@@ -2,7 +2,7 @@
 
 This file is for **coding agents**: AI agents that develop and maintain this repository.
 
-If you are a **setup agent** installing Paper Scout for a user, read `README.md` instead.
+If you are a **setup agent** installing Paper Scout for a user, read `SETUP.md` instead.
 If you are a **reading agent** executing a scouting run, read the workspace instruction file in `~/.paper-scout/workspace/` instead.
 
 ## What This Project Is
@@ -13,7 +13,8 @@ This repository ships **templates and specifications** that get installed into a
 
 What the repo contains:
 
-- `README.md` — the setup contract, read by a setup agent during installation
+- `README.md` — the project entry point for humans and AI agents landing here
+- `SETUP.md` — the installation guide, read by a setup agent during installation
 - `AGENTS_template.md` — the workspace instruction template, rendered into the user's persistent runtime contract
 - `prompt_template.md` — the thin run-trigger template, rendered into a lightweight prompt
 - `skill/SKILL.md` — the runtime method, installed as a skill into the user's agent harness
@@ -56,7 +57,7 @@ The setup agent:
 - runs once (or occasionally, for reconfiguration)
 - operates from wherever the user invoked it — a terminal, a chat, a random directory
 - has no access to the workspace until it creates one
-- reads `README.md` as its primary instruction source
+- reads `SETUP.md` as its primary instruction source
 - reads `AGENTS_template.md` and `prompt_template.md` as source material for generating files
 - produces the installed workspace, the thin prompt, and the skill installation
 - is done when the user has a working setup
@@ -99,8 +100,8 @@ When editing any file in this repo, ask:
 
 Common failure modes to watch for:
 
-- **Making setup feel like work.** The whole point is that the user does almost nothing. If `README.md` is written in a way that causes the setup agent to dump a wall of questions, the user experience is already broken. Write setup instructions that lead to short, natural conversations with sensible defaults.
-- **Jargon leaking into user-facing moments.** The setup agent translates `README.md` into conversation. If the README uses internal terminology without explaining how to present it, the setup agent may parrot it. Write setup instructions in a way that naturally produces plain-language questions.
+- **Making setup feel like work.** The whole point is that the user does almost nothing. If `SETUP.md` is written in a way that causes the setup agent to dump a wall of questions, the user experience is already broken. Write setup instructions that lead to short, natural conversations with sensible defaults.
+- **Jargon leaking into user-facing moments.** The setup agent translates `SETUP.md` into conversation. If the setup guide uses internal terminology without explaining how to present it, the setup agent may parrot it. Write setup instructions in a way that naturally produces plain-language questions.
 - **Over-specification killing usefulness.** If templates are too rigid, the reading agent produces mechanical output. Users want judgment, not checklists. Leave room for the reading agent to adapt structure to content.
 - **Under-specification causing inconsistency.** If templates are too vague, different reading agents will interpret them differently across runs. Users expect a stable personality and consistent quality. Be precise about what matters (standards, constraints, identity) and flexible about what should adapt (structure, length, emphasis).
 - **Volume over signal.** Users do not want padding. Every template instruction that encourages completeness over selectivity makes the output worse for the user. Filtering hard is a feature, not a compromise.
@@ -119,18 +120,19 @@ If a template change would make the output longer but not more useful, it is pro
 
 ## Thinking From the Setup Agent's Perspective
 
-The setup agent reads `README.md` — often fetched directly from a GitHub URL — and uses it to drive a setup conversation with the user. It has no prior knowledge of Paper Scout. Everything it knows comes from what it reads.
+The setup agent reads `SETUP.md` — often fetched directly from a GitHub URL — and uses it to drive a setup conversation with the user. It has no prior knowledge of Paper Scout. Everything it knows comes from what it reads.
 
-When editing `README.md`, ask:
+When editing `SETUP.md`, ask:
 
 **If an agent reads this cold and talks to a user, what conversation will it produce?**
 
 Common failure modes to watch for:
 
-- **Too many questions.** The user said "install this for me", not "let me fill out a form." If the README presents a long field list without emphasizing defaults, the setup agent will ask for every field. Group questions by necessity: what must be asked, what has good defaults, what can be deferred.
-- **Unclear sequencing.** The setup agent needs to verify tools before asking preferences, and ask preferences before generating files. If the README presents these in the wrong order or mixes them, the setup agent may verify tools after generating files, or ask the user questions it could have inferred.
-- **Missing error recovery.** If `hf papers` does not work, the setup agent needs to know what to do. If the README only says "verify hf papers works" without explaining how to handle failure, different setup agents will handle it differently — some will try to fix it, some will silently skip, some will dump a traceback at the user.
-- **Assuming the setup agent has repo access.** The setup agent may be reading `README.md` from a URL. It may not have the repo cloned. If setup requires reading `AGENTS_template.md` or `skill/SKILL.md`, the README should make clear how to access them — whether by cloning, fetching raw URLs, or other means.
+- **Too many questions.** The user said "install this for me", not "let me fill out a form." If the setup guide presents a long field list without emphasizing defaults, the setup agent will ask for every field. Group questions by necessity: what must be asked, what has good defaults, what can be deferred.
+- **Unclear sequencing.** The setup agent needs to verify tools before asking preferences, and ask preferences before generating files. If the guide presents these in the wrong order or mixes them, the setup agent may verify tools after generating files, or ask the user questions it could have inferred.
+- **Missing error recovery.** If `hf papers` does not work, the setup agent needs to know what to do. If the guide only says "verify hf papers works" without explaining how to handle failure, different setup agents will handle it differently — some will try to fix it, some will silently skip, some will dump a traceback at the user.
+- **Assuming the setup agent has repo access.** The setup agent may be reading `SETUP.md` from a URL. It may not have the repo cloned. If setup requires reading `AGENTS_template.md` or `skill/SKILL.md`, the guide should make clear how to access them — whether by cloning, fetching raw URLs, or other means.
+- **Polluting the workspace instruction file.** The setup agent must not leave setup artifacts in the file it generates for the future running agent. `SETUP.md` should explicitly warn against this. See the "Your Role" section in that file.
 
 ## Thinking From the Reading Agent's Perspective
 
@@ -164,13 +166,20 @@ Coding agents should keep this hierarchy clean. Do not put run-scoped concerns i
 
 Each file in this repo has a distinct job. Do not let them bleed into each other.
 
-**`README.md`** is the setup contract.
+**`README.md`** is the project entry point.
 
-- Audience: **setup agents** (and humans browsing the repo).
-- Contains: installation flow, onboarding questions, tool requirements, troubleshooting.
+- Audience: humans discovering the project, and AI agents that land on the repo root.
+- Contains: a brief project description, the two-audience installation pointer, a "what gets installed" summary, and a file inventory.
+- Does not contain: setup flow, onboarding questions, tool requirements, runtime behavior.
+- Editing principle: keep it short enough that a human gets the idea immediately and an AI agent gets pointed to the right file without needing to read further.
+
+**`SETUP.md`** is the installation guide.
+
+- Audience: **setup agents** (AI agents performing installation).
+- Contains: role-awareness section, installation flow, onboarding questions, tool requirements, file generation rules, troubleshooting.
 - Does not contain: runtime behavior, run-phase details, skill logic.
 - Editing principle: if a change affects how the setup conversation goes, it belongs here.
-- Remember: setup agents often read this from a GitHub URL without cloning the repo. It must be self-contained enough to drive the setup flow, while pointing to the other files when the setup agent needs to read them.
+- Remember: setup agents often read this from a GitHub URL without cloning the repo. It must be self-contained enough to drive the setup flow, while pointing to the other files when the setup agent needs to read them. It must also clearly warn the setup agent not to leave installation artifacts in the workspace instruction file it generates.
 
 **`AGENTS_template.md`** is the workspace instruction template.
 
