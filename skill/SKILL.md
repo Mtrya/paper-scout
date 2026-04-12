@@ -29,7 +29,7 @@ This skill defaults to Hugging Face papers via `hf papers`, but it may be used w
 
 Before source discovery, load `hf-cli`.
 
-Before creating or updating Feishu docs, load `lark-doc`.
+Before creating Feishu docs, load `lark-doc`.
 
 Use this `paper-scout` skill as the main operating method throughout the run.
 
@@ -87,7 +87,7 @@ workspace/
 
 ## State Rules
 
-Before serious scouting or investigation, inspect `workspace/state/log.md` or `state/log.md`, depending on how the harness frames the current working directory.
+Before serious scouting or investigation, inspect `state/log.md`.
 
 Use the log to identify:
 
@@ -123,11 +123,10 @@ If the workspace instructions or current run trigger explicitly expand permissio
 Before scouting:
 
 1. Load `hf-cli`.
-2. Load `paper-scout`.
-3. Confirm the workspace root exists or can be created.
-4. Inspect `workspace/state/log.md` if present.
-5. Verify the output and scratch directories are available.
-6. Before delivery work later in the run, remember to load `lark-doc`.
+2. Confirm the workspace root exists or can be created.
+3. Inspect `state/log.md` if present.
+4. Verify the output and scratch directories are available.
+5. Before delivery work later in the run, remember to load `lark-doc`.
 
 If source access or delivery readiness is broken, stop early and explain the blocker.
 
@@ -190,10 +189,10 @@ The exact quotas come from the workspace instructions or current run trigger. If
 
 For the selected deep-dive candidates:
 
-1. Download the paper markdown into `workspace/papers/`.
+1. Download the paper markdown into `papers/`.
 2. Read more carefully.
 3. Inspect linked external assets only when the expected value is high.
-4. If a GitHub repo looks important, clone it into `workspace/repos/` and scan the codebase and docs.
+4. If a GitHub repo looks important, clone it into `repos/` and scan the codebase and docs.
 5. If model or dataset cards matter, inspect them for practical and credibility signals.
 
 During deep investigation, focus on:
@@ -229,7 +228,7 @@ Writing style should be determined by the workspace instructions or current run 
 
 Before delivery, load `lark-doc`.
 
-Write the brief as Lark-flavored markdown into `workspace/output/` first.
+Write the brief as Lark-flavored markdown into `output/` first.
 
 Then create a fresh Feishu doc in the configured destination for this run. The destination is expected to be a folder or wiki space rather than an existing doc to update.
 
@@ -237,7 +236,7 @@ Preserve the resulting document URL or identifier for logging.
 
 ## Phase 7: Logging And Optional Cleanup
 
-After successful delivery, append a new entry to `workspace/state/log.md`.
+After successful delivery, append a new entry to `state/log.md`.
 
 Each run entry should record:
 
@@ -270,6 +269,6 @@ Before finishing a run, confirm:
 - deep investigation stayed read-only and lightweight
 - the final brief reflects both broad scouting and deeper analysis
 - a fresh Feishu doc was created
-- `workspace/state/log.md` was updated
+- `state/log.md` was updated
 
 If any of these failed, say so clearly instead of implying the run was complete.

@@ -30,42 +30,43 @@ After setup, a typical installation should produce:
 
 The repository itself is not required after installation as long as the generated workspace files and installed skill are in place.
 
-## Setup Contract For The Agent
+## Setup Contract
 
-When a user asks an agent to install or configure Paper Scout, the agent should treat this README as the canonical setup contract and follow this flow:
+If you are an AI agent and a user has asked you to install or configure Paper Scout, this README is your guide. Treat it as the canonical setup contract and follow this flow:
 
 1. Read this README before making changes.
-2. Verify the required tools and actual access:
-   - `hf` is installed
+2. Clone or fetch the repository so the other files are accessible. If you are reading this README from a URL, you need access to `AGENTS_template.md`, `prompt_template.md`, and `skill/SKILL.md` from the same repository.
+3. Verify the required tools and actual access:
+   - `hf` is installed (`uv tool install huggingface_hub`)
    - `hf papers` works
-   - `lark-cli` is installed
+   - `lark-cli` is installed and configured
    - `lark-cli docs` and `lark-cli wiki` work
    - Feishu destination access can be validated
-3. Ask the user the onboarding questions in the next section.
-4. Create `~/.paper-scout/workspace/` if needed.
-5. Generate the workspace instruction file from [`AGENTS_template.md`](./AGENTS_template.md), using the harness-appropriate filename when practical:
+4. Ask the user the onboarding questions in the next section.
+5. Create `~/.paper-scout/workspace/` if needed.
+6. Generate the workspace instruction file from `AGENTS_template.md`, using the harness-appropriate filename when practical:
    - Codex: `AGENTS.md`
    - Claude: `CLAUDE.md`
    - Gemini: `GEMINI.md`
-6. Generate a thin `~/.paper-scout/prompt.md` from [`prompt_template.md`](./prompt_template.md).
-7. Install [`skill/SKILL.md`](./skill/SKILL.md) into the user's harness, typically under a skill directory named `paper-scout`.
-8. Optionally install a scheduled task if the user wants automation.
+7. Generate a thin `~/.paper-scout/prompt.md` from `prompt_template.md`.
+8. Install `skill/SKILL.md` into the user's harness, typically under a skill directory named `paper-scout`.
+9. Optionally install a scheduled task if the user wants automation.
 
-The setup agent owns this flow end-to-end, but it should pause for clarification or confirmation whenever the user's preferences, destination, or harness path are unclear.
+You own this flow end-to-end, but pause for clarification or confirmation whenever the user's preferences, destination, or harness path are unclear.
 
 ### Onboarding Style Rules
 
-When asking setup questions, the agent should translate this README into plain user-facing language instead of repeating the raw field list.
+When asking setup questions, translate this README into plain user-facing language instead of repeating the raw field list.
 
-In particular, the setup agent should:
+In particular:
 
 - ask only for the minimum information needed to proceed
-- offer sensible defaults and say it will fill in the rest unless the user wants to customize
+- offer sensible defaults and say you will fill in the rest unless the user wants to customize
 - explain project-specific terms the first time they appear
 - prefer short, natural prompts over long requirement dumps
 - defer optional questions such as scheduling until the core installation is complete
 
-The setup agent should not respond to a simple install request by pasting every onboarding field back to the user verbatim.
+Do not respond to a simple install request by pasting every onboarding field back to the user verbatim.
 
 For example:
 
@@ -75,24 +76,25 @@ For example:
 
 ## Required Tools
 
-Paper Scout assumes the runtime agent can use:
+Paper Scout assumes the agent executing scouting runs can use:
 
 - `hf` with working `hf papers`
 - `lark-cli` with a valid authenticated session and the ability to create docs in the target destination
 
-Setup should fail fast if either tool exists but does not actually work for the intended operation.
+Fail fast if either tool exists but does not actually work for the intended operation.
 
-## Quick Start For Agent-Led Setup
+## Quick Start
 
-If the user says something like "read this repo and configure it for me", the setup agent should:
+If the user says something like "read this repo and configure it for me", you should:
 
-1. Verify `hf` and `hf papers`.
-2. Verify `lark-cli` and validate the user's Feishu destination.
-3. Ask a short plain-language version of the onboarding questions below, using defaults where possible.
-4. Generate the workspace instruction file in the Paper Scout workspace.
-5. Generate the thin `~/.paper-scout/prompt.md` trigger.
-6. Install the Paper Scout skill into the user's harness.
-7. Optionally install scheduling.
+1. Clone or fetch the repository so the templates and skill are accessible.
+2. Verify `hf` and `hf papers`.
+3. Verify `lark-cli` and validate the user's Feishu destination.
+4. Ask a short plain-language version of the onboarding questions below, using defaults where possible.
+5. Generate the workspace instruction file in the Paper Scout workspace.
+6. Generate the thin `~/.paper-scout/prompt.md` trigger.
+7. Install the Paper Scout skill into the user's harness.
+8. Optionally install scheduling.
 
 A good quick-start prompt should usually be closer to:
 
@@ -101,11 +103,11 @@ A good quick-start prompt should usually be closer to:
 - how often should it run: daily or weekly?
 - where in Feishu should it create the report?
 
-If the user does not care about the finer details, the setup agent should choose reasonable defaults and continue.
+If the user does not care about the finer details, choose reasonable defaults and continue.
 
 ## Onboarding Questions
 
-The setup agent should collect the following information, but it does not need to ask for all of it in one message:
+Collect the following information, but you do not need to ask for all of it in one message:
 
 - research interests / domains
 - preferred language
@@ -119,23 +121,23 @@ The setup agent should collect the following information, but it does not need t
 
 The quick-start flow should keep these questions concise, explain unfamiliar terms in plain language, and allow custom instructions only where the user wants finer control.
 
-If the user gives only partial answers, the setup agent should fill the remaining fields with reasonable defaults and confirm the result briefly.
+If the user gives only partial answers, fill the remaining fields with reasonable defaults and confirm the result briefly.
 
 ## Guidance For Answers
 
 ### Research Interests / Domains
 
-Free-form input is expected. The setup agent should preserve the user's wording and only normalize it enough to make the generated workspace instructions clear and actionable.
+Free-form input is expected. Preserve the user's wording and only normalize it enough to make the generated workspace instructions clear and actionable.
 
 ### Preferred Language
 
 Free-form input is acceptable. Common defaults are Chinese, English, or bilingual delivery.
 
-If the user does not care, the setup agent may default to the language the user is already using in the conversation.
+If the user does not care, default to the language the user is already using in the conversation.
 
 ### Tone
 
-The setup agent should offer a few reasonable options and also allow custom instruction. Good defaults include:
+Offer a few reasonable options and also allow custom instruction. Good defaults include:
 
 - research notebook
 - executive brief
@@ -144,7 +146,7 @@ The setup agent should offer a few reasonable options and also allow custom inst
 
 ### Depth
 
-The setup agent should offer a few reasonable options and also allow custom instruction. Good defaults include:
+Offer a few reasonable options and also allow custom instruction. Good defaults include:
 
 - light scan
 - balanced
@@ -157,13 +159,13 @@ Explain this as how often Paper Scout should run. The default modes are:
 - `daily`
 - `weekly`
 
-The generated workspace instructions should keep budgets adaptive. If the period is weak, the agent should do fewer papers rather than pad the output.
+The generated workspace instructions should keep budgets adaptive. If the period is weak, the agent running Paper Scout should do fewer papers rather than pad the output.
 
 ### Feishu Destination
 
-Explain this as where new reports should be created in Feishu. The expected destination is a folder or wiki space where the agent can create a new doc for each run.
+Explain this as where new reports should be created in Feishu. The expected destination is a folder or wiki space where a new doc can be created for each run.
 
-The setup agent should:
+You should:
 
 1. ask for the destination URL or token
 2. verify that it is a valid destination
@@ -185,7 +187,7 @@ The default workspace root is:
 
 `~/.paper-scout/workspace/`
 
-If the user does not request a different location, the setup agent should use this default.
+If the user does not request a different location, use this default.
 
 ## Prompt Generation Rules
 
@@ -193,21 +195,19 @@ The generated trigger prompt should be written to:
 
 `~/.paper-scout/prompt.md`
 
-If `~/.paper-scout/prompt.md` already exists, the setup agent should:
+If `~/.paper-scout/prompt.md` already exists:
 
 1. summarize the current prompt briefly
 2. ask whether to overwrite it, update it, or keep both
 
-The generated prompt should stay thin. It should mainly:
+The generated prompt should stay thin. It should only:
 
 - state the current date
 - identify the workspace path
-- remind the agent to use the workspace instruction file
-- state the topic scope
-- state the covered period implied by cadence
+- remind the agent to use the workspace instruction file and the `paper-scout` skill
 - start the scouting run
 
-Do not duplicate the full runtime contract in `prompt.md` if that contract already lives in the workspace instruction file.
+Do not duplicate stable preferences (interests, exclusions, cadence, tone) in `prompt.md`. Those belong in the workspace instruction file.
 
 ## Workspace Instruction File Rules
 
@@ -218,43 +218,43 @@ Preferred filenames:
 - Codex: `AGENTS.md`
 - Claude: `CLAUDE.md`
 - Gemini: `GEMINI.md`
+- Kimi: `AGENTS.md`
 
-If the harness-specific workspace instruction mechanism is obvious, the setup agent should use it. If not, it should ask the user.
+If the harness-specific workspace instruction mechanism is obvious, use it. If not, ask the user.
 
 If the harness does not support an always-loaded workspace instruction file, a fuller `prompt.md` fallback is acceptable, but the preferred design is still:
 
 - stable contract in the workspace instruction file
 - thin trigger in `~/.paper-scout/prompt.md`
 
-The generated workspace instruction file should carry the stable configuration and operating rules, including:
+The generated workspace instruction file should carry the stable configuration, including:
 
 - Paper Scout identity and mission
 - required companion skills
 - user interests and exclusions
-- cadence defaults
+- cadence and effort budget
 - language, tone, and depth preferences
-- selection and investigation policy
+- investigation policy (user-configured permissions; the skill defines the boundaries)
+- output expectations
 - delivery destination
-- workspace structure
-- logging and cleanup rules
-- run directive and quality bar
+- workspace root and coverage log location
+
+The workspace instruction file should not duplicate the skill's phased workflow, selection criteria, or logging procedures. It should defer to the `paper-scout` skill for method details.
 
 ## Skill Installation Rules
 
-The installable skill source in this repository is:
+The installable skill source in this repository is `skill/SKILL.md`.
 
-[`skill/SKILL.md`](./skill/SKILL.md)
+Install it into the user's harness under a skill directory named `paper-scout` when practical.
 
-The setup agent should install it into the user's harness under a skill directory named `paper-scout` when practical.
-
-If the harness-specific install location is obvious, the agent should use it. If not, it should ask the user.
+If the harness-specific install location is obvious, use it. If not, ask the user.
 
 Paper Scout also expects companion skills during execution:
 
 - `hf-cli` before source discovery
 - `lark-doc` before delivery
 
-Those do not need to be copied from this repository, but the workspace instruction file should remind the runtime agent to load them.
+Those do not need to be copied from this repository, but the workspace instruction file should remind the agent executing runs to load them.
 
 ## Manual Use
 
@@ -275,11 +275,11 @@ Runs should execute from:
 The workspace should hold:
 
 - the harness-specific workspace instruction file
-- downloaded paper markdown
-- cloned repos
-- per-run notes
-- output markdown
-- the coverage log at `state/log.md`
+- `papers/` — downloaded paper markdown
+- `repos/` — cloned repositories for inspection
+- `runs/` — per-run notes and scratch artifacts
+- `output/` — final Lark-flavored markdown before delivery
+- `state/log.md` — the persistent coverage log
 
 ## Scheduling
 
@@ -287,7 +287,7 @@ Scheduling is optional and should be offered only after the workspace instructio
 
 When first onboarding a user, treat scheduling as a follow-up preference rather than a required setup question.
 
-If the user wants automation, the setup agent may install either:
+If the user wants automation, you may install either:
 
 - `cron`
 - `systemd --user`
@@ -298,16 +298,13 @@ Scheduling should:
 - use the generated thin `~/.paper-scout/prompt.md` together with the installed workspace instruction file
 - preserve the same user-specific configuration as manual runs
 
-The setup agent should explain what it is installing and confirm the user's preference before making the scheduling change.
+Explain what you are installing and confirm the user's preference before making the scheduling change.
 
 ## Reconfiguration
 
-If the user later wants to change scope, tone, cadence, destination, or investigation policy, the setup agent should usually update:
+If the user later wants to change scope, tone, cadence, destination, or investigation policy, update the workspace instruction file in `~/.paper-scout/workspace/`.
 
-- the workspace instruction file in `~/.paper-scout/workspace/`
-- `~/.paper-scout/prompt.md`
-
-and only touch the installed skill if the runtime method itself needs to change.
+The thin `~/.paper-scout/prompt.md` trigger rarely needs reconfiguration since it carries only the date and workspace path. The installed skill should only be touched if the runtime method itself needs to change.
 
 ## Troubleshooting
 
