@@ -78,21 +78,15 @@ These are targets, not quotas. If the pool is weak, reduce the output. If it is 
 
 ---
 
-## Language, Tone, And Depth
-
-Language:
+## Language
 
 `{{LANGUAGE}}`
 
-Tone:
+## Writing Style
 
-`{{TONE}}`
+{{WRITING_STYLE}}
 
-Depth:
-
-`{{DEPTH}}`
-
-Follow these preferences in the final doc unless the user explicitly overrides them for a specific run.
+The above writing style applies to the final doc unless the user explicitly overrides it for a specific run.
 
 ---
 

@@ -17,7 +17,10 @@ What the repo contains:
 - `SETUP.md` — the installation guide, read by a setup agent during installation
 - `AGENTS_TEMPLATE.md` — the workspace instruction template, rendered into the user's persistent runtime contract
 - `PROMPT_TEMPLATE.md` — the thin run-trigger template, rendered into a lightweight prompt
-- `skill/SKILL.md` — the runtime method, installed as a skill into the user's agent harness
+- `skill/SKILL.md` — the main runtime method, installed as a skill into the user's agent harness
+- `skill/DEEP_DIVE.md` — the deep investigation sub-skill, invoked by the main skill during Phase 4
+- `skill/FEISHU_DOC.md` — the document writing sub-skill, invoked by the main skill during Phase 5
+- `DEEP_DIVE_SKILL.md` — an external reference baseline (not installed); kept in the repo as a reference for the coding agent
 
 What the repo produces after installation:
 
@@ -189,13 +192,29 @@ Each file in this repo has a distinct job. Do not let them bleed into each other
 - Editing principle: if a change affects how every future run behaves for a given user, it belongs here.
 - Remember: the reading agent has never seen this repository. It only sees the filled result. Do not reference template placeholders, setup flow, or repo structure in a way that would confuse a reading agent seeing only the installed file.
 
-**`skill/SKILL.md`** is the runtime method.
+**`skill/SKILL.md`** is the main runtime method.
 
 - Audience: **reading agents**, loaded as a skill during execution.
 - Contains: phased workflow, investigation boundaries, selection criteria, synthesis guidance, logging rules.
 - Does not contain: user-specific preferences, delivery destination, onboarding flow.
 - Editing principle: if a change affects how the scouting method works regardless of which user is running it, it belongs here.
 - Remember: this is the one file shared identically across all installations. It must not assume any particular user's interests or configuration.
+
+**`skill/DEEP_DIVE.md`** is the deep investigation sub-skill.
+
+- Audience: **reading agents**, invoked by the main `paper-scout` skill during Phase 4.
+- Contains: section inventory process, motivation/contribution analysis, method walkthrough, experimental evidence assessment, artifact inspection, bottom-line judgment.
+- Does not contain: synthesis, writing style, delivery, or workflow orchestration.
+- Editing principle: if a change affects how deeply and systematically a single paper is analyzed, it belongs here.
+- Relationship: `skill/SKILL.md` Phase 4 delegates entirely to this skill. Keep them consistent.
+
+**`skill/FEISHU_DOC.md`** is the document writing sub-skill.
+
+- Audience: **reading agents**, invoked by the main `paper-scout` skill during Phase 5.
+- Contains: document structure, visual hierarchy, formatting conventions (tables, callouts, horizontal rules), section templates, writing quality standards.
+- Does not contain: analysis logic, investigation procedures, or delivery mechanics.
+- Editing principle: if a change affects how the final brief is structured or written for Feishu, it belongs here.
+- Relationship: `skill/SKILL.md` Phase 5 delegates writing decisions to this skill. Writing tone and depth are still controlled by the workspace instruction file — this skill controls layout and structural quality.
 
 **`PROMPT_TEMPLATE.md`** is the run-trigger template.
 

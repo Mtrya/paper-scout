@@ -31,6 +31,10 @@ Before source discovery, load `hf-cli`.
 
 Before creating Feishu docs, load `lark-doc`.
 
+During Phase 4 (deep investigation), load and follow `paper-scout-deep-dive` (`skill/DEEP_DIVE.md`).
+
+During Phase 5 (synthesis and writing), load and follow `paper-scout-feishu-doc` (`skill/FEISHU_DOC.md`).
+
 Use this `paper-scout` skill as the main operating method throughout the run.
 
 ## Core Principles
@@ -187,42 +191,37 @@ The exact quotas come from the workspace instructions or current run trigger. If
 
 ## Phase 4: Deep Investigation
 
-For the selected deep-dive candidates:
+For each selected deep-dive candidate, load and follow the `paper-scout-deep-dive` skill (`skill/DEEP_DIVE.md`).
 
-1. Download the paper markdown into `papers/`.
-2. Read more carefully.
-3. Inspect linked external assets only when the expected value is high.
-4. If a GitHub repo looks important, clone it into `repos/` and scan the codebase and docs.
-5. If model or dataset cards matter, inspect them for practical and credibility signals.
+That skill defines the full investigation process: section inventory, motivation and contribution analysis, method walkthrough, experimental evidence assessment, artifact inspection, and bottom-line judgment. Follow it in full for every deep-dive paper.
 
-During deep investigation, focus on:
+A light summary of what the skill covers:
 
-- what the paper is actually claiming
-- what is genuinely novel
-- whether the results seem credible
-- what the repo or artifacts reveal about maturity and practicality
-- what caveats or red flags should affect how seriously the paper is taken
-- whether this paper changes the user's near-term reading or building priorities
+- **Build a section inventory first.** List every section and where it will appear in the analysis. This prevents important content from being silently skipped.
+- **Work through the full paper.** Do not stop at the method section. Experiments, ablations, and appendices contain the evidence that tests the claims.
+- **Write specific analysis notes.** The goal is not to summarize. It is to understand the paper well enough to write a genuinely useful brief section.
+- **Inspect artifacts selectively.** Repos, model cards, and project pages add value when the paper is genuinely promising. Do not let artifact inspection become a detour.
+- **Write a bottom-line judgment.** Is it worth the user's time? Should they track follow-up work? Be direct.
+
+Save analysis notes for each paper to `runs/<paper-id>-deep-dive.md`. These notes feed Phase 5 directly.
 
 Do not let deep investigation turn into a full reproduction effort.
 
 ## Phase 5: Synthesis And Writing
 
-Choose the best structure for the findings instead of forcing a rigid template.
+Load and follow the `paper-scout-feishu-doc` skill (`skill/FEISHU_DOC.md`).
 
-The final brief should usually contain:
+That skill defines the document structure, visual hierarchy, formatting conventions, and quality standards for the final brief. Follow it for layout and writing decisions.
 
-- a clear picture of what matters in the period
-- a shortlist of scan-worthy papers
-- deeper analysis for the few papers that earned it
-- synthesis of themes, patterns, or shifts when the pool supports it
+A light summary of what the skill covers:
 
-Writing style should be determined by the workspace instructions or current run trigger, but the reasoning standard should remain high:
+- **Open with a synthesis.** The user should understand what mattered this period before reading individual papers.
+- **Use a shortlist table** for all shortlisted papers, with specific contribution and relevance columns.
+- **Write structured H2 sections** for each deep-dived paper: what it does, how it works, the evidence, and a judgment.
+- **Use rich formatting.** Tables, callouts (blockquotes), and horizontal rules make the brief navigable. Avoid flat bullet lists for everything.
+- **Be specific, not promotional.** Every claim should be grounded in what the paper actually says or what the analysis found.
 
-- concise where possible
-- specific when making judgments
-- candid about uncertainty
-- explicit about why the deep-dive papers were chosen
+Writing tone and depth are controlled by the workspace instructions or current run trigger. The reasoning standard should remain high regardless of style choice.
 
 ## Phase 6: Delivery
 

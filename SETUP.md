@@ -70,13 +70,15 @@ You own this flow end-to-end, but pause for clarification or confirmation whenev
 
 ## Onboarding Style
 
-When asking setup questions, translate this guide into plain user-facing language instead of repeating the raw field list.
+**Before asking any questions, briefly introduce Paper Scout to the user.** Do not assume they know what they are installing — they may have just pasted a URL from somewhere. A good introduction is two to three sentences: what it does, what it produces, and what you need from them to configure it. For example:
 
-In particular:
+> Paper Scout is a workflow that automatically discovers and reads recent AI papers for you, then delivers a brief to a Feishu doc on a schedule you choose. To set it up, I need a few things from you — mostly what topics to watch and where to send the reports.
+
+Then ask questions. Keep the following in mind:
 
 - ask only for the minimum information needed to proceed
 - offer sensible defaults and say you will fill in the rest unless the user wants to customize
-- explain project-specific terms the first time they appear
+- explain any unfamiliar terms the first time they appear
 - prefer short, natural prompts over long requirement dumps
 - defer optional questions such as scheduling until the core installation is complete
 
@@ -85,6 +87,7 @@ Do not respond to a simple install request by pasting every onboarding field bac
 For example:
 
 - say "How often should it run: daily or weekly?" instead of "cadence"
+- say "What language should the reports be in? (default: the language we're using now)" instead of "preferred language"
 - say "Where in Feishu should new reports be created?" instead of "Feishu destination"
 - say "Is it okay to inspect promising repos or project pages without running code?" instead of "code investigation policy"
 
@@ -103,9 +106,10 @@ If the user says something like "read this repo and configure it for me", you sh
 7. Install the Paper Scout skill into the user's harness.
 8. Optionally install scheduling.
 
-A good quick-start conversation usually only needs four things from the user:
+A good quick-start conversation usually only needs five things from the user:
 
 - what topics should this watch for?
+- what language should reports be in?
 - what style should the writeup have?
 - how often should it run: daily or weekly?
 - where in Feishu should it create the report?
@@ -157,20 +161,26 @@ If the user does not care, default to the language the user is already using in 
 
 ### Tone
 
-Offer a few reasonable options and also allow custom instruction. Good defaults include:
+Offer a few reasonable options and also allow custom instruction. The options are:
 
-- research notebook
-- executive brief
-- critical reading memo
-- practical recommendation memo
+- **research notebook** — write as a working researcher building understanding. Prioritize precise technical claims, specific evidence, and honest uncertainty. Structure around "what did they actually do, what does it mean, what should I think about this." Favor clear observations over polished prose.
+- **executive brief** — lead with impact and significance. State conclusions before methods. Emphasize strategic relevance, practical implications, and decision-relevant signals. Keep technical detail minimal unless it directly affects the judgment.
+- **critical reading memo** — foreground skepticism. For every claim, ask what evidence supports it, how strong the baselines are, whether the evaluation is convincing. Structure around strengths, weaknesses, and open questions. Do not summarize approvingly — interrogate.
+- **practical recommendation memo** — focus on what the user can do with this. What tools, methods, datasets, or ideas are immediately usable? What would need adaptation? What are the implementation risks? Structure around actionability rather than academic contribution.
+
+Custom instructions are also allowed. If the user specifies their own style, record it verbatim.
+
+**When writing the workspace instruction file, do not just write the label (e.g., `research notebook`). Expand it into the concrete writing instructions above.** The running agent needs to know how to write, not just what genre to aim for.
 
 ### Depth
 
-Offer a few reasonable options and also allow custom instruction. Good defaults include:
+Offer a few reasonable options and also allow custom instruction. The options are:
 
-- light scan
-- balanced
-- deep technical
+- **light scan** — cover title, abstract, key contribution, and one-line assessment per paper. Skip method details entirely. Optimize for breadth over any single paper.
+- **balanced** — for shortlisted papers: summarize contribution, method overview, key results, and a brief judgment. For deep-dive papers: add core technical details, key experimental results with interpretation, and an honest assessment of credibility and relevance to the user's work.
+- **deep technical** — for shortlisted papers: go deeper than a summary — explain the core mechanism and why it works. For deep-dive papers: read thoroughly including appendices whenever available; cover full method, experimental details, ablations, and a detailed critical assessment.
+
+**When writing the workspace instruction file, do not just write the label (e.g., `balanced`). Expand depth into concrete instructions that tell the running agent how much effort to spend and what to cover at each level.** Combine the tone and depth choices into a single coherent writing style section rather than listing them as separate labels.
 
 ### Cadence
 
@@ -263,11 +273,13 @@ Do not duplicate stable preferences (interests, exclusions, cadence, tone) in `p
 
 ## Skill Installation Rules
 
-The installable skill source in this repository is `skill/SKILL.md`.
+The installable skill sources in this repository are:
 
-Install it into the user's harness under a skill directory named `paper-scout` when practical.
+- `skill/SKILL.md` — the main `paper-scout` skill
+- `skill/DEEP_DIVE.md` — the deep investigation sub-skill (`paper-scout-deep-dive`)
+- `skill/FEISHU_DOC.md` — the document writing sub-skill (`paper-scout-feishu-doc`)
 
-If the harness-specific install location is obvious, use it. If not, ask the user.
+Install all three into the user's harness. Use skill directory names that match the skill names (`paper-scout`, `paper-scout-deep-dive`, `paper-scout-feishu-doc`) when practical. If the harness-specific install location is obvious, use it. If not, ask the user.
 
 Paper Scout also expects companion skills during execution:
 
