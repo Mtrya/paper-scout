@@ -1,145 +1,295 @@
 ---
 name: paper-scout-feishu-doc
-description: "Structure and write the Paper Scout brief as rich Feishu-rendered markdown. Covers document layout, visual hierarchy, callouts, tables, and section templates."
+description: "Structure and write the Paper Scout brief as a Feishu document using lark-cli. Covers the full Lark-flavored Markdown format, document sections, callouts, grids, lark-table, LaTeX, and the delivery command sequence."
 user-invocable: false
 ---
 
 # paper-scout-feishu-doc
 
-This skill governs how the Paper Scout brief is written and structured for Feishu delivery. It is used during Phase 5 (synthesis and writing) and Phase 6 (delivery).
+This skill governs how the Paper Scout brief is written and delivered as a Feishu document. It is used during Phase 5 (synthesis and writing) and Phase 6 (delivery) of the main `paper-scout` skill.
 
-Feishu renders markdown with rich visual output: headings create clear hierarchy, tables render as grids, blockquotes render as highlighted callouts, and horizontal rules create visible section breaks. Use these to make the brief scannable and visually organized — not a wall of bullets.
+The document is created using `lark-cli docs +create` with Lark-flavored Markdown. For long briefs, create the document first and append sections with `lark-cli docs +update --mode append`.
 
 ---
 
-## Core Principles
+## Before You Start
 
-**Vary the structure.** A brief that is entirely flat bullet lists is hard to read. Use headings, tables, callouts, and prose to match the structure to the content.
+Load `lark-doc` before any delivery work.
 
-**Lead with the synthesis.** The user should understand what mattered this period before they read individual papers. Put the top-line picture first.
+Feishu renders Lark-flavored Markdown with real visual structure — callouts, grids, tables with rich cell content, inline LaTeX. Use this. A brief that is nothing but flat bullet lists misses the platform entirely.
 
-**Tables for comparison, bullets for lists.** If you are comparing papers, showing a shortlist, or summarizing multiple items with the same attributes, use a table. Use bullets for non-comparative lists of items.
-
-**Callouts for things that demand attention.** If a paper is exceptional, if there is a notable pattern, or if there is a caveat the user must not miss, use a blockquote callout to make it stand out.
-
-**Headings to navigate.** Feishu users can jump to sections. Use H2 for major sections and H3 for individual papers or subsections.
-
-**Fewer words, more specificity.** Do not write "this paper presents an interesting approach to X." Write what the approach actually is. If you cannot say it specifically, you have not understood it well enough.
+**Critical rules:**
+- Do not repeat the document title inside the markdown. The `--title` flag handles it; the markdown starts directly with body content.
+- Feishu generates a table of contents automatically from your headings. Use a sensible H2/H3 hierarchy.
+- Callouts cannot contain code blocks or tables. Callouts contain text, headings, lists, and quotes.
+- `<lark-table>` cells must each have a blank line before and after their content.
 
 ---
 
 ## Document Structure
 
-### Title
+### 1. Opening Synthesis (Required)
 
-Use the configured title pattern from the workspace instructions:
+Write 2–4 sentences answering: *What mattered this period?*
 
+This is a judgment, not a summary. What was the dominant theme? What was the standout paper? What should the user notice before reading further?
+
+If a paper was clearly exceptional this period, wrap the synthesis in a standout callout:
+
+```html
+<callout emoji="✅" background-color="light-green">
+
+**Standout this week:** [Title] is the clearest example of [trend/contribution]. [One sentence on why.]
+
+</callout>
 ```
-Paper Scout Daily Brief - YYYY-MM-DD
-Paper Scout Weekly Brief - YYYY-MM-DD
-```
 
-### Opening Synthesis (Required)
-
-A 2–4 sentence paragraph or short section that answers: *What mattered this period?*
-
-This is not a table of contents. It is a judgment: what is the dominant theme, what was the standout paper, what should the user pay attention to even before reading further. Write it as a researcher, not a summarizer.
-
-If the period was weak, say so honestly here.
-
-### Shortlist Table
-
-A table of all shortlisted papers — papers worth noticing but not deeply investigated. Columns:
-
-| Paper | Key Contribution | Why It Matters | Links |
-|---|---|---|---|
-| Title (authors, year) | One sentence, specific | One sentence, user-relevant | [HF](url) / [PDF](url) |
-
-Keep "Key Contribution" and "Why It Matters" distinct: contribution is what the paper did, relevance is why the user should care. Do not write the same thing twice.
-
-If a paper appears in the shortlist but was also deep-dived, mark it clearly (e.g., bold the row, or add a note "→ deep dive below").
-
-### Deep Dive Sections
-
-One H2 section per deep-dived paper. Each section should contain:
-
-**Header line:** Title, authors, year, links inline.
-
-**What it does (1–2 sentences):** The core claim or contribution, stated specifically. Not the abstract.
-
-**How it works:** The key mechanism or approach. Dense and specific — this is where the brief earns its value. Use an H3 subsection if the method is complex enough to deserve it. If the paper has a clear pipeline or algorithm, describe it step by step.
-
-**Evidence:** What the experiments show, how convincing they are, any notable caveats or red flags. Be direct: if the baseline comparisons are weak, say so. If the gains are marginal, say so.
-
-**Repo / artifacts (if inspected):** One sentence or a short bullet on what the code or project page reveals about maturity, usability, or gaps between the paper and the implementation.
-
-**Judgment:** One or two sentences on why this paper was selected for deep investigation and what the user should do with it. Is it worth reading in full? Worth building on? Worth tracking?
-
-Separate deep dive sections with a horizontal rule (`---`).
-
-### Themes And Patterns (Optional)
-
-If the pool this period shows a clear convergence, a notable absence, or a significant shift in direction, add a short H2 section after the deep dives.
-
-Write this as an observation, not a list. "Three of this week's most-cited papers use X approach, suggesting Y is becoming the dominant paradigm" is more useful than "Notable themes: X, Y, Z."
+If the period was weak, say so in plain prose. Do not pad.
 
 ---
 
-## Formatting Reference
+### 2. Shortlist Table
 
-**Callout (blockquote)** — use for standout papers, critical caveats, or important patterns:
+All shortlisted papers in one `<lark-table>`. Use `<lark-table>` rather than a Markdown table so each cell can hold links, bold text, and short lists cleanly.
 
-```markdown
-> **Standout this week:** [Paper title] is the clearest example yet of [notable trend].
-> The results are unusually well-validated and the code is clean. Worth reading.
+Four columns: Paper, Key Contribution, Why It Matters, Links.
+
+```html
+<lark-table column-widths="200,230,230,70" header-row="true">
+<lark-tr>
+<lark-td>
+
+**Paper**
+
+</lark-td>
+<lark-td>
+
+**Key Contribution**
+
+</lark-td>
+<lark-td>
+
+**Why It Matters**
+
+</lark-td>
+<lark-td>
+
+**Links**
+
+</lark-td>
+</lark-tr>
+<lark-tr>
+<lark-td>
+
+**Title** (Author et al., 2025)
+
+</lark-td>
+<lark-td>
+
+One sentence — the specific thing the paper did.
+
+</lark-td>
+<lark-td>
+
+One sentence — why the user should care about this.
+
+</lark-td>
+<lark-td>
+
+[HF](url) / [PDF](url)
+
+</lark-td>
+</lark-tr>
+</lark-table>
 ```
 
-**Table** — use for the shortlist and any multi-attribute comparisons:
+Keep "Key Contribution" and "Why It Matters" distinct — contribution is what they did, relevance is why it matters to this user. Do not write the same sentence twice.
 
-```markdown
-| Paper | Contribution | Relevance | Links |
-|---|---|---|---|
-| **Title** (Author et al., 2025) | Specific claim | Why it matters | [HF](url) |
-```
+Papers that also appear in a deep dive section below: bold their row title and add `→ see deep dive` in the contribution cell.
 
-**Horizontal rule** — use between deep dive sections:
-
-```markdown
 ---
-```
 
-**Inline code** — use for method names, model names, dataset names, paper IDs:
+### 3. Deep Dive Sections
+
+One `## [Title]` section per deep-dived paper, separated by `---`.
+
+#### Header
+
+Start with the paper title as the H2, and put author, year, and links on the immediately following line:
 
 ```markdown
-`GPT-4o`, `LoRA`, `2501.12345`
+## Paper Title
+
+Author et al. (2025) · [HF](url) · [PDF](url)
 ```
 
-**Bold** — use for key claims, paper titles within prose, and things the user must not miss:
+#### What It Does
+
+One or two sentences — the core claim, stated specifically, not the abstract. Start directly: "This paper proposes..." is a valid opener but prefer even more concrete: "The paper shows that..." or "The authors introduce X, which..."
+
+#### How It Works
+
+The key mechanism. Dense and specific. If the paper has a clear pipeline, describe it step by step with a numbered list. If it has a notable formula or loss term, write it with inline LaTeX:
 
 ```markdown
-The paper's key finding is that **attention heads are redundant beyond depth 12** in this family of models.
+The training objective is $\mathcal{L} = \mathcal{L}_{\text{CE}} + \lambda \mathcal{L}_{\text{KL}}$
 ```
+
+For block equations:
+
+```markdown
+$$
+\hat{y} = \arg\max_{y} P(y \mid x; \theta)
+$$
+```
+
+If the method contrasts two design choices directly, use a two-column grid:
+
+```html
+<grid cols="2">
+<column>
+
+**Prior approach**
+
+Description of what prior work did.
+
+</column>
+<column>
+
+**This paper**
+
+Description of what this paper does differently.
+
+</column>
+</grid>
+```
+
+#### Evidence
+
+What the key results show and how convincing they are. Be direct:
+
+- "Outperforms X by Y% on Z benchmark" is useful.
+- "Achieves state-of-the-art" is not useful.
+
+If there are notable red flags or caveats, use a warning callout:
+
+```html
+<callout emoji="⚠️" background-color="light-yellow">
+
+Baseline comparisons exclude [Method X], which is the strongest prior approach in this setting.
+
+</callout>
+```
+
+#### Artifacts (If Inspected)
+
+One sentence or a short bullet: what the repo or project page reveals about maturity, usability, or gaps between the paper and the implementation.
+
+#### Judgment
+
+One or two sentences: why this paper was worth the deep dive, and what the user should do with it. Is it worth reading in full? Worth building on? Worth tracking follow-ups?
+
+---
+
+### 4. Themes And Patterns (Optional)
+
+A short H2 section after all deep dives, only when the pool shows a clear convergence, absence, or shift worth naming.
+
+Write as an observation in prose, not a bullet list. One or two paragraphs.
+
+---
+
+## Callout Reference
+
+Use callouts for things that demand attention, not as decoration. Three types are useful for paper briefs:
+
+**Standout paper or exceptional finding:**
+```html
+<callout emoji="✅" background-color="light-green">
+
+[Content]
+
+</callout>
+```
+
+**Caveat, red flag, or important limitation:**
+```html
+<callout emoji="⚠️" background-color="light-yellow">
+
+[Content]
+
+</callout>
+```
+
+**Notable insight or key insight:**
+```html
+<callout emoji="💡" background-color="light-blue">
+
+[Content]
+
+</callout>
+```
+
+Callout content supports text, headings, lists, and quotes. It does not support code blocks or tables.
+
+---
+
+## Delivery Commands
+
+### Creating The Document
+
+```bash
+lark-cli docs +create \
+  --title "Paper Scout Daily Brief - YYYY-MM-DD" \
+  --folder-token <token> \
+  --markdown "<opening synthesis and first section>"
+```
+
+Replace `--folder-token` with `--wiki-node <token>` or `--wiki-space <id>` depending on what the user's destination is. The destination type is recorded in the workspace instruction file.
+
+### Appending Sections For Long Briefs
+
+For briefs longer than a few sections, create the document with the opening content then append sections one at a time:
+
+```bash
+lark-cli docs +update \
+  --doc "<doc_id>" \
+  --mode append \
+  --markdown "<next section>"
+```
+
+Use the `doc_id` from the create response, not the `doc_url`, especially when the destination is a wiki node (the URL may be `/wiki/...` form, which behaves differently).
+
+### Typical Sequence
+
+1. Create the doc with the opening synthesis and shortlist table.
+2. Append each deep-dive section.
+3. Append the themes section if present.
+4. Record the `doc_url` from the create response for the coverage log.
 
 ---
 
 ## What Not To Do
 
-- Do not use a flat bullet list for the entire brief. If everything is a bullet, nothing stands out.
-- Do not write an abstract-style summary for each paper. The brief is a judgment, not a digest.
-- Do not pad with qualifications ("it is worth noting that," "interestingly," "the authors argue that"). Say the thing directly.
-- Do not use the same structure for every section regardless of content. A paper with a clean pipeline deserves a step-by-step description; a position paper deserves a different treatment.
-- Do not omit the opening synthesis. The user should not have to read the entire brief to understand what mattered.
-- Do not skip the shortlist table if there are shortlisted papers. They deserve a concise record even if they did not earn a deep dive.
+- Do not start the markdown with a `# Title` heading — it duplicates the `--title` parameter.
+- Do not use `>` blockquote syntax expecting it to render as a callout. Use the `<callout>` tag.
+- Do not put tables or code blocks inside a callout — it is not supported.
+- Do not use `overwrite` mode to fix or update a brief. Use `append` or `replace_range`.
+- Do not write "the paper achieves state-of-the-art." Write the number, the benchmark, and the comparison.
+- Do not use a flat bullet list for the entire brief. The shortlist is a `<lark-table>`. Deep dives are H2 sections. Judgment paragraphs are prose.
+- Do not skip the opening synthesis. The user should understand what mattered before scrolling to individual papers.
 
 ---
 
 ## Checklist Before Delivery
 
-- [ ] Opening synthesis written — covers what mattered this period in 2–4 sentences
-- [ ] Shortlist table populated with all shortlisted papers, specific contributions and relevance
-- [ ] Each deep dive section: specific contribution, how it works, evidence quality, judgment
-- [ ] No flat-bullet-only sections where a table or prose would be clearer
-- [ ] Callout used for anything the user must not miss
-- [ ] Horizontal rules separating deep dive sections
-- [ ] Document title matches configured pattern
-- [ ] Written to `output/` before delivery
+- [ ] `lark-doc` loaded
+- [ ] Document title matches configured pattern (`--title` flag, not inside markdown)
+- [ ] Opening synthesis written — 2–4 sentences on what mattered this period
+- [ ] Shortlist in a `<lark-table>` with specific contribution and relevance columns
+- [ ] Each deep dive: specific contribution, how it works, evidence quality, judgment
+- [ ] Callouts used for standout papers and notable caveats — not decoratively
+- [ ] LaTeX used for any equations the paper centers on
+- [ ] Grid used for any direct method comparisons worth visualizing
+- [ ] Doc created via `docs +create`; sections appended via `docs +update --mode append` if long
+- [ ] `doc_url` or `doc_id` recorded for the coverage log
