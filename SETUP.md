@@ -52,6 +52,7 @@ Follow these steps in order:
    - `hf papers` works
    - `lark-cli` is installed and configured
    - `lark-cli docs` and `lark-cli wiki` work
+   - the installed `lark-doc` skill is the **v2** version and `lark-cli docs +create --api-version v2 --help` succeeds (if `--api-version` is rejected or the `lark-doc` skill is not v2, run `lark-cli update` to upgrade the binary and skills before continuing)
    - Feishu destination access can be validated
 4. Ask the user the onboarding questions in the next section.
 5. Create `~/.paper-scout/workspace/` if needed.
@@ -312,7 +313,7 @@ The workspace should hold:
 - `papers/` — downloaded paper markdown
 - `repos/` — cloned repositories for inspection
 - `runs/` — per-run notes and scratch artifacts
-- `output/` — final Lark-flavored markdown before delivery
+- `output/` — final Lark DocxXML before delivery
 - `state/log.md` — the persistent coverage log
 
 ---

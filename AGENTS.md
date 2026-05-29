@@ -211,9 +211,9 @@ Each file in this repo has a distinct job. Do not let them bleed into each other
 **`skill/FEISHU_DOC.md`** is the document writing sub-skill.
 
 - Audience: **reading agents**, invoked by the main `paper-scout` skill during Phase 5.
-- Contains: document structure, visual hierarchy, formatting conventions (tables, callouts, horizontal rules), section templates, writing quality standards.
-- Does not contain: analysis logic, investigation procedures, or delivery mechanics.
-- Editing principle: if a change affects how the final brief is structured or written for Feishu, it belongs here.
+- Contains: brief structure, section templates, visual-hierarchy guidance, writing quality standards, and the v2 delivery command sequence. Authoring format is Lark DocxXML (`lark-cli` v2).
+- Does not contain: analysis logic or investigation procedures. It also does not own the DocxXML syntax — low-level format, escaping, and command flags defer to the installed `lark-doc` skill, so this file does not rot when `lark-cli` changes.
+- Editing principle: if a change affects how the final brief is structured or written for Feishu, it belongs here. If it is a low-level DocxXML syntax detail, it belongs in `lark-doc`, not here.
 - Relationship: `skill/SKILL.md` Phase 5 delegates writing decisions to this skill. Writing tone and depth are still controlled by the workspace instruction file — this skill controls layout and structural quality.
 
 **`PROMPT_TEMPLATE.md`** is the run-trigger template.

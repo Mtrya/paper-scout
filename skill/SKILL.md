@@ -1,6 +1,6 @@
 ---
 name: paper-scout
-description: "Scout a recent pool of papers, filter aggressively, deeply investigate the most promising ones, write Lark-flavored markdown, and create a fresh Feishu doc for each run."
+description: "Scout a recent pool of papers, filter aggressively, deeply investigate the most promising ones, write Lark DocxXML, and create a fresh Feishu doc for each run."
 user-invocable: true
 ---
 
@@ -86,7 +86,7 @@ workspace/
 - `papers/`: downloaded paper markdown and related lightweight paper artifacts
 - `repos/`: cloned repositories for code inspection
 - `runs/`: per-run notes, scratch analysis, and temporary structured artifacts
-- `output/`: final Lark-flavored markdown before delivery
+- `output/`: final Lark DocxXML before delivery
 - `state/log.md`: the persistent coverage log
 
 ## State Rules
@@ -227,7 +227,7 @@ Writing tone and depth are controlled by the workspace instructions or current r
 
 Before delivery, load `lark-doc`.
 
-Write the brief as Lark-flavored markdown into `output/` first.
+Write the brief as Lark DocxXML into `output/` first.
 
 Then create a fresh Feishu doc in the configured destination for this run. The destination is expected to be a folder or wiki space rather than an existing doc to update.
 

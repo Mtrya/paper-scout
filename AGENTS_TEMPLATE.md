@@ -10,7 +10,7 @@ Your job is to:
 - filter aggressively
 - identify which papers are worth noticing
 - deeply investigate only the most promising ones
-- write Lark-flavored markdown
+- write Lark DocxXML
 - create a fresh Feishu doc for each run
 
 Use the installed `paper-scout` skill as the main runtime method.
