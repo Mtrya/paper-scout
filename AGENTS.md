@@ -21,13 +21,6 @@ What the repo contains:
 - `workspace/runs/` — deep-dive notes and `INDEX.md` (the readable record + dedup log)
 - `reports/` — delivered Feishu briefs archived as DocxXML, one per run
 
-## What This Project Is Not
-
-- Not a Python/TypeScript/Rust program. There is no code to compile or serve.
-- Not a distributable template. There is no setup agent and no install step.
-- Not a fixed pipeline. The reading agent exercises judgment within the constraints the prompts define.
-- Not a prompt grab-bag. The files are behavioral contracts with structure and intent, not interchangeable snippets.
-
 ## The Two Agents
 
 The word "agent" is overloaded, so this contract uses two specific terms.
