@@ -31,9 +31,9 @@ Before source discovery, load `hf-cli`.
 
 Before creating Feishu docs, load `lark-doc`.
 
-During Phase 4 (deep investigation), load and follow `paper-scout-deep-dive` (`skill/DEEP_DIVE.md`).
+During Phase 4 (deep investigation), load and follow `paper-scout-deep-dive`.
 
-During Phase 5 (synthesis and writing), load and follow `paper-scout-feishu-doc` (`skill/FEISHU_DOC.md`).
+During Phase 5 (synthesis and writing), load and follow `paper-scout-feishu-doc`.
 
 Use this `paper-scout` skill as the main operating method throughout the run.
 
@@ -190,7 +190,7 @@ The exact quotas come from the workspace instructions or current run trigger. If
 
 ## Phase 4: Deep Investigation
 
-For each selected deep-dive candidate, load and follow the `paper-scout-deep-dive` skill (`skill/DEEP_DIVE.md`).
+For each selected deep-dive candidate, load and follow the `paper-scout-deep-dive` skill.
 
 That skill defines the full investigation process: section inventory, motivation and contribution analysis, method walkthrough, experimental evidence assessment, artifact inspection, and bottom-line judgment. Follow it in full for every deep-dive paper.
 
@@ -208,7 +208,7 @@ Do not let deep investigation turn into a full reproduction effort.
 
 ## Phase 5: Synthesis And Writing
 
-Load and follow the `paper-scout-feishu-doc` skill (`skill/FEISHU_DOC.md`).
+Load and follow the `paper-scout-feishu-doc` skill.
 
 That skill defines the document structure, visual hierarchy, formatting conventions, and quality standards for the final brief. Follow it for layout and writing decisions.
 
