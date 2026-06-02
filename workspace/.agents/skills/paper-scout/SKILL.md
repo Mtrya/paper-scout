@@ -76,9 +76,8 @@ workspace/
 ├── papers/
 ├── repos/
 ├── runs/
-├── output/
-└── state/
-    └── log.md
+│   └── INDEX.md
+└── drafts/
 ```
 
 ### Directory Roles
@@ -86,12 +85,12 @@ workspace/
 - `papers/`: downloaded paper markdown and related lightweight paper artifacts
 - `repos/`: cloned repositories for code inspection
 - `runs/`: per-run notes, scratch analysis, and temporary structured artifacts
-- `output/`: final Lark DocxXML before delivery
-- `state/log.md`: the persistent coverage log
+- `drafts/`: working Lark DocxXML before delivery
+- `runs/INDEX.md`: the persistent coverage log and dedup source of truth
 
 ## State Rules
 
-Before serious scouting or investigation, inspect `state/log.md`.
+Before serious scouting or investigation, inspect `runs/INDEX.md`.
 
 Use the log to identify:
 
@@ -128,7 +127,7 @@ Before scouting:
 
 1. Load `hf-cli`.
 2. Confirm the workspace root exists or can be created.
-3. Inspect `state/log.md` if present.
+3. Inspect `runs/INDEX.md` if present.
 4. Verify the output and scratch directories are available.
 5. Before delivery work later in the run, remember to load `lark-doc`.
 
@@ -227,7 +226,7 @@ Writing tone and depth are controlled by the workspace instructions or current r
 
 Before delivery, load `lark-doc`.
 
-Write the brief as Lark DocxXML into `output/` first.
+Write the brief as Lark DocxXML into `drafts/` first. After successful delivery, archive the delivered DocxXML to the repo-root `reports/` as `YYYY-MM-DD-<slug>.docxxml`.
 
 Then create a fresh Feishu doc in the configured destination for this run. The destination is expected to be a folder or wiki space rather than an existing doc to update.
 
@@ -235,7 +234,7 @@ Preserve the resulting document URL or identifier for logging.
 
 ## Phase 7: Logging And Optional Cleanup
 
-After successful delivery, append a new entry to `state/log.md`.
+After successful delivery, append a new entry to `runs/INDEX.md`.
 
 Each run entry should record:
 
@@ -268,6 +267,6 @@ Before finishing a run, confirm:
 - deep investigation stayed read-only and lightweight
 - the final brief reflects both broad scouting and deeper analysis
 - a fresh Feishu doc was created
-- `state/log.md` was updated
+- `runs/INDEX.md` was updated
 
 If any of these failed, say so clearly instead of implying the run was complete.

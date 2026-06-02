@@ -214,14 +214,14 @@ Use callouts for things that demand attention, not as decoration. Three types ar
 
 ## Delivery Commands
 
-All commands carry `--api-version v2`. Content is DocxXML, passed via `--content` (default `--doc-format xml`). For multi-line content, prefer `--content @path/to/file.xml` or `--content -` (stdin) over inline strings — write the brief to `output/` first and pass the file. See `lark-doc-create.md` / `lark-doc-update.md`.
+All commands carry `--api-version v2`. Content is DocxXML, passed via `--content` (default `--doc-format xml`). For multi-line content, prefer `--content @path/to/file.xml` or `--content -` (stdin) over inline strings — write the brief to `drafts/` first and pass the file. See `lark-doc-create.md` / `lark-doc-update.md`.
 
 ### Creating The Document
 
 ```bash
 lark-cli docs +create --api-version v2 \
   --parent-token <token> \
-  --content @output/brief.xml
+  --content @drafts/brief.xml
 ```
 
 The `<title>` element inside the content sets the document title — there is no `--title` flag. The destination is set with `--parent-token <folder-or-wiki-node-token>` (or `--parent-position my_library` for a personal library). The destination type is recorded in the workspace instruction file. Note that v2 uses `--parent-token` for both folders and wiki nodes — there are no separate `--folder-token` / `--wiki-node` / `--wiki-space` flags.
@@ -236,7 +236,7 @@ Capture `data.document.document_id` and `data.document.url` from the response.
 lark-cli docs +update --api-version v2 \
   --doc "<document_id>" \
   --command append \
-  --content @output/section.xml
+  --content @drafts/section.xml
 ```
 
 Use the `document_id` from the create response, not the `url`, especially for wiki destinations.
