@@ -39,7 +39,7 @@ When the reading agent encounters conflicting guidance, it resolves in this orde
 
 1. **Per-run prompt** (`prompt.txt`) — most specific; wins on run-scoped parameters like date and focus.
 2. **Reading-agent contract** (`workspace/AGENTS.md`) — stable user preferences; wins on identity, style, policy, destination.
-3. **Skills** (`workspace/.agents/skills/`) — the method; win on workflow structure and phase definitions.
+3. **Skills** (`workspace/.agents/skills/`) — the method; win on how each workflow step is executed.
 
 Keep this hierarchy clean. Do not put run-scoped concerns in a skill. Do not put method details in the reading-agent contract. Do not put stable preferences in the prompt.
 
@@ -57,11 +57,15 @@ Each file has a distinct job. Do not let them bleed into each other.
 
 **`workspace/AGENTS.md`** — the reading-agent contract. Identity, user preferences, policy, delivery destination, coverage-log rules. Concrete values, not templates. No method detail, no run-phase orchestration.
 
-**`workspace/.agents/skills/paper-scout/SKILL.md`** — the main runtime method: phased workflow, investigation boundaries, selection criteria, synthesis, logging. No user-specific preferences or destination.
+**`workspace/.agents/skills/workspace-manage/SKILL.md`** — workspace layout, naming rules, area conventions, and `runs/INDEX.md` coverage log.
 
-**`workspace/.agents/skills/paper-scout-deep-dive/SKILL.md`** — the deep investigation sub-skill invoked during Phase 4. How deeply and systematically a single paper is analyzed. No synthesis, writing, or delivery.
+**`workspace/.agents/skills/paper-source/SKILL.md`** — recent-paper pool discovery. Default source is Hugging Face Papers, with commands documented inline; additional sources are added here as the workflow grows.
 
-**`workspace/.agents/skills/paper-scout-feishu-doc/SKILL.md`** — the document writing sub-skill invoked during Phase 5–6. Brief structure, visual hierarchy, writing standards, and the `lark-cli` v2 delivery commands. Low-level DocxXML syntax defers to the installed `lark-doc` skill so this file does not rot when `lark-cli` changes.
+**`workspace/.agents/skills/paper-deep-dive/SKILL.md`** — deep investigation of a single paper: reading, code inspection, lightweight checks, related-work comparison, and structured analysis notes.
+
+**`workspace/.agents/skills/brief-compose/SKILL.md`** — DocxXML brief structure, editorial standards, visual hierarchy, and writing rules. Low-level DocxXML syntax defers to the installed `lark-doc` skill so this file does not rot when `lark-cli` changes.
+
+**`workspace/.agents/skills/brief-deliver/SKILL.md`** — Feishu doc creation, user notification, and archive to `reports/`. Uses `lark-doc` and `lark-im` for command details.
 
 **`scout.sh`** — the launcher. Computes the date, stamps `prompt.txt`, starts the harness from `workspace/`. The only file that knows the harness invocation.
 
@@ -87,12 +91,12 @@ The reading agent's home is `workspace/`. These invariants must hold across prom
 workspace/
 ├── AGENTS.md          # reading-agent contract
 ├── .agents/skills/    # the skills (the method)
-├── papers/            # downloaded paper markdown (gitignored, README placeholder)
-├── repos/             # cloned repos (gitignored, README placeholder)
+├── papers/            # downloaded paper markdown, organized by area (gitignored, README placeholder)
+├── repos/             # cloned repos, organized by area (gitignored, README placeholder)
 ├── drafts/            # working DocxXML before delivery (gitignored, README placeholder)
 └── runs/
-    ├── INDEX.md       # coverage log + dedup source of truth
-    └── <paper-id>-deep-dive.md
+    ├── INDEX.md                         # coverage log + dedup source of truth
+    └── <area>/<slug>-<id>-deep-dive.md  # durable analysis notes, organized by area
 ```
 
 Delivered briefs are archived to the repo-root `reports/` as `YYYY-MM-DD-<slug>.docxxml`, one per run.

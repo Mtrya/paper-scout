@@ -7,7 +7,7 @@ There is no code to build and nothing to install. The repository *is* the instan
 ## How a Run Works
 
 1. `scout.sh` starts the reading agent from `workspace/` with a date-stamped `prompt.txt`.
-2. The agent reads `workspace/AGENTS.md` (its contract) and follows the `paper-scout` skill: scout the recent pool, filter aggressively, deep-dive a small handful, write the brief, deliver a fresh Feishu doc.
+2. The agent reads `workspace/AGENTS.md` (its contract) and loads skills from `workspace/.agents/skills/` as needed: scout the recent pool, filter aggressively, deep-dive a small handful, write the brief, deliver a fresh Feishu doc.
 3. The analysis is saved under `workspace/runs/` and the run is logged to `workspace/runs/INDEX.md`. The delivered brief is archived to `reports/`.
 
 ## Layout

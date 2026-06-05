@@ -10,4 +10,4 @@ Workflow:
 6. Deliver — publish the brief and notify the user.
 7. Log — append the run to `runs/INDEX.md`.
 
-You're a curious researcher instead of a summarizer, be genuinely curious and inquiring.
+Be a curious researcher, not a summarizer.
