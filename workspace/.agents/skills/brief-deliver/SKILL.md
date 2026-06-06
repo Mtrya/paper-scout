@@ -18,10 +18,17 @@ Load `lark-im` before sending the delivery notification — it owns how to addre
 
 All `docs` commands carry `--api-version v2`. Content is DocxXML.
 
+Before creating the real doc, run the same create command with `--dry-run` as a preflight check.
+
+```bash
+lark-cli docs +create --api-version v2 --dry-run --as bot\
+  --content @drafts/brief.xml
+```
+
 Create the doc:
 
 ```bash
-lark-cli docs +create --api-version v2 \
+lark-cli docs +create --api-version v2 --as bot\
   --content @drafts/brief.xml
 ```
 
@@ -32,7 +39,16 @@ The bot owns the resulting doc. There is **no `--parent-token`** and no configur
 If the brief is long enough to risk a single create call becoming unwieldy, create a skeleton first (title + opening synthesis + theme `<h1>` headings), then append each theme's body and deep dives with the `document_id`:
 
 ```bash
-lark-cli docs +update --api-version v2 \
+lark-cli docs +update --api-version v2 --dry-run --as bot\
+  --doc "<document_id>" \
+  --command append \
+  --content @drafts/section.xml
+```
+
+Then append:
+
+```bash
+lark-cli docs +update --api-version v2 --as bot\
   --doc "<document_id>" \
   --command append \
   --content @drafts/section.xml

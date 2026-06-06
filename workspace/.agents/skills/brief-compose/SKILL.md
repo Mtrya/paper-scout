@@ -8,12 +8,16 @@ user-invocable: false
 
 Load `lark-doc` first and follow its DocxXML references.
 
+For figure/media placement, follow `references/figure-embedding.md`.
+
 ## Format Rules
 
 - Author as DocxXML. v2 API. No `--title` flag — use a `<title>` element at the start and do not repeat it in the body.
 - Use a sensible `<h1>` / `<h2>` hierarchy. Feishu auto-generates a table of contents.
 - Callout children must be block elements (`<p>`, headings, lists). No bare text, no tables or code blocks inside callouts.
-- Escape `<`, `>`, `&` as `&lt;`, `&gt;`, `&amp;` in text. Follow `lark-doc-xml.md` for full escaping rules.
+- Escape `<`, `>`, `&` as `&lt;`, `&gt;`, `&amp;` in text.
+- DocxXML is a fragment format with multiple top-level blocks. Do not validate it with a standard single-root XML parser.
+- Temporary figure anchors must be standalone top-level paragraphs, unique within the doc, and easy to delete after media insertion, for example `<p>[[figure-anchor:paper-slug:overview]]</p>`.
 
 ## Structure
 
@@ -113,6 +117,10 @@ Write as fluent narrative, not a fixed template. Sub-headings (`<h3>`) only when
 
 Use platform features where they earn their place: `<latex>` for centered equations, `<grid>` for two-way comparisons, `<table>` for multi-way comparisons, callouts for standouts or caveats. Judgment over decoration.
 
+### Visual evidence
+
+Deep dives should be scannable and evidence-rich when the source material supports it. Prefer one or two high-signal visuals over decoration: an architecture figure, main result table, qualitative example, compact code snippet, or equation block that makes the method easier to trust. If a local extracted figure should appear near a specific paper's prose, place a temporary figure anchor in the draft and record the intended image/caption for delivery.
+
 ### Cross-cutting observations (optional)
 
 Add a closing `<h1>` only for a pattern that cuts across themes — a convergence, absence, or shift. One or two paragraphs of prose. Skip if there is nothing to say.
@@ -149,6 +157,7 @@ Use sparingly, only for things that demand attention.
 - Do not ship a deep dive that restates the abstract.
 - Do not skip the opening synthesis.
 - Do not guess XML escaping. Follow `lark-doc-xml.md`.
+- Do not leave temporary figure anchors visible in the delivered doc.
 
 ## Checklist
 
@@ -159,5 +168,6 @@ Use sparingly, only for things that demand attention.
 - [ ] Per-theme `<h1>`; each paper exactly once
 - [ ] Shortlist tables per theme (lightly-noticed only)
 - [ ] Deep dives as fluent narrative with mechanism, evidence, findings, verdict
+- [ ] Visual evidence considered; figure anchors included where local media should be inserted
 - [ ] Callouts used only where they earn attention
 - [ ] `<`, `>`, `&` escaped per `lark-doc-xml.md`

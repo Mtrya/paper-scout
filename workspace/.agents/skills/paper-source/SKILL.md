@@ -8,8 +8,6 @@ user-invocable: true
 
 This skill covers how to gather papers.
 
-The default source is Hugging Face Papers.
-
 ## What to Gather
 
 For each candidate, preserve enough metadata to support later triage:
@@ -24,12 +22,14 @@ If you persist the candidate pool to disk, write it to `drafts/` (scratch, may b
 
 ## Source A: Hugging Face Papers
 
-Use the `hf` CLI. The commands below cover the common scouting cases.
+Use the `hf` CLI for quick paper scouting and reading.
 
-List daily papers:
+List papers:
 
 ```bash
-hf papers list --date YYYY-MM-DD --limit N
+hf papers ls --sort trending --limit N
+hf papers ls --date YYYY-MM-DD --limit N
+hf papers ls --week YYYY-Www --limit N
 ```
 
 Read a paper as markdown:
@@ -51,3 +51,30 @@ hf papers search "<query>" --limit N
 ```
 
 Use `--format json` when structured output is easier to process.
+
+## Source B: ArXiv PDF + MinerU
+
+Use ArXiv PDF + MinerU for finer-grained control, better support for same-day papers, and more reliable full-text and figure/table extraction.
+
+End-to-end script:
+
+```bash
+.agents/skills/paper-source/scripts/arxiv-mineru-parse.sh <paper-id> <area> <slug>
+```
+
+The script downloads the PDF to `drafts/`, submits the arXiv PDF URL to MinerU, polls for completion, extracts the result zip under `drafts/`, copies the resulting Markdown to `papers/<area>/<slug>-<paper-id>.md`, then removes the transient PDF, zip, and task/result JSON files. It assumes `curl`, `jq`, `unzip`, and a MinerU token at `~/.config/mineru/token`.
+
+Useful options:
+
+```bash
+.agents/skills/paper-source/scripts/arxiv-mineru-parse.sh <paper-id> <area> <slug> --model pipeline
+.agents/skills/paper-source/scripts/arxiv-mineru-parse.sh <paper-id> <area> <slug> --copy-images
+```
+
+With `--copy-images`, the script also copies extracted images from `drafts/` to `assets/` for easier reference during deep dives and writing.
+
+If you only need the PDF audit artifact, use:
+
+```bash
+.agents/skills/paper-source/scripts/fetch-arxiv-pdf.sh <paper-id> <slug>
+```

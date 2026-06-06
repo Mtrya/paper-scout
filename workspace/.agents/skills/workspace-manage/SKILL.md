@@ -11,7 +11,7 @@ user-invocable: false
 ```text
 .
 ├── papers/<area>/<slug>-<id>.md          # downloaded paper markdown
-├── repos/<area>/<repo-name>/             # cloned repos
+├── repos/<area>/<repo-name>/             # cloned repos or verification projects
 ├── runs/
 │   ├── INDEX.md                          # coverage log / dedup source
 │   └── <area>/<slug>-<id>-deep-dive.md   # analysis notes
@@ -39,7 +39,7 @@ Add an id suffix to repos only on collision.
 ## Directory Rules
 
 - `papers/`: durable downloaded markdown.
-- `repos/`: durable cloned code.
+- `repos/`: durable cloned code and agent-created verification projects.
 - `runs/`: durable notes + `INDEX.md` only.
 - `drafts/`: scratch. Overwrite freely. Never put durable content here.
 - `../reports/`: archive delivered DocxXML as `YYYY-MM-DD-<slug>.docxxml`.

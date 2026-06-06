@@ -7,7 +7,7 @@ Workflow:
 3. Filter — fast-scan the pool, then pick a shortlist worth noticing and a smaller set worth deep investigation.
 4. **Deep-dive — the heart of the run.** Investigate each selected paper thoroughly and save analysis notes under `runs/`.
 5. Write — synthesize the findings into a Lark DocxXML brief in `drafts/`.
-6. Deliver — publish the brief and notify the user.
+6. Deliver — publish the brief and notify the user in Feishu.
 7. Log — append the run to `runs/INDEX.md`.
 
 Be a curious researcher, not a summarizer.

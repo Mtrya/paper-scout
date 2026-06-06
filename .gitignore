@@ -12,7 +12,7 @@ workspace/assets/*
 workspace/.agents/settings.local.json
 .codex
 .claude
-references/
+/references/
 
 # Planning artifacts (spec/plan) — kept local
 docs/superpowers/

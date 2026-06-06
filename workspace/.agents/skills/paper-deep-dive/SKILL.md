@@ -19,6 +19,7 @@ Structured notes saved to `runs/<area>/<slug>-<id>-deep-dive.md`:
 - core method at near-reimplementation detail
 - experimental evidence and credibility
 - what the code reveals — matches, undocumented tricks, discrepancies, or explicit note that no code exists
+- artifact completeness and lightweight verification — classify the release and record what small check you ran, if any
 - comparative positioning against 1–3 key related papers (mandatory when no code)
 - red flags and caveats
 - bottom-line judgment: read / skim / build on / track / skip, with reason
@@ -27,7 +28,7 @@ Notes do not need polished prose. They need to be accurate and specific.
 
 ## Phase D0: Download And Inventory
 
-1. Download: `hf papers read <id> > papers/<area>/<slug>-<id>.md`
+1. Acquire the paper through `paper-source` (`hf papers read` or arXiv PDF + MinerU) and save the Markdown to `papers/<area>/<slug>-<id>.md`.
 2. Read the full paper. Do not skip sections or the appendix.
 3. Build a section inventory. Account for every section. Assign each one a home in your analysis or note it under general observations.
 
@@ -91,6 +92,8 @@ Mandatory whenever a repository exists. Do not trust the paper's description of 
 
 If no code exists, state that explicitly and explain how it affects confidence.
 
+Classify artifact completeness: reproducible artifact / architecture release / partial artifact / no usable artifact. If the artifact is not reproducible end to end, still run one lightweight verification when possible. You may create a small project under `repos/<area>/<slug>-check/`, set up a local Python venv, write scripts, install minimal dependencies, and execute toy checks there. Good checks include reimplementing an attention mask, token-packing rule, loss, optimizer step, metric, config/model-shape assertion, or small synthetic-input path. Report what it confirmed or contradicted; if no meaningful lightweight check exists, say why.
+
 ## Phase D-RW: Situate Against Related Work
 
 Mandatory when no usable code exists; encouraged otherwise.
@@ -121,9 +124,9 @@ Write a bottom-line covering novelty, credibility, relevance, and priority. End 
 - [ ] Motivation and contribution in the paper's own terms
 - [ ] Core method at reimplementation detail
 - [ ] Evidence assessed, not transcribed
-- [ ] Code inspected or absence explicitly noted; discrepancies recorded
+- [ ] Artifact completeness classified; code inspected or absence explicitly noted; discrepancies recorded
 - [ ] Situated against 1–3 related papers when no code exists
-- [ ] Lightweight verification reported with results
+- [ ] Lightweight verification run or explicitly ruled out
 - [ ] Red flags noted
 - [ ] Bottom-line judgment with specific priority call
 - [ ] Notes saved to `runs/<area>/<slug>-<id>-deep-dive.md`
