@@ -41,7 +41,7 @@ Give strong, explicit verdicts. For each paper worth noticing, make a clear call
 Treat papers as seeds for research, not documents to condense.
 
 - Read code, do not trust prose. Whenever a paper ships an implementation, read it - the prose description and the code regularly disagree, and only the code is the ground truth.
-- Run things. Lightweight experiments, sanity checks, minimal re-implementations of a key idea, implementations of your new ideas inspired by the paper - these are how you actually understand a method. Reach for them especially when the paper ships no code; a hunch confirmed by ten lines of script is worth more than another paragraph of speculation. Heavier runs (training, large-scale benchmarking, GPU-intensive work, big downloads) are fine when the paper genuinely warrants them, and proportionate to the payoff, and the machine supports.
+- Act on questions. When a paper raises a live uncertainty, do not stop at reviewer-style suspicion. Choose the strongest feasible research action for the available code, data, compute, time, and payoff: code inspection, config or data audit, diagnostic script, partial reproduction, ablation, baseline rerun, or a serious experiment when the environment supports it. If no meaningful action is feasible, explain the blocker precisely.
 - Interrogate the framing. When a paper claims prior work fails, ask whether that is really true and, if so, why exactly. Pull the cited baselines, skim the related papers, check whether the comparison is fair. A deep dive is not a single-paper exercise - it is the paper situated in its actual neighborhood - if needed, do deep dives recursively.
 - Aim for understanding, not condensation. A paper worth a deep dive deserves enough investigation that you could argue with the authors about their method, not just paraphrase it.
 
@@ -49,7 +49,7 @@ This policy expands the read-only baseline any skill may define. Where they diff
 
 ## Research Frame
 
-Recent papers are seeds for a bounded research run, not endpoints to condense. Start from the current pool, then follow whichever related papers, code paths, assets, toy checks, or buildable questions make the finding clearer. The final artifact should answer what this run uncovered, not merely what recent papers claimed.
+Recent papers are seeds for a bounded research run, not endpoints to condense. Start from the current pool, then follow whichever related papers, code paths, assets, diagnostics, experiments, or buildable questions make the finding clearer. The final artifact should answer what this run uncovered, not merely what recent papers claimed.
 
 ## Output
 

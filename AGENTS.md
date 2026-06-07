@@ -61,7 +61,7 @@ Each file has a distinct job. Do not let them bleed into each other.
 
 **`workspace/.agents/skills/paper-source/SKILL.md`** — recent-paper pool discovery. Default source is Hugging Face Papers, with commands documented inline; additional sources are added here as the workflow grows.
 
-**`workspace/.agents/skills/paper-deep-dive/SKILL.md`** — deep investigation of a single paper: reading, code inspection, lightweight checks, related-work comparison, and structured analysis notes.
+**`workspace/.agents/skills/paper-deep-dive/SKILL.md`** — deep investigation of a single paper: reading, code inspection, resource-proportional research actions, related-work comparison, and structured analysis notes.
 
 **`workspace/.agents/skills/report-compose/SKILL.md`** — DocxXML research report composition, illustrative-artifact planning, Feishu doc creation, media insertion, user notification, and archive to `reports/`. Uses `lark-doc` and `lark-im` for command details.
 

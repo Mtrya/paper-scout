@@ -1,6 +1,6 @@
 ---
 name: paper-deep-dive
-description: "Thoroughly investigate a selected paper: read it fully, inspect code and artifacts, run lightweight checks, compare related work, and write structured analysis notes."
+description: "Thoroughly investigate a selected paper: read it fully, inspect code and artifacts, choose resource-proportional research actions, compare related work, and write structured analysis notes."
 user-invocable: true
 ---
 
@@ -19,9 +19,9 @@ Structured notes saved to `runs/<area>/<slug>-<id>-deep-dive.md`:
 - core method at near-reimplementation detail
 - experimental evidence and credibility
 - what the code reveals — matches, undocumented tricks, discrepancies, or explicit note that no code exists
-- artifact completeness and lightweight verification — classify the release and record what small check you ran, if any
+- artifact completeness and research action — classify the release and record the live question, action, resource fit, result, and interpretation or blocker
 - comparative positioning against 1–3 key related papers (mandatory when no code)
-- illustration candidates for the report — equations, figures, tables, snippets, or toy-check artifacts that make the finding easier to understand
+- illustration candidates for the report — equations, figures, tables, snippets, diagnostics, or experiment artifacts that make the finding easier to understand
 - red flags and caveats
 - bottom-line judgment: read / skim / build on / track / skip, with reason
 
@@ -71,7 +71,7 @@ Explain the method densely enough that someone could roughly reimplement it.
 - **Ablations:** what components are tested, what removing each reveals, whether the study is convincing.
 - **Red flags:** cherry-picked comparisons, missing baselines, gains within noise, evaluation favoring the method, abstract claims overshooting results.
 
-## Phase D4: Code And Artifact Inspection
+## Phase D4: Code And Artifact Investigation
 
 Mandatory whenever a repository exists. Do not trust the paper's description of its own method.
 
@@ -82,7 +82,7 @@ Mandatory whenever a repository exists. Do not trust the paper's description of 
 3. Trace the core implementation end to end. Locate the key equation, loss, or algorithm in the source.
 4. Look for what the paper omits: undocumented tricks, defaults, clamps, normalizations, data filtering, baseline implementations.
 5. Note paper-vs-code discrepancies and repo maturity (last commit, activity).
-6. Run lightweight checks when cheap and decisive: small scripts, CPU sanity runs, tiny snippets. No training, no full benchmarks, no heavy downloads. Report exactly what you ran and what it showed.
+6. Convert live questions into a research action. Choose the strongest feasible action: code-path trace, config/default audit, dataset/sample inspection, diagnostic script, partial reproduction, ablation, or full experiment when justified.
 
 **Hugging Face model / dataset cards:**
 
@@ -93,7 +93,13 @@ Mandatory whenever a repository exists. Do not trust the paper's description of 
 
 If no code exists, state that explicitly and explain how it affects confidence.
 
-Classify artifact completeness: reproducible artifact / architecture release / partial artifact / no usable artifact. If the artifact is not reproducible end to end, still run one lightweight verification when possible. You may create a small project under `repos/<area>/<slug>-check/`, set up a local Python venv, write scripts, install minimal dependencies, and execute toy checks there. Good checks include reimplementing an attention mask, token-packing rule, loss, optimizer step, metric, config/model-shape assertion, or small synthetic-input path. Report what it confirmed or contradicted; if no meaningful lightweight check exists, say why.
+Classify artifact completeness: reproducible artifact / architecture release / partial artifact / no usable artifact. Do not use an incomplete artifact as a reason to stop at critique. When meaningful, create a project under `repos/<area>/<slug>-check/`, set up a local Python venv, write scripts, install dependencies proportionate to the action, and execute the diagnostic or experiment. Good actions might be reimplementing an attention mask, token-packing rule, loss, optimizer step, metric, config/model-shape assertion, small synthetic-input path, ablation of a code branch, or benchmark subset. If no meaningful action fits the available resources, say why.
+
+Use this loop in the notes:
+
+```text
+Question -> Action -> Result -> Interpretation -> New Question -> ...
+```
 
 ## Phase D-RW: Situate Against Related Work
 
@@ -116,7 +122,7 @@ Write a bottom-line covering novelty, credibility, relevance, and priority. End 
 - Do not stop at the method section. Experiments and ablations test claims.
 - Do not skip the appendix.
 - Do not skip code inspection when a repo exists.
-- Do not let code inspection become a reproduction project.
+- Do not perform cargo-cult reproduction. Spend resources when the expected insight justifies them.
 - Do not let related-work exploration become a literature review.
 
 ## Checklist
@@ -127,7 +133,7 @@ Write a bottom-line covering novelty, credibility, relevance, and priority. End 
 - [ ] Evidence assessed, not transcribed
 - [ ] Artifact completeness classified; code inspected or absence explicitly noted; discrepancies recorded
 - [ ] Situated against 1–3 related papers when no code exists
-- [ ] Lightweight verification run or explicitly ruled out
+- [ ] Research action loop recorded: question, action, resource fit, result, interpretation or blocker
 - [ ] Illustration candidates recorded for report composition
 - [ ] Red flags noted
 - [ ] Bottom-line judgment with specific priority call

@@ -12,7 +12,7 @@ Load `lark-doc` before drafting or publishing. Follow its DocxXML references for
 
 ## Report Contract
 
-Recent papers are research seeds, not the boundary of the report. Start from what is new, then follow the strongest threads: related papers, code, artifacts, toy checks, equations, and buildable questions. The report should make the interesting findings quickly understandable.
+Recent papers are research seeds, not the boundary of the report. Start from what is new, then follow the strongest threads: related papers, code, artifacts, diagnostics, experiments, equations, and buildable questions. The report should make the interesting findings quickly understandable.
 
 Illustrative artifacts are first-class: equations, code snippets, pseudocode, paper figures, curated diagrams, and real tables. Their purpose is not to prove the report true, but to demonstrate the mechanism, result, contrast, or failure mode faster than prose can.
 
@@ -125,12 +125,14 @@ Use DocxXML features where they carry understanding:
 - `<table>` for structured multi-way comparisons, metrics, or ablations.
 - Local image anchors for paper figures, qualitative examples, failure cases, or curated diagrams that should appear near the relevant prose.
 
+For paper figures, prefer the paper's main figure when it best illustrates the mechanism or result, and map MinerU image files to figure numbers by checking the caption and surrounding main-text references rather than inferring from filenames.
+
 ### Illustration Plan
 
 Before writing the final draft, keep a scratch illustration plan for each deep-dive section:
 
 - artifact type: equation / code / pseudocode / paper figure / curated diagram / real table
-- source: paper asset, codebase, related paper, toy check, or agent-created diagram
+- source: paper asset, codebase, related paper, diagnostic, experiment, or agent-created diagram
 - purpose: what the artifact helps the reader understand
 - placement: nearby paragraph or temporary media anchor
 
