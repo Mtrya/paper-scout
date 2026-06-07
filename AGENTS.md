@@ -6,7 +6,7 @@ If you are a **reading agent** executing a scouting run, read `workspace/AGENTS.
 
 ## What This Project Is
 
-Paper Scout is a single living instance of a paper-scouting workflow. It discovers recent papers, filters hard, investigates a few deeply, delivers a Feishu doc per run, and accumulates its record in this repository as runs happen.
+Paper Scout is a single living instance of a paper-conditioned research workflow. It discovers recent papers, filters hard, investigates a few deeply, delivers a Feishu research report per run, and accumulates its record in this repository as runs happen.
 
 There is no application to build and no installer. The repository *is* the instance. Anyone who wants their own tracker can clone this, read the prompts, and tell their agent to "configure a paper tracker in the same spirit, tailored to my interests" — then edit `workspace/AGENTS.md` and the skills directly. What this project ships is **prompts**: instruction files and skills that are easy to read and tune.
 
@@ -19,7 +19,7 @@ What the repo contains:
 - `workspace/AGENTS.md` — the reading agent's persistent operating contract
 - `workspace/.agents/skills/` — the skills the reading agent loads (the method)
 - `workspace/runs/` — deep-dive notes and `INDEX.md` (the readable record + dedup log)
-- `reports/` — delivered Feishu briefs archived as DocxXML, one per run
+- `reports/` — delivered Feishu reports archived as DocxXML, one per run
 
 ## The Two Agents
 
@@ -63,9 +63,7 @@ Each file has a distinct job. Do not let them bleed into each other.
 
 **`workspace/.agents/skills/paper-deep-dive/SKILL.md`** — deep investigation of a single paper: reading, code inspection, lightweight checks, related-work comparison, and structured analysis notes.
 
-**`workspace/.agents/skills/brief-compose/SKILL.md`** — DocxXML brief structure, editorial standards, visual hierarchy, and writing rules. Low-level DocxXML syntax defers to the installed `lark-doc` skill so this file does not rot when `lark-cli` changes.
-
-**`workspace/.agents/skills/brief-deliver/SKILL.md`** — Feishu doc creation, user notification, and archive to `reports/`. Uses `lark-doc` and `lark-im` for command details.
+**`workspace/.agents/skills/report-compose/SKILL.md`** — DocxXML research report composition, illustrative-artifact planning, Feishu doc creation, media insertion, user notification, and archive to `reports/`. Uses `lark-doc` and `lark-im` for command details.
 
 **`scout.sh`** — the launcher. Computes the date, stamps `prompt.txt`, starts the harness from `workspace/`. The only file that knows the harness invocation.
 
@@ -99,7 +97,7 @@ workspace/
     └── <area>/<slug>-<id>-deep-dive.md  # durable analysis notes, organized by area
 ```
 
-Delivered briefs are archived to the repo-root `reports/` as `YYYY-MM-DD-<slug>.docxxml`, one per run.
+Delivered reports are archived to the repo-root `reports/` as `YYYY-MM-DD-<slug>.docxxml`, one per run.
 
 Behavioral invariants:
 

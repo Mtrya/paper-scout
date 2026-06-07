@@ -1,14 +1,14 @@
-# Figure Embedding Workflow
+# Media Embedding Workflow
 
-Use this when a Paper Scout brief should include local figures extracted from papers, such as MinerU images under `drafts/` or copied assets under `assets/`. Feishu local media cannot be embedded solely by writing a draft DocxXML file; create or append the text first, then insert media into explicit anchors.
+Use this when a Paper Scout report should include local illustrative images extracted from papers, such as MinerU figures under `drafts/` or copied assets under `assets/`. Feishu local media cannot be embedded solely by writing a draft DocxXML file; create or append the text first, then insert media into explicit anchors.
 
-## When To Use Figures
+## When To Use Media
 
-Use figures only when they make the brief easier to trust or scan. Good candidates are architecture diagrams, main result tables, qualitative examples, failure-mode figures, compact code snippets, or equations that carry the method. Do not add decorative images.
+Use local media when an image is the clearest way to understand the mechanism, result, contrast, or failure mode. Good candidates are architecture diagrams, main result figures, qualitative examples, failure-mode figures, and curated diagrams. Do not add decorative images.
 
 ## Anchor Pattern
 
-Put a unique standalone paragraph exactly where the figure should land:
+Put a unique standalone paragraph exactly where the image should land:
 
 ```xml
 <p>Paper A prose before the figure.</p>
@@ -57,7 +57,7 @@ Verify the final order with another fetch. The intended pattern is: relevant pro
 ## Practical Notes
 
 - `docs +media-insert` works for local images and returns an image block id plus file token.
-- Use `--as bot` when the brief doc is bot-owned.
+- Use `--as bot` when the report doc is bot-owned.
 - For images copied with `paper-source`'s `--copy-images`, run from `assets/<slug>-<paper-id>/` and pass a relative filename.
 - For raw MinerU output, run from the extracted directory and pass `images/<figure>.jpg`.
 - If the selection text appears more than once, use the `start...end` form supported by `--selection-with-ellipsis`, or make the anchor more specific.

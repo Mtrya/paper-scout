@@ -22,7 +22,7 @@ If you persist the candidate pool to disk, write it to `drafts/` (scratch, may b
 
 ## Source A: Hugging Face Papers
 
-Use the `hf` CLI for quick paper scouting and reading.
+Use the `hf` CLI for quick paper scouting, scanning and filtering, never for reading.
 
 List papers:
 
@@ -30,12 +30,6 @@ List papers:
 hf papers ls --sort trending --limit N
 hf papers ls --date YYYY-MM-DD --limit N
 hf papers ls --week YYYY-Www --limit N
-```
-
-Read a paper as markdown:
-
-```bash
-hf papers read <paper-id> > papers/<area>/<slug>-<paper-id>.md
 ```
 
 Get paper metadata:
@@ -54,7 +48,7 @@ Use `--format json` when structured output is easier to process.
 
 ## Source B: ArXiv PDF + MinerU
 
-Use ArXiv PDF + MinerU for finer-grained control, better support for same-day papers, and more reliable full-text and figure/table extraction.
+Use ArXiv PDF + MinerU for paper reading, with its more reliable full-text and figure/table extraction.
 
 End-to-end script:
 

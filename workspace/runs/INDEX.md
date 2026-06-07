@@ -12,5 +12,3 @@ Entry format:
 ```
 
 ---
-
-<!-- No runs recorded yet. -->

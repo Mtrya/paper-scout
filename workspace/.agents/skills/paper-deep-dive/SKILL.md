@@ -21,6 +21,7 @@ Structured notes saved to `runs/<area>/<slug>-<id>-deep-dive.md`:
 - what the code reveals — matches, undocumented tricks, discrepancies, or explicit note that no code exists
 - artifact completeness and lightweight verification — classify the release and record what small check you ran, if any
 - comparative positioning against 1–3 key related papers (mandatory when no code)
+- illustration candidates for the report — equations, figures, tables, snippets, or toy-check artifacts that make the finding easier to understand
 - red flags and caveats
 - bottom-line judgment: read / skim / build on / track / skip, with reason
 
@@ -127,6 +128,7 @@ Write a bottom-line covering novelty, credibility, relevance, and priority. End 
 - [ ] Artifact completeness classified; code inspected or absence explicitly noted; discrepancies recorded
 - [ ] Situated against 1–3 related papers when no code exists
 - [ ] Lightweight verification run or explicitly ruled out
+- [ ] Illustration candidates recorded for report composition
 - [ ] Red flags noted
 - [ ] Bottom-line judgment with specific priority call
 - [ ] Notes saved to `runs/<area>/<slug>-<id>-deep-dive.md`
