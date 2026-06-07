@@ -1,15 +1,6 @@
-# Large / reproducible workspace contents
-workspace/papers/*
-!workspace/papers/README.md
-workspace/repos/*
-!workspace/repos/README.md
-workspace/drafts/*
-!workspace/drafts/README.md
-workspace/assets/*
-!workspace/assets/README.md
+# Workspace run-artifact policy lives in workspace/.gitignore
 
 # Local-only, never tracked
-workspace/.agents/settings.local.json
 .codex
 .claude
 /references/
