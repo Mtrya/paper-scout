@@ -12,7 +12,7 @@ For workspace layout and naming, follow `workspace-manage`.
 
 ## Output
 
-Structured notes saved to `runs/<area>/<slug>-<id>-deep-dive.md`:
+Structured notes saved to `runs/<area>/<slug>-<id>/deep-dive.md`:
 
 - what the paper is actually doing
 - what is genuinely novel
@@ -22,6 +22,7 @@ Structured notes saved to `runs/<area>/<slug>-<id>-deep-dive.md`:
 - artifact completeness and research action — classify the release and record the live question, action, resource fit, result, and interpretation or blocker
 - comparative positioning against 1–3 key related papers (mandatory when no code)
 - illustration candidates for the report — equations, figures, tables, snippets, diagnostics, or experiment artifacts that make the finding easier to understand
+- curated artifacts to preserve — move durable scripts, results, figures, or setup notes into `runs/<area>/<slug>-<id>/artifacts/`
 - red flags and caveats
 - bottom-line judgment: read / skim / build on / track / skip, with reason
 
@@ -93,7 +94,7 @@ Mandatory whenever a repository exists. Do not trust the paper's description of 
 
 If no code exists, state that explicitly and explain how it affects confidence.
 
-Classify artifact completeness: reproducible artifact / architecture release / partial artifact / no usable artifact. Do not use an incomplete artifact as a reason to stop at critique. When meaningful, create a project under `repos/<area>/<slug>-check/`, set up a local Python venv, write scripts, install dependencies proportionate to the action, and execute the diagnostic or experiment. Good actions might be reimplementing an attention mask, token-packing rule, loss, optimizer step, metric, config/model-shape assertion, small synthetic-input path, ablation of a code branch, or benchmark subset. If no meaningful action fits the available resources, say why.
+Classify artifact completeness: reproducible artifact / architecture release / partial artifact / no usable artifact. Do not use an incomplete artifact as a reason to stop at critique. When meaningful, create a project under `repos/<area>/<slug>-check/`, set up a local Python venv, write scripts, install dependencies proportionate to the action, and execute the diagnostic or experiment. Good actions might be reimplementing an attention mask, token-packing rule, loss, optimizer step, metric, config/model-shape assertion, small synthetic-input path, ablation of a code branch, or benchmark subset. Preserve only curated scripts/results/setup notes under `runs/<area>/<slug>-<id>/artifacts/`; leave raw repos, venvs, logs, and scratch ignored. If no meaningful action fits the available resources, say why.
 
 Use this loop in the notes:
 
@@ -134,7 +135,8 @@ Write a bottom-line covering novelty, credibility, relevance, and priority. End 
 - [ ] Artifact completeness classified; code inspected or absence explicitly noted; discrepancies recorded
 - [ ] Situated against 1–3 related papers when no code exists
 - [ ] Research action loop recorded: question, action, resource fit, result, interpretation or blocker
+- [ ] Durable artifacts, if any, moved to `runs/<area>/<slug>-<id>/artifacts/`
 - [ ] Illustration candidates recorded for report composition
 - [ ] Red flags noted
 - [ ] Bottom-line judgment with specific priority call
-- [ ] Notes saved to `runs/<area>/<slug>-<id>-deep-dive.md`
+- [ ] Notes saved to `runs/<area>/<slug>-<id>/deep-dive.md`

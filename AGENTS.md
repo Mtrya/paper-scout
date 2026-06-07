@@ -89,12 +89,15 @@ The reading agent's home is `workspace/`. These invariants must hold across prom
 workspace/
 ├── AGENTS.md          # reading-agent contract
 ├── .agents/skills/    # the skills (the method)
-├── papers/            # downloaded paper markdown, organized by area (gitignored, README placeholder)
-├── repos/             # cloned repos, organized by area (gitignored, README placeholder)
-├── drafts/            # working DocxXML before delivery (gitignored, README placeholder)
+├── papers/            # tracked downloaded paper markdown cache, organized by area
+├── repos/             # ignored cloned repos and verification projects
+├── drafts/            # ignored working DocxXML and scratch artifacts
+├── assets/            # ignored extracted media dumps
 └── runs/
     ├── INDEX.md                         # coverage log + dedup source of truth
-    └── <area>/<slug>-<id>-deep-dive.md  # durable analysis notes, organized by area
+    └── <area>/<slug>-<id>/              # durable research packet
+        ├── deep-dive.md                 # analysis notes
+        └── artifacts/                   # curated scripts, results, figures, README
 ```
 
 Delivered reports are archived to the repo-root `reports/` as `YYYY-MM-DD-<slug>.docxxml`, one per run.

@@ -20,7 +20,7 @@ There is no code to build and nothing to install. The repository *is* the instan
 - `reports/` — delivered reports archived as DocxXML, one per run
 - `AGENTS.md` — contract for coding agents maintaining this repo
 
-`workspace/{papers,repos,drafts}/` hold transient run data and are gitignored.
+`workspace/papers/` is the tracked paper-text cache. `workspace/runs/` holds durable research packets. `workspace/{repos,drafts,assets}/` hold scratch run data and are gitignored.
 
 ## Make It Your Own
 
