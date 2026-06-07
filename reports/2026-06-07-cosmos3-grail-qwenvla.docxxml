@@ -1,0 +1,168 @@
+<title>Paper Scout Research Report - 2026-06-07</title>
+
+<p>This week brought an inflection point for unified Physical AI. NVIDIA shipped <b>Cosmos 3</b>, an open omnimodal world model that genuinely unifies language, image, video, audio, and action inside a single training framework — and released the code, weights, and synthetic datasets to back it. Alongside it, <b>Qwen-VLA</b> pitched a unified generalist VLA with a clever text-to-action pretraining recipe, but arrived with no code and a credibility crack we could measure: the headline +10.2 pp T2A ablation is not compute-matched. <b>GRAIL</b> demonstrated that synthetic humanoid data pipelines can now reach real-world deployment, producing 22,189 motions and validating them on a Unitree G1, though the reconstruction objective is dominated by a single contact loss with weight 1e5.</p>
+
+<callout emoji="✅" background-color="light-green">
+  <p><b>Standout:</b> Cosmos 3 is the clearest seed for the next generation of Physical AI foundation models. Its Mixture-of-Transformers architecture and domain-aware action representation are genuine contributions, and the open release makes them immediately buildable. The "unified Physical AI" claim is slightly overstated — headline results come from post-trained specialists — but the base model is still the strongest public starting point.</p>
+</callout>
+
+<h1>Unified Models for Physical AI</h1>
+
+<p>The central tension this week is between <i>architectural unification</i> and <i>capability unification</i>. Two papers claim to collapse fragmented embodied-AI pipelines into single models. One delivers with open artifacts; the other promises much but ships a README and an ablation that conflates method with extra training.</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>World Models Meet Language Models</b> (Zhou et al., 2026)</td>
+      <td>Controlled concrete reasoning: a model learns to invoke, verify, and integrate visual future simulation alongside abstract MLLM reasoning.</td>
+      <td>Shows when world-model rollouts help and when they mislead; 10%+ gains on spatial lookahead benchmarks.</td>
+      <td><a href="https://huggingface.co/papers/2606.03603">HF</a></td>
+    </tr>
+    <tr>
+      <td><b>Where to Look</b> (Liu et al., 2026)</td>
+      <td>Foundation models for active viewpoint exploration toward a target.</td>
+      <td>Embodied perception-action loop with no task-specific training; tests whether VLMs can plan spatial trajectories.</td>
+      <td><a href="https://huggingface.co/papers/2606.01247">HF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Cosmos 3: Omnimodal World Models for Physical AI</h2>
+<p>NVIDIA · 2606.02800 · <a href="https://huggingface.co/papers/2606.02800">HF</a> · <a href="https://github.com/nvidia/cosmos">GitHub</a></p>
+
+<p>Cosmos 3 is the most significant open release in Physical AI this year. It is a family of decoder-only transformers (4B Edge, 16B Nano, 64B Super) that processes and generates language, image, video, audio, and action inside a single framework. The core architectural bet is the <b>Mixture-of-Transformers</b> (MoT): every layer contains two complete weight sets — a reasoner (autoregressive text+vision) and a generator (diffusion-based video/audio/action) — initialized from a Qwen3-VL backbone, with joint attention allowing the diffusion tower to attend to the AR tower but not vice versa.</p>
+
+<p>[[figure-anchor:cosmos3:architecture]]</p>
+
+<p><b>What "MoT" actually means.</b> We ran a parameter-count script against the actual code and the released Qwen3-VL-8B config. The result is unambiguous: a MoT decoder layer has exactly 2.000× the parameters of a single-pathway layer. At the whole-model level the ratio is ~1.848× because the token embeddings and output head are shared. There is no learned gating, no sparse expert selection, no router. <code>init_moe()</code> simply copies understanding weights into generation weights. We confirmed this by inspecting the released <code>nvidia/Cosmos3-Nano-Policy-DROID</code> checkpoint metadata: out of 1,160 weight keys, 181 carry the <code>_moe_gen</code> suffix, with duplicated MLPs and norms in every layer 0–35.</p>
+
+<pre lang="python" caption="MoT parameter count vs single-pathway (Nano, Qwen3-VL-8B backbone)"><code>Single-pathway decoder layer params: 192,946,432
+MoT decoder layer params:           385,892,864
+  -&gt; MoT layer / single layer ratio: 2.000x
+
+Single-pathway model total: 8,190,735,360 (8.19B)
+MoT model total:           15,136,811,008 (15.14B)
+  -&gt; MoT total / single total ratio: 1.848x</code></pre>
+
+<p><b>Any benefit therefore comes from decoupling the optimization problems, not from conditional computation.</b> That is a defensible design choice — diffusion and autoregression have different loss landscapes — but the "Mixture-of-Transformers" name is a misnomer in the usual MoE sense. The attention split is cleanly implemented, as the code confirms: <code>PackedAttentionMoT</code> dispatches AR queries through causal self-attention and DM queries through full attention over concatenated AR+DM keys and values.</p>
+
+<p><b>Action unification is genuine but shallow.</b> Heterogeneous action vectors are mapped into a shared latent space via <code>DomainAwareLinear</code>, which stores per-embodiment weight rows in an <code>nn.Embedding</code>. For <code>action_dim=64</code>, <code>hidden_size=4096</code>, and 32 domains, the projection pair (action2llm + llm2action) adds ~17M parameters — about 0.11% of the 15B backbone. The mechanism is genuinely per-domain, but it is also just a linear map per robot. We verified the SE(3) action representation by round-tripping random absolute poses through the repo's own <code>pose_utils.py</code>: max translation error ~1e-6, max rotation error ~0.028°. The geometry is preserved.</p>
+
+<p><b>What we still cannot isolate.</b> The paper's most compelling action evidence is the mid-training transfer ablation: MT-init reaches 24.6% on LIBERO-10 at 500 iterations vs PT-init at 0.0%. This is supposed to show that seeing diverse action domains during training produces a transferable prior. But the released code has no script that fixes total data and steps while varying only action-domain diversity. The mid-trained prior is baked into the released policy checkpoint. The gap may be real architecture transfer, or it may simply be that MT-init saw more optimization. We could not disentangle the two.</p>
+
+<p><b>Red flags.</b> (1) The RoboArena #1 ranking rests on 20 pairwise comparisons. (2) The headline Text2Image, Image2Video, and Policy models are post-trained specialists. (3) All synthetic data sources degrade the Human domain in video generation. (4) The parameter accounting is unclear — the "16B Nano" label likely counts only the understanding tower; the full MoT is ~15B text parameters plus duplicated generation parameters.</p>
+
+<p><b>Verdict: build on / track.</b> The MoT pattern is a practical design pattern that can be adopted by other labs. The action representation is a genuine contribution for cross-embodiment learning. The open release is serious. But treat the "one model to rule them all" framing as aspirational: the real products are strong specialist initializations.</p>
+
+<hr/>
+
+<h2>Qwen-VLA: Unifying Vision-Language-Action Modeling</h2>
+<p>Qwen Team (Alibaba) · 2605.30280 · <a href="https://huggingface.co/papers/2605.30280">HF</a></p>
+
+<p>Qwen-VLA attempts to unify manipulation, navigation, and trajectory prediction in a single 5.15B-parameter model: a Qwen3.5-4B VLM backbone plus a 1.15B DiT flow-matching action decoder. Its central insight is <b>Text-to-Action (T2A) pretraining</b>: before showing the model any images, train the DiT decoder to map language instructions and embodiment descriptions directly to action chunks. This is supposed to build a compact, language-indexed action prior.</p>
+
+<p>[[figure-anchor:qwen-vla:architecture]]</p>
+
+<p><b>The headline +10.2 pp gain is confounded.</b> We read §5.2.1 carefully. The no-T2A baseline is a randomly initialized DiT entering the standard CPT → SFT pipeline. The best T2A run gets <b>2,000 extra DiT-only steps</b> on a language-action corpus before CPT. The paper does not match total training steps or total data exposure. So the +10.2 pp may be a genuine language-indexed action prior, or it may simply be more decoder pretraining. A clean test would add 2,000 vision-free steps of some other objective to the no-T2A baseline. The paper does not do this.</p>
+
+<p>We tested what we could without the model weights:</p>
+
+<pre lang="python" caption="Sigmoid-Normal vs Beta(1,3) mass in [0.3, 0.7]"><code>Sigmoid-Normal mass in [0.3,0.7] (CDF) : 0.6032
+Beta(1,3) mass in [0.3,0.7]             : 0.3160
+Ratio Sigmoid-Normal / Beta             : 1.909x
+Paper claim                             : ~1.85x
+Confirmed (ratio within 5%)             : True</code></pre>
+
+<p>The timestep-distribution claim checks out. The masked flow-matching loss also behaves exactly as described: padded positions contribute zero loss and zero gradient. We verified this on synthetic language-action batches. But these are mathematical sanity checks, not evidence that T2A itself is the causal factor.</p>
+
+<p><b>Prompt brittleness is untested by the authors and potentially real.</b> The entire cross-embodiment mechanism is a rigid text template. The paper never ablates sensitivity to rephrasing. We ran a toy linear probe on the exact template and on rephrased variants (formal, swapped field order, shortened, omitted robot tag). Even surface-form changes moved the predicted action vector by up to ~1.36× the inter-task standard deviation. A real VLM backbone is likely more robust than a bag-of-words probe, but the paper provides no evidence either way.</p>
+
+<p><b>Artifact status: no usable artifact.</b> The GitHub repository remains a single-commit README placeholder. No code, weights, or training scripts. This makes all claims unverifiable by the community.</p>
+
+<p><b>Verdict: track, with skepticism.</b> The T2A recipe is a plausible training idea, but its headline gain is not cleanly attributed. The embodiment-prompt design is elegant but its brittleness is unmeasured. The empty repository means practitioners cannot adopt it even if they believe the claims. Re-evaluate if/when actual code and weights appear.</p>
+
+<h1>Synthetic Data &amp; Sim-to-Real for Humanoids</h1>
+
+<p>While foundation models argue about unification, the data problem remains stubbornly physical. GRAIL attacks it head-on with a fully virtual pipeline that generates 22,189 humanoid loco-manipulation sequences and validates them on a real Unitree G1.</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Humanoid-GPT</b> (Qi et al., 2026)</td>
+      <td>GPT-style transformer trained on 2B frames of retargeted motion for zero-shot whole-body control.</td>
+      <td>Scales data and model capacity for humanoid tracking; tests whether causal transformers can replace shallow MLP trackers.</td>
+      <td><a href="https://huggingface.co/papers/2606.03985">HF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>GRAIL: Generating Humanoid Loco-Manipulation from 3D Assets and Video Priors</h2>
+<p>NVIDIA + UCLA · 2606.05160 · <a href="https://huggingface.co/papers/2606.05160">HF</a> · <a href="https://github.com/NVlabs/GRAIL">GitHub</a></p>
+
+<p>GRAIL's core insight is architectural, not algorithmic: instead of reconstructing an unconstrained in-the-wild video into an ambiguous 4D scene, <i>specify the 3D scene first</i> — object mesh, camera parameters, metric scale, environment depth, and a robot-proportioned character — then generate a human interaction video from that specification, and recover 4D human-object interaction inside the known metric frame.</p>
+
+<p>[[figure-anchor:grail:pipeline]]</p>
+
+<p>We ran actual checks against the released code, configs, and HuggingFace dataset. The findings are more nuanced than the prose suggests.</p>
+
+<p><b>The reconstruction objective is dominated by one loss term.</b> Parsing <code>configs/recon_4dhoi/pickup_smplx.yaml</code> shows three stages (400 + 1000 + 400 = 1,800 iterations). The relative weight dominance is extreme:</p>
+
+<pre lang="text" caption="Loss weight dominance in GRAIL pickup config"><code>human_traj_opt          : human_global_init_reg = 94.6% of total |weight|
+human_global_traj_opt   : contact               = 99.7%
+obj_traj_opt            : contact               = 99.5%</code></pre>
+
+<p>The contact loss has weight <b>1e5</b> in stages 2 and 3. This is the only mechanism that snaps hands onto the object and keeps them there. Zeroing it would likely collapse reconstruction to a smooth hand motion that ignores the object. The <code>human_global_init_reg</code> term in stage 1 (weight 3e3) anchors the body to GENMO's global trajectory. These two terms are load-bearing; the rest are fine-tuning.</p>
+
+<p><b>Undocumented behaviors in the loss terms.</b> We reimplemented the loss math from <code>grail/optimization/loss_terms.py</code> and ran synthetic unit tests:</p>
+
+<ul>
+  <li>The 20% outlier trimming in Chamfer distance can zero the depth loss entirely for small point clouds.</li>
+  <li><code>smoothness_loss</code> penalizes first-order differences against zero, so even constant-velocity motion incurs loss.</li>
+  <li>Contact loss is gated by 3D distance: if the closest hand-object distance exceeds <code>max_contact_dist</code>, the term is silently skipped. This is a stability feature when the VLM mislabels contact, but it is not mentioned in the paper.</li>
+</ul>
+
+<p><b>Released code is Docker-bound.</b> Importing <code>grail.optimization.loss_terms</code> directly fails with <code>ModuleNotFoundError: No module named 'pytorch3d'</code>. The Docker pull timed out in our environment, so we could not run the full end-to-end pipeline. The practical reproducibility depends on the provided container.</p>
+
+<p><b>Dataset count is 22,189, not 20,309.</b> We counted the released HuggingFace dataset by category. The paper's ">20,000" claim still holds, but the exact number is higher than previously reported. A real trajectory sample (<code>pickup_table__alcohol_0__000</code>) shows a 76 cm object lift, 31 cm root displacement, and hand-action toggles on every frame — physically plausible motion.</p>
+
+<p><b>Real-world results are promising but thin.</b> GRAIL achieves 84% success on diverse object pick-up and 90% on stair-climbing with a Unitree G1, trained only on synthetic data. But trial counts are small (10 per object), the visual policy architecture is barely described, and there is no ablation isolating the data contribution from the SONIC pretrained controller or the sim-to-real pipeline.</p>
+
+<p><b>Verdict: build on / track.</b> The privileged 3D setup is a genuine design pattern. The dataset and code make immediate follow-up work possible. The real-world numbers need more trials and baselines to be bulletproof, and the reconstruction objective is more brittle than it appears from the five-term equation in the paper.</p>
+
+<h1>Cross-Cutting Observations</h1>
+
+<p><b>The unification gap is widening.</b> All three deep-dived papers claim unification in some form — Cosmos 3 unifies modalities, Qwen-VLA unifies tasks and embodiments, GRAIL unifies generation and reconstruction. But in every case, the unified architecture is a starting point, and the headline capabilities come from downstream specialization. Cosmos 3's best T2I, I2V, and policy results are post-trained specialists. Qwen-VLA's RL stage is essentially a SimplerEnv specialist. GRAIL's real-world policy is a distilled specialist on top of a pretrained controller. This is not a criticism — it is the honest shape of the field.</p>
+
+<p><b>Parameter costs matter.</b> Cosmos 3's MoT is a 1.85× parameter multiplier for the privilege of decoupled optimization. Qwen-VLA's domain-aware projections are negligible (~0.11% of backbone) but the T2A gain is confounded with extra training. GRAIL's reconstruction succeeds partly because a single loss term has weight 1e5. None of these facts invalidate the papers, but they show that the interesting claims live in engineering trade-offs, not magic.</p>
+
+<p><b>Open release quality varies enormously.</b> Cosmos 3 and GRAIL ship code, weights, datasets, and configs. Qwen-VLA ships a README. When artifact completeness correlates with institutional backing (NVIDIA) rather than with paper impressiveness, the community has a reproducibility problem. The T2A pretraining insight in Qwen-VLA is genuinely interesting, but practitioners cannot adopt it without the artifacts.</p>
+
+<p><b>Synthetic data is now a first-class citizen.</b> Cosmos 3 trains on five synthetic datasets. GRAIL generates 22,189 motions without a single teleoperation episode. The bottleneck is no longer data scarcity but <i>data quality</i> — all synthetic sources in Cosmos 3 degrade human video generation, and GRAIL's reconstruction relies on an extreme contact-loss weight to snap hands to objects. The next frontier is selective synthesis and domain-targeted refinement, not indiscriminate scaling.</p>

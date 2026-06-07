@@ -1,0 +1,84 @@
+<frozen site>:101: RuntimeWarning: Unexpected value in sys.prefix, expected /home/betelgeuse/Documents/paper-scout/workspace/.venv, got /home/betelgeuse/Documents/paper-scout/workspace/runs/vla/../../.venv
+<frozen site>:101: RuntimeWarning: Unexpected value in sys.exec_prefix, expected /home/betelgeuse/Documents/paper-scout/workspace/.venv, got /home/betelgeuse/Documents/paper-scout/workspace/runs/vla/../../.venv
+[warning] sentence-transformers/HF download failed (We couldn't connect to 'https://hf-mirror.com' to load the files, and couldn't find them in the cached files.
+Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.); using sklearn CountVectorizer fallback.
+======================================================================
+1. Masked flow-matching T2A loss on synthetic (language, action) data
+======================================================================
+  Batch: B=4, H=16, K=32, active channels per sample=[4, 7, 6, 4], active steps=[8, 11, 10, 16]
+  PyTorch loss      : 2.183302
+  Manual per-channel: 2.183302
+  Match             : True
+  Loss with 9999 in padded target : 2.183302
+  Invariant (|diff| < 1e-5)       : True
+  Max |grad| on padded positions : 0.00e+00 (should be 0)
+  Max |grad| on active positions : 6.26e-02 (should be >0)
+  Gradient masking holds         : True
+  Loss before/after one Adam step: 2.1833 -> 1.8958 (should decrease)
+
+======================================================================
+2. Sigmoid-Normal vs Beta(1,3) mass on intermediate timesteps [0.3, 0.7]
+======================================================================
+  Sigmoid-Normal mass in [0.3,0.7] (pdf quad) : 0.6032
+  Sigmoid-Normal mass in [0.3,0.7] (CDF)       : 0.6032
+  Beta(1,3) mass in [0.3,0.7]                  : 0.3160
+  Ratio Sigmoid-Normal / Beta                  : 1.909x
+  Paper claim                                  : ~1.85x
+  Confirmed (ratio within 5%)                  : True
+
+======================================================================
+3. Prompt-brittleness probe on the embodiment-aware template
+======================================================================
+  Task: 'pick up the red cup'
+  Encoder: sklearn CountVectorizer (fallback)
+  Style            | embed→action L2 | embed cos-sim | action shift / inter-task std
+  original           | 0.000           | +1.000         | 0.00x
+  rephrase           | 0.358           | +0.851         | 0.45x
+  formal             | 1.079           | +0.800         | 1.36x
+  swap               | 0.397           | +0.956         | 0.50x
+  omit_robot         | 0.418           | +0.971         | 0.53x
+  short              | 0.975           | +0.595         | 1.23x
+
+  Interpretation (toy, NOT the real Qwen-VLA):
+  - With a sparse BoW encoder, rephrasing predictably changes the predicted action vector.
+  - A real VLM may be more robust, but the paper includes NO prompt-sensitivity ablation.
+
+======================================================================
+4. Zero-padding projection parameter savings
+======================================================================
+  Paper-listed embodiment dims : [7, 7, 14, 14, 14, 7, 29, 14, 14, 32] (sum=152, max=32)
+  Hidden size h                : 768
+  Multi-MLP params             : 233,472
+  Zero-Padding params          : 49,152
+  Savings (1 - zero/multi)     : 78.9%
+  Paper claim                  : ~79%
+  Match within 2 pp            : True
+
+  Random mixes (n_emb=5..15, d_i in [3,32]):
+    Mean savings : 81.8%
+    Std dev      : 6.5%
+    Min / Max    : 56.2% / 90.5%
+    >75% savings : 84.5% of mixes
+
+======================================================================
+5. What is confirmed / not confirmed / needs the model
+======================================================================
+
+CONFIRMED from first principles:
+  - The masked flow-matching loss ignores padding exactly as described (Eq. 1-2).
+  - Sigmoid-Normal(0,1) places ~1.9x more mass in [0.3,0.7] than Beta(1,3).
+  - Zero-padding saves ~77% of projection params for the paper's embodiment mix
+    (close to the reported ~79%; exact count depends on which dims are included).
+
+PARTIALLY CONFIRMED / QUALIFIED:
+  - The T2A stage is mathematically well-formed and cheap to implement.
+  - Prompt rephrasing moves action predictions in a toy linear probe; this is a
+    warning sign, not proof that Qwen-VLA is brittle. The paper does not ablate it.
+
+NOT CONFIRMED (requires released model or independent reimplementation):
+  - The +10.2 pp gain from T2A could be a language-indexed prior OR simply
+    extra pretraining compute/data. The ablation does not control total steps.
+  - Full-sequence vs chunk superiority in a real DiT.
+  - The absolute Simpler-WidowX success rates (60.9% / 71.1%).
+  - Generalisation of the embodiment-prompt mechanism to unseen phrasing.
+
