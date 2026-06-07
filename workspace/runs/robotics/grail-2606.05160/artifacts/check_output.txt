@@ -1,0 +1,174 @@
+
+========================================================================
+A. Import sanity check on the real repo modules
+========================================================================
+FAIL: cannot import real loss_terms module: ModuleNotFoundError: No module named 'pytorch3d'
+This confirms the released code needs the docker/conda env (pytorch3d).
+
+========================================================================
+B. pickup_smplx.yaml — optimization schedule and loss weights
+========================================================================
+
+human_traj_opt: 400 iters (vars: human_trans_res, human_pose_res)
+  - keypoint_tracking: weight=0.3  {'beta': 0.1}
+  - human_smoothness: weight=30.0  {'beta': 0.1}
+  - human_traj_reg: weight=10.0
+  - human_pose_reg: weight=30.0
+  - human_foot_contact: weight=100.0
+  - human_global_init_reg: weight=3000.0
+
+human_global_traj_opt: 1000 iters (vars: human_trans_global, human_pose_res)
+  - contact: weight=100000.0  {'duration': 'start', 'threshold': 1.0}
+  - human_smoothness: weight=300.0  {'beta': 0.1}
+  - human_pose_reg: weight=30.0
+  - keypoint_tracking: weight=0.1  {'beta': 0.1}
+
+obj_traj_opt: 400 iters (vars: obj_t_res, obj_R_res, human_pose_res)
+  - contact: weight=100000.0  {'duration': 'all', 'threshold': 1.0}
+  - obj_smoothness: weight=500.0
+  - obj_rot_reg: weight=10.0
+  - verts_tracking: weight=0.1  {'threshold': 0.1}
+
+Total optimization iterations: 1800
+Dominant weights: contact=1e5 in stages 2 and 3; human_global_init_reg=3e3 in stage 1.
+
+========================================================================
+C. Config-level mini ablation: relative loss weight dominance
+========================================================================
+
+human_traj_opt (total |weight| = 3170.3)
+  human_global_init_reg          weight=      3000.0  ( 94.6%)
+  human_foot_contact             weight=       100.0  (  3.2%)
+  human_smoothness               weight=        30.0  (  0.9%)
+  human_pose_reg                 weight=        30.0  (  0.9%)
+  human_traj_reg                 weight=        10.0  (  0.3%)
+  keypoint_tracking              weight=         0.3  (  0.0%)
+
+human_global_traj_opt (total |weight| = 100330.1)
+  contact                        weight=    100000.0  ( 99.7%)
+  human_smoothness               weight=       300.0  (  0.3%)
+  human_pose_reg                 weight=        30.0  (  0.0%)
+  keypoint_tracking              weight=         0.1  (  0.0%)
+
+obj_traj_opt (total |weight| = 100510.1)
+  contact                        weight=    100000.0  ( 99.5%)
+  obj_smoothness                 weight=       500.0  (  0.5%)
+  obj_rot_reg                    weight=        10.0  (  0.0%)
+  verts_tracking                 weight=         0.1  (  0.0%)
+
+=> contact dominates stages 2/3 (>99.9%). Zeroing it removes the only
+   term that pulls hands onto the object during interaction.
+=> human_global_init_reg dominates stage 1 (~94%). Zeroing it lets the
+   human global trajectory drift far from GENMO initialization.
+
+========================================================================
+D. Numerical verification of loss-term implementations
+========================================================================
+
+D1. huber_loss
+  [PASS] huber([-0.005,0.020]): got 8.124999e-05, want 8.125000e-05
+
+D2. bidirectional_chamfer_loss (no trimming)
+  [PASS] trim=0.0: got 1.000000e+00, want 1.000000e+00
+
+D3. bidirectional_chamfer_loss (20% trim — same tiny clouds)
+  [PASS] trim=0.2 (2 points each, keep 1): got 0.000000e+00, want 0.000000e+00
+   -> outlier trimming can zero the loss completely for small point clouds.
+
+D4. contact_loss at 5 cm separation
+  [PASS] contact_loss 5cm (single point pair): got 4.950000e-05, want 4.950000e-05
+
+D5. contact_depth_loss — screen-space gating
+  screen distance for far vertex: 25.0 px
+  screen distance for close vertex: 2.5 px
+  loss with far vertex (screen>20):   0.000000e+00  (expected 0)
+  loss with close vertex (screen<20): 0.000000e+00  (>0 because z-diff=0)
+
+D6. contact_depth_loss — depth penalty
+  [PASS] depth diff 0.10m: got 9.950003e-05, want 9.950000e-05
+
+D7. smoothness_loss
+  [PASS] linear motion: got 1.000000e+00, want 1.000000e+00
+  [PASS] erratic motion: got 2.166667e+00, want 2.166667e+00
+
+D8. keypoint_loss with confidence mask
+  [PASS] conf mask: got 3.000000e-01, want 3.000000e-01
+
+D9. ground_loss
+  [PASS] ground at 0.12/0.16 vs 0.14: got 2.000000e-02, want 2.000000e-02
+
+========================================================================
+E. Contact gating by 3D distance (max_contact_dist)
+========================================================================
+Code path: loss_computer.py _contact_loss() -> _too_far() ->
+  if min(cdist(human_verts, obj_verts)) > max_contact_dist: skip
+
+  near object min distance = 0.0028 m  (< 0.05) -> compute contact loss
+  far  object min distance = 0.1652 m  (> 0.05) -> skip contact loss
+
+========================================================================
+F. Filtering thresholds in pickup_smplx.yaml vs filter.py defaults
+========================================================================
+
+Config values (pickup_smplx.yaml):
+  camera_trans_thr: 0.1
+  object_mask_tol: 1.0
+  total_mask_tol: 0.4
+  human_static_thr: 0
+
+filter.py hard-coded defaults:
+  object_mask_tol = 0.5
+  total_mask_tol  = 0.3
+  human_static_thr= 0.01
+
+Observations:
+  - object_mask_tol in config is 1.0 (2x the default 0.5).
+  - total_mask_tol  in config is 0.4 (looser than default 0.3).
+  - human_static_thr in config is 0  -> check_static_human always passes
+    because avg_max_velocity >= 0 is true for any motion.
+
+Synthetic almost-static motion avg max velocity = 0.000515
+  passes with config thr=0.0 ? True  (yes -> false negative)
+  passes with default thr=0.01? False
+
+Synthetic clear motion avg max velocity = 0.0172
+  passes with default thr=0.01? True
+
+========================================================================
+G. Dataset category counts (HuggingFace README)
+========================================================================
+
+Released counts: {
+  "pickup_table": 2991,
+  "pickup_ground": 1613,
+  "sitting": 1748,
+  "slope": 1880,
+  "curb": 1769,
+  "stair": 12188
+}
+Sum: 22189  (paper claims >20,000; released: 22189 -> consistent)
+
+HF API sanity check: pickup_table/meta contains 1000 files
+
+========================================================================
+H. Real trajectory inspection (pickup_table__alcohol_0__000)
+========================================================================
+
+Robot trajectory:
+  frames = 250, fps = 25.0, duration = 10.00 s
+  root XY displacement = 0.312 m
+  root height range = [0.762, 0.791] m
+  mean joint speed = 0.180 rad/s
+  max  joint speed = 5.097 rad/s
+  left hand action changes = 249, right = 249
+
+Object trajectory:
+  start pos = [0.04669189453125, -0.12453460693359375, 0.5330832004547119]
+  end   pos = [0.0446624755859375, -0.030048370361328125, 1.298142671585083]
+  net displacement = 0.771 m
+  total path length = 1.462 m
+  max height = 1.298 m
+
+  object lifted >5 cm? True (max - init = 0.765 m)
+
+--- END OF CHECKS ---
