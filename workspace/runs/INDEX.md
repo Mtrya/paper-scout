@@ -11,6 +11,13 @@ Entry format:
 - Shortlisted: <id>, <id>, ...
 ```
 
+## 2026-06-08 — 2026-06-07 to 2026-06-08
+- Doc: https://fudan-nlp.feishu.cn/docx/MMg3dXGwjoZq21xjEyRcClnInyb
+- Deep-dived: 2606.07326, 2606.06891, 2606.06741
+- Shortlisted: 2606.06476, 2606.07433, 2606.05761, 2606.05806, 2606.02373, 2606.07514
+
+---
+
 ## 2026-06-07 — 2026-05-28 to 2026-06-07
 - Doc: https://fudan-nlp.feishu.cn/docx/G8dFd8ry2oC3yZxdIb3cGvwonnc
 - Deep-dived: 2606.02800, 2605.30280, 2606.05160

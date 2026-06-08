@@ -1,0 +1,263 @@
+<title>Paper Scout Research Report - 2026-06-08</title>
+
+<callout emoji="✅" background-color="light-green">
+  <p><b>Standout:</b> OpenSkill is the clearest seed for a durable research thread. It formalizes how agents can self-improve after deployment without target-task supervision — a design pattern that outlasts any single model generation.</p>
+</callout>
+
+<p>This run covers <b>2026-06-07 to 2026-06-08</b>. The pool was small — 20 new papers — but three strong threads emerged: world models as controllable embodied interfaces, real-time 3D perception for streaming video, and agents that build their own learning loops from open-world resources. All three deep-dived papers are conceptually ambitious and empirically solid, though none has released code yet.</p>
+
+<h1>World Simulation for Embodied Agents</h1>
+
+<p>Two papers this week tackle the same frontier — how world models can serve embodied agents — from opposite directions. AnchorWorld <i>generates</i> egocentric experience conditioned on full-body motion and user-specified scene anchors. Astra (Thinking with Imagination) <i>reasons</i> about spatial relationships by querying a world simulator for missing viewpoints. Together they show the field moving past passive video generation toward interactive, agent-facing world models.</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Thinking with Imagination</b> (Zhu et al., 2026)</td>
+      <td>Agentic VLM that queries a world simulator for imagined viewpoints during spatial reasoning.</td>
+      <td>Shows that simulator access alone is insufficient — the policy must learn <i>when</i> and <i>how</i> to imagine. Two-phase RL curriculum prevents collapse to direct answering or over-imagination.</td>
+      <td><a href="https://huggingface.co/papers/2606.06476">HF</a> / <a href="https://arxiv.org/pdf/2606.06476">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>UniSHARP</b> (Song et al., 2026)</td>
+      <td>Extends photorealistic view synthesis to arbitrary camera systems — perspective, fisheye, omnidirectional.</td>
+      <td>A technical advance in universal monocular rendering. Less directly relevant to embodied agents but useful for any system needing consistent novel views from diverse sensors.</td>
+      <td><a href="https://huggingface.co/papers/2606.07514">HF</a> / <a href="https://arxiv.org/pdf/2606.07514">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>AnchorWorld: Embodied Egocentric World Simulation with View-based Evolution Customization</h2>
+<p>Yu Li et al. (2026) · <a href="https://huggingface.co/papers/2606.07326">HF</a> · <a href="https://arxiv.org/pdf/2606.07326">PDF</a></p>
+
+<p>AnchorWorld generates 77-frame egocentric videos from two control signals: full-body human motion (SMPL-X parameters) and a set of <b>anchor views</b> — each an RGB image with a 6-DoF pose and a text evolution prompt. The motion drives the camera and body; the anchors pin local scene appearance to 3D locations and dictate how those regions change over time.</p>
+
+<p>The architectural insight is a <b>hybrid-view training</b> strategy. Egocentric videos provide sparse motion supervision because most body parts are out of frame. AnchorWorld pairs first-person videos with third-person footage of the same motion, treating the camera as a projection parameter. The model pre-trains on 301K third-person videos (200K internal + 101K synthetic UE), then adapts to egocentric data with the same motion sequences rendered from the head viewpoint. A spatial pose attention mechanism concatenates video tokens with motion and camera tokens along the spatial dimension, updates them via self-attention, and truncates the pose tokens:</p>
+
+<p><latex>\mathbf{T} = [\mathbf{z}_v^{(t)}; \mathbf{z}_m; \mathbf{z}_c] \in \mathbb{R}^{f' \times (hw + k + 1) \times d}</latex></p>
+<p><latex>\mathbf{z}_v^{(t)} = \mathbf{z}_v^{(t)} + \text{Truncate}\left(\text{Attn}(W_Q \mathbf{T}, W_K \mathbf{T}, W_V \mathbf{T})\right)</latex></p>
+
+<p>For world customization, anchor images are in-context concatenated with video latents. 3D RoPE distinguishes multiple anchors by frame-axis position. Text evolution prompts are injected via <b>masked cross-attention</b> — each prompt's keys are visible only to its corresponding anchor tokens and the generated video tokens, preventing cross-anchor interference.</p>
+
+<p>The quantitative results are strong: AnchorWorld beats reimplemented PlayerOne and CaM baselines on scene consistency, camera accuracy, and text alignment. The most impressive qualitative result is <b>out-of-sight evolution</b> — the model correctly infers that a person stands up from a sofa even when that action is initially outside the egocentric field of view, because the anchor view specified the region and the evolution prompt described the action.</p>
+
+<p>But the ablations tell a more nuanced story. The largest gains come from Stage I third-person pretraining and projection-based control, not from the anchor-view mechanism itself. Removing anchor-view pose or RoPE degrades metrics by only 1–2%. The anchor view is elegant and enables genuinely new capabilities (out-of-sight control, pose-consistent anchoring), but it is not the dominant source of improvement.</p>
+
+<callout emoji="⚠️" background-color="light-yellow">
+  <p><b>Caveats:</b> No code or data released. PlayerOne is reimplemented, not official. The 200K "internal curated dataset" is undisclosed. Hands are excluded from motion estimation. Limited to 77 frames with no long-horizon evaluation.</p>
+</callout>
+
+<p><b>Verdict:</b> Track. Hybrid-view training is a genuinely useful idea for egocentric generation. The anchor-view mechanism is conceptually clean but needs stronger empirical validation and, critically, open data before it can be built upon.</p>
+
+<hr/>
+
+<h1>Streaming Spatial Intelligence</h1>
+
+<p>Deploying 3D vision-language models in AR glasses or robots requires real-time operation on streaming video, not batch processing of pre-segmented clips. Stream3D-VLM is the first system to tackle this, reformulating streaming control as next-token prediction and incrementally injecting geometry priors from a feed-forward reconstruction model.</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Watch, Remember, Reason</b> (Meng et al., 2026)</td>
+      <td>Long-form human-view video understanding with MLLMs, handling sparse evidence and long-range dependencies.</td>
+      <td>Complementary to Stream3D-VLM: where Stream3D-VLM focuses on metric 3D reasoning, this work targets semantic understanding over extended egocentric videos.</td>
+      <td><a href="https://huggingface.co/papers/2606.07433">HF</a> / <a href="https://arxiv.org/pdf/2606.07433">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Stream3D-VLM: Online 3D Spatial Understanding with Incremental Geometry Priors</h2>
+<p>Hanxun Yu et al. (2026) · <a href="https://huggingface.co/papers/2606.06891">HF</a> · <a href="https://arxiv.org/pdf/2606.06891">PDF</a></p>
+
+<p>Stream3D-VLM is built on Qwen2.5-VL and adds three components for streaming 3D operation. First, an <b>autoregressive streaming mechanism</b> that introduces <code>&lt;SEP&gt;</code> and <code>&lt;END&gt;</code> decision tokens. The model jointly optimizes a streaming decision loss and the standard language modeling loss:</p>
+
+<p><latex>\mathcal{L} = \lambda \mathcal{L}_{\text{stream}} + \mathcal{L}_{\text{LM}}</latex></p>
+
+<p>where <latex>\mathcal{L}_{\text{stream}}</latex> is cross-entropy on decision tokens and <latex>\lambda = 2.0</latex> in practice. During inference, the model ingests frames at 1 FPS and decides on-the-fly whether to respond or continue watching.</p>
+
+<p>Second, a <b>Visual-Spatial Feature Integration (VSFI)</b> module. StreamVGGT — a concurrent feed-forward 3D reconstruction model — extracts latent geometry tokens and a camera token per frame. These are fused into the 2D visual stream via cross-attention, with the 2D tokens as queries and 3D tokens as keys/values. A residual connection preserves original semantics. This design lets the model reason about object-object and object-camera spatial relationships without explicit point-cloud or mesh inputs.</p>
+
+<p>Third, <b>Geometry-Adaptive Voxel Compression (GAVC)</b>. For long streaming sessions, visual tokens accumulate and inference latency grows. GAVC back-projects 2D patches to 3D using estimated depth, clusters them with K-Means in 3D space, and aggregates within each cluster using dual attention that weights both feature similarity and spatial proximity:</p>
+
+<p><latex>s_j^f = \cos(\mathbf{v}_j, \bar{\mathbf{v}}_k), \quad s_j^p = \exp\left(-\|\mathbf{p}_j - \bar{\mathbf{p}}_k\|^2 / 2\sigma_k^2\right)</latex></p>
+<p><latex>w_j = \alpha s_j^f + (1 - \alpha) s_j^p</latex></p>
+
+<p>The compression preserves 3D structure while cutting tokens. At 50% retention, GAVC achieves 59.8/65.4/51.4 on numerical/multiple-choice/open-ended answers, versus 49.2/53.8/41.6 for VisionZip — a ~10-point gap that validates geometry-aware over semantics-only compression.</p>
+
+<p>The benchmark contribution is substantial. Stream3D-Bench spans 29 tasks across five cognitive categories (ego-motion, environment measurement, object-camera relations, object chronology, object attributes) and three temporal modes (backward tracing, realtime perception, forward monitoring). The 1M+ training QA pairs are generated from ScanNet, ScanNet++, and ARKitScenes using a hybrid of rule-based templates and VLM-verified transfer.</p>
+
+<p>The most striking result is model efficiency: the <b>4B variant reaches 55.2% on VSI-Bench</b>, beating Qwen2.5-VL-72B (37.0%) and even Gemini-2.5 Pro (51.5%). This suggests that streaming architecture and geometry priors matter more than raw parameter count for 3D spatial reasoning.</p>
+
+<callout emoji="⚠️" background-color="light-yellow">
+  <p><b>Caveats:</b> No code released. Heavy dependence on unreleased StreamVGGT model. Training data is largely templated. Real-world streaming (AR glasses, robots) is unvalidated. Indoor-only benchmarks.</p>
+</callout>
+
+<p><b>Verdict:</b> Read. Strong engineering with a clean three-part architecture and a valuable benchmark. If the authors release code, this could become a standard building block for embodied agents.</p>
+
+<hr/>
+
+<h1>Agents That Improve Themselves</h1>
+
+<p>The most durable idea this week is OpenSkill's framing of open-world self-evolution. Most self-improving agents assume a usable learning loop is already present: curated skills, successful trajectories, or verifier signals. OpenSkill asks what happens when none of these exist — when the agent has only a task prompt and the open web.</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>SubtleMemory</b> (Wang et al., 2026)</td>
+      <td>Fine-grained relational memory discrimination benchmark for long-horizon agents.</td>
+      <td>Memory quality is the limiting factor for persistent assistants. This benchmark tests whether agents can resolve conflicting, reinforcing, or diverging memories.</td>
+      <td><a href="https://huggingface.co/papers/2606.05761">HF</a> / <a href="https://arxiv.org/pdf/2606.05761">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>When Tools Fail</b> (Zhu et al., 2026)</td>
+      <td>ToolMaze benchmark for dynamic replanning and anomaly recovery in LLM agents.</td>
+      <td>Most tool-use benchmarks assume happy paths. This tests whether agents can recover from tool failures — a critical real-world capability.</td>
+      <td><a href="https://huggingface.co/papers/2606.05806">HF</a> / <a href="https://arxiv.org/pdf/2606.05806">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Harness-1</b> (Jiang et al., 2026)</td>
+      <td>RL for search agents using state-externalizing harnesses.</td>
+      <td>Search agents typically manage growing transcripts internally. Harness-1 externalizes state, reducing the cognitive load on the policy and improving search quality.</td>
+      <td><a href="https://huggingface.co/papers/2606.02373">HF</a> / <a href="https://arxiv.org/pdf/2606.02373">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>OpenSkill: Open-World Self-Evolution for LLM Agents</h2>
+<p>Zhiling Yan et al. (2026) · <a href="https://huggingface.co/papers/2606.06741">HF</a> · <a href="https://arxiv.org/pdf/2606.06741">PDF</a></p>
+
+<p>OpenSkill bootstraps a learning loop from scratch in three stages. <b>Stage 1</b> retrieves task-relevant knowledge and verification anchors from the open web using a deep-research agent (Gemini). The query is carefully filtered to exclude benchmark names, preventing answer leakage. <b>Stage 2</b> drafts skills and refines them against self-built virtual tests — pytest suites generated by an independent verifier LLM that uses only the verification anchors, never ground-truth tests. A diagnostic classifier determines whether failures are bugs (self-fixable) or knowledge gaps (triggering targeted retrieval). <b>Stage 3</b> deploys the frozen skill to the target agent zero-shot.</p>
+
+<p>The central design choice is the <b>leakage barrier</b>: ground-truth tests are invisible during skill construction and unlocked only for final evaluation. This forces the agent to build its own verification signal from independently checkable facts — reference values, statistical invariants, cross-validation procedures, documented output formats.</p>
+
+<p>The results are the best automated pass rates on every benchmark setting tested. On SkillsBench (11 domains), OpenSkill achieves 43.6% with Opus 4.6 and 42.1% with GPT 5.2 — beating the strongest baseline by +8.9 and +8.8 points, and landing within 1–3 points of the human upper bound (44.5% / 44.8%).</p>
+
+<table>
+  <colgroup>
+    <col width="140"/>
+    <col width="80"/>
+    <col width="80"/>
+    <col width="80"/>
+    <col width="80"/>
+    <col width="80"/>
+    <col width="80"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Method</th>
+      <th background-color="light-gray">Open-World Retrieval</th>
+      <th background-color="light-gray">Iterative Refinement</th>
+      <th background-color="light-gray">Supervision-Free Verifier</th>
+      <th background-color="light-gray">Transferable Artifact</th>
+      <th background-color="light-gray">SkillsBench (Opus)</th>
+      <th background-color="light-gray">SkillsBench (GPT)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>No Skill</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>25.5%</td>
+      <td>25.0%</td>
+    </tr>
+    <tr>
+      <td>Skill Creator</td>
+      <td>✗</td>
+      <td>✓</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>34.7%</td>
+      <td>33.3%</td>
+    </tr>
+    <tr>
+      <td>AutoSkill</td>
+      <td>✗</td>
+      <td>✓</td>
+      <td>✗</td>
+      <td>✗</td>
+      <td>24.7%</td>
+      <td>11.2%</td>
+    </tr>
+    <tr>
+      <td>Memento</td>
+      <td>✗</td>
+      <td>✓</td>
+      <td>✗</td>
+      <td>✓</td>
+      <td>30.1%</td>
+      <td>15.6%</td>
+    </tr>
+    <tr>
+      <td><b>OpenSkill</b></td>
+      <td><b>✓</b></td>
+      <td><b>✓</b></td>
+      <td><b>✓</b></td>
+      <td><b>✓</b></td>
+      <td><b>43.6%</b></td>
+      <td><b>42.1%</b></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Perhaps more important than the absolute numbers is <b>cross-model transfer</b>. Skills built by Opus 4.6 improve Haiku, Qwen 3 Coder, DeepSeek V3, and Mistral Large by 5.5–14.8 points without any model-specific adaptation. This confirms that explicit skill artifacts are more durable than model-bound behaviors.</p>
+
+<p>The ablations are instructive. Open-world retrieval alone contributes +6.1 points. The virtual verifier alone contributes +6.3 points. Together they yield +8.2 — the components are complementary. However, refinement peaks at 3 iterations (82.7%) and degrades at 5 (79.9%) and 10 (78.0%), suggesting overfitting to imperfect virtual feedback. The virtual verifier itself has 56.9% precision and covers 88.9% of ground-truth test intents — good enough to guide skill construction, but far from perfect.</p>
+
+<callout emoji="⚠️" background-color="light-yellow">
+  <p><b>Caveats:</b> Code not yet released. Cost is substantial (~$1,800 per full benchmark run). Heavy commercial API dependency. Manufacturing domain collapses to 0% for all methods. The virtual verifier's false-positive rate means some "passed" skills still fail ground-truth tests.</p>
+</callout>
+
+<p><b>Verdict:</b> Read. The conceptual contribution — formalizing open-world self-evolution with a leakage barrier — is more important than the specific numbers. The three-stage pipeline (acquire → verify → deploy) is a durable design pattern for agent self-improvement, though the current implementation is too API-dependent and expensive for wide adoption.</p>
+
+<hr/>
+
+<h1>Cross-cutting Observations</h1>
+
+<p><b>Code release remains the critical bottleneck.</b> All three deep-dived papers are conceptually strong and empirically solid, yet none has released code. AnchorWorld's project page shows videos but no repository. Stream3D-VLM's project page has no code link. OpenSkill's GitHub is a placeholder ("Code is on the way"). This is a concerning pattern: the field is generating good ideas faster than it is making them reproducible. For a community that claims to value open science, the gap between paper publication and code release is widening, not narrowing.</p>
+
+<p><b>World models are becoming agent-facing, not just generative.</b> AnchorWorld generates worlds. Astra reasons with generated worlds. Stream3D-VLM perceives worlds in real time. OpenSkill improves agents that operate in worlds. The common thread is that world models are no longer just video generators — they are becoming interfaces between agents and their environments. This shift from "generate pretty videos" to "enable embodied cognition" is the most important trend in this week's pool.</p>
