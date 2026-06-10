@@ -20,4 +20,11 @@ Entry format:
 - Covered papers: 2606.02800, 2605.30280, 2606.05160
 - Shortlisted papers: 2606.03603, 2606.01247, 2606.03985
 
+## 2026-06-10 — 2026-06-08 to 2026-06-10
+- Doc: https://fudan-nlp.feishu.cn/docx/I2QadXXR6o0i9Kx8U5UcKbb5npf
+- Run: runs/2026-06-10-oasis-ahawam-tbdvla/
+- Deep threads: OASIS sim-to-real humanoid loco-manipulation (2606.08548), AHA-WAM async world-action modeling (2606.09811), TBD-VLA temporal block diffusion VLA (2606.07895), QGF test-time gradient guidance for flow policies (2606.11087)
+- Covered papers: 2606.08548, 2606.09811, 2606.07895, 2606.11087
+- Shortlisted papers: 2605.25077, 2606.06556, 2606.09669, 2606.11129, 2606.09828, 2606.07723, 2606.06476
+
 ---
