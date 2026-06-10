@@ -25,7 +25,7 @@ user-invocable: false
             └── patches/                  # optional preserved patches against external code
 ```
 
-A thread directory may also contain only `BLOCKER.md` when no meaningful external signal could be preserved.
+A thread is a durable unit of investigation. It may be one paper, a comparison across papers, a method question, a code path, or a buildable idea inspired by the paper pool. A thread directory may also contain only `BLOCKER.md` when no meaningful external signal could be preserved.
 
 ## Naming
 
@@ -108,11 +108,49 @@ The verifier checks:
 - final mode leaves `code/` and `drafts/` with only their README markers.
 - final mode requires `runs/INDEX.md` to mention the run id.
 
+## Checklist Template
+
+Use `runs/<run-id>/checklist.md` as the run's human completion contract. It must exist and be true before publishing, but it is not machine-parsed.
+
+```md
+# Paper Scout Run Checklist
+
+## Run
+- Run id:
+- Period covered:
+- Report:
+- Feishu doc:
+
+## Research Contract
+- [ ] The report foregrounds insight earned from the paper plus external signals, not paper reorganization.
+- [ ] Each deep thread has a constructive research action or a precise blocker.
+- [ ] Critical claims are backed by code, probes, patches, related work, data samples, derivations, produced artifacts, or explicitly stated blockers.
+- [ ] The report explains what the run learned that was not obvious from rereading the paper text alone.
+
+## Report Contract
+- [ ] The report is scannable: clear opening synthesis, strong sectioning, useful figures/tables/equations/snippets, and fluent logic.
+- [ ] At least two figure anchors are present in `report.docxxml`.
+- [ ] Deep thread sections read as research narratives, not template-filled summaries.
+- [ ] Lightly noticed papers and deep threads are separated cleanly.
+
+## Preservation Contract
+- [ ] Durable evidence is in thread directories.
+- [ ] Report-facing assets are in `assets/`.
+- [ ] `code/` and `drafts/` do not contain the only copy of durable work.
+- [ ] Workspace verifier passes in prepublish mode.
+
+## Publication Contract
+- [ ] Report published.
+- [ ] User notification confirmed.
+- [ ] `runs/INDEX.md` updated.
+- [ ] Workspace verifier passes in final mode.
+```
+
 ## INDEX.md
 
 Persistent dedup log. Append-only, newest-first.
 
-**Read before scouting.** Do not deep-dive papers already listed unless explicitly overridden. Shortlisted papers may reappear if still relevant.
+**Read before scouting.** Do not repeat papers or research threads already covered unless explicitly overridden. Shortlisted papers may reappear if still relevant.
 
 **Append after confirmed delivery.** Record:
 
@@ -120,9 +158,9 @@ Persistent dedup log. Append-only, newest-first.
 - period covered
 - Feishu doc URL
 - run packet path
+- deep threads
+- covered papers
 - shortlisted papers
-- deep-dived papers or threads
-- paper identifiers
 
 Keep entries concise. Do not rewrite history.
 

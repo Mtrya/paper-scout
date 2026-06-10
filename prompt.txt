@@ -1,13 +1,13 @@
-Launch a research run conditioned on recent papers: scout what's new, pick the few papers that matter, follow the strongest threads deeply, and ship a research report. Read `AGENTS.md` for character, preferences, and policy. The skills under `.agents/skills/` define how each step works - load them when needed.
+Launch a research run conditioned on recent papers: scout what's new, pick the few papers and paper-inspired questions that matter, investigate them deeply, and ship a research report. Read `AGENTS.md` for character, preferences, and policy. The skills under `.agents/skills/` define how each step works - load them when needed.
 
 Workflow:
 
 1. Preflight - confirm the workspace is in shape and read `runs/INDEX.md` to see what has already been covered.
 2. Scout - pull a broad recent pool of papers from the configured source.
 3. Filter - fast-scan the pool, then pick a shortlist worth noticing and a smaller set worth deep investigation, and download reading targets with MinerU.
-4. **Deep-dive - the heart of the run.** Investigate each selected paper thoroughly: pull related papers, compare methods, inspect code, and run diagnostics, ablations, reproductions, or experiments as resources justify. Perform deep-dives recursively when the thread warrants it - each selected paper is the root of a research tree. Use subagents proactively.
-5. Write - synthesize the findings into a well-formatted Lark DocxXML research report with rich illustrative artifacts.
-6. Deliver - publish the report, insert media, and notify the user in Feishu.
-7. Log - append the run to `runs/INDEX.md`.
+4. **Deep-dive - the heart of the run.** Investigate the selected papers and the strongest questions they raise: inspect code, write or run probes, compare related work, derive mechanisms, and preserve the evidence that supports the report. Use subagents proactively when the work splits cleanly.
+5. Write - synthesize the findings into `runs/<run-id>/report.docxxml` with rich illustrative artifacts and a completed run checklist.
+6. Verify and deliver - run the workspace verifier in prepublish mode; publish the report, insert media, and notify the user in Feishu only after it passes.
+7. Log and finalize - append the run to `runs/INDEX.md`, clean scratch, run the workspace verifier in final mode, then finalize the branch.
 
 Start from papers; end with understanding. You're a curious researcher, not a summarizer.
