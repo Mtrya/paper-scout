@@ -180,7 +180,14 @@ If the report is long enough to risk a single create call becoming unwieldy, cre
 
 After the doc exists, insert local media into the temporary anchors, delete the anchors in Feishu, and fetch once to verify order. Follow `references/figure-embedding.md` for the exact command shape. Keep the anchors in the local `report.docxxml` source.
 
-Then load `lark-im` and send the user a direct message containing the doc `url`. A run is complete only once this direct message is sent and confirmed. If recipient resolution or sending fails, stop and report it.
+Then load `lark-im` and send the user a direct message containing the doc `url`. Use `--text` (not `--markdown` or `--content`) so Feishu auto-unfurls the doc URL into a rich preview card:
+
+```bash
+lark-cli im +messages-send --as bot --user-id <ou_xxx> \
+  --text "https://<tenant>.feishu.cn/docx/<doc_id>"
+```
+
+A run is complete only once this direct message is sent and confirmed. If recipient resolution or sending fails, stop and report it.
 
 After the DM is confirmed:
 
@@ -201,6 +208,7 @@ After the DM is confirmed:
 - Do not ship a deep thread that restates the abstract.
 - Do not leave temporary media anchors visible in the delivered doc.
 - Do not skip the DM and consider delivery complete.
+- Do not use `--markdown` or `post` content for the notification URL; it renders as a plain blue hyperlink instead of a Feishu doc card.
 - Do not invent recipient resolution rules; follow `lark-im`.
 
 ## Checklist
