@@ -1,0 +1,322 @@
+<title>Paper Scout Research Report - 2026-06-10</title>
+
+<callout emoji="✅" background-color="light-green">
+  <p><b>Standout:</b> QGF (Zhou et al., 2026) is the clearest seed for a research thread. It shows that test-time gradient guidance can match training-time RL for flow policies, sidestepping the instability that has plagued actor-critic training of diffusion and flow models. Combined with OASIS, AHA-WAM, and TBD-VLA, this run paints a coherent picture: generative action models are maturing, and the frontier is shifting from <em>how to train them</em> to <em>how to guide, decouple, and deploy them efficiently.</em></p>
+</callout>
+
+<p>This run scouts papers from 2026-06-08 to 2026-06-10 and follows four strong threads. Three share a central technology — flow matching or diffusion for robot action generation — but attack different bottlenecks: data scarcity (OASIS), inference latency (AHA-WAM), action decoding architecture (TBD-VLA), and policy optimization without retraining (QGF). A fourth paper, the TBD-VLA architecture, rounds out the picture by showing how discrete diffusion can be temporally structured inside a VLA. Together they suggest that the next leap in robot control will come not from scaling policy parameters, but from smarter training pipelines, asynchronous inference, and test-time compute.</p>
+
+<h1>Simulation-to-Reality for Humanoid Loco-Manipulation</h1>
+
+<p>Humanoid robots are finally leaving the lab, but data remains the binding constraint. Real-robot teleoperation is accurate yet painfully slow; simulation is fast but historically struggled to transfer. Two papers this period attack the data bottleneck from opposite directions: OASIS by making simulation the primary data source, and a shortlist of benchmarks (SpatialWorld, WorldOlympiad) by making evaluation more realistic.</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>SpatialWorld</b> (Zhu et al., 2026)</td>
+      <td>Benchmark for interactive spatial reasoning across 8 simulation backends with a unified protocol.</td>
+      <td>Existing spatial benchmarks are passive (VQA). SpatialWorld tests whether agents can <em>act</em> on spatial understanding across diverse simulators.</td>
+      <td><a href="https://huggingface.co/papers/2606.09669">HF</a></td>
+    </tr>
+    <tr>
+      <td><b>WorldOlympiad</b> (Chen et al., 2026)</td>
+      <td>Triathlon benchmark diagnosing world models on physical faithfulness, geometric consistency, and interaction fidelity.</td>
+      <td>Most video-world-model benchmarks reward visual quality, not physical correctness. WorldOlympiad tests whether generated videos obey actual physics.</td>
+      <td><a href="https://huggingface.co/papers/2606.11129">HF</a></td>
+    </tr>
+    <tr>
+      <td><b>VoLo</b> (Zhang et al., 2026)</td>
+      <td>VLM orchestrator for open-vocabulary long-horizon manipulation with interruptible tool use.</td>
+      <td>Demonstrates that treating low-level controllers as <em>interruptible tools</em> rather than monolithic policies improves failure recovery in physical manipulation.</td>
+      <td><a href="https://huggingface.co/papers/2606.07723">HF</a></td>
+    </tr>
+    <tr>
+      <td><b>Robots Need More than VLA and World Models</b> (Karcini et al., 2026)</td>
+      <td>Position paper identifying four missing interfaces for the next generation of robotics: data autolabelling, embodiment retargeting, physics-grounded 3D reasoning, and reward inference.</td>
+      <td>A useful framing for the field. The authors argue that policy scaling is hitting a wall because unstructured behavioral data cannot be converted into robot supervision.</td>
+      <td><a href="https://huggingface.co/papers/2606.06556">HF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>OASIS: From Simulation Data Collection to Real-World Humanoid Loco-Manipulation</h2>
+
+<p>Zehao Yu et al. (2026) · <a href="https://huggingface.co/papers/2606.08548">HF</a> · <a href="https://arxiv.org/abs/2606.08548">PDF</a> · <a href="https://oasis-humanoid.github.io/">Project</a></p>
+
+<p>OASIS is a complete pipeline that learns humanoid loco-manipulation policies entirely from simulation data. The core insight is practical: separate the <em>cost</em> of teleoperation from the <em>size</em> of the resulting dataset by collecting trajectories in lightweight real-time rendering, then replaying them offline under diverse photorealistic conditions.</p>
+
+<p>[[figure-anchor:oasis:overview]]</p>
+
+<p>The pipeline has four stages. First, real-world object photos are fed to Hunyuan3D for mesh generation and Qwen3-VL for physical dimension and material estimation. Second, a human operator teleoperates a simulated Unitree G1 via VR (PICO 4U) in Isaac-Sim's real-time mode. Third, the recorded state trajectories are replayed and rendered under randomized textures, lighting, and camera extrinsics — turning one demonstration into twenty. Fourth, a hierarchical policy learns: a high-level Flow Matching planner predicts 32-frame whole-body reference motion chunks from CLIP text, DINOv2 vision, and proprioception; a low-level Teleopit controller tracks them at 50 Hz.</p>
+
+<p>The method is mechanically sound. The reference motion command <latex>m_t \in \mathbb{R}^{67}</latex> compactly encodes root pose deltas, joint positions, and joint increments (Eq. 1 in the paper). Flow matching trains the denoiser to regress the constant-velocity field between noise and data:</p>
+
+<pre lang="python" caption="Flow matching objective (reconstructed)"><code>loss = MSE(denoiser(a_tau, tau, condition), noise - action_chunk)
+a_tau = (1 - tau) * action_chunk + tau * noise</code></pre>
+
+<p>What makes OASIS stand out is not any single algorithmic novelty — 3D generation, VLM attribute estimation, and flow matching are all existing pieces — but the <em>system integration</em> into a scalable humanoid data pipeline. The two-stage decoupled rendering is a genuine scaling insight: operator time is linear in trajectories, while dataset size is linear in renderings, and the gap between them is whatever compute you can afford.</p>
+
+<p>Does it work? The real-robot experiments say yes, with caveats. Under a 50-trajectory budget per task, simulation-only training matches or exceeds real-robot training on most tasks, and an equal mix outperforms both. The ablations confirm that <b>lighting randomization dominates transfer</b>: disabling it causes near-total failure, while texture and camera randomization matter less. A curriculum-based rollout mechanism (progressively replacing ground-truth history with the model's own predictions during training) is critical — without it, success rates collapse from 7–10/10 to 0–2/10.</p>
+
+<p>But the evidence has limits. The evaluation is small: 10 trials × 4 tasks on one robot, with no error bars. Asset dimension errors reach 3 cm (~12% relative) and mass is assigned via uniform-density category lookup, which the authors themselves flag as a weakness for contact-rich tasks. Camera randomization is narrow (±1 cm position, ±1.5° rotation) — far less aggressive than VIRAL's multi-camera training. And <b>no code is public</b> as of this writing, so independent verification is impossible. The project page links to nothing but the paper and a video.</p>
+
+<p>The comparison with related methods is instructive:</p>
+
+<table>
+  <colgroup>
+    <col width="120"/>
+    <col width="200"/>
+    <col width="200"/>
+    <col width="120"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Method</th>
+      <th background-color="light-gray">Data Source</th>
+      <th background-color="light-gray">Randomization</th>
+      <th background-color="light-gray">Code?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>OASIS</b></td>
+      <td>Sim teleop + offline rendering</td>
+      <td>Texture, lighting, camera (narrow)</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>VIRAL</td>
+      <td>RL teacher + DAgger student</td>
+      <td>Lighting, materials, camera, image quality, sensor delay</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>GR00T N1</td>
+      <td>Heterogeneous mix (real + synthetic + video)</td>
+      <td>Unknown</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>MimicGen</td>
+      <td>Human demos replayed in new initial conditions</td>
+      <td>Task-specific scene variation</td>
+      <td>Yes</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>OASIS's niche is clear: it is the first to apply the MimicGen-style "teleop + replay + rendering" paradigm to <em>whole-body humanoid loco-manipulation</em>. MimicGen and DexMimicGen are fixed-base or upper-body only. Whether that generalizes to dynamic locomotion or contact-rich manipulation remains an open question.</p>
+
+<h1>World-Action Models: Beyond Synchronous Prediction</h1>
+
+<p>World-action models (WAMs) jointly learn visual scene dynamics and action generation, injecting physical priors into control. But existing WAMs force world prediction and action execution to share the same short horizon, making the video branch waste capacity on redundant adjacent-frame variations. AHA-WAM asks: what if the world planner thinks slowly and the action executor acts fast?</p>
+
+<h2>AHA-WAM: Asynchronous Horizon-Adaptive World-Action Modeling</h2>
+
+<p>Jisong Cai et al. (2026) · <a href="https://huggingface.co/papers/2606.09811">HF</a> · <a href="https://arxiv.org/abs/2606.09811">PDF</a> · <a href="https://serene-sivy.github.io/aha-wam/">Project</a></p>
+
+<p>AHA-WAM reorganizes world-action modeling around a temporal asymmetry. A <b>slow video DiT</b> (Wan2.2-5B, horizon <latex>h_v = 64</latex>) maintains rolling key-value memory over past observations and exposes reusable layerwise latent context. A <b>fast action DiT</b> (~1.02B params, horizon <latex>h_a = 16</latex>) executes short action chunks in closed loop by querying that context through layerwise joint attention. The video branch refreshes only periodically; the action branch runs at full control frequency.</p>
+
+<p>[[figure-anchor:ahawam:architecture]]</p>
+
+<p>The central technical challenge is <b>stale planner context</b>. If the video DiT only refreshes every few action chunks, the cached K/V context may misalign with the current scene. AHA-WAM solves this with <b>Observation-Guided Video-Context Routing (OVCR)</b>, a four-step mechanism that adapts cached planner context to the latest observation without rerunning the video DiT:</p>
+
+<ol>
+  <li><b>Routing queries</b> — 32 learnable base queries attend over the current visual observation tokens to produce compact, observation-conditioned slots.</li>
+  <li><b>Planner read</b> — These queries attend to the cached planner K/V from the last refresh, retrieving chunk-relevant information.</li>
+  <li><b>Residual update</b> — A lightweight layerwise router predicts residual K/V updates from the retrieved features.</li>
+  <li><b>Gated merge</b> — A learned sigmoid gate blends the residuals into the cached context.</li>
+</ol>
+
+<p>The adapted context <latex>\widetilde{\mathcal{C}}_t^p</latex> is then consumed by the action DiT through layerwise joint attention (Eq. 3):</p>
+
+<pre lang="python" caption="Layerwise joint attention (reconstructed)"><code>def forward_action_layer(action_q, action_k, action_v,
+                         planner_k_adapted, planner_v_adapted):
+    k = concat(action_k, planner_k_adapted)
+    v = concat(action_v, planner_v_adapted)
+    out = attention(action_q, k, v)
+    return out</code></pre>
+
+<p>To prevent the action expert from overfitting to a fixed planner-executor phase, <b>horizon-adaptive offset training</b> randomly shifts the action-chunk grid by <latex>\delta \sim \mathcal{U}\{0, \dots, h_a - 1\}</latex> within the planner horizon. This exposes the action DiT to all possible alignment offsets it will encounter during streaming deployment.</p>
+
+<p>The ablations tell a clear story. Naive async execution (decoupling without adaptation) drops RoboTwin success by 3.2 points. Adding rolling K/V memory recovers 2.4 of those. Adding OVCR recovers the rest and pushes performance <em>above</em> the synchronous Fast-WAM baseline (+0.97 points). OVCR is the decisive ingredient.</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="100"/>
+    <col width="100"/>
+    <col width="100"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Variant</th>
+      <th background-color="light-gray">Clean (%)</th>
+      <th background-color="light-gray">Rand. (%)</th>
+      <th background-color="light-gray">Avg (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Fast-WAM (sync baseline)</td>
+      <td>91.88</td>
+      <td>91.78</td>
+      <td>91.83</td>
+    </tr>
+    <tr>
+      <td>Naive-Async</td>
+      <td>88.64</td>
+      <td>88.56</td>
+      <td>88.60</td>
+    </tr>
+    <tr>
+      <td>+ Rolling KV Memory</td>
+      <td>91.40</td>
+      <td>90.62</td>
+      <td>91.01</td>
+    </tr>
+    <tr>
+      <td>+ OVCR</td>
+      <td>91.52</td>
+      <td>91.42</td>
+      <td>91.47</td>
+    </tr>
+    <tr>
+      <td><b>Full AHA-WAM</b></td>
+      <td><b>93.40</b></td>
+      <td><b>92.20</b></td>
+      <td><b>92.80</b></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The inference stack is impressively engineered. TensorRT + CUDA Graphs + hot-path redundancy elimination cut action-chunk latency from 415 ms (PyTorch eager) to 41 ms (24.2 Hz). ODE distillation further reduces to 17.6 ms (56.9 Hz) with only a 2.6-point simulation accuracy drop. All latency numbers are measured on an RTX 5090D — a cutting-edge consumer GPU — so portability to datacenter or edge hardware is an open question.</p>
+
+<p>Real-world evaluation is limited but promising: 78.3% success across 4 bimanual tasks on AgileX Piper arms, matching <latex>\pi_{0.5}</latex> (76.7%) without generalist pretraining. Only 4 tasks, ~120 episodes each, with RoboCOIN pretraining — so the "no pretraining" claim applies to simulation, not deployment. And like OASIS, <b>no code is public</b>. The project page is a glossy shell with no repository link.</p>
+
+<h1>Generative Policies for Robot Control</h1>
+
+<p>If OASIS and AHA-WAM ask "how do we get data and run models fast enough?", TBD-VLA and QGF ask "how do we make the action model itself better?" Both use generative modeling — discrete block diffusion and continuous flow matching, respectively — but attack orthogonal problems: TBD-VLA redesigns the decoding architecture for temporally coherent, low-latency action generation; QGF redesigns the optimization paradigm so the policy never needs unstable actor-critic training at all.</p>
+
+<h2>TBD-VLA: Temporal Block Diffusion Vision Language Action Model</h2>
+
+<p>Sung-Wook Lee et al. (2026) · <a href="https://huggingface.co/papers/2606.07895">HF</a> · <a href="https://arxiv.org/abs/2606.07895">PDF</a> · <a href="https://tbd-vla.github.io/">Project</a></p>
+
+<p>Discrete VLA models generate actions as tokens from a VLM backbone, but autoregressive decoding is too slow for closed-loop control, while fully parallel decoding sacrifices temporal structure. TBD-VLA splits the difference: it partitions action sequences into temporal blocks, performs <b>masked discrete diffusion within each block</b> (parallel), and maintains <b>autoregressive generation across blocks</b> (temporal). The result is a 2B-parameter Qwen3-VL model that achieves 97.7% average success on LIBERO — a modest 0.8-point margin over <latex>\pi_{0.5}</latex> — but with an architecture that enables a genuinely useful inference trick.</p>
+
+<p>[[figure-anchor:tbdvla:overview]]</p>
+
+<p>The training efficiency comes from a <b>doubled-layout attention mask</b>. Instead of running K separate forward passes (one per block), the input sequence is laid out as <code>[prefix] [clean_0] [noised_0] [clean_1] [noised_1] ...</code> with shared RoPE positions between clean and noised twins. A custom mask packs all block-level losses into one forward pass while preventing information leakage (the noised block cannot attend to its own clean twin). Our reconstruction verifies the mask shape and no-leak property.</p>
+
+<p>The most practically interesting idea is <b>Real-Time Chunking (RTC)</b>. During closed-loop control, inference latency means the robot has no new actions for <latex>d</latex> timesteps. TBD-VLA handles this by <b>freezing the committed action tail</b> and reusing it as in-painting context for the next generation cycle. Because the model was trained with masked block diffusion — it routinely sees partial action context and must complete the block — this hard in-painting is natively aligned with the training objective. Without RTC, TBD-VLA collapses from 97.7% to 72.3% at latency <latex>L=4</latex>; with RTC it holds at 93.2%.</p>
+
+<p><b>A critical reading:</b> the +20.9 pp RTC boost is vs. TBD-VLA <em>without</em> RTC, not vs. the baseline. The cross-method comparison against <latex>\pi_{0.5}</latex> with RTC is only +3.4 pp — still meaningful, but much smaller. The paper's phrasing could easily be misread.</p>
+
+<p>Another striking result is <b>expectation sampling</b>: instead of taking the argmax token, TBD-VLA decodes each scalar action as a weighted average over bin centers using the full predicted distribution. This is worth <b>+7.1 points</b> over argmax on SimplerEnv Google Robot, suggesting the token distributions retain genuinely useful uncertainty that standard decoding discards.</p>
+
+<table>
+  <colgroup>
+    <col width="220"/>
+    <col width="120"/>
+    <col width="120"/>
+    <col width="120"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Configuration</th>
+      <th background-color="light-gray">Success (%)</th>
+      <th background-color="light-gray">Inference (s)</th>
+      <th background-color="light-gray">Forwards</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>m=1, fully AR</td>
+      <td>84.6</td>
+      <td>0.223</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <td>m=16, full parallel</td>
+      <td>84.0</td>
+      <td>0.061</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>m=4, n_d=1</td>
+      <td>85.7</td>
+      <td>0.060</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td><b>m=4, n_d=2, Expectation</b></td>
+      <td><b>88.7</b></td>
+      <td><b>0.086</b></td>
+      <td><b>4</b></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The block size ablation confirms <latex>m=4</latex> as a sweet spot: fully autoregressive is slower and worse; fully parallel is fastest but worst. The real-world evaluation is minimal (3 tasks, 50 demos each, FR3 robot) and the paper honestly reports a complete failure on liquid transfer under camera viewpoint shift. Like OASIS and AHA-WAM, <b>no code is public</b> — the project page is empty. The LeRobot framework is mentioned for training, but configs and model definitions are absent.</p>
+
+<hr/>
+
+<h2>QGF: Test-Time Gradient Guidance of Flow Policies in Reinforcement Learning</h2>
+
+<p>Zhiyuan Zhou et al. (2026) · <a href="https://huggingface.co/papers/2606.11087">HF</a> · <a href="https://arxiv.org/abs/2606.11087">PDF</a> · <a href="https://github.com/zhouzypaul/qgf">Code</a></p>
+
+<p>QGF is the standout of this run. It asks a radical question: instead of designing a more stable RL objective for flow policies, can we keep the actor training purely supervised and do <em>all</em> policy optimization at test time?</p>
+
+<p>The idea is simple in concept but subtle in execution. Train a reference flow policy via standard behavioral cloning. Train a critic via IQL (in-sample, no policy interaction). At inference, guide each denoising step with the critic gradient. The challenge is <em>where</em> to evaluate that gradient. Three options exist:</p>
+
+<ul>
+  <li><b>OOD gradient</b> <latex>\nabla_{a_t} Q(s, a_t)</latex>: Evaluate at the noisy action. The critic has never seen noisy actions — gradient is biased and exploitative.</li>
+  <li><b>BPTT gradient</b> <latex>\nabla_{a_t} Q(s, \text{ODE}(a_t))</latex>: Backprop through the full denoising chain. Expensive and high-variance.</li>
+  <li><b>QGF gradient</b> <latex>\nabla_{\hat{a}_1} Q(s, \hat{a}_1)</latex> with <latex>\hat{a}_1 = a_t + (1-t) v_\theta(s, a_t, t)</latex>: Approximate the clean action with one large Euler step, evaluate the gradient there, and drop the Jacobian entirely.</li>
+</ul>
+
+<p>[[figure-anchor:qgf:probe]]</p>
+
+<p>The QGF estimator is counter-intuitively <em>better</em> than its more exact cousins. Our 1D diagnostic probe reproduces the qualitative behavior of the paper's Figure 2: a tri-modal flow matching distribution guided by QGF shifts mass cleanly to the optimal mode, while OOD gets stuck at a suboptimal mode and BPTT shows high variance. The probe also confirms that including the exact Jacobian (QGF-Jacobian) <em>increases</em> gradient variance and hurts performance — a result that echoes the broader ML literature on approximate gradients (feedback alignment, synthetic gradients) but is still surprising.</p>
+
+<p>Empirically, QGF outperforms all prior test-time methods (QFQL, BPTT, GradStep, CFGRL) and is competitive with the best training-time baseline (EDP) across 20 OGBench tasks with action chunking. It uses orders of magnitude less compute than best-of-N sampling: BFN(N=4) needs ~4× the FLOPs yet performs worse. QGF+BFN(N=4) matches BFN(N=16), showing that gradient guidance is a far cheaper form of test-time compute than rejection sampling.</p>
+
+<p>The scaling story is positive but bounded. QGF improves from 800k to 3.2M parameters while QAM (a training-time baseline) flatlines. But both methods <b>overfit at 12.7M parameters</b>. The headline "scales with model size" only holds up to a point. And QGF cannot rescue a poorly trained base policy — an important practical caveat that the paper admits in its limitations section.</p>
+
+<p>Unlike the other three papers in this run, <b>QGF's code is public and complete</b>. We cloned the repository, inspected the core inference loop in <code>agents/qgf.py</code>, and verified that the implementation matches Algorithm 1 exactly. The 1D probe is self-contained and runnable. This makes QGF the most buildable contribution of the period.</p>
+
+<h1>Cross-cutting Observations</h1>
+
+<p><b>Flow and diffusion have become the default action representation.</b> All four deep-dive papers use flow matching or diffusion for action generation: OASIS (Flow Matching planner), AHA-WAM (Flow Matching dual-DiT), TBD-VLA (discrete block diffusion), QGF (flow-matching policy). This is no longer a niche — it is the dominant paradigm for expressive robot policies. The open research question is shifting from "should we use diffusion?" to "how do we make it fast, structured, and optimizable?"</p>
+
+<p><b>Code availability is the run's sharpest dividing line.</b> QGF ships a complete public repository. OASIS, AHA-WAM, and TBD-VLA have project pages with videos and figures but no source code. This pattern — strong empirical claims without reproducible artifacts — is becoming common in robotics, where training pipelines are complex and hardware-dependent. It is also a liability: without configs and model definitions, the community cannot verify ablations, reproduce baselines, or build follow-up work. The verifier on this run treated missing code as a blocker for deeper validation, not a reason to stop investigating, but the gap is real.</p>
+
+<p><b>Test-time compute is emerging as a third axis of robot policy design.</b> Historically, the field has focused on training data and model architecture. QGF and TBD-VLA's RTC introduce a third dimension: how much compute to spend at inference to improve actions without retraining. QGF shows that gradient guidance can be as effective as actor-critic training; TBD-VLA shows that in-painting can recover from inference latency. Both suggest that for expensive VLA models, test-time optimization may be more practical than training-time RL.</p>
+
+<p><b>Simulation data is crossing the credibility threshold for humanoids.</b> OASIS's claim that simulation-only training matches real-robot data on a Unitree G1, while limited in evaluation scale, aligns with VIRAL's earlier success and suggests a trend: for humanoid loco-manipulation, visual diversity from randomized rendering may matter more than physics fidelity. If this holds, the bottleneck shifts from "better simulators" to "better asset generation pipelines" — which is exactly what OASIS's Hunyuan3D + Qwen3-VL pipeline addresses.</p>
+
+<p><b>Temporal structure in action generation is undervalued.</b> AHA-WAM decouples world and action temporal horizons. TBD-VLA introduces temporal blocks that preserve autoregressive structure across time while enabling parallel decoding within blocks. Both find that treating actions as an unstructured bag of tokens (fully parallel) or as rigidly sequential (fully autoregressive) is suboptimal. The middle ground — structured temporal blocks with intra-block parallelism — appears to be the sweet spot for both speed and coherence.</p>
+
+<h1>What to Build Next</h1>
+
+<ul>
+  <li><b>Combine QGF with OASIS.</b> OASIS trains a Flow Matching policy on simulation data; QGF guides flow policies with critic gradients at test time. A natural next step is to train an IQL critic on OASIS's simulation data and deploy QGF guidance on the real robot, potentially improving over the base BC policy without any real-world retraining.</li>
+  <li><b>Apply AHA-WAM's OVCR to TBD-VLA.</b> TBD-VLA's RTC handles inference latency by in-painting; AHA-WAM handles it by asynchronously refreshing planner context. A hybrid that uses block-diffusion action generation inside an async world-action framework could get the best of both architectures.</li>
+  <li><b>Scale QGF to VLA backbones.</b> QGF is currently evaluated on small MLP flow policies (up to 12.7M params). Scaling the gradient estimator to 2B-parameter VLMs like TBD-VLA's Qwen3-VL backbone is an open and important challenge.</li>
+</ul>
+
+<p><i>Investigated 2026-06-10. Papers covered: 2606.08548, 2606.09811, 2606.07895, 2606.11087. Shortlisted: 2605.25077, 2606.06556, 2606.09669, 2606.11129, 2606.09828, 2606.07723, 2606.06476.</i></p>
