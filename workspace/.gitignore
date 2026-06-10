@@ -1,6 +1,11 @@
 # Ignore all files by default
 *
 
+# Agent skills and scripts
+!.agents/
+!.agents/skills/
+!.agents/skills/**
+
 # Durable paper cache
 !papers/
 !papers/**
@@ -9,18 +14,15 @@
 !runs/
 !runs/**
 
-# Scratch and extracted media dumps
+# Scratch
 drafts/*
 !drafts/
 !drafts/README.md
-assets/*
-!assets/
-!assets/README.md
 
 # Reproducible external code and local environments
-repos/*
-!repos/
-!repos/README.md
+code/*
+!code/
+!code/README.md
 
 # Local-only agent settings
 .agents/settings.local.json

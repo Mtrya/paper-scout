@@ -1,6 +1,6 @@
 ---
 name: workspace-manage
-description: "Workspace layout, naming rules, artifact tracking and cleanup policy, branch/PR finalization, area conventions, and INDEX.md coverage log for Paper Scout."
+description: "Workspace layout, naming rules, artifact tracking and cleanup policy, run-packet verifier, branch/PR finalization, and INDEX.md coverage log for Paper Scout."
 user-invocable: false
 ---
 
@@ -11,45 +11,49 @@ user-invocable: false
 ```text
 .
 ├── papers/<area>/<slug>-<id>.md          # downloaded paper markdown
-├── repos/<area>/<repo-name>/             # cloned repos or verification projects
-├── runs/
-│   ├── INDEX.md                          # coverage log / dedup source
-│   └── <area>/<slug>-<id>/               # durable research packet
-│       ├── deep-dive.md                  # analysis notes
-│       └── artifacts/                    # curated scripts, results, figures, README
-├── drafts/                               # scratch DocxXML + temp artifacts
-└── assets/                               # scratch extracted media
+├── code/                                 # ignored lab bench for active external-signal work
+├── drafts/                               # ignored DocxXML, media, and scratch artifacts
+└── runs/
+    ├── INDEX.md                          # coverage log / dedup source
+    └── <run-id>/                         # durable run packet
+        ├── report.docxxml                # delivered report source
+        ├── checklist.md                  # human completion gate
+        ├── assets/                       # report-facing assets and small result artifacts
+        └── <thread-id>/                  # paper or cross-paper research thread
+            ├── README.md                 # required when evidence is preserved
+            ├── code/                     # optional preserved probes, scripts, reimplementations
+            └── patches/                  # optional preserved patches against external code
 ```
 
-## Areas
-
-Kebab-case folders under `papers/`, `repos/`, `runs/`. Not a fixed taxonomy.
-
-- Create an area only when a theme recurs.
-- Fold a one-stray-paper area into a broader one.
-- Reuse the same area name across `papers/`, `repos/`, and `runs/`.
+A thread directory may also contain only `BLOCKER.md` when no meaningful external signal could be preserved.
 
 ## Naming
 
-Lead with a human-readable slug from the title/repo. Trail with the paper id (dedup key).
+Run ids should be date-led and human-readable when practical, such as `2026-06-07-cosmos3-grail-qwenvla`. Do not force a clever slug when the paper set does not have one.
+
+Paper cache files lead with a title slug and trail with the paper id:
 
 - `papers/vla/robosemanticbench-2606.02277.md`
-- `repos/spatial-intelligence/TVRBench/`
-- `runs/vla/robosemanticbench-2606.02277/deep-dive.md`
-- `runs/vla/robosemanticbench-2606.02277/artifacts/check_attention_mask.py`
+- `papers/world-models/cosmos3-2606.02800.md`
 
-Add an id suffix to repos only on collision.
+Thread ids should be readable and stable:
+
+- `runs/2026-06-07-cosmos3-grail-qwenvla/cosmos3-2606.02800/`
+- `runs/2026-06-07-cosmos3-grail-qwenvla/action-tokenization/`
 
 ## Directory Rules
 
 - `papers/`: tracked durable paper-text cache.
-- `runs/`: tracked durable notes, coverage log, and curated research-action artifacts.
-- `runs/<area>/<slug>-<id>/artifacts/`: preserved scripts, small results, generated figures, environment setup files, and a README when interpretation is not obvious.
-- `repos/`: ignored cloned code and temporary verification projects. Promote only curated artifacts to `runs/.../artifacts/`.
+- `code/`: ignored lab bench. Clone repos, create venvs, run experiments, patch upstream code, and write scratch probes here. Do not leave the only durable copy of useful work here.
 - `drafts/`: ignored scratch. Overwrite freely. Never put durable content here.
-- `assets/`: ignored extracted media dump. Promote only selected figures to `runs/.../artifacts/figures/` when they should be preserved.
-- `../reports/`: tracked delivered DocxXML archive as `YYYY-MM-DD-<slug>.docxxml`.
-- Workspace root: no loose run scripts or scratch outputs. Move useful files into `runs/.../artifacts/`; otherwise clean them.
+- `runs/<run-id>/report.docxxml`: tracked delivered report source.
+- `runs/<run-id>/checklist.md`: tracked human completion gate.
+- `runs/<run-id>/assets/`: tracked flat home for report-facing assets and small result artifacts.
+- `runs/<run-id>/<thread-id>/README.md`: tracked explanation for preserved code or patches.
+- `runs/<run-id>/<thread-id>/code/`: tracked curated code worth preserving.
+- `runs/<run-id>/<thread-id>/patches/`: tracked curated patches worth preserving.
+- `runs/<run-id>/<thread-id>/BLOCKER.md`: tracked blocker note when no code or patch evidence can be preserved.
+- Workspace root: no loose run scripts or scratch outputs.
 
 ## Artifact Policy
 
@@ -60,22 +64,49 @@ git status --short --ignored
 git check-ignore -v <path>
 ```
 
-Never force-add ignored files. If an ignored file should be durable, move a curated copy to the correct tracked location first.
+Never force-add ignored files. If an ignored file should be durable, move a curated copy, patch, result, or README into the correct tracked run packet first.
 
 Track:
 
 - paper markdown under `papers/`
-- delivered report archives under `../reports/`
+- delivered report source at `runs/<run-id>/report.docxxml`
+- run checklist at `runs/<run-id>/checklist.md`
+- report-facing assets under `runs/<run-id>/assets/`
+- thread evidence under `runs/<run-id>/<thread-id>/`
 - `runs/INDEX.md`
-- `runs/<area>/<slug>-<id>/deep-dive.md`
-- curated artifacts under `runs/<area>/<slug>-<id>/artifacts/`
 
 Clean after confirmed delivery:
 
-- `drafts/`, `assets/`, `repos/`, `hf_inspect/`, venvs, caches, local settings, loose workspace scripts, and other ignored scratch.
-- Run a dry run first: `git clean -ndX .` from `workspace/`.
-- If the dry-run list is only ignored scratch, run `git clean -fdX .`.
-- If an unignored path remains, either stage it as a durable artifact or intentionally remove/move it; do not leave the workspace messy.
+- `code/` back to only `README.md`
+- `drafts/` back to only `README.md`
+- other ignored scratch only after durable evidence has been promoted
+
+## Verifier
+
+Use the verifier as the machine-checkable subset of the run contract. The checklist remains the broader human contract.
+
+Run before publishing:
+
+```bash
+python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode prepublish
+```
+
+Run after delivery, cleanup, and index update:
+
+```bash
+python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode final
+```
+
+The verifier checks:
+
+- `report.docxxml`, `checklist.md`, and `assets/` exist.
+- `report.docxxml` contains at least two unique `[[figure-anchor:...]]` anchors.
+- there is at least one thread directory.
+- every non-reserved run-level directory is a valid thread.
+- a thread is either `BLOCKER.md`, or `README.md` with `code/`, `patches/`, or both.
+- present `code/` or `patches/` directories contain at least one non-empty file.
+- final mode leaves `code/` and `drafts/` with only their README markers.
+- final mode requires `runs/INDEX.md` to mention the run id.
 
 ## INDEX.md
 
@@ -88,15 +119,16 @@ Persistent dedup log. Append-only, newest-first.
 - run date/time
 - period covered
 - Feishu doc URL
+- run packet path
 - shortlisted papers
-- deep-dived papers
+- deep-dived papers or threads
 - paper identifiers
 
 Keep entries concise. Do not rewrite history.
 
 ## Preflight
 
-1. Ensure `papers/`, `repos/`, `runs/`, `drafts/`, `assets/` exist. Create missing ones.
+1. Ensure `papers/`, `code/`, `runs/`, and `drafts/` exist. Create missing ones.
 2. Read `runs/INDEX.md` if present.
 3. Inspect git state before the run. If the workspace has unrelated changes, stop and report them.
 4. Start the run on a branch, not `main`/`master`. Use a branch such as `scout/YYYY-MM-DD` or `scout/YYYY-MM-DD-<topic>`, adding a suffix on collision.
@@ -107,20 +139,26 @@ Keep entries concise. Do not rewrite history.
 After the Feishu doc is created, media is inserted, the user DM is confirmed, and `runs/INDEX.md` is updated:
 
 1. Move all durable material into tracked locations according to the Artifact Policy.
-2. Clean ignored scratch with the dry-run-first `git clean -ndX .` / `git clean -fdX .` flow.
-3. Review `git status --short`. It should show only the report archive, paper cache, run packets, and `runs/INDEX.md`.
-4. Stage only durable outputs:
+2. Clean ignored scratch so `code/` and `drafts/` contain only their README markers.
+3. Run final verification:
 
 ```bash
-git add ../reports papers runs
+python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode final
 ```
 
-5. Commit with a run-focused message, for example `Add 2026-06-07 paper scout report`.
-6. Push the branch and create a ready-to-review PR. Do not create a draft PR:
+4. Review `git status --short`. It should show only durable paper cache, run packets, and `runs/INDEX.md`.
+5. Stage only durable outputs:
+
+```bash
+git add papers runs
+```
+
+6. Commit with a run-focused message, for example `Add 2026-06-07 paper scout report`.
+7. Push the branch and create a ready-to-review PR. Do not create a draft PR:
 
 ```bash
 git push -u origin HEAD
-gh pr create --title "Add YYYY-MM-DD paper scout report" --body "Adds the delivered report archive, paper cache, run notes, and curated research artifacts for the YYYY-MM-DD Paper Scout run."
+gh pr create --title "Add YYYY-MM-DD research report" --body "Adds the delivered report, paper cache, and preserved research evidence for the YYYY-MM-DD Paper Scout run."
 ```
 
-7. If push or PR creation fails because auth/network is unavailable, stop and report the branch name, commit SHA, and exact failure.
+8. If push or PR creation fails because auth/network is unavailable, stop and report the branch name, commit SHA, and exact failure.

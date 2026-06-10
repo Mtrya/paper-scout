@@ -8,7 +8,7 @@ There is no code to build and nothing to install. The repository *is* the instan
 
 1. `scout.sh` starts the reading agent from `workspace/` with a date-stamped `prompt.txt`.
 2. The agent reads `workspace/AGENTS.md` (its contract) and loads skills from `workspace/.agents/skills/` as needed: scout the recent pool, filter aggressively, deep-dive a small handful, compose the report, deliver a fresh Feishu doc.
-3. The analysis is saved under `workspace/runs/` and the run is logged to `workspace/runs/INDEX.md`. The delivered report is archived to `reports/`.
+3. The report and preserved evidence are saved under `workspace/runs/<run-id>/`, and the run is logged to `workspace/runs/INDEX.md`.
 
 ## Layout
 
@@ -16,11 +16,11 @@ There is no code to build and nothing to install. The repository *is* the instan
 - `scout.sh` — launches a run
 - `workspace/AGENTS.md` — the reading agent's contract (your interests, cadence, Feishu destination)
 - `workspace/.agents/skills/` — the scouting, deep-dive, and Feishu-doc skills
-- `workspace/runs/` — deep-dive notes and `INDEX.md` (the readable record)
-- `reports/` — delivered reports archived as DocxXML, one per run
+- `workspace/code/` — ignored lab bench for cloned repos, probes, patches, and temporary environments
+- `workspace/runs/` — delivered reports, preserved evidence packets, and `INDEX.md`
 - `AGENTS.md` — contract for coding agents maintaining this repo
 
-`workspace/papers/` is the tracked paper-text cache. `workspace/runs/` holds durable research packets. `workspace/{repos,drafts,assets}/` hold scratch run data and are gitignored.
+`workspace/papers/` is the tracked paper-text cache. `workspace/runs/` holds durable run packets. `workspace/code/` and `workspace/drafts/` hold scratch run data and are gitignored except for their README markers.
 
 ## Make It Your Own
 

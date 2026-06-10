@@ -18,8 +18,8 @@ What the repo contains:
 - `scout.sh` — a launcher that starts a run from `workspace/`
 - `workspace/AGENTS.md` — the reading agent's persistent operating contract
 - `workspace/.agents/skills/` — the skills the reading agent loads (the method)
-- `workspace/runs/` — deep-dive notes and `INDEX.md` (the readable record + dedup log)
-- `reports/` — delivered Feishu reports archived as DocxXML, one per run
+- `workspace/code/` — ignored lab bench for cloned repos, probes, patches, experiments, and local environments
+- `workspace/runs/` — delivered reports, durable evidence packets, and `INDEX.md` (the readable record + dedup log)
 
 ## The Two Agents
 
@@ -57,13 +57,13 @@ Each file has a distinct job. Do not let them bleed into each other.
 
 **`workspace/AGENTS.md`** — the reading-agent contract. Identity, user preferences, policy, delivery destination, coverage-log rules. Concrete values, not templates. No method detail, no run-phase orchestration.
 
-**`workspace/.agents/skills/workspace-manage/SKILL.md`** — workspace layout, naming rules, area conventions, and `runs/INDEX.md` coverage log.
+**`workspace/.agents/skills/workspace-manage/SKILL.md`** — workspace layout, naming rules, artifact tracking, verifier script, cleanup policy, and `runs/INDEX.md` coverage log.
 
 **`workspace/.agents/skills/paper-source/SKILL.md`** — recent-paper pool discovery. Default source is Hugging Face Papers, with commands documented inline; additional sources are added here as the workflow grows.
 
 **`workspace/.agents/skills/paper-deep-dive/SKILL.md`** — deep investigation of a single paper: reading, code inspection, resource-proportional research actions, related-work comparison, and structured analysis notes.
 
-**`workspace/.agents/skills/report-compose/SKILL.md`** — DocxXML research report composition, illustrative-artifact planning, Feishu doc creation, media insertion, user notification, and archive to `reports/`. Uses `lark-doc` and `lark-im` for command details.
+**`workspace/.agents/skills/report-compose/SKILL.md`** — DocxXML research report composition, illustrative-artifact planning, Feishu doc creation, media insertion, user notification, and run-packet report preservation. Uses `lark-doc` and `lark-im` for command details.
 
 **`scout.sh`** — the launcher. Computes the date, stamps `prompt.txt`, starts the harness from `workspace/`. The only file that knows the harness invocation.
 
@@ -90,21 +90,25 @@ workspace/
 ├── AGENTS.md          # reading-agent contract
 ├── .agents/skills/    # the skills (the method)
 ├── papers/            # tracked downloaded paper markdown cache, organized by area
-├── repos/             # ignored cloned repos and verification projects
+├── code/              # ignored lab bench for external-signal work
 ├── drafts/            # ignored working DocxXML and scratch artifacts
-├── assets/            # ignored extracted media dumps
 └── runs/
     ├── INDEX.md                         # coverage log + dedup source of truth
-    └── <area>/<slug>-<id>/              # durable research packet
-        ├── deep-dive.md                 # analysis notes
-        └── artifacts/                   # curated scripts, results, figures, README
+    └── <run-id>/                        # durable run packet
+        ├── report.docxxml
+        ├── checklist.md
+        ├── assets/
+        └── <thread-id>/
+            ├── README.md
+            ├── code/                    # optional preserved code/probes
+            └── patches/                 # optional preserved patches
 ```
 
-Delivered reports are archived to the repo-root `reports/` as `YYYY-MM-DD-<slug>.docxxml`, one per run.
+Delivered report sources are archived inside their run packets as `report.docxxml`.
 
 Behavioral invariants:
 
-- `runs/INDEX.md` is the single source of truth for what has been covered. If you change how logging works, the reading agent must still be able to determine what was previously deep-dived from this file.
+- `runs/INDEX.md` is the single source of truth for what has been covered. If you change how logging works, the reading agent must still be able to determine what was previously covered from this file.
 - The reading-agent contract is stable. Regenerating `prompt.txt` should not require changing `workspace/AGENTS.md`, and vice versa.
 - The prompt stays thin — run-scoped parameters only.
 - One run produces one Feishu doc. Delivery is append-new, not update-existing.

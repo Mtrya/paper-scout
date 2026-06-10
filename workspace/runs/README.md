@@ -1,9 +1,11 @@
 # runs/
 
-The durable, human-readable record of what each run found.
+The durable, human-readable record of what each run found and what evidence was preserved.
 
 - `INDEX.md` — the compact coverage log and dedup source of truth (one block per delivered run, newest first).
-- `<area>/<title-slug>-<id>/deep-dive.md` — per-paper analysis notes, filed under the same free-form research areas used by `papers/`.
-- `<area>/<title-slug>-<id>/artifacts/` — curated preserved scripts, small results, generated figures, and setup notes that support the deep dive.
+- `<run-id>/report.docxxml` — the delivered report source.
+- `<run-id>/checklist.md` — the run's completion gate.
+- `<run-id>/assets/` — report-facing assets and small result artifacts.
+- `<run-id>/<thread-id>/` — preserved evidence for a paper or cross-paper research thread.
 
-`papers/` and `runs/` are tracked in git. `repos/`, `drafts/`, and `assets/` are scratch; promote only curated durable artifacts into the paper's run packet.
+`papers/` and `runs/` are tracked in git. `code/` and `drafts/` are scratch; promote curated durable evidence into the run packet before final cleanup.
