@@ -1,0 +1,252 @@
+<title>Paper Scout Research Report - 2026-06-11</title>
+
+<p>This run uncovered three converging threads in embodied AI and long-horizon reasoning. World models are maturing from standalone predictors into policy infrastructure—steering VLAs with frozen priors (World Pilot) and training faster via multi-horizon supervision (Next Forcing). Embodied-R1.5 tests the bold hypothesis that a reasoning-first foundation model can substitute for massive action pretraining when adapted downstream. And ALE-Bench opens a new evaluation frontier where pass/fail saturation gives way to open-ended score optimization, revealing that even frontier LLMs remain far from expert-level consistency in algorithm engineering.</p>
+
+<callout emoji="✅" background-color="light-green">
+  <p><b>Standout:</b> Next Forcing is the clearest seed for a general training-recipe improvement. Its multi-chunk prediction objective cures a real pathology—myopic supervision via appearance shortcuts—in autoregressive video world models, yielding 2.3× faster convergence and SOTA results on RoboTwin. The mechanism is composable with existing context-construction and noise-scheduling methods, and the inference-speedup side effect is nearly free.</p>
+</callout>
+
+<h1>World Models as Embodied Infrastructure</h1>
+
+<p>Two papers this week treat world models not as end-to-end policy generators, but as modular infrastructure: one steers an existing VLA with frozen world-model priors, the other improves world-model training itself. Together they suggest a shift from "bigger world models" to "smarter ways to build and use them."</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Latent Spatial Memory for Video World Models</b> (Wang et al., 2026)</td>
+      <td>Persistent 3D cache in diffusion latent space, avoiding pixel-space round trips.</td>
+      <td>10.57× faster video generation, 55× memory reduction vs. explicit 3D baselines.</td>
+      <td><a href="https://huggingface.co/papers/2606.09828">HF</a> / <a href="https://arxiv.org/abs/2606.09828">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>World Model Self-Distillation</b> (Stapf et al., 2026)</td>
+      <td>Train world models to solve general tasks via self-distillation without task-specific labels.</td>
+      <td>Tests whether world-model pretraining alone can yield general-purpose representations.</td>
+      <td><a href="https://huggingface.co/papers/2606.12072">HF</a> / <a href="https://arxiv.org/abs/2606.12072">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>World Pilot: Steering Vision-Language-Action Models with World-Action Priors</h2>
+<p>Zefu Lin et al. (2026) · <a href="https://huggingface.co/papers/2606.12403">HF</a> · <a href="https://arxiv.org/abs/2606.12403">PDF</a></p>
+
+<p>World Pilot starts from a simple observation: VLA policies inherit semantic grounding from image-text pretraining, but manipulation is a continuous, contact-rich process whose dynamics that pretraining cannot capture. The natural complement is a video-pretrained World-Action Model (WAM). The question is not whether to combine them, but <em>where, in what form, and at which layers</em> to inject the WAM's signals so they reach the parts of the policy that need them without being diluted in transit.</em></p>
+
+<p>The answer is two additive pathways from a <b>frozen</b> WAM into an existing VLA pipeline:</p>
+
+<ul>
+  <li><b>Latent Steering</b> conditions VLM hidden states on a scene-evolution latent via residual cross-attention.</li>
+  <li><b>Action Steering</b> compresses the WAM's anticipated trajectory into a single prefix token for the flow-matching action generator.</li>
+</ul>
+
+<p>Both pathways are ablatable, enter at different layers, and leave the WAM entirely outside the training graph. The implementation in <code>cosmos_fusion.py</code> matches the paper almost exactly:</p>
+
+<pre lang="python" caption="Latent Steering: residual cross-attention into VLM hidden states"><code>B, N_cam, C, Hp, Wp = future_image_latents.shape
+flat = future_image_latents.reshape(B, N_cam, C * Hp * Wp)
+tokens = self.projector(flat.to(vl_hidden.dtype))
+
+step_ids = torch.ones(B, N_cam, dtype=torch.long, device=vl_hidden.device)
+tokens = self.temporal_embed(tokens, step_ids)  # tag as "future"
+
+return self.cross_attn(vl_hidden, tokens)        # residual + LayerNorm</code></pre>
+
+<p>The <code>CrossAttention</code> module computes multi-head attention from VLM hidden states (query) to Cosmos tokens (key/value) and adds the result back as a residual, matching Equation (2) in the paper exactly. A critical detail: the <code>CosmosTemporalEmbedding</code> tags all latent tokens as <em>future</em> (step=1). The paper notes that "without this tag, the prior's contribution diminishes empirically."</p>
+
+<p>For Action Steering, the WAM's coarse action chunk is truncated to the VLA action horizon, flattened, and compressed through a small MLP into <b>a single token</b> prepended to the DiT input sequence:</p>
+
+<pre lang="python" caption="Action Steering: single trajectory-level prior token"><code>truncated = cosmos_actions[:, :self.abot_action_horizon, :]
+flat = truncated.reshape(truncated.shape[0], -1)
+return self.mlp(flat).unsqueeze(1)   # (B, 1, output_dim)</code></pre>
+
+<p>The single-token design is the result of a careful ablation. Per-step tokens (83.6%) and raw trajectory use (83.0%) pin generation to noisy step-level signals. Flow-matching initialization from the WAM trajectory recovers some freedom (84.1%) but still anchors the ODE to the WAM's action quality. The single token gives the generator the <em>shape</em> of the motion without constraining the <em>details</em>, yielding the best result at 84.7%.</p>
+
+<p><b>The most striking result is not the simulation SOTA.</b> On LIBERO-Plus, World Pilot reaches 84.7%—a 2.6-point margin over the strongest baseline. But the real story is in real-robot OOD resilience: World Pilot's ID-to-OOD drop stays within 10–20 absolute points, while baselines drop 25–50 points. On container-lid alignment—the most geometrically stringent task—World Pilot succeeds in 13–14 of 20 trials under OOD pose/object changes; no baseline exceeds 6.</p>
+
+<p>Even more surprisingly, the scene-evolution latent from <b>Cosmos-Predict</b> (a video-prediction model that has <em>never seen robot actions</em>) still improves results: +2.1 on LIBERO-Plus, +4.1 on RoboTwin2.0, and +8.7 on RoboCasa. Large-scale video pretraining encodes transferable physical structure—object motion, contact dynamics, spatial relationships—that is embodiment-agnostic. You can bootstrap a stronger VLA today with any good video world model, not just one that has been expensive action-finetuned.</p>
+
+<p><b>Non-obvious finding:</b> The architecture is aggressively modular. The WAM runs in a separate WebSocket server process; training reads precomputed <code>.npz</code> cache files. The code also layers VGGT metric-3D spatial fusion <em>before</em> Cosmos latent fusion, enriching VLM hidden states with geometry first, then dynamics. This layered conditioning is not discussed prominently in the paper but is visible in the code.</p>
+
+<p><b>Honest limitation:</b> Gains are uneven. World Pilot trails on the Language, Robot, and Layout axes of LIBERO-Plus because the WAM has no language model and its video distribution may not cover embodiment changes well. Per-step WAM inference also adds latency, limiting high-frequency reactive control.</p>
+
+<p>[[figure-anchor:worldpilot:architecture]]</p>
+
+<hr/>
+
+<h2>Next Forcing: Causal World Modeling with Multi-Chunk Prediction</h2>
+<p>Gangwei Xu et al. (2026) · <a href="https://huggingface.co/papers/2606.11187">HF</a> · <a href="https://arxiv.org/abs/2606.11187">PDF</a></p>
+
+<p>Next Forcing addresses a training pathology in autoregressive video world models that the authors call <b>myopic supervision</b>. In standard teacher forcing, the model denoises the current chunk conditioned on clean past chunks. At high frame rates (e.g. 50 fps), adjacent chunks are visually almost identical. The denoising task therefore admits a powerful <em>appearance shortcut</em>: the model can drive most of the loss down by learning a near-identity map from the clean past chunk to the current one, adding only tiny residual corrections. This shortcut is much easier to fit than the underlying physical dynamics, and it absorbs a large share of the gradient signal.</p>
+
+<p>The cure is <b>multi-chunk prediction (MCP)</b>. Next Forcing bolts three lightweight auxiliary modules onto a 30-layer Wan2.2 Transformer backbone. Each module predicts a video chunk at a future horizon—next¹, next², next³—simultaneously with the main model's current-chunk prediction. The key is not just "predict more chunks," but the specific design choices that force the <em>main backbone</em> to learn:</p>
+
+<ul>
+  <li><b>Multi-layer feature fusion</b> (layers {4, 12, 20, 30}): MCP modules consume intermediate hidden states, not just the final layer. Without this (−2.2 points), the MCP loss is solved by the lightweight heads alone and the backbone receives weak gradients.</li>
+  <li><b>Higher timestep shift</b> (<latex>s_{\text{mcp}} = 10</latex> vs. <latex>s_{\text{main}} = 5</latex>): A larger shift pushes noise mass toward higher noise levels. At higher noise, the MCP input carries almost no information about its own target, so the module is forced to rely on the main model's representations. Ablating <latex>s_{\text{mcp}}</latex> down to 5 drops performance by 2.6 points—this is the secret sauce.</li>
+  <li><b>Causal chain across depths</b>: Each depth builds on the previous depth's hidden state, so near-future predictions inform farther-future ones.</li>
+</ul>
+
+<p>The training objective combines main losses and MCP losses:</p>
+
+<p><latex>\mathcal{L} = \mathcal{L}_{\text{video}} + \mathcal{L}_{\text{action}} + \sum_{k=1}^{3} w_k \cdot \mathcal{L}_k^{\text{MCP}}</latex></p>
+
+<p>At inference, the MCP modules can either be discarded entirely (zero-overhead mode—all quality gains come from the enriched training signal baked into the backbone) or retained for parallel chunk generation (2× speedup, since depth-1 MCP predicts the next chunk alongside the current one).</p>
+
+<p>The results are strong and frame-rate-dependent. At 12 fps the gap is modest (~1–2 points at convergence), because the appearance shortcut is weaker. At 50 fps the gap becomes a chasm: Next Forcing is +24.7 / +29.7 points ahead at 5k steps, and matches LingBot-VA's 45k-step accuracy at only 20k steps—a <b>2.3× convergence speedup</b>. Final SOTA on RoboTwin is 94.1% / 93.5% (Clean / Random).</p>
+
+<p><b>Non-obvious finding:</b> Lighter MCP heads actually score <em>higher</em> (1 transformer block: 86.5% vs. 3 blocks: 85.8%), but the paper sticks with 3 blocks because 1 block produces visual artifacts in the MCP-generated chunks—important for the parallel inference mode. This reveals a tension: training wants the heads weak (so the main model must work), but inference wants them strong enough to produce clean chunks.</p>
+
+<p><b>Non-obvious finding:</b> The gains generalize far beyond robotics. On general video pretraining (3.5M in-house clips), Next Forcing reduces FVD by &gt;50% and surpasses the baseline at 10k steps vs. 50k. Myopic supervision is not a robotics-specific pathology—it afflicts any autoregressive video model trained with single-chunk teacher forcing.</p>
+
+<p><b>Honest limitation:</b> The GitHub repo is only a project page; the training code is not public. The reproduction barrier is high. Our PyTorch sketch (preserved in the thread) fills part of this gap but is not a full training pipeline.</p>
+
+<p>[[figure-anchor:nextforcing:training-curves]]</p>
+
+<h1>Unified Embodied Intelligence</h1>
+
+<p>Embodied-R1.5 asks a high-stakes question: can a single 8B VLM, trained on diverse embodied reasoning tasks, internalize enough physical understanding that downstream VLA training requires only a small amount of action data?</p>
+
+<h2>Embodied-R1.5: Evolving Physical Intelligence via Embodied Foundation Models</h2>
+<p>Yifu Yuan et al. (2026) · <a href="https://huggingface.co/papers/2606.11324">HF</a> · <a href="https://arxiv.org/abs/2606.11324">PDF</a></p>
+
+<p>Embodied-R1.5 organizes embodied intelligence into three progressive dimensions: <b>Cognition &amp; Spatial Reasoning</b> (perceive and understand), <b>Planning &amp; Correction</b> (schedule and recover), and <b>Pointing &amp; Location</b> (ground reasoning in coordinates and trajectories). The bet is that unifying these in a single model allows information to flow freely across dimensions without external communication.</p>
+
+<p>The model achieves SOTA on 16 of 24 embodied VLM benchmarks, with an average of 70.4% across 21 main accuracy-based benchmarks—surpassing Gemini-Robotics-ER-1.5 by 17.0% and GPT-5.4 by 21.7%. More critically, when adapted into a VLA with only a small action dataset, it outperforms π₀.₅ across 4 manipulation benchmark suites: 92.4% on SimplerEnv (vs. π₀.₅'s 72.7%) and strong gains on LIBERO and PartNet-Mobility.</p>
+
+<p><b>The data system is the real engine.</b> Three automated pipelines construct a 15B-token corpus:</p>
+
+<ol>
+  <li><b>3D Scene Annotation</b> (~20K samples): An 8-step pipeline (resize → tag → geometry → segment → 3D lift → normal estimation → world-frame alignment → QA generation) produces tabletop spatial-reasoning data from single RGB images. The code for this pipeline is fully released and well-engineered, with quality controls at every stage.</li>
+  <li><b>Failure-Aware Correction</b> (~800K samples): Structured perturbations of correct plans and executions generate detection → localization → correction QA triples. The logic is described in detail but <b>the generation code is absent</b> from the repo.</li>
+  <li><b>Functional Affordance &amp; Trajectory</b>: Simulation renders and hand-object interaction data scale part-level grounding and visual trace generation. Again, the extraction code is not present.</li>
+</ol>
+
+<p><b>The most important code discovery:</b> The RL stage uses <b>MBPO</b>, not GRPO. The advantage estimator normalizes by <code>scores.std()</code> over the <em>entire mixed batch</em>, not per-group:</p>
+
+<pre lang="python" caption="MBPO advantage estimator from core_algos.py"><code>@register_adv_estimator(AdvantageEstimator.MBPO)
+def compute_mbpo_outcome_advantage(token_level_rewards, response_mask, index, eps=1e-6):
+    scores = token_level_rewards.sum(dim=-1)
+    id2score = defaultdict(list)
+    id2mean = {}
+    for i in range(bsz):
+        id2score[index[i]].append(scores[i])
+    for idx in id2score:
+        id2mean[idx] = torch.mean(torch.stack(id2score[idx]))
+    batch_std = scores.std()          # ← entire mixed batch
+    for i in range(bsz):
+        scores[i] = (scores[i] - id2mean[index[i]]) / (batch_std + eps)
+    returns = scores.unsqueeze(-1) * response_mask
+    return returns, returns</code></pre>
+
+<p>This is elegant: it preserves intra-group relative ordering while unifying gradient magnitudes across heterogeneous tasks. It requires no task labels, no EMA history, and no per-task statistics. Our probe demonstrates that on a toy mixed batch, GRPO blows up tiny-variance tasks into ±1.0 advantages while compressing high-variance tasks, whereas MBPO gives both tasks stable, proportionate updates.</p>
+
+<p><b>The biggest gap between paper and code:</b> The Planner-Grounder-Corrector (PGC) closed-loop framework—described as enabling autonomous planning, execution, and self-correction on long-horizon tasks—is <b>not implemented</b> in the released code. Only a basic 3-round planning→reflection demo exists in <code>inference/reflection.py</code>. The milk-tea and cup-stacking demos are impressive, but researchers cannot reproduce them from the repository alone.</p>
+
+<p><b>Another inconsistency:</b> The paper states the vision encoder is jointly trained in SFT, but the SFT config sets <code>freeze_vision_tower: true</code>. Only the RFT config unfreezes it. This suggests either the released SFT config is not the exact one used, or the paper's statement applies only to RFT.</p>
+
+<p><b>Honest assessment:</b> Embodied-R1.5 is a high-quality, ambitious, and mostly honest piece of work. The core claim—that unified embodied reasoning internalized in a VLM can reduce downstream VLA data requirements—is well-supported. The gaps (PGC framework, two data pipelines) are significant but do not undermine the benchmark results. For the community, the immediate value is a strong 8B embodied VLM checkpoint, a reusable 3D annotation pipeline, and a verified multi-task RL recipe.</p>
+
+<p>[[figure-anchor:embodiedr1:capability-taxonomy]]</p>
+
+<h1>Beyond Pass/Fail: Benchmarking Long-Horizon Algorithm Engineering</h1>
+
+<p>While embodied AI papers chase simulation metrics, ALE-Bench quietly opens a harder frontier: can an AI system do what skilled human programmers do over weeks—iteratively refine an algorithm for an NP-hard optimization problem with no known exact solution?</p>
+
+<h2>ALE-Bench: A Benchmark for Long-Horizon Objective-Driven Algorithm Engineering</h2>
+<p>Yuki Imajuku et al. (2025) · <a href="https://huggingface.co/papers/2506.09050">HF</a> · <a href="https://arxiv.org/abs/2506.09050">PDF</a></p>
+
+<p>ALE-Bench is the first large-scale benchmark for <b>score-based algorithmic programming contests</b>—specifically the AtCoder Heuristic Contest (AHC). It ships with 40 real contest problems (routing, scheduling, planning, power-grid balancing), official scorers, visualizers, human leaderboards, and a Python framework that replicates the contest environment in Docker.</p>
+
+<p>The key metric is <b>performance</b>—an Elo-like score derived from rank within the original contest leaderboard. Unlike pass/fail benchmarks, AHC problems are open-ended: even after AI surpasses the best humans, scores can keep improving.</p>
+
+<p><b>Frontier LLM performance is competent but inconsistent.</b> In one-shot mode, o3-high is the only model to break average performance 1000 (1044). Most models cluster between 550–850. With 4 hours of iterative refinement, o4-mini-high reaches 1520 average performance and a rating of 2104—top 11.8% of humans. But <b>rating overestimates AI skill</b>: humans in that rating band average 56.2% of problems ≥1600, while o4-mini-high achieves only 32.5%, closer to the 1600–1700 human band.</p>
+
+<p>LLMs show <b>high variance</b>: they spike to ≥2400 on 5% of problems but crater on others. They also outperform humans more on short contests than long ones, because they can generate 100–1000 solution variants in hours—impossible for humans. The "parallel search" effect flatters short-contest performance, while long contests (where humans develop deep, problem-specific insights) remain harder.</p>
+
+<p><b>The critical claim:</b> Is the iterative refinement "genuine long-horizon problem solving" or just "massively parallel search of mediocre ideas"? The paper addresses this with a targeted experiment: on 6 problems where o4-mini-high achieved ≥2000, 150 independent one-shot trials were run (matching the ~150 generations in iterative refinement). The peak scores from independent search were consistently 300–800 points below iterative-refinement peaks:</p>
+
+<table>
+  <colgroup>
+    <col width="120"/>
+    <col width="120"/>
+    <col width="120"/>
+    <col width="120"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Problem</th>
+      <th background-color="light-gray">Iter-Refine</th>
+      <th background-color="light-gray">One-Shot Max</th>
+      <th background-color="light-gray">Gap</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ahc005</td>
+      <td>2107</td>
+      <td>1722</td>
+      <td>−385</td>
+    </tr>
+    <tr>
+      <td>ahc006</td>
+      <td>2472</td>
+      <td>2174</td>
+      <td>−298</td>
+    </tr>
+    <tr>
+      <td>ahc012</td>
+      <td>2236</td>
+      <td>1388</td>
+      <td>−848</td>
+    </tr>
+    <tr>
+      <td>ahc020</td>
+      <td>2545</td>
+      <td>1731</td>
+      <td>−814</td>
+    </tr>
+    <tr>
+      <td>ahc041</td>
+      <td>2306</td>
+      <td>1911</td>
+      <td>−395</td>
+    </tr>
+    <tr>
+      <td>ahc044</td>
+      <td>2150</td>
+      <td>1831</td>
+      <td>−319</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The gap is real, but the mechanism is still high-throughput local search rather than human-like deep strategic reasoning. The authors are transparent about this: o4-mini-high generated &gt;100 solutions in 4 hours, and ALE-Agent generated ~1000—"unrealistic for humans, even in long-format contests." The benchmark is valuable precisely because it captures this intermediate regime.</p>
+
+<p><b>Domain scaffolding &gt;&gt;&gt; generic agents.</b> OpenHands (a strong general-purpose coding agent) achieved marginal gains over one-shot and often quit early. ALE-Agent—with domain-specific prompts covering simulated annealing neighbor design, beam search, and speedup strategies, plus a best-first tree search with beam width 30—reaches <b>2880 performance on AHC039</b>, equivalent to <b>5th place in the actual contest</b>. This was verified by submitting the solution to AtCoder post-hoc. Generic agentic scaffolding fails in this domain; specialized domain knowledge is essential.</p>
+
+<p><b>Non-obvious finding:</b> The framework is remarkably production-grade. Docker sandboxing, Rust toolchains, polars-based leaderboard math, visualization server orchestration, and checkpoint/resume logic show serious engineering. The code is designed for sustained use, not as a throwaway research artifact.</p>
+
+<p>[[figure-anchor:alebench:score-progression]]</p>
+
+<h1>Cross-cutting Observations</h1>
+
+<p><b>1. The "reasoning before action" hypothesis is gaining empirical support.</b> World Pilot uses WAM priors to supply dynamics reasoning that VLMs lack. Embodied-R1.5 internalizes spatial reasoning and planning so thoroughly that a lightweight action head suffices. Both papers suggest that action data scaling is not the only path to capable robots—reasoning infrastructure can substitute.</p>
+
+<p><b>2. World models are becoming modular infrastructure.</b> World Pilot's frozen WAM runs as a separate WebSocket server; Next Forcing's MCP modules are bolt-on training objectives. Neither treats the world model as an end-to-end system. This modularity trades co-adaptation for interchangeability and engineering simplicity.</p>
+
+<p><b>3. Benchmarks are shifting from pass/fail to continuous improvement.</b> ALE-Bench's open-ended scoring, Next Forcing's focus on convergence speed rather than final accuracy alone, and Embodied-R1.5's multi-benchmark average all reflect a maturing field that cares about trajectory, not just destination.</p>
+
+<p><b>4. The code-release honesty gap persists.</b> Embodied-R1.5 describes a compelling closed-loop autonomy framework (PGC) that is not in the released code. Next Forcing's GitHub is a project page with no training code. World Pilot is the exception—its full training and evaluation code is released, with model weights on HuggingFace. For a field that claims to value reproducibility, this gap remains a real barrier.</p>

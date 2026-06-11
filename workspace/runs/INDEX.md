@@ -27,4 +27,11 @@ Entry format:
 - Covered papers: 2606.08548, 2606.09811, 2606.07895, 2606.11087
 - Shortlisted papers: 2605.25077, 2606.06556, 2606.09669, 2606.11129, 2606.09828, 2606.07723, 2606.06476
 
+## 2026-06-11 — 2026-06-08 to 2026-06-11
+- Doc: https://fudan-nlp.feishu.cn/docx/Li5YdEumooOkIrxTQgfcBivRnKe
+- Run: runs/2026-06-11-alebench-worldpilot-embodiedr1-nextforcing/
+- Deep threads: ALE-Bench long-horizon algorithm engineering (2506.09050), World Pilot steering VLAs with WAM priors (2606.12403), Next Forcing multi-chunk prediction for causal world models (2606.11187), Embodied-R1.5 unified embodied foundation model (2606.11324)
+- Covered papers: 2506.09050, 2606.12403, 2606.11187, 2606.11324
+- Shortlisted papers: 2606.09828, 2606.12072, 2606.07100
+
 ---
