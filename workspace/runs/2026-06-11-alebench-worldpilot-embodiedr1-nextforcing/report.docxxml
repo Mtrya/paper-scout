@@ -245,6 +245,33 @@ def compute_mbpo_outcome_advantage(token_level_rewards, response_mask, index, ep
 
 <p>[[figure-anchor:alebench:score-progression]]</p>
 
+<h1>Agent Benchmarks Meet the Real World</h1>
+
+<p>While ALE-Bench probes algorithmic reasoning in a controlled contest environment, Agents' Last Exam asks a broader question: can a generalist computer-use agent perform real professional workflows across 55 subfields and 13 industry clusters? The two benchmarks are complementary—one tests deep reasoning in a narrow domain, the other tests broad capability across authentic expert tasks. Together they paint a sobering picture: frontier agents are competent novices in almost every domain they touch.</p>
+
+<h2>Agents' Last Exam: A Benchmark for Long-Horizon, Economically Valuable Agent Work</h2>
+<p>Yiyou Sun et al. (2026) · <a href="https://huggingface.co/papers/2606.05405">HF</a> · <a href="https://arxiv.org/abs/2606.05405">PDF</a></p>
+
+<p>ALE is the most ambitious agent benchmark to date: 1,490 task instances across 55 subfields, sourced from 250+ domain experts and anchored in the O*NET/SOC 2018 occupational taxonomy. Tasks are real professional workflows—not synthetic scenarios—contributed by practitioners and subjected to multi-round quality control (first-pass review, engineer dry-runs, expert committee peer review). Verification is deterministic and artifact-based: gate-and-score evaluation checks deliverables against expert-provided references without human judges.</p>
+
+<p>The results are sobering. The strongest configuration (Codex with GPT-5.5) scores only <b>42.4% pass</b> on the easiest tier and <b>8.6%</b> on the hardest; Claude Code records near-zero on the "Last-Exam" tier. ALE is deliberately far from saturated.</p>
+
+<p><b>The five-hour cap is a hard truncation, not a generous limit.</b> Claude Code needs <b>72 wall-clock hours</b> just for the 59-task easiest tier. Timed-out runs score 25% lower than those that finish naturally, suppressing scores for slow-but-thorough agents. The cap is pragmatic—evaluation must finish—but it systematically rewards speed over thoroughness at the margin.</p>
+
+<p><b>The failure taxonomy inverts the paper's central hypothesis.</b> Understanding failures (31%) and Approach failures (47%) together account for ~78% of cases. Agents do not fail because they cannot click buttons or run shell commands; they fail because they <b>lack domain knowledge</b> and default to ad-hoc Bash scripts instead of the intended professional software. The benchmark was built around GUI+CLI orchestration as the hard problem, but the data reveal that domain knowledge—not tool use—is the binding constraint.</p>
+
+<p><b>Harness engineering matters far less than the backbone model.</b> Appendix D.4 shows that varying the model produces an 18.0 pp spread in pass rate, while varying the harness produces only 5–6 pp. ALE-Claw, a stripped-down Python port of OpenClaw with no memory or plugin framework, performs within 2 pp of full product harnesses. The bottleneck is the foundation model, not the scaffolding.</p>
+
+<p><b>The "economically valuable" framing is overstated.</b> ALE tasks are authentic expert workflows, but evaluated as isolated, single-shot deliverables with fixed requirements and no feedback loops. That is a real capability gap, but not the same as economically valuable work, which is embedded in organizational context and iterative refinement. The O*NET anchor gives face validity, not economic validation.</p>
+
+<p><b>Cross-benchmark positioning is clarifying.</b> ALE-CLI (the Linux-only subset) is substantially harder than Terminal-Bench: Codex scores 82% on Terminal-Bench but only 26% on ALE-CLI. The gap reflects domain breadth and end-to-end complexity, not merely terminal vs. GUI. Terminal-Bench tasks median under 20 minutes; ALE tasks routinely take hours.</p>
+
+<p><b>Cost and scalability are real concerns.</b> A full evaluation costs $300–1,100+ and takes 48–181 wall-clock hours. The Near-Term tier ($100–200) is more accessible, but the Full-Spectrum and Last-Exam tiers—which are the benchmark's most distinctive contribution—will be evaluated rarely, mostly by well-funded labs. There is a risk that ALE becomes two separate instruments: a 59-task routine leaderboard and a 91-task milestone test that few run.</p>
+
+<p><b>Honest assessment:</b> ALE sets a new standard for agent evaluation. Its scale, expert involvement, verification rigor, and rolling-evaluation design are genuine achievements. But its loftiest claims—"economically valuable," "GDP-relevant," "last exam"—are not yet earned by the evidence. What ALE actually shows is that frontier agents lack domain knowledge, not tool coordination. The most important practical implication is that researchers should invest in model capability and domain-specific knowledge acquisition rather than ever-fancier agent harnesses.</p>
+
+<p>[[figure-anchor:agentslastexam:taxonomy]]</p>
+
 <h1>Cross-cutting Observations</h1>
 
 <p><b>1. The "reasoning before action" hypothesis is gaining empirical support, but "reasoning" itself is poorly validated.</b> World Pilot uses WAM priors to supply dynamics reasoning that VLMs lack, and the results are genuine. Embodied-R1.5 shows that strong VLM capabilities (spatial understanding, planning text, pointing accuracy) can reduce downstream VLA data needs. But the paper's claim that the model "reasons" about physical tasks is unsupported: the RL reward evaluates only final answers, not reasoning chains; the "adaptive thinking" is explicitly prompted rather than emergent; and the System 2/System 1 framing is a metaphor, not an architecture. The field needs to distinguish between "models that produce reasoning-shaped text" and "models whose reasoning quality is causally linked to action performance."</p>
