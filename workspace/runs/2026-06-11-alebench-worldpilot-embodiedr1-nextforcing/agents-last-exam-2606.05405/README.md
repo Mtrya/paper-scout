@@ -67,7 +67,7 @@ Consider the tool-usage data: 34% of public task instances designate graphical s
 
 This is a subtle but important inversion. The benchmark's architectural contribution—GUI-as-Tool, CUA MCP bridge, sub-agent dispatch—solves a real problem (how to evaluate GUI+CLI agents uniformly), but it is not the binding constraint on performance. The constraint is the model's internal knowledge of 55 professional domains.
 
-**Non-obvious implication:** If you fixed every harness bug and gave agents perfect GUI coordination, you would still have ~75% of the same failures. The marginal return to better agent architecture is lower than the marginal return to better domain knowledge in the foundation model—or to retrieval-augmented generation that can pull in domain-specific documentation and examples.
+**Non-obvious implication:** If you fixed every harness bug and gave agents perfect GUI coordination, you would likely still face the majority of the same failures, since ~78% are classified as Understanding or Approach rather than Execution. The marginal return to better agent architecture is lower than the marginal return to better domain knowledge in the foundation model—or to retrieval-augmented generation that can pull in domain-specific documentation and examples.
 
 ---
 

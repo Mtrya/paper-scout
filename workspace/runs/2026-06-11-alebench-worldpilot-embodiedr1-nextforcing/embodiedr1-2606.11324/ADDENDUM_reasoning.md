@@ -7,7 +7,7 @@
 
 ## Core Insight
 
-**The RL training objective in Embodied-R1.5 is structurally incapable of teaching the model to reason.** The reward function evaluates only the final answer inside `<answer>` tags and discards the reasoning text entirely. The "adaptive thinking" the paper celebrates is therefore not a learned property of multi-task RL; it is at best an SFT imitation artifact, at worst a spurious correlation between task complexity and response length, and — most critically — **explicitly prompted rather than emergent.** The authors' own code contradicts their prose on this point.
+**The RL training objective in Embodied-R1.5 provides no mechanism to improve reasoning quality, and no evidence is presented that it does so.** The reward function evaluates only the final answer inside `<answer>` tags and discards the reasoning text entirely. The "adaptive thinking" the paper celebrates is therefore not a learned property of multi-task RL; it is at best an SFT imitation artifact, at worst a spurious correlation between task complexity and response length, and — most critically — **explicitly prompted rather than emergent.** The authors' own code contradicts their prose on this point.
 
 ---
 
@@ -55,9 +55,9 @@ The paper is honest about the setup, but draws an unsupported conclusion. An out
 
 ## 3. The System 2 / System 1 Framing Is a Metaphor, Not an Architecture
 
-The paper describes the VLA extension as "a dual-system architecture (System 2 for reasoning, System 1 for action generation)" (§2.2). In reality, the architecture is a standard Qwen3-VL-8B backbone plus a DiT-B flow-matching action head attached to intermediate VLM hidden states. The action head generates continuous actions via cross-attention on VLM features, **not by parsing explicit reasoning tokens.** There is no architectural separation between "reasoning" and "action" subsystems. The "System 2 / System 1" language is a conceptual metaphor, not a description of the compute graph.
+The paper describes the VLA extension as "a dual-system architecture (System 2 for reasoning, System 1 for action generation)" (§2.2). In reality, the architecture is a standard Qwen3-VL-8B backbone plus a DiT-B flow-matching action head attached to intermediate VLM hidden states. The action head generates continuous actions via cross-attention on VLM features, **not by parsing explicit reasoning tokens.** There is no architectural separation between "reasoning" and "action" subsystems in the compute graph. The "System 2 / System 1" language is a conceptual metaphor, not a description of the architecture.
 
-More importantly, **there is no ablation testing whether the reasoning text matters for VLA performance.** The strong VLA results (92.4% on SimplerEnv) demonstrate that a VLM with rich spatial-semantic representations provides good features for an action head — valuable, but not the same as showing that "reasoning drives action."
+Separately, **the paper does not ablate whether reasoning text improves VLA performance.** The strong VLA results (92.4% on SimplerEnv) demonstrate that a VLM with rich spatial-semantic representations provides good features for an action head — valuable, but not the same as showing that "reasoning drives action." Without an ablation that removes reasoning tokens and measures the impact, we cannot know whether the reasoning text is causally important or merely correlated with correct answers.
 
 ---
 
@@ -84,7 +84,7 @@ The reflection "verdict" is crude string matching with no parsing of reflection 
 
 The SFT config (`scripts/train/sft_config.yaml`) uses template `qwen3_vl_nothink` — a LLaMA-Factory template that disables the native reasoning/thinking tokens of Qwen3. The explicit "think first" instruction is introduced **only at the RL stage** via `QUESTION_TEMPLATE`.
 
-This means the "reasoning" behavior is not an inherited property of the base model fine-tuned on embodied data. It is **elicited by prompt injection during RL** on a model whose SFT stage did not emphasize reasoning. That the model produces coherent reasoning traces at all is a testament to the general capabilities of the Qwen3-VL backbone, not to a deliberate reasoning curriculum.
+This means the "reasoning" behavior is not an inherited property of the base model fine-tuned on embodied data. It is **elicited by explicit prompting during RL** on a model whose SFT stage did not emphasize reasoning. That the model produces coherent reasoning traces at all is a testament to the general capabilities of the Qwen3-VL backbone, not to a deliberate reasoning curriculum.
 
 ---
 
