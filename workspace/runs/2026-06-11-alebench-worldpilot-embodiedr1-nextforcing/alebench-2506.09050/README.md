@@ -200,3 +200,9 @@ Small inspection scripts written during this investigation are preserved in `cod
 
 - `probe_session_resources.py` — Dumps the `Session` resource-gating fields and public-eval cooldown logic.
 - `probe_scaffold_loop.py` — Prints the phase structure of `evaluate_contest()` and the parallelism signatures of repeated sampling / self-refinement.
+
+---
+
+## 8. Addendum: Is the ALE-Bench Gap Due to an "Alien" Environment?
+
+See `ADDENDUM_environment.md` for a second-pass investigation. Core finding: the "alien environment" hypothesis is strongly refuted. The Session API is standard Python; prompts are textbook competitive programming; models compile and run successfully on the first try; and the one-shot retry data show ACCEPTED verdicts with poor scores, not repeated environment failures. The gap is in algorithmic invention, not environmental adaptation.

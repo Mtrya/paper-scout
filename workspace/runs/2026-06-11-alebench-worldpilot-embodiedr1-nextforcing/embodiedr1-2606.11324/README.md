@@ -326,4 +326,10 @@ Two small probes are preserved under `code/`:
 
 ---
 
+## 10. Addendum: What Does "Reasoning" Actually Mean in Embodied-R1.5?
+
+See `ADDENDUM_reasoning.md` for a second-pass investigation. Core finding: the RL training objective is structurally incapable of teaching reasoning quality—the reward discards all reasoning text and scores only final answers. The "adaptive thinking" claim is contradicted by explicit prompt injection in the training code (`EasyR1/verl/utils/dataset.py`), and the System 2/System 1 framing is a metaphor, not an architecture.
+
+---
+
 *End of deep-dive. Last updated: 2026-06-11.*
