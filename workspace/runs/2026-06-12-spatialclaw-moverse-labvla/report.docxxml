@@ -1,0 +1,194 @@
+<title>Paper Scout Research Report — 2026-06-12</title>
+
+<p>This run covered the 2026-06-11/12 paper pool and found three strong threads. The common pattern is a deliberate split between <b>memory that persists across time</b> and <b>computation that runs on demand</b>: LabVLA builds a simulation data engine to pre-train embodied memory for laboratory protocols; MoVerse offloads long-range scene memory into an explicit panoramic Gaussian scaffold so a causal video model only has to refine local observations; and SpatialClaw shows that the action interface itself—code executed in a persistent kernel—can be a larger win for spatial agents than adding more tools. Below each thread is backed by code inspection, small probes, and comparisons with neighbors.</p>
+
+<callout emoji="✅" background-color="light-green">
+<p><b>Standout:</b> SpatialClaw is the clearest seed for a research thread. Its controlled ablation shows that replacing structured tool-calls with a persistent Python cell interface gains +11.2 pp on 20 spatial-reasoning benchmarks, with the largest lifts exactly where chained geometric computation across frames or viewpoints is required.</p>
+</callout>
+
+<h1>Theme 1 — Embodied Intelligence in Structured Worlds</h1>
+
+<p>Two papers tackle embodied or world-model settings where the scene itself is the hard part: a scientific laboratory for VLAs, and a single-image explorable world for real-time video roaming.</p>
+
+<table>
+<colgroup>
+<col width="190"/>
+<col width="230"/>
+<col width="230"/>
+<col width="100"/>
+</colgroup>
+<thead>
+<tr>
+<th background-color="light-gray">Paper</th>
+<th background-color="light-gray">Key Contribution</th>
+<th background-color="light-gray">Why It Matters</th>
+<th background-color="light-gray">Links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><b>InternVideo3</b> (Yan et al., 2026)</td>
+<td>Multimodal contextual reasoning (MCR) for long-horizon video tasks; token-preserving M²LA latent attention.</td>
+<td>Turns long-video understanding into closed-loop evidence accumulation with a shared observation-reasoning-memory context.</td>
+<td><a href="https://huggingface.co/papers/2606.12195">HF</a> / <a href="https://arxiv.org/pdf/2606.12195">PDF</a></td>
+</tr>
+<tr>
+<td><b>EvoArena</b> (Xu et al., 2026)</td>
+<td>Benchmark of dynamic environment updates plus EvoMem, a patch-based memory that tracks update histories.</td>
+<td>Exposes how LLM agents fail when the world changes under them; memory-as-update-history generalizes to GAIA and LoCoMo.</td>
+<td><a href="https://huggingface.co/papers/2606.13681">HF</a> / <a href="https://arxiv.org/pdf/2606.13681">PDF</a></td>
+</tr>
+</tbody>
+</table>
+
+<hr/>
+
+<h2>LabVLA: Grounding VLAs in Scientific Laboratories</h2>
+<p>Ren et al. (2026) · <a href="https://huggingface.co/papers/2606.13578">HF</a> · <a href="https://arxiv.org/pdf/2606.13578">PDF</a> · <a href="https://zjunlp.github.io/LabVLA/">Project</a></p>
+
+<p>The paper’s central claim is that scientific-lab manipulation is a <b>data-and-embodiment bottleneck</b>, not a policy-architecture bottleneck. Existing robot corpora (Open X-Embodiment, DROID, BridgeData) rarely contain pipettes, centrifuges, transparent liquids, or protocol-level workflows, so a VLA trained only on them cannot ground a written lab protocol in the right instruments and physical states. LabVLA’s response is two-fold: RoboGenesis, an Isaac Sim–based data engine that composes configured lab workflows from atomic skills across 16 robot embodiments, and LabVLA, a Qwen3-VL-4B policy trained with FAST action-token pretraining followed by flow-matching posttraining under knowledge insulation.</p>
+
+<p>[[figure-anchor:labvla:framework]]</p>
+
+<p>RoboGenesis is the more novel half. It generates assets (text → image → TRELLIS 2.0 mesh → USD with collision metadata), assembles validated lab scenes through a seeded greedy placement solver, decomposes natural-language protocols into ordered atomic skills, instantiates them across robot profiles, and exports only successful rollouts with 15 annotation streams. The paper compares synthetic-data engines in Table 1 and argues that only RoboGenesis combines generative asset creation, workflow composition, cross-embodiment deployment, domain randomization, and success-filtered structured export.</p>
+
+<p>The policy half is deliberately conservative: Qwen3-VL-4B backbone + an 18-layer DiT action expert. The training recipe has two stages. In pretraining, continuous actions are tokenized with FAST and the VLM is trained to predict those discrete action tokens alongside VQA and language subtasks, so the visual-language prefix becomes action-aware before any continuous head is attached. In posttraining, a DiT action expert is attached and trained with flow matching to predict 50-step action chunks. A stop-gradient (<b>knowledge insulation</b>) blocks flow-matching gradients from reaching the VLM prefix while FAST and annotation cross-entropy losses remain active, preventing the action objective from corrupting language and visual grounding.</p>
+
+<pre lang="python" caption="Flow-matching action chunk (simplified)"><code>x_t = tau * A_gt + (1 - tau) * noise
+u_t = A_gt - noise
+v_theta = dit(x_t, tau, state, proj(vlm_prefix))  # VLM prefix detached under KI
+loss = MSE(v_theta, u_t) + lambda_fast * CE_FAST + lambda_ann * CE_ann</code></pre>
+
+<p>We inspected the public code at <code>zjunlp/LabVLA</code> and found it matches the paper’s hyperparameters closely: VLM pretrain on Robointer-VQA + AgiBot World Beta + OXE-AugE + DROID, 3×8 A100s, 100k steps; KI posttrain on OXE-AugE + LabEmbodied-Data, 2×8 A100s, 80k steps, <code>ki_mse_weight=10.0</code>, 10 Euler inference steps. The DiT uses interleaved self-attention blocks (odd-indexed layers self-attend over state and action tokens) to let action tokens exchange temporal information, a detail the paper does not emphasize. A deliberate legacy choice in the code places the state soft token before the vision+language prefix rather than after, noted in comments as a checkpoint bit-compatibility issue.</p>
+
+<p>The biggest unresolved question is availability. RoboGenesis and LabEmbodied-Data are described in detail but are <b>not in the public repository</b> as of this run; the README lists them as pending releases. Without them, the data-engine claim is hard to replicate externally. We therefore built a toy reconstruction (<code>runs/2026-06-12-spatialclaw-moverse-labvla/labvla-2606.13578/code/toy_robogenesis_workflow.py</code>) that captures the workflow-composition and domain-randomization semantics, plus FAST and flow-matching sketches in NumPy.</p>
+
+<p>On LabUtopia, LabVLA leads baselines in average success (71.1% ID / 70.0% OOD), but the task breakdown is telling: <b>Pour Liquid</b> sits far below the others (43.3% ID / 34.2% OOD), confirming that liquid-state tracking and fine tilt control remain unsolved. The real-robot Franka study shows simulation pretraining transfers to four benchtop tasks, but the gap to real wet-lab deployment is large. LabVLA is best understood as a careful integration of a lab-protocol data engine with a π0.5-style policy recipe; the architecture itself is not the novelty, but the connection between data engine, cross-embodiment schema, and knowledge-insulated training is.</p>
+
+<hr/>
+
+<h2>MoVerse: Real-Time Video World Modeling with Panoramic Gaussian Scaffold</h2>
+<p>Zhou et al. (2026) · <a href="https://huggingface.co/papers/2606.13376">HF</a> · <a href="https://arxiv.org/pdf/2606.13376">PDF</a> · <a href="https://orange-3dv-team.github.io/MoVerse/">Project</a></p>
+
+<p>MoVerse asks: can a single narrow-field-of-view image become an interactively navigable, photorealistic world? The difficulty is that the input observes only a small frustum, while roaming requires a complete surrounding world, persistent geometry, controllable camera motion, and temporally coherent frames. MoVerse’s answer is to <b>separate world construction from observation rendering</b>. Stages I and II run once offline to build a panoramic Gaussian scaffold; Stage III streams video online through a causal autoregressive renderer conditioned on that scaffold.</p>
+
+<p>Stage I expands the input into a gravity-aligned 360° ERP panorama. A differentiable auto-leveling module estimates a rigid spherical rotation that removes pitch and roll, avoiding the jelly-like warps of an unconstrained spatial transformer. Circular latent encoding and a shift-equivariance loss make the diffusion model respect the horizontal S¹ topology of ERP panoramas, rather than treating the left/right boundary as an artificial image edge.</p>
+
+<p>Stage II lifts the panorama into a 3D Gaussian scaffold. Each ERP pixel maps to longitude <latex>\theta</latex> and latitude <latex>\phi</latex>, with viewing direction <latex>\mathbf{d}(\theta,\phi)</latex>. Given panorama depth <latex>D_k</latex>, the initial Gaussian center is</p>
+<p><latex>\boldsymbol{\mu}_k = D_k \, \mathbf{d}(\theta_k, \phi_k)</latex></p>
+<p>and the initial scale is latitude-aware, <latex>s_k \propto D_k \cos\phi_k</latex>, so the tangential footprint shrinks toward the poles. A lightweight residual head predicts corrections <latex>(\Delta\theta, \Delta\phi, \Delta z)</latex> in angular–inverse-depth space; this adapts SHARP’s depth-guided residual Gaussian prediction from planar pinhole images to spherical ERP geometry.</p>
+
+<p>[[figure-anchor:moverse:pipeline]]</p>
+
+<p>Stage III renders the scaffold along the requested trajectory and refines the conditioning stream into final video. A bidirectional diffusion teacher (initialized from Wan2.1-T2V-1.3B) is trained for high-quality Gaussian-conditioned rendering; it is then distilled into a causal autoregressive student with a bounded KV cache, so the online model only has to do local refinement while the explicit scaffold carries long-range spatial memory. The authors report 8 FPS on a single RTX 4090.</p>
+
+<p>We cloned the official repository, but it is currently a placeholder: only a README, an icon, and a pipeline figure, with a note that release is pending corporate compliance review. So this thread is built on the paper plus two humble probes. The first probe (<code>probe_stagei_shift_equivariance.py</code>) shows that circular horizontal padding gives exact shift equivariance on a toy latent, while zero padding introduces a seam—validating the topology argument. The second probe (<code>probe_stageii_erp_to_gaussians.py</code>) reconstructs the spherical back-projection, latitude-aware scale initialization, and angular–inverse-depth residual composition on a synthetic box room.</p>
+
+<p>[[figure-anchor:moverse:probe-gaussians]]</p>
+
+<p>The probe’s numbers confirm the geometry is non-trivial: mean Gaussian scale at the equator is 0.196 versus 0.018 near the poles, so omitting the <latex>\cos\phi</latex> correction would badly overestimate polar footprints. The main open question is robustness: Stage I hallucinates the entire 360° world from one NFOV image, and there is no feedback path from Stages II/III to correct a bad panorama. The real-time claim is architecturally plausible because memory lives in the explicit scaffold, but independent verification is blocked until the causal student, TAEHV decoder, and checkpoints are released.</p>
+
+<h1>Theme 2 — Action Interfaces for Visual Agents</h1>
+
+<p>Once an agent can see and act, how should it express those actions? This theme treats the interface itself as a first-class design decision.</p>
+
+<table>
+<colgroup>
+<col width="190"/>
+<col width="230"/>
+<col width="230"/>
+<col width="100"/>
+</colgroup>
+<thead>
+<tr>
+<th background-color="light-gray">Paper</th>
+<th background-color="light-gray">Key Contribution</th>
+<th background-color="light-gray">Why It Matters</th>
+<th background-color="light-gray">Links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><b>EvoArena</b> (Xu et al., 2026)</td>
+<td>Patch-based memory tracking environment evolution across terminal, software, and social domains.</td>
+<td>Surfaces a concrete memory abstraction—update histories rather than facts—for dynamic-world agents.</td>
+<td><a href="https://huggingface.co/papers/2606.13681">HF</a> / <a href="https://arxiv.org/pdf/2606.13681">PDF</a></td>
+</tr>
+<tr>
+<td><b>EurekAgent</b> (Xin et al., 2026)</td>
+<td>Environment engineering—permissions, artifacts, budgets, human-in-the-loop—for autonomous scientific discovery.</td>
+<td>Argues that as CLI agents improve, the bottleneck shifts from prescribing workflows to designing reliable research environments.</td>
+<td><a href="https://huggingface.co/papers/2606.13662">HF</a> / <a href="https://arxiv.org/pdf/2606.13662">PDF</a></td>
+</tr>
+</tbody>
+</table>
+
+<hr/>
+
+<h2>SpatialClaw: Rethinking Action Interface for Agentic Spatial Reasoning</h2>
+<p>Cho et al. (2026) · <a href="https://huggingface.co/papers/2606.13673">HF</a> · <a href="https://arxiv.org/pdf/2606.13673">PDF</a> · <a href="https://spatialclaw.github.io/">Project</a></p>
+
+<p>SpatialClaw studies a specific but underexplored design choice: the <b>action interface</b> of a tool-augmented spatial-reasoning agent. Existing agents either generate one complete Python program before seeing any intermediate result, or invoke a fixed menu of structured JSON tool calls. Both limit the agent’s ability to compose perception outputs in task-specific ways. SpatialClaw instead treats <b>code as the action interface</b>: at each step the VLM writes one executable Python cell in a persistent kernel pre-loaded with input frames, perception tools (SAM3, Depth-Anything-3), and scientific libraries (NumPy, SciPy, Matplotlib).</p>
+
+<p>[[figure-anchor:spatialclaw:interface]]</p>
+
+<p>The kernel exposes six entry points: <code>InputImages</code>, <code>Metadata</code>, <code>tools</code>, <code>show(...)</code>, <code>vlm</code>, and <code>ReturnAnswer(...)</code>. Each cell can call tools, compose their outputs, register intermediate images via <code>show()</code>, and leave variables in the persistent namespace for later cells. An outer loop runs plan → code → AST safety check → execute → feedback (stdout, variables, images, errors) → reflect/continue. The system prompt encodes general spatial-reasoning discipline rather than task-specific templates, so the same configuration is used across all 20 benchmarks and six backbone models.</p>
+
+<p>We cloned the official implementation (<code>NVlabs/SpatialClaw</code>) and traced the LangGraph workflow, the persistent Jupyter kernel manager, the AST sandbox, and the tool wrappers. The code matches the paper’s architectural description. We also cloned pySpatial to confirm it is single-pass: <code>generate_code_from_query()</code> → <code>execute_code()</code> → <code>answer()</code>, with no per-step revision. VADAR’s repository contains only project-page HTML, so we could not trace it.</p>
+
+<p>The key empirical result is that the interface itself drives the gains. On Gemma4-31B, the action-interface ablation shows No-tool 53.4, Single-pass code 55.2, Structured tool-call 56.7, and SpatialClaw 59.9. Removing predefined utility wrappers loses only −0.5 pp, because the agent reimplements them with NumPy/SciPy; removing the perception tools entirely still beats the no-tool baseline by +2.7 pp. The largest gains concentrate in camera motion, multi-view/viewpoint reasoning, and relative direction—exactly the categories that demand chained geometric computation across frames or viewpoints.</p>
+
+<p>To make the mechanism concrete without GPUs or a real VLM, we built a minimal reconstruction in <code>runs/2026-06-12-spatialclaw-moverse-labvla/spatialclaw-2606.13673/code/</code>: a mock persistent kernel, mock perception tools, an AST sandbox, and a scripted 4-step session that segments two objects, reconstructs metric 3D geometry, computes camera-to-object distances, and returns <code>ReturnAnswer("car")</code>. The probe runs end-to-end and produces a synthetic input image plus step-by-step feedback logs.</p>
+
+<p>[[figure-anchor:spatialclaw:probe-input]]</p>
+
+<p>The takeaway is that for spatial reasoning, the action space should be as expressive as Python evaluated in a persistent loop, not as restrictive as a fixed JSON tool menu. The remaining bottleneck is perception quality and VLM hallucination, not the interface itself.</p>
+
+<h1>Theme 3 — Agent Infrastructure for Scientific Discovery</h1>
+
+<p>Beyond any single task, several papers build the substrate that lets LLM agents run longer, collaborate, and generalize.</p>
+
+<table>
+<colgroup>
+<col width="190"/>
+<col width="230"/>
+<col width="230"/>
+<col width="100"/>
+</colgroup>
+<thead>
+<tr>
+<th background-color="light-gray">Paper</th>
+<th background-color="light-gray">Key Contribution</th>
+<th background-color="light-gray">Why It Matters</th>
+<th background-color="light-gray">Links</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><b>Arbor</b> (Jin et al., 2026)</td>
+<td>Hypothesis-tree refinement (HTR) for generalist autonomous research: coordinator + executors + persistent evidence tree.</td>
+<td>Turns autonomous research from isolated attempts into a cumulative process where strategy, execution, and evidence persist.</td>
+<td><a href="https://huggingface.co/papers/2606.11926">HF</a> / <a href="https://arxiv.org/pdf/2606.11926">PDF</a></td>
+</tr>
+<tr>
+<td><b>RACES</b> (Xiang et al., 2026)</td>
+<td>Recursive automated composition of verifiable environments for RL reasoning generalization.</td>
+<td>Treats environments as typed LEGO bricks; composing them by matching input/output types scales reasoning training beyond manual construction.</td>
+<td><a href="https://huggingface.co/papers/2606.12373">HF</a> / <a href="https://arxiv.org/pdf/2606.12373">PDF</a></td>
+</tr>
+<tr>
+<td><b>EurekAgent</b> (Xin et al., 2026)</td>
+<td>Environment engineering for metric-driven discovery: permissions, artifacts, budgets, human-in-the-loop.</td>
+<td>Sets SotA on math, kernel, and ML engineering tasks with off-the-shelf CLI agents and an engineered environment.</td>
+<td><a href="https://huggingface.co/papers/2606.13662">HF</a> / <a href="https://arxiv.org/pdf/2606.13662">PDF</a></td>
+</tr>
+</tbody>
+</table>
+
+<h1>Cross-Cutting Observation: Explicit Memory, Local Computation</h1>
+
+<p>A single design pattern appears across the deep threads. MoVerse puts durable scene memory in an explicit 3D Gaussian scaffold and uses the video model only for local refinement. LabVLA builds a reusable synthetic corpus so the policy can learn laboratory protocols offline before online deployment. SpatialClaw keeps intermediate spatial evidence as persistent Python variables rather than one-shot tool outputs. In each case the authors are trading away the temptation to let a single monolithic model do everything, and instead factor the problem into <b>memory that persists</b> plus <b>computation that runs on demand</b>. The current pool suggests this factorization is becoming a default engineering move for embodied agents and world models, not just a theoretical preference.</p>
+
+<h1>Methodology Note</h1>
+
+<p>We pulled the 2026-06-11/12 Hugging Face Papers pool, filtered for relevance to robotics, multimodal agents, world models, and control, then selected three papers for deep investigation. Each thread includes code inspection, related-work comparison, and a small probe or reconstruction preserved under <code>runs/2026-06-12-spatialclaw-moverse-labvla/&lt;thread-id&gt;/</code>. Full empirical numbers were not independently reproduced where the released artifacts were incomplete (MoVerse, RoboGenesis) or the full evaluation required multi-GPU infrastructure (SpatialClaw); those limits are stated explicitly.</p>

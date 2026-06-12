@@ -27,6 +27,13 @@ Entry format:
 - Covered papers: 2606.08548, 2606.09811, 2606.07895, 2606.11087
 - Shortlisted papers: 2605.25077, 2606.06556, 2606.09669, 2606.11129, 2606.09828, 2606.07723, 2606.06476
 
+## 2026-06-12 — 2026-06-11 to 2026-06-12
+- Doc: https://fudan-nlp.feishu.cn/docx/YT9Rd6YeLoHZxQx1TczcBWpCn1e
+- Run: runs/2026-06-12-spatialclaw-moverse-labvla/
+- Deep threads: LabVLA scientific-lab VLA (2606.13578), MoVerse panoramic Gaussian world model (2606.13376), SpatialClaw code-as-action spatial reasoning (2606.13673)
+- Covered papers: 2606.13578, 2606.13376, 2606.13673
+- Shortlisted papers: 2606.12195, 2606.13681, 2606.13662, 2606.11926, 2606.12373
+
 ## 2026-06-11 — 2026-06-08 to 2026-06-11
 - Doc: https://fudan-nlp.feishu.cn/docx/Li5YdEumooOkIrxTQgfcBivRnKe
 - Run: runs/2026-06-11-alebench-worldpilot-embodiedr1-nextforcing/
