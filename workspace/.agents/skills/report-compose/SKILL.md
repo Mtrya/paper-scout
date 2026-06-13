@@ -160,6 +160,10 @@ Before creating the real doc, ensure the run checklist is complete and run:
 python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode prepublish
 ```
 
+### Feishu delivery (requires lark-cli)
+
+If `lark-cli` is available on PATH, proceed with the full Feishu flow below. If `lark-cli` is **not** available, skip directly to the **Local-only fallback** section.
+
 Before creating the real doc, run the same create command with `--dry-run`:
 
 ```bash
@@ -194,6 +198,18 @@ After the DM is confirmed:
 1. Ensure the delivered DocxXML source is preserved at `runs/<run-id>/report.docxxml`.
 2. Preserve the document `url` so `workspace-manage` can record it in `runs/INDEX.md`.
 
+### Local-only fallback (no lark-cli)
+
+When `lark-cli` is not installed, Feishu delivery is skipped gracefully. Do not treat this as an error. Instead:
+
+1. Ensure the DocxXML source is preserved at `runs/<run-id>/report.docxxml`.
+2. Tell the user where the report was saved, using the absolute workspace path, for example:
+
+   > Feishu delivery skipped (lark-cli not found). Report saved to:
+   > `/absolute/path/to/workspace/runs/<run-id>/report.docxxml`
+
+3. Proceed to `workspace-manage` finalization as normal. Record the run in `runs/INDEX.md` with the local file path in place of a Feishu URL.
+
 ## What Not To Do
 
 - Do not omit or duplicate the `<title>`.
@@ -207,7 +223,7 @@ After the DM is confirmed:
 - Do not hardcode the theme list.
 - Do not ship a deep thread that restates the abstract.
 - Do not leave temporary media anchors visible in the delivered doc.
-- Do not skip the DM and consider delivery complete.
+- Do not skip the DM and consider delivery complete (unless lark-cli is unavailable and you are following the local-only fallback).
 - Do not use `--markdown` or `post` content for the notification URL; it renders as a plain blue hyperlink instead of a Feishu doc card.
 - Do not invent recipient resolution rules; follow `lark-im`.
 

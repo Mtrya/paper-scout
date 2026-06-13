@@ -2,7 +2,7 @@
 # Launch a Paper Scout reading-agent run.
 #
 # Usage: ./scout.sh <agent>
-#   agent  – codex | kimi | ... (add your own below)
+#   agent  – codex | kimi | qoder (add your own below)
 #
 # Optional:
 #   PAPER_SCOUT_NOTIFY_USER_ID  Feishu/Lark open_id to notify when launch aborts.
@@ -14,11 +14,20 @@ set -euo pipefail
 agent="${1:-}"
 if [[ -z "$agent" ]]; then
     echo "Usage: $0 <agent>" >&2
-    echo "Supported agents: codex, kimi" >&2
+    echo "Supported agents: codex, kimi, qoder" >&2
     exit 1
 fi
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Ensure user-local CLI tools (e.g. huggingface-papers) are found before
+# any environment-specific shadows (e.g. conda env's huggingface_hub hf).
+if [[ -d "$HOME/.local/bin" ]]; then
+    case ":$PATH:" in
+        *:"$HOME/.local/bin":*) ;;
+        *) export PATH="$HOME/.local/bin:$PATH" ;;
+    esac
+fi
 
 notify_abort() {
     local reason="$1"
@@ -78,9 +87,12 @@ case "$agent" in
     kimi)
         exec kimi -p "$prompt"
         ;;
+    qoder)
+        exec qodercli --permission-mode auto "$prompt"
+        ;;
     *)
         echo "Unknown agent: $agent" >&2
-        echo "Supported agents: codex, kimi" >&2
+        echo "Supported agents: codex, kimi, qoder" >&2
         exit 1
         ;;
 esac
