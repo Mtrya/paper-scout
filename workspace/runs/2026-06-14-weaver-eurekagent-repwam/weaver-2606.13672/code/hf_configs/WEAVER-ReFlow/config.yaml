@@ -1,0 +1,111 @@
+scratch_dir: /network/scratch/a/arnav-kumar.jain/SAILOR/libero/models/finetune_droid_2cams/
+horizon: 8
+eval_horizon: 5
+eval_video_frames: 50
+eval_bootstrap: 5
+n_history: 2
+n_memory_frames: 6
+t_memory: 5
+use_wandb: false
+exp_name: finetune_droid_2cams
+log_freq: 100
+save_model: true
+ckpt_freq: 1000
+video_log_freq: 5000
+valid_log_freq: 5000
+resume: true
+use_compile: true
+use_activation_checkpointing: true
+cpu_offload: false
+finetune: false
+finetune_cfg:
+  batch_size: 8
+  max_steps: 25000
+  max_lr: 2.0e-05
+  min_lr: 2.0e-05
+  warmup_steps: 100
+  weight_decay: 0.01
+  betas:
+  - 0.9
+  - 0.99
+  gradient_accumulation_steps: 1
+wandb:
+  project: sailorv2
+  entity: world_model_team
+experiment:
+  name: sailor_exp
+  seed: 42
+dataset:
+  name: DROID
+  path: /network/scratch/a/arnav-kumar.jain/SAILOR/DROID/world_model_data_our_50/
+  n_workers: 10
+  relabel_actions: true
+  collapse_prob: 0.1
+  subdirs: ''
+  img_keys:
+  - wrist_left
+  - exterior_1_left
+  image_size:
+  - 192
+  - 320
+  norm_stats_path: /home/mila/a/arnav-kumar.jain/scratch/SAILOR/release/weaver_checkpoints/WEAVER-ReFlow/norm_stats_relabel.json
+model:
+  n_embed: 1536
+  n_layers: 32
+  n_heads: 16
+  n_latent: 768
+  n_spatial: 1
+  qk_norm: true
+  use_v1_residual: false
+  train_steps: 1000
+  val_steps: 4
+  n_hidden: 512
+  loss_target: v-pred
+  use_lpips_loss: false
+  use_linear_proj: true
+  lpips_loss_scale: 0.0
+  use_cfm_loss: false
+  cfm_weighting: uniform
+  cfm_coeff: 0.05
+  use_temporal_loss: false
+  temporal_loss_coeff: 0.1
+  history_noise_std: 0.1
+  use_reg_loss: false
+  reg_coeff: 0.2
+  cls_loss_coeff: 0.03
+  reg_encoder: dinov3_vits16
+  reg_projector_dim: 2048
+  reg_layer: -1
+  diff_forcing: true
+  use_sprint: true
+  sprint_drop_ratio: 0.5
+  sprint_encoder_blocks: 2
+  sprint_decoder_blocks: 2
+  path_drop_prob: 0.05
+  rm_update_freq: 100
+  discount_factor: 0.995
+  gae_lambda: 0.95
+  loss_scale:
+    states: 0.1
+    reward_l2: 0.5
+inference:
+  pyramid_schedule: cosine
+  pyramid_stagger_width: 0
+  pyramid_schedule_power: 0.5
+  pyramid_schedule_steepness: 5.0
+  pyramid_schedule_center: 0.5
+training:
+  batch_size: 8
+  max_lr: 2.0e-05
+  min_lr: 2.0e-05
+  max_steps: 25000
+  warmup_steps: 100
+  gradient_accumulation_steps: 1
+  weight_decay: 0.01
+  betas:
+  - 0.9
+  - 0.99
+im_encoder:
+  name: stabilityai/stable-diffusion-3-medium-diffusers
+  freeze: true
+  spatial_size: 2

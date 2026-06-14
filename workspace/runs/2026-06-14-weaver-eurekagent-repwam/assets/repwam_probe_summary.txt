@@ -1,0 +1,5 @@
+Toy RepWAM probe
+Visual tokenizer params: 114752
+LAT params: 46668
+WAM params: 101772
+Mean LAT forward MSE: 0.0000

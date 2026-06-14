@@ -1,0 +1,204 @@
+<title>Paper Scout Research Report - 2026-06-14</title>
+
+<p><b>What this run found.</b> The Hugging Face Papers feed was effectively flat for 2026-06-13/14, so I went deep on the strongest papers that surfaced at the end of the previous week. Two threads dominate. First, robot world models are being re-architected for speed and utility: <b>WEAVER</b> shows that a latent flow-matching transformer with learned reward and critic heads can evaluate, improve, and plan on a real Franka, while <b>RepWAM</b> argues that the visual-action tokenizer itself should be representation-centric rather than reconstruction-centric. Second, autonomous research agents are being reframed as an environment-engineering problem: <b>EurekAgent</b> wraps off-the-shelf CLI agents in permission, artifact, budget, and human-in-the-loop scaffolding and reports state-of-the-art results across math, kernel engineering, and ML engineering. In both areas, the most interesting work is moving from "bigger model" to "better interface between model and world."</p>
+
+<h1>Theme 1: Robot world models are becoming fast, latent, and useful</h1>
+
+<p>World models for manipulation have long promised policy evaluation, improvement, and planning without expensive real-world rollouts, but the trifecta of fidelity, long-horizon consistency, and inference speed has been elusive. This week two papers attack the problem from complementary angles: WEAVER by making the whole pipeline efficient enough to close the loop, and RepWAM by redesigning the latent space on which the model is built.</p>
+
+<table>
+  <colgroup><col width="200"/><col width="230"/><col width="230"/><col width="90"/></colgroup>
+  <thead><tr><th background-color="light-gray">Paper</th><th background-color="light-gray">Key Contribution</th><th background-color="light-gray">Why It Matters</th><th background-color="light-gray">Links</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>World Model Self-Distillation</b> (Sun et al., 2026)</td>
+      <td>Distills a world model into itself to solve general downstream tasks without task-specific data.</td>
+      <td>Tests whether world models can transfer through self-supervision rather than fine-tuning.</td>
+      <td><a href="https://huggingface.co/papers/2606.12072">HF</a> / <a href="https://arxiv.org/pdf/2606.12072">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>τ<sub>0</sub>-WM</b> (anonymous, 2026)</td>
+      <td>A unified video-action world model for robotic manipulation.</td>
+      <td>Another entrant in the from-scratch manipulation WAM race; compare to RepWAM and WEAVER.</td>
+      <td><a href="https://huggingface.co/papers/2606.01027">HF</a> / <a href="https://arxiv.org/pdf/2606.01027">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Building Social World Models with LLMs</b> (Park et al., 2026)</td>
+      <td>Uses LLMs to build interpretable social world models for multi-agent reasoning.</td>
+      <td>Extends world-model ideas beyond physical dynamics into social reasoning.</td>
+      <td><a href="https://huggingface.co/papers/2606.11482">HF</a> / <a href="https://arxiv.org/pdf/2606.11482">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>WeaveBench</b> (Yao et al., 2026)</td>
+      <td>Long-horizon real-world benchmark for computer-use agents with hybrid interfaces.</td>
+      <td>Agent evaluation, not model scaling, may be the real bottleneck for embodied agents.</td>
+      <td><a href="https://huggingface.co/papers/2606.09426">HF</a> / <a href="https://arxiv.org/pdf/2606.09426">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>MuJoCo-Drones-Gym</b> (Romero et al., 2026)</td>
+      <td>GPU-accelerated multi-drone simulator for control and RL.</td>
+      <td>Fast simulators remain a prerequisite for any world-model/policy co-training loop.</td>
+      <td><a href="https://huggingface.co/papers/2606.08039">HF</a> / <a href="https://arxiv.org/pdf/2606.08039">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>WEAVER: a flow-matching world model that closes the loop on real hardware</h2>
+
+<p>Jain et al. (2026) · <a href="https://huggingface.co/papers/2606.13672">HF</a> · <a href="https://arxiv.org/pdf/2606.13672">PDF</a> · <a href="https://arnavkj1995.github.io/WEAVER/">project</a></p>
+
+<p>WEAVER (World Estimation Across Views for Embodied Reasoning) is the most complete attempt I have seen to make a robot world model practical for all three downstream uses at once: evaluation, policy improvement, and test-time planning. The core bet is that you can get fidelity, long-horizon consistency, and speed by fusing ingredients from video generation (flow matching, diffusion forcing, a pretrained SD3 VAE), latent world models (learned reward and value heads), and manipulation-specific architectures (multi-view memory and history).</p>
+
+<p>The setup is a standard visuomotor policy loop. At each step the robot observes multi-view RGB images <latex>I_t^1, \dots, I_t^n</latex> and proprioception <latex>q_t \in \mathbb{R}^8</latex>; a base policy <latex>\pi_{0.5}</latex> proposes an <latex>h</latex>-step action chunk <latex>\mathbf{a}_t</latex>; and the world model imagines the resulting future latents. WEAVER encodes images with a frozen SD3 VAE, concatenates per-view patch tokens with a state token, an action token, and a flow-timestep token, and runs a 32-layer block-causal transformer. Two conditioning windows keep the generation coherent: a sparse long-term memory of every 5th past latent, and a 2-frame short-term history.</p>
+
+<p>[[figure-anchor:weaver:architecture]]</p>
+
+<p>The training objective is conditional flow matching in v-prediction form, with diffusion forcing applied independently across future timesteps:</p>
+
+<pre lang="python" caption="WEAVER flow-matching loss (v-pred)"><code>x1 = z[t+1 : t+h+1]                 # ground-truth future latents
+x0 = torch.randn_like(x1)            # Gaussian noise
+tau = torch.rand(...)                # one noise level per frame (diffusion forcing)
+xt = tau * x1 + (1 - tau) * x0
+v = x1 - x0
+loss = MSE(v, model(xt, actions, tau, memory, history))</code></pre>
+
+<p>I cloned the official repository and reconstructed the released <code>WEAVER</code> config without downloading the 8.2 GB checkpoint. The parameter count comes out to <b>928,735,746</b> trainable parameters — 98.5% in the dynamics core, only ~1.5% in the latent reward and critic heads. This matches the paper's claimed 928 M almost exactly and is a good sanity check that the public config is the one used for the reported numbers.</p>
+
+<p>For inference, WEAVER uses a pyramid noise schedule so earlier future frames become clean context for later frames, plus KV caching over the constant memory/history tokens and, critically, a ReFlow distillation stage that brings NFE down from 23 to 4. The speedup is structural: the same backbone can be run at very different latency points. That is what makes the reported 5–10× speedup over Ctrl-World mechanically plausible even though I could not measure wall-clock time without a GPU.</p>
+
+<table>
+  <colgroup><col width="140"/><col width="100"/><col width="100"/><col width="100"/><col width="100"/><col width="100"/></colgroup>
+  <thead><tr><th background-color="light-gray">Method</th><th background-color="light-gray">NFE</th><th background-color="light-gray">ext. FID↓</th><th background-color="light-gray">ext. FVD↓</th><th background-color="light-gray">wrist FVD↓</th><th background-color="light-gray">time (s)↓</th></tr></thead>
+  <tbody>
+    <tr><td>Ctrl-World</td><td>16</td><td>26.09</td><td>78.73</td><td>195.37</td><td>14.65</td></tr>
+    <tr><td>Ctrl-World</td><td>50</td><td>22.44</td><td>55.05</td><td>91.77</td><td>42.33</td></tr>
+    <tr><td><b>WEAVER</b></td><td>16</td><td><b>10.20</b></td><td><b>27.83</b></td><td><b>90.72</b></td><td><b>4.78</b></td></tr>
+    <tr><td><b>WEAVER</b></td><td>50</td><td><b>9.51</b></td><td><b>26.54</b></td><td><b>66.89</b></td><td><b>14.25</b></td></tr>
+  </tbody>
+</table>
+
+<p>The downstream results are striking. For policy evaluation, WEAVER-FT reaches a Pearson correlation of <latex>\rho = 0.87</latex> with real-world success rate. For policy improvement, fine-tuning <latex>\pi_{0.5}</latex> on synthetic data filtered by predicted advantage matches fine-tuning on real data within 4% and improves over the base policy by 38%. For test-time planning, best-of-N sampling with the latent verifier improves success by 14% with a latency budget that Ctrl-World cannot meet.</p>
+
+<p>What makes the planning result work is the latent verifier. Instead of decoding every imagined frame and querying an external VLM judge, WEAVER trains lightweight reward and critic heads directly on imagined latents. The advantage for a candidate action chunk is</p>
+
+<p><latex>\hat{A}_t = \sum_{\ell=1}^{H} \gamma^{\ell-1} R(\hat{z}_{t+\ell}, \ell) + \gamma^H V(\hat{z}_{t+H}, \ell) - V(z_t, \ell).</latex></p>
+
+<p>This is standard RL machinery, but operating on imagined latents rather than rendered pixels is what makes sub-second planning possible. The main caveat is that I could not download the checkpoints or run on real DROID data, so the FID/FVD and real-robot numbers remain the authors' claims, even though the architecture and scale are code-verified.</p>
+
+<hr/>
+
+<h2>RepWAM: representation-centric tokenization for world-action models</h2>
+
+<p>Wang et al. (2026) · <a href="https://huggingface.co/papers/2606.13674">HF</a> · <a href="https://arxiv.org/pdf/2606.13674">PDF</a> · <a href="https://github.com/wdrink/RepWAM">code (placeholder)</a></p>
+
+<p>RepWAM asks a more foundational question: what kind of latent space should a world-action model live in? Current WAMs typically inherit visual tokenizers from pretrained video generators, which are optimized for pixel reconstruction, not for manipulation semantics. RepWAM instead trains a <b>representation visual-action tokenizer</b> (RepViTok) that aligns visual latents with a frozen visual foundation model and learns latent actions as transitions in the same semantic space.</p>
+
+<p>[[figure-anchor:repwam:tokenizer]]</p>
+
+<p>The tokenizer has two parts. The visual tokenizer is a ViT autoencoder trained with reconstruction, perceptual, GAN, and semantic-alignment losses:</p>
+
+<p><latex>\mathcal{L}_{\text{vis}} = \lambda_1 \|o - \hat{o}\|_1 + \lambda_{\text{perc}} \mathcal{L}_{\text{perc}} + \lambda_{\text{gan}} \mathcal{L}_{\text{gan}} + \lambda_{\text{align}} \| \text{avg}(W_{\text{align}} z) - \text{avg}(G(o)) \|_2^2.</latex></p>
+
+<p>On top of the frozen visual latents, a Latent Action Tokenizer (LAT) couples an inverse dynamics model <latex>q_\phi</latex> with a forward dynamics model <latex>f_\psi</latex>:</p>
+
+<pre lang="python" caption="RepWAM latent action tokenizer"><code>l_t = idm(z_t, z_t+1)                          # latent action, d_l = 4
+K_t, delta_t = fdm(z_t, l_t)                   # transport + residual
+z_hat_t+1 = K_t @ z_t + delta_t                # next latent prediction</code></pre>
+
+<p><latex>K_t \in \mathbb{R}^{L \times L}</latex> is a soft transport matrix over spatial tokens, inspired by optical flow in token space; <latex>\delta_t</latex> captures non-transportable changes. The LAT is trained with forward next-latent prediction plus backward consistency on reversed pairs.</p>
+
+<p>The causal WAM itself is a diffusion transformer over visual-action chunks. Each chunk interleaves visual tokens and latent-action tokens; a block-causal mask lets each chunk attend only to language conditioning, the initial visual context, and previous chunks. The model is pretrained on video + latent-action tokens from AgiBot (~100 G tokens), then adapted to real robot actions from AgiBot, RoboMIND, RoboCOIN, and InternAI (~300 G tokens).</p>
+
+<p>The official repository is currently a placeholder, so I could not trace the full implementation. Instead I built a minimal CPU-runnable probe of the core equations on synthetic moving-blob videos. The probe confirms that the LAT objective trains stably (held-out forward MSE &lt; 1e-4) and that the causal WAM flow-matching loss falls from ~2.3 to ~0.15 over 15 epochs. That validates the math, but it says nothing about manipulation semantics or the reported RoboTwin 2.0 numbers.</p>
+
+<table>
+  <colgroup><col width="160"/><col width="120"/><col width="120"/><col width="120"/><col width="120"/><col width="120"/></colgroup>
+  <thead><tr><th background-color="light-gray">Tokenizer</th><th background-color="light-gray">gFVD↓ seen</th><th background-color="light-gray">PSNR↑ seen</th><th background-color="light-gray">OLS↑ seen</th><th background-color="light-gray">gFVD↓ unseen</th><th background-color="light-gray">PickFruit↑</th></tr></thead>
+  <tbody>
+    <tr><td>WAN2.2 VAE</td><td>67.42</td><td>17.34</td><td>13.68</td><td>83.98</td><td>20%</td></tr>
+    <tr><td>ViTok</td><td>69.23</td><td>17.21</td><td>16.29</td><td>80.14</td><td>10%</td></tr>
+    <tr><td><b>RepViTok</b></td><td><b>61.01</b></td><td><b>18.47</b></td><td><b>18.82</b></td><td><b>72.91</b></td><td><b>30%</b></td></tr>
+  </tbody>
+</table>
+
+<p>The ablation above is from the paper and should be read with the code-unavailable caveat. The interesting structural point is that RepWAM explicitly decouples <i>semantic visual dynamics</i> from <i>embodiment-specific motor commands</i> through an intermediate latent-action stage, whereas contemporaries like Lingbot-VA model real robot actions directly inside a pretrained WAN2.2 VAE. Whether the reported gains come from the tokenizer design or from the extra pretraining stage is a question only the released code and weights can settle.</p>
+
+<h1>Theme 2: Autonomous research as environment engineering</h1>
+
+<p>Autonomous scientific discovery has been dominated by prescribed workflows: evolutionary search, solution trees, test-time RL. EurekAgent turns the lens outward and asks whether the bottleneck is now the environment rather than the agent algorithm.</p>
+
+<table>
+  <colgroup><col width="200"/><col width="230"/><col width="230"/><col width="90"/></colgroup>
+  <thead><tr><th background-color="light-gray">Paper</th><th background-color="light-gray">Key Contribution</th><th background-color="light-gray">Why It Matters</th><th background-color="light-gray">Links</th></tr></thead>
+  <tbody>
+    <tr>
+      <td><b>EvoArena</b> (Xu et al., 2026)</td>
+      <td>Benchmark for robust LLM agents in dynamic environments with progressive updates.</td>
+      <td>Static benchmarks may overstate agent competence; dynamic evaluation is the next stress test.</td>
+      <td><a href="https://huggingface.co/papers/2606.13681">HF</a> / <a href="https://arxiv.org/pdf/2606.13681">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Hypothesis-Tree Refinement</b> (anonymous, 2026)</td>
+      <td>Generalist autonomous research via recursive hypothesis-tree refinement.</td>
+      <td>Another take on structured autonomous research; compare to EurekAgent's environment framing.</td>
+      <td><a href="https://huggingface.co/papers/2606.11926">HF</a> / <a href="https://arxiv.org/pdf/2606.11926">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>TRACE</b> (anonymous, 2026)</td>
+      <td>Unified rollout budget allocation for efficient agentic RL.</td>
+      <td>Budget-aware allocation may matter as much as policy architecture for long-horizon agents.</td>
+      <td><a href="https://huggingface.co/papers/2606.11119">HF</a> / <a href="https://arxiv.org/pdf/2606.11119">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>EurekAgent: building the sandbox, not just the agent</h2>
+
+<p>Xin et al. (2026) · <a href="https://huggingface.co/papers/2606.13662">HF</a> · <a href="https://arxiv.org/pdf/2606.13662">PDF</a> · <a href="https://github.com/THU-Team-Eureka/EurekAgent">code</a></p>
+
+<p>EurekAgent's central claim is that the bottleneck for autonomous scientific discovery is shifting from prescribing agent workflows to designing agent environments. The system wraps off-the-shelf CLI agents in four environment-engineering dimensions: permissions, artifacts, budget, and human-in-the-loop oversight. Within those boundaries the agents are free to choose their own search strategy.</p>
+
+<p>[[figure-anchor:eurekagent:overview]]</p>
+
+<p>The outer loop is intentionally minimal:</p>
+
+<pre lang="text" caption="EurekAgent stage loop"><code>prepare → [ propose → { implement }_p=1..P ]_r=1..R</code></pre>
+
+<ul>
+  <li><b>Prepare</b> validates the problem, tests the grader, installs dependencies, and writes a stage-gate artifact.</li>
+  <li><b>Propose</b> launches one agent session that distills prior rounds and the web into a manifest of up to <latex>P</latex> hypotheses.</li>
+  <li><b>Implement</b> runs up to <latex>P</latex> parallel agent sessions, each confined to its own workspace, submitting candidates to a secure grader.</li>
+</ul>
+
+<p>The environment layer is where the work lives. Permissions engineering uses Docker isolation, a hidden grader container, GPU locks, and a PreToolUse hook that blocks writes to controller-owned result files and same-round peer access. Artifact engineering uses the filesystem plus Git history as shared memory: preparation summaries, hypothesis manifests, ranked solution histories, and evaluator feedback all persist across sessions. Budget engineering tracks wall-clock time per stage and API cost across sessions, with resume support if a run is interrupted.</p>
+
+<p>I cloned the official implementation and ran two probes. The first starts the official FastAPI grader for the circle-packing task, submits a valid candidate, and verifies that the server writes <code>best_result.jsonl</code> and <code>intermediate_results.jsonl</code> while rejecting an invalid submission. The second exercises the <code>TokenTracker</code> cost accounting. Both mechanisms work as documented, which means the environment-engineering design is implemented, not just conceptual.</p>
+
+<table>
+  <colgroup><col width="160"/><col width="120"/><col width="120"/><col width="120"/><col width="120"/></colgroup>
+  <thead><tr><th background-color="light-gray">Task</th><th background-color="light-gray">EurekAgent</th><th background-color="light-gray">Prev. best AI</th><th background-color="light-gray">Prev. best human</th><th background-color="light-gray">Cost</th></tr></thead>
+  <tbody>
+    <tr><td>26-circle packing (↑)</td><td><b>2.635999</b></td><td>2.635986</td><td>~2.634</td><td>~$11</td></tr>
+    <tr><td>Erdős min. overlap (↓)</td><td><b>0.380870</b></td><td>0.380876</td><td>0.380927</td><td>part of &lt;$17</td></tr>
+    <tr><td>1st autocorr. ineq. (↓)</td><td><b>1.502861</b></td><td>1.502863</td><td>1.509730</td><td>part of &lt;$17</td></tr>
+    <tr><td>TriMul kernel (↓)</td><td><b>2005 µs</b></td><td>2248 µs</td><td>2096 µs</td><td>A100 time</td></tr>
+  </tbody>
+</table>
+
+<p>The reported results are strong: new AI records on all three math tasks, a new best on the TriMul kernel engineering task, and 85.71% any-medal rate on a seven-task MLE-Bench Lite subset. The authors achieve this with GLM-5.1, an open model, at an average API cost below $17 for the math suite. That is a meaningful efficiency signal if it holds up.</p>
+
+<p>The key caveat is that I did not run the full autonomous loop. Reproducing the $11 circle-packing result would require ~9 hours of agent time with Claude Code/GLM-5.1 plus API credits, and the TriMul/MLE-Bench results need GPUs and held-out data. The probes validate the environment mechanisms; the SOTA numbers should be reported as the authors' results.</p>
+
+<p>Comparing EurekAgent with its neighbors sharpens the point. AlphaEvolve prescribes an evolutionary loop; AIDE prescribes a solution-tree agent; TTT-Discover uses test-time RL that updates model weights per problem. EurekAgent prescribes almost none of that. It gives general-purpose CLI agents a bounded, observable, accountable environment and lets them search. That is a genuine design shift, and the code makes it concrete.</p>
+
+<h1>Cross-cutting observations: the interface layer is where the action is</h1>
+
+<p>Two superficially different fields — robot world models and autonomous research agents — are converging on the same insight. The model is no longer the only thing that matters; the interface between the model and the world is becoming the decisive research object.</p>
+
+<p>In robotics, WEAVER's speed comes from re-engineering the inference interface (flow matching, diffusion forcing, ReFlow, latent verifiers). RepWAM's bet is that the tokenizer — the interface between pixels and the model's latent world — should be semantic and action-aligned rather than reconstruction-oriented. In agentic research, EurekAgent's bet is that the environment — the interface between the LLM and the task — should enforce permissions, persist artifacts, bound budgets, and keep humans in the loop. In both cases the model is treated as a powerful but opaque node; the surrounding architecture does the work that makes the node reliable.</p>
+
+<p>One open question ties the two threads together. If world models become fast and faithful enough to serve as simulators for agent actions, and autonomous research agents become environment-engineered enough to explore reliably, then the next interesting systems may be agents that use learned world models as their environment — not to replace real-world experiments, but to make the search for policies and hypotheses far cheaper. Neither paper quite gets there, but both are building the pieces.</p>
+
+<callout emoji="⚠️" background-color="light-yellow" border-color="yellow">
+  <p><b>Coverage note:</b> Hugging Face Papers returned empty date-specific lists for 2026-06-13 and 2026-06-14. This run therefore treats 2026-06-08 to 2026-06-12 as the effective recent pool and deep-dives the strongest papers from that window not already covered in <code>runs/INDEX.md</code>.</p>
+</callout>
