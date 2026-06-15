@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-06-15 — 2026-06-15
+- Doc: https://fudan-nlp.feishu.cn/docx/SVnEd0IsyobD8fx71yPcHPCynsd
+- Run: runs/2026-06-15-mu0-hyvla/
+- Deep threads: μ₀ 3D interaction-trace world model (2606.13769), Hy-Embodied-0.5-VLA full robot learning stack (2606.14409)
+- Covered papers: 2606.13769, 2606.14409
+- Shortlisted papers: 2606.13679, 2606.14249, 2606.14579, 2606.12384
+
 ## 2026-06-07 — 2026-05-28 to 2026-06-07
 - Doc: https://fudan-nlp.feishu.cn/docx/G8dFd8ry2oC3yZxdIb3cGvwonnc
 - Run: runs/2026-06-07-cosmos3-grail-qwenvla/
