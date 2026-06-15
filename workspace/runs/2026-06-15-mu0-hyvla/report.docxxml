@@ -1,0 +1,291 @@
+<title>Paper Scout Research Report — 2026-06-15</title>
+
+<p><b>Opening.</b> This run kept circling one question: if scalable robot learning needs far more data than any lab can teleoperate, where should the supervision come from? Two fresh papers give strikingly different answers. <b>μ₀</b> argues that unlabeled internet-style videos are enough if the world model predicts the right intermediate representation — 3D interaction traces. <b>Hy-Embodied-0.5-VLA</b> argues the opposite: build custom hardware, collect 10,000 hours of sub-millimeter action-labeled demonstrations, and refine with offline RL. Both report strong real-robot numbers; both also arrive with material code-release caveats. Alongside them, the pool offered several sharp agent-training papers — on procedural credit assignment, harness evolution, view-consistent GUI grounding, and interleaved generation — that are worth watching even if they did not get a full deep dive this time.</p>
+
+<callout emoji="✅" background-color="light-green">
+  <p><b>Standout:</b> μ₀ (arXiv 2606.13769) is the clearest research seed. It reframes world-model pretraining around a compact, inspectable, embodiment-agnostic motion representation, and it backs the claim with both trace-forecasting metrics and real-robot transfer.</p>
+</callout>
+
+<h1>Theme 1 — World Models from Unlabeled Video</h1>
+
+<p>The dominant recipe for robot foundation models today is pretraining on large action-labeled corpora (π₀, π₀.5, OpenVLA, etc.). A dissenting view says video itself should be enough, provided the model predicts a representation that discards irrelevant appearance and keeps actionable geometry. Two recent papers sit on this branch.</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>μ₀</b> (Lee et al., 2026)</td>
+      <td>Query-conditioned 3D trace world model plus the TraceExtract data engine.</td>
+      <td>First video-only world model competitive with action-supervised VLAs on real robots.</td>
+      <td><a href="https://huggingface.co/papers/2606.13769">HF</a> / <a href="https://arxiv.org/pdf/2606.13769">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>TraceGen</b> (Lee et al., CVPR 2026)</td>
+      <td>Fixed-grid 3D trace world model trained from cross-embodiment videos.</td>
+      <td>Immediate predecessor; μ₀ improves entity selection, global tracking, and event captions.</td>
+      <td><a href="https://arxiv.org/abs/2506.06199">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>μ₀: A Scalable 3D Interaction-Trace World Model</h2>
+
+<p>Lee et al. (2026) · <a href="https://huggingface.co/papers/2606.13769">HF</a> · <a href="https://arxiv.org/pdf/2606.13769">PDF</a> · <a href="https://mu0-wm.github.io/">Project</a></p>
+
+<p>μ₀ occupies a deliberately chosen middle ground between pixel generators and action-predicting VLAs. Pixel models spend most of their capacity on appearance; VLA models need embodiment-specific action labels that do not transfer. The authors instead ask the model to forecast <b>3D interaction traces</b> — future trajectories of semantic keypoints on objects, tools, hands, and contact regions. The same trace forecast can be consumed by different downstream action experts for different robots.</p>
+
+<p><b>TraceExtract.</b> Because no large trace dataset existed, the authors built an offline engine that converts heterogeneous human and robot videos into supervised trace tuples. It selects entity-centric keypoints via DINOv2 clustering, lifts and tracks them in a globally aligned 3D frame using VGGT and TAPIP3D, and segments motion into short events via acceleration peaks and valleys. A VLM then captions each event from start/mid/end frames. The result is roughly 8× the scale of prior 3D-trace datasets.</p>
+
+<p><b>Model.</b> μ₀ uses a frozen SmolVLM2-2.2B prefix for semantic conditioning and adds a 20-layer permutation-equivariant “Trace Expert.” Each query keypoint is represented as a history token plus a set of noisy B-spline control points. The expert is trained with conditional flow matching on those control points, plus a validity head for occlusion and a rigidity loss that keeps keypoints within the same DINO cluster from stretching unnaturally.</p>
+
+<p>[[figure-anchor:mu0:overview]]</p>
+
+<p>After pretraining, the entire μ₀ model is frozen. A small action expert is trained on robot demonstrations that consumes intermediate trace-denoising features as motion tokens, fuses them into VLM features through a gated cross-attention layer, and predicts action chunks via flow matching. The action expert is the only place embodiment-specific labels appear.</p>
+
+<p><b>Why B-splines matter.</b> The paper replaces a dense H=32-step future trace with D=10 cubic B-spline control points — roughly a 3× compression in the target dimension — while keeping the curve smooth. I reconstructed this target from Appendix B.2 to see whether the compression is lossy in practice. On a noisy synthetic 3D spiral, the ridge-least-squares fit recovers the trace with MSE ≈ 0.0028 and only 30 scalars instead of 96.</p>
+
+<p>[[figure-anchor:mu0:bspline]]</p>
+
+<table>
+  <colgroup>
+    <col width="260"/>
+    <col width="160"/>
+    <col width="160"/>
+    <col width="160"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Metric</th>
+      <th background-color="light-gray">μ₀ claim</th>
+      <th background-color="light-gray">Closest baseline</th>
+      <th background-color="light-gray">Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>3D trace top-5 DTW (T=32)</td>
+      <td>0.223</td>
+      <td>TraceGen 0.457</td>
+      <td>On paper's held-out trace benchmark</td>
+    </tr>
+    <tr>
+      <td>Trace inference latency</td>
+      <td>0.29 s</td>
+      <td>Track2Act 0.85 s</td>
+      <td>Single A6000</td>
+    </tr>
+    <tr>
+      <td>RoboCasa365 avg. success</td>
+      <td>30.25%</td>
+      <td>π₀ 25.25%; π₀.5 42%</td>
+      <td>π₀.5 uses action-labeled pretraining</td>
+    </tr>
+    <tr>
+      <td>Real UR3 avg. success</td>
+      <td>91.7%</td>
+      <td>π₀ 71.7%; π₀.5 80.0%</td>
+      <td>3 tabletop tasks, 20 rollouts each</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><b>Critical notes.</b> The headline real-robot result is encouraging, but the evaluation is narrow: three tabletop tasks on one UR3 setup. The simulation comparison with π₀.5 is not data-matched, which the authors acknowledge. More importantly, the project page lists the code as “Coming soon,” so the TraceExtract pipeline and the action-expert checkpoint cannot be inspected or reproduced yet. The method reconstruction above is based on the paper and appendix; the real implementation details remain unverified.</p>
+
+<hr/>
+
+<h1>Theme 2 — Full-Stack Action-Labeled VLAs</h1>
+
+<p>At the other pole, several groups are treating the robot-learning problem as a systems problem: co-design data collection hardware, model architecture, training recipe, and deployment stack. The strongest new entry is Tencent's HyVLA-0.5.</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Hy-Embodied-0.5-VLA</b> (Tencent Robotics X, 2026)</td>
+      <td>End-to-end VLA stack: fingertip UMI data, MoT VLM, flow-matching expert, PRO-based RL, async deployment.</td>
+      <td>Strongest engineering completeness claim; ships model + data + most training code.</td>
+      <td><a href="https://huggingface.co/papers/2606.14409">HF</a> / <a href="https://github.com/Tencent-Hunyuan/Hy-Embodied-0.5-VLA">GitHub</a></td>
+    </tr>
+    <tr>
+      <td><b>APPO</b> (Wang et al., 2026)</td>
+      <td>Procedural branching and credit assignment for agentic RL.</td>
+      <td>Moves credit assignment from tool-call boundaries to fine-grained decision points.</td>
+      <td><a href="https://huggingface.co/papers/2606.12384">HF</a> / <a href="https://arxiv.org/pdf/2606.12384">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Hy-Embodied-0.5-VLA: A Real-World Robot Learning Stack</h2>
+
+<p>Tencent Robotics X × Tencent Hy Team (2026) · <a href="https://huggingface.co/papers/2606.14409">HF</a> · <a href="https://arxiv.org/pdf/2606.14409">PDF</a> · <a href="https://github.com/Tencent-Hunyuan/Hy-Embodied-0.5-VLA">GitHub</a></p>
+
+<p>HyVLA-0.5 is presented not as a model but as a stack: custom fingertip UMI grippers in an optical motion-capture cage, a 4B Mixture-of-Transformers VLM pretrained on embodied corpora, a 370M-parameter flow-matching action expert, a parameter-free compact memory encoder, offline preference-optimization RL, and an asynchronous high-frequency deployment pipeline. The paper reports 90.9% / 90.1% on RoboTwin 2.0 Clean / Randomized and near-ceiling success on four real-robot X-Trainer tasks after FlowPRO post-training.</p>
+
+<p><b>Data.</b> The custom rig records 10,000+ hours of egocentric human demonstrations. Optical mocap replaces the visual SLAM used in standard UMI, giving sub-millimeter 6-DoF gripper poses in a single world frame. The same trajectories are reused for pretraining, supervised fine-tuning, and RL post-training.</p>
+
+<p><b>Architecture.</b> The backbone is Hy-Embodied-0.5-MoT, a 4B VLM with separate visual/text QKV and FFN parameters and shared attention for cross-modal interaction. The action expert is a second transformer tower (hidden size 1024, intermediate 2048, ~370M params) that shares attention with the VLM tower. The memory encoder wraps ViT blocks with factorized causal temporal-spatial attention and drops past-frame tokens before the VLM, so the token budget stays flat.</p>
+
+<p>[[figure-anchor:hyvla:architecture]]</p>
+
+<p><b>Action representation.</b> State and action are represented in the end-effector frame as 10-d vectors per arm: xyz translation, 6-d rotation, and gripper. The policy predicts delta chunks relative to the current end-effector pose, decoupling learning from robot kinematics. An optional “relabs” mode doubles the chunk with both relative and absolute targets and blends them at decode time.</p>
+
+<p><b>What the code actually ships.</b> I cloned the repository and inspected it end to end. The architecture code is complete and runnable: MoT backbone fallback, dual-tower action expert, flow-matching head with Beta(1.5,1.0) timestep sampling and 10 Euler steps, KV-cache, parameter-free memory encoder, delta-chunk transforms, and training scripts for UMI pretraining and RoboTwin SFT. Public checkpoints and a ~2K-hour dataset are on Hugging Face.</p>
+
+<p>However, two of the most emphasized system components are <b>not in the release</b>:</p>
+
+<ul>
+  <li><b>FlowPRO.</b> The offline RL post-training stage (Sec. 4) is marked “under review” in the README; a repo-wide grep for FlowPRO / RPRO / preference / intervention / rollback returns only README text and paper references, not implementation code.</li>
+  <li><b>Async Bézier deployment.</b> The asynchronous inference framework with cubic-Bézier chunk stitching (Sec. 5.2–5.3) is not present. Only a synchronous RoboTwin policy wrapper is included.</li>
+</ul>
+
+<table>
+  <colgroup>
+    <col width="220"/>
+    <col width="120"/>
+    <col width="260"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Component</th>
+      <th background-color="light-gray">Shipped?</th>
+      <th background-color="light-gray">Evidence</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>MoT VLM backbone</td>
+      <td>Yes</td>
+      <td><code>hy_vla/hunyuan_vl_mot/</code> + transformers fork</td>
+    </tr>
+    <tr>
+      <td>Dual-tower action expert</td>
+      <td>Yes</td>
+      <td><code>modeling_dual_tower.py</code>, ~370M params</td>
+    </tr>
+    <tr>
+      <td>Flow-matching head</td>
+      <td>Yes</td>
+      <td><code>HyVLAFlowMatching</code>, Beta timesteps, 10 Euler steps</td>
+    </tr>
+    <tr>
+      <td>Compact memory encoder</td>
+      <td>Yes</td>
+      <td><code>space_time_attention.py</code>, parameter-free</td>
+    </tr>
+    <tr>
+      <td>UMI pretraining + RoboTwin SFT</td>
+      <td>Yes</td>
+      <td>Scripts + public checkpoints + ~2K h dataset</td>
+    </tr>
+    <tr>
+      <td>FlowPRO RL post-training</td>
+      <td>No</td>
+      <td>README: “under review, code coming soon”</td>
+    </tr>
+    <tr>
+      <td>Async Bézier deployment</td>
+      <td>No</td>
+      <td>Not found in repository</td>
+    </tr>
+    <tr>
+      <td>Real-robot platform mapper</td>
+      <td>No</td>
+      <td>Only RoboTwin wrapper present</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><b>Bottom line.</b> HyVLA-0.5 is a serious, well-engineered training and inference baseline, and the released model achieves the reported RoboTwin numbers. But the paper's strongest claims — near-ceiling real-robot performance after FlowPRO and smooth high-frequency deployment — depend on components that are not yet public. Treat it as a strong open VLA recipe, not a complete real-world deployment stack.</p>
+
+<hr/>
+
+<h1>Theme 3 — Agents, Interfaces, and Multimodal Generation</h1>
+
+<p>These papers did not get a full deep dive this run, but each introduces a clean idea that is likely to resurface.</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="240"/>
+    <col width="240"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>InterleaveThinker</b> (Zheng et al., 2026)</td>
+      <td>Planner + Critic agents that turn any frozen image generator into an interleaved text-image reasoner.</td>
+      <td>Surprising gains on WISE (0.47→0.73) and RISE (13.3→28.9) beyond generation benchmarks.</td>
+      <td><a href="https://huggingface.co/papers/2606.13679">HF</a> / <a href="https://github.com/zhengdian1/InterleaveThinker">GitHub</a></td>
+    </tr>
+    <tr>
+      <td><b>HarnessX</b> (Darwin Agent Team, 2026)</td>
+      <td>Typed, composable agent harness plus AEGIS trace-driven evolution engine.</td>
+      <td>Averages +14.5% across GAIA, ALFWorld, WebShop, τ³-Bench, SWE-bench; strongest on weakest agents.</td>
+      <td><a href="https://huggingface.co/papers/2606.14249">HF</a> / <a href="https://arxiv.org/pdf/2606.14249">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>VISTA</b> (Qiu et al., 2026)</td>
+      <td>View-consistent GRPO for GUI grounding: groups rollouts from target-preserving crops.</td>
+      <td>Fixes reward degeneracy when all rollouts in a group are correct or all incorrect.</td>
+      <td><a href="https://huggingface.co/papers/2606.14579">HF</a> / <a href="https://arxiv.org/pdf/2606.14579">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>APPO</b> (Wang et al., 2026)</td>
+      <td>Procedural-level branching and advantage scaling for agentic RL.</td>
+      <td>≈+3–4 points across 13 benchmarks by branching at decision points, not just tool calls.</td>
+      <td><a href="https://huggingface.co/papers/2606.12384">HF</a> / <a href="https://arxiv.org/pdf/2606.12384">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr/>
+
+<h1>Cross-Cutting Observation — The Code-Release Gap</h1>
+
+<p>Both deep-dive papers are framed as system contributions: μ₀ as a reusable cross-embodiment motion prior, HyVLA-0.5 as a full robot-learning stack. Both make real-robot claims. Yet both ship incomplete artifacts. μ₀ has no code at all as of this writing; HyVLA-0.5 ships the core model and training but omits FlowPRO and the async deployment stack that produce its most impressive real-robot numbers.</p>
+
+<p>This pattern matters for two reasons. First, external signals — the thing that lets the field verify, extend, or falsify a paper — are weaker than the prose suggests. Second, the gap is structural: the parts most likely to contain hard-won engineering secrets (offline RL from human interventions, high-frequency closed-loop serving, long-horizon trace curation) are exactly the parts left out. Until they arrive, the prudent read is that both papers establish promising <i>directions</i> more than they establish reproducible <i>systems</i>.</p>
+
+<h1>What This Run Learned</h1>
+
+<ul>
+  <li><b>3D traces are a plausible interface between video and control.</b> μ₀'s design — semantic keypoints, global 3D tracking, event-level captions, B-spline targets, frozen trace features for action experts — is coherent and the real-robot results are better than one would expect from video-only pretraining.</li>
+  <li><b>The action-labeled path is not standing still.</b> HyVLA-0.5 shows that a MoT VLM, parameter-free temporal encoding, delta-chunk actions, and careful data engineering can push VLA performance without waiting for a video-only solution to mature.</li>
+  <li><b>Released code is the binding constraint.</b> For both world-model approaches, the next research cycle depends on whether the missing pieces — TraceExtract and the action expert for μ₀, FlowPRO and deployment for HyVLA — are released and reproducible.</li>
+</ul>
+
+<p><b>Next questions worth following:</b> Can μ₀ scale beyond tabletop manipulation to mobile manipulators and dexterous hands? Does HyVLA-0.5's FlowPRO actually drive the claimed near-ceiling real-robot success when the code is released? And will the two philosophies converge — for example, by using μ₀-style trace pretraining to warm-start HyVLA-style action experts, reducing the need for 10K hours of action-labeled data?</p>
