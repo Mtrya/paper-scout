@@ -27,6 +27,7 @@ A good report is insight-dense and scannable. Plain prose should orient the read
 - DocxXML is a fragment format with multiple top-level blocks. Do not validate it with a standard single-root XML parser.
 - Temporary media anchors must be standalone top-level paragraphs, unique within the doc, and easy to delete after media insertion, for example `<p>[[figure-anchor:paper-slug:overview]]</p>`.
 - Include at least two unique `[[figure-anchor:...]]` anchors in the local `report.docxxml`. The delivered Feishu doc should not leave visible placeholder anchors after media insertion.
+- Inside `<latex>` blocks, use a single backslash for LaTeX commands (`\pi`, `\mathcal{L}`); a double backslash (`\\`) is a line-break command and will render each token on a new line.
 
 ## Structure
 
@@ -243,6 +244,7 @@ When `lark-cli` is not installed, Feishu delivery is skipped gracefully. Do not 
 - [ ] Local media anchors inserted, resolved, deleted, and verified
 - [ ] Callouts used only where they earn attention
 - [ ] `<`, `>`, `&` escaped per `lark-doc`
+- [ ] LaTeX commands inside `<latex>` use single backslashes
 - [ ] Create/update commands dry-run before live write
 - [ ] Feishu URL captured
 - [ ] User DM confirmed
