@@ -58,9 +58,9 @@
 
 <p>The training objective mixes action regression, future-feature matching, and future-depth supervision:</p>
 
-<p><latex>\\mathcal{L}_{\\text{total}} = \\lambda_{\\text{act}} \\mathcal{L}_{\\text{act}} + \\lambda_{\\text{feat}} \\mathcal{L}_{\\text{feat}} + \\lambda_{\\text{depth}} \\mathcal{L}_{\\text{depth}}</latex></p>
+<p><latex>\\mathcal{L}_{\\text{total}} = 3\\mathcal{L}_{\\text{act}} + \\mathcal{L}_{\\text{feat}} + 3\\mathcal{L}_{\\text{depth}}</latex></p>
 
-<p>with <latex>\\lambda_{\\text{act}}=3, \\lambda_{\\text{feat}}=1, \\lambda_{\\text{depth}}=3</latex>. The depth and feature losses anchor the predictor to real geometric transitions; the action loss is standard L1 regression on an 8-step end-effector chunk.</p>
+<p>The action and depth terms are weighted 3×; the feature term is weighted 1×. The depth and feature losses anchor the predictor to real geometric transitions; the action loss is standard L1 regression on an 8-step end-effector chunk.</p>
 
 <p>The numbers are mostly consistent with the paper, with one caveat. The open DA3 <code>DPT</code> head is ~35.6 M parameters, whereas GAM reports 50.1 M. The discrepancy is small relative to the total model size but suggests the GAM authors use a variant head or include auxiliary geometry heads. More importantly, the headline 55× speedup over Cosmos-Policy is largely a single-pass-vs-diffusion effect: GAM takes 6.9 ms with CUDA graphs, while Cosmos-Policy takes 382.4 ms. The GFM substrate helps efficiency, but the order-of-magnitude gain comes from avoiding multi-step denoising.</p>
 
@@ -147,7 +147,7 @@
 
 <p>APT starts from a Bayesian factorization of the VLA policy:</p>
 
-<p><latex>\\pi(\\mathbf{a} \\mid \\mathbf{v}, \\ell) \\propto \\pi^p(\\mathbf{a} \\mid \\mathbf{v}) \\cdot \\mathcal{L}(\\ell \\mid \\mathbf{v}, \\mathbf{a})</latex></p>
+<p><latex>\\pi(a \\mid v,\\ell) \\propto \\pi^p(a \\mid v)\\,\\mathcal{L}(\\ell \\mid v,a)</latex></p>
 
 <p>The first term is a language-agnostic vision-action prior; the second is a language-conditioned likelihood. The paper argues that vision-action pairs are inherently balanced (every frame has its own action), whereas full VLA triplets are language-poor, so pretraining the action expert on vision-action data removes the shortcut incentive before language is introduced.</p>
 
