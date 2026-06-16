@@ -145,6 +145,8 @@
 <h2>APT: Action Expert Pretraining Improves Instruction Generalization of VLAs</h2>
 <p>Xu et al. (2026) · <a href="https://huggingface.co/papers/2606.12366">HF</a> · <a href="https://arxiv.org/abs/2606.12366">PDF</a> · <a href="https://github.com/xukechun/APT">code</a></p>
 
+<p>[[figure-anchor:apt:main]]</p>
+
 <p>APT starts from a Bayesian factorization of the VLA policy:</p>
 
 <p><latex>\pi(a \mid v,\ell) \propto \pi^p(a \mid v)\,\mathcal{L}(\ell \mid v,a)</latex></p>
@@ -204,6 +206,8 @@
 
 <h2>DreamX-World 1.0: A General-Purpose Interactive World Model</h2>
 <p>DreamX Team (2026) · <a href="https://huggingface.co/papers/2606.16993">HF</a> · <a href="https://arxiv.org/abs/2606.16993">PDF</a> · <a href="https://github.com/AMAP-ML/DreamX-World">code</a> · <a href="https://amap-ml.github.io/DreamX_World/">project</a></p>
+
+<p>[[figure-anchor:dreamx:main]]</p>
 
 <p>DreamX-World initializes from Wan2.2-TI2V and progressively adapts it for camera control, memory, events, and autoregressive streaming. The core algorithmic addition is E-PRoPE, an efficient variant of projective positional encoding. Instead of applying PRoPE's camera-aware attention over the full token set, E-PRoPE downsamples spatial tokens by 4× and runs a parallel camera-attention branch, then adds the result back as a residual. The paper reports this cuts latency by ~30% while keeping camera-control score within 0.14 points of full PRoPE.</p>
 
