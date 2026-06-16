@@ -209,15 +209,114 @@
 
 <p>[[figure-anchor:dreamx:main]]</p>
 
-<p>DreamX-World initializes from Wan2.2-TI2V and progressively adapts it for camera control, memory, events, and autoregressive streaming. The core algorithmic addition is E-PRoPE, an efficient variant of projective positional encoding. Instead of applying PRoPE's camera-aware attention over the full token set, E-PRoPE downsamples spatial tokens by 4× and runs a parallel camera-attention branch, then adds the result back as a residual. The paper reports this cuts latency by ~30% while keeping camera-control score within 0.14 points of full PRoPE.</p>
+<p>DreamX-World 1.0 is the latest move in a quickly maturing class of <i>general-domain interactive world models</i> — systems that turn a video generator into an action-conditioned simulator. The landscape has separated into three tiers. Passive text/image-to-video models (Sora, Lumiere, Cosmos Text2World) produce beautiful clips but cannot be steered frame-by-frame. Game-specific interactive engines — GameNGen on DOOM, Oasis on Minecraft, MineWorld, Matrix-Game 3.0 — prove closed-loop rollout is possible in narrow domains. General-domain interactive models — Genie, HY-WorldPlay 1.5, LingBot-World, and now DreamX — aim for photorealistic, game-style, and stylized scenes under user control. DreamX's central bet is that a 5B Wan2.2-based model, plus projective camera conditioning and a stack of training stages, can outperform larger rivals that are already public.</p>
+
+<table>
+  <colgroup>
+    <col width="160"/>
+    <col width="120"/>
+    <col width="180"/>
+    <col width="140"/>
+    <col width="160"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Model</th>
+      <th background-color="light-gray">Params</th>
+      <th background-color="light-gray">Control</th>
+      <th background-color="light-gray">Speed</th>
+      <th background-color="light-gray">Public artifacts</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>HY-WorldPlay 1.5</td>
+      <td>8B</td>
+      <td>discrete keys + PRoPE camera poses</td>
+      <td>24 FPS @ 720p (8× H800)</td>
+      <td>code, checkpoints, WorldCompass RL</td>
+    </tr>
+    <tr>
+      <td>LingBot-World</td>
+      <td>14B active / 28B total MoE</td>
+      <td>Plücker ray poses + WASD keys</td>
+      <td>16 FPS</td>
+      <td>code, checkpoints, eval scripts</td>
+    </tr>
+    <tr>
+      <td><b>DreamX-World 1.0</b></td>
+      <td><b>5B</b></td>
+      <td><b>6-DoF camera trajectory (+ text/image)</b></td>
+      <td><b>16 FPS (8× RTX 5090)</b></td>
+      <td>inference code + checkpoints; training code missing</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The headline numbers are striking. On DreamX's own 5-second evaluation, the 5B DreamX model leads the 8B HY-WorldPlay 1.5 and the 14B/28B LingBot-World on overall score and camera control. The same pattern holds at ~30 seconds and on revisit-consistency metrics. But the benchmark is internally designed and aligned with Omni-WorldBench/WorldScore axes, not an official public leaderboard, so the absolute numbers should be read as a relative signal among these three systems rather than as a universal ranking.</p>
+
+<table>
+  <colgroup>
+    <col width="180"/>
+    <col width="110"/>
+    <col width="130"/>
+    <col width="110"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Metric</th>
+      <th background-color="light-gray">HY 8B</th>
+      <th background-color="light-gray">LingBot 14B</th>
+      <th background-color="light-gray">DreamX 5B</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Camera control (5 s)</td>
+      <td>65.12</td>
+      <td>71.73</td>
+      <td><b>73.75</b></td>
+    </tr>
+    <tr>
+      <td>Overall (5 s)</td>
+      <td>80.79</td>
+      <td>80.45</td>
+      <td><b>84.76</b></td>
+    </tr>
+    <tr>
+      <td>Overall (~30 s)</td>
+      <td>68.85</td>
+      <td>67.43</td>
+      <td><b>70.41</b></td>
+    </tr>
+    <tr>
+      <td>ΔPSNR on revisit</td>
+      <td>3.19</td>
+      <td>0.61</td>
+      <td><b>3.92</b></td>
+    </tr>
+    <tr>
+      <td>ΔLPIPS on revisit</td>
+      <td>0.202</td>
+      <td>0.039</td>
+      <td><b>0.232</b></td>
+    </tr>
+  </tbody>
+</table>
 
 <p>[[figure-anchor:dreamx:inference]]</p>
 
-<p>Our inspection of the released inference code confirms the camera branch is implemented (<code>PropeSelfAttention</code> / <code>CausalPropeSelfAttention</code>), but also surfaces a gap: the public autoregressive config sets <code>eprope: false</code>, which selects the full-dim branch (<code>attn_compress=1</code>) rather than the efficient one. Parameter counts derived from the config give ~5.0 B for the base DiT, ~5.3 B with E-PRoPE, and ~6.1 B with full PRoPE. The released model is advertised as 5B, so the checkpoint may override one of these flags, or the public config may not match the published model exactly.</p>
+<p>The most concrete technical advance is E-PRoPE, an efficient camera-conditioning layer. The original PRoPE (<i>Cameras as Relative Positional Encoding</i>, arXiv:2507.10496) encodes camera intrinsics and extrinsics directly into self-attention by treating the 4×4 projective transform as a relative position code. E-PRoPE keeps the projective term but moves it to a parallel branch: it reportedly downsamples spatial tokens from ~18k to ~4k, compresses the branch dimension, drops the RoPE submatrix, and adds the branch back as a residual. The paper claims this cuts latency by ~26% (80 s → 59 s on 8× H20) while losing only 0.14 camera-control points (73.89 → 73.75).</p>
 
-<p>The biggest discrepancy is memory. The paper describes geometry-guided retrieval of non-local memory frames and residual recycling to handle revisits. The released inference code implements only a local rolling KV cache with sink tokens and Block-Relativistic RoPE. There is no code that retrieves earlier frames by camera-pose overlap, packs memory frames into the token sequence, or perturbs conditioning latents for error recycling. Either this mechanism is training-only, folded into weights, or omitted from the public snapshot; in any case it is not auditable.</p>
+<p>Our code inspection confirms the parallel camera-attention branch exists, but the public autoregressive config sets <code>eprope: false</code>, which selects <code>attn_compress=1</code> rather than the compressed branch. The released code also does not implement the claimed spatial token downsampling; it only exposes dimension compression. Parameter counts derived from the config are ~5.0 B for the base DiT, ~5.3 B with E-PRoPE compression, and ~6.1 B with full PRoPE. The advertised 5B model may override these flags in the checkpoint, or the public config may not match the paper's E-PRoPE description. Either way, the efficiency story is only partially auditable from the released code.</p>
 
-<p>Event instruction tuning is also prompt-only in the release. The structured per-entity event records described in the paper are not backed by a parser or event module; rich captions in <code>eval.json</code> are fed through the standard text encoder. The training stages that turn Wan2.2 into DreamX-World—camera-aware fine-tuning, memory conditioning, event instruction tuning, DMD distillation, and RL post-training—are absent from the repository. The inference path is clean and runnable, but the quantitative edge over HY-WorldPlay 1.5 and LingBot-World cannot be reproduced from code alone.</p>
+<p>The memory story is similar. The paper describes a geometry-guided retrieval module that packs non-local memory frames into the token sequence, plus residual recycling that perturbs conditioning latents with self-generated errors (an idea borrowed from Stable Video Infinity). The released inference code, however, implements only a local rolling KV cache with sink tokens and Block-Relativistic RoPE. Matrix-Game 3.0, which arrived slightly earlier, ships a similar camera-aware memory retrieval path and reports 40 FPS at 720p — so DreamX's description is plausible, but the public snapshot does not expose the retrieval logic. The strong revisit-consistency numbers therefore cannot be traced to a visible mechanism.</p>
+
+<p>The training pipeline that turns Wan2.2-TI2V into DreamX-World is almost entirely absent from the release. The inference skeleton does follow the right recipe — causal forcing, a DMD-style 4-step schedule, and Infinity-RoPE-style block-relativistic position encoding — which matches contemporaneous work such as CausVid. But the trainers for camera-aware fine-tuning, memory conditioning, event instruction tuning, DMD distillation, and RL post-training are not in the repository. The RL stage is especially opaque: the paper cites camera-control and video-quality reward models trained with DiffusionNFT, but no reward code or checkpoints are public.</p>
+
+<p>Event instruction tuning follows the same pattern. The paper claims composable multi-entity event control built from structured per-entity event records. In the released code, events enter only as natural-language captions in <code>eval.json</code>; there is no event parser, no entity-level conditioning module, and no structured-event data loader. The capability may emerge from rich captions in the training mix, but in the public artifact it is indistinguishable from strong prompt following.</p>
+
+<p>What this means for the field is that DreamX-World is a strong <i>engineering integration</i> and a useful inference engine, but not yet a reproducible training recipe. The fact that HY-WorldPlay 1.5, LingBot-World, and DreamX are all public makes this a rare open-source frontier where the comparisons can be rerun and extended. At the same time, the reliance on self-designed metrics and VLM judges (Gemini-3.1-Pro for artifact detection) highlights a deeper problem: without ground-truth future videos, interactive world models are evaluated by proxies that may not capture what matters for downstream agents. The same period's BadWorld paper explicitly attacks this weakness, showing that visual world models are vulnerable to adversarial perturbations precisely because there is no real future to compare against. DreamX's numbers are defensible as a relative signal; their meaning for embodied agents remains an open question.</p>
 
 <h1>Cross-cutting: policies, world models, and the reproducibility gap</h1>
 
