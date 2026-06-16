@@ -58,7 +58,7 @@
 
 <p>The training objective mixes action regression, future-feature matching, and future-depth supervision:</p>
 
-<p><latex>\\mathcal{L}_{\\text{total}} = 3\\mathcal{L}_{\\text{act}} + \\mathcal{L}_{\\text{feat}} + 3\\mathcal{L}_{\\text{depth}}</latex></p>
+<p><latex>\mathcal{L}_{\text{total}} = 3\mathcal{L}_{\text{act}} + \mathcal{L}_{\text{feat}} + 3\mathcal{L}_{\text{depth}}</latex></p>
 
 <p>The action and depth terms are weighted 3×; the feature term is weighted 1×. The depth and feature losses anchor the predictor to real geometric transitions; the action loss is standard L1 regression on an 8-step end-effector chunk.</p>
 
@@ -147,7 +147,7 @@
 
 <p>APT starts from a Bayesian factorization of the VLA policy:</p>
 
-<p><latex>\\pi(a \\mid v,\\ell) \\propto \\pi^p(a \\mid v)\\,\\mathcal{L}(\\ell \\mid v,a)</latex></p>
+<p><latex>\pi(a \mid v,\ell) \propto \pi^p(a \mid v)\,\mathcal{L}(\ell \mid v,a)</latex></p>
 
 <p>The first term is a language-agnostic vision-action prior; the second is a language-conditioned likelihood. The paper argues that vision-action pairs are inherently balanced (every frame has its own action), whereas full VLA triplets are language-poor, so pretraining the action expert on vision-action data removes the shortcut incentive before language is introduced.</p>
 
