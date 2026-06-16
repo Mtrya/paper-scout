@@ -5,7 +5,7 @@ Workflow:
 1. Preflight - confirm the workspace is in shape and read `runs/INDEX.md` to see what has already been covered.
 2. Scout - pull a broad recent pool of papers from the configured source.
 3. Filter - fast-scan the pool, then pick a shortlist worth noticing and a smaller set worth deep investigation, and download reading targets with MinerU.
-4. **Deep-dive - the heart of the run.** Investigate the selected papers and the strongest questions they raise: inspect code, write or run probes, compare related work, derive mechanisms, and preserve the evidence that supports the report. Use subagents proactively when the work splits cleanly.
+4. **Deep-dive - the heart of the run.** Investigate the selected papers and the strongest questions they raise: inspect code, write or run probes, compare related work, derive mechanisms, and earn insights. Use subagents when the work splits cleanly; push back on subagents when their returns are naive reorganization or audit-driven.
 5. Write - synthesize the findings into `runs/<run-id>/report.docxxml` with rich illustrative artifacts and a completed run checklist.
 6. Verify and deliver - run the workspace verifier in prepublish mode; publish the report, insert media, and notify the user in Feishu only after it passes.
 7. Log and finalize - append the run to `runs/INDEX.md`, clean scratch, run the workspace verifier in final mode, then finalize the branch.
