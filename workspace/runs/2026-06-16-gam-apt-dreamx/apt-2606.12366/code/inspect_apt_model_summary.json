@@ -1,0 +1,38 @@
+{
+  "config": {
+    "hdim": 768,
+    "num_heads": 12,
+    "num_diffusion_layers": 20,
+    "idim": 1536
+  },
+  "stage0_counts": {
+    "total": 110449674,
+    "context_encoder": 24791040,
+    "diffusion_head": 85658634,
+    "  |- traj_context_attn": 82668800,
+    "  |    |- attention_blocks": 82653440,
+    "  |    |- layer_gates": 15360,
+    "  |- input_encoders": 2978304,
+    "  |- final_head": 8458
+  },
+  "stage1_counts": {
+    "total": 193103114,
+    "context_encoder": 24791040,
+    "diffusion_head": 168312074,
+    "  |- traj_context_attn": 165322240,
+    "  |    |- attention_blocks": 165306880,
+    "  |    |- layer_gates": 15360,
+    "  |- input_encoders": 2978304,
+    "  |- final_head": 8458
+  },
+  "growth": {
+    "absolute": 82653440,
+    "relative_pct": 74.83
+  },
+  "hybrid_layer_trace": {
+    "input": "torch.Size([2, 160, 192])",
+    "output": "torch.Size([2, 160, 192])",
+    "num_layers": "8",
+    "gate_shape": "torch.Size([8, 192])"
+  }
+}

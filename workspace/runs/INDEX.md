@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-06-16 — 2026-06-15 to 2026-06-16
+- Doc: https://fudan-nlp.feishu.cn/docx/NtxjdBv3AoNSQPxWD4XcqFpqnce
+- Run: runs/2026-06-16-gam-apt-dreamx/
+- Deep threads: Geometric Action Model (2606.17046), APT action-expert pretraining (2606.12366), DreamX-World 1.0 (2606.16993)
+- Covered papers: 2606.17046, 2606.12366, 2606.16993
+- Shortlisted papers: 2606.15631, 2606.09813, 2606.06194, 2606.14777, 2606.16295, 2606.17030, 2606.16519
+
 ## 2026-06-15 — 2026-06-15
 - Doc: https://fudan-nlp.feishu.cn/docx/SVnEd0IsyobD8fx71yPcHPCynsd
 - Run: runs/2026-06-15-mu0-hyvla/

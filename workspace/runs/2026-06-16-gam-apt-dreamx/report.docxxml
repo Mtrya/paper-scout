@@ -1,0 +1,222 @@
+<title>Paper Scout Research Report — 2026-06-16</title>
+
+<p>The 2026-06-15/16 paper drop is dominated by three overlapping bets: using geometric foundation models as robot-policy backbones, rethinking how vision-language-action models are trained so they actually follow language, and turning video generators into real-time interactive world models. This run deep-dives one strong paper from each bet and finds that the headline numbers are mostly defensible—but the reproducible, buildable part is often smaller than the abstract suggests.</p>
+
+<callout emoji="✅" background-color="light-green">
+  <p><b>Standout:</b> <i>Geometric Action Model</i> is the clearest seed for a buildable idea. It shows how to split a pretrained depth/pose foundation model and insert a lightweight causal world model, producing a 1.4B-parameter policy that runs at ~145 Hz and holds up under camera perturbations.</p>
+</callout>
+
+<h1>Geometry as the robot-policy substrate</h1>
+
+<p>Recent VLAs and world-action models operate on 2D pixels or 2D-derived latents; the 3D structure needed for contact-rich manipulation is left implicit. A new line of work is trying to make geometry the native representation instead. The strongest entry this period repurposes a geometric foundation model (GFM) as the policy itself, not merely as a feature extractor.</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>ReCAP: Retrieve, Don't Retrain</b> (Park et al., 2026)</td>
+      <td>Adapts a frozen VLA/WAM to new tasks at test time by retrieving cheap cross-embodiment demonstrations rather than collecting target teleop.</td>
+      <td>Makes task expansion an indexing problem; pairs naturally with video-world-action backbones like Cosmos Policy.</td>
+      <td><a href="https://huggingface.co/papers/2606.15631">HF</a> / <a href="https://arxiv.org/abs/2606.15631">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>iMaC</b> (Wu et al., 2026)</td>
+      <td>Replaces low-D action vectors with motion/contact images as the action interface for embodied world models.</td>
+      <td>Tests whether visual action tokens generalize better across embodiments than joint-angle vectors.</td>
+      <td><a href="https://huggingface.co/papers/2606.09813">HF</a> / <a href="https://arxiv.org/abs/2606.09813">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>ActiveMimic</b> (Lin et al., 2026)</td>
+      <td>Pretrains on egocentric human video with explicit active-perception (camera-motion) signals to close the gap to robot pretraining.</td>
+      <td>Surfaces a missing supervision signal in large human-video pretraining datasets.</td>
+      <td><a href="https://huggingface.co/papers/2606.06194">HF</a> / <a href="https://arxiv.org/abs/2606.06194">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Geometric Action Model for Robot Policy Learning</h2>
+<p>Han et al. (2026) · <a href="https://huggingface.co/papers/2606.17046">HF</a> · <a href="https://arxiv.org/abs/2606.17046">PDF</a> · <a href="https://cvlab-kaist.github.io/Geometric-Action-Model/">project</a></p>
+
+<p>GAM's central claim is that a pretrained GFM can be the <i>shared substrate</i> for perception, future-state prediction, and action decoding in a manipulation policy. The authors take DA3-Giant (a 40-block DinoV2 <code>vitg</code> trained for metric depth, pose, and multi-view geometry), split it at layer 12, insert a 12-layer causal future predictor, and route predicted future geometry tokens back through the remaining DA3 blocks. A lightweight action head decodes the action chunk; the original DPT depth head decodes future geometry. The result is a single forward pass that predicts both what happens next and what to do about it.</p>
+
+<p>[[figure-anchor:gam:overview]]</p>
+
+<p>The architecture is more surgical than the abstract implies. Because DA3 blocks 0–12 are frozen and the DPT head is frozen, only ~983 M of the ~1.4 B parameters are trainable: the later DA3 blocks (already pretrained to decode geometry), the 210 M predictor, and the 8 M action head. Our probe against the open Depth-Anything-3 code confirms the backbone parameter split and that layer 13 is the first alternating local/global-attention layer, so the split sits at a natural seam. The first DPT feature layer is 19, which means predicted tokens at the split can still be decoded into future depth maps.</p>
+
+<p>The training objective mixes action regression, future-feature matching, and future-depth supervision:</p>
+
+<p><latex>\\mathcal{L}_{\\text{total}} = \\lambda_{\\text{act}} \\mathcal{L}_{\\text{act}} + \\lambda_{\\text{feat}} \\mathcal{L}_{\\text{feat}} + \\lambda_{\\text{depth}} \\mathcal{L}_{\\text{depth}}</latex></p>
+
+<p>with <latex>\\lambda_{\\text{act}}=3, \\lambda_{\\text{feat}}=1, \\lambda_{\\text{depth}}=3</latex>. The depth and feature losses anchor the predictor to real geometric transitions; the action loss is standard L1 regression on an 8-step end-effector chunk.</p>
+
+<p>The numbers are mostly consistent with the paper, with one caveat. The open DA3 <code>DPT</code> head is ~35.6 M parameters, whereas GAM reports 50.1 M. The discrepancy is small relative to the total model size but suggests the GAM authors use a variant head or include auxiliary geometry heads. More importantly, the headline 55× speedup over Cosmos-Policy is largely a single-pass-vs-diffusion effect: GAM takes 6.9 ms with CUDA graphs, while Cosmos-Policy takes 382.4 ms. The GFM substrate helps efficiency, but the order-of-magnitude gain comes from avoiding multi-step denoising.</p>
+
+<table>
+  <colgroup>
+    <col width="160"/>
+    <col width="100"/>
+    <col width="120"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Method</th>
+      <th background-color="light-gray">Size</th>
+      <th background-color="light-gray">Latency</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cosmos-Policy</td>
+      <td>2B</td>
+      <td>382.4 ms</td>
+    </tr>
+    <tr>
+      <td>OpenVLA-OFT</td>
+      <td>7B</td>
+      <td>77.8 ms</td>
+    </tr>
+    <tr>
+      <td>π0.5</td>
+      <td>3.3B</td>
+      <td>29.2 ms</td>
+    </tr>
+    <tr>
+      <td><b>GAM</b></td>
+      <td>1.4B</td>
+      <td><b>6.9 ms</b></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The camera-robustness claim is the most interesting. On LIBERO-Plus aggregated camera perturbations, GAM reaches ~91% vs. π0.5 ~80% and Cosmos-Policy ~89%. The gain is plausible: depth, scale, and occlusion are explicit in the GFM latent space, so moving the camera perturbs the latent representation less severely than it perturbs pure 2D image features. The real-robot experiments (four tasks, ~200 demos each, external camera shifted 85 cm and 45°) show the same pattern.</p>
+
+<p>What blocks a quick reproduction: the GAM code and the Track4World-tuned DA3-Giant checkpoint are not yet public. The paper also leaves several implementation details implicit—the exact T5 language-encoder variant, the causal-mask shapes in the decoder, and the precise data filtering for the 784K-trajectory pretraining mixture. Pretraining cost is substantial: 64 GH200 GPUs for ~96 hours plus per-benchmark fine-tuning.</p>
+
+<hr/>
+
+<h1>Training VLAs to follow language, not just labels</h1>
+
+<p>Continuous-action VLAs achieve strong in-distribution manipulation, but they frequently collapse to visual shortcuts when language instructions become unseen or compositional. The leading diagnosis is that the action expert starts randomly and is trained on imbalanced VLA data where every trajectory shares one language instruction. This period's strongest response treats action-expert pretraining as the fix.</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>JoyAI-VL-Interaction</b> (Yao et al., 2026)</td>
+      <td>Real-time vision-language interaction agent that proactively detects and responds to events in a video stream.</td>
+      <td>Pushes VL agents from turn-based QA toward continuous monitoring and low-latency response.</td>
+      <td><a href="https://huggingface.co/papers/2606.14777">HF</a> / <a href="https://arxiv.org/abs/2606.14777">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>VisualClaw</b> (Tu et al., 2026)</td>
+      <td>Personalized real-time agent for the physical world with user-specific memory and tool-use workspaces.</td>
+      <td>Surfaces deployment gaps for VL agents: latency, static scaffolds, and benchmark mismatch.</td>
+      <td><a href="https://huggingface.co/papers/2606.16295">HF</a> / <a href="https://arxiv.org/abs/2606.16295">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>APT: Action Expert Pretraining Improves Instruction Generalization of VLAs</h2>
+<p>Xu et al. (2026) · <a href="https://huggingface.co/papers/2606.12366">HF</a> · <a href="https://arxiv.org/abs/2606.12366">PDF</a> · <a href="https://github.com/xukechun/APT">code</a></p>
+
+<p>APT starts from a Bayesian factorization of the VLA policy:</p>
+
+<p><latex>\\pi(\\mathbf{a} \\mid \\mathbf{v}, \\ell) \\propto \\pi^p(\\mathbf{a} \\mid \\mathbf{v}) \\cdot \\mathcal{L}(\\ell \\mid \\mathbf{v}, \\mathbf{a})</latex></p>
+
+<p>The first term is a language-agnostic vision-action prior; the second is a language-conditioned likelihood. The paper argues that vision-action pairs are inherently balanced (every frame has its own action), whereas full VLA triplets are language-poor, so pretraining the action expert on vision-action data removes the shortcut incentive before language is introduced.</p>
+
+<p>Our code inspection of the released repository shows this is implemented as a <i>training recipe</i> rather than a separate inference network. In Stage 0 (<code>train_stage=0</code>), only the first N/2 attention layers are built, language tokens are masked out of the causal self-attention, and the VLM is frozen. In Stage 1 (<code>train_stage=1</code>), the stack expands to N interleaved layers: odd-index layers inherit the prior, even-index layers are new mRoPE layers that inject language. The key code path is in <code>VLA.load_from_pretrain(..., load_from_va=True)</code>, which copies each Stage-0 layer i into Stage-1 layer 2i+1.</p>
+
+<p>[[figure-anchor:apt:architecture]]</p>
+
+<p>Layer-wise gated fusion keeps the prior from being washed out. At every layer the action expert mixes its own vision-language stream with a VLM highway feature through a learnable sigmoid gate:</p>
+
+<pre lang="python" caption="Gated fusion in APT's action expert"><code>vl = vl * sigmoid(w_i) + vl_highway_i * (1 - sigmoid(w_i))</code></pre>
+
+<p>This is exactly the paper's Equation 3. A parameter-count probe on the base config (hidden dim 768, 20 layers) gives 110.45 M parameters in Stage 0 and 193.10 M in Stage 1—the entire growth comes from doubling the attention blocks. The action expert remains tiny next to the Qwen3-VL-2B backbone.</p>
+
+<p>The comparison with neighbors is illuminating. π0.5 protects the VLM with Knowledge Insulation (stop-gradient from action expert) and co-trains on discrete FAST tokens. BayesVLA uses the same factorization but freezes the prior in Stage 2 and relies on a pre/post-contact architecture. APT's move is to keep the prior inside the same weights and jointly finetune it with the likelihood, which the ablations show is enough to make joint VLM tuning helpful rather than harmful. On LIBERO-PRO, π0 and OpenVLA score near 0% under language perturbations; π0.5 recovers on positional shifts but not on unseen task wording; APT substantially outperforms both.</p>
+
+<p>Reproduction is feasible but not cheap. Code and checkpoints are public, but the pretraining mixture spans DROID, AgiBotWorld, InternData, and LIBERO/ALOHA, and training runs at batch size 256 for 100k iterations per stage. The main practical blocker is data collection and GPU hours, not missing weights.</p>
+
+<hr/>
+
+<h1>Interactive world models beyond passive video</h1>
+
+<p>The second half of the drop is crowded with world-model papers, but most are incremental. The one that shipped usable inference code is DreamX-World, which builds a real-time interactive video world on top of Wan2.2. Its value is systems-level integration—camera control, memory, event prompting, autoregressive distillation, and serving optimization—rather than a single new algorithmic primitive.</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Qwen-RobotWorld</b> (Zhang et al., 2026)</td>
+      <td>Large technical report on a language-conditioned video world model for manipulation, driving, navigation, and human-to-robot transfer.</td>
+      <td>Shows the scale of industrial efforts to unify embodied world modeling under natural-language actions; no public code yet.</td>
+      <td><a href="https://huggingface.co/papers/2606.17030">HF</a> / <a href="https://arxiv.org/abs/2606.17030">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>BadWorld</b> (Shen et al., 2026)</td>
+      <td>Adversarial attacks on visual world models that exploit the lack of ground-truth future videos.</td>
+      <td>As world models become deployment artifacts, their robustness to perturbations becomes a security concern.</td>
+      <td><a href="https://huggingface.co/papers/2606.16519">HF</a> / <a href="https://arxiv.org/abs/2606.16519">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>DreamX-World 1.0: A General-Purpose Interactive World Model</h2>
+<p>DreamX Team (2026) · <a href="https://huggingface.co/papers/2606.16993">HF</a> · <a href="https://arxiv.org/abs/2606.16993">PDF</a> · <a href="https://github.com/AMAP-ML/DreamX-World">code</a> · <a href="https://amap-ml.github.io/DreamX_World/">project</a></p>
+
+<p>DreamX-World initializes from Wan2.2-TI2V and progressively adapts it for camera control, memory, events, and autoregressive streaming. The core algorithmic addition is E-PRoPE, an efficient variant of projective positional encoding. Instead of applying PRoPE's camera-aware attention over the full token set, E-PRoPE downsamples spatial tokens by 4× and runs a parallel camera-attention branch, then adds the result back as a residual. The paper reports this cuts latency by ~30% while keeping camera-control score within 0.14 points of full PRoPE.</p>
+
+<p>[[figure-anchor:dreamx:inference]]</p>
+
+<p>Our inspection of the released inference code confirms the camera branch is implemented (<code>PropeSelfAttention</code> / <code>CausalPropeSelfAttention</code>), but also surfaces a gap: the public autoregressive config sets <code>eprope: false</code>, which selects the full-dim branch (<code>attn_compress=1</code>) rather than the efficient one. Parameter counts derived from the config give ~5.0 B for the base DiT, ~5.3 B with E-PRoPE, and ~6.1 B with full PRoPE. The released model is advertised as 5B, so the checkpoint may override one of these flags, or the public config may not match the published model exactly.</p>
+
+<p>The biggest discrepancy is memory. The paper describes geometry-guided retrieval of non-local memory frames and residual recycling to handle revisits. The released inference code implements only a local rolling KV cache with sink tokens and Block-Relativistic RoPE. There is no code that retrieves earlier frames by camera-pose overlap, packs memory frames into the token sequence, or perturbs conditioning latents for error recycling. Either this mechanism is training-only, folded into weights, or omitted from the public snapshot; in any case it is not auditable.</p>
+
+<p>Event instruction tuning is also prompt-only in the release. The structured per-entity event records described in the paper are not backed by a parser or event module; rich captions in <code>eval.json</code> are fed through the standard text encoder. The training stages that turn Wan2.2 into DreamX-World—camera-aware fine-tuning, memory conditioning, event instruction tuning, DMD distillation, and RL post-training—are absent from the repository. The inference path is clean and runnable, but the quantitative edge over HY-WorldPlay 1.5 and LingBot-World cannot be reproduced from code alone.</p>
+
+<h1>Cross-cutting: policies, world models, and the reproducibility gap</h1>
+
+<p>Three patterns emerge across the deep threads. First, <b>language is becoming the universal action interface</b>: GAM conditions its predictor on T5 language tokens, APT conditions actions on Qwen3-VL language tokens, and DreamX/Qwen-RobotWorld treat natural-language prompts as event/action specifications. Second, <b>the boundary between policies and world models is blurring</b>: GAM predicts future geometry and actions in one pass; DreamX predicts future frames conditioned on camera/actions; Qwen-RobotWorld explicitly targets policy training augmentation. Third, <b>the buildable surface is smaller than the abstract</b>: GAM's code is coming soon, DreamX's training pipeline is missing from its release, and Qwen-RobotWorld has no public artifacts yet.</p>
+
+<p>The most honest takeaway is that these are strong research signals, not turnkey systems. GAM gives a concrete architecture for geometry-aware policies; APT gives a reproducible training recipe for language generalization; DreamX gives a usable inference engine for interactive world simulation. What is still missing is the full stack—data engine, training code, and checkpoints—that would let someone outside the authors' lab verify the headline numbers end-to-end.</p>
