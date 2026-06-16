@@ -1,0 +1,3 @@
+independent_first_frame: false
+warp_denoising_step: false
+context_noise: 0.1

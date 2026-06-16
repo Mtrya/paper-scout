@@ -97,3 +97,4 @@ Run the workspace verifier as directed by `workspace-manage`; if it fails, fix t
 - Do not stop at "no code"; try a reconstruction, related implementation, or related-paper triangulation.
 - Do not perform cargo-cult reproduction. Spend resources when the expected insight justifies them.
 - Do not let related-work exploration become a literature review.
+- Do not stop at logging a code-paper discrepancy; explain what the gap means in the context of related work and the broader research question.

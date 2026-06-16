@@ -1,0 +1,17 @@
+{
+  "_class_name": "CausalWanModel",
+  "_diffusers_version": "0.33.0",
+  "dim": 3072,
+  "eps": 1e-06,
+  "ffn_dim": 14336,
+  "freq_dim": 256,
+  "in_dim": 48,
+  "model_type": "ti2v",
+  "num_heads": 24,
+  "num_layers": 30,
+  "out_dim": 48,
+  "text_len": 512,
+  "add_control_adapter": true,
+  "downscale_factor_control_adapter":16,
+  "add_ref_conv": false
+}

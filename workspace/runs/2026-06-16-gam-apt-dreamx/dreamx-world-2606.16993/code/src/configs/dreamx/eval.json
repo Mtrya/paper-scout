@@ -1,0 +1,206 @@
+[
+  {
+    "image_path": "./demo/36_Tilt_Down.png",
+    "caption": "Style: Photorealistic. A breathtaking coastal landscape captured from a high vantage point, showcasing rugged orange-brown cliffs framing a vibrant turquoise ocean. In the foreground, dry grasses and rocky outcrops lead the eye down into a dramatic cove where powerful waves crash onto the shore, creating frothy white surf. The middle ground reveals the dynamic interaction between water and rock, with sunlight highlighting the textures of the seafoam and cliff faces. Beyond, the ocean stretches to the horizon under a clear blue sky, with distant headlands adding depth. The lighting is bright and natural, casting sharp shadows that accentuate the geological layers of the cliffs. The overall emotional tone is one of awe-inspiring natural beauty, combining tranquility with the raw energy of the sea.",
+    "action_seq": [
+      "wk"
+    ],
+    "action_speed_list": [
+      6
+    ]
+  },
+  {
+    "image_path": "./demo/007.jpg",
+    "caption": "Style: Minecraft. A serene Minecraft landscape at sunset, featuring a blocky cliffside overlooking a calm ocean. In the foreground, grassy terrain with yellow flowers and red soil leads up to a rugged cliff composed of layered red and gray blocks. Sparse trees grow on rocky outcrops, adding life to the structured environment. The midground reveals the cliff's dramatic descent into the water, while the background showcases a vast ocean reflecting the warm hues of the setting sun. The sky is painted in gradients of orange, pink, and pale blue, with pixelated clouds drifting above. The lighting casts soft shadows and enhances the textured, cubic surfaces, creating a peaceful and immersive atmosphere that blends natural beauty with digital artistry.",
+    "action_seq": [
+      "w",
+      "wj"
+    ],
+    "action_speed_list": [
+      4,
+      6
+    ]
+  },
+  {
+    "image_path": "./demo/VCG211326403844_crop.jpg",
+    "caption": "Style: Photorealistic. A breathtaking photorealistic view of a traditional East Asian pagoda-style tower standing atop a lush hillside at golden hour. The structure features multiple tiered roofs with dark, curved eaves and ornate wooden balconies, bathed in warm sunlight that accentuates its textures and architectural details. The foreground consists of young trees and terraced stone paths, while the midground reveals rolling green hills covered in dense forest. In the distance, misty mountains fade into a gradient sky transitioning from deep blue to soft yellow, evoking a peaceful and majestic atmosphere. The overall mood is serene, grand, and deeply immersive, capturing harmony between human craftsmanship and nature.",
+    "action_seq": [
+      "w",
+      "dj"
+    ],
+    "action_speed_list": [
+      4,
+      6
+    ]
+  },
+  {
+    "image_path": "./demo/51_L-shape_Forward.png",
+    "caption": "Style: Photorealistic. A warmly lit bedroom viewed through an open doorway, bathed in golden morning sunlight streaming through a large arched window. The scene features soft beige walls, sheer curtains gently filtering light, and a neatly made bed with cream linens and a knitted throw. A small potted plant rests on the windowsill, and a wooden nightstand sits beside the bed. Sunlight casts long, gentle shadows across the polished wooden floor and a plush rug, creating a serene and inviting atmosphere. The pendant lamp above glows softly, adding to the cozy ambiance. The spatial layout draws the eye from the darkened entryway into the luminous interior, emphasizing depth and tranquility. Overall, the mood is peaceful, warm, and contemplative.",
+    "action_seq": [
+      "w",
+      "j"
+    ],
+    "action_speed_list": [
+      4,
+      6
+    ]
+  },
+  {
+    "image_path": "./demo/VCG211376318837_crop.jpg",
+    "caption": "Style: Photorealistic. A luxurious wooden balcony at twilight overlooks a tranquil lake surrounded by distant mountains and a small forested island. The warm glow of interior lighting spills through floor-to-ceiling glass doors, contrasting with the cool blues and golds of the evening sky. The deck features minimalist lounge furniture, potted plants, and a low coffee table, all set on richly textured wood planks. Beyond the railing, the calm water reflects the fading sunlight, while nearby buildings and docks add subtle human presence. The scene radiates serenity, elegance, and harmony between modern architecture and nature, evoking a feeling of peaceful retreat.",
+    "action_seq": [
+      "w",
+      "j"
+    ],
+    "action_speed_list": [
+      4,
+      6
+    ]
+  },
+  {
+    "image_path": "./demo/65_L-shape_Forward.png",
+    "caption": "Style: Photorealistic. A serene, moss-covered stone well sits at the center of a quiet garden path, surrounded by smooth, rounded stepping stones embedded in damp earth scattered with fallen autumn leaves. The well's circular structure is built from layered, weathered stones, each edge thickly draped in vibrant green moss that cascades down into the dark, shadowed interior. The foreground features detailed textures—wet stone, delicate moss strands, and crisp leaf edges—while the background softly blurs into a low stone wall and dense greenery. Soft, diffused lighting enhances the cool, earthy palette of greens, grays, and browns, evoking a sense of peace, timelessness, and natural harmony. The overall emotional tone is meditative and tranquil, inviting contemplation.",
+    "action_seq": [
+      "w",
+      "dj"
+    ],
+    "action_speed_list": [
+      4,
+      6
+    ]
+  },
+  {
+    "image_path": "./demo/008.png",
+    "caption": "Style: Photorealistic. A breathtaking aerial view of an active volcanic crater at twilight, featuring a vast lava lake with glowing red-orange cracks cutting through cooled black basalt. The foreground displays jagged, textured volcanic rock forming the crater rim, while steam rises gently from fissures along the slopes. The midground reveals the expansive, cracked surface of the lava lake, illuminated by internal heat, creating a stark contrast against the darkened surroundings. In the background, distant mountain ridges stretch across the horizon beneath a mesmerizing sky transitioning from deep violet to soft pink and golden hues near the horizon. The low-angle lighting enhances depth and texture, casting long shadows and highlighting geological detail. The overall atmosphere is one of primal power, quiet drama, and natural wonder.",
+    "action_seq": [
+      "dj",
+      "wk"
+    ],
+    "action_speed_list": [
+      6,
+      6
+    ]
+  },
+  {
+    "image_path": "./demo/005.png",
+    "caption": "Style: 3D Rendering / CGI. A breathtaking sci-fi landscape featuring massive, glowing coiled conduits embedded in snow-covered terrain, emitting vibrant purple and blue light. Icicles hang from the metallic structures, emphasizing the frigid environment. In the background, a colossal circular ruin rises around a central valley, partially buried under snow and ice. Above, the night sky is alive with swirling green and purple auroras, casting an ethereal glow over the entire scene. The atmosphere is serene yet mysterious, blending advanced technology with natural beauty in a frozen, alien world. The overall emotional tone is one of awe, solitude, and quiet wonder.",
+    "action_seq": [
+      "wi"
+    ],
+    "action_speed_list": [
+      6
+    ]
+  },
+  {
+    "image_path": "./demo/034_w.png",
+    "action_seq": [
+      "wj",
+      "wl",
+      "w"
+    ],
+    "action_speed_list": [
+      6,
+      6,
+      4
+    ],
+    "caption": "Style: 3D Rendering / CGI. A narrow, icy passage flanked by massive metallic structures under a crimson sky, with a snow-capped mountain glowing in the distance. The camera moves forward while panning left, revealing a frozen river reflecting the red hues of the sky and the edge of a vast glacier. The camera then moves forward while panning right, revealing another section of the metallic structure with weathered panels and a distant cave entrance. The camera moves forward, revealing the full scale of the mountain peak rising above the horizon, its summit bathed in golden light."
+  },
+  {
+    "image_path": "./demo/12_发光森林中的精灵秘境_shot_06_wk.png",
+    "action_seq": [
+      "wj",
+      "wl",
+      "w"
+    ],
+    "action_speed_list": [
+      6,
+      6,
+      4
+    ],
+    "caption": "Style: 3D Rendering / CGI. A glowing emerald waterfall cascades into a misty, enchanted ravine surrounded by lush vegetation and floating bioluminescent orbs. The camera moves forward while panning left, revealing a winding root bridge over the luminous pool below. The camera then moves forward while panning right, revealing ancient moss-covered stone ruins partially hidden in the foliage. The camera moves forward, revealing a deeper chasm with shimmering water reflecting the glow of the waterfall and distant glowing flora."
+  },
+  {
+    "image_path": "./demo/37_漫游异星生态世界_shot_01_w_l.png",
+    "action_seq": [
+      "wl",
+      "wj",
+      "w"
+    ],
+    "action_speed_list": [
+      6,
+      6,
+      4
+    ],
+    "caption": "Style: 3D Rendering / CGI. A surreal alien desert under a twilight sky with two large moons and distant jagged mountains. The camera moves forward while panning right, revealing crystalline rock formations emerging from the undulating sand dunes. The camera then moves forward while panning left, revealing a vast expanse of glowing purple terrain with subtle bioluminescent patterns. The camera moves forward, revealing a lone, mysterious structure in the distance partially buried in the sand."
+  },
+  {
+    "image_path": "./demo/19_龙影掠过的悬崖王国_shot_05_s_l.png",
+    "action_seq": [
+      "w",
+      "wl"
+    ],
+    "action_speed_list": [
+      4,
+      6
+    ],
+    "caption": "Style: 3D Rendering / CGI. A dragon soars above a crumbling stone battlement at sunset, with a distant castle engulfed in flames perched on a mountain ridge. The camera moves forward, revealing the full height of the ancient wall and the fiery glow from within the castle towers. The camera then moves forward while panning right, revealing a vast mountainous valley below and the burning courtyard of the fortress."
+  },
+  {
+    "task_id": "001",
+    "image_path": "./demo/case4_22_山中神社与灵体夜行_shot_05.png",
+    "caption": "Style: Game Art / Concept Art. A mystical stone path marked with a radiant blue rune begins at the entrance of a narrow canyon, guiding the viewer toward a luminous staircase that ascends into a swirling aurora-filled sky. The camera moves forward along the winding stone path, revealing glowing steps rising upward through soft mist and drifting magical particles. As the camera continues to follow the path, it gently pans left, revealing ancient rock formations on the left side of the trail, their surfaces etched with faint, glowing magical symbols. The camera then smoothly pans right while advancing along the path, revealing a hidden waterfall on the right side, cascading into a pool of shimmering, enchanted water.",
+    "action_seq": [
+      "w",
+      "wj",
+      "wl"
+    ],
+    "action_speed_list": [
+      4,
+      6,
+      6
+    ]
+  },
+  {
+    "task_id": "000",
+    "image_path": "./demo/case2_01_霍格沃茨入学之夜_shot_05_l_w.png",
+    "caption": "Style: 3D Rendering / CGI. A dark, misty underground river flows beneath a massive stone archway, with faint light filtering through the fog ahead. The camera moves forward while panning left, revealing moss-covered rock walls and tangled vines hanging from above. The camera then moves forward, revealing a distant waterfall cascading into the river, surrounded by lush greenery in the dim glow.",
+    "action_seq": [
+      "wj",
+      "w"
+    ],
+    "action_speed_list": [
+      6,
+      4
+    ]
+  },
+  {
+    "task_id": "001",
+    "image_path": "./demo/case6_04_天空之城巡游_shot_01_wl.png",
+    "caption": "Style: 3D Rendering / CGI. A floating island above the clouds, featuring lush greenery, cascading waterfalls, and ancient stone arches under a golden sunrise. The camera moves forward, revealing a serene turquoise lake nestled among the cliffs. The camera then moves forward while panning right, revealing a narrow vine-covered bridge extending into the mist. The camera then moves forward while panning left, revealing more of the island's rugged terrain and distant cloud formations below.",
+    "action_seq": [
+      "w",
+      "wl",
+      "wj"
+    ],
+    "action_speed_list": [
+      4,
+      6,
+      6
+    ]
+  },
+  {
+    "task_id": "000",
+    "image_path": "./demo/case1_26_从森林到雪峰的高山攀登_shot_02_s_dj.png",
+    "caption": "Style: Photorealistic. A serene mountain campsite at twilight, captured in rich detail with natural lighting and realistic textures. In the foreground, a small campfire burns warmly within a circular stone fire pit, its orange flames flickering gently against the cool blue tones of the evening sky. The ground is covered in dry grass, moss, and scattered rocks, adding texture and depth to the scene. To the right, a green canvas tent stands slightly open, casting a subtle shadow and suggesting quiet human presence. Behind the campsite, rugged rock formations rise steeply, their surfaces weathered and partially covered in patches of lichen and low alpine vegetation. The background features towering, jagged mountain peaks silhouetted against a soft gradient sky transitioning from deep blue to faint hints of purple and pink near the horizon. The overall atmosphere is peaceful and contemplative, evoking solitude and connection with nature. The interplay of warm firelight and cool ambient light enhances the sense of tranquility and isolation. 8K, ultra high quality, photorealistic.",
+    "action_seq": [
+      "s", 
+      "sj",
+      "sl"
+    ],
+    "action_speed_list": [
+      4,
+      4,
+      4
+    ]
+  }
+]
