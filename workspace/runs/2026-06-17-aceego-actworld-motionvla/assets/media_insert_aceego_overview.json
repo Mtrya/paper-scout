@@ -1,0 +1,24 @@
+Inserting: ace-ego-0-fig1-overview.jpg -> document B5Ix...enMJ
+Root block ready: B5IxdNyLAoqHcNxyoZHc7CGenMJ (79 children)
+Creating block at index 79
+Block created: doxcnY3rdHYp5wBZzMQ4DogeFHc
+File uploaded: OFXbbP2WhouXRpxmWgHc787lng2
+Binding uploaded media to block doxcnY3rdHYp5wBZzMQ4DogeFHc
+{
+  "ok": true,
+  "identity": "user",
+  "data": {
+    "block_id": "doxcnY3rdHYp5wBZzMQ4DogeFHc",
+    "document_id": "B5IxdNyLAoqHcNxyoZHc7CGenMJ",
+    "file_token": "OFXbbP2WhouXRpxmWgHc787lng2",
+    "type": "image"
+  },
+  "_notice": {
+    "update": {
+      "command": "lark-cli update",
+      "current": "1.0.53",
+      "latest": "1.0.55",
+      "message": "lark-cli 1.0.55 available, current 1.0.53, run: lark-cli update"
+    }
+  }
+}

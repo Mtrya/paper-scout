@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-06-17 — 2026-06-16 to 2026-06-17
+- Doc: https://fudan-nlp.feishu.cn/docx/B5IxdNyLAoqHcNxyoZHc7CGenMJ
+- Run: runs/2026-06-17-aceego-actworld-motionvla/
+- Deep threads: ACE-Ego-0 egocentric-robot VLA pretraining (2606.17200), ActWorld action-aware interactive world model (2606.17730), MotionVLA dual-stream humanoid motion tokenizer (2606.15142)
+- Covered papers: 2606.17200, 2606.17730, 2606.15142
+- Shortlisted papers: 2606.17054, 2606.17030, 2606.15768, 2606.17043, 2606.16519
+
 ## 2026-06-16 — 2026-06-15 to 2026-06-16
 - Doc: https://fudan-nlp.feishu.cn/docx/NtxjdBv3AoNSQPxWD4XcqFpqnce
 - Run: runs/2026-06-16-gam-apt-dreamx/
