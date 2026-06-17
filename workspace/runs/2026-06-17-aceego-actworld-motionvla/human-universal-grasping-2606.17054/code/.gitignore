@@ -1,0 +1,4 @@
+# Local Python virtualenv used only to run the self-contained probes.
+.venv/
+__pycache__/
+*.pyc

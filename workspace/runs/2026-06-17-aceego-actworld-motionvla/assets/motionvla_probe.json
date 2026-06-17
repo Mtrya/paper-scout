@@ -1,0 +1,20 @@
+{
+  "single_stream": {
+    "mse_full": 0.028502105977386238,
+    "mse_base": 0.0004953828387078829,
+    "mse_phys": 0.056508828811347486,
+    "tokens_per_frame": 0.141
+  },
+  "dual_stream": {
+    "mse_full": 0.024407001277431846,
+    "mse_base": 0.005885530710220337,
+    "mse_phys": 0.04292847184464335,
+    "base_tokens_per_frame": 0.016666666666666663,
+    "phys_tokens_per_frame": 0.1328333333333333,
+    "total_tokens_per_frame": 0.14949999999999997
+  },
+  "energy_coverage": {
+    "base_k5": 0.9732353091239929,
+    "phys_k5": 0.11809483915567398
+  }
+}
