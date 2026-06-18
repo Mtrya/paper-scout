@@ -1,0 +1,220 @@
+<title>Paper Scout Research Report - 2026-06-18</title>
+
+<p>This run found three papers that each argue, in different ways, that the next leap in embodied and multimodal AI comes from <b>looping</b> rather than scaling: Guava shows that a well-designed harness can transfer embodied manipulation into a 4B model with fewer than 2K trajectories; Kairos treats long-horizon world modeling as a deployment-first architecture problem, not a data problem; and OmniAgent reframes long-video understanding as a query-driven POMDP in which perception itself is a reasoning action. All three have concrete artifacts to inspect—two with public code, one with a detailed project page—so the report grounds each claim in either traced implementation, a runnable probe, or an explicit blocker.</p>
+
+<callout emoji="✅" background-color="light-green">
+  <p><b>Standout:</b> OmniAgent (2606.19341) is the clearest seed for a research thread. Its released code implements the TAURA entropy-rescaled advantage exactly as described, and the OTA loop's strict media-purging makes the "active perception as reasoning" claim concrete. A 7B agent beating a 10× larger passive model while using 73% fewer frames is the kind of result that is worth understanding from the code up.</p>
+</callout>
+
+<h1>Harnessing embodied agents</h1>
+
+<p>The dominant story in robot learning has been end-to-end vision-language-action models trained on hundreds of thousands of real trajectories. The papers in this theme ask whether a smaller open model, wrapped in the right harness, can be enough. Guava is the strongest example; the shortlist contains related efforts in agentic environments and memory-driven evolution.</p>
+
+<table>
+  <colgroup>
+    <col width="220"/>
+    <col width="240"/>
+    <col width="240"/>
+    <col width="100"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>GameCraft-Bench</b> (Luo et al., 2026)</td>
+      <td>End-to-end game generation benchmark in Godot with 140 tasks and interactive gameplay verification.</td>
+      <td>Even the strongest coding agent scores only ~41%, exposing how hard it is to turn a specification into a complete, playable artifact.</td>
+      <td><a href="https://huggingface.co/papers/2606.17861">HF</a> <a href="https://arxiv.org/pdf/2606.17861">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>EgoCS-400K</b> (Guo et al., 2026)</td>
+      <td>400K first-person Counter-Strike videos (10K hours) with replay-grounded actions, states, and events.</td>
+      <td>A practical bridge between passive web video and costly embodied data for interactive world models.</td>
+      <td><a href="https://huggingface.co/papers/2606.18180">HF</a> <a href="https://arxiv.org/pdf/2606.18180">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Guava: An Effective and Universal Harness for Embodied Manipulation</h2>
+
+<p>Haowen Liu et al. (2026) · <a href="https://huggingface.co/papers/2606.18363">HF</a> · <a href="https://arxiv.org/pdf/2606.18363">PDF</a> · <a href="https://guava-harness.github.io">Project page</a></p>
+
+<p>Guava's central claim is that <b>harness design</b>—not model size—can unlock embodied manipulation. The authors identify three ingredients: iterative ReAct-style perception-reasoning-action loops, semantic action abstractions (grasp, align, move, release), and multimodal observations that combine an RGB view with a compact symbolic state. They then distill the resulting behavior into a 4B Qwen3.5-4B model using only 1,934 trajectories collected in simulation, and report zero-shot real-world Franka deployment.</p>
+
+<p>[[figure-anchor:guava:overview]]</p>
+
+<p>The paper's ablations make the design argument quantitative. On six long-horizon Robosuite tasks, moving from a one-shot harness to a closed-loop ReAct harness, from a low-level numeric action space to semantic tools, and from text-only to multimodal observations each gives large gains. The most striking result is that Guava-Agent-4B reaches an overall 75.6% success rate, above GPT-5.4 (70.2%) and a concurrent CaP-Agent0 baseline (62.7%). RL post-training is applied only to the two hardest long-horizon tasks and raises shell-game performance from 6.7% to 60.0%.</p>
+
+<p>[[figure-anchor:guava:react-ablation]]</p>
+
+<p>Because the project page lists code as "coming soon," I built a minimal pure-Python probe of the harness idea. The probe places a red cube in a basket using semantic tools and a hand-written ReAct policy; it can recover from a simulated grasp failure. Three ablations isolate the ingredients:</p>
+
+<pre lang="text" caption="Guava probe: 20-trial Monte Carlo over stochastic grasp failures"><code>ReAct + semantic + multimodal       success 20/20  avg_steps 6.0
+One-shot open-loop plan             success 12/20  avg_steps 4.0
+Low-level numeric moves             success  0/20  avg_steps 20.0
+Text-only observations              success  0/20  avg_steps 6.0</code></pre>
+
+<p>The toy environment confirms that each ingredient is load-bearing: iteration handles failure, semantic tools spare the planner from geometry, and the visual channel disambiguates otherwise identical objects. What the probe cannot verify is the headline real-world transfer, the exact data-engine curation, or the GRPO recipe, because none of those artifacts are public yet. The nearest open comparator with code is CaP-X/CaP-Agent0; Guava differentiates itself by distilling the harness into a compact model rather than treating the harness as a test-time-only scaffold.</p>
+
+<p>[[figure-anchor:guava:reasoning-trace]]</p>
+
+<hr/>
+
+<h1>World models as deployable infrastructure</h1>
+
+<p>Kairos is the most ambitious world-model stack in the pool: it wants to learn, maintain, and run worlds for physical AI. The shortlist contains two other structural contributions—3D-consistent multi-view generation and a large egocentric game dataset—that share the same conviction: world models must become operational substrates, not just video generators.</p>
+
+<table>
+  <colgroup>
+    <col width="220"/>
+    <col width="240"/>
+    <col width="240"/>
+    <col width="100"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>PAIWorld</b> (Huang et al., 2026)</td>
+      <td>Geometry-Aware Cross-View Attention, Geo-RoPE, and Latent 3D-REPA for 3D-consistent multi-view world models.</td>
+      <td>Ranks 1st on WorldArena and 2nd on AgiBot-Challenge2026; the first explicit geometric communication pathway for multi-view robotic manipulation.</td>
+      <td><a href="https://huggingface.co/papers/2606.18375">HF</a> <a href="https://arxiv.org/pdf/2606.18375">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Looped World Models</b> (Lu et al., 2026)</td>
+      <td>First looped architecture for world models: parameter-shared transformer block with adaptive computation.</td>
+      <td>Claims up to 100× parameter efficiency and establishes iterative latent depth as a new scaling axis.</td>
+      <td><a href="https://huggingface.co/papers/2606.18208">HF</a> <a href="https://arxiv.org/pdf/2606.18208">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>EgoCS-400K</b> (Guo et al., 2026)</td>
+      <td>Replay-grounded egocentric Counter-Strike dataset with 400K videos and aligned action/state/event traces.</td>
+      <td>Provides a scalable, auditable source of video-action-language trajectories between web video and real robot data.</td>
+      <td><a href="https://huggingface.co/papers/2606.18180">HF</a> <a href="https://arxiv.org/pdf/2606.18180">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Kairos: A Native World Model Stack for Physical AI</h2>
+
+<p>Kairos Team (2026) · <a href="https://huggingface.co/papers/2606.16533">HF</a> · <a href="https://arxiv.org/pdf/2606.16533">PDF</a> · <a href="https://github.com/kairos-agi/kairos-sensenova">Code</a></p>
+
+<p>Kairos argues that world models must be built as operational infrastructure from the start: they need a native cross-embodiment curriculum, a unified understanding-generation-prediction architecture, and deployment-aware co-design. The most concrete part of this vision is the <b>Hybrid Linear Temporal Attention</b> inside the DiT backbone. Local dynamics are handled by sliding-window attention (SWA), mid-range dependencies by dilated sliding-window attention (DSWA), and persistent global memory by Gated Linear Attention (GLA).</p>
+
+<p>[[figure-anchor:kairos:architecture]]</p>
+
+<p>The GLA update is a delta rule with a forget gate. At each step the model retrieves the old value associated with the current key, writes a corrected value, and decays the state matrix:</p>
+
+<latex>
+\mathbf{v}_t^{\text{old}} = \mathbf{S}_{t-1} \mathbf{k}_t, \quad
+\mathbf{v}_t^{\text{new}} = \beta_t \mathbf{v}_t + (1 - \beta_t) \mathbf{v}_t^{\text{old}},
+</latex>
+
+<latex>
+\mathbf{S}_t = \alpha_t \mathbf{S}_{t-1} - \mathbf{v}_t^{\text{old}} \mathbf{k}_t^{\top} + \mathbf{v}_t^{\text{new}} \mathbf{k}_t^{\top}
+= \alpha_t \mathbf{S}_{t-1} + \beta_t (\mathbf{v}_t - \mathbf{v}_t^{\text{old}}) \mathbf{k}_t^{\top}.
+</latex>
+
+<p>The theory proves that a purely local window cannot recover supra-window state (Theorem 1), and that a contractive global memory bounds long-horizon excess risk by</p>
+
+<latex>
+\mathcal{R}_t(\hat{\mu}_t) - \mathcal{R}_t^{\star} \le \left( L\varepsilon + \frac{L_G \bar{\xi}}{1 - \rho} \right)^2.
+</latex>
+
+<p>Tracing the official repo confirms the factorization is hard-coded. <code>KairosDiT</code> schedules a <code>GatedDeltaNet</code> GLA block every fourth layer; the others are <code>SelfAttention</code> with frame-scaled windows and dilation. The 4B config uses 32 layers, dim 2560, 20 heads, and <code>dilated_lengths = [1, 1, 4, 1]</code>:</p>
+
+<pre lang="python" caption="From kairos/modules/dits/kairos_dit.py"><code>use_linear_attns = [(i + 1) % 4 == 0 for i in range(num_layers)]
+...
+DiTBlock(..., use_linear_attn=(i + 1) % 4 == 0,
+         dilated_length=dilated_lengths[i % 4], ...)</code></pre>
+
+<p>The repo is inference-oriented, so the data curriculum and training code are paper-only. But the deployment co-design is fully present: TeaCache timestep skipping, DMD distillation, sequence/tensor parallelism, SageAttention/FlashAttention kernels, tiled VAE, chunked FFN, and VRAM offloading are all wired into the same pipeline. A toy NumPy probe confirms the necessity claim: on a cue-recovery task where only the first token carries class information, a pure sliding-window baseline stays near chance while GLA and Hybrid retain near-perfect accuracy across horizons up to 120 steps.</p>
+
+<p>[[figure-anchor:kairos:probe-result]]</p>
+
+<p>[[figure-anchor:kairos:data-curriculum]]</p>
+
+<hr/>
+
+<h1>Active perception and credit assignment</h1>
+
+<p>The third theme is about turning perception itself into a reasoning process. OmniAgent does this for long-video understanding; the shortlist contains two training-method papers that also re-examine how credit is assigned during learning.</p>
+
+<table>
+  <colgroup>
+    <col width="220"/>
+    <col width="240"/>
+    <col width="240"/>
+    <col width="100"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>ZPPO</b> (Lee et al., 2026)</td>
+      <td>Zone of Proximal Policy Optimization: keeps the teacher in prompts via BCQ/NCQ and a prompt replay buffer.</td>
+      <td>Outperforms distillation and GRPO on small-student (0.8B–9B) VLMs across 31 benchmarks; largest gains at smallest scale.</td>
+      <td><a href="https://huggingface.co/papers/2606.18216">HF</a> <a href="https://arxiv.org/pdf/2606.18216">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>OPD-Evolver</b> (Zhang et al., 2026)</td>
+      <td>Slow-fast co-evolution agent with a four-level memory hierarchy and on-policy self-distillation.</td>
+      <td>A 9B agent-evolver challenges giant models by learning to read, use, write, and maintain experience.</td>
+      <td><a href="https://huggingface.co/papers/2606.17628">HF</a> <a href="https://arxiv.org/pdf/2606.17628">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>OmniAgent: Native Active Perception as Reasoning</h2>
+
+<p>Zhenghao Xing et al. (2026) · <a href="https://huggingface.co/papers/2606.19341">HF</a> · <a href="https://arxiv.org/pdf/2606.19341">PDF</a> · <a href="https://github.com/harryhsing/OmniAgent">Code</a></p>
+
+<p>OmniAgent attacks the "watch-it-all" cost of long-video models by treating video understanding as a POMDP. The agent maintains a persistent textual memory and a transient raw-media percept. At each turn it emits an Observation–Thought–Action triplet; the environment executes the action, returns a new raw percept, and <b>purges</b> the old one. The context cost is meant to scale with the reasoning trace, not the video duration.</p>
+
+<p>[[figure-anchor:omniagent:ota-framework]]</p>
+
+<p>The action grammar is exactly the paper's four actions: <code>get_frames</code>, <code>get_audio</code>, <code>get_clip</code>, and <code>answer</code>. The training pipeline has two stages. Agentic SFT bootstraps the OTA loop from 58K best-of-N trajectories with outcome verification and a GPT-4o rationality audit. Agentic RL then refines the policy with TAURA (Turn-aware Adaptive Uncertainty Rescaled Advantage), which addresses the advantage homogenization problem in multi-turn GRPO.</p>
+
+<p>Vanilla GRPO broadcasts a single trajectory-level advantage to every token. TAURA rescales it by the per-turn mean token entropy:</p>
+
+<latex>
+\hat{A}_{i,k} = A_i \cdot \frac{H_{i,k}}{\frac{1}{N_{\mathcal{G}}} \sum_{j=1}^{G} \sum_{m=1}^{K_j} H_{j,m}}.
+</latex>
+
+<p>Tracing the released code shows that TAURA is implemented under the flag <code>entropy_weight=true</code>. In <code>verl/trainer/ppo/core_algos.py</code>, <code>get_entropy_weights</code> computes the per-turn mean entropy and normalizes by the query-group mean, then <code>ray_trainer.py</code> multiplies the GRPO advantage by that weight. The vanilla GRPO baseline is the same launch script with <code>entropy_weight=false</code>. The match to Equation 4 is exact; only the internal name differs.</p>
+
+<p>[[figure-anchor:omniagent:accuracy-vs-frames]]</p>
+
+<p>A small synthetic probe reproduces the intended asymmetry. When one turn per trajectory is given elevated entropy to mimic a "discovery" fork, TAURA boosts the high-entropy turn magnitude by about 1.3× while down-weighting low-entropy routine turns. The full 7B model was not run locally because it needs a large GPU, vLLM, and the released checkpoints; the probe isolates the credit-assignment mechanism.</p>
+
+<p>The empirical headline is that OmniAgent-7B reaches 50.5% on LVBench, above Qwen2.5-VL-72B (47.3%) while sampling ~73% fewer frames (203 vs. 768). Test-time scaling is also positive: accuracy on VideoMME-Long rises from 53.4% to 59.6% as the turn budget grows, but the average number of executed turns saturates around 11.7 even when the cap is 52. The agent learns to stop once it has enough evidence rather than burning budget.</p>
+
+<p>[[figure-anchor:omniagent:test-time-scaling]]</p>
+
+<h1>Cross-cutting observations</h1>
+
+<p>Two patterns cut across the deep threads.</p>
+
+<p><b>Loops, not just scale.</b> Guava, Kairos, and OmniAgent all replace a single forward pass with an explicit loop: ReAct tool use, recurrent GLA memory, and the OTA perception cycle. In each case the loop is treated as a first-class design decision, not as a sampling trick on top of a frozen model.</p>
+
+<p><b>Deployment as a method constraint.</b> Kairos co-designs attention, kernels, and memory so the model can run on a robot; Guava distills into a 4B model so the harness is cheap enough to call repeatedly; OmniAgent caps context cost by discarding raw media each turn. Efficiency is not an afterthought—it shapes what the method is.</p>
+
+<p><b>What remains uncertain.</b> For Guava, the absence of training code and task definitions means the real-world transfer claim is plausible but unverified. For Kairos, the Cross-Embodiment Data Curriculum is described in detail but not present in the public repo, so the pre-training story cannot be independently inspected. For OmniAgent, the code matches the paper, but the strongest result depends on checkpoints and compute that are out of reach here. The loop-level insights, however, are portable.</p>

@@ -1,0 +1,195 @@
+Guava Harness Probe
+Task: place the red cube in the basket
+Note: the first grasp attempt is randomly allowed to fail to test recovery.
+
+
+============================================================
+Condition: Guava-style: ReAct + semantic tools + multimodal obs
+Success: True  |  Steps used: 7
+----------------------------------------
+Step 1
+Observation (text):
+  Step 0. Last action result: initialized
+  Gripper: pos=(0.50,0.50,0.50) open=True holding=None
+  red_cube: pos=(0.25,0.40,0.00) size=0.08 in_basket=False
+  blue_cube: pos=(0.25,0.60,0.00) size=0.08 in_basket=False
+  basket: pos=(0.75,0.50,0.00) size=0.18 in_basket=False
+Observation (visual):
+    0 1 2 3 4 5 6 7 8 9 0
+  0 . . . . . . . . . . .
+  1 . . . . . . . . . . .
+  2 . . . . . . . . . . .
+  3 . . . . . . . . . . .
+  4 . . BB . . . . . . . .
+  5 . . . . . + . . BB . .
+  6 . . RR . . . . . . . .
+  7 . . . . . . . . . . .
+  8 . . . . . . . . . . .
+  9 . . . . . . . . . . .
+  0 . . . . . . . . . . .
+Think: Align above target for grasping.
+Tool:  {'name': 'align', 'arguments': {'obj': 'red_cube', 'direction': 'top', 'clearance': 'medium'}}
+Result: moved gripper to (0.25, 0.40, 0.08)
+----------------------------------------
+Step 2
+Observation (text):
+  Step 1. Last action result: moved gripper to (0.25, 0.40, 0.08)
+  Gripper: pos=(0.25,0.40,0.08) open=True holding=None
+  red_cube: pos=(0.25,0.40,0.00) size=0.08 in_basket=False
+  blue_cube: pos=(0.25,0.60,0.00) size=0.08 in_basket=False
+  basket: pos=(0.75,0.50,0.00) size=0.18 in_basket=False
+Observation (visual):
+    0 1 2 3 4 5 6 7 8 9 0
+  0 . . . . . . . . . . .
+  1 . . . . . . . . . . .
+  2 . . . . . . . . . . .
+  3 . . . . . . . . . . .
+  4 . . BB . . . . . . . .
+  5 . . . . . . . . BB . .
+  6 . . + . . . . . . . .
+  7 . . . . . . . . . . .
+  8 . . . . . . . . . . .
+  9 . . . . . . . . . . .
+  0 . . . . . . . . . . .
+Think: Gripper is aligned and open; grasp target.
+Tool:  {'name': 'grasp', 'arguments': {'obj': 'red_cube'}}
+Result: grasp failed: gripper closed on air near red_cube
+----------------------------------------
+Step 3
+Observation (text):
+  Step 2. Last action result: grasp failed: gripper closed on air near red_cube
+  Gripper: pos=(0.25,0.40,0.08) open=False holding=None
+  red_cube: pos=(0.25,0.40,0.00) size=0.08 in_basket=False
+  blue_cube: pos=(0.25,0.60,0.00) size=0.08 in_basket=False
+  basket: pos=(0.75,0.50,0.00) size=0.18 in_basket=False
+Observation (visual):
+    0 1 2 3 4 5 6 7 8 9 0
+  0 . . . . . . . . . . .
+  1 . . . . . . . . . . .
+  2 . . . . . . . . . . .
+  3 . . . . . . . . . . .
+  4 . . BB . . . . . . . .
+  5 . . . . . . . . BB . .
+  6 . . x . . . . . . . .
+  7 . . . . . . . . . . .
+  8 . . . . . . . . . . .
+  9 . . . . . . . . . . .
+  0 . . . . . . . . . . .
+Think: Recovery: last grasp failed, opening gripper before retry.
+Tool:  {'name': 'release', 'arguments': {}}
+Result: released gripper
+----------------------------------------
+Step 4
+Observation (text):
+  Step 3. Last action result: released gripper
+  Gripper: pos=(0.25,0.40,0.08) open=True holding=None
+  red_cube: pos=(0.25,0.40,0.00) size=0.08 in_basket=False
+  blue_cube: pos=(0.25,0.60,0.00) size=0.08 in_basket=False
+  basket: pos=(0.75,0.50,0.00) size=0.18 in_basket=False
+Observation (visual):
+    0 1 2 3 4 5 6 7 8 9 0
+  0 . . . . . . . . . . .
+  1 . . . . . . . . . . .
+  2 . . . . . . . . . . .
+  3 . . . . . . . . . . .
+  4 . . BB . . . . . . . .
+  5 . . . . . . . . BB . .
+  6 . . + . . . . . . . .
+  7 . . . . . . . . . . .
+  8 . . . . . . . . . . .
+  9 . . . . . . . . . . .
+  0 . . . . . . . . . . .
+Think: Gripper is aligned and open; grasp target.
+Tool:  {'name': 'grasp', 'arguments': {'obj': 'red_cube'}}
+Result: grasped red_cube
+----------------------------------------
+Step 5
+Observation (text):
+  Step 4. Last action result: grasped red_cube
+  Gripper: pos=(0.25,0.40,0.08) open=False holding=red_cube
+  red_cube: pos=(0.25,0.40,0.00) size=0.08 in_basket=False
+  blue_cube: pos=(0.25,0.60,0.00) size=0.08 in_basket=False
+  basket: pos=(0.75,0.50,0.00) size=0.18 in_basket=False
+Observation (visual):
+    0 1 2 3 4 5 6 7 8 9 0
+  0 . . . . . . . . . . .
+  1 . . . . . . . . . . .
+  2 . . . . . . . . . . .
+  3 . . . . . . . . . . .
+  4 . . BB . . . . . . . .
+  5 . . . . . . . . BB . .
+  6 . . x . . . . . . . .
+  7 . . . . . . . . . . .
+  8 . . . . . . . . . . .
+  9 . . . . . . . . . . .
+  0 . . . . . . . . . . .
+Think: Align above basket for safe placement.
+Tool:  {'name': 'align', 'arguments': {'obj': 'basket', 'direction': 'top', 'clearance': 'medium'}}
+Result: moved gripper to (0.75, 0.50, 0.08)
+----------------------------------------
+Step 6
+Observation (text):
+  Step 5. Last action result: moved gripper to (0.75, 0.50, 0.08)
+  Gripper: pos=(0.75,0.50,0.08) open=False holding=red_cube
+  red_cube: pos=(0.75,0.50,0.08) size=0.08 in_basket=False
+  blue_cube: pos=(0.25,0.60,0.00) size=0.08 in_basket=False
+  basket: pos=(0.75,0.50,0.00) size=0.18 in_basket=False
+Observation (visual):
+    0 1 2 3 4 5 6 7 8 9 0
+  0 . . . . . . . . . . .
+  1 . . . . . . . . . . .
+  2 . . . . . . . . . . .
+  3 . . . . . . . . . . .
+  4 . . BB . . . . . . . .
+  5 . . . . . . . . x . .
+  6 . . . . . . . . . . .
+  7 . . . . . . . . . . .
+  8 . . . . . . . . . . .
+  9 . . . . . . . . . . .
+  0 . . . . . . . . . . .
+Think: Lower into basket.
+Tool:  {'name': 'move', 'arguments': {'x': 0.75, 'y': 0.5, 'z': 0.05}}
+Result: moved gripper to (0.75, 0.50, 0.05)
+----------------------------------------
+Step 7
+Observation (text):
+  Step 6. Last action result: moved gripper to (0.75, 0.50, 0.05)
+  Gripper: pos=(0.75,0.50,0.05) open=False holding=red_cube
+  red_cube: pos=(0.75,0.50,0.05) size=0.08 in_basket=False
+  blue_cube: pos=(0.25,0.60,0.00) size=0.08 in_basket=False
+  basket: pos=(0.75,0.50,0.00) size=0.18 in_basket=False
+Observation (visual):
+    0 1 2 3 4 5 6 7 8 9 0
+  0 . . . . . . . . . . .
+  1 . . . . . . . . . . .
+  2 . . . . . . . . . . .
+  3 . . . . . . . . . . .
+  4 . . BB . . . . . . . .
+  5 . . . . . . . . x . .
+  6 . . . . . . . . . . .
+  7 . . . . . . . . . . .
+  8 . . . . . . . . . . .
+  9 . . . . . . . . . . .
+  0 . . . . . . . . . . .
+Think: Release target into basket.
+Tool:  {'name': 'release', 'arguments': {}}
+Result: released gripper
+
+============================================================
+Condition: Ablation: one-shot plan (no ReAct loop)
+Success: False  |  Steps used: 4
+
+============================================================
+Condition: Ablation: low-level numeric moves (no semantic align/grasp)
+Success: False  |  Steps used: 20
+
+============================================================
+Condition: Ablation: text-only observations (color omitted -> picks blue cube)
+Success: False  |  Steps used: 7
+
+============================================================
+Monte-Carlo summary (20 trials, seed 100-119)
+  ReAct + semantic + multimodal       success 20/20  avg_steps 6.0
+  One-shot                            success 12/20  avg_steps 4.0
+  Low-level moves                     success 0/20  avg_steps 20.0
+  Text-only                           success 0/20  avg_steps 6.0

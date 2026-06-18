@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-06-18 — 2026-06-16 to 2026-06-18
+- Doc: https://fudan-nlp.feishu.cn/docx/Yc1HdNNXEoTGk2xuG3rcVtpEnSb
+- Run: runs/2026-06-18-guava-kairos-omniagent/
+- Deep threads: Guava harness for embodied manipulation (2606.18363), Kairos native world model stack (2606.16533), OmniAgent active perception (2606.19341)
+- Covered papers: 2606.18363, 2606.16533, 2606.19341
+- Shortlisted papers: 2606.18375, 2606.18208, 2606.18180, 2606.18216, 2606.17628, 2606.17861
+
 ## 2026-06-17 — 2026-06-16 to 2026-06-17
 - Doc: https://fudan-nlp.feishu.cn/docx/B5IxdNyLAoqHcNxyoZHc7CGenMJ
 - Run: runs/2026-06-17-aceego-actworld-motionvla/
