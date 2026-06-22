@@ -1,0 +1,552 @@
+[
+  {
+    "iteration": 1,
+    "family": "Close",
+    "objects": [
+      "white_cabinet"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 2,
+    "family": "Lift",
+    "objects": [
+      "sandal"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 3,
+    "family": "Lift",
+    "objects": [
+      "tissue_box"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 4,
+    "family": "Close",
+    "objects": [
+      "metal_ring"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 5,
+    "family": "Close",
+    "objects": [
+      "walkie_talkie"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 6,
+    "family": "Open",
+    "objects": [
+      "white_cabinet"
+    ],
+    "skills": [
+      "pull_surface_outward"
+    ],
+    "success": false
+  },
+  {
+    "iteration": 7,
+    "family": "Close",
+    "objects": [
+      "sandal"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 8,
+    "family": "Close",
+    "objects": [
+      "black_cloth"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 9,
+    "family": "Close",
+    "objects": [
+      "drawer"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 10,
+    "family": "Lift",
+    "objects": [
+      "white_cabinet"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 11,
+    "family": "Lift",
+    "objects": [
+      "metal_ring"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 12,
+    "family": "Close",
+    "objects": [
+      "sandal"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 13,
+    "family": "Lift",
+    "objects": [
+      "walkie_talkie"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": false
+  },
+  {
+    "iteration": 14,
+    "family": "Lift",
+    "objects": [
+      "tissue_box"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 15,
+    "family": "Lift",
+    "objects": [
+      "drawer"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": false
+  },
+  {
+    "iteration": 16,
+    "family": "Close",
+    "objects": [
+      "toothpaste"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 17,
+    "family": "Lift",
+    "objects": [
+      "black_cloth"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 18,
+    "family": "Close",
+    "objects": [
+      "tissue_box"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 19,
+    "family": "Lift",
+    "objects": [
+      "toothpaste"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 20,
+    "family": "Lift",
+    "objects": [
+      "drawer"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 21,
+    "family": "Lift",
+    "objects": [
+      "toothpaste"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": false
+  },
+  {
+    "iteration": 22,
+    "family": "Lift",
+    "objects": [
+      "metal_ring"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": false
+  },
+  {
+    "iteration": 23,
+    "family": "Close",
+    "objects": [
+      "drawer"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": false
+  },
+  {
+    "iteration": 24,
+    "family": "Close",
+    "objects": [
+      "metal_ring"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 25,
+    "family": "Lift",
+    "objects": [
+      "white_cabinet"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": false
+  },
+  {
+    "iteration": 26,
+    "family": "Lift",
+    "objects": [
+      "black_cloth"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": false
+  },
+  {
+    "iteration": 27,
+    "family": "Close",
+    "objects": [
+      "sandal"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 28,
+    "family": "Lift",
+    "objects": [
+      "drawer"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": false
+  },
+  {
+    "iteration": 29,
+    "family": "Close",
+    "objects": [
+      "metal_ring"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 30,
+    "family": "Close",
+    "objects": [
+      "walkie_talkie"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 31,
+    "family": "Close",
+    "objects": [
+      "black_cloth"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 32,
+    "family": "Close",
+    "objects": [
+      "toothpaste"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 33,
+    "family": "Lift",
+    "objects": [
+      "sandal"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 34,
+    "family": "Lift",
+    "objects": [
+      "metal_ring"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 35,
+    "family": "Close",
+    "objects": [
+      "tissue_box"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 36,
+    "family": "Lift",
+    "objects": [
+      "black_cloth"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 37,
+    "family": "Lift",
+    "objects": [
+      "black_cloth"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": false
+  },
+  {
+    "iteration": 38,
+    "family": "Lift",
+    "objects": [
+      "tissue_box"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": false
+  },
+  {
+    "iteration": 39,
+    "family": "Lift",
+    "objects": [
+      "toothpaste"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": false
+  },
+  {
+    "iteration": 40,
+    "family": "Lift",
+    "objects": [
+      "tissue_box"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 41,
+    "family": "Lift",
+    "objects": [
+      "walkie_talkie"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 42,
+    "family": "Close",
+    "objects": [
+      "white_cabinet"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 43,
+    "family": "Close",
+    "objects": [
+      "toothpaste"
+    ],
+    "skills": [
+      "push_surface_inward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 44,
+    "family": "Lift",
+    "objects": [
+      "drawer"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 45,
+    "family": "Lift",
+    "objects": [
+      "toothpaste"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": false
+  },
+  {
+    "iteration": 46,
+    "family": "Open",
+    "objects": [
+      "toothpaste"
+    ],
+    "skills": [
+      "pull_surface_outward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 47,
+    "family": "Open",
+    "objects": [
+      "walkie_talkie"
+    ],
+    "skills": [
+      "pull_surface_outward"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 48,
+    "family": "Lift",
+    "objects": [
+      "white_cabinet"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 49,
+    "family": "Lift",
+    "objects": [
+      "sandal"
+    ],
+    "skills": [
+      "execute_top_down_grasp_and_lift"
+    ],
+    "success": true
+  },
+  {
+    "iteration": 50,
+    "family": "Open",
+    "objects": [
+      "drawer"
+    ],
+    "skills": [
+      "pull_surface_outward"
+    ],
+    "success": true
+  }
+]

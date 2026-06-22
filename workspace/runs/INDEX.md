@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-06-22 — 2026-06-15 to 2026-06-22
+- Doc: https://fudan-nlp.feishu.cn/docx/WA6hdqAhWox75Zx0DkRcAxULnTG
+- Run: runs/2026-06-22-humanscale-playful-imagewam-wrbench/
+- Deep threads: HumanScale egocentric vs. real-robot pretraining (2606.20521), ImageWAM image-editing world-action model (2606.19531), WRBench persistent-state diagnosis (2606.20545), Playful RATS code-as-policy play learning (2606.19419)
+- Covered papers: 2606.20521, 2606.19531, 2606.20545, 2606.19419
+- Shortlisted papers: 2606.15133, 2606.20515, 2606.19980, 2606.16122, 2606.20083, 2606.19495, 2606.18847, 2606.17480, 2606.18558, 2606.17030, 2606.14667, 2606.19338, 2606.00793, 2606.18180
+
 ## 2026-06-18 — 2026-06-16 to 2026-06-18
 - Doc: https://fudan-nlp.feishu.cn/docx/Yc1HdNNXEoTGk2xuG3rcVtpEnSb
 - Run: runs/2026-06-18-guava-kairos-omniagent/
