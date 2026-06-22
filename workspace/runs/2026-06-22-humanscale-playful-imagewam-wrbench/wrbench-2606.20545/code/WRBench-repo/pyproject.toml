@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wrbench"
+version = "0.1.0"
+description = "Out-of-the-box unified camera control for video-generation world models: frame-level actions, arbitrary translation/rotation, and preset combinations compiled to model-native payloads."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "WRBench" }]
+keywords = ["video-generation", "camera-control", "world-model", "benchmark", "wrbench"]
+dependencies = ["numpy>=1.23"]
+
+[project.urls]
+Homepage = "https://jinplu.github.io/WRBench/"
+Repository = "https://github.com/JinPLu/WRBench"
+Paper = "https://arxiv.org/abs/2606.20545"
+"Hugging Face Paper" = "https://huggingface.co/papers/2606.20545"
+"Hugging Face Artifacts" = "https://huggingface.co/collections/WRBench/wrbench-current-world-models-lack-a-persistent-state-core-6a365c717251293c9fc2cc26"
+Leaderboard = "https://huggingface.co/spaces/WRBench/wrbench-leaderboard"
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+prompts = ["httpx>=0.27"]
+firstframe = ["httpx>=0.27", "pillow>=10"]
+eval = []
+all = ["httpx>=0.27", "pillow>=10", "pytest>=7"]
+
+[project.scripts]
+wrbench = "wrbench.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+wrbench = [
+  "models/*.json",
+  "prompts/templates/*.txt",
+  "eval/contract/*.json",
+  "eval/contract/*.md",
+  "data/**/*",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
