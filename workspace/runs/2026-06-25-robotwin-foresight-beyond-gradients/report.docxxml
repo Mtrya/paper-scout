@@ -1,0 +1,277 @@
+<title>Paper Scout Research Report - 2026-06-25</title>
+
+<p>This run kept circling the same question: what does it take to make embodied agents robust enough to leave the lab? Three very different works gave overlapping answers, each from a different angle. <b>RoboTwin 2.0</b> shows that the bottleneck is often the data itself—specifically, whether synthetic demonstrations cover the visual and physical chaos of real scenes. <b>Foresight</b> argues that even good policies fail, so the urgent problem is detecting failure early and cheaply enough to do something about it. And Jiayi Weng's <b>Learning Beyond Gradients</b> asks whether the whole premise of learning a monolithic policy is the wrong target: maybe the durable artifact is maintainable, testable code. Together they map a pipeline—generate robust data, watch for failure, keep the system explainable—that is more engineering doctrine than single algorithmic breakthrough.</p>
+
+<callout emoji="✅" background-color="light-green" border-color="green">
+  <p><b>Standout:</b> RoboTwin 2.0 is the clearest seed for a scalable sim-to-real data engine. The released simulator, object library, and code-generation loop are real, and the hardest-condition sim-to-real gains are large even if the headline percentages are cherry-picked.</p>
+</callout>
+
+<h1>Theme 1: Building robust embodied data</h1>
+
+<p>The dominant source of fragility in robot learning is still the gulf between training scenes and deployment scenes. This period produced several attempts to close that gap at the data layer.</p>
+
+<table>
+  <colgroup>
+    <col width="180"/>
+    <col width="260"/>
+    <col width="260"/>
+    <col width="100"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>EventVLA</b> (Yang et al., 2026)</td>
+      <td>A VLA with sparse visual evidence memory: foundational anchors plus a learned Keyframe Evidence Memory head that predicts which future frames will matter.</td>
+      <td>Non-Markovian manipulation (lift a cover, then remember what was underneath) is where reactive VLAs quietly fail. The proposed RoboTwin-MeM benchmark isolates 1–5 transient keyframes.</td>
+      <td><a href="https://huggingface.co/papers/2606.20092">HF</a> / <a href="https://arxiv.org/abs/2606.20092">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>World Value Models</b> (Wang et al., 2026)</td>
+      <td>Repurposes a pretrained video world model as a generalist value estimator, using a Mixture-of-Transformers to keep value tokens from interfering with generation.</td>
+      <td>Value models are the natural filter for mixed-quality data, but VLMs have weak temporal priors. World models do not, and the new Suboptimal-Value-Bench tests hesitation and retry modes.</td>
+      <td><a href="https://huggingface.co/papers/2606.24742">HF</a> / <a href="https://arxiv.org/abs/2606.24742">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>PolicyTrim</b> (Wang et al., 2026)</td>
+      <td>GRPO post-training that extends reliable action-chunk length and prunes redundant physical steps.</td>
+      <td>Even good VLAs waste inference calls on tail-degraded chunks and corrective wiggles. PolicyTrim reports 3× chunk utilization, 51.4% fewer steps, and up to 5.83× end-to-end speedup.</td>
+      <td><a href="https://huggingface.co/papers/2606.22540">HF</a> / <a href="https://arxiv.org/abs/2606.22540">arXiv</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr/>
+
+<h2>RoboTwin 2.0: the data engine is the product</h2>
+
+<p><b>RoboTwin 2.0</b> (arXiv 2506.18088) is best understood as an upgraded data factory, not a new policy. It ships a SAPIEN simulator, a 731-instance annotated object library called RoboTwin-OD, an MLLM+VLM code-generation loop, and systematic domain randomization across clutter, backgrounds, lighting, tabletop height, and language. The goal is to generate synthetic demonstrations that transfer to real bimanual manipulation.</p>
+
+<p>What makes the object library more than a mesh dump is the per-instance manipulation metadata. Each object carries <code>contact_points_pose</code>, <code>functional_matrix</code>, <code>target_pose</code>, and <code>orientation_point</code>, plus 15 VLM-generated descriptions split into seen and unseen pools. Those annotations are what let a generic grasp API work across 147 categories without hand-tuned code per object. The code shows this directly: clutter placement uses precomputed <code>radius</code>, <code>z_offset</code>, and <code>z_max</code> from the object metadata, and a <code>same_obj</code> filter prevents visually similar distractors from landing next to each other.</p>
+
+<p>The expert synthesis loop is a genuine closed loop, though a noisy one. DeepSeek-V3 generates a <code>play_once()</code> subclass for a task; the framework runs it 10 times; a Moonshot VLM observer diagnoses failures from saved head-camera images; and the error log is fed back into the next prompt. But Appendix G.4 of the paper reports the VLM observer at F1 ≈ 0.30 and only 30% failure-localization accuracy. The multimodal feedback helps—Table 1 shows it adds roughly 5–8 percentage points of success on top of execution-log feedback alone—but it is a helper, not an oracle.</p>
+
+<p>The domain-randomization config is preserved in the thread and is more structured than simple texture swapping. Object placement uses task-level prohibited areas and embodiment-aware grasp scoring; language instructions are assembled combinatorially from seen/unseen description pools; and background textures are explicitly split into seen and unseen sets (11k textures generated from Stable Diffusion and filtered). A subtle finding from tracing the code: head-camera pose randomization exists in the camera module but is set to zero in the released randomized config, so the reported benchmark does not actually use it.</p>
+
+<p>The benchmark itself is clean and large: 50 tasks, 5 embodiments (Aloha-AgileX, Piper, Franka, ARX-X5, UR5), policies including ACT, DP, DP3, RDT, and π0, with 100 rollouts per task under Easy (clean) and Hard (randomized) conditions. The central evidence that randomization matters is a pretraining ablation: RDT/π0 pretrained on 9,600 randomized trajectories from 32 tasks reaches roughly 25–29% success on 8 test tasks, while pretraining on clean data gives almost no gain.</p>
+
+<table>
+  <colgroup>
+    <col width="220"/>
+    <col width="140"/>
+    <col width="140"/>
+    <col width="140"/>
+    <col width="160"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Real-world condition</th>
+      <th background-color="light-gray">10 real clean</th>
+      <th background-color="light-gray">+ 1k synth</th>
+      <th background-color="light-gray">Abs. Δ</th>
+      <th background-color="light-gray">Rel. Δ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Seen, not cluttered</td>
+      <td>29.5%</td>
+      <td>43.0%</td>
+      <td>+13.5 pp</td>
+      <td>+46%</td>
+    </tr>
+    <tr>
+      <td>Seen, cluttered</td>
+      <td>14.0%</td>
+      <td>41.5%</td>
+      <td>+27.5 pp</td>
+      <td>+196%</td>
+    </tr>
+    <tr>
+      <td>Unseen, not cluttered</td>
+      <td>15.5%</td>
+      <td>39.0%</td>
+      <td>+23.5 pp</td>
+      <td>+151%</td>
+    </tr>
+    <tr>
+      <td><b>Unseen, cluttered</b></td>
+      <td><b>9.0%</b></td>
+      <td><b>42.0%</b></td>
+      <td><b>+33.0 pp</b></td>
+      <td><b>+367%</b></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The headline numbers need context. The abstract's 367% relative improvement and 228% zero-shot gain come from the unseen-background + cluttered corner case. The average absolute gain across all four conditions is a still-respectable +24.4 percentage points (17.0% → 41.4%), but final success rates remain below 50% in most conditions. Synthetic data clearly buys robustness, yet the robot still fails more often than it succeeds in the hardest setting.</p>
+
+<p>Embodiment-aware grasp adaptation is the most cleanly validated mechanism after domain randomization. Table 2 shows large gains for low-DoF arms—Piper +22.7% and Aloha-AgileX +13.7%—while high-DoF Franka and UR5 change little. That matches the code, where <code>grasp_perfect_direction</code> and <code>rotate_lim</code> are embodiment-specific config fields.</p>
+
+<callout emoji="❗" background-color="light-yellow" border-color="yellow">
+  <p><b>Caveat:</b> The sim-to-real numbers are conditional on scene feasibility—the eval loop only tests policy rollouts on seeds where the expert program already succeeds. That is reasonable for benchmarking, but it means the reported rates are not unconditional success on arbitrary scenes.</p>
+</callout>
+
+<h1>Theme 2: Knowing when the policy is failing</h1>
+
+<p>If the first theme is about making better data, the second is about admitting that policies still fail and building a watcher that notices in time. <b>Foresight</b> (arXiv 2606.23085) uses action-conditioned world-model latents to detect failures in long-horizon manipulation.</p>
+
+<hr/>
+
+<h2>Foresight: failure detection from predicted latents</h2>
+
+<p>The key insight is that a failure is often not visually anomalous in isolation; it is a mismatch between what the policy intended to do and what the world actually did. Foresight therefore conditions its failure signal on the action chunk. It builds on V-JEPA 2-AC, a latent action-conditioned world model: a frozen ViT-Giant encoder observes an 8-frame context, and a trained 24-layer causal Transformer predictor forecasts future <i>latent representations</i> given the policy's action chunk. The model never decodes pixels; it predicts where the encoder's own representation should go.</p>
+
+<p>At each replan step the predicted latent <latex>z_t^p</latex> is mean-pooled to 1408 dimensions, projected, and fed as a timestep token into a small causal Transformer detector. The detector outputs a per-timestep failure score <latex>s_t \in [0,1]</latex>, trained only on trajectory-level binary labels because exact failure timestamps are unknown. Temporal aggregation is essential: an MLP detector is near chance on real-world data, while the causal Transformer reaches ROC-AUC 0.93 on ReactorX/ACT and 0.89 on Franka/GR00T N1.5.</p>
+
+<p>The thresholding uses functional conformal prediction (FCP). From successful calibration rollouts the method builds a time-varying threshold <latex>\delta_t = \mu_t + \hat{q} \cdot \sigma_t</latex>, where <latex>\mu_t</latex> and <latex>\sigma_t</latex> are the mean and standard deviation of detector scores at time <latex>t</latex>, and <latex>\hat{q}</latex> is the <latex>(1-\alpha)</latex>-quantile of the nonconformity scores. Under exchangeability this controls the false-positive rate on successful rollouts at level <latex>\alpha</latex>. The authors sweep many <latex>\alpha</latex> values and select the one that maximizes cross-validated balanced accuracy; selected values range from 0.02 on LIBERO-Long to 0.20 on BEHAVIOR-1K.</p>
+
+<table>
+  <colgroup>
+    <col width="180"/>
+    <col width="150"/>
+    <col width="150"/>
+    <col width="150"/>
+    <col width="150"/>
+    <col width="150"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Method</th>
+      <th background-color="light-gray">LIBERO ROC-AUC</th>
+      <th background-color="light-gray">LIBERO BalAcc</th>
+      <th background-color="light-gray">ManiSkill ROC-AUC</th>
+      <th background-color="light-gray">ManiSkill BalAcc</th>
+      <th background-color="light-gray">BEHAVIOR BalAcc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>FAIL-Detect</td>
+      <td>0.90±0.02</td>
+      <td>0.82±0.06</td>
+      <td>0.71±0.02</td>
+      <td>0.50±0.01</td>
+      <td>0.52±0.01</td>
+    </tr>
+    <tr>
+      <td>SAFE-LSTM</td>
+      <td>0.91±0.02</td>
+      <td>0.88±0.02</td>
+      <td>0.82±0.01</td>
+      <td>0.74±0.01</td>
+      <td>0.64±0.05</td>
+    </tr>
+    <tr>
+      <td>Gauge</td>
+      <td>0.88±0.01</td>
+      <td>0.81±0.06</td>
+      <td>0.80±0.02</td>
+      <td>0.77±0.03</td>
+      <td>0.60±0.03</td>
+    </tr>
+    <tr>
+      <td><b>Foresight-Transformer</b></td>
+      <td><b>0.89±0.02</b></td>
+      <td><b>0.94±0.06</b></td>
+      <td><b>0.84±0.03</b></td>
+      <td><b>0.80±0.10</b></td>
+      <td><b>0.78±0.02</b></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The gains scale with horizon length: the strongest result is on BEHAVIOR-1K, where rollouts average 8,557 steps and Foresight improves balanced accuracy by +0.14 over the best baseline. That is exactly where you would expect predicted-latent mismatch to become informative.</p>
+
+<p>The cost, however, is dominated by the world-model backbone. On an H200 the ViT-G encoder takes ~122 ms and the predictor ~60 ms per replan, for a feature-extraction subtotal of ~183 ms. The detector head adds less than 1 ms. For a chunk-based policy that already replans every 100–1000 ms this is acceptable; for high-frequency reactive control it is not. Edge deployment is also hard: the full backbone is 1.3B parameters.</p>
+
+<callout emoji="❗" background-color="light-yellow" border-color="yellow">
+  <p><b>Caveat:</b> No official Foresight code is public as of this run. The V-JEPA 2-AC backbone was cloned and inspected, but integration details—exact early-detection weighting, action-chunk alignment across policies, and FCP extrapolation past calibration length—remain author-authority only.</p>
+</callout>
+
+<h1>Theme 3: A different notion of learning</h1>
+
+<p>The third thread steps back and asks whether the right artifact to optimize is a neural network at all. Jiayi Weng's <b>Learning Beyond Gradients</b> frames <i>Heuristic Learning (HL)</i> as an alternative loop: state → action → feedback → code edit, where the object being updated is software structure rather than weights.</p>
+
+<hr/>
+
+<h2>Learning Beyond Gradients: code as the learnable object</h2>
+
+<p>Weng's argument is that coding agents are now good enough to read failures, edit code, add tests, and watch replays. A Heuristic System (HS) therefore contains not just a policy but detectors, feedback channels, <code>trials.jsonl</code> logs, regression tests, videos, and an update mechanism. The update is a direct code edit by an LLM, not backpropagation.</p>
+
+<p>The artifact repo is unusually concrete. I reproduced the Breakout progression exactly: 387 → 507 → 839 → 864, matching the blog's numbers on <code>envpool==1.2.5</code>. A single Ant MPC episode scored 5820.5, inside the blog's reported 5-episode range. The policies are not toy if-statements; they are engineered control systems with PD controllers, residual MPC, computer-vision pipelines, and finite-state machines.</p>
+
+<table>
+  <colgroup>
+    <col width="140"/>
+    <col width="120"/>
+    <col width="120"/>
+    <col width="520"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Policy</th>
+      <th background-color="light-gray">Lines</th>
+      <th background-color="light-gray">Functions</th>
+      <th background-color="light-gray">Key techniques</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Breakout</td>
+      <td>957</td>
+      <td>37</td>
+      <td>RAM/RGB geometry, ball-velocity estimation, wall reflection, stuck-loop breaker, late-game taper</td>
+    </tr>
+    <tr>
+      <td>Ant</td>
+      <td>1062</td>
+      <td>27</td>
+      <td>CPG phase oscillator, stance/swing warping, PD tracking, residual MPC (H=10, C=96)</td>
+    </tr>
+    <tr>
+      <td>HalfCheetah</td>
+      <td>854</td>
+      <td>31</td>
+      <td>Fourier PD gait, asymmetric phase frequency, staged-tree MPC overlay</td>
+    </tr>
+    <tr>
+      <td>VizDoom D3</td>
+      <td>1015</td>
+      <td>21</td>
+      <td>cv2 color thresholds, connected components, enemy/item/threat detectors, combat state machine</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>[[figure-anchor:learning-beyond-gradients:breakout-progression]]</p>
+
+<p>The Breakout policy is a good example of what this loop actually produces. The first version simply intercepts the ball. Later versions add a stuck-loop perturbation (the ball can enter a periodic route that clears no bricks), a fast-low-ball lead, and a late-game taper that releases the offset as the ball approaches the paddle. Each increment is a human-interpretable repair to a specific failure mode, validated by simulation.</p>
+
+<p>[[figure-anchor:learning-beyond-gradients:atari57-median-hns]]</p>
+
+<p>The comparison to Deep RL is fair only on a narrow axis: environment-step efficiency on a fixed task with a strong simulator and generous iteration budget. It ignores LLM API cost, wall-clock time, human scaffold design, and generalization. The unattended Atari57 batch reports median human-normalized scores competitive with PPO at 1M environment steps, but those 342 Codex trajectories consumed tokens and failed trials that are not counted on the x-axis. The policies are also tightly coupled to specific ROMs, color palettes, and physics parameters.</p>
+
+<p>For robotics, the blog's System 1 / System 2 decomposition is suggestive but unproven. Contact-rich manipulation, sim-to-real, and high-dimensional visual perception are not addressed. The most plausible near-term role for HL is as a <i>data-engineering layer</i>: a coding agent writes programmatic policies in simulation, successful rollouts pass regression tests, and the resulting trajectories train a neural VLA or diffusion policy. That reading connects it directly to RoboTwin 2.0's synthetic-data mission and to Foresight's quality filter.</p>
+
+<h1>Cross-cutting observations</h1>
+
+<p>Three ideas keep showing up across the threads:</p>
+
+<ul>
+  <li><b>Robustness needs data diversity at the source.</b> RoboTwin's domain randomization, EventVLA's memory for transient evidence, and WVM's value filter for suboptimal data all treat the training corpus as the primary intervention point.</li>
+  <li><b>Failure handling is moving from reactive to anticipatory.</b> Foresight predicts latent mismatch before the rollout terminates; EventVLA predicts which future frames will matter; HL records failure modes and regression-tests repairs. The common move is to make failure explicit and inspectable.</li>
+  <li><b>Explainability is becoming a practical requirement, not an afterthought.</b> Programmatic policies, conformal thresholds, and annotated object libraries all trade some peak performance for the ability to debug, test, and maintain the system.</li>
+</ul>
+
+<p>What is still missing is the glue. We do not yet have a single system that generates randomized synthetic data, filters it through a value model and failure detector, and uses an HL-style coding agent to repair the residual failures. Each piece exists in prototype; the integration is the next research problem.</p>
+
+<callout emoji="💡" background-color="light-blue" border-color="blue">
+  <p><b>Bottom line:</b> This period's most important signal is methodological, not a single number. The embodied-AI community is converging on a pipeline—data generation, failure monitoring, maintainable policies—rather than betting everything on scaling a single VLA. That convergence is worth watching closely.</p>
+</callout>

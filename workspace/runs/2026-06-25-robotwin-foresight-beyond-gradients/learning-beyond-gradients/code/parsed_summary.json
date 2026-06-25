@@ -1,0 +1,130 @@
+{
+  "breakout_milestones": [
+    {
+      "trial_name": "baseline_v0",
+      "score": 99.0,
+      "cumulative_env_steps": 16303,
+      "note": "initial RAM intercept"
+    },
+    {
+      "trial_name": "tunnel0_v1",
+      "score": 387.0,
+      "cumulative_env_steps": 43303,
+      "note": "return the ball, no loop breaker"
+    },
+    {
+      "trial_name": "stuck12_t1024_s256_v1",
+      "score": 507.0,
+      "cumulative_env_steps": 325859,
+      "note": "add stuck-loop perturbation"
+    },
+    {
+      "trial_name": "fastlead3_v1",
+      "score": 839.0,
+      "cumulative_env_steps": 708968,
+      "note": "handle fast low balls"
+    },
+    {
+      "trial_name": "secondwall_stucktaper8_lag2_v1",
+      "score": 864.0,
+      "cumulative_env_steps": 1513928,
+      "note": "late-game stuck taper + lag comp"
+    },
+    {
+      "trial_name": "breakout_default_864_eval3_v1",
+      "score": 864.0,
+      "cumulative_env_steps": 1907240,
+      "note": "default 864 3-episode validation"
+    },
+    {
+      "trial_name": "breakout_vision_min0_h8_eval3_v1",
+      "score": 864.0,
+      "cumulative_env_steps": 2055402,
+      "note": "pure-vision RGB controller 864"
+    }
+  ],
+  "ant_milestones": [
+    {
+      "trial_name": "ant_lr_cpgpd_v1",
+      "score": 2291.8756677500846,
+      "cumulative_env_steps": 5000,
+      "note": "left/right anti-phase CPG + PD"
+    },
+    {
+      "trial_name": "ant_yawaxis_grid_v2",
+      "score": 2857.850490012765,
+      "cumulative_env_steps": 20000,
+      "note": "add yaw feedback + retune"
+    },
+    {
+      "trial_name": "ant_h3_428_v1",
+      "score": 3161.956131255999,
+      "cumulative_env_steps": 50000,
+      "note": "add 2nd/3rd harmonics"
+    },
+    {
+      "trial_name": "ant_mpc_residual_v1_ep1",
+      "score": 3635.537237763405,
+      "cumulative_env_steps": 62000,
+      "note": "residual MPC baseline (H=6, C=32)"
+    },
+    {
+      "trial_name": "ant_mpc_residual_warm02_eval5_v1",
+      "score": 5165.188253095001,
+      "cumulative_env_steps": 85000,
+      "note": "warm-start residual plan"
+    },
+    {
+      "trial_name": "ant_mpc_default_adaptive_ep1_v1",
+      "score": 6146.207719609141,
+      "cumulative_env_steps": 106300,
+      "note": "speed-adaptive phase + stance"
+    }
+  ],
+  "atari57_best_codex_median_hns": {
+    "native_obs": 1.8301244074351692,
+    "ram": 0.8074348744877081
+  },
+  "atari57_per_game_top_advantage": [
+    {
+      "game": "DoubleDunk",
+      "advantage_over_ppo2": 10.137
+    },
+    {
+      "game": "Asterix",
+      "advantage_over_ppo2": 9.454
+    },
+    {
+      "game": "Krull",
+      "advantage_over_ppo2": 7.751
+    },
+    {
+      "game": "Jamesbond",
+      "advantage_over_ppo2": 7.54
+    },
+    {
+      "game": "Breakout",
+      "advantage_over_ppo2": 6.316
+    },
+    {
+      "game": "Centipede",
+      "advantage_over_ppo2": 3.317
+    },
+    {
+      "game": "Skiing",
+      "advantage_over_ppo2": 1.51
+    },
+    {
+      "game": "Tennis",
+      "advantage_over_ppo2": 1.195
+    },
+    {
+      "game": "Phoenix",
+      "advantage_over_ppo2": 1.008
+    },
+    {
+      "game": "Gopher",
+      "advantage_over_ppo2": 0.977
+    }
+  ]
+}

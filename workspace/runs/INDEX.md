@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-06-25 — 2026-06-23 to 2026-06-25
+- Doc: https://fudan-nlp.feishu.cn/docx/NXqedB7DAo2mx3xLcyhct759ndd
+- Run: runs/2026-06-25-robotwin-foresight-beyond-gradients/
+- Deep threads: RoboTwin 2.0 synthetic bimanual data engine (2506.18088), Foresight failure detection with action-conditioned world-model latents (2606.23085), Learning Beyond Gradients heuristic-learning paradigm (blog)
+- Covered papers: 2506.18088, 2606.23085
+- Shortlisted papers: 2606.20092, 2606.24742, 2606.22540
+
 ## 2026-06-22 — 2026-06-15 to 2026-06-22
 - Doc: https://fudan-nlp.feishu.cn/docx/WA6hdqAhWox75Zx0DkRcAxULnTG
 - Run: runs/2026-06-22-humanscale-playful-imagewam-wrbench/
