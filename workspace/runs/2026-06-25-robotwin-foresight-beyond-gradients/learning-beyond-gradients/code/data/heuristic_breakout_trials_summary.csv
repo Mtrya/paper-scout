@@ -1,0 +1,82 @@
+trial_index,timestamp,trial_name,kind,policy,num_envs,episodes_started,episodes_finished,env_steps,ale_frames,cumulative_env_steps,cumulative_ale_frames,score_mean,score_min,score_max,notes
+0,2026-04-01T23:47:00-07:00,shape_action_probe,probe,manual_probe,1,5,0,32,64,32,64,,,,"Inspect action count, obs/info shapes, and per-action short rollouts."
+1,2026-04-01T23:48:00-07:00,reset_palette_probe,probe,manual_probe,1,1,0,0,0,32,64,,,,Dump one reset frame and RGB palette to /tmp/breakout_reset.png.
+2,2026-04-01T23:49:00-07:00,component_bbox_probe,probe,manual_probe,1,1,0,0,0,32,64,,,,Connected-component dump for non-black colors to identify ball/paddle/brick ROIs.
+3,2026-04-01T23:52:00-07:00,ram_byte_corr_probe_v1,probe,manual_probe,1,9,8,5000,10000,5032,10064,,,,Correlate image-derived ball/paddle labels with all 128 RAM bytes under a fixed action cycle.
+4,2026-04-01T23:56:00-07:00,ram_fit_action_probe_v1,probe,manual_probe,1,4,3,3000,6000,8032,16064,,,,Fit RAM affine maps and probe paddle action directions; first version had a paddle detector false positive on the right wall.
+5,2026-04-01T23:59:00-07:00,ram_fit_action_probe_v2,probe,manual_probe,1,2,1,1500,3000,9532,19064,,,,"Refit RAM affine maps after excluding the right-side red wall from paddle detection; action 2 = right, action 3 = left."
+6,2026-04-01T23:57:30-07:00,baseline_v0,eval,ram,1,1,1,6771,6771,16303,25835,99.0,99.0,99.0,initial RAM intercept policy
+7,2026-04-01T23:58:15-07:00,tunnel0_v1,eval,ram,1,1,1,27000,27000,43303,52835,387.0,387.0,387.0,no_tunnel_offset
+8,2026-04-01T23:58:18-07:00,tunnel12_v1,eval,ram,1,1,1,3396,3396,46699,56231,19.0,19.0,19.0,stronger_tunnel_bias
+9,2026-04-01T23:58:19-07:00,tunnel16_v1,eval,ram,1,1,1,2112,2112,48811,58343,9.0,9.0,9.0,max_tunnel_bias_probe
+10,2026-04-01T23:58:21-07:00,lead3_t8_v1,eval,ram,1,1,1,6508,6508,55319,64851,92.0,92.0,92.0,shorter_chase_lead
+11,2026-04-01T23:58:22-07:00,lead10_t8_v1,eval,ram,1,1,1,3509,3509,58828,68360,31.0,31.0,31.0,longer_chase_lead
+12,2026-04-01T23:58:50-07:00,tunnel0_max108k_v1,eval,ram,1,1,1,27000,27000,85828,95360,387.0,387.0,387.0,"pre-patch cap bug: requested 108000, but env max_episode_steps was still 27000"
+13,2026-04-01T23:59:03-07:00,tunnel0_eval3_v1,eval,ram,1,3,3,81000,81000,166828,176360,387.0,387.0,387.0,3-episode check for tunnel0 config
+14,2026-04-02T00:00:33-07:00,tunnel0_max108k_v2,eval,ram,1,1,1,108000,108000,274828,284360,387.0,387.0,387.0,"same as tunnel0_v1, fixed max_episode_steps propagation"
+15,2026-04-02T00:04:09-07:00,stuck12_t2048_s512_v1,eval,ram,1,1,1,18292,18292,293120,302652,428.0,428.0,428.0,enable stuck-mode offset cycling after 2048 no-reward steps
+16,2026-04-02T00:04:37-07:00,stuck8_t1024_s256_v1,eval,ram,1,1,1,14422,14422,307542,317074,437.0,437.0,437.0,earlier_smaller_offsets
+17,2026-04-02T00:04:41-07:00,stuck12_t1024_s256_v1,eval,ram,1,1,1,18317,18317,325859,335391,507.0,507.0,507.0,earlier_default_offsets
+18,2026-04-02T00:04:44-07:00,stuck16_t1024_s256_v1,eval,ram,1,1,1,18317,18317,344176,353708,507.0,507.0,507.0,earlier_larger_offsets
+19,2026-04-02T00:04:48-07:00,stuck16_t2048_s512_v1,eval,ram,1,1,1,18164,18164,362340,371872,475.0,475.0,475.0,later_larger_offsets
+20,2026-04-02T00:04:51-07:00,stuck20_t2048_s512_v1,eval,ram,1,1,1,18164,18164,380504,390036,475.0,475.0,475.0,later_aggressive_offsets
+21,2026-04-02T00:05:31-07:00,stuck12_t1024_s256_eval3_v1,eval,ram,1,3,3,54951,54951,435455,444987,507.0,507.0,507.0,3-episode eval with new default stuck-breaker config
+22,2026-04-02T00:13:55-07:00,downward_intercept_clamp_eval3_v1,eval,ram,1,3,3,38202,38202,473657,483189,424.0,424.0,424.0,predict paddle intercept for all downward balls; clamp negative time-to-paddle to 0
+23,2026-04-02T00:14:44-07:00,d2_lo24_so12_v1,eval,ram,1,1,1,10079,10079,483736,493268,390.0,390.0,390.0,tighter_deadband
+24,2026-04-02T00:14:46-07:00,d2_lo32_so12_v1,eval,ram,1,1,1,8629,8629,492365,501897,354.0,354.0,354.0,tighter_deadband_far_launch
+25,2026-04-02T00:14:49-07:00,d3_lo16_so12_v1,eval,ram,1,1,1,12570,12570,504935,514467,423.0,423.0,423.0,closer_launch
+26,2026-04-02T00:14:51-07:00,d3_lo32_so12_v1,eval,ram,1,1,1,11951,11951,516886,526418,414.0,414.0,414.0,farther_launch
+27,2026-04-02T00:14:54-07:00,d4_lo24_so12_v1,eval,ram,1,1,1,14340,14340,531226,540758,424.0,424.0,424.0,looser_deadband
+28,2026-04-02T00:14:57-07:00,d3_lo24_so14_v1,eval,ram,1,1,1,16118,16118,547344,556876,428.0,428.0,428.0,stronger_stuck_offset
+29,2026-04-02T00:15:00-07:00,d2_lo24_so14_v1,eval,ram,1,1,1,10079,10079,557423,566955,390.0,390.0,390.0,tighter_deadband_stronger_stuck
+30,2026-04-02T00:15:03-07:00,d3_lo24_so10_v1,eval,ram,1,1,1,16255,16255,573678,583210,425.0,425.0,425.0,weaker_stuck_offset
+31,2026-04-02T00:15:53-07:00,last_life_snap_eval3_v1,eval,ram,1,3,3,44496,44496,618174,627706,428.0,428.0,428.0,"on final life, snap to current ball_x for downward balls below y=180"
+32,2026-04-02T00:22:00-07:00,low_ball_hold_eval3_v1,eval,ram,1,3,3,44094,44094,662268,671800,437.0,437.0,437.0,hold paddle when ball is below paddle_y and horizontally within 8 px
+33,2026-04-02T00:23:34-07:00,fastlead1_v1,eval,ram,1,1,1,16434,16434,678702,688234,421.0,421.0,421.0,low_lead_for_fast_low_ball
+34,2026-04-02T00:23:37-07:00,fastlead2_v1,eval,ram,1,1,1,12148,12148,690850,700382,416.0,416.0,416.0,medium_low_lead_for_fast_low_ball
+35,2026-04-02T00:23:41-07:00,fastlead3_v1,eval,ram,1,1,1,18118,18118,708968,718500,839.0,839.0,839.0,moderate_low_lead_for_fast_low_ball
+36,2026-04-02T00:23:44-07:00,fastlead4_v1,eval,ram,1,1,1,13155,13155,722123,731655,427.0,427.0,427.0,slightly_reduced_low_lead_for_fast_low_ball
+37,2026-04-02T00:24:11-07:00,fastlead2p5_vy3_v1,eval,ram,1,1,1,12734,12734,734857,744389,424.0,424.0,424.0,local_sweep_fastlead_2p5
+38,2026-04-02T00:24:14-07:00,fastlead3p5_vy3_v1,eval,ram,1,1,1,11632,11632,746489,756021,427.0,427.0,427.0,local_sweep_fastlead_3p5
+39,2026-04-02T00:24:17-07:00,fastlead3_vy2p5_v1,eval,ram,1,1,1,18118,18118,764607,774139,839.0,839.0,839.0,local_sweep_minvy_2p5
+40,2026-04-02T00:24:21-07:00,fastlead3_vy3p5_v1,eval,ram,1,1,1,17538,17538,782145,791677,425.0,425.0,425.0,local_sweep_minvy_3p5
+41,2026-04-02T00:24:23-07:00,fastlead2p5_vy2p5_v1,eval,ram,1,1,1,12734,12734,794879,804411,424.0,424.0,424.0,local_sweep_fastlead_2p5_minvy_2p5
+42,2026-04-02T00:24:26-07:00,fastlead3p5_vy3p5_v1,eval,ram,1,1,1,15037,15037,809916,819448,435.0,435.0,435.0,local_sweep_fastlead_3p5_minvy_3p5
+43,2026-04-02T00:24:52-07:00,d2_so8_fastlead3_v1,eval,ram,1,1,1,15362,15362,825278,834810,431.0,431.0,431.0,tight_deadband_weak_stuck_fastlead3
+44,2026-04-02T00:24:55-07:00,d2_so12_fastlead3_v1,eval,ram,1,1,1,15330,15330,840608,850140,428.0,428.0,428.0,tight_deadband_mid_stuck_fastlead3
+45,2026-04-02T00:24:57-07:00,d2_so16_fastlead3_v1,eval,ram,1,1,1,13201,13201,853809,863341,426.0,426.0,426.0,tight_deadband_strong_stuck_fastlead3
+46,2026-04-02T00:25:00-07:00,d3_so16_fastlead3_v1,eval,ram,1,1,1,13361,13361,867170,876702,421.0,421.0,421.0,default_deadband_strong_stuck_fastlead3
+47,2026-04-02T00:25:03-07:00,d4_so8_fastlead3_v1,eval,ram,1,1,1,15434,15434,882604,892136,423.0,423.0,423.0,loose_deadband_weak_stuck_fastlead3
+48,2026-04-02T00:25:06-07:00,d4_so16_fastlead3_v1,eval,ram,1,1,1,15857,15857,898461,907993,427.0,427.0,427.0,loose_deadband_strong_stuck_fastlead3
+49,2026-04-02T00:25:26-07:00,lead4_fastlead3_v1,eval,ram,1,1,1,15053,15053,913514,923046,409.0,409.0,409.0,sweep_chase_lead_4_fastlead3
+50,2026-04-02T00:25:29-07:00,lead5_fastlead3_v1,eval,ram,1,1,1,18921,18921,932435,941967,837.0,837.0,837.0,sweep_chase_lead_5_fastlead3
+51,2026-04-02T00:25:32-07:00,lead6_fastlead3_v2,eval,ram,1,1,1,18118,18118,950553,960085,839.0,839.0,839.0,control_chase_lead_6_fastlead3
+52,2026-04-02T00:25:35-07:00,lead7_fastlead3_v1,eval,ram,1,1,1,13447,13447,964000,973532,405.0,405.0,405.0,sweep_chase_lead_7_fastlead3
+53,2026-04-02T00:25:39-07:00,lead8_fastlead3_v1,eval,ram,1,1,1,16620,16620,980620,990152,417.0,417.0,417.0,sweep_chase_lead_8_fastlead3
+54,2026-04-02T00:31:40-07:00,fastlead3_stucktaper8_eval3_v1,eval,ram,1,3,3,43095,43095,1023715,1033247,428.0,428.0,428.0,fast_low_ball_lead_steps=3 default + stuck offset fades out within 8 predicted steps to paddle
+55,2026-04-02T00:31:57-07:00,fastlead3_stucktaper1_v1,eval,ram,1,1,1,18118,18118,1041833,1051365,839.0,839.0,839.0,fastlead3 with stuck offset fading only in final 1 predicted step
+56,2026-04-02T00:32:31-07:00,fastlead3_stucktaper2_v1,eval,ram,1,1,1,13361,13361,1055194,1064726,421.0,421.0,421.0,fastlead3 with stuck offset fading over final 2 predicted steps
+57,2026-04-02T00:32:54-07:00,fastlead3_trigger1280_notaper_v1,eval,ram,1,1,1,15654,15654,1070848,1080380,428.0,428.0,428.0,fastlead3 with original full stuck offset but delayed trigger=1280
+58,2026-04-02T00:34:31-07:00,fastlead3_brickbias_v1,eval,ram,1,1,1,15090,15090,1085938,1095470,428.0,428.0,428.0,stuck offset direction follows normalized right-left brick balance when abs(balance) > 0.01
+59,2026-04-02T00:35:32-07:00,localgrid_fl2.8_db2.8_v1,eval,ram,1,1,1,12145,12145,1098083,1107615,428.0,428.0,428.0,3x3 local sweep around fastlead3/deadband3 with brick bias disabled
+60,2026-04-02T00:35:35-07:00,localgrid_fl2.8_db3_v1,eval,ram,1,1,1,12615,12615,1110698,1120230,419.0,419.0,419.0,3x3 local sweep around fastlead3/deadband3 with brick bias disabled
+61,2026-04-02T00:35:38-07:00,localgrid_fl2.8_db3.2_v1,eval,ram,1,1,1,13349,13349,1124047,1133579,389.0,389.0,389.0,3x3 local sweep around fastlead3/deadband3 with brick bias disabled
+62,2026-04-02T00:35:41-07:00,localgrid_fl3_db2.8_v1,eval,ram,1,1,1,11586,11586,1135633,1145165,403.0,403.0,403.0,3x3 local sweep around fastlead3/deadband3 with brick bias disabled
+63,2026-04-02T00:35:44-07:00,localgrid_fl3_db3_v1,eval,ram,1,1,1,18118,18118,1153751,1163283,839.0,839.0,839.0,3x3 local sweep around fastlead3/deadband3 with brick bias disabled
+64,2026-04-02T00:35:47-07:00,localgrid_fl3_db3.2_v1,eval,ram,1,1,1,12839,12839,1166590,1176122,414.0,414.0,414.0,3x3 local sweep around fastlead3/deadband3 with brick bias disabled
+65,2026-04-02T00:35:51-07:00,localgrid_fl3.2_db2.8_v1,eval,ram,1,1,1,16341,16341,1182931,1192463,787.0,787.0,787.0,3x3 local sweep around fastlead3/deadband3 with brick bias disabled
+66,2026-04-02T00:35:53-07:00,localgrid_fl3.2_db3_v1,eval,ram,1,1,1,11632,11632,1194563,1204095,427.0,427.0,427.0,3x3 local sweep around fastlead3/deadband3 with brick bias disabled
+67,2026-04-02T00:35:56-07:00,localgrid_fl3.2_db3.2_v1,eval,ram,1,1,1,12839,12839,1207402,1216934,414.0,414.0,414.0,3x3 local sweep around fastlead3/deadband3 with brick bias disabled
+68,2026-04-02T00:36:52-07:00,secondwall_brickbias_v1,eval,ram,1,1,1,18118,18118,1225520,1235052,839.0,839.0,839.0,brick-balance-guided stuck direction only after score >= 432
+69,2026-04-02T00:37:48-07:00,secondwall_stucktaper8_v1,eval,ram,1,1,1,31846,31846,1257366,1266898,862.0,862.0,862.0,apply stuck offset taper only after score >= 432
+70,2026-04-02T00:38:13-07:00,secondwall_stucktaper8_eval3_v1,eval,ram,1,3,3,95538,95538,1352904,1362436,862.0,862.0,862.0,3-episode validation for score-conditional stuck taper after first wall
+71,2026-04-02T00:41:15-07:00,secondwall_stucktaper8_lag5_v1,eval,ram,1,1,1,108000,108000,1460904,1470436,860.0,860.0,860.0,score>=432: stuck taper horizon=8 + one-step paddle drift compensation of 5px when ball_y>=170
+72,2026-04-02T00:42:00-07:00,secondwall_stucktaper8_lag2_v1,eval,ram,1,1,1,53024,53024,1513928,1523460,864.0,864.0,864.0,score>=432: stuck taper horizon=8 + one-step paddle drift compensation 2px when ball_y>=170
+73,2026-04-02T00:42:04-07:00,secondwall_stucktaper8_lag3_v1,eval,ram,1,1,1,18240,18240,1532168,1541700,840.0,840.0,840.0,score>=432: stuck taper horizon=8 + one-step paddle drift compensation 3px when ball_y>=170
+74,2026-04-02T00:42:21-07:00,secondwall_stucktaper8_lag4_v1,eval,ram,1,1,1,108000,108000,1640168,1649700,860.0,860.0,860.0,score>=432: stuck taper horizon=8 + one-step paddle drift compensation 4px when ball_y>=170
+75,2026-04-02T00:42:39-07:00,secondwall_stucktaper8_lag6_v1,eval,ram,1,1,1,108000,108000,1748168,1757700,864.0,864.0,864.0,score>=432: stuck taper horizon=8 + one-step paddle drift compensation 6px when ball_y>=170
+76,2026-04-02T00:44:49-07:00,breakout_default_864_eval3_v1,eval,ram,1,3,3,159072,159072,1907240,1916772,864.0,864.0,864.0,default config after promoting secondwall stuck taper + lag2 compensation
+77,2026-04-02T08:23:21-07:00,breakout_vis_frameskip2_probe_v1,eval,ram,1,1,1,3658,7316,1910898,1924088,317.0,317.0,317.0,visualization probe only: frame_skip=2 to avoid max-pool trail artifacts
+78,2026-04-02T17:13:13-07:00,breakout_vision_smoke,eval,vision,1,1,1,11358,11358,1922256,1935446,310.0,310.0,310.0,
+79,2026-04-02T17:23:08-07:00,breakout_vision_db3_ch8_t0_v1,eval,vision,1,3,3,43146,43146,1965402,1978592,428.0,428.0,428.0,
+80,2026-04-02T17:38:13-07:00,breakout_vision_min0_h8_eval3_v1,eval,vision,1,3,3,90000,90000,2055402,2068592,864.0,864.0,864.0,pure-vision RGB-only controller; lower stuck-offset taper threshold to 0 so late intercepts are not biased away from the ball
