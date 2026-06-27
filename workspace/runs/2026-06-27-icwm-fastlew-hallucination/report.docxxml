@@ -1,0 +1,118 @@
+<title>Paper Scout Research Report - 2026-06-27</title>
+
+<p>This week's strongest signal is a shared conviction that world models are not just generative video toys, but deployable reasoning substrates—and that their main bottleneck is no longer architecture, but <b>how they adapt, plan, and know when they are failing</b>. Three papers make the case from different angles: a VLA that identifies its own camera and morphology through a handful of self-generated interactions; a latent world model that predicts action-prefix outcomes in parallel to make planning fast and less error-prone; and a large-scale empirical study arguing that world-model hallucination is a coverage problem with coverage-derived cures. Below, I investigate each idea with code and data; two additional shortlist papers round out the period.</p>
+
+<callout emoji="✅" background-color="light-green">
+  <p><b>Standout:</b> <i>Hallucination in World Models is Predictable and Preventable</i> is the most complete research artifact of the run—the authors release MMBench2, code, checkpoints, and a live browser demo, and the simplest of their three predictors reproduces cleanly on a laptop.</p>
+</callout>
+
+<h1>World Models: Adaptation, Speed, and Self-Diagnosis</h1>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>PhysiFormer</b> (Chen, Lan &amp; Vedaldi, 2026)</td>
+      <td>A diffusion transformer that predicts future mesh-vertex trajectories directly in world coordinates, handling rigid and elastic materials without hand-coded physics.</td>
+      <td>Moves world modeling out of view-dependent pixel space and into a geometry-aware, simulator-like representation that robots and graphics pipelines can both consume.</td>
+      <td><a href="https://arxiv.org/abs/2606.27364">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>In-Context World Modeling for Robotic Control</h2>
+<p>Wang et al. (2026) · <a href="https://huggingface.co/papers/2606.26025">HF</a> · <a href="https://arxiv.org/abs/2606.26025">PDF</a></p>
+
+<p>The standard VLA policy <latex>\pi_\theta(a_t \mid o_t, l)</latex> silently assumes the camera viewpoint, mounting offset, and robot morphology are the same ones seen during training. When they are not, performance collapses: on the authors' real UR5e setup, success drops from 68% to 17% after a viewpoint shift. ICWM reframes this as <b>test-time system identification</b>: instead of fine-tuning, the robot performs a short sequence of task-agnostic random probing motions and prepends the resulting <latex>(o_i^s, a_i, o_i^e)</latex> clips as in-context examples. The VLA then conditions on these clips and infers the current system configuration <latex>\psi</latex> implicitly, without parameter updates or task demonstrations.</p>
+
+<p>The information-theoretic justification is crisp. If the latent state decomposes into a time-invariant configuration <latex>\psi</latex> and a time-varying scene state <latex>\xi_t</latex>, then under weak assumptions any action sequence satisfies <latex>I(\psi; o_{0:t}, a_{1:t}) &gt; I(\psi; o_0)</latex>. In other words, even random movements carry strictly more information about viewpoint and kinematics than a single image. The paper's ablations confirm the model is not just attending to extra tokens: removing the visual outcomes causes a −56.4% average collapse, and <i>false</i> context from a 180° viewpoint performs worse than no context at all.</p>
+
+<p>Empirically, ICWM raises OOD LIBERO success from 19.8% to 25.0%, with the largest gains on the long-horizon suite (+26.3%). It also beats an explicit-configuration baseline that receives ground-truth camera angles as text, suggesting the interaction context encodes more than a scalar viewpoint—it encodes the causal observation-action mapping.</p>
+
+<p>[[figure-anchor:icwm:information-gain]]</p>
+
+<p><b>What the probe shows.</b> Because no official code or checkpoint has been released, I built a synthetic probe that reproduces the paper's Proposition 1 on a discretized viewpoint-morphology grid. With 14 candidate viewpoints and five random probing steps, interaction context reduces posterior entropy from 3.81 bits to 1.56 bits, compared with 2.19 bits for a single observation. The probe is preserved in the run packet; the qualitative conclusion—that random interaction is informative—holds, but the LIBERO cross-view numbers remain paper-only until a release appears.</p>
+
+<hr/>
+
+<h2>Fast LeWorldModel</h2>
+<p>Gao &amp; Xu (2026) · <a href="https://huggingface.co/papers/2606.26217">HF</a> · <a href="https://arxiv.org/abs/2606.26217">PDF</a> · <a href="https://github.com/Yuntian-Gao/Fast-LeWorldModel">Code</a></p>
+
+<p>LeWorldModel and other JEPA-style planners evaluate a candidate action sequence by repeatedly composing a one-step latent transition model <latex>\hat{z}_{t+1} = F(z_t, a_t)</latex>. That is slow—each candidate needs a full autoregressive rollout—and errors compound because every future latent depends on previously imagined latents. Fast-LeWM keeps the encoder and SIGReg regularizer but changes the dynamics interface: it encodes action <i>prefixes</i> and predicts all future latents in parallel.</p>
+
+<p>Concretely, a causal Transformer consumes the action sequence <latex>(a_t, \dots, a_{t+H-1})</latex> and emits prefix tokens <latex>p_{t,k}</latex>, each summarizing <latex>a_{t:t+k-1}</latex>. A parallel predictor then maps the anchor latent <latex>z_t</latex> and all prefix tokens to <latex>(\hat{z}_{t+1}, \dots, \hat{z}_{t+H})</latex> in one forward pass. During CEM planning, the terminal prefix token directly scores the candidate sequence, cutting the dynamics-module cost from 31.4 s to 8.0 s on Two-Room and the full CEM solve time from 54.4 s to 28.3 s. Success rises from 85.8% to 90.5%.</p>
+
+<p>[[figure-anchor:fastlew:error-growth]]</p>
+
+<p><b>What the probe shows.</b> The official GitHub repository is currently an empty placeholder, so I implemented a minimal nonlinear latent-dynamics task to compare the two rollout interfaces. Prefix prediction uses 1 model call per candidate instead of 20, and its terminal MSE at horizon 20 is roughly half the autoregressive value (144 vs. 312). The toy task is far simpler than LeWM's visual planning domain, but it isolates exactly the mechanism the paper highlights: removing sequential dependency slows error growth.</p>
+
+<hr/>
+
+<h2>Hallucination in World Models is Predictable and Preventable</h2>
+<p>Hansen &amp; Wang (2026) · <a href="https://huggingface.co/papers/2606.27326">HF</a> · <a href="https://arxiv.org/abs/2606.27326">PDF</a> · <a href="https://nicklashansen.com/mmbench2">Code &amp; Data</a></p>
+
+<p>This paper makes the case that world-model hallucination is primarily a <b>data-coverage</b> problem, not a missing inductive bias, and it backs the claim with an unusually complete artifact release. The authors build MMBench2—65,600 trajectories, 427 hours of 224×224 video at 15 fps, 210 tasks across 10 domains—and train a 350M Dreamer-4-style world model on it. They then dissect failures into three pipeline stages:</p>
+
+<ul>
+  <li><b>Perceptual hallucination</b> — the tokenizer projects an OOD scene onto the nearest in-distribution exemplar.</li>
+  <li><b>Action marginalization</b> — the dynamics prediction is visually plausible but insensitive to the action.</li>
+  <li><b>Scene divergence</b> — autoregressive rollouts produce physically implausible futures.</li>
+</ul>
+
+<p>For each stage they propose a label-free predictor: tokenizer round-trip residual <latex>u_r</latex>, flow instability <latex>u_f</latex>, and inter-seed variance <latex>u_s</latex>. All three correlate strongly with realized rollout error (Spearman <latex>\rho \approx 0.80</latex>).</p>
+
+<p>[[figure-anchor:hallucination:ur-psnr]]</p>
+
+<p><b>What the probe shows.</b> I downloaded a validation slice of MMBench2 and the released combined-model tokenizer checkpoint, then ran the <latex>u_r</latex> predictor on 24 held-out <i>cup-catch</i> frames. Higher residuals line up with lower reconstruction PSNR exactly as the paper predicts (e.g., frame 1: <latex>u_r = 0.045</latex>, PSNR = 39.2 dB; frame 10: <latex>u_r = 0.024</latex>, PSNR = 42.6 dB). The code is self-contained and runs in a CPU-only venv; the heavier dynamics checkpoints and live-environment rollout pipeline were inspected but not executed here.</p>
+
+<p>The most striking result is the targeted-data-collection experiment: finetuning the pretrained model on just <b>50 trajectories per unseen task</b>, collected with a curiosity policy driven by <latex>u_r</latex>, reaches ~90% of expert/human oracle performance. That is a powerful demonstration that the same internal signal can both detect and mitigate hallucination.</p>
+
+<h1>Agents: Learning from Their Own Trajectories</h1>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>OPID</b> (Yang et al., 2026)</td>
+      <td>Extracts hierarchical hindsight skills from completed on-policy trajectories and distills them into dense token-level advantages for agentic RL.</td>
+      <td>Avoids external skill libraries or retrieved privileged context at inference, addressing a real mismatch problem in multi-turn agents.</td>
+      <td><a href="https://huggingface.co/papers/2606.26790">HF</a> · <a href="https://arxiv.org/abs/2606.26790">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Qwen-Image-Agent</b> (Zhang et al., 2026)</td>
+      <td>An agentic image-generation framework that plans, reasons, searches, remembers, and iterates to bridge the context gap in real-world T2I requests.</td>
+      <td>Shows agentic loops being applied outside text/code domains; worth watching for how visual planning agents may borrow similar tooling.</td>
+      <td><a href="https://huggingface.co/papers/2606.26907">HF</a> · <a href="https://arxiv.org/abs/2606.26907">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h1>Cross-Cutting Observations</h1>
+
+<p>Two patterns cut across the deep threads. First, <b>world models are acquiring inference-time structure</b>: ICWM uses the context window for system identification, Fast-LeWM redesigns the planning query to avoid autoregressive error accumulation, and the MMBench2 work treats hallucination as a runtime signal rather than a post-hoc failure. Second, <b>coverage is replacing capacity as the limiting factor</b>: Hallucination shows that a 350M model fails predictably where data is sparse, and that targeted data collection closes the gap faster than scaling. The open question is whether these coverage-centric insights transfer to billion-parameter models and real robot deployments, where collecting ground-truth action labels is far harder than in simulation.</p>

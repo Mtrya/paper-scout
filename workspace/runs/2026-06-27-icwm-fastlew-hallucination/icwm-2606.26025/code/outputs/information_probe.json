@@ -1,0 +1,24 @@
+{
+  "true_psi_deg": 45,
+  "n_viewpoints": 14,
+  "T": 5,
+  "prior_entropy_bits": 3.807354922057604,
+  "single_obs": {
+    "posterior_entropy_bits": 2.186447948744338,
+    "information_gain_bits": 1.6209069733132662,
+    "top_viewpoints_deg": [
+      30,
+      315,
+      300
+    ]
+  },
+  "interaction_context": {
+    "posterior_entropy_bits": 1.559694130863865,
+    "information_gain_bits": 2.247660791193739,
+    "top_viewpoints_deg": [
+      300,
+      45,
+      30
+    ]
+  }
+}

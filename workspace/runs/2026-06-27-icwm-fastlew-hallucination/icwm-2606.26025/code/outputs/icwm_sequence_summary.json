@@ -1,0 +1,6 @@
+{
+  "num_context_clips": 5,
+  "context_token_summary": "[clip_0:img_s] a+093 a-046 a+044 a-039 a+045 a+072 a-085 [clip_0:img_e] [clip_1:img_s] a-015 a-001 a-061 a-049 a-031 a+026 a+084 [clip_1:img_e] [clip_2:img_s] a+095 a-010 a+072 a-099 a+003 a+080 a+007 [clip_2:img_e] [clip_3:img_s] a-094 a-037 a-017 a-018 a-026 a+078 a-092 [clip_3:img_e] [clip_4:img_s] a-076 a+052 a+087 a-083 a+031 a-060 a+077 [clip_4:img_e]",
+  "task_token_summary": "[task_img] \"pick up the black bowl and place it on the plate\" => a-023 a-044 a-080 a+095 a-020 a-023 a+052",
+  "full_sequence_summary": "[clip_0:img_s] a+093 a-046 a+044 a-039 a+045 a+072 a-085 [clip_0:img_e] [clip_1:img_s] a-015 a-001 a-061 a-049 a-031 a+026 a+084 [clip_1:img_e] [clip_2:img_s] a+095 a-010 a+072 a-099 a+003 a+080 a+007 [clip_2:img_e] [clip_3:img_s] a-094 a-037 a-017 a-018 a-026 a+078 a-092 [clip_3:img_e] [clip_4:img_s] a-076 a+052 a+087 a-083 a+031 a-060 a+077 [clip_4:img_e] [task_img] \"pick up the black bowl and place it on the plate\" => a-023 a-044 a-080 a+095 a-020 a-023 a+052"
+}

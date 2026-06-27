@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-06-27 — 2026-06-26 to 2026-06-27
+- Doc: https://fudan-nlp.feishu.cn/docx/RXoKdXYYtowcXjxSELKckfghnRb
+- Run: runs/2026-06-27-icwm-fastlew-hallucination/
+- Deep threads: In-Context World Modeling for Robotic Control (2606.26025), Fast LeWorldModel (2606.26217), Hallucination in World Models is Predictable and Preventable (2606.27326)
+- Covered papers: 2606.26025, 2606.26217, 2606.27326
+- Shortlisted papers: 2606.27364, 2606.26790, 2606.26907
+
 ## 2026-06-25 — 2026-06-23 to 2026-06-25
 - Doc: https://fudan-nlp.feishu.cn/docx/NXqedB7DAo2mx3xLcyhct759ndd
 - Run: runs/2026-06-25-robotwin-foresight-beyond-gradients/
