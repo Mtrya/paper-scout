@@ -85,7 +85,7 @@ case "$agent" in
         exec codex exec "$prompt"
         ;;
     kimi)
-        exec kimi -p "$prompt"
+        exec kimi --afk -p "$prompt"
         ;;
     qoder)
         exec qodercli --permission-mode auto "$prompt"
