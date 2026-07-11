@@ -1,0 +1,21 @@
+{
+  "ok": true,
+  "identity": "bot",
+  "data": {
+    "chat_id": "oc_7b2e57b70b5447d7afb92909adcab724",
+    "create_time": "2026-07-11 16:43:15",
+    "message_id": "om_x100b6a146ce214a4b1d75701a76ed5f"
+  },
+  "_notice": {
+    "skills": {
+      "current": "",
+      "message": "lark-cli skills not installed, run: lark-cli update",
+      "target": "1.0.26"
+    },
+    "update": {
+      "current": "1.0.26",
+      "latest": "1.0.68",
+      "message": "lark-cli 1.0.68 available, current 1.0.26, run: lark-cli update"
+    }
+  }
+}

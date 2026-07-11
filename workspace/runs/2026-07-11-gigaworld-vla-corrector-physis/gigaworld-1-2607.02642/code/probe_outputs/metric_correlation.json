@@ -1,0 +1,31 @@
+{
+  "note": "Synthetic reproduction of Figures 4-5 from GigaWorld-1.",
+  "metric_correlations_with_WMES": {
+    "Background Consistency": -0.8926853382388996,
+    "Photometric Consistency": -0.8697036703715776,
+    "Interaction Quality": 0.2461963116789164,
+    "Semantic Alignment": 0.3588499632146615,
+    "Aesthetic Quality": 0.6913686337596697,
+    "Image Quality": 0.7144420491635666,
+    "JEPA Similarity": 0.7599614881845008,
+    "Perspectivity": 0.8129465319577326,
+    "Instruction Following": 0.8190242869005044,
+    "Subject Consistency": 0.8492995489081581
+  },
+  "interpretation": {
+    "positive_predictors": [
+      "Semantic Alignment",
+      "Aesthetic Quality",
+      "Image Quality",
+      "JEPA Similarity",
+      "Perspectivity",
+      "Instruction Following",
+      "Subject Consistency"
+    ],
+    "negative_predictors": [
+      "Background Consistency",
+      "Photometric Consistency"
+    ],
+    "unreliable": []
+  }
+}
