@@ -82,13 +82,20 @@ prompt="$(printf 'Today is %s.\n\n' "$today"; cat "$repo_root/prompt.txt")"
 
 case "$agent" in
     codex)
-        exec codex exec "$prompt"
+        # Non-interactive / unattended: workspace-write sandbox, no approval prompts,
+        # network enabled (needed for web search, HF, Lark, etc.).
+        exec codex exec \
+            --sandbox workspace-write \
+            --ask-for-approval never \
+            -c 'sandbox_workspace_write.network_access=true' \
+            "$prompt"
         ;;
     kimi)
         exec kimi --afk -p "$prompt"
         ;;
     qoder)
-        exec qodercli --permission-mode auto "$prompt"
+        # -p = headless/print mode; --yolo = auto-confirm tool calls.
+        exec qodercli -p --yolo "$prompt"
         ;;
     *)
         echo "Unknown agent: $agent" >&2
