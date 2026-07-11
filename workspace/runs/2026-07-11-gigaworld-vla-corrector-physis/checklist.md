@@ -22,10 +22,10 @@
 - [x] Durable evidence is in thread directories.
 - [x] Report-facing assets are in `assets/`.
 - [x] `code/` and `drafts/` do not contain the only copy of durable work.
-- [ ] Workspace verifier passes in prepublish mode.
+- [x] Workspace verifier passes in prepublish mode.
 
 ## Publication Contract
-- [ ] Report published.
-- [ ] User notification confirmed.
-- [ ] `runs/INDEX.md` updated.
-- [ ] Workspace verifier passes in final mode.
+- [x] Report published.
+- [x] User notification confirmed.
+- [x] `runs/INDEX.md` updated.
+- [x] Workspace verifier passes in final mode.
