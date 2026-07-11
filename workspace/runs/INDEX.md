@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-07-11 — 2026-06-28 to 2026-07-11
+- Doc: https://fudan-nlp.feishu.cn/docx/JaRGdeEawoAvAKxPQCgc3ZHFnUg
+- Run: runs/2026-07-11-gigaworld-vla-corrector-physis/
+- Deep threads: GigaWorld-1 world-model policy evaluation (2607.02642), PhysisForcing physics-reinforced world simulator (2606.28128), VLA-Corrector detect-and-correct inference (2607.01804)
+- Covered papers: 2607.02642, 2606.28128, 2607.01804
+- Shortlisted papers: 2607.06559, 2607.05390, 2607.02403, 2607.02517, 2607.05966, 2607.04434, 2607.07608, 2607.03751, 2607.00678, 2607.00272, 2607.02501
+
 ## 2026-06-27 — 2026-06-26 to 2026-06-27
 - Doc: https://fudan-nlp.feishu.cn/docx/RXoKdXYYtowcXjxSELKckfghnRb
 - Run: runs/2026-06-27-icwm-fastlew-hallucination/

@@ -1,0 +1,117 @@
+{
+  "config_source": "/home/alpheratz/Projects/paper-scout/workspace/runs/2026-07-11-gigaworld-vla-corrector-physis/gigaworld-1-2607.02642/code/official_snippets/stage_1_post_functrl_wan21.yaml",
+  "history_sizes": [
+    16,
+    2,
+    1
+  ],
+  "latent_window_size": 9,
+  "validation_max_num_frames": 33,
+  "token_budget": {
+    "anchor_frames": 1,
+    "short_history_frames": 16,
+    "mid_history_frames": 2,
+    "long_history_frames": 1,
+    "future_frames": 9,
+    "anchor_tokens": 300,
+    "short_tokens": 4800,
+    "mid_tokens": 600,
+    "long_tokens": 300,
+    "future_tokens": 2700,
+    "total_context_tokens": 8700
+  },
+  "num_chunks_for_validation_rollout": 4,
+  "first_few_chunks": [
+    {
+      "chunk": 0,
+      "future": [
+        1,
+        10
+      ],
+      "history": {
+        "anchor": [
+          0,
+          1
+        ],
+        "short": null,
+        "mid": null,
+        "long": null
+      }
+    },
+    {
+      "chunk": 1,
+      "future": [
+        10,
+        19
+      ],
+      "history": {
+        "anchor": [
+          0,
+          1
+        ],
+        "short": [
+          0,
+          10
+        ],
+        "mid": [
+          0,
+          0
+        ],
+        "long": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "chunk": 2,
+      "future": [
+        19,
+        28
+      ],
+      "history": {
+        "anchor": [
+          0,
+          1
+        ],
+        "short": [
+          3,
+          19
+        ],
+        "mid": [
+          1,
+          3
+        ],
+        "long": [
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "chunk": 3,
+      "future": [
+        28,
+        33
+      ],
+      "history": {
+        "anchor": [
+          0,
+          1
+        ],
+        "short": [
+          12,
+          28
+        ],
+        "mid": [
+          10,
+          12
+        ],
+        "long": [
+          9,
+          10
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "map_shapes": {
+    "ee_pose_map": [
+      16,
+      60,
+      80,
+      2
+    ],
+    "ray_map": [
+      16,
+      60,
+      80,
+      3
+    ]
+  },
+  "description": "EE pose map renders end-effector trajectory as a spatial heatmap plus gripper state; ray map stores per-pixel world-coordinate ray directions for moving wrist cameras. Both are spatially aligned with the video latent and concatenated channel-wise."
+}

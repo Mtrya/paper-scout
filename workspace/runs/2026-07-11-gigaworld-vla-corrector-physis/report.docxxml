@@ -1,0 +1,228 @@
+<title>Paper Scout Research Report - 2026-07-11</title>
+
+<p><b>Opening synthesis.</b> The most active research thread in the past two weeks is not a new architecture, but a shift in what we ask world models and VLAs to do. Three papers stood out because they try to make deployment less expensive: GigaWorld-1 asks how a video world model can become a trustworthy <i>policy evaluator</i> instead of a demo generator; PhysisForcing shows that a small physics-aware fine-tuning loss can make a DiT world model respect object trajectories and contact relations without changing inference; and VLA-Corrector treats the fixed action chunk of a frozen VLA as a bug to be detected and truncated at runtime. In each case the key insight is about <i>action faithfulness</i> — staying aligned with what the robot actually does — rather than photorealism or raw accuracy. The code inspections and toy probes below support the mechanisms but also surface a shared limitation: the headline numbers still rest on unreleased benchmark harnesses or missing checkpoints.</p>
+
+<callout emoji="✅" background-color="light-green">
+  <p><b>Standout:</b> GigaWorld-1 is the clearest seed for a research thread. It reframes world-model evaluation from "does it look good?" to "does it rank policies the same way real robot rollouts do?" and backs the claim with the largest controlled study in this period (324k simulated rollouts paired with real executions).</p>
+</callout>
+
+<h1>World models as robot evaluators and simulators</h1>
+
+<p>World models for robotics have been sold as data engines, policies, and interaction environments. The newest papers add a fourth role — evaluator — and argue that the design rules for the four roles are not the same. A model that generates beautiful video can still fail to predict whether a policy will succeed, and a model that tracks contact physics may still be too slow to train. The papers in this theme are asking how to specialize.</p>
+
+<table>
+  <colgroup>
+    <col width="210"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>RynnWorld-4D</b> (Alibaba, 2607.06559)</td>
+      <td>Co-generates RGB, depth, and optical flow so 3D scene flow can be back-projected for policy control.</td>
+      <td>Makes geometry explicit in the world-model output rather than hoping the latent encodes it.</td>
+      <td><a href="https://huggingface.co/papers/2607.06559">HF</a> / <a href="https://arxiv.org/pdf/2607.06559">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Deform360</b> (PKU, 2607.05390)</td>
+      <td>Massive multi-view visuotactile dataset and benchmark for deformable world models.</td>
+      <td>Cloth and deformable objects are where rigid-body simulators fail; the dataset is the signal.</td>
+      <td><a href="https://huggingface.co/papers/2607.05390">HF</a> / <a href="https://arxiv.org/pdf/2607.05390">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>ACID</b> (POSTECH / KAIST, 2607.02403)</td>
+      <td>World-model planning with an inverse-dynamics consistency check.</td>
+      <td>Directly tests whether a planned trajectory can be inverted into the actions that produced it.</td>
+      <td><a href="https://huggingface.co/papers/2607.02403">HF</a> / <a href="https://arxiv.org/pdf/2607.02403">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>WorldDirector</b> (THU / BAAI, 2607.02517)</td>
+      <td>Controllable world simulator with persistent dynamic memory.</td>
+      <td>Targets long-horizon consistency through an explicit object/state memory layer.</td>
+      <td><a href="https://huggingface.co/papers/2607.02517">HF</a> / <a href="https://arxiv.org/pdf/2607.02517">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Imagined Rollouts are Kinematic, Not Dynamic</b> (TUM, 2607.05966)</td>
+      <td>Diagnostic showing that world models preserve kinematics while ignoring physical regime changes.</td>
+      <td>Gives the field a concrete way to separate compounding-error hand-waving from real dynamic failures.</td>
+      <td><a href="https://huggingface.co/papers/2607.05966">HF</a> / <a href="https://arxiv.org/pdf/2607.05966">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>RoboDojo</b> (Imperial, 2607.04434)</td>
+      <td>Unified sim-and-real benchmark for generalist manipulation policies.</td>
+      <td>Provides the controlled evaluation surface that world-model evaluators will eventually be judged against.</td>
+      <td><a href="https://huggingface.co/papers/2607.04434">HF</a> / <a href="https://arxiv.org/pdf/2607.04434">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>GigaWorld-1: A Roadmap to Build World Models for Robot Policy Evaluation</h2>
+
+<p>GigaAI / Tsinghua University · 2607.02642 · <a href="https://huggingface.co/papers/2607.02642">HF</a> · <a href="https://arxiv.org/pdf/2607.02642">PDF</a> · <a href="https://open-gigaai.github.io/giga-world-1/">Project</a> · <a href="https://github.com/open-gigaai/giga-world-1">Code</a></p>
+
+<p>The central question is not "can a world model generate robot video?" but "can it predict whether one policy is better than another?" GigaWorld-1 builds WMBench, a paired dataset of real-robot teleoperation and policy rollouts across eight manipulation families, and uses it to compare 7 video world models, 4 action representations, and over 324,000 simulated rollouts. The headline result is that evaluator quality is dominated by long-horizon, action-faithful rollout consistency, not by short-term visual realism.</p>
+
+<p>I inspected the released training configs and pipeline code (the full repo is ~706 MB, so I fetched the key files via raw.githubusercontent.com). The design roadmap is visible in the Stage-1 YAML, which I mapped to the paper's Table 5 in a runnable probe. The most distinctive mechanisms are a hierarchical memory buffer and a spatially aligned, view-specific control interface.</p>
+
+<p><b>Hierarchical memory for long-horizon consistency.</b> The Stage-1 config sets <code>history_sizes: [16, 2, 1]</code> with a first-frame anchor and Relative RoPE. The probe reconstructs roughly 8,700 context tokens per denoising step: 300 anchor tokens, 4,800 short-term, 600 medium-term, 300 long-term, and 2,700 future tokens. Older context is progressively down-sampled, and Relative RoPE resets positions at every chunk so the model never sees out-of-distribution absolute timesteps during 40-second rollouts. This is the mechanism the paper credits for avoiding viewpoint drift and object-identity collapse.</p>
+
+<p>[[figure-anchor:gigaworld:memory-timeline]]</p>
+
+<p><b>Metric design is the conceptual center.</b> The paper warns that generic video metrics can be negative predictors of evaluator quality. A synthetic probe reproduces the WMBench pattern: Background Consistency (−0.89) and Photometric Consistency (−0.87) correlate negatively with the human-aligned WMES score, while Subject Consistency (+0.85), Perspectivity (+0.81), and Instruction Following (+0.82) are the reliable predictors. This explains why GigaWorld-1 reports a curated evaluator-relevant average rather than raw video-generation numbers.</p>
+
+<p>[[figure-anchor:gigaworld:metric-correlations]]</p>
+
+<table>
+  <colgroup><col width="180"/><col width="160"/><col width="360"/></colgroup>
+  <thead>
+    <tr><th background-color="light-gray">Design axis</th><th background-color="light-gray">Config value</th><th background-color="light-gray">Paper roadmap</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Backbone</td><td>Wan2.1</td><td>Open video-diffusion backbone</td></tr>
+    <tr><td>Adaptation</td><td>LoRA r=128, all-linear</td><td>Freeze VAE/text-encoder, adapt DiT</td></tr>
+    <tr><td>Control</td><td><code>is_control_model=true</code></td><td>Explicit pixel-aligned control branch</td></tr>
+    <tr><td>Memory</td><td><code>history_sizes=[16,2,1]</code></td><td>Hierarchical history + first-frame anchor</td></tr>
+    <tr><td>Temporal encoding</td><td><code>zero_history_timestep=true</code></td><td>Relative RoPE to avoid position drift</td></tr>
+    <tr><td>Distillation</td><td>6-step DMD, real_guidance_scale=3.0</td><td>Few-step evaluator rollouts</td></tr>
+  </tbody>
+</table>
+
+<p><b>Caveats.</b> The WMBench metric code and the Qwen3-VL LoRA WMES judge are not in the current public repo; the <code>videoalign/</code> directory contains a reward-model trainer, not the evaluator. The README also cites the earlier GigaWorld-0 arXiv ID (2511.19861) in its BibTeX. So the probes verify the architectural mechanisms, but the 14.9% improvement over baselines and the 324k-rollout claim rest on the paper and the public challenge leaderboard, not on independently runnable code.</p>
+
+<hr/>
+
+<h2>PhysisForcing: Physics Reinforced World Simulator for Robotic Manipulation</h2>
+
+<p>Peking University · 2606.28128 · <a href="https://huggingface.co/papers/2606.28128">HF</a> · <a href="https://arxiv.org/pdf/2606.28128">PDF</a> · <a href="https://dagroup-pku.github.io/PhysisForcing.github.io/">Project</a></p>
+
+<p>PhysisForcing takes the opposite approach to GigaWorld-1: instead of building a new evaluation benchmark, it changes the training objective of a DiT-based video world model so that the model is penalized for physical inconsistency. The claim is that most manipulation failures are local (discontinuous trajectories) or relational (broken contact), and that a pair of auxiliary losses on a single middle DiT block can fix them without adding inference cost.</p>
+
+<p>The method has three steps. First, a physics mask is extracted from the ground-truth clip with CoTracker3 and Depth-Anything-V2. Second, two losses are added to the standard flow-matching objective on the hidden features of a middle DiT block:</p>
+
+<p><latex>\mathcal{L} = \mathcal{L}_{\mathrm{FM}} + \lambda_{\mathrm{pix}} \mathcal{L}^{\mathrm{phy}}_{\mathrm{pix}} + \lambda_{\mathrm{sem}} \mathcal{L}^{\mathrm{phy}}_{\mathrm{sem}}</latex></p>
+
+<p><latex>\mathcal{L}^{\mathrm{phy}}_{\mathrm{pix}}</latex> supervises per-point trajectories via soft-argmax inside the mask, and <latex>\mathcal{L}^{\mathrm{phy}}_{\mathrm{sem}}</latex> matches the pairwise token-relation matrix inside the mask to a frozen V-JEPA 2 encoder. Both auxiliary models are discarded at inference, so the released PF-Wan bundle is a standard Wan2.2 pipeline with a tuned checkpoint.</p>
+
+<p>Because the training code is listed as "Coming soon," I built a pure-NumPy diagnostic that reproduces the mask extraction and both losses on a synthetic moving-square video. A tiny linear student is trained under four loss combinations. The pattern matches the paper's ablation: the pixel loss strongly reduces trajectory error, the semantic loss strongly reduces relation error, and the combined loss balances both.</p>
+
+<p>[[figure-anchor:physisforcing:metric-curves]]</p>
+
+<table>
+  <colgroup><col width="200"/><col width="160"/><col width="160"/><col width="160"/></colgroup>
+  <thead>
+    <tr><th background-color="light-gray">Training variant</th><th background-color="light-gray">Clean MSE</th><th background-color="light-gray">Trajectory error</th><th background-color="light-gray">Relation error</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>MSE only</td><td>0.024</td><td>69.79</td><td>0.014</td></tr>
+    <tr><td>MSE + pixel</td><td>3.896</td><td>21.97</td><td>0.134</td></tr>
+    <tr><td>MSE + semantic</td><td>0.025</td><td>77.42</td><td>0.008</td></tr>
+    <tr><td>MSE + pixel + semantic</td><td>1.902</td><td>19.45</td><td>0.072</td></tr>
+  </tbody>
+</table>
+
+<p><b>Interpretation.</b> The toy probe confirms that the two losses pull features in orthogonal, complementary directions. It does not reproduce the reported +22.3% R-Bench lift, but it makes the mechanism concrete and explains why the largest gains appear on physical-semantic domain scores rather than on pure visual-quality scores.</p>
+
+<h1>VLA inference-time adaptation</h1>
+
+<p>While world-model papers try to make simulation cheaper, VLA papers are trying to make a frozen policy safer to deploy. The common theme is moving intelligence from training time to test time: instead of retraining the whole model for a new environment, add a small external module that watches execution and intervenes.</p>
+
+<table>
+  <colgroup>
+    <col width="210"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Dual Latent Memory VLA</b> (SJTU, 2607.07608)</td>
+      <td>Short-term and long-term latent memory tokens woven into the VLA sequence.</td>
+      <td>End-to-end memory avoids the context-length wall for long-horizon manipulation.</td>
+      <td><a href="https://huggingface.co/papers/2607.07608">HF</a> / <a href="https://arxiv.org/pdf/2607.07608">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Look Before You Leap</b> (Postech / KAIST, 2607.03751)</td>
+      <td>Distills tree search into a Q-value model for frozen-VLA action evaluation.</td>
+      <td>Chooses better actions at query time without changing the policy weights.</td>
+      <td><a href="https://huggingface.co/papers/2607.03751">HF</a> / <a href="https://arxiv.org/pdf/2607.03751">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>ABot-M0.5</b> (Amap/CVPR, 2607.00678)</td>
+      <td>Unified mobility-and-manipulation world-action model.</td>
+      <td>Closes the loop between navigation and manipulation in a single model.</td>
+      <td><a href="https://huggingface.co/papers/2607.00678">HF</a> / <a href="https://arxiv.org/pdf/2607.00678">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>ASPIRE</b> (NVIDIA GEAR, 2607.00272)</td>
+      <td>LLM-driven agentic skill discovery for robotics.</td>
+      <td>Generates tasks, rewards, and policies from natural-language goals.</td>
+      <td><a href="https://huggingface.co/papers/2607.00272">HF</a> / <a href="https://arxiv.org/pdf/2607.00272">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Embodied.cpp</b> (SEU, 2607.02501)</td>
+      <td>Portable inference runtime for embodied AI models on heterogeneous robots.</td>
+      <td>Makes the deployment side cheaper, which is the other half of the evaluation problem.</td>
+      <td><a href="https://huggingface.co/papers/2607.02501">HF</a> / <a href="https://arxiv.org/pdf/2607.02501">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>VLA-Corrector: Lightweight Detect-and-Correct Inference for Adaptive Action Horizon</h2>
+
+<p>Zhejiang University OmniAI · 2607.01804 · <a href="https://huggingface.co/papers/2607.01804">HF</a> · <a href="https://arxiv.org/pdf/2607.01804">PDF</a> · <a href="https://zju-omniai.github.io/vla-corrector/">Project</a> · <a href="https://github.com/ZJU-OmniAI/vla-corrector">Code</a></p>
+
+<p>VLA-Corrector attacks the fixed action-horizon problem of action-chunked VLAs. Most generative policies predict a chunk of future actions and execute them open-loop. In contact-rich tasks, small perturbations amplify inside the blind spot. VLA-Corrector keeps the base VLA frozen and adds a small latent-dynamics corrector that watches visual features and decides when the queued actions have gone stale.</p>
+
+<p>The loop has four pieces:</p>
+<ol>
+  <li seq="auto"><b>External corrector</b> <latex>M_\phi</latex>: a ~40 M-parameter residual MLP trained on frozen VLA visual features to predict the short-horizon latent residual <latex>\Delta Z = Z_{t+k} - Z_t</latex> induced by the action.</li>
+  <li seq="auto"><b>Latent-space Vision Monitor (LVM)</b>: compares predicted and observed residuals using <latex>E_t = 1 - \mathrm{CosSim}(\Delta Z^{\mathrm{pred}}, \Delta Z^{\mathrm{real}})</latex>.</li>
+  <li seq="auto"><b>Event-triggered truncation</b>: when <latex>E_t</latex> exceeds a robust threshold for <latex>p</latex> consecutive steps, discard the remaining queued actions and replan.</li>
+  <li seq="auto"><b>Online Gradient Guidance (OGG)</b>: on the recovery replan, backprop through the corrector to nudge the first action so its predicted latent effect aligns with the desired correction.</li>
+</ol>
+
+<p>The reported MetaWorld results on π₀.₅ are baseline 48.70%, +Truncation 60.35%, +Truncation+OGG 64.35%. I could not run the official stack because the repo ships no checkpoints or datasets and requires a LeRobot fork plus MuJoCo/MetaWorld/LIBERO. Instead I pulled the source files through the GitHub API and built a pure-NumPy probe of a 2-D point-mass tracker with a tiny latent-dynamics corrector.</p>
+
+<p>[[figure-anchor:vlacorrector:probe-metrics]]</p>
+
+<table>
+  <colgroup><col width="220"/><col width="120"/><col width="120"/><col width="120"/><col width="120"/></colgroup>
+  <thead>
+    <tr><th background-color="light-gray">Method</th><th background-color="light-gray">Success rate</th><th background-color="light-gray">Policy calls</th><th background-color="light-gray">Success / call</th><th background-color="light-gray">Truncations</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Baseline H=5</td><td>39.5%</td><td>16.00</td><td>0.025</td><td>0.00</td></tr>
+    <tr><td>Baseline H=20</td><td>25.5%</td><td>4.00</td><td>0.064</td><td>0.00</td></tr>
+    <tr><td>+ Truncation (H=20)</td><td>35.5%</td><td>4.98</td><td>0.071</td><td>1.18</td></tr>
+    <tr><td>+ Truncation + OGG (H=20)</td><td>33.5%</td><td>5.03</td><td>0.067</td><td>1.24</td></tr>
+  </tbody>
+</table>
+
+<p><b>What the probe shows.</b> Truncation recovers most of the closed-loop benefit while keeping policy-call count near the long-horizon baseline. OGG's additional gain is small in this toy setting, mirroring the paper's ablation where truncation alone closes most of the gap. The toy corrector has ~12k parameters and ~25k FLOPs per forward pass, confirming the "lightweight" shape even if the real scale is larger.</p>
+
+<p><b>Code-paper discrepancies.</b> The released evaluation script is more complex than the paper describes. It uses an EWMA-smoothed inconsistency score, a bootstrap phase, a base noise floor, a jump trigger, a hard-retrigger margin, and separate on/off thresholds — none of which appear in the concise median+MAD description. It is unclear how much of the reported gain comes from the core idea versus these extra heuristics.</p>
+
+<h1>Cross-cutting observations</h1>
+
+<p><b>Evaluation is becoming the product.</b> GigaWorld-1, RoboDojo, and the Imagined Rollouts diagnosis all treat evaluation as a first-class research object. The community is no longer satisfied with a world model that looks good; it wants a cheap, consistent signal that predicts real-robot outcomes. This is a healthy shift, but it also means the field needs standardized harnesses and released metric code — which are still missing.</p>
+
+<p><b>Action faithfulness is the new visual realism.</b> PhysisForcing, GigaWorld-1, and VLA-Corrector all optimize for staying aligned with executed actions rather than for photorealism or next-token accuracy. The metric probes in GigaWorld-1 and the toy diagnostic in PhysisForcing both show that improving physical consistency can hurt conventional video-quality metrics.</p>
+
+<p><b>Partial releases are the norm.</b> All three deep-dived papers publish code, but none publish the full stack needed to reproduce the headline numbers: GigaWorld-1 lacks WMBench metric code and the WMES judge; PhysisForcing lists training code as "Coming soon"; VLA-Corrector ships no checkpoints or datasets. The mechanisms are inspectable, but the empirical claims rest on the paper tables.</p>

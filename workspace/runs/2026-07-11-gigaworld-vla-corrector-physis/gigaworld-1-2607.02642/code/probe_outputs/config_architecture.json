@@ -1,0 +1,57 @@
+{
+  "backbone": {
+    "model_type": "wan2.1",
+    "pretrained": "model/before_stage1/Wan2p1_1p3B-FunControl-diffusers",
+    "lora_rank": 128,
+    "lora_alpha": 128.0,
+    "lora_target": "all-linear",
+    "is_control_model": true
+  },
+  "data": {
+    "instance_data_root": [
+      "example/toy_train_dataset/nano"
+    ],
+    "single_resolution": [
+      480,
+      1920
+    ],
+    "caption_dropout": 0
+  },
+  "control": {
+    "is_control_model": true
+  },
+  "memory": {
+    "history_sizes": [
+      16,
+      2,
+      1
+    ],
+    "latent_window_size": [
+      9
+    ],
+    "has_multi_term_memory_patch": true,
+    "zero_history_timestep": true,
+    "guidance_cross_attn": true,
+    "restrict_self_attn": false
+  },
+  "training": {
+    "learning_rate": "3e-5",
+    "lr_scheduler": "constant",
+    "mixed_precision": "bf16",
+    "gradient_checkpointing": true,
+    "max_train_steps": 1000000,
+    "history_amplification": false,
+    "history_scale_mode": "per_head",
+    "train_lora_patch_embedding": true,
+    "train_full_multi_term_memory_patch": true
+  },
+  "validation": {
+    "validation_height": 480,
+    "validation_width": 1920,
+    "validation_max_num_frames": 33,
+    "num_inference_steps": 15,
+    "guidance_scale": 5.0,
+    "use_dynamic_shifting": true,
+    "time_shift_type": "exponential"
+  }
+}

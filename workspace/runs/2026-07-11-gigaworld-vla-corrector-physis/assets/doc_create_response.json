@@ -1,0 +1,31 @@
+{
+  "ok": true,
+  "identity": "bot",
+  "data": {
+    "document": {
+      "document_id": "JaRGdeEawoAvAKxPQCgc3ZHFnUg",
+      "revision_id": 3,
+      "url": "https://fudan-nlp.feishu.cn/docx/JaRGdeEawoAvAKxPQCgc3ZHFnUg"
+    },
+    "log_id": "2026071116420297289C4E976787AF1DA4",
+    "permission_grant": {
+      "member_type": "openid",
+      "message": "Granted the current CLI user full_access (可管理权限) on the new document.",
+      "perm": "full_access",
+      "status": "granted",
+      "user_open_id": "ou_112f716a1251541d5a80127d81595f9a"
+    }
+  },
+  "_notice": {
+    "skills": {
+      "current": "",
+      "message": "lark-cli skills not installed, run: lark-cli update",
+      "target": "1.0.26"
+    },
+    "update": {
+      "current": "1.0.26",
+      "latest": "1.0.68",
+      "message": "lark-cli 1.0.68 available, current 1.0.26, run: lark-cli update"
+    }
+  }
+}

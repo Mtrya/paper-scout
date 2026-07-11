@@ -1,0 +1,50 @@
+[
+  {
+    "label": "Baseline H=5",
+    "mean_final_dist": 0.9639321813662144,
+    "success_rate": 0.395,
+    "mean_policy_calls": 16.0,
+    "success_per_call": 0.024687499984570312,
+    "mean_truncations": 0.0
+  },
+  {
+    "label": "Baseline H=10",
+    "mean_final_dist": 1.3752997881217888,
+    "success_rate": 0.18,
+    "mean_policy_calls": 8.0,
+    "success_per_call": 0.022499999971874997,
+    "mean_truncations": 0.0
+  },
+  {
+    "label": "Baseline H=20",
+    "mean_final_dist": 1.7434560535322,
+    "success_rate": 0.255,
+    "mean_policy_calls": 4.0,
+    "success_per_call": 0.063749999840625,
+    "mean_truncations": 0.0
+  },
+  {
+    "label": "Baseline H=50",
+    "mean_final_dist": 6.772630154354318,
+    "success_rate": 0.0,
+    "mean_policy_calls": 2.0,
+    "success_per_call": 0.0,
+    "mean_truncations": 0.0
+  },
+  {
+    "label": "+ Truncation (H=20)",
+    "mean_final_dist": 1.4234208693856698,
+    "success_rate": 0.355,
+    "mean_policy_calls": 4.98,
+    "success_per_call": 0.07128514041910614,
+    "mean_truncations": 1.18
+  },
+  {
+    "label": "+ Truncation + OGG (H=20)",
+    "mean_final_dist": 1.362209760083449,
+    "success_rate": 0.335,
+    "mean_policy_calls": 5.03,
+    "success_per_call": 0.06660039748190776,
+    "mean_truncations": 1.24
+  }
+]
