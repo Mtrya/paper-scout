@@ -1,0 +1,47 @@
+From: Paper Scout run 2026-07-12-lamem-rynnworld-sieve
+Subject: Align Stage-A feature weights with paper normalization
+
+The paper (Section "Structural Exposure Allocation", Eq. 12) defines
+primitive/transition weights as
+
+    w_c = q_c / |P| ,   w_e = q_e / |P|
+
+where q_c/q_e count the number of composition patterns containing a
+primitive/transition and |P| is the total number of unique patterns.
+
+The official implementation in scripts/select.py instead normalizes by the
+*mean* q_c/q_e.  This keeps the average weight at 1.0 for both terms but
+changes the relative scale between primitive and transition exposure,
+because the two means are generally different.
+
+This patch makes the code follow the paper's stated formula exactly.
+
+--- a/code/sieve/scripts/select.py
++++ b/code/sieve/scripts/select.py
+@@ -108,7 +108,8 @@ def compute_feature_weights(
+     optimize_primitives: bool,
+     optimize_transitions: bool,
+ ) -> tuple[Dict[int, float], Dict[Transition, float]]:
++    n_patterns = len(patterns)
+     q_c: Counter[int] = Counter()
+     q_e: Counter[Transition] = Counter()
+ 
+@@ -124,15 +125,11 @@ def compute_feature_weights(
+     w_c: Dict[int, float] = {}
+     w_e: Dict[Transition, float] = {}
+ 
+-    if optimize_primitives and q_c:
+-        mean_q_c = float(sum(q_c.values()) / len(q_c))
+-        if mean_q_c > 0.0:
+-            w_c = {k: float(v / mean_q_c) for k, v in q_c.items()}
++    if optimize_primitives and q_c and n_patterns > 0:
++        w_c = {k: float(v / n_patterns) for k, v in q_c.items()}
+ 
+-    if optimize_transitions and q_e:
+-        mean_q_e = float(sum(q_e.values()) / len(q_e))
+-        if mean_q_e > 0.0:
+-            w_e = {k: float(v / mean_q_e) for k, v in q_e.items()}
++    if optimize_transitions and q_e and n_patterns > 0:
++        w_e = {k: float(v / n_patterns) for k, v in q_e.items()}
+ 
+     return w_c, w_e

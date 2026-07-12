@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-07-12 — 2026-07-08 to 2026-07-11
+- Doc: https://fudan-nlp.feishu.cn/docx/XjeTdcYjroyDJUxikhPcEAE3nld
+- Run: runs/2026-07-12-lamem-rynnworld-sieve/
+- Deep threads: LaMem-VLA latent-memory probe (2607.07608), RynnWorld-4D code trace and 4D-policy analysis (2607.06559), SIEVE structure-aware selection probe (2607.06442)
+- Covered papers: 2607.07608, 2607.06559, 2607.06442
+- Shortlisted papers: 2607.08716, 2607.04988, 2607.03751, 2607.06558, 2607.06291, 2607.05352, 2607.06018, 2607.05765, 2607.05390, 2607.07534, 2607.07675, 2607.02466, 2607.04434, 2607.06403, 2607.02646, 2607.07508, 2607.08763, 2607.03748, 2607.03723, 2607.08768, 2607.06838
+
 ## 2026-07-11 — 2026-06-28 to 2026-07-11
 - Doc: https://fudan-nlp.feishu.cn/docx/JaRGdeEawoAvAKxPQCgc3ZHFnUg
 - Run: runs/2026-07-11-gigaworld-vla-corrector-physis/
