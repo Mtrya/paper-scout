@@ -1,0 +1,75 @@
+From: Paper Scout run 2026-07-12-lamem-rynnworld-sieve
+Subject: Add xyz sign-flip segmentation boundary as described in the paper
+
+The paper (Section "Primitive Discovery / Trajectory segmentation") says
+SIEVE segments trajectories using "end effector (gripper/dexterous-hand)
+state flips (i.e., grasp/release flips)" at "physically grounded
+interaction boundaries".
+
+In the official scripts/gripper_pose_seg.py the default `gripper` mode
+only splits on gripper *command* changes; the smoothed end-effector pose
+is computed but the xyz sign-flip detector is dead code.  The
+`dexterous_hand` mode similarly only splits on hand command changes.
+
+This patch optionally adds xyz sign-flip boundaries (with confirmation)
+so that the segmentation can be driven by physical end-effector motion
+reversals in addition to gripper state changes, matching the broader
+framing in the paper text.  A new CLI flag --use-xyz-sign-flip toggles
+this behavior; it is off by default to preserve the original behavior.
+
+--- a/code/sieve/scripts/gripper_pose_seg.py
++++ b/code/sieve/scripts/gripper_pose_seg.py
+@@ -86,6 +86,7 @@ def collect_segment_starts(
+     pose6_smoothed: np.ndarray,
+     action: np.ndarray,
+     cfg: SegConfig,
++    use_xyz_sign_flip: bool = False,
+     dex_hand_slices: Tuple[slice, slice] | None = None,
+ ) -> List[int]:
+     n = pose6_smoothed.shape[0]
+@@ -116,7 +117,18 @@ def collect_segment_starts(
+             left_cmd = (action[:, left_slice].mean(axis=1) > 0.0).astype(np.int32)
+             right_cmd = (action[:, right_slice].mean(axis=1) > 0.0).astype(np.int32)
+ 
++    xyz_diff = pose_diff[:, :3]
++
+     for i in range(1, n):
++        if use_xyz_sign_flip:
++            if has_confirmed_sign_flip(
++                prev_xyz=xyz_diff[i - 1],
++                future_xyz=xyz_diff[i:],
++                eps=cfg.xyz_sign_eps,
++                confirm_frames=cfg.confirm_frames,
++            ):
++                add_split(i)
++
+         if cfg.split_control == "gripper":
+             # Rule: gripper uses binary command only (1=open, 0=close).
+             # State change is confirmed only when next frame keeps the new state.
+@@ -273,6 +285,11 @@ def parse_args() -> argparse.Namespace:
+     p.add_argument("--xyz-sign-eps", type=float, default=1e-3, help="Zero tolerance for xyz sign flip")
+     p.add_argument("--confirm-frames", type=int, default=5, help="Consecutive frames required to confirm reversal/state change")
+     p.add_argument(
++        "--use-xyz-sign-flip",
++        action=argparse.BooleanOptionalAction,
++        default=False,
++        help="Also split on confirmed xyz sign flips of the smoothed end-effector pose",
++    )
++    p.add_argument(
+         "--split-control",
+         type=str,
+         default="gripper",
+@@ -307,6 +324,7 @@ def main() -> None:
+     cfg = SegConfig(
+         version=args.version,
+         xyz_sign_eps=args.xyz_sign_eps,
+         confirm_frames=max(1, args.confirm_frames),
+         split_control=args.split_control,
+     )
+@@ -319,6 +337,7 @@ def main() -> None:
+         dataset_specs=dataset_specs,
+         output_jsonl=args.output_jsonl,
+         cfg=cfg,
++        use_xyz_sign_flip=args.use_xyz_sign_flip,
+         max_episodes=args.max_episodes,
+     )
