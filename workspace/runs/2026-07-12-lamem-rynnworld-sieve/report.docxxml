@@ -1,0 +1,497 @@
+<title>Paper Scout Research Report - 2026-07-12</title>
+
+<p>This week's strongest papers share a single impulse: they take scaffolding that robot-learning systems usually keep outside the model — memory, geometry, data curation — and move it inside the latent reasoning stream. LaMem-VLA treats episodic history as ordinary VLA tokens; RynnWorld-4D turns a 2D video diffusion backbone into a synchronized RGB-depth-flow predictor whose internal latents drive a closed-loop dexterous policy; SIEVE selects training data not by trajectory similarity but by reusable primitive composition. All three are buildable ideas, and all three raise the same follow-up question: once the scaffolding is internal, what new failure modes appear?</p>
+
+<callout emoji="✅" background-color="light-green">
+  <p><b>Standout:</b> LaMem-VLA is the clearest conceptual move. It reframes robotic memory from "retrieval fed to the policy head" to "tokens attending inside the VLA sequence," and the ablations isolate exactly where the gain comes from.</p>
+</callout>
+
+<h1>Memory as native latent context</h1>
+
+<p>Long-horizon manipulation only looks Markovian if you are willing to cheat. In practice, success depends on what happened ten seconds ago: whether the lid was already grasped, which side of the bowl is facing up, whether the previous subgoal completed. The usual fixes — expanding the context window or retrieving from an external memory bank — keep history at arm's length. Two papers this week try to dissolve that boundary.</p>
+
+<table>
+  <colgroup>
+    <col width="220"/>
+    <col width="260"/>
+    <col width="260"/>
+    <col width="100"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Remember When It Matters</b> (Wu et al., 2026)</td>
+      <td>A separate proactive memory agent writes structured memory for an unmodified action agent, treating memory as active intervention rather than passive retrieval.</td>
+      <td>Decouples memory architecture from action policy; the "behavioral state decay" framing is a useful diagnosis.</td>
+      <td><a href="https://huggingface.co/papers/2607.08716">HF</a> · <a href="https://arxiv.org/pdf/2607.08716">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>InternVLA-A1.5</b> (Ma et al., 2026)</td>
+      <td>Unifies VLM understanding, latent foresight, and action generation on a native VLM backbone with a lightweight unified head.</td>
+      <td>Tests whether foresight and action can coexist without eroding the pretrained semantics.</td>
+      <td><a href="https://huggingface.co/papers/2607.04988">HF</a> · <a href="https://arxiv.org/pdf/2607.04988">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Look Before You Leap</b> (Xie et al., 2026)</td>
+      <td>Distills tree search into an action-evaluation head for a frozen VLA, using pass@k evidence that VLAs already contain competent behaviors in their output distribution.</td>
+      <td>Suggests VLA failures are partly evaluation failures, not only generation failures.</td>
+      <td><a href="https://huggingface.co/papers/2607.03751">HF</a> · <a href="https://arxiv.org/pdf/2607.03751">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr/>
+
+<h2>LaMem-VLA: Dual Latent Memory in Vision-Language-Action Models for Robotic Manipulation</h2>
+
+<p>Qu et al. (2026) · <a href="https://huggingface.co/papers/2607.07608">HF</a> · <a href="https://arxiv.org/pdf/2607.07608">PDF</a> · <a href="https://github.com/quhongyu/LaMem-VLA">Code</a></p>
+
+<p>LaMem-VLA's central claim is that memory for robot control should not live in a side module; it should be tokens in the same continuous embedding space where the VLA already perceives, reasons, and forms action intent. The paper builds a four-stage loop — curator, seeker, condenser, weaver — around a 7B Prismatic VLM backbone and a diffusion action expert.</p>
+
+<p>At each timestep the curator writes two vaults. A short-term vault stores compressed visual tokens from the current frame as key/value units; a long-term vault stores the previous action-query hidden states. When a vault exceeds capacity <latex>L</latex>, the most redundant adjacent pair (highest key cosine similarity) is merged by averaging. The seeker builds a context-aware query from the current visual and instruction tokens, mean-pools it, and retrieves the top-<latex>K</latex> units from both vaults. The condenser squeezes that retrieved evidence into a fixed number of latent memory tokens, <latex>L_s</latex> short-term and <latex>L_l</latex> long-term. Finally the weaver prepends them to the VLM input:</p>
+
+<p><latex>\mathbf{S}_t = [\mathbf{M}^{\text{short}} + \mathbf{1}_{L_s}\mathbf{b}_s^\top ; \mathbf{M}^{\text{long}} + \mathbf{1}_{L_l}\mathbf{b}_l^\top ; \mathbf{X}_t ; \mathbf{I} ; \mathbf{Q}^{\text{action}}]</latex></p>
+
+<p>The source embeddings <latex>\mathbf{b}_s, \mathbf{b}_l</latex> are learned, and the memory tokens attend to, and are attended by, the current observation, language, and action queries. Because the action-query outputs are therefore memory-grounded, the downstream diffusion expert receives a different conditioning vector than any policy-side memory bank can provide.</p>
+
+<p>[[figure-anchor:lamem:overview]]</p>
+
+<pre lang="python" caption="The four-stage LaMem loop (from the runnable probe in runs/2026-07-12-lamem-rynnworld-sieve/lamem-vla/code/lamem_probe.py)"><code># 1. Curator writes history into bounded vaults
+short_vault.append(visual_compressor(X_t))  # key/value units
+long_vault.append(H_action_prev)            # action hidden states
+merge_most_redundant_adjacent_pair(vault)   # if |vault| &gt; L
+
+# 2. Seeker retrieves context-relevant evidence
+Q_t = query_builder([X_t; I; Q_init])[-K_q:]      # masked transformer
+q_t = mean_pool(Q_t)
+Z_short, Z_long = top_k_cosine(q_t, vaults)       # non-differentiable
+
+# 3. Condenser reconstructs fixed-length memory tokens
+M_short = memory_former([Q_t; Z_short; T_s])[-L_s:]
+M_long  = memory_former([Q_t; Z_long;  T_l])[-L_l:]
+
+# 4. Weaver injects memory as ordinary VLM tokens
+S_t = concat([M_short + b_s, M_long + b_l, X_t, I, Q_action])
+Z_action = vlm(S_t)[-N_a:]
+action_chunk = diffusion_expert(Z_action)         # (B, 16, 7)</code></pre>
+
+<p>The ablations are more informative than the headline numbers. Removing both memory streams drops SimplerEnv-Bridge to 57.3% and LIBERO-90 to 92.1%, essentially the memory-free CogACT baseline. Removing only short-term memory costs 8.3 points on SimplerEnv; removing only long-term costs 9.3 points. Policy-side conditioning — feeding retrieved evidence to the action head instead of weaving it into the VLM sequence — reaches 71.9% / 94.8%, below the full model's 73.9% / 97.0%. That gap is the empirical signature of the latent-native design.</p>
+
+<table>
+  <colgroup>
+    <col width="220"/>
+    <col width="140"/>
+    <col width="140"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Ablation</th>
+      <th background-color="light-gray">SimplerEnv-Bridge</th>
+      <th background-color="light-gray">LIBERO-90</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Full LaMem-VLA</td>
+      <td>73.9%</td>
+      <td>97.0%</td>
+    </tr>
+    <tr>
+      <td>w/o short-term memory</td>
+      <td>65.6%</td>
+      <td>95.4%</td>
+    </tr>
+    <tr>
+      <td>w/o long-term memory</td>
+      <td>64.6%</td>
+      <td>94.8%</td>
+    </tr>
+    <tr>
+      <td>w/o dual memory</td>
+      <td>57.3%</td>
+      <td>92.1%</td>
+    </tr>
+    <tr>
+      <td>Policy-side memory</td>
+      <td>71.9%</td>
+      <td>94.8%</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>What I could not verify. The public repository is currently empty, and the downloaded arXiv source does not include the appendix, so the exact SE-bottleneck compressor, the masked-attention masks in the query builder and memory formers, and the bootstrap of an empty long-term vault are all underspecified. The probe I wrote fills these gaps with reasonable defaults, but a fully reproducible implementation will need the appendix or released code. The top-<latex>K</latex> retrieval is also non-differentiable, which means the model learns what to condense but not which vault unit to retrieve end-to-end. And every result is simulation-only; real-world validation is promised for a future version.</p>
+
+<hr/>
+
+<h1>From 2D video diffusion to 4D robot control</h1>
+
+<p>Generative video models are good at looking plausible. They are much worse at being useful for manipulation, because pixels hide 3D structure, object scale flickers, and motion is only implicit. This week's world-model papers respond by making geometry and motion explicit without abandoning the scalability of video diffusion. The most ambitious of them, RynnWorld-4D, closes the loop all the way to a real bimanual dexterous robot.</p>
+
+<table>
+  <colgroup>
+    <col width="220"/>
+    <col width="260"/>
+    <col width="260"/>
+    <col width="100"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>RynnWorld-Teleop</b> (Zhao et al., 2026)</td>
+      <td>An action-conditioned world model that turns hand-pose streams into egocentric robot video from a single reference image, decoupling teleoperation data collection from physical hardware.</td>
+      <td>Digital teleoperation is a practical response to the robot-data bottleneck; pairs naturally with RynnWorld-4D.</td>
+      <td><a href="https://huggingface.co/papers/2607.06558">HF</a> · <a href="https://arxiv.org/pdf/2607.06558">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>AlayaWorld</b> (AlayaWorld Team, 2026)</td>
+      <td>Long-horizon playable video world generation trained on gameplay and real-world video.</td>
+      <td>Explores open-ended interactive environments rather than task-conditioned control.</td>
+      <td><a href="https://huggingface.co/papers/2607.06291">HF</a> · <a href="https://arxiv.org/pdf/2607.06291">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Multiplayer Interactive World Models</b> (Hu et al., 2026)</td>
+      <td>The first multiplayer world model, conditioning on multiple agents' action streams in Rocket League.</td>
+      <td>Tests whether world models can attribute scene changes to the correct player under coupled dynamics.</td>
+      <td><a href="https://huggingface.co/papers/2607.05352">HF</a> · <a href="https://arxiv.org/pdf/2607.05352">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>RoboTALES</b> (Gani et al., 2026)</td>
+      <td>Task-aligned simulated futures from a video generative model, guided by an LLM subgoal planner, for policy training.</td>
+      <td>Addresses the same "imagined futures drift from task intent" problem as RynnWorld-4D from a different angle.</td>
+      <td><a href="https://huggingface.co/papers/2607.06018">HF</a> · <a href="https://arxiv.org/pdf/2607.06018">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Image2Sim</b> (Wang et al., 2026)</td>
+      <td>A real-time neural simulator built from posed RGB-D scans for embodied navigation.</td>
+      <td>Another route to scalable, visually grounded interactive environments.</td>
+      <td><a href="https://huggingface.co/papers/2607.05765">HF</a> · <a href="https://arxiv.org/pdf/2607.05765">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Deform360</b> (Li et al., 2026)</td>
+      <td>A large multi-view visuotactile dataset for deformable world models.</td>
+      <td>Deformable objects are where most world models still fail; the dataset is a needed resource.</td>
+      <td><a href="https://huggingface.co/papers/2607.05390">HF</a> · <a href="https://arxiv.org/pdf/2607.05390">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Infinite Worlds</b> (Gao et al., 2026)</td>
+      <td>LingBot-World 2.0: unbounded interaction horizon, real-time distilled variant, and diverse interactive elements.</td>
+      <td>Scales interactive world models toward open-ended, long-horizon play.</td>
+      <td><a href="https://huggingface.co/papers/2607.07534">HF</a> · <a href="https://arxiv.org/pdf/2607.07534">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>LingBot-Video</b> (Ma et al., 2026)</td>
+      <td>Mixture-of-Experts video pretraining for embodied intelligence, trading capacity for inference efficiency.</td>
+      <td>MoE pretraining for video may become a building block for embodied world models.</td>
+      <td><a href="https://huggingface.co/papers/2607.07675">HF</a> · <a href="https://arxiv.org/pdf/2607.07675">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr/>
+
+<h2>RynnWorld-4D: 4D Embodied World Models for Robotic Manipulation</h2>
+
+<p>Zhao et al. (2026) · <a href="https://huggingface.co/papers/2607.06559">HF</a> · <a href="https://arxiv.org/pdf/2607.06559">PDF</a> · <a href="https://github.com/alibaba-damo-academy/RynnWorld-4D">Code</a></p>
+
+<p>RynnWorld-4D's bet is that a lightweight projective 4D representation — synchronized RGB, depth, and optical flow (RGB-DF) — can inherit the generative prior of a large video diffusion model while exposing the geometry and motion that robot actions actually need. The model is built on Wan 2.2-TI2V-5B, a 30-layer latent video diffusion transformer, extended into three modality branches. Each branch keeps its own FFN and self-attention; text cross-attention K/V projections are shared because language is modality-agnostic.</p>
+
+<p>[[figure-anchor:rynnworld:overview]]</p>
+
+<p>The projective 4D reading is simple and explicit. Given camera intrinsics <latex>\mathbf{K}</latex>, depth <latex>D_t</latex>, and dense optical flow <latex>\mathbf{f}_{\text{opt}} = (\Delta u, \Delta v)</latex>, a pixel <latex>\mathbf{p}_t = (u, v, 1)</latex> lifts and tracks as:</p>
+
+<p><latex>\mathbf{P}_t = D_t(u,v) \cdot \mathbf{K}^{-1}\mathbf{p}_t</latex></p>
+<p><latex>\mathbf{P}_{t+1} = D_{t+1}(u+\Delta u, v+\Delta v) \cdot \mathbf{K}^{-1}(\mathbf{p}_t + [\Delta u, \Delta v, 0]^\top)</latex></p>
+<p><latex>\mathbf{f}_{3D} = \mathbf{P}_{t+1} - \mathbf{P}_t</latex></p>
+
+<p>That back-projection gives a per-point metric scene flow, which is what differentiates RynnWorld-4D from prior RGB-D-N work that relies on static geometry like normals. For a hand-over or lid-placement task, the relative 3D motion of two high-DoF end-effectors is exactly the signal that raw RGB struggles to encode.</p>
+
+<p>Cross-modal consistency is enforced by Joint Cross-Modal Attention (JA) modules inserted every three layers. For each branch <latex>m</latex>, a single query attends to the concatenated keys and values of the other two branches, restricted to the same frame. The output projection is zero-initialized, but a scalar gate is initialized to 1 and passed through <latex>\tanh</latex>; this avoids the saddle point that would occur if both projection and gate started at zero, while still preserving the Stage-1 checkpoint as an initial residual.</p>
+
+<p>The training recipe is three stages: independent branch adaptation, frozen-backbone joint-attention alignment, and full-parameter joint fine-tuning. A single shared Gaussian noise sample is used across all three branches so their denoising trajectories stay aligned. Branch dropout randomly corrupts depth or flow (but never RGB, the appearance anchor) to force the JA modules to reconstruct missing modalities.</p>
+
+<p>For control, RynnWorld-4D-Policy does something clever: it reads the world model's internal latent state in a single forward pass rather than decoding video. The frozen world model is run at diffusion timestep <latex>t = 500</latex>, hidden states from block 15 of all three branches are concatenated into a 9216-dimensional conditioning vector, and a small perceiver-style Flow Former plus a 4-step flow-matching head outputs a chunk of 10 actions. The heavy backbone runs once per replan cycle (~1.1 s on an RTX 5090), giving an effective control frequency of ~9 Hz by executing the action chunk while the next plan computes in parallel.</p>
+
+<table>
+  <colgroup>
+    <col width="220"/>
+    <col width="120"/>
+    <col width="120"/>
+    <col width="120"/>
+    <col width="120"/>
+    <col width="120"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Real-world task</th>
+      <th background-color="light-gray">RynnWorld-4D</th>
+      <th background-color="light-gray">π₀</th>
+      <th background-color="light-gray">π₀.₅</th>
+      <th background-color="light-gray">Diffusion Policy</th>
+      <th background-color="light-gray">Task demands</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Dual Picking</td>
+      <td>94.29%</td>
+      <td>80.00%</td>
+      <td>85.71%</td>
+      <td>77.14%</td>
+      <td>bimanual sequencing</td>
+    </tr>
+    <tr>
+      <td>Block Pushing</td>
+      <td>82.86%</td>
+      <td>62.86%</td>
+      <td>74.29%</td>
+      <td>71.43%</td>
+      <td>arm hand-off</td>
+    </tr>
+    <tr>
+      <td>Hand-over</td>
+      <td>88.57%</td>
+      <td>62.86%</td>
+      <td>68.57%</td>
+      <td>74.29%</td>
+      <td>dynamic object transfer</td>
+    </tr>
+    <tr>
+      <td>Bimanual Lifting</td>
+      <td>77.14%</td>
+      <td>60.00%</td>
+      <td>71.43%</td>
+      <td>62.86%</td>
+      <td>heavy-load coordination</td>
+    </tr>
+    <tr>
+      <td>Lid Placement</td>
+      <td>65.71%</td>
+      <td>48.57%</td>
+      <td>54.29%</td>
+      <td>57.14%</td>
+      <td>spatial precision</td>
+    </tr>
+    <tr>
+      <td>Bowl Stacking</td>
+      <td>65.71%</td>
+      <td>54.29%</td>
+      <td>57.14%</td>
+      <td>57.14%</td>
+      <td>spatial precision</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The internal ablations are the strongest evidence. Independent branches raise depth AbsRel from 0.310 to 0.737 and flow AEPE from 0.170 to 0.247. Skipping modality adaptation drops <latex>\delta_1</latex> from 0.610 to 0.479. Training only on task-specific robot data spikes AEPE from 0.170 to 0.729. Replacing the predictive encoder with a ResNet-18 drops Dual Picking success from 94.29% to 71.43%. These are clean, mechanistic demonstrations that the 4D latents matter.</p>
+
+<p>What the code reveals. The public repository is Apache-2.0 and complete, but the released training scripts differ from the paper in two places. Stage-2/3 scripts use <code>--joint_unidirectional True</code>, meaning depth and flow attend only to RGB, while the paper's equation (5) is fully bidirectional. And the Stage-3 branch dropout probability is 0.05 in the scripts, not 0.1 as reported. The code is the more reliable artifact: it also shows an early exit at layer 20 inside the policy inference path and a cosine decay on the RGB-side injection to protect appearance quality. These are sensible engineering choices, but the "mutual cross-modal interaction" claim should be read as "depth and flow are strongly regularized by RGB" rather than symmetric three-way fusion.</p>
+
+<p>Caveats. Depth and flow are pseudo-labeled with Depth-Anything 3 and DPFlow, so geometric metrics measure consistency with other estimators, not ground truth. World-model evaluation uses 50 held-out sequences; real-world policy evaluation uses 35 trials per task on one hardware platform. AEPE is computed on Middlebury color-coded flow videos in normalized RGB space, an unusual proxy. And 9 Hz effective control, while sufficient for many human-scale motions, is far below low-level servo rates, so fast contact transients remain a question.</p>
+
+<hr/>
+
+<h1>Selecting structure, not just data</h1>
+
+<p>Imitation learning for VLAs is hitting a data-quality ceiling: adding more demonstrations does not always help because redundancy, noise, and uneven coverage dilute the signal. This week's data-centric papers argue that the right unit of selection is neither the whole trajectory nor the individual state-action pair, but reusable behavioral subprograms — primitives and the transitions between them.</p>
+
+<table>
+  <colgroup>
+    <col width="220"/>
+    <col width="260"/>
+    <col width="260"/>
+    <col width="100"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Learning to Move Before Learning to Do</b> (Shi et al., 2026)</td>
+      <td>Task-agnostic pretraining for VLAs that learns motor priors from cheap human videos before language-supervised task learning.</td>
+      <td>Separates physical competence from semantic alignment, attacking the demonstration-scarcity bottleneck.</td>
+      <td><a href="https://huggingface.co/papers/2607.02466">HF</a> · <a href="https://arxiv.org/pdf/2607.02466">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>RoboDojo</b> (Chen et al., 2026)</td>
+      <td>A unified sim-and-real benchmark for generalist manipulation policies with broad capability coverage.</td>
+      <td>Generalist policies need harder, more reproducible evaluation; this is a step toward that.</td>
+      <td><a href="https://huggingface.co/papers/2607.04434">HF</a> · <a href="https://arxiv.org/pdf/2607.04434">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>LingBot-VLA 2.0</b> (Wu et al., 2026)</td>
+      <td>A practical VLA foundation model improved for generalization, latency, and real-world deployment.</td>
+      <td> Bridges lab benchmarks and application engineering.</td>
+      <td><a href="https://huggingface.co/papers/2607.06403">HF</a> · <a href="https://arxiv.org/pdf/2607.06403">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>EVA-Client</b> (Yang et al., 2026)</td>
+      <td>An open-source framework unifying real-robot data collection, inference, and evaluation.</td>
+      <td>Lowers the engineering barrier between trained policy and real hardware iteration.</td>
+      <td><a href="https://huggingface.co/papers/2607.02646">HF</a> · <a href="https://arxiv.org/pdf/2607.02646">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr/>
+
+<h2>SIEVE: Structure-Aware Data Selection for Imitation Learning with VLA Models</h2>
+
+<p>Wu et al. (2026) · <a href="https://huggingface.co/papers/2607.06442">HF</a> · <a href="https://arxiv.org/pdf/2607.06442">PDF</a> · <a href="https://github.com/ChangtiWu/SIEVE">Code</a></p>
+
+<p>SIEVE's framing is clean: useful demonstrations are those that expose reusable behavioral regularities. Instead of scoring trajectories holistically or pruning state-action pairs, it discovers a vocabulary of visuo-motor primitives, represents each trajectory as a primitive composition pattern, and selects episodes that maximize coverage of primitives and the transitions between them. The method is motivated by the Minimum Description Length principle: repeating patterns should be stored in the model, not redundantly encoded in every data point.</p>
+
+<p>Primitive discovery works in three steps. Trajectories are segmented at gripper or hand command flips, confirmed over five frames. Each segment is encoded by V-JEPA2 from eight uniformly sampled frames, reduced to 256 dimensions with PCA, and clustered with MiniBatchKMeans. The number of clusters is chosen automatically on a 10% subset by maximizing <latex>(1 - \mathcal{J}) \log \mathcal{R}</latex>, where <latex>\mathcal{J}</latex> is the median pairwise Jaccard similarity of per-trajectory cluster sets and <latex>\mathcal{R}</latex> is the median cross-trajectory cluster reuse. This favors vocabularies that are broadly reused but still structurally discriminative.</p>
+
+<p>Each trajectory then becomes an ordered primitive sequence, its composition pattern <latex>P_i</latex>, and adjacent primitives define transitions <latex>e_i^j = (c_i^j \rightarrow c_i^{j+1})</latex>. The selection budget is allocated greedily to maximize structural exposure:</p>
+
+<p><latex>F(\mathcal{B}) = \sum_{c \in \mathcal{C}} w_c \log(1 + n_c(\mathcal{B})) + \sum_{e \in \mathcal{E}} w_e \log(1 + n_e(\mathcal{B}))</latex></p>
+
+<p>where <latex>w_c = q_c / |\mathcal{P}|</latex> and <latex>w_e = q_e / |\mathcal{P}|</latex> up-weight primitives and transitions that participate in many composition patterns. The log utility imposes diminishing returns, pushing selection toward broader structural coverage rather than repeatedly reinforcing the same pattern. After the budget is allocated across pattern buckets, SIEVE keeps the trajectories closest to the bucket medoid in representation space, favoring central, stable realizations for behavior cloning.</p>
+
+<p>[[figure-anchor:sieve:redistribution]]</p>
+
+<pre lang="python" caption="Greedy structural exposure allocation (from runs/2026-07-12-lamem-rynnworld-sieve/sieve/code/sieve_probe.py)"><code>def allocate_budget(patterns, transitions, weights, budget):
+    B = {p: 0 for p in patterns}
+    for _ in range(budget):
+        best_gain, best_p = -inf, None
+        for p in patterns:
+            gain = marginal_log_gain(p, B, patterns, transitions, weights)
+            if gain &gt; best_gain:
+                best_gain, best_p = gain, p
+        B[best_p] += 1
+    return B</code></pre>
+
+<p>The probe I ran on synthetic gripper-driven episodes confirms the paper's qualitative claim. Starting from a distribution dominated by a few short patterns, the greedy allocator flattens the frequency distribution and shifts the selected subset toward longer, transition-rich sequences. Pattern-frequency Gini drops from 0.463 to 0.412, and the top selected patterns become 3- and 4-primitive sequences rather than 2-primitive loops.</p>
+
+<table>
+  <colgroup>
+    <col width="260"/>
+    <col width="180"/>
+    <col width="180"/>
+    <col width="180"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">SIEVE result on Bridge-V2 / SimplerEnv-WidowX</th>
+      <th background-color="light-gray">Budget / steps</th>
+      <th background-color="light-gray">Avg. success</th>
+      <th background-color="light-gray">vs. Full-Training</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Full-Training</td>
+      <td>53K / 50K</td>
+      <td>51.8%</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>SIEVE</td>
+      <td>26.5K / 25K</td>
+      <td>56.3%</td>
+      <td>+4.5 pp</td>
+    </tr>
+    <tr>
+      <td>SIEVE</td>
+      <td>26.5K / 50K</td>
+      <td>59.4%</td>
+      <td>+7.6 pp</td>
+    </tr>
+    <tr>
+      <td>SIEVE</td>
+      <td>37.1K / 35K</td>
+      <td>62.3%</td>
+      <td>+10.5 pp</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Where the code diverges from the paper. The official implementation is production-quality and largely faithful, but two details matter. First, segmentation is driven by gripper or hand command flips; the code also contains a smoothed end-effector pose and an xyz sign-flip helper, but that helper is dead code in both modes. Second, Stage-A weights are mean-normalized within the primitive term and within the transition term, not divided by <latex>|\mathcal{P}|</latex> as Eq. 12 states. Because the number of primitives and transitions differs, this changes the relative scale of the two terms. The paper's ablation says transitions matter more than primitives; that result should be revisited with the exact paper normalization. I preserved patches for both issues in the thread.</p>
+
+<hr/>
+
+<h1>Other seeds worth watching</h1>
+
+<table>
+  <colgroup>
+    <col width="220"/>
+    <col width="260"/>
+    <col width="260"/>
+    <col width="100"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Single-Rollout Asynchronous Optimization</b> (Hou et al., 2026)</td>
+      <td>Asynchronous RL for long-horizon agentic tasks, addressing GRPO's group-wise sampling limitations.</td>
+      <td>Agentic post-training of LLMs needs async pipelines; this is a systems-and-algorithm contribution.</td>
+      <td><a href="https://huggingface.co/papers/2607.07508">HF</a> · <a href="https://arxiv.org/pdf/2607.07508">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>OpenCoF</b> (Chen et al., 2026)</td>
+      <td>Chain-of-Frame reasoning through video generation, with a curated 17K reasoning-video dataset.</td>
+      <td>Explores whether temporal visual generation can serve as a reasoning medium.</td>
+      <td><a href="https://huggingface.co/papers/2607.08763">HF</a> · <a href="https://arxiv.org/pdf/2607.08763">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>BRAID</b> (Hu et al., 2026)</td>
+      <td>RL for interleaved multi-modal reasoning as a unified decision process.</td>
+      <td>Extends policy-gradient training across text and image generation steps.</td>
+      <td><a href="https://huggingface.co/papers/2607.03748">HF</a> · <a href="https://arxiv.org/pdf/2607.03748">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>OmniTacTune</b> (Yu et al., 2026)</td>
+      <td>Policy-agnostic real-world RL that adapts tactile feedback to pretrained visual policies via residual correction.</td>
+      <td>Tactile residual RL is a practical path for contact-rich tasks where vision alone fails.</td>
+      <td><a href="https://huggingface.co/papers/2607.03723">HF</a> · <a href="https://arxiv.org/pdf/2607.03723">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>UniClawBench</b> (Chen et al., 2026)</td>
+      <td>A benchmark for proactive agents on real-world tasks with fine-grained capability taxonomies.</td>
+      <td>Real-world agent evaluation is still ad hoc; a structured benchmark helps.</td>
+      <td><a href="https://huggingface.co/papers/2607.08768">HF</a> · <a href="https://arxiv.org/pdf/2607.08768">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>WildCity</b> (Han et al., 2026)</td>
+      <td>A real-world city-scale multimodal dataset from autonomous fleets for spatial intelligence.</td>
+      <td>Embodied AI at city scale needs city-scale data; this supplies it.</td>
+      <td><a href="https://huggingface.co/papers/2607.06838">HF</a> · <a href="https://arxiv.org/pdf/2607.06838">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h1>Cross-cutting observations</h1>
+
+<p><b>Latent-native design is becoming the default.</b> LaMem-VLA puts memory inside the VLM sequence. RynnWorld-4D reads control policies from internal diffusion latents rather than decoded video. SIEVE treats data selection as a structure-exposure problem over discovered primitives. In each case the authors are asking: what if the thing we used to bolt on externally were instead a first-class citizen of the model's latent reasoning? The unifying bet is that tighter coupling between representation and objective beats cleaner modularity.</p>
+
+<p><b>Code availability is uneven and matters.</b> SIEVE ships a complete, runnable pipeline. RynnWorld-4D also released code, and tracing it revealed paper/code mismatches that change how one should interpret the claims. LaMem-VLA's repository is still empty, which leaves several architectural details — exact compressor, attention masks, vault bootstrap — as interpretive gaps. For a field that increasingly depends on empirical head-to-heads, code release is no longer a courtesy; it is part of the argument.</p>
+
+<p><b>Evaluation is still the bottleneck.</b> LaMem-VLA is simulation-only. RynnWorld-4D's real-world numbers are promising but rest on 35 trials per task and one hardware platform. SIEVE's strongest result — 50% of data beating full data — is on a WidowX simulation benchmark. None of this invalidates the papers, but it means the practical ceiling of each idea remains to be established. The next useful work will likely be cross-platform reproductions and harder real-world suites.</p>
+
+<p><b>The open question.</b> All three papers are trying to make robot policies less myopic and more structured. The deeper question is whether these separate fixes — latent memory, 4D world models, structured data selection — will converge into a single training recipe, or whether they point to different regimes where one dominates the others. That convergence, or its absence, will define the next year of embodied foundation-model research.</p>
