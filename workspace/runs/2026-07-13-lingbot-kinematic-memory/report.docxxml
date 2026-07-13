@@ -1,0 +1,365 @@
+<title>Paper Scout Research Report - 2026-07-13</title>
+
+<p>Over the past few days the embodied-AI and world-model literature has pushed in three directions at once: scaling video pretraining with Mixture-of-Experts, diagnosing what world models actually learn, and making multi-agent world models real-time. This run chases the strongest of those threads. The unifying question is whether these systems are learning physics or merely learning to extrapolate visually consistent motion. The answer, so far, is sobering: we can build bigger, faster, and more controllable world models, but a direct diagnostic shows that at least one major world-model family imagines kinematically rather than dynamically. The actionable insight is that the field needs better probes, not just bigger models.</p>
+
+<callout emoji="✅" background-color="light-green">
+  <p><b>Standout:</b> "Imagined Rollouts Are Kinematic, Not Dynamic" is the clearest seed for research this run. It turns a vague complaint about compounding error into a falsifiable diagnostic, releases code and checkpoints, and the headline signature reproduces cleanly on CPU. If the finding generalizes, it reframes how we should train and evaluate world models.</p>
+</callout>
+
+<h1>Scaling video pretraining for embodied AI</h1>
+
+<p>LingBot released two companion systems in the same week: LingBot-Video, a 30 B sparse-MoE video diffusion model, and LingBot-World 2.0 (Infinity), a real-time causal world model. They share a team and a data-centric philosophy, but code inspection shows they are architecturally distinct. Together they let us ask what it takes to repurpose internet-scale video generation for embodied intelligence.</p>
+
+<h2>LingBot-Video and LingBot-World 2.0</h2>
+<p><b>Authors:</b> Ma et al. / Gao et al. (2026) · <a href="https://huggingface.co/papers/2607.07675">HF 2607.07675</a> · <a href="https://arxiv.org/abs/2607.07675">PDF</a> · <a href="https://github.com/robbyant/lingbot-video">Code</a></p>
+
+<p>LingBot-Video is a non-causal diffusion transformer built for text-to-image, text-to-video, and image-to-video. Its distinguishing choice is scale through sparsity: a 30 B total / ~2.9 B active MoE with 128 routed experts, top-8 routing, group-limited routing, shared experts, and online load-balancing bias. We counted parameters analytically from the released Diffusers config and confirmed ~30.1 B total and ~2.89 B active per token. A smaller dense 1.3 B variant and a 480p→1080p refiner are also released.</p>
+
+<p>The data engine is the other half of the claim. The authors profile videos along structural, semantic, motion, camera, and quality axes, annotate with VLMs and specialized scorers, and use a 50 k-leaf knowledge graph plus an action tree to drive distribution-aware sampling. The five-stage curriculum ends with more than 70 k hours of robot manipulation, navigation, and egocentric footage blended with web video. Post-training uses GRPO with six de-coupled reward models: vision quality, text-video alignment, dynamic degree, motion coherence, human-motion consistency, and physical plausibility.</p>
+
+<p>LingBot-World 2.0 is a different beast. It is a dense 14 B causal DiT derived from Wan2.2, conditioned on camera Plücker embeddings and chunk-wise text prompts. Training uses a hybrid causal/bidirectional attention mask (MoBA) and conditional flow matching. Distillation combines consistency distillation with Distribution Matching Distillation run over long self-rollouts, which is meant to suppress compounding drift. The released artifact is the distilled 14 B causal-fast model; the causal-pretrain and 1.3 B variants are marked TODO.</p>
+
+<p>What the code makes clear is that the two systems are siblings, not parent and child. LingBot-World 2.0 is not initialized from LingBot-Video weights; it is a Wan2.2-style dense causal transformer with its own conditioning. The shared DNA is conceptual: structured captions, embodied footage, cascaded refinement, and a focus on physical plausibility.</p>
+
+<p><b>Reported numbers.</b> LingBot-Video scores 0.620 on RBench (open-source SOTA) and 40.4 on Physics-IQ Verified I2V. The MoE 30B-A3B is 2.59× faster than a dense 14 B and 3.18× faster than a dense 30 B on a 1 M-token sequence. LingBot-World 2.0's claims are mostly qualitative: hour-long 720p generation at 60 fps, with no standard VBench or Physics-IQ numbers yet.</p>
+
+<p>[[figure-anchor:lingbot:scale-comparison]]</p>
+
+<table>
+  <colgroup>
+    <col width="180"/>
+    <col width="180"/>
+    <col width="180"/>
+    <col width="180"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Aspect</th>
+      <th background-color="light-gray">LingBot-Video</th>
+      <th background-color="light-gray">LingBot-World 2.0</th>
+      <th background-color="light-gray">MIRA</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>DiT params</b></td>
+      <td>30.1 B total / 2.9 B active</td>
+      <td>13.0 B dense</td>
+      <td>5.0 B dense</td>
+    </tr>
+    <tr>
+      <td><b>Architecture</b></td>
+      <td>Single-stream MoE DiT</td>
+      <td>Wan2.2 dense causal DiT</td>
+      <td>Latent diffusion on DINOv3-L codec</td>
+    </tr>
+    <tr>
+      <td><b>Conditioning</b></td>
+      <td>Text / image / JSON captions</td>
+      <td>Camera Plücker + prompts</td>
+      <td>4-player keyboard action streams</td>
+    </tr>
+    <tr>
+      <td><b>Headline metric</b></td>
+      <td>RBench 0.620</td>
+      <td>Hour-long 720p @ 60 fps</td>
+      <td>20 fps on B200, stable to 5 min</td>
+    </tr>
+    <tr>
+      <td><b>License</b></td>
+      <td>Apache-2.0</td>
+      <td>CC BY-NC-SA 4.0</td>
+      <td>Code + dataset public</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>What is buildable, what is uncertain</h3>
+<p>The LingBot-Video release is genuinely usable: public weights, Diffusers pipeline, SGLang/FP8 serving code, and public benchmark numbers. The main uncertainty is how much the embodiment-aware data mixture and the six reward models actually move physical plausibility, because the reward-model weights and training data are not released.</p>
+
+<p>LingBot-World 2.0 is more visionary but thinner on evidence. The real-time demo requires multi-GPU inference, only the distilled checkpoint is available, and there are no numeric benchmarks. The claim of hour-long stability is impressive if reproducible, but without an evaluation protocol it is hard to verify independently.</p>
+
+<hr/>
+
+<h2>Shortlist: data, memory, and deployment</h2>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>LaMem-VLA</b> (Qu et al., 2026)</td>
+      <td>Dual latent memory tokens (short-term + long-term) interleaved directly into VLA reasoning.</td>
+      <td>Moves memory from auxiliary retrieval into the native VLA latent space; strongest memory paper in the pool.</td>
+      <td><a href="https://huggingface.co/papers/2607.07608">HF</a> / <a href="https://arxiv.org/abs/2607.07608">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>SIEVE</b> (Wu et al., 2026)</td>
+      <td>Structure-aware data selection for VLA imitation learning.</td>
+      <td>Data-centric complement to scaling: not all robot demonstrations are equally useful.</td>
+      <td><a href="https://huggingface.co/papers/2607.06442">HF</a> / <a href="https://arxiv.org/abs/2607.06442">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>RoboTALES</b> (Gani et al., 2026)</td>
+      <td>Single-stage framework that learns task-aligned simulated futures for visuomotor control.</td>
+      <td>Tries to make video-generator futures action-conditional and task-relevant at the same time.</td>
+      <td><a href="https://huggingface.co/papers/2607.06018">HF</a> / <a href="https://arxiv.org/abs/2607.06018">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>OmniTacTune</b> (Yu et al., 2026)</td>
+      <td>Policy-agnostic real-world RL for tactile residual adaptation of visual policies.</td>
+      <td>Shows how to add tactile feedback without retraining the base visual policy.</td>
+      <td><a href="https://huggingface.co/papers/2607.03723">HF</a> / <a href="https://arxiv.org/abs/2607.03723">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Embodied.cpp</b> (Xu et al., 2026)</td>
+      <td>Portable inference runtime for VLA and WAM models on heterogeneous robots.</td>
+      <td>Deployment-side counterpart to the model rush; targets edge devices.</td>
+      <td><a href="https://huggingface.co/papers/2607.02501">HF</a> / <a href="https://arxiv.org/abs/2607.02501">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h1>Diagnosing long-horizon world-model failure</h1>
+
+<p>While LingBot and MIRA are building bigger and faster world models, a diagnostic paper from TUM asks a more basic question: when these models fail over long horizons, what kind of error is compounding? Their answer is that current world models tend to imagine kinematically, not dynamically. The claim is operationalized with a metric and a protocol that can be run on any action-conditioned world model.</p>
+
+<h2>Imagined Rollouts Are Kinematic, Not Dynamic</h2>
+<p><b>Authors:</b> Schäfer et al. (2026) · <a href="https://huggingface.co/papers/2607.05966">HF 2607.05966</a> · <a href="https://arxiv.org/abs/2607.05966">PDF</a> · <a href="https://github.com/TUM-AVS/iKCE">Code</a></p>
+
+<p>The paper starts from a classical-mechanics distinction. <b>Kinematic</b> motion is described by position, velocity, and acceleration time series. <b>Dynamic</b> motion requires the forces and constraints that produced it. A world model that imagines kinematically will produce internally consistent trajectories that nonetheless ignore physical regime changes such as a friction drop.</p>
+
+<p>The diagnostic tool is the <b>imagined Kinematic-Consistency Error (iKCE)</b>. For an imagined rollout <latex>\{\hat{x}_t\}_{t=0}^{T}</latex> with kinematic state <latex>\hat{x}_t</latex>, define</p>
+
+<p><latex>\text{iKCE} \;\doteq\; \frac{1}{T}\sum_{t=0}^{T-1} \bigl\|\, \hat{x}_{t+1}^{\text{WM}} \;-\; \mathrm{kin}\bigl(\hat{x}_t^{\text{WM}}\bigr) \,\bigr\|^{2}.</latex></p>
+
+<p>For the walker identity view used in the headline experiment, the kinematic null is a one-step constant-velocity update on root height and vertical velocity:</p>
+
+<p><latex>\hat{x}_t = \begin{bmatrix} z_t \\ \dot{z}_t \end{bmatrix}, \quad \mathrm{kin}(\hat{x}_t) = \begin{bmatrix} z_t + \Delta t \, \dot{z}_t \\ \dot{z}_t \end{bmatrix}, \quad \Delta t = 25\,\text{ms}.</latex></p>
+
+<p>The counter-intuitive reading is that <b>low iKCE is bad</b>: it means the imagined state is exactly the kinematic continuation of the previous state. A dynamic imaginer would deviate from this null when physical conditions change.</p>
+
+<p>To break the ambiguity, the authors pair iKCE with a perturbation protocol. They sweep MuJoCo sliding friction by a multiplier <latex>\mu \in [0.1, 1.7]</latex>, crossing the empirically determined gait-collapse boundary near <latex>\mu \approx 0.20</latex>. They run two channels: real DMC physics driven by the trained DreamerV3 policy, and imagined rollouts from the DreamerV3 world model conditioned on five perturbed observations. They also run a positive control: adding Gaussian noise to joint positions directly corrupts the kinematic state and should raise iKCE.</p>
+
+<h3>Reproduction</h3>
+<p>We cloned the official diagnostic repository and the pinned DreamerV3 PyTorch port, downloaded the released checkpoint with curl, and ran the friction sweep on CPU. The headline signature reproduced cleanly. The world-model iKCE stayed flat across the friction sweep while real-physics iKCE dropped as friction decreased.</p>
+
+<p>[[figure-anchor:ikce:friction-sweep]]</p>
+
+<table>
+  <colgroup>
+    <col width="220"/>
+    <col width="160"/>
+    <col width="200"/>
+    <col width="220"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Channel</th>
+      <th background-color="light-gray">iKCE at μ=1.0</th>
+      <th background-color="light-gray">log-log slope vs μ</th>
+      <th background-color="light-gray">Interpretation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>World model (imagined)</td>
+      <td>2.27 × 10⁻³</td>
+      <td>−0.018 (CI contains 0)</td>
+      <td>Friction-invariant → kinematic</td>
+    </tr>
+    <tr>
+      <td>Real physics + policy</td>
+      <td>9.18 × 10⁻⁵</td>
+      <td>−0.154 (CI excludes 0)</td>
+      <td>Friction-sensitive → dynamic</td>
+    </tr>
+    <tr>
+      <td>WM / physics ratio</td>
+      <td>24.7×</td>
+      <td>—</td>
+      <td>Matches paper's ~30×</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The positive control also behaved as expected: adding joint-position noise raised WM iKCE from 2.35 × 10⁻³ at σ=0.00 to 2.81 × 10⁻³ at σ=0.30, confirming the model is not globally insensitive. Finally, we recomputed the log-log friction slope at horizons T ∈ {8, 16, 32, 64}. The dynamic signature only emerged at T=64, matching the paper's claim that the diagnostic must be run longer than the embodiment's gait period.</p>
+
+<h3>What it means</h3>
+<p>The diagnostic adds a third layer to the world-model failure surface. The Dreamer line stabilizes latent representations; MBPO bounds error compounding through short branched rollouts; iKCE tests what the latent representation actually contains. A model can satisfy the first two while still being dynamically blind. The fix is not simply more parameters or longer training: the latent state needs dynamic features such as contact state, friction, and mass distribution.</p>
+
+<p>The main caveat is scope. The evidence is from one task and one model family. Generalizing to humanoids, driving, or generative video world models is open. And iKCE is structural, not predictive: a model could be dynamic in unmeasured dimensions while looking kinematic on root height.</p>
+
+<hr/>
+
+<h2>Shortlist: benchmarks and proactive agents</h2>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>RoboDojo</b> (Chen et al., 2026)</td>
+      <td>Unified sim-and-real benchmark for generalist manipulation policies.</td>
+      <td>The field needs harder, more systematic manipulation benchmarks; this one spans both domains.</td>
+      <td><a href="https://huggingface.co/papers/2607.04434">HF</a> / <a href="https://arxiv.org/abs/2607.04434">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Image2Sim</b> (Wang et al., 2026)</td>
+      <td>Generative neural simulator for scaling embodied navigation.</td>
+      <td>Navigation has lacked interactive, visually realistic environments; this is a data-free alternative.</td>
+      <td><a href="https://huggingface.co/papers/2607.05765">HF</a> / <a href="https://arxiv.org/abs/2607.05765">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Remember When It Matters</b> (Wu et al., 2026)</td>
+      <td>Proactive memory agent for long-horizon agents.</td>
+      <td>Long-horizon agents lose task-relevant state in growing context; this surfaces it before decisions.</td>
+      <td><a href="https://huggingface.co/papers/2607.08716">HF</a> / <a href="https://arxiv.org/abs/2607.08716">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>UniClawBench</b> (Chen et al., 2026)</td>
+      <td>Universal benchmark for proactive agents on real-world tasks.</td>
+      <td>Attempts to move agent evaluation out of sandboxes and into realistic multi-turn settings.</td>
+      <td><a href="https://huggingface.co/papers/2607.08768">HF</a> / <a href="https://arxiv.org/abs/2607.08768">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h1>Multiplayer interactive world models</h1>
+
+<p>If LingBot is about scaling and the iKCE paper is about diagnosis, MIRA is about controllability under multi-agent action streams. It asks whether a learned world model can simulate a fast, contact-rich 3D game for multiple players in real time, with each player's actions conditioning the shared future.</p>
+
+<h2>MIRA: Multiplayer Interactive World Models with Representation Autoencoders</h2>
+<p><b>Authors:</b> Hu et al. (2026) · <a href="https://huggingface.co/papers/2607.05352">HF 2607.05352</a> · <a href="https://arxiv.org/abs/2607.05352">PDF</a> · <a href="https://github.com/mira-wm/mira">Code</a></p>
+
+<p>MIRA simulates 2v2 Rocket League. The game is fast, partially observed from each player's first-person view, and dominated by car-ball contact. The model is a 5 B parameter latent diffusion transformer. It is trained on 10,000 hours of gameplay recorded with publicly available bots, and at rollout it generates four synchronized views at 20 fps on a single Nvidia B200.</p>
+
+<p>The key design choice is the representation autoencoder. The encoder starts from a frozen DINOv3-L/16 backbone, aggregates intermediate layers, and compresses through a learned 3-D convolutional bottleneck to 32 latent channels at 10 Hz. The decoder is a 28-layer ViT-XL with factorized space-time attention. The loss is L1 reconstruction plus LPIPS plus DINO latent consistency, with adaptive gradient weighting. The autoencoder is deterministic and continuous; there is no VQ and no GAN.</p>
+
+<p>The world model operates on the codec latent grid. It is a factorized axial transformer with spatial self-attention (full) and temporal self-attention (causal). Training uses diffusion forcing: each latent frame is noised independently to a random flow-matching level, and the model predicts the velocity field back to data. A few-step self-distillation objective (PSD) lets inference run in one or two function evaluations per frame. The multiplayer conditioning tiles the four per-player latent grids vertically, adds learned player embeddings, and processes the tall grid with joint attention. During training, per-player action dropout forces the model to stay coherent under arbitrary subsets of active players.</p>
+
+<h3>What the ablations say</h3>
+<p>The codec ablations are the most informative part of the paper. A latent-space model beats pixel-space baselines by a wide margin (gFID 10.7 vs. 81–105). A frozen DINOv3-L feature extractor beats a from-scratch extractor even though the from-scratch extractor reconstructs sharper single frames in PSNR (29.7 vs. 32.2). The pretrained features give a smoother latent geometry: small errors stay semantically valid instead of compounding into visual drift. This is a strong empirical argument that the choice of latent space matters as much as the generative architecture.</p>
+
+<table>
+  <colgroup>
+    <col width="240"/>
+    <col width="160"/>
+    <col width="160"/>
+    <col width="240"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Design choice</th>
+      <th background-color="light-gray">Best variant</th>
+      <th background-color="light-gray">Key number</th>
+      <th background-color="light-gray">Takeaway</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Latent vs. pixel space</td>
+      <td>Latent</td>
+      <td>gFID 10.7 vs. 81–105</td>
+      <td>Latent world models are essential.</td>
+    </tr>
+    <tr>
+      <td>Feature extractor</td>
+      <td>Frozen DINOv3-L</td>
+      <td>gFID 10.7 vs. 22.5</td>
+      <td>Pretrained features beat sharper reconstructions.</td>
+    </tr>
+    <tr>
+      <td>Generative objective</td>
+      <td>Diffusion forcing</td>
+      <td>gFID 10.7 vs. 32.5</td>
+      <td>Independent frame noise stabilizes autoregressive rollout.</td>
+    </tr>
+    <tr>
+      <td>Multiplayer warm-start</td>
+      <td>Single → multiplayer</td>
+      <td>Best gFID at matched budget</td>
+      <td>Single-player pretraining is a strong prior.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Limitations</h3>
+<p>MIRA is impressive as an engineering demonstration, but it is narrow. The data comes from one bot policy (Nexto), three fixed arenas, and no procedural variation. The paper reports measured stability only to five minutes, with "hours" observed informally. There is no downstream RL validation: no agents are trained inside MIRA and transferred to the real game. And the Action Recoverability Ratio, while useful, is bounded by the codec reconstruction rather than true physical correctness.</p>
+
+<hr/>
+
+<h2>Shortlist: agents, architectures, and optimization</h2>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Automating the Design of Embodied Agent Architectures</b> (Zhou et al., 2026)</td>
+      <td>Agent Architecture Search (AAS) for embodied agents.</td>
+      <td>Treats agent design as a search problem over perception-memory-planning-action wiring.</td>
+      <td><a href="https://huggingface.co/papers/2606.30111">HF</a> / <a href="https://arxiv.org/abs/2606.30111">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Single-Rollout Asynchronous Optimization</b> (Hou et al., 2026)</td>
+      <td>Asynchronous RL update rule using single rollouts.</td>
+      <td>Targets the inefficiency of synchronous batch-interleaved RL for long-horizon agents.</td>
+      <td><a href="https://huggingface.co/papers/2607.07508">HF</a> / <a href="https://arxiv.org/abs/2607.07508">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>UP: Unbounded Positive Asymmetric Optimization</b> (Fan et al., 2026)</td>
+      <td>Asymmetric importance-sampling clipping for RL stability.</td>
+      <td>Addresses the exploration-stability dilemma in LLM RL.</td>
+      <td><a href="https://huggingface.co/papers/2607.06987">HF</a> / <a href="https://arxiv.org/abs/2607.06987">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h1>Cross-cutting observations</h1>
+
+<p><b>Scale, data, and latent space are the current levers.</b> LingBot scales parameters and data. MIRA shows that the latent space choice can matter more than raw scale. Both point to the same lesson: the substrate on which the world model learns is as important as the model itself.</p>
+
+<p><b>But scale does not guarantee dynamics.</b> The iKCE diagnostic is a warning. A world model can be large, fast, controllable, and visually stable while still failing to represent friction, contact, and other regime variables. The field currently lacks standardized dynamic probes; iKCE is one candidate, but it needs to be applied beyond walker-walk and DreamerV3.</p>
+
+<p><b>Real-time and long-horizon are being decoupled.</b> LingBot-World 2.0 and MIRA both use distillation to make inference cheap enough for real-time interaction, while keeping the base model expressive. This split between teacher (quality) and student (speed) is becoming standard.</p>
+
+<p><b>The evaluation gap is widening.</b> We have RBench and Physics-IQ for video quality, FVD and gFID for world-model frames, and now iKCE for dynamic content. None of them alone is enough. A useful next step would be to run iKCE-style probes on LingBot-World 2.0 and MIRA, or to apply MIRA's action-recovery and game-state probes to LingBot's embodied videos.</p>
+
+<p><b>Open questions for follow-up.</b> Does the DINOv3-L codec recipe transfer to real-world robotics, where pretrained visual features may be less reliable? Can iKCE be extended to visual-latent world models and generative video models? And what would a training objective that penalizes regime invariance look like?</p>

@@ -1,0 +1,30 @@
+# Full friction sweep, physics side, for reproducing the headline curve.
+run_name: probe_physics_full
+task_domain: walker
+task_name: walk
+
+checkpoint_path: ./checkpoints/walker_walk
+
+backend: physics
+driving_policy: dreamer
+
+kinematic_view: identity
+
+kinematic_spec:
+  pos_slice: [14, 15]
+  vel_slice: [15, 16]
+  accel_slice: null
+  dt: 0.025
+
+extrapolation: constant_velocity
+
+horizon: 64
+conditioning_steps: 0
+n_rollouts_per_magnitude: 20
+seed_base: 0
+
+axes:
+  - name: friction
+    magnitudes: [0.1, 0.15, 0.2, 0.3, 0.5, 0.7, 0.85, 1.0, 1.1, 1.2, 1.35, 1.5, 1.7]
+
+results_root: results
