@@ -25,7 +25,7 @@
 - [x] Workspace verifier passes in prepublish mode.
 
 ## Publication Contract
-- [ ] Report published.
-- [ ] User notification confirmed.
+- [x] Report published.
+- [x] User notification confirmed.
 - [x] `runs/INDEX.md` updated.
-- [ ] Workspace verifier passes in final mode.
+- [x] Workspace verifier passes in final mode.
