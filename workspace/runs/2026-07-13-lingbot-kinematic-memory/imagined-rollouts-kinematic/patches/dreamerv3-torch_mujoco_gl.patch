@@ -1,0 +1,13 @@
+diff --git a/dreamer.py b/dreamer.py
+index f4de475..218c5fd 100644
+--- a/dreamer.py
++++ b/dreamer.py
+@@ -4,7 +4,7 @@ import os
+ import pathlib
+ import sys
+ 
+-os.environ["MUJOCO_GL"] = "osmesa"
++os.environ.setdefault("MUJOCO_GL", "osmesa")
+ 
+ import numpy as np
+ import ruamel.yaml as yaml

@@ -1,0 +1,30 @@
+# Joint-noise positive control, WM side, reduced.
+run_name: probe_wm_jointnoise
+task_domain: walker
+task_name: walk
+
+checkpoint_path: ./checkpoints/walker_walk
+
+backend: dreamer
+driving_policy: dreamer
+
+kinematic_view: identity
+
+kinematic_spec:
+  pos_slice: [14, 15]
+  vel_slice: [15, 16]
+  accel_slice: null
+  dt: 0.025
+
+extrapolation: constant_velocity
+
+horizon: 64
+conditioning_steps: 5
+n_rollouts_per_magnitude: 10
+seed_base: 0
+
+axes:
+  - name: joint_noise
+    magnitudes: [0.0, 0.15, 0.30]
+
+results_root: results

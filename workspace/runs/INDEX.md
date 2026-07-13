@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-07-13 — 2026-07-08 to 2026-07-13
+- Doc: https://fudan-nlp.feishu.cn/docx/UC4pdUL3bo8OS1xXokIch228nKb
+- Run: runs/2026-07-13-lingbot-kinematic-memory/
+- Deep threads: LingBot world models (2607.07675, 2607.07534), Imagined Rollouts kinematic diagnosis (2607.05966), MIRA multiplayer world models (2607.05352)
+- Covered papers: 2607.07675, 2607.07534, 2607.05966, 2607.05352
+- Shortlisted papers: 2607.07608, 2607.06442, 2607.06018, 2607.04434, 2607.03723, 2607.05765, 2607.08716, 2607.08768, 2606.30111, 2607.02501, 2607.07508, 2607.06987
+
 ## 2026-07-11 — 2026-06-28 to 2026-07-11
 - Doc: https://fudan-nlp.feishu.cn/docx/JaRGdeEawoAvAKxPQCgc3ZHFnUg
 - Run: runs/2026-07-11-gigaworld-vla-corrector-physis/
