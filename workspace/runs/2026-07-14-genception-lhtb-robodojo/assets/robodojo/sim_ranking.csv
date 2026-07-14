@@ -1,0 +1,31 @@
+rank,policy,Generalization,Precision,Long-Horizon,Memory,Open,Average
+1,"Hy-Embodied-0.5-VLA(Zhang et al., [2026a](https://arxiv.org/html/2607.04434#bib.bib72)",8.39,8.00,14.92,12.11,0.58,8.80
+2,"Spatial Forcing(Li et al., [2025a](https://arxiv.org/html/2607.04434#bib.bib31)",9.33,10.58,14.58,4.11,1.58,8.04
+3,"\pi_{0.5}(Intelligence et al., [2025](https://arxiv.org/html/2607.04434#bib.bib22)",8.17,5.50,14.67,4.56,1.67,6.91
+4,"X-VLA(Zheng et al., [2025](https://arxiv.org/html/2607.04434#bib.bib79)",6.78,12.00,9.75,3.56,0.50,6.52
+5,"Xiaomi-Robotics-0(Cai et al., [2026c](https://arxiv.org/html/2607.04434#bib.bib9)",5.56,4.58,6.92,3.67,0.17,4.18
+6,"X-WAM(Guo et al., [2026](https://arxiv.org/html/2607.04434#bib.bib21)",3.33,1.83,9.08,4.67,0.25,3.83
+7,"GigaWorld-Policy(Ye et al., [2026a](https://arxiv.org/html/2607.04434#bib.bib63)",2.89,1.83,8.92,2.22,0.50,3.27
+8,"StarVLA-\alpha(Ye et al., [2026b](https://arxiv.org/html/2607.04434#bib.bib64)",2.33,4.33,6.50,2.44,0.58,3.24
+9,GalaxeaVLA (G0),2.83,3.83,5.58,1.89,0.67,2.96
+10,"LingBot-VLA(Wu et al., [2026](https://arxiv.org/html/2607.04434#bib.bib58)",4.28,1.83,5.25,2.78,0.67,2.96
+11,"EventVLA(Yang et al., [2026a](https://arxiv.org/html/2607.04434#bib.bib60)",1.94,5.75,0.83,4.78,0.75,2.81
+12,"AHA-WAM(Cai et al., [2026a](https://arxiv.org/html/2607.04434#bib.bib7)",3.28,2.42,2.67,2.78,0.83,2.39
+13,"Fast-WAM(Yuan et al., [2026b](https://arxiv.org/html/2607.04434#bib.bib70)",1.11,0.00,5.17,3.44,0.42,2.03
+14,"ABot-M0(Yang et al., [2026c](https://arxiv.org/html/2607.04434#bib.bib62)",3.50,1.75,0.50,2.22,0.67,1.73
+15,"\pi_{0}(Black et al., [2024](https://arxiv.org/html/2607.04434#bib.bib5)",2.56,0.75,2.00,2.11,0.25,1.53
+16,"GR00T-N1.7(Bjorck et al., [2025](https://arxiv.org/html/2607.04434#bib.bib4)",1.22,0.67,3.58,0.89,0.17,1.31
+17,"InternVLA-A1(Cai et al., [2026b](https://arxiv.org/html/2607.04434#bib.bib8)",1.83,0.92,1.17,1.33,0.17,1.08
+18,SmolVLA (Single Task),1.22,0.33,0.25,2.44,0.00,0.85
+19,"GO-1(Bu et al., [2025](https://arxiv.org/html/2607.04434#bib.bib6)",1.22,0.42,0.25,0.67,0.08,0.53
+20,"LDA-1B(Lyu et al., [2026](https://arxiv.org/html/2607.04434#bib.bib42)",0.17,0.50,0.08,1.78,0.00,0.51
+21,"MolmoAct2(Fang et al., [2026](https://arxiv.org/html/2607.04434#bib.bib18)",0.06,0.00,0.00,1.00,0.83,0.38
+22,ACT (Single-Task),0.56,0.00,0.92,0.13,0.00,0.32
+23,"Spirit v1.5([Team et al.,](https://arxiv.org/html/2607.04434#bib.bib53)",0.50,0.00,0.00,0.22,0.00,0.14
+24,"RDT-1B(Liu et al., [2025a](https://arxiv.org/html/2607.04434#bib.bib38)",0.33,0.00,0.00,0.33,0.00,0.13
+25,"H-RDT(Bi et al., [2026b](https://arxiv.org/html/2607.04434#bib.bib3)",0.22,0.00,0.17,0.11,0.08,0.12
+26,"TinyVLA(Wen et al., [2025](https://arxiv.org/html/2607.04434#bib.bib57)",0.00,0.00,0.00,0.11,0.25,0.07
+27,"DM0(Yu et al., [2026a](https://arxiv.org/html/2607.04434#bib.bib66)",0.06,0.00,0.08,0.11,0.00,0.05
+28,"Dexora-1B(Zhang et al., [2026e](https://arxiv.org/html/2607.04434#bib.bib77)",0.11,0.00,0.00,0.00,0.00,0.02
+29,"A1(Zhang et al., [2026b](https://arxiv.org/html/2607.04434#bib.bib73)",0.00,0.00,0.00,0.00,0.08,0.02
+30,"OpenVLA-OFT(Kim et al., [2025](https://arxiv.org/html/2607.04434#bib.bib28)",0.00,0.00,0.00,0.00,0.08,0.02

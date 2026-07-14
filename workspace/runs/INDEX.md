@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-07-14 — 2026-07-08 to 2026-07-14
+- Doc: https://fudan-nlp.feishu.cn/docx/CQBSdrQELoOXcExGR83cZzasnvc
+- Run: runs/2026-07-14-genception-lhtb-robodojo/
+- Deep threads: GenCeption generative video as universal vision prior (2607.09024), Long-Horizon-Terminal-Bench dense grading for long-horizon agents (2607.08964), RoboDojo sim-and-real manipulation diagnosis (2607.04434)
+- Covered papers: 2607.09024, 2607.08964, 2607.04434
+- Shortlisted papers: 2607.09657, 2607.09661, 2607.06403, 2607.06291, 2607.05373, 2607.02403, 2607.04988, 2607.04425, 2607.06838, 2607.08716
+
 ## 2026-07-13 — 2026-07-08 to 2026-07-13
 - Doc: https://fudan-nlp.feishu.cn/docx/UC4pdUL3bo8OS1xXokIch228nKb
 - Run: runs/2026-07-13-lingbot-kinematic-memory/

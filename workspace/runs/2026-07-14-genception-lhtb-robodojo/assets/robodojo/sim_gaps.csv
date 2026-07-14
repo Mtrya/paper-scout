@@ -1,0 +1,7 @@
+dimension,human_score,best_policy,best_success,absolute_gap_pp,relative_gap_pct
+Generalization,87.83,"Spatial Forcing(Li et al., [2025a](https://arxiv.org/html/2607.04434#bib.bib31)",9.33,78.50,89.4
+Precision,64.00,"X-VLA(Zheng et al., [2025](https://arxiv.org/html/2607.04434#bib.bib79)",12.00,52.00,81.2
+Long-Horizon,74.25,"Hy-Embodied-0.5-VLA(Zhang et al., [2026a](https://arxiv.org/html/2607.04434#bib.bib72)",14.92,59.33,79.9
+Memory,74.33,"Hy-Embodied-0.5-VLA(Zhang et al., [2026a](https://arxiv.org/html/2607.04434#bib.bib72)",12.11,62.22,83.7
+Open,79.75,"\pi_{0.5}(Intelligence et al., [2025](https://arxiv.org/html/2607.04434#bib.bib22)",1.67,78.08,97.9
+Average,76.03,"Hy-Embodied-0.5-VLA(Zhang et al., [2026a](https://arxiv.org/html/2607.04434#bib.bib72)",8.80,67.23,88.4

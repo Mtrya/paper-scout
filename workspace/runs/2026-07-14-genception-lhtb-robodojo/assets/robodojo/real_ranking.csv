@@ -1,0 +1,11 @@
+rank,policy,score,success
+1,"\pi_{0.5}(Intelligence et al., [2025](https://arxiv.org/html/2607.04434#bib.bib22)",22.90,12.80
+2,"InternVLA-A1(Cai et al., [2026b](https://arxiv.org/html/2607.04434#bib.bib8)",12.00,7.20
+3,GalaxeaVLA (G0),9.00,4.40
+4,"Xiaomi-Robotics-0(Cai et al., [2026c](https://arxiv.org/html/2607.04434#bib.bib9)",7.90,3.90
+5,"X-VLA(Zheng et al., [2025](https://arxiv.org/html/2607.04434#bib.bib79)",7.60,3.30
+6,"GR00T-N1.7(Bjorck et al., [2025](https://arxiv.org/html/2607.04434#bib.bib4)",5.90,1.70
+7,"\pi_{0}(Black et al., [2024](https://arxiv.org/html/2607.04434#bib.bib5)",5.80,1.70
+8,"StarVLA-\alpha(Ye et al., [2026b](https://arxiv.org/html/2607.04434#bib.bib64)",4.10,1.70
+9,"Spirit v1.5([Team et al.,](https://arxiv.org/html/2607.04434#bib.bib53)",1.60,0.60
+10,"DM0(Yu et al., [2026a](https://arxiv.org/html/2607.04434#bib.bib66)",0.00,0.00

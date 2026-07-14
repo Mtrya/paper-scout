@@ -1,0 +1,100 @@
+{
+  "category_by_difficulty": {
+    "climate-science": {
+      "hard": 1
+    },
+    "engineering-architecture": {
+      "hard": 4
+    },
+    "engineering-regression": {
+      "hard": 4
+    },
+    "game-ai": {
+      "hard": 1
+    },
+    "games": {
+      "hard": 6
+    },
+    "health-medicine": {
+      "hard": 1
+    },
+    "materials-science": {
+      "hard": 1
+    },
+    "mathematical-modeling": {
+      "hard": 1
+    },
+    "ml": {
+      "hard": 1
+    },
+    "multimodal": {
+      "hard": 5
+    },
+    "puzzle": {
+      "hard": 1
+    },
+    "reverse-engineering": {
+      "hard": 1
+    },
+    "robotics": {
+      "hard": 1
+    },
+    "scientific-computing": {
+      "hard": 1
+    },
+    "security": {
+      "hard": 1
+    },
+    "security-testing": {
+      "hard": 1
+    },
+    "software-engineering": {
+      "hard": 7
+    },
+    "systems-engineering": {
+      "hard": 3
+    },
+    "tool-use": {
+      "hard": 5
+    }
+  },
+  "difficulty": {
+    "hard": 46
+  },
+  "mean_expert_time_min": 231.0,
+  "mean_junior_time_min": 575.2,
+  "n_tasks": 46,
+  "paper_categories": {
+    "APEX professional workflows": 4,
+    "Earth, climate & energy": 6,
+    "Interactive games": 4,
+    "Logic & constraint puzzles": 3,
+    "Multimodal & imaging analysis": 6,
+    "Research reproduction & ML": 5,
+    "Scientific computing & simulation": 6,
+    "Software & reverse engineering": 7,
+    "Systems, performance & security": 5
+  },
+  "repo_categories": {
+    "climate-science": 1,
+    "engineering-architecture": 4,
+    "engineering-regression": 4,
+    "game-ai": 1,
+    "games": 6,
+    "health-medicine": 1,
+    "materials-science": 1,
+    "mathematical-modeling": 1,
+    "ml": 1,
+    "multimodal": 5,
+    "puzzle": 1,
+    "reverse-engineering": 1,
+    "robotics": 1,
+    "scientific-computing": 1,
+    "security": 1,
+    "security-testing": 1,
+    "software-engineering": 7,
+    "systems-engineering": 3,
+    "tool-use": 5
+  },
+  "timeouts_ge_90min": 27
+}
