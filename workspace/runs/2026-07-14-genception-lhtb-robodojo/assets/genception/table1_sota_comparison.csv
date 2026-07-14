@@ -1,0 +1,95 @@
+method,backbone,task,benchmark,metric,value
+David-Large[saleh2025david],ViT-L 0.34B,Normals,Hi4D,mAE,15.37
+Sapiens[sapienseccv2024],ViT-L 2B,Normals,Hi4D,mAE,12.14
+Marigold-E2E-FT[garcia2025fine],SD V2 0.86B,Normals,Sintel,mAE,33.5
+NormalCrafter[bin2025normalcrafter],SVD 1.5B,Normals,Sintel,mAE,30.7
+Lotus-2[he2025lotus],FLUX 12B,Normals,Sintel,mAE,30.3
+David-Large[saleh2025david],ViT-L 0.34B,Depth,Goliath,AbsRel,0.012
+Sapiens[sapienseccv2024],MAE 2B,Depth,Goliath,AbsRel,0.033
+MapAnything[keetha2025mapanything],DinoV2 1.1B,Depth,Sintel,AbsRel,0.306
+MapAnything[keetha2025mapanything],DinoV2 1.1B,Depth,KITTI,AbsRel,0.096
+MapAnything[keetha2025mapanything],DinoV2 1.1B,Cam. Pose,Sintel,ATE,0.202
+MapAnything[keetha2025mapanything],DinoV2 1.1B,Cam. Pose,Sintel,RPE-T,0.089
+MapAnything[keetha2025mapanything],DinoV2 1.1B,Cam. Pose,Sintel,RPE-R,2.383
+VGGT[wang2025vggt],DinoV2 1.1B,Depth,Sintel,AbsRel,0.247
+VGGT[wang2025vggt],DinoV2 1.1B,Depth,KITTI,AbsRel,0.067
+VGGT[wang2025vggt],DinoV2 1.1B,Cam. Pose,Sintel,ATE,0.168
+VGGT[wang2025vggt],DinoV2 1.1B,Cam. Pose,Sintel,RPE-T,0.056
+VGGT[wang2025vggt],DinoV2 1.1B,Cam. Pose,Sintel,RPE-R,0.428
+DepthAnything 3[lin2025depth],DinoV2 1.15B,Depth,Sintel,AbsRel,0.201
+DepthAnything 3[lin2025depth],DinoV2 1.15B,Depth,KITTI,AbsRel,0.059
+DepthAnything 3[lin2025depth],DinoV2 1.15B,Depth,ETH3D,AbsRel,0.028
+DepthAnything 3[lin2025depth],DinoV2 1.15B,Cam. Pose,Sintel,ATE,0.065
+DepthAnything 3[lin2025depth],DinoV2 1.15B,Cam. Pose,Sintel,RPE-T,0.048
+DepthAnything 3[lin2025depth],DinoV2 1.15B,Cam. Pose,Sintel,RPE-R,0.456
+D4RT[zhang2025efficiently],VideoMAE2 1B,Depth,Sintel,AbsRel,0.148
+D4RT[zhang2025efficiently],VideoMAE2 1B,Depth,KITTI,AbsRel,0.051
+D4RT[zhang2025efficiently],VideoMAE2 1B,Cam. Pose,Sintel,ATE,0.065
+D4RT[zhang2025efficiently],VideoMAE2 1B,Cam. Pose,Sintel,RPE-T,0.024
+D4RT[zhang2025efficiently],VideoMAE2 1B,Cam. Pose,Sintel,RPE-R,0.126
+VGGT-Ω\Omega[wang2026vggt],DinoV3 1B,Depth,Sintel,AbsRel,0.145
+VGGT-Ω\Omega[wang2026vggt],DinoV3 1B,Depth,KITTI,AbsRel,0.041
+VGGT-Ω\Omega[wang2026vggt],DinoV3 1B,Depth,ETH3D,AbsRel,0.016
+VGGT-Ω\Omega[wang2026vggt],DinoV3 1B,Cam. Pose,Sintel,ATE,0.057
+VGGT-Ω\Omega[wang2026vggt],DinoV3 1B,Cam. Pose,Sintel,RPE-T,0.059
+VGGT-Ω\Omega[wang2026vggt],DinoV3 1B,Cam. Pose,Sintel,RPE-R,0.407
+MODNet[ke2022modnet],MNetV2,Foreground Seg.,V.Mat.,MSE,0.0054
+MODNet[ke2022modnet],MNetV2,Foreground Seg.,P.Mat.,MSE,0.0304
+RVM[lin2022robust],MNetV3,Foreground Seg.,V.Mat.,MSE,0.001
+David-Large[saleh2025david],ViT-L 0.34B,Foreground Seg.,P.Mat.,MSE,0.0009
+ReferFormer[wu2022language],Swin-L 0.19B,Expression-Referring Seg.,Ref-DAVIS,J&F,61.1
+ReferFormer[wu2022language],Swin-L 0.19B,Expression-Referring Seg.,MeViS,J&F,31.0
+VISA[yan2024visa],Chat-Univi 13B,Expression-Referring Seg.,Ref-DAVIS,J&F,70.4
+VISA[yan2024visa],Chat-Univi 13B,Expression-Referring Seg.,MeViS,J&F,44.5
+Vocap[uijlings2025vocap],SAM2 0.4B,Expression-Referring Seg.,Ref-DAVIS,J&F,75.1
+Vocap[uijlings2025vocap],SAM2 0.4B,Expression-Referring Seg.,MeViS,J&F,51.9
+ReferEverything[bagchi2025refereverything],WAN 2.1 14B,Expression-Referring Seg.,Ref-DAVIS,J&F,75.0
+ReferEverything[bagchi2025refereverything],WAN 2.1 14B,Expression-Referring Seg.,MeViS,J&F,60.3
+SAM 3[carion2025sam],PE 0.8B,Expression-Referring Seg.,Ref-DAVIS,J&F,41.3
+SAM 3[carion2025sam],PE 0.8B,Expression-Referring Seg.,MeViS,J&F,38.3
+SAM 3 + Gemini 3.5 Flash[carion2025sam],PE 0.8B,Expression-Referring Seg.,Ref-DAVIS,J&F,64.5
+SAM 3 + Gemini 3.5 Flash[carion2025sam],PE 0.8B,Expression-Referring Seg.,MeViS,J&F,57.5
+GVHMR[shen2024gvhmr],ViT,3D Human,EMDB,MPJPE,72.6
+TRAM[wang2024tram],ViT-H,3D Human,EMDB,MPJPE,74.4
+Genmo[genmo2025],ViT-H,3D Human,EMDB,MPJPE,73.0
+Diception - Generalist[zhao2025diception],SD3 2B,Normals,Sintel,mAE,37.9
+Diception - Generalist[zhao2025diception],SD3 2B,Normals,Hi4D,mAE,20.4
+Diception - Generalist[zhao2025diception],SD3 2B,Depth,Sintel,AbsRel,0.5
+Diception - Generalist[zhao2025diception],SD3 2B,Depth,KITTI,AbsRel,0.145
+Diception - Generalist[zhao2025diception],SD3 2B,Depth,ETH3D,AbsRel,0.177
+Ours - Specialist - S,WAN 2.1 1.3B,Normals,Sintel,mAE,32.7
+Ours - Specialist - S,WAN 2.1 1.3B,Depth,Sintel,AbsRel,0.167
+Ours - Specialist - S,WAN 2.1 1.3B,Depth,KITTI,AbsRel,0.06
+Ours - Specialist - S,WAN 2.1 1.3B,Depth,ETH3D,AbsRel,0.056
+Ours - Specialist - S,WAN 2.1 1.3B,Cam. Pose,Sintel,ATE,0.057
+Ours - Specialist - S,WAN 2.1 1.3B,Cam. Pose,Sintel,RPE-T,0.023
+Ours - Specialist - S,WAN 2.1 1.3B,Cam. Pose,Sintel,RPE-R,0.72
+Ours - Specialist - S,WAN 2.1 1.3B,Expression-Referring Seg.,Ref-DAVIS,J&F,69.7
+Ours - Specialist - S,WAN 2.1 1.3B,Expression-Referring Seg.,MeViS,J&F,59.9
+Ours - Specialist - L,WAN 2.1 14B,Normals,Sintel,mAE,29.7
+Ours - Specialist - L,WAN 2.1 14B,Normals,Hi4D,mAE,10.99
+Ours - Specialist - L,WAN 2.1 14B,Depth,Sintel,AbsRel,0.13
+Ours - Specialist - L,WAN 2.1 14B,Depth,KITTI,AbsRel,0.048
+Ours - Specialist - L,WAN 2.1 14B,Depth,ETH3D,AbsRel,0.037
+Ours - Specialist - L,WAN 2.1 14B,Depth,Goliath,AbsRel,0.008
+Ours - Specialist - L,WAN 2.1 14B,Cam. Pose,Sintel,ATE,0.05
+Ours - Specialist - L,WAN 2.1 14B,Cam. Pose,Sintel,RPE-T,0.018
+Ours - Specialist - L,WAN 2.1 14B,Cam. Pose,Sintel,RPE-R,0.464
+Ours - Specialist - L,WAN 2.1 14B,Foreground Seg.,V.Mat.,MSE,0.0027
+Ours - Specialist - L,WAN 2.1 14B,Foreground Seg.,P.Mat.,MSE,0.0009
+Ours - Specialist - L,WAN 2.1 14B,Expression-Referring Seg.,Ref-DAVIS,J&F,76.4
+Ours - Specialist - L,WAN 2.1 14B,Expression-Referring Seg.,MeViS,J&F,70.0
+Ours - Specialist - L,WAN 2.1 14B,3D Human,EMDB,MPJPE,71.8
+Ours - Generalist -L,WAN 2.1 14B,Normals,Sintel,mAE,29.3
+Ours - Generalist -L,WAN 2.1 14B,Normals,Hi4D,mAE,11.47
+Ours - Generalist -L,WAN 2.1 14B,Depth,Sintel,AbsRel,0.156
+Ours - Generalist -L,WAN 2.1 14B,Depth,KITTI,AbsRel,0.048
+Ours - Generalist -L,WAN 2.1 14B,Depth,ETH3D,AbsRel,0.044
+Ours - Generalist -L,WAN 2.1 14B,Depth,Goliath,AbsRel,0.011
+Ours - Generalist -L,WAN 2.1 14B,Cam. Pose,Sintel,ATE,0.062
+Ours - Generalist -L,WAN 2.1 14B,Cam. Pose,Sintel,RPE-T,0.018
+Ours - Generalist -L,WAN 2.1 14B,Cam. Pose,Sintel,RPE-R,0.485
+Ours - Generalist -L,WAN 2.1 14B,Foreground Seg.,V.Mat.,MSE,0.001
+Ours - Generalist -L,WAN 2.1 14B,Foreground Seg.,P.Mat.,MSE,0.0008
+Ours - Generalist -L,WAN 2.1 14B,Expression-Referring Seg.,Ref-DAVIS,J&F,75.8
+Ours - Generalist -L,WAN 2.1 14B,Expression-Referring Seg.,MeViS,J&F,69.0

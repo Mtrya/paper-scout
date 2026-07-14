@@ -1,0 +1,89 @@
+<title>Paper Scout Research Report - 2026-07-14</title>
+<callout emoji="💡" background-color="light-yellow" border-color="yellow">
+<p><b>Opening synthesis.</b> The 2026-07-14 pool sharpens a single question: what does it take to build systems that understand and act in the physical world for a long time? <b>GenCeption</b> argues the answer is already inside generative video models; <b>Long-Horizon-Terminal-Bench</b> shows that even frontier agents cannot sustain ninety-minute workflows; and <b>RoboDojo</b> reveals that generalist manipulation policies remain tens of percentage points below human teleoperation in both simulation and reality. Together they point to a season in which benchmarks are becoming sharper diagnostic instruments just as model priors are becoming richer.</p>
+</callout>
+<p>Period covered: 2026-07-08 to 2026-07-14. Three papers were investigated deeply; a shortlist of lightly-noticed papers follows.</p>
+<h1>Generative video as a universal vision prior</h1>
+<p>The last year has seen video generation models grow from synthesis toys into candidate world models. GenCeption is the clearest recent attempt to treat them as pre-trained visual backbones for perception.</p>
+<h2>GenCeption: Video Generation Models are General-Purpose Vision Learners</h2>
+<p>Wang et al. (ECCV 2026) · arXiv:2607.09024 · <a href="https://huggingface.co/papers/2607.09024">HF</a> · <a href="https://arxiv.org/pdf/2607.09024">PDF</a> · <a href="https://genception.github.io/">project page</a></p>
+<p>The paper asks what the vision equivalent of next-token prediction in NLP might be, and answers: large-scale text-to-video generation. GenCeption repurposes a WAN 2.1 rectified-flow DiT as a single-step, feed-forward perception model steered by text prompts. The architectural move is surprisingly minimal.</p>
+<p>[[figure-anchor:genception:overview]]</p>
+<p><b>From diffusion to perception.</b> Instead of feeding noisy latents at timestep <latex>t</latex>, GenCeption feeds the clean latent of the input video and fixes <latex>t = 0</latex>. The DiT still predicts the flow velocity <latex>v</latex>, but the output is negated (<latex>-v = x_0 - \epsilon</latex>) before the VAE decoder. A single forward pass therefore produces the target-modality video. Because the base model was already trained to render realistic video conditioned on text, the authors argue it has already internalized the geometry, physics, and vision-language alignment needed for downstream perception.</p>
+<p><b>Unified RGB ambient space.</b> All dense targets are represented as ordinary 3-channel videos. Depth maps are channel-replicated; surface normals fill the three channels naturally; camera poses are packed into a pixel-space “Rothko” raymap with ray origins in the center and directions in the ring. Sparse tasks such as 2D/3D keypoints use a small set of learnable per-frame tokens decoded by an MLP.</p>
+<p><b>One loss everywhere.</b> The entire model is trained with plain L2 in latent space. Task-specific scale ambiguity is pushed to the data representation: depth is median-normalized per scene and compressed with <latex>d' = \text{clip}(\alpha \log(d+1), 0, 1)</latex>. This mirrors the LLM recipe of unifying heterogeneous tasks under a single objective and varying only the data mixture.</p>
+<p>[[figure-anchor:genception:scaling]]</p>
+<p><b>What the numbers say.</b> On the reported benchmarks the 14B generalist is competitive with or beats task-specialist models:</p>
+<table>
+<colgroup><col width="220"/><col width="160"/><col width="200"/><col width="200"/></colgroup>
+<thead><tr><th background-color="light-gray">Task</th><th background-color="light-gray">Benchmark</th><th background-color="light-gray">GenCeption 14B</th><th background-color="light-gray">Closest specialist</th></tr></thead>
+<tbody>
+<tr><td>Surface normals</td><td>Sintel</td><td>29.3 mAE</td><td>Lotus-2 30.3</td></tr>
+<tr><td>Depth</td><td>KITTI AbsRel</td><td>0.048</td><td>DepthAnything3 0.059</td></tr>
+<tr><td>Camera pose</td><td>Sintel RPE-T / RPE-R</td><td>0.018 / 0.485</td><td>VGGT-Ω 0.059 / 0.407</td></tr>
+<tr><td>Referring segmentation</td><td>Ref-DAVIS / MeViS</td><td>75.8 / 69.0 J&amp;F</td><td>ReferEverything 75.0 / 60.3</td></tr>
+</tbody>
+</table>
+<p><b>External signals.</b> No GenCeption code, weights, or training data have been released, so the numbers are not yet independently reproducible. I inspected the open WAN 2.1 repository and confirmed that the architecture is a rectified-flow DiT with 3D RoPE and T5 text conditioning; the <latex>t=0</latex> trick maps cleanly onto the existing timestep path. Related work (Marigold, GenPercept, Diception, DepthCrafter, Geo4D, ReferEverything, Vision Banana, Wiedemer et al.) shows the same intuition in narrower domains, but GenCeption is the first to unify dense and sparse video perception in a single feed-forward model.</p>
+<p><b>Limitations.</b> The generalist loses the 3D-keypoint task entirely in joint training, and surface-normal results move in opposite directions across benchmarks. The sparse token head disrupts pretrained DiT attention, undercutting the “no architectural change” story. Training cost is also steep: 15,000 steps at batch size 64 on 256 v6e TPUs. The “7×–500× less data” claim is real but depends heavily on which metric is picked.</p>
+<callout emoji="✅" background-color="light-green"><p><b>Standout signal.</b> GenCeption is the clearest seed this period for the generative-world-model thread. It turns a video generator into a generalist perceiver with almost no architectural surgery and beats or matches specialists on several benchmarks. The main uncertainty is whether the priors are uniquely generative or simply a by-product of scale and multimodal data.</p></callout>
+<h1>Grading the long horizon</h1>
+<p>Agent benchmarks have mostly measured whether a model can finish a short task. LHTB asks whether it can keep going for ninety minutes.</p>
+<h2>Long-Horizon-Terminal-Bench</h2>
+<p>Li et al. (2026) · arXiv:2607.08964 · <a href="https://huggingface.co/papers/2607.08964">HF</a> · <a href="https://arxiv.org/pdf/2607.08964">PDF</a> · <a href="https://zli12321.github.io/LHTB/">project page</a></p>
+<p>LHTB contains 46 containerized terminal tasks across nine categories, each requiring hundreds of steps and tens of minutes to hours. The key design choice is dense, subtask-based grading: instead of a single pass/fail, a hidden verifier computes <latex>R = \sum_k w_k r_k / \sum_k w_k</latex> with binary, continuous, and episode-aggregated subtasks. A task counts as resolved only at <latex>R \ge 0.95</latex>.</p>
+<p>[[figure-anchor:lhtb:leaderboard]]</p>
+<p><b>Why dense grading matters.</b> At the strict <latex>R = 1.0</latex> threshold, ten of the fifteen paper-reported models solve zero tasks; at <latex>R \ge 0.95</latex> the mean pass rate is only 4.3%. Yet 62.8% of runs make partial progress and 26.1% reach <latex>R \ge 0.5</latex>. Binary grading would collapse the leaderboard into a sea of zeros; mean reward is the only signal that distinguishes models right now.</p>
+<p>[[figure-anchor:lhtb:reward-dist]]</p>
+<p><b>Verifier design.</b> I inspected the official repository and three verifiers. The anti-gaming is real: hidden stress tests with dynamic inputs, replay-based grading for games, determinism checks, bans on reading <code>/tests</code> fixtures, and process monitoring that scans terminal recordings for solver scripts. The vector-DB task even carries a comment explaining that the top reward band was rescaled because the old metric saturated at 10× speedup.</p>
+<p><b>Failure modes.</b> Across all unresolved runs, 79% time out while still working and only 19% exit early. But among those early exits, 14 have <latex>R \ge 0.75</latex>: the agent stops thinking it is done while hidden checks remain unsatisfied. The binding constraint is not local correctness but long-horizon completion and calibrated self-verification.</p>
+<p>[[figure-anchor:lhtb:failure]]</p>
+<p><b>Takeaway.</b> LHTB is a well-engineered stress test for the actual bottleneck in today’s agents: sustained execution. The dense reward design is not cosmetic—it is the measurement strategy that makes the benchmark usable at all. The next gains are likely to come from planning, memory, progress tracking, and stopping judgment rather than stronger next-token prediction alone.</p>
+<h1>Sim-and-real manipulation diagnosis</h1>
+<p>Robot manipulation has no shortage of benchmarks, but few combine scalable simulation with reproducible real-world evaluation under one protocol. RoboDojo does.</p>
+<h2>RoboDojo: A Unified Sim-and-Real Benchmark</h2>
+<p>Chen et al. (2026) · arXiv:2607.04434 · <a href="https://huggingface.co/papers/2607.04434">HF</a> · <a href="https://arxiv.org/pdf/2607.04434">PDF</a> · <a href="https://robodojo-benchmark.com/">project page</a></p>
+<p>RoboDojo is best read as a diagnostic loop rather than a task collection. It pairs 42 simulation tasks on a bimanual ARX X5 robot across five capability dimensions—Generalization, Memory, Long-Horizon, Precision, and Open—with 18 real-world tasks across three embodiments (ARX X5, Piper, Piper X). The simulation side uses heterogeneous parallel Isaac Sim environments; the real-world side uses RoboDojo-RealEval, a standardized hardware station with controlled lighting, layout-replay overlays, and cloud-based remote access. XPolicyLab provides a single policy adapter so the same policy can run in both settings.</p>
+<p>[[figure-anchor:robodojo:overview]]</p>
+<p><b>The human gap is enormous and uneven.</b> On the paper’s frozen 3 Jul 2026 leaderboard, the best simulation policy scores 8.80% success against 76.03% for human teleop—a 67.23 pp gap. In the real world the best policy scores 12.80% against 100% human—a 87.20 pp gap. Open-vocabulary skill recombination is essentially unsolved (best 1.67% vs. human 79.75%).</p>
+<p>[[figure-anchor:robodojo:sim-gaps]]</p>
+<table>
+<colgroup><col width="160"/><col width="140"/><col width="140"/><col width="140"/><col width="140"/></colgroup>
+<thead><tr><th background-color="light-gray">Dimension</th><th background-color="light-gray">Human</th><th background-color="light-gray">Best policy</th><th background-color="light-gray">Absolute gap</th><th background-color="light-gray">Relative gap</th></tr></thead>
+<tbody>
+<tr><td>Generalization</td><td>87.83%</td><td>9.33%</td><td>78.50 pp</td><td>89.4%</td></tr>
+<tr><td>Memory</td><td>74.33%</td><td>12.11%</td><td>62.22 pp</td><td>83.7%</td></tr>
+<tr><td>Long-Horizon</td><td>74.25%</td><td>14.92%</td><td>59.33 pp</td><td>79.9%</td></tr>
+<tr><td>Precision</td><td>64.00%</td><td>12.00%</td><td>52.00 pp</td><td>81.2%</td></tr>
+<tr><td>Open</td><td>79.75%</td><td>1.67%</td><td>78.08 pp</td><td>97.9%</td></tr>
+</tbody>
+</table>
+<p><b>Simulation rank is a noisy predictor of real-world deployability.</b> The real-world tasks are intentionally not paired with simulation tasks, so the benchmark is a deployment stress test. π₀.₅ is 3rd in simulation but 1st in the real world; InternVLA-A1 is 17th in simulation but 2nd in the real world. Embodiment-specific effects are also strong: π₀.₅ does well on Piper but nearly fails on Piper X.</p>
+<p>[[figure-anchor:robodojo:sim-real]]</p>
+<p><b>External signals.</b> The RoboDojo and XPolicyLab repositories are public. I traced the config-driven task engine, the heterogeneous parallel environment launcher, and the policy adapter interface. The project page leaderboard is JS-rendered and could not be scraped; the analysis uses the frozen paper tables. Running the simulator would require asset downloads and Isaac Sim, which are not available here.</p>
+<p><b>Takeaway.</b> RoboDojo exposes both a large capability gap and a measurement gap. Simpler benchmarks were hiding how far generalist manipulation still is from reliable physical execution. The most important finding is that simulation success does not automatically transfer: policies re-rank across embodiments and across sim-to-real deployment, which is exactly what a unified benchmark should reveal.</p>
+<h1>Shortlist: other papers worth noticing</h1>
+<p>These papers were fast-scanned and are relevant to the same themes, but were not investigated deeply this run.</p>
+<table>
+<colgroup><col width="200"/><col width="230"/><col width="230"/><col width="90"/></colgroup>
+<thead><tr><th background-color="light-gray">Paper</th><th background-color="light-gray">Key contribution</th><th background-color="light-gray">Why it matters</th><th background-color="light-gray">Links</th></tr></thead>
+<tbody>
+<tr><td><b>Scalable Visual Pretraining for Language Intelligence</b> (Zhang et al., 2026)</td><td>Large-scale visual pretraining for multimodal language intelligence.</td><td>Tests whether vision can carry more of the representational load in MLLMs.</td><td><a href="https://huggingface.co/papers/2607.09657">HF</a> / <a href="https://arxiv.org/pdf/2607.09657">PDF</a></td></tr>
+<tr><td><b>PanoWorld</b> (Li et al., 2026)</td><td>Real-world panoramic generation with long-range memory.</td><td>World-model angle on panoramic scenes; complements GenCeption’s video-prior story.</td><td><a href="https://huggingface.co/papers/2607.09661">HF</a> / <a href="https://arxiv.org/pdf/2607.09661">PDF</a></td></tr>
+<tr><td><b>From Foundation to Application: Improving VLA Models in Practice</b> (Wu et al., 2026)</td><td>Practical improvements for deploying VLA models in real-world settings.</td><td>Directly addresses the sim-to-real and system-engineering gaps RoboDojo measures.</td><td><a href="https://huggingface.co/papers/2607.06403">HF</a> / <a href="https://arxiv.org/pdf/2607.06403">PDF</a></td></tr>
+<tr><td><b>AlayaWorld</b> (AlayaWorld Team, 2026)</td><td>Long-horizon and playable video world generation.</td><td>Another generative-world-model proposal, this time for game-like interactive environments.</td><td><a href="https://huggingface.co/papers/2607.06291">HF</a> / <a href="https://arxiv.org/pdf/2607.06291">PDF</a></td></tr>
+<tr><td><b>PixWorld</b> (Gao et al., 2026)</td><td>Unifying 3D scene generation and reconstruction in pixel space.</td><td>Generative 3D scene model; relevant to world models and spatial reasoning.</td><td><a href="https://huggingface.co/papers/2607.05373">HF</a> / <a href="https://arxiv.org/pdf/2607.05373">PDF</a></td></tr>
+<tr><td><b>ACID</b> (Seo et al., 2026)</td><td>Action consistency via inverse dynamics for planning with world models.</td><td>Tackles action-consistency in model-based planning; adjacent to GenCeption’s perception-to-action pipeline.</td><td><a href="https://huggingface.co/papers/2607.02403">HF</a> / <a href="https://arxiv.org/pdf/2607.02403">PDF</a></td></tr>
+<tr><td><b>InternVLA-A1.5</b> (Ma et al., 2026)</td><td>Unifying understanding, latent foresight, and action for compositional generalization.</td><td>VLA that explicitly combines perception, world-model foresight, and action.</td><td><a href="https://huggingface.co/papers/2607.04988">HF</a> / <a href="https://arxiv.org/pdf/2607.04988">PDF</a></td></tr>
+<tr><td><b>UI-MOPD</b> (Lian et al., 2026)</td><td>Multi-platform on-policy distillation for continual GUI agent learning.</td><td>Long-horizon GUI agents, complementary to LHTB’s terminal focus.</td><td><a href="https://huggingface.co/papers/2607.04425">HF</a> / <a href="https://arxiv.org/pdf/2607.04425">PDF</a></td></tr>
+<tr><td><b>WildCity</b> (Han et al., 2026)</td><td>City-scale multimodal dataset with closed-loop simulator.</td><td>Large-scale spatial-intelligence data; connects to world models and embodied navigation.</td><td><a href="https://huggingface.co/papers/2607.06838">HF</a> / <a href="https://arxiv.org/pdf/2607.06838">PDF</a></td></tr>
+<tr><td><b>Remember When It Matters</b> (Wu et al., 2026)</td><td>Proactive memory agent for long-horizon agents.</td><td>Memory mechanism directly motivated by the failure modes LHTB exposes.</td><td><a href="https://huggingface.co/papers/2607.08716">HF</a> / <a href="https://arxiv.org/pdf/2607.08716">PDF</a></td></tr>
+</tbody>
+</table>
+<h1>Cross-cutting observations</h1>
+<p>Three patterns cut across the deep threads:</p>
+<ul>
+<li><b>Benchmarks are now defining the problem more sharply than models are solving it.</b> LHTB and RoboDojo both use dense, capability-oriented evaluation to expose gradients that binary metrics would hide. That is a sign the field is moving from “look, it works” to “where exactly does it fail?”</li>
+<li><b>Generative priors and long-horizon control are converging, but not yet connected.</b> GenCeption extracts perception from a video generator; LHTB and RoboDojo measure acting over time. The next interesting question is whether these generative world priors can be turned into the memory, planning, and verification functions that long-horizon agents lack.</li>
+<li><b>Reproducibility remains uneven.</b> GenCeption ships no code or weights; RoboDojo and LHTB ship code but require heavy infrastructure to run. Claims about emergent generalization or sim-to-real transfer will not be fully testable until artifacts appear.</li>
+</ul>

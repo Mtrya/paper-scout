@@ -1,0 +1,16 @@
+{
+  "raymap": {
+    "description": "6-DoF per-pixel rays packed into 3 RGB channels",
+    "central_region": "ray origins (ox, oy, oz)",
+    "peripheral_ring": "ray directions (dx, dy, dz)",
+    "note": "No architectural decoder change needed; VAE sees a normal video latent."
+  },
+  "depth_mapping": {
+    "description": "Data-level scale removal + range compression",
+    "steps": [
+      "d_norm = depth / median(depth)",
+      "d' = clip(alpha * log(d_norm + 1), 0, 1)"
+    ],
+    "alpha_role": "trade-off between near-field detail and far-field structure"
+  }
+}

@@ -1,0 +1,754 @@
+[
+  {
+    "method": "David-Large[saleh2025david]",
+    "backbone": "ViT-L 0.34B",
+    "task": "Normals",
+    "benchmark": "Hi4D",
+    "metric": "mAE",
+    "value": 15.37
+  },
+  {
+    "method": "Sapiens[sapienseccv2024]",
+    "backbone": "ViT-L 2B",
+    "task": "Normals",
+    "benchmark": "Hi4D",
+    "metric": "mAE",
+    "value": 12.14
+  },
+  {
+    "method": "Marigold-E2E-FT[garcia2025fine]",
+    "backbone": "SD V2 0.86B",
+    "task": "Normals",
+    "benchmark": "Sintel",
+    "metric": "mAE",
+    "value": 33.5
+  },
+  {
+    "method": "NormalCrafter[bin2025normalcrafter]",
+    "backbone": "SVD 1.5B",
+    "task": "Normals",
+    "benchmark": "Sintel",
+    "metric": "mAE",
+    "value": 30.7
+  },
+  {
+    "method": "Lotus-2[he2025lotus]",
+    "backbone": "FLUX 12B",
+    "task": "Normals",
+    "benchmark": "Sintel",
+    "metric": "mAE",
+    "value": 30.3
+  },
+  {
+    "method": "David-Large[saleh2025david]",
+    "backbone": "ViT-L 0.34B",
+    "task": "Depth",
+    "benchmark": "Goliath",
+    "metric": "AbsRel",
+    "value": 0.012
+  },
+  {
+    "method": "Sapiens[sapienseccv2024]",
+    "backbone": "MAE 2B",
+    "task": "Depth",
+    "benchmark": "Goliath",
+    "metric": "AbsRel",
+    "value": 0.033
+  },
+  {
+    "method": "MapAnything[keetha2025mapanything]",
+    "backbone": "DinoV2 1.1B",
+    "task": "Depth",
+    "benchmark": "Sintel",
+    "metric": "AbsRel",
+    "value": 0.306
+  },
+  {
+    "method": "MapAnything[keetha2025mapanything]",
+    "backbone": "DinoV2 1.1B",
+    "task": "Depth",
+    "benchmark": "KITTI",
+    "metric": "AbsRel",
+    "value": 0.096
+  },
+  {
+    "method": "MapAnything[keetha2025mapanything]",
+    "backbone": "DinoV2 1.1B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "ATE",
+    "value": 0.202
+  },
+  {
+    "method": "MapAnything[keetha2025mapanything]",
+    "backbone": "DinoV2 1.1B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "RPE-T",
+    "value": 0.089
+  },
+  {
+    "method": "MapAnything[keetha2025mapanything]",
+    "backbone": "DinoV2 1.1B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "RPE-R",
+    "value": 2.383
+  },
+  {
+    "method": "VGGT[wang2025vggt]",
+    "backbone": "DinoV2 1.1B",
+    "task": "Depth",
+    "benchmark": "Sintel",
+    "metric": "AbsRel",
+    "value": 0.247
+  },
+  {
+    "method": "VGGT[wang2025vggt]",
+    "backbone": "DinoV2 1.1B",
+    "task": "Depth",
+    "benchmark": "KITTI",
+    "metric": "AbsRel",
+    "value": 0.067
+  },
+  {
+    "method": "VGGT[wang2025vggt]",
+    "backbone": "DinoV2 1.1B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "ATE",
+    "value": 0.168
+  },
+  {
+    "method": "VGGT[wang2025vggt]",
+    "backbone": "DinoV2 1.1B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "RPE-T",
+    "value": 0.056
+  },
+  {
+    "method": "VGGT[wang2025vggt]",
+    "backbone": "DinoV2 1.1B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "RPE-R",
+    "value": 0.428
+  },
+  {
+    "method": "DepthAnything 3[lin2025depth]",
+    "backbone": "DinoV2 1.15B",
+    "task": "Depth",
+    "benchmark": "Sintel",
+    "metric": "AbsRel",
+    "value": 0.201
+  },
+  {
+    "method": "DepthAnything 3[lin2025depth]",
+    "backbone": "DinoV2 1.15B",
+    "task": "Depth",
+    "benchmark": "KITTI",
+    "metric": "AbsRel",
+    "value": 0.059
+  },
+  {
+    "method": "DepthAnything 3[lin2025depth]",
+    "backbone": "DinoV2 1.15B",
+    "task": "Depth",
+    "benchmark": "ETH3D",
+    "metric": "AbsRel",
+    "value": 0.028
+  },
+  {
+    "method": "DepthAnything 3[lin2025depth]",
+    "backbone": "DinoV2 1.15B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "ATE",
+    "value": 0.065
+  },
+  {
+    "method": "DepthAnything 3[lin2025depth]",
+    "backbone": "DinoV2 1.15B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "RPE-T",
+    "value": 0.048
+  },
+  {
+    "method": "DepthAnything 3[lin2025depth]",
+    "backbone": "DinoV2 1.15B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "RPE-R",
+    "value": 0.456
+  },
+  {
+    "method": "D4RT[zhang2025efficiently]",
+    "backbone": "VideoMAE2 1B",
+    "task": "Depth",
+    "benchmark": "Sintel",
+    "metric": "AbsRel",
+    "value": 0.148
+  },
+  {
+    "method": "D4RT[zhang2025efficiently]",
+    "backbone": "VideoMAE2 1B",
+    "task": "Depth",
+    "benchmark": "KITTI",
+    "metric": "AbsRel",
+    "value": 0.051
+  },
+  {
+    "method": "D4RT[zhang2025efficiently]",
+    "backbone": "VideoMAE2 1B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "ATE",
+    "value": 0.065
+  },
+  {
+    "method": "D4RT[zhang2025efficiently]",
+    "backbone": "VideoMAE2 1B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "RPE-T",
+    "value": 0.024
+  },
+  {
+    "method": "D4RT[zhang2025efficiently]",
+    "backbone": "VideoMAE2 1B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "RPE-R",
+    "value": 0.126
+  },
+  {
+    "method": "VGGT-\u03a9\\Omega[wang2026vggt]",
+    "backbone": "DinoV3 1B",
+    "task": "Depth",
+    "benchmark": "Sintel",
+    "metric": "AbsRel",
+    "value": 0.145
+  },
+  {
+    "method": "VGGT-\u03a9\\Omega[wang2026vggt]",
+    "backbone": "DinoV3 1B",
+    "task": "Depth",
+    "benchmark": "KITTI",
+    "metric": "AbsRel",
+    "value": 0.041
+  },
+  {
+    "method": "VGGT-\u03a9\\Omega[wang2026vggt]",
+    "backbone": "DinoV3 1B",
+    "task": "Depth",
+    "benchmark": "ETH3D",
+    "metric": "AbsRel",
+    "value": 0.016
+  },
+  {
+    "method": "VGGT-\u03a9\\Omega[wang2026vggt]",
+    "backbone": "DinoV3 1B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "ATE",
+    "value": 0.057
+  },
+  {
+    "method": "VGGT-\u03a9\\Omega[wang2026vggt]",
+    "backbone": "DinoV3 1B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "RPE-T",
+    "value": 0.059
+  },
+  {
+    "method": "VGGT-\u03a9\\Omega[wang2026vggt]",
+    "backbone": "DinoV3 1B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "RPE-R",
+    "value": 0.407
+  },
+  {
+    "method": "MODNet[ke2022modnet]",
+    "backbone": "MNetV2",
+    "task": "Foreground Seg.",
+    "benchmark": "V.Mat.",
+    "metric": "MSE",
+    "value": 0.0054
+  },
+  {
+    "method": "MODNet[ke2022modnet]",
+    "backbone": "MNetV2",
+    "task": "Foreground Seg.",
+    "benchmark": "P.Mat.",
+    "metric": "MSE",
+    "value": 0.0304
+  },
+  {
+    "method": "RVM[lin2022robust]",
+    "backbone": "MNetV3",
+    "task": "Foreground Seg.",
+    "benchmark": "V.Mat.",
+    "metric": "MSE",
+    "value": 0.001
+  },
+  {
+    "method": "David-Large[saleh2025david]",
+    "backbone": "ViT-L 0.34B",
+    "task": "Foreground Seg.",
+    "benchmark": "P.Mat.",
+    "metric": "MSE",
+    "value": 0.0009
+  },
+  {
+    "method": "ReferFormer[wu2022language]",
+    "backbone": "Swin-L 0.19B",
+    "task": "Expression-Referring Seg.",
+    "benchmark": "Ref-DAVIS",
+    "metric": "J&F",
+    "value": 61.1
+  },
+  {
+    "method": "ReferFormer[wu2022language]",
+    "backbone": "Swin-L 0.19B",
+    "task": "Expression-Referring Seg.",
+    "benchmark": "MeViS",
+    "metric": "J&F",
+    "value": 31.0
+  },
+  {
+    "method": "VISA[yan2024visa]",
+    "backbone": "Chat-Univi 13B",
+    "task": "Expression-Referring Seg.",
+    "benchmark": "Ref-DAVIS",
+    "metric": "J&F",
+    "value": 70.4
+  },
+  {
+    "method": "VISA[yan2024visa]",
+    "backbone": "Chat-Univi 13B",
+    "task": "Expression-Referring Seg.",
+    "benchmark": "MeViS",
+    "metric": "J&F",
+    "value": 44.5
+  },
+  {
+    "method": "Vocap[uijlings2025vocap]",
+    "backbone": "SAM2 0.4B",
+    "task": "Expression-Referring Seg.",
+    "benchmark": "Ref-DAVIS",
+    "metric": "J&F",
+    "value": 75.1
+  },
+  {
+    "method": "Vocap[uijlings2025vocap]",
+    "backbone": "SAM2 0.4B",
+    "task": "Expression-Referring Seg.",
+    "benchmark": "MeViS",
+    "metric": "J&F",
+    "value": 51.9
+  },
+  {
+    "method": "ReferEverything[bagchi2025refereverything]",
+    "backbone": "WAN 2.1 14B",
+    "task": "Expression-Referring Seg.",
+    "benchmark": "Ref-DAVIS",
+    "metric": "J&F",
+    "value": 75.0
+  },
+  {
+    "method": "ReferEverything[bagchi2025refereverything]",
+    "backbone": "WAN 2.1 14B",
+    "task": "Expression-Referring Seg.",
+    "benchmark": "MeViS",
+    "metric": "J&F",
+    "value": 60.3
+  },
+  {
+    "method": "SAM 3[carion2025sam]",
+    "backbone": "PE 0.8B",
+    "task": "Expression-Referring Seg.",
+    "benchmark": "Ref-DAVIS",
+    "metric": "J&F",
+    "value": 41.3
+  },
+  {
+    "method": "SAM 3[carion2025sam]",
+    "backbone": "PE 0.8B",
+    "task": "Expression-Referring Seg.",
+    "benchmark": "MeViS",
+    "metric": "J&F",
+    "value": 38.3
+  },
+  {
+    "method": "SAM 3 + Gemini 3.5 Flash[carion2025sam]",
+    "backbone": "PE 0.8B",
+    "task": "Expression-Referring Seg.",
+    "benchmark": "Ref-DAVIS",
+    "metric": "J&F",
+    "value": 64.5
+  },
+  {
+    "method": "SAM 3 + Gemini 3.5 Flash[carion2025sam]",
+    "backbone": "PE 0.8B",
+    "task": "Expression-Referring Seg.",
+    "benchmark": "MeViS",
+    "metric": "J&F",
+    "value": 57.5
+  },
+  {
+    "method": "GVHMR[shen2024gvhmr]",
+    "backbone": "ViT",
+    "task": "3D Human",
+    "benchmark": "EMDB",
+    "metric": "MPJPE",
+    "value": 72.6
+  },
+  {
+    "method": "TRAM[wang2024tram]",
+    "backbone": "ViT-H",
+    "task": "3D Human",
+    "benchmark": "EMDB",
+    "metric": "MPJPE",
+    "value": 74.4
+  },
+  {
+    "method": "Genmo[genmo2025]",
+    "backbone": "ViT-H",
+    "task": "3D Human",
+    "benchmark": "EMDB",
+    "metric": "MPJPE",
+    "value": 73.0
+  },
+  {
+    "method": "Diception - Generalist[zhao2025diception]",
+    "backbone": "SD3 2B",
+    "task": "Normals",
+    "benchmark": "Sintel",
+    "metric": "mAE",
+    "value": 37.9
+  },
+  {
+    "method": "Diception - Generalist[zhao2025diception]",
+    "backbone": "SD3 2B",
+    "task": "Normals",
+    "benchmark": "Hi4D",
+    "metric": "mAE",
+    "value": 20.4
+  },
+  {
+    "method": "Diception - Generalist[zhao2025diception]",
+    "backbone": "SD3 2B",
+    "task": "Depth",
+    "benchmark": "Sintel",
+    "metric": "AbsRel",
+    "value": 0.5
+  },
+  {
+    "method": "Diception - Generalist[zhao2025diception]",
+    "backbone": "SD3 2B",
+    "task": "Depth",
+    "benchmark": "KITTI",
+    "metric": "AbsRel",
+    "value": 0.145
+  },
+  {
+    "method": "Diception - Generalist[zhao2025diception]",
+    "backbone": "SD3 2B",
+    "task": "Depth",
+    "benchmark": "ETH3D",
+    "metric": "AbsRel",
+    "value": 0.177
+  },
+  {
+    "method": "Ours - Specialist - S",
+    "backbone": "WAN 2.1 1.3B",
+    "task": "Normals",
+    "benchmark": "Sintel",
+    "metric": "mAE",
+    "value": 32.7
+  },
+  {
+    "method": "Ours - Specialist - S",
+    "backbone": "WAN 2.1 1.3B",
+    "task": "Depth",
+    "benchmark": "Sintel",
+    "metric": "AbsRel",
+    "value": 0.167
+  },
+  {
+    "method": "Ours - Specialist - S",
+    "backbone": "WAN 2.1 1.3B",
+    "task": "Depth",
+    "benchmark": "KITTI",
+    "metric": "AbsRel",
+    "value": 0.06
+  },
+  {
+    "method": "Ours - Specialist - S",
+    "backbone": "WAN 2.1 1.3B",
+    "task": "Depth",
+    "benchmark": "ETH3D",
+    "metric": "AbsRel",
+    "value": 0.056
+  },
+  {
+    "method": "Ours - Specialist - S",
+    "backbone": "WAN 2.1 1.3B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "ATE",
+    "value": 0.057
+  },
+  {
+    "method": "Ours - Specialist - S",
+    "backbone": "WAN 2.1 1.3B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "RPE-T",
+    "value": 0.023
+  },
+  {
+    "method": "Ours - Specialist - S",
+    "backbone": "WAN 2.1 1.3B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "RPE-R",
+    "value": 0.72
+  },
+  {
+    "method": "Ours - Specialist - S",
+    "backbone": "WAN 2.1 1.3B",
+    "task": "Expression-Referring Seg.",
+    "benchmark": "Ref-DAVIS",
+    "metric": "J&F",
+    "value": 69.7
+  },
+  {
+    "method": "Ours - Specialist - S",
+    "backbone": "WAN 2.1 1.3B",
+    "task": "Expression-Referring Seg.",
+    "benchmark": "MeViS",
+    "metric": "J&F",
+    "value": 59.9
+  },
+  {
+    "method": "Ours - Specialist - L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Normals",
+    "benchmark": "Sintel",
+    "metric": "mAE",
+    "value": 29.7
+  },
+  {
+    "method": "Ours - Specialist - L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Normals",
+    "benchmark": "Hi4D",
+    "metric": "mAE",
+    "value": 10.99
+  },
+  {
+    "method": "Ours - Specialist - L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Depth",
+    "benchmark": "Sintel",
+    "metric": "AbsRel",
+    "value": 0.13
+  },
+  {
+    "method": "Ours - Specialist - L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Depth",
+    "benchmark": "KITTI",
+    "metric": "AbsRel",
+    "value": 0.048
+  },
+  {
+    "method": "Ours - Specialist - L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Depth",
+    "benchmark": "ETH3D",
+    "metric": "AbsRel",
+    "value": 0.037
+  },
+  {
+    "method": "Ours - Specialist - L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Depth",
+    "benchmark": "Goliath",
+    "metric": "AbsRel",
+    "value": 0.008
+  },
+  {
+    "method": "Ours - Specialist - L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "ATE",
+    "value": 0.05
+  },
+  {
+    "method": "Ours - Specialist - L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "RPE-T",
+    "value": 0.018
+  },
+  {
+    "method": "Ours - Specialist - L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "RPE-R",
+    "value": 0.464
+  },
+  {
+    "method": "Ours - Specialist - L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Foreground Seg.",
+    "benchmark": "V.Mat.",
+    "metric": "MSE",
+    "value": 0.0027
+  },
+  {
+    "method": "Ours - Specialist - L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Foreground Seg.",
+    "benchmark": "P.Mat.",
+    "metric": "MSE",
+    "value": 0.0009
+  },
+  {
+    "method": "Ours - Specialist - L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Expression-Referring Seg.",
+    "benchmark": "Ref-DAVIS",
+    "metric": "J&F",
+    "value": 76.4
+  },
+  {
+    "method": "Ours - Specialist - L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Expression-Referring Seg.",
+    "benchmark": "MeViS",
+    "metric": "J&F",
+    "value": 70.0
+  },
+  {
+    "method": "Ours - Specialist - L",
+    "backbone": "WAN 2.1 14B",
+    "task": "3D Human",
+    "benchmark": "EMDB",
+    "metric": "MPJPE",
+    "value": 71.8
+  },
+  {
+    "method": "Ours - Generalist -L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Normals",
+    "benchmark": "Sintel",
+    "metric": "mAE",
+    "value": 29.3
+  },
+  {
+    "method": "Ours - Generalist -L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Normals",
+    "benchmark": "Hi4D",
+    "metric": "mAE",
+    "value": 11.47
+  },
+  {
+    "method": "Ours - Generalist -L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Depth",
+    "benchmark": "Sintel",
+    "metric": "AbsRel",
+    "value": 0.156
+  },
+  {
+    "method": "Ours - Generalist -L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Depth",
+    "benchmark": "KITTI",
+    "metric": "AbsRel",
+    "value": 0.048
+  },
+  {
+    "method": "Ours - Generalist -L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Depth",
+    "benchmark": "ETH3D",
+    "metric": "AbsRel",
+    "value": 0.044
+  },
+  {
+    "method": "Ours - Generalist -L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Depth",
+    "benchmark": "Goliath",
+    "metric": "AbsRel",
+    "value": 0.011
+  },
+  {
+    "method": "Ours - Generalist -L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "ATE",
+    "value": 0.062
+  },
+  {
+    "method": "Ours - Generalist -L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "RPE-T",
+    "value": 0.018
+  },
+  {
+    "method": "Ours - Generalist -L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Cam. Pose",
+    "benchmark": "Sintel",
+    "metric": "RPE-R",
+    "value": 0.485
+  },
+  {
+    "method": "Ours - Generalist -L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Foreground Seg.",
+    "benchmark": "V.Mat.",
+    "metric": "MSE",
+    "value": 0.001
+  },
+  {
+    "method": "Ours - Generalist -L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Foreground Seg.",
+    "benchmark": "P.Mat.",
+    "metric": "MSE",
+    "value": 0.0008
+  },
+  {
+    "method": "Ours - Generalist -L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Expression-Referring Seg.",
+    "benchmark": "Ref-DAVIS",
+    "metric": "J&F",
+    "value": 75.8
+  },
+  {
+    "method": "Ours - Generalist -L",
+    "backbone": "WAN 2.1 14B",
+    "task": "Expression-Referring Seg.",
+    "benchmark": "MeViS",
+    "metric": "J&F",
+    "value": 69.0
+  }
+]

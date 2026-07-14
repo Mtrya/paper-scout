@@ -804,7 +804,7 @@ We provide a complete specification for each real-world task, including the task
 
 In this section, we provide the training settings for all evaluated policies in RoboDojo. For each policy, we report the initialization checkpoint, training data, batch size, number of training steps, and other model-specific configurations when applicable. These details are included to improve reproducibility and to clarify how each policy is trained for simulation and real-world evaluation.
 
-Hy-Embodied-0.5-VLA. We fine-tune Hy-Embodied-0.5-VLA from the foundation checkpoint hosted at [https://hf-mirror.com/tencent/Hy-Embodied-0.5-VLA-UMI](https://hf-mirror.com/tencent/Hy-Embodied-0.5-VLA-UMI). For simulation experiments, we follow its official open-source evaluation setting on RoboTwin 2.0, training the model with a batch size of 128 for 200K steps and using 6 historical images sampled every 20 steps for memory encoding.
+Hy-Embodied-0.5-VLA. We fine-tune Hy-Embodied-0.5-VLA from the foundation checkpoint hosted at [https://huggingface.co/tencent/Hy-Embodied-0.5-VLA-UMI](https://huggingface.co/tencent/Hy-Embodied-0.5-VLA-UMI). For simulation experiments, we follow its official open-source evaluation setting on RoboTwin 2.0, training the model with a batch size of 128 for 200K steps and using 6 historical images sampled every 20 steps for memory encoding.
 
 Spatial Forcing. We fine-tune Spatial Forcing from the gs://openpi-assets/checkpoints/pi05_base foundation checkpoint. For simulation experiments, the model is trained with a batch size of 256 for 60K steps.
 
