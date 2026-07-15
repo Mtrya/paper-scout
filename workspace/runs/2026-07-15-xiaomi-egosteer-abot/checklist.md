@@ -27,5 +27,5 @@
 ## Publication Contract
 - [x] Report published.
 - [x] User notification confirmed.
-- [ ] `runs/INDEX.md` updated.
-- [ ] Workspace verifier passes in final mode.
+- [x] `runs/INDEX.md` updated.
+- [x] Workspace verifier passes in final mode.
