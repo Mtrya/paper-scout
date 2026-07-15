@@ -1,0 +1,15 @@
+Grid: 32x32
+Raster AR serial steps: 1024
+FlashAR anti-diagonal serial steps: 63
+Theoretical speed-up: 16.25x
+
+First few diagonals:
+  step 0: [(0, 0)]
+  step 1: [(0, 1), (1, 0)]
+  step 2: [(0, 2), (1, 1), (2, 0)]
+  step 3: [(0, 3), (1, 2), (2, 1), (3, 0)]
+  step 4: [(0, 4), (1, 3), (2, 2), (3, 1), (4, 0)]
+  step 5: [(0, 5), (1, 4), (2, 3), (3, 2), (4, 1), (5, 0)]
+  ...
+Last diagonal:
+  step 62: [(31, 31)]

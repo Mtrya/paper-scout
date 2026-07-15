@@ -1,0 +1,45 @@
+{
+  "paper": {
+    "arxiv_id": "2607.10350",
+    "title": "ABot-AgentOS: A General Robotic Agent OS with Lifelong Multi-modal Memory",
+    "authors": "AMAP CV Lab",
+    "local_markdown": "papers/agents/abot-agentos-2607.10350.md",
+    "status": "acquired_and_read"
+  },
+  "project_page": {
+    "url": "https://amap-cvlab.github.io/ABot-AgentOS",
+    "status": "404_not_found",
+    "checked_at": "2026-07-15T00:04:58Z",
+    "note": "Linked from arXiv abstract; returns GitHub Pages 404."
+  },
+  "github": {
+    "url": "https://github.com/amap-cvlab/ABot-AgentOS",
+    "status": "placeholder_only",
+    "checked_at": "2026-07-15T08:05:00Z",
+    "note": "Repo exists but contains only a 10-line README.md and a reference to a missing architecture image. No source code, benchmark, or model weights.",
+    "local_clone": "code/ABot-AgentOS"
+  },
+  "benchmark": {
+    "name": "EmbodiedWorldBench",
+    "status": "not_released",
+    "note": "Paper states 'future work will report the complete benchmark evaluation and release EmbodiedWorldBench for open research use.' Built on UnrealZoo with 16 scenes and >300 annotated waypoints."
+  },
+  "training_pipeline": {
+    "status": "not_released",
+    "note": "Deployment-oriented small-model training pipeline (text sandbox, teacher distillation, SFT, RL with LLM-as-a-Judge) described but not released."
+  },
+  "related_abot_repos": {
+    "note": "AMAP CV Lab has released ABot-Navigation, ABot-Manipulation, ABot-PhysWorld, and ABot-Explorer with code, but none implement AgentOS or EmbodiedWorldBench.",
+    "repos": [
+      "https://github.com/amap-cvlab/ABot-Navigation",
+      "https://github.com/amap-cvlab/ABot-Manipulation",
+      "https://github.com/amap-cvlab/ABot-PhysWorld",
+      "https://github.com/amap-cvlab/ABot-Explorer"
+    ]
+  },
+  "probe": {
+    "file": "code/memory_graph_probe.py",
+    "description": "Runnable reconstruction of the typed multi-modal graph memory, hybrid retriever, and evidence-subgraph expansion.",
+    "dependencies": "Python 3.10+ standard library only"
+  }
+}

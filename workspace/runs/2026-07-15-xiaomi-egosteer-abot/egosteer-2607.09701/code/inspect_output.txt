@@ -1,0 +1,98 @@
+{
+  "repo_root": "/home/alpheratz/Projects/paper-scout/workspace/code/egosteer-2607.09701",
+  "config_files": {
+    "model": "src/config/model/qwen3_vl_2b.yaml",
+    "training": "src/config/training/default.yaml",
+    "data": "src/config/data/unified_wds.yaml",
+    "world_model": "src/config/world_model/frozen_regression.yaml",
+    "experiment": "src/config/experiment/egosteer_qwen3_vl.yaml"
+  },
+  "backbone": {
+    "model_name_or_path": "Qwen/Qwen3-VL-2B-Instruct",
+    "vlm_hidden_size": 2048,
+    "text_attn_implementation": "flex_attention"
+  },
+  "unified_action_space": {
+    "state_dim": 48,
+    "action_dim": 48,
+    "state_history_frames": 6,
+    "action_horizon": 32,
+    "lowdim_layout_note": "world-frame wrist_state(18) + hand_state(30) + wrist_action(18) + hand_action(30)"
+  },
+  "action_expert": {
+    "hidden_size": 1024,
+    "intermediate_size": 2816,
+    "num_layers": 14,
+    "num_heads": 8,
+    "use_adaln": true,
+    "use_kv_projection": true
+  },
+  "world_model": {
+    "enabled": true,
+    "frozen_teacher": "facebook/dinov3-vitl16-pretrain-lvd1689m",
+    "teacher_image_size": [
+      384,
+      384
+    ],
+    "teacher_patch_size": 16,
+    "upsample_factor": 2,
+    "num_expert_layers": 4,
+    "expert_hidden_size": 1024,
+    "expert_intermediate_size": 4096,
+    "action_conditioning": true,
+    "motion_conditioning": true,
+    "future_frame_horizon": 1,
+    "future_frame_stride": 30
+  },
+  "training_time_rtc": {
+    "rtc_enabled_default": false,
+    "delay_strategy": "uniform",
+    "max_delay": 6,
+    "note": "disabled by default in base config; intended to be enabled for real-robot post-training"
+  },
+  "losses": {
+    "ce_loss_weight": 0.05,
+    "flow_loss_weight": 1.0,
+    "wm_loss_weight": 1.0
+  },
+  "training": {
+    "action_expert_lr": "3e-4",
+    "vlm_lr": "1e-4",
+    "world_model_lr": "3e-4",
+    "ar_action_heads_lr": "8e-4",
+    "flow_sampling": "beta",
+    "flow_alpha": 1.5,
+    "flow_beta": 1.0,
+    "num_inference_steps": 10,
+    "num_parallel_t": 4
+  },
+  "data": {
+    "target_image_size": [
+      384,
+      384
+    ],
+    "video_base_fps": 30.0,
+    "shuffle_buffer": 16384,
+    "keep_ratio": 0.2
+  },
+  "experiment": {
+    "name": "egosteer_qwen3_vl",
+    "workspace": "src.workspace.train_egosteer_workspace.TrainEgoSteerWorkspace"
+  }
+}
+
+--- sanity checks ---
+[PASS] action expert hidden size == 1024
+[PASS] action expert layers == 14
+[PASS] action expert intermediate size == 2816
+[PASS] action expert AdaLN enabled
+[PASS] WM expert layers == 4
+[PASS] WM expert hidden size == 1024
+[PASS] WM teacher is DINOv3 ViT-L/16
+[PASS] WM future horizon == 1
+[PASS] state/action dim == 48
+[PASS] action horizon == 32
+[PASS] state history == 6 frames
+[PASS] CE weight == 0.05
+[PASS] flow weight == 1.0
+[PASS] WM weight == 1.0

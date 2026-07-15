@@ -5,7 +5,14 @@ Compact coverage log and dedup source of truth, newest first. Before serious sco
 Entry format:
 
 ```
-## YYYY-MM-DD — <period covered>
+## ## 2026-07-15 — 2026-07-08 to 2026-07-15
+- Doc: https://fudan-nlp.feishu.cn/docx/CqSXde8TFo3U8axpy3gcdxJDntS
+- Run: runs/2026-07-15-xiaomi-egosteer-abot/
+- Deep threads: Xiaomi-Robotics-U0 unified embodied synthesis (2607.11643), EgoSteer dexterous manipulation from egocentric video (2607.09701), ABot-AgentOS robotic agent OS with lifelong memory (2607.10350)
+- Covered papers: 2607.11643, 2607.09701, 2607.10350
+- Shortlisted papers: 2607.07287, 2607.10383, 2607.08741, 2607.01897, 2607.05804, 2607.05155, 2607.05376
+
+YYYY-MM-DD — <period covered>
 - Doc: <url>
 - Run: runs/<run-id>/
 - Deep threads: <thread name> (<paper ids if any>), <thread name>

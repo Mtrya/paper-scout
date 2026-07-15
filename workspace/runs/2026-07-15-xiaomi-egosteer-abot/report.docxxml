@@ -1,0 +1,313 @@
+<title>Paper Scout Research Report - 2026-07-15</title>
+
+<p>This week's strongest signal is that embodied AI is being rebuilt as a <b>full-stack systems problem</b> rather than a model-architecture problem. The most interesting papers do not introduce a single new loss or backbone; they argue that the gap between foundation-model capability and real robot deployment is now in the integration layer — how to keep visual priors alive while adapting to embodiment, how to turn unstructured human video into grounded dexterous policies, and how to give an agent a persistent, verifiable memory and skill runtime. Three threads stood out: <b>Xiaomi-Robotics-U0</b> reframes embodied generation as a continuation of foundation image/video generation; <b>EgoSteer</b> closes the data-engineering and deployment loop for dual-hand dexterous VLAs; and <b>ABot-AgentOS</b> proposes a deliberative agent operating system with lifelong multi-modal memory. Each is ambitious, each has a different artifact footprint, and together they map where the field is putting its effort now.</p>
+
+<callout emoji="✅" background-color="light-green">
+  <p><b>Standout:</b> EgoSteer is the clearest seed for a buildable research thread because it ships the full stack — data pipeline, robot stack, training code, and model weights — and backs its claims with internal but well-documented real-robot scaling curves. Xiaomi-Robotics-U0 is the most eye-catching unification bet, but its boldest claims rest on a video checkpoint that is not yet public. ABot-AgentOS is a thoughtful architecture paper whose strongest contribution is a typed memory graph, though its full system artifacts are still missing.</p>
+</callout>
+
+<h1>World models as embodied synthesis engines</h1>
+
+<p>The dominant question in this theme is whether an embodied world model should be a narrow post-training fork from a foundation generator, or a broader continuation that keeps text-to-image, editing, and robot-centric generation in the same model. Xiaomi-Robotics-U0 takes the second path at serious scale.</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>TouchWorld</b> (Zhou et al., 2026)</td>
+      <td>Hierarchical tactile foundation model that separates predictive contact subgoals from high-frequency residual correction.</td>
+      <td>Shows how touch can be both a predictive world-model signal and a fast feedback loop for contact-rich dexterous tasks.</td>
+      <td><a href="https://huggingface.co/papers/2607.07287">HF</a> / <a href="https://arxiv.org/abs/2607.07287">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>MV-Forcing</b> (Liu et al., 2026)</td>
+      <td>4D-grounded spatio-temporal self-forcing for long multi-view video generation.</td>
+      <td>Another push toward consistent 4D world generation, relevant for synthetic embodied data engines.</td>
+      <td><a href="https://huggingface.co/papers/2607.05376">HF</a> / <a href="https://arxiv.org/abs/2607.05376">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr/>
+
+<h2>Xiaomi-Robotics-U0: Unified Embodied Synthesis with World Foundation Model</h2>
+
+<p>Xiaomi Robotics (arXiv 2607.11643) · <a href="https://huggingface.co/papers/2607.11643">HF</a> · <a href="https://arxiv.org/abs/2607.11643">PDF</a> · <a href="https://robotics.xiaomi.com/xiaomi-robotics-u0.html">project</a></p>
+
+<p>The paper's central question is whether embodied generation can be a <b>natural extension</b> of foundation image and video generation, rather than a specialized fork that forgets general visual priors. Xiaomi-Robotics-U0 is a 38-billion-parameter dense autoregressive model that jointly trains on text-to-image, any-to-image editing, embodied scene generation, embodied transfer, and embodied video generation. The bet is that co-training with internet-scale visual tasks preserves semantics and controllability while robot data supplies multi-view consistency and embodiment constraints.</p>
+
+<p>[[figure-anchor:xiaomi-robotics-u0:capabilities]]</p>
+
+<p><b>Architecture and training.</b> The released config is a 64-layer decoder with hidden size 5120, 64 heads, 8 GQA KV heads, intermediate size 25600, and a vocab of 282926 tokens — roughly 34B dense parameters, close to the paper's "38B" claim. It inherits Emu3.5's IBQ visual tokenizer (16×16 spatial compression) and extends the text vocabulary with the image codebook, so all modalities live in a single discrete token space. Training is staged: <b>single-step co-training</b> on T2I, X2I, embodied scene generation, and embodied transfer; then <b>sequential training</b> on image-text-interleaved subtask-subgoal sequences and multi-FPS manipulation videos (1, 3, and 5 FPS). Everything reduces to next-token prediction.</p>
+
+<p>The structured control formulation is one of the most concrete ideas. Embodied transfer conditions on multi-view inverse-depth maps and a scene description disentangled into five independent dimensions: workspace, task objects, irrelevant objects, lighting, and background. Inspecting the released task configs confirms these five dimensions are exactly the fields used in the system prompts, and depth preprocessing uses Depth Anything 3. This is the mechanism that lets the model perform style-aware, geometrically consistent data augmentation for downstream policies.</p>
+
+<p><b>FlashAR+ acceleration.</b> High-resolution autoregressive image generation is slow in raster order. Xiaomi adds a FlashAR-derived extension: a vertical prediction branch, horizontal and vertical prediction heads, a learnable fusion gate, and an anti-diagonal decoding schedule. Position (r,c) is generated at step r+c, so a 32×32 token grid drops from 1024 serial steps to 63. A small probe of the anti-diagonal schedule gives the speed-up structure:</p>
+
+<pre lang="text" caption="FlashAR anti-diagonal decoding (32×32 grid)"><code>Raster AR serial steps: 1024
+FlashAR anti-diagonal serial steps: 63
+Theoretical speed-up: 16.25x
+
+step 0: [(0, 0)]
+step 1: [(0, 1), (1, 0)]
+step 2: [(0, 2), (1, 1), (2, 0)]
+...
+step 62: [(31, 31)]</code></pre>
+
+<p>The released loss in the FlashAR model file is <code>loss = loss_fuse + 0.05 * loss_h + 0.05 * loss_v + 0.2 * loss_distill</code>, matching the paper's Equation (5). Combined with a vLLM patch for diagonal scheduling and paged KV-cache, the paper reports 5.44 s/image at 1024×1024 on one H20, or 82.9× faster than AR eager.</p>
+
+<p><b>What the external signals confirm and what they don't.</b> The good news: the model weights, inference code for four engine modes (AR eager, AR+vLLM, FlashAR eager, FlashAR+vLLM), and composable task configs are public on HuggingFace and GitHub. The code confirms the unified token space, the five structured scene dimensions, the FlashAR mechanism, and the depth-conditioned transfer pipeline. The cautious news: the <b>video checkpoint is listed as "coming soon."</b> That means the sequential-world-modeling claims, the World Arena ranking, and the real-world policy augmentation experiments — including the highlighted π₀.₅ jump from 36.9% to 63.2% OOD success — cannot be independently reproduced yet. Training recipes, data mixtures, and the VLM annotation pipeline are also not released, and the comparison against GPT-Image-2.0 uses a small internal benchmark (300 transfer samples, 400 scene-generation samples).</p>
+
+<p><b>Takeaway.</b> Xiaomi-Robotics-U0 is a credible unification attempt with real released weights for single-step embodied generation and a well-engineered acceleration path. The idea of treating embodied synthesis as a continuation of foundation generation is intellectually clean. But the paper's boldest claim — that the same model unifies long-horizon embodied video generation and serves as a scalable data engine — currently rests on a video checkpoint and training pipeline that are not public. Treat the single-step results and FlashAR speed-up as substantiated; treat the sequential/video story as promising-yet-unverified.</p>
+
+<hr/>
+
+<h1>Dexterous manipulation from egocentric priors</h1>
+
+<p>High-DoF dual-hand manipulation has been data-starved and task-specific. EgoSteer argues that the bottleneck is not architecture alone but the full stack: curating egocentric video into usable pre-training data, grounding human-hand priors on a real robot with modest teleoperation, and designing a VLA training objective that can use both.</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>ABot-N1</b> (Gong et al., 2026)</td>
+      <td>Slow-fast VLN foundation model with pixel-grounded waypoints.</td>
+      <td>Decouples high-level reasoning from low-level control through interpretable pixel goals; strong urban-scale numbers.</td>
+      <td><a href="https://huggingface.co/papers/2607.10383">HF</a> / <a href="https://arxiv.org/abs/2607.10383">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>ARDY</b> (Zhao et al., 2026)</td>
+      <td>Streaming autoregressive diffusion for interactive human motion.</td>
+      <td>Real-time, text- and keyframe-controllable motion generation; relevant for humanoid animation and locomotion.</td>
+      <td><a href="https://huggingface.co/papers/2607.08741">HF</a> / <a href="https://arxiv.org/abs/2607.08741">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr/>
+
+<h2>EgoSteer: A Full-Stack System Towards Steerable Dexterous Manipulation from Egocentric Videos</h2>
+
+<p>Zhong et al. (arXiv 2607.09701) · <a href="https://huggingface.co/papers/2607.09701">HF</a> · <a href="https://arxiv.org/abs/2607.09701">PDF</a> · <a href="https://egosteer.github.io/">project</a></p>
+
+<p>EgoSteer asks whether a single dual-dexterous-hand VLA can follow free-form language across 40+ real-world tasks by pre-training on large-scale egocentric human video and grounding with only modest real-robot teleoperation. The authors' answer is less a new algorithm than a full-stack integration: a data pipeline called <b>EgoSmith</b>, a unified robot stack with human-in-the-loop correction, and a world-model-enhanced flow VLA.</p>
+
+<p>[[figure-anchor:egosteer:overview]]</p>
+
+<p><b>EgoSmith.</b> The pipeline curates 12 raw egocentric datasets into a 9.6K-hour pre-training corpus. It pre-filters locomotion and occluded hands with optical-flow and YOLO gates; reconstructs metric world-space hand trajectories using HaWoR's ViT but replaces DROID-SLAM with faster DPVO odometry and anchors it to metric depth from Any4D; labels clips with five-level language instructions from Qwen3.5-VL-Plus; and post-filters at episode, chunk, and frame levels. The authors report roughly 9× throughput over HaWoR and improved accuracy, though world-space hand joint error is still ~86 mm on the strictest metric, so the pre-training labels are approximate.</p>
+
+<p><b>Robot stack and DAgger.</b> The hardware is a RealMan platform with two 7-DoF arms and two 6-DoF Ruiyan RY-H2 hands, teleoperated at 100/80 Hz using PsiBot gloves and Vive trackers. The key deployment idea is <b>relative motion mapping</b>: when an operator intervenes, the system records robot and human poses at takeover and applies the operator's relative motion to the robot's current state, avoiding handover jumps. Only intervention segments are kept for DAgger training. The collected real-robot dataset is 187 hours / 55K trajectories across 193 tasks.</p>
+
+<p><b>EgoSteer model.</b> A Qwen3-VL-2B VLM backbone is paired with two lightweight transformer experts. Inputs are a language instruction, camera intrinsics, 6 image frames at 1 FPS, 6 states, and a 32-step action target. The unified 48-D action space is bimanual wrist poses + fingertip keypoints (rot6d for wrist, coordinate displacements for fingers). A 14-layer DiT-style action expert (hidden 1024, intermediate 2816, ~300M params) uses joint attention to the backbone KV cache and conditional flow matching for training. A second 4-layer world-model expert (~70M params) predicts frozen DINOv3-ViT-L/16 features of the future frame 1 s ahead and is discarded at inference. Training-time RTC (Real-Time Chunking) reserves a random prefix of the action chunk so the model learns to denoise the suffix while the robot executes the prefix, eliminating inference pauses. The config probe confirms the architectural numbers exactly:</p>
+
+<pre lang="json" caption="Architectural hyperparameters from official Hydra configs"><code>{
+  "unified_action_space": {
+    "state_dim": 48,
+    "action_dim": 48,
+    "state_history_frames": 6,
+    "action_horizon": 32
+  },
+  "action_expert": {
+    "hidden_size": 1024,
+    "intermediate_size": 2816,
+    "num_layers": 14,
+    "num_heads": 8,
+    "use_adaln": true
+  },
+  "world_model": {
+    "frozen_teacher": "facebook/dinov3-vitl16-pretrain-lvd1689m",
+    "num_expert_layers": 4,
+    "expert_hidden_size": 1024,
+    "expert_intermediate_size": 4096
+  },
+  "losses": {
+    "ce_loss_weight": 0.05,
+    "flow_loss_weight": 1.0,
+    "wm_loss_weight": 1.0
+  }
+}</code></pre>
+
+<p><b>Results.</b> After pre-training on 9.6K hours, post-training on 187 hours, and 3 DAgger iterations, EgoSteer reports 75% average success on 32 seen tasks, 65% on 4 compositional tasks, and 62% on 4 unseen tasks. The scaling curve is the strongest scientific signal: from-scratch fails on harder tasks, while 3K / 6K / 9.6K hours yield 40% / 43% / 60% on a 10-task subset. DAgger is also efficient: on 4 failure-prone tasks, success rises from 22.5% to 62.5% after only 8.3 hours of corrections. Ablations show that removing the world-model objective, training-time RTC, or EgoSmith filtering each drops performance substantially.</p>
+
+<table>
+  <colgroup>
+    <col width="260"/>
+    <col width="120"/>
+    <col width="120"/>
+    <col width="120"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Condition</th>
+      <th background-color="light-gray">Seen</th>
+      <th background-color="light-gray">Comp.</th>
+      <th background-color="light-gray">Unseen</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>EgoSteer full</td>
+      <td>75%</td>
+      <td>65%</td>
+      <td>62%</td>
+    </tr>
+    <tr>
+      <td>Scratch</td>
+      <td>30%</td>
+      <td>—</td>
+      <td>fails</td>
+    </tr>
+    <tr>
+      <td>3K h pre-train</td>
+      <td>40%</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>6K h pre-train</td>
+      <td>43%</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>9.6K h pre-train</td>
+      <td>60%</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><b>Limitations.</b> The evaluation is internal on the authors' RealMan setup, and baseline comparisons with π₀.₅ and Being-H0.5 are post-trained on the authors' data and stack. Full reproduction is expensive (128 A800s for ~7 days of pre-training). Tactile feedback is absent, which likely caps contact-rich tasks. The world-model objective is a representation-learning auxiliary loss, not a dynamics model used for planning.</p>
+
+<p><b>Takeaway.</b> EgoSteer is the most complete open-source contribution in this run: data pipeline, robot stack, training code, configs, and checkpoints are all public. The core lesson is that the data-engineering and deployment-engineering gaps for dexterous VLAs can be closed together, and that doing so yields a steerable, generalist dual-hand policy. The scaling and DAgger results are the most robust claims; the baseline comparisons should be read as directional evidence from a home-court setup.</p>
+
+<hr/>
+
+<h1>Agent architectures for long-horizon embodied execution</h1>
+
+<p>Beyond low-level policies, long-horizon embodied agents need a deliberative layer that can plan, delegate, verify, remember, and recover. ABot-AgentOS proposes a full Agent OS stack for this, with the strongest concrete contribution in a typed, source-grounded multi-modal memory graph.</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Rank-Then-Act</b> (Maksyuta et al., 2026)</td>
+      <td>Reward-free control via a VLM trained as an ordinal progress scorer, with correlation-based RL reward.</td>
+      <td>Offers a scalable alternative to hand-designed rewards for learning from expert videos.</td>
+      <td><a href="https://huggingface.co/papers/2607.01897">HF</a> / <a href="https://arxiv.org/abs/2607.01897">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>TurnOPD</b> (Zhou et al., 2026)</td>
+      <td>Turn-aware on-policy distillation for long-horizon language agents.</td>
+      <td>Addresses rollout waste and shallow-token bias in agent distillation across ALFWorld, WebShop, and search.</td>
+      <td><a href="https://huggingface.co/papers/2607.05804">HF</a> / <a href="https://arxiv.org/abs/2607.05804">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>EdgeBench</b> (Zhu et al., 2026)</td>
+      <td>Scaling-law benchmark for learning from 38K hours of real-world agent interaction.</td>
+      <td>Provides a public lens on how agents improve from long-horizon deployment experience.</td>
+      <td><a href="https://huggingface.co/papers/2607.05155">HF</a> / <a href="https://arxiv.org/abs/2607.05155">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr/>
+
+<h2>ABot-AgentOS: A General Robotic Agent OS with Lifelong Multi-modal Memory</h2>
+
+<p>AMAP CV Lab (arXiv 2607.10350) · <a href="https://huggingface.co/papers/2607.10350">HF</a> · <a href="https://arxiv.org/abs/2607.10350">PDF</a></p>
+
+<p>ABot-AgentOS argues that recent VLMs and VLAs give robots perception and action prediction, but the missing layer is a general runtime for reasoning, memory, tool use, verification, and cross-embodiment execution. The paper proposes an <b>Agent OS</b> that sits above low-level controllers and below foundation models, with three public-facing contributions: a modular agent harness, a new executable benchmark (EmbodiedWorldBench), and a typed multi-modal memory graph with failure-driven self-evolution.</p>
+
+<p>[[figure-anchor:abot-agentos:architecture]]</p>
+
+<p><b>Agent Harness.</b> The runtime uses an edge-cloud LLM router: a lightweight Tiny LLM handles every turn, escalating to a cloud Large LLM on demand. The Agent Harness separates three roles often entangled in a single controller: a <b>Main LLM</b> for scene-conditioned semantic planning, a <b>Skill Runner</b> subagent that absorbs procedural detail in an isolated local context, and a <b>Verifier</b> that supervises execution at runtime, skill-level, and finish-time. This is a sensible response to the reasoning-execution gap: embodied tasks rarely emit explicit success signals, so the agent must cross-check language-level belief against trajectory evidence.</p>
+
+<p><b>Multi-modal graph memory.</b> The strongest concrete contribution is the memory system. Long-term experience is stored as a typed graph <latex>\mathcal{G}=(\mathcal{V},\mathcal{E})</latex> with nodes for sources, evidence, entities, places, sessions, and semantic events, and edges for temporal order, containment, observation, participation, location, identity continuity, spatial relations, and provenance. Each node carries a compact JSON-style record with time reference, evidence summary, confidence, and provenance, so answers can be traced back to source observations rather than relying on parametric memory.</p>
+
+<p>Retrieval uses a hybrid seed-selection score:</p>
+
+<p><latex>s(q,v) = \lambda_{\mathrm{sem}} s_{\mathrm{sem}}(q,v) + \lambda_{\mathrm{lex}} s_{\mathrm{lex}}(q,v) + \lambda_{\mathrm{meta}} s_{\mathrm{meta}}(q,v) + \lambda_{\mathrm{type}} s_{\mathrm{type}}(q,v)</latex></p>
+
+<p>Top seeds are expanded along typed edges into a local evidence subgraph, and each run records a retrieval trace. This traceability is what enables the failure-driven self-evolution loop: after each evaluation split, diagnosed memory failures are compiled into gated runtime "evo-assets" that can only be promoted to later splits, preventing ground-truth leakage while enabling cumulative improvement.</p>
+
+<p><b>What the probe shows.</b> Because the full system is not released, I built a small runnable reconstruction of the graph memory, retriever, and evidence-subgraph expansion. It writes the paper's "I adopted a Maltese dog yesterday" example into typed nodes and edges and answers queries from the resulting evidence subgraph. For the query "Where is the dog now?" the retriever correctly follows temporal and location edges to the latest observation:</p>
+
+<pre lang="json" caption="ABot-AgentOS memory-graph probe: evidence subgraph for "Where is the dog now?""><code>{
+  "query": "Where is the dog now?",
+  "seed_nodes": [
+    "event:home-002:2026-07-15T08:00:00Z",
+    "place:living_room",
+    "place:backyard"
+  ],
+  "retrieved_node_ids": [
+    "evidence:frames/home-002/000020.jpg",
+    "place:backyard",
+    "event:home-002:2026-07-15T08:00:00Z",
+    "entity:Maltese_dog:home-002"
+  ],
+  "retrieved_edges": [
+    ["event:home-002", "location", "place:backyard"],
+    ["event:home-002", "provenance", "evidence:frames/home-002/000020.jpg"],
+    ["event:home-002", "observation", "entity:Maltese_dog:home-002"],
+    ["entity:Maltese_dog:home-002", "location", "place:backyard"]
+  ]
+}</code></pre>
+
+<p><b>Results and artifact status.</b> On an initial EmbodiedWorldBench subset, ABot-AgentOS improves over a ReAct baseline by +11.99 TSR and +10.84 GCR with the same backbone, and swapping to a stronger main LLM adds another +6.22 TSR. The memory evaluation is more substantial: 87.5 on LoCoMo (near human 87.9), 59.9 on OpenEQA EM-EQA, 88.6 on Mem-Gallery, 76.5 Acc@All on NExT-QA, and 65.4 on EgoLifeQA. Self-evolution adds modest but consistent gains, especially +4.1 on NExT-QA where temporal/relation edges matter.</p>
+
+<p>However, the public artifact situation is thin. The GitHub repo is a placeholder, the project page linked from arXiv returns 404, and EmbodiedWorldBench is described as future work. The strongest controlled comparison is Static vs. +Self-evo under the same implementation; the agent subset results should be read as preliminary.</p>
+
+<p><b>Takeaway.</b> ABot-AgentOS is best understood as a well-integrated system-architecture paper. Its most persuasive contribution is the typed memory graph and the retrieval-trace design, which post competitive numbers across five memory benchmarks. The Agent Harness is sensible but the agent results are on an unreleased subset of an unreleased benchmark. The report should flag the artifact gap honestly: the community cannot yet build on the full system, but the memory mechanism itself is concrete and implementable.</p>
+
+<h1>Cross-cutting observations</h1>
+
+<p>Three patterns cut across this week's papers.</p>
+
+<p><b>1. Full-stack integration is the new differentiator.</b> EgoSteer does not win on a single architectural novelty; it wins by releasing the data pipeline, robot stack, training code, and weights together. Xiaomi-Robotics-U0's most impressive number is a systems number (82.9× speed-up via FlashAR+vLLM). ABot-AgentOS's value proposition is an integrated runtime layer. The field is moving past "better backbone" toward "better glue."</p>
+
+<p><b>2. Artifact footprint predicts how much to believe.</b> EgoSteer shipped nearly everything, so its claims are the most auditable. Xiaomi-Robotics-U0 shipped the single-step weights and inference code but held back the video checkpoint and training pipeline, so its sequential claims are provisional. ABot-AgentOS shipped a detailed architecture and memory results but almost no system code, so its agent-benchmark claims are preliminary. The honest report should scale confidence with artifact availability.</p>
+
+<p><b>3. World models are being asked to do two jobs at once.</b> Both Xiaomi-Robotics-U0 and EgoSteer use world-model-like objectives, but for different purposes: Xiaomi wants a generative data engine that can roll out synthetic embodied trajectories; EgoSteer wants a future-state prediction auxiliary loss that improves representation learning in a VLA. The first is generative and deployment-expensive; the second is discriminative and training-only. Both are legitimate, but they should not be conflated.</p>
+
+<p><b>What to watch next.</b> Whether Xiaomi releases its video checkpoint and whether the World Arena results hold up under independent submission. Whether EgoSteer's open-sourced Base checkpoint enables transfer to other dexterous platforms beyond RealMan. Whether ABot-AgentOS follows through with code and EmbodiedWorldBench. And whether any of these systems add tactile or force feedback, which remains the obvious missing modality for contact-rich dexterity.</p>

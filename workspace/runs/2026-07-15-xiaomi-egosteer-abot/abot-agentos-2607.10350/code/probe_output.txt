@@ -1,0 +1,399 @@
+
+=== QUERY: What dog did I adopt? ===
+{
+  "query": "What dog did I adopt?",
+  "seed_nodes": [
+    "event:home-001:2026-07-14T10:00:00Z",
+    "event:home-002:2026-07-15T08:00:00Z",
+    "session:home-001"
+  ],
+  "seed_scores": {
+    "event:home-001:2026-07-14T10:00:00Z": 0.20857142857142863,
+    "event:home-002:2026-07-15T08:00:00Z": 0.11363636363636366,
+    "session:home-001": 0.020000000000000004
+  },
+  "retrieved_node_ids": [
+    "session:home-001",
+    "entity:red_cushion:home-001",
+    "event:home-001:2026-07-14T10:00:00Z",
+    "evidence:frames/home-001/000100.jpg",
+    "entity:Maltese_dog:home-001",
+    "evidence:frames/home-002/000020.jpg",
+    "place:living_room",
+    "place:backyard",
+    "event:home-002:2026-07-15T08:00:00Z",
+    "entity:Maltese_dog:home-002"
+  ],
+  "retrieved_edges": [
+    [
+      "event:home-001:2026-07-14T10:00:00Z",
+      "location",
+      "place:living_room"
+    ],
+    [
+      "event:home-001:2026-07-14T10:00:00Z",
+      "provenance",
+      "evidence:frames/home-001/000100.jpg"
+    ],
+    [
+      "event:home-001:2026-07-14T10:00:00Z",
+      "observation",
+      "entity:Maltese_dog:home-001"
+    ],
+    [
+      "event:home-001:2026-07-14T10:00:00Z",
+      "observation",
+      "entity:red_cushion:home-001"
+    ],
+    [
+      "event:home-002:2026-07-15T08:00:00Z",
+      "location",
+      "place:backyard"
+    ],
+    [
+      "event:home-002:2026-07-15T08:00:00Z",
+      "provenance",
+      "evidence:frames/home-002/000020.jpg"
+    ],
+    [
+      "event:home-002:2026-07-15T08:00:00Z",
+      "observation",
+      "entity:Maltese_dog:home-002"
+    ],
+    [
+      "session:home-001",
+      "provenance",
+      "event:home-001:2026-07-14T10:00:00Z"
+    ],
+    [
+      "entity:Maltese_dog:home-001",
+      "location",
+      "place:living_room"
+    ],
+    [
+      "entity:Maltese_dog:home-001",
+      "temporal_order",
+      "entity:Maltese_dog:home-002"
+    ],
+    [
+      "entity:red_cushion:home-001",
+      "location",
+      "place:living_room"
+    ],
+    [
+      "entity:Maltese_dog:home-002",
+      "location",
+      "place:backyard"
+    ]
+  ],
+  "evidence": [
+    {
+      "id": "session:home-001",
+      "type": "session",
+      "content": "Session home-001",
+      "info": {
+        "session_id": "home-001",
+        "start_time": "2026-07-14T10:00:00Z"
+      }
+    },
+    {
+      "id": "entity:red_cushion:home-001",
+      "type": "entity",
+      "content": "red_cushion",
+      "info": {
+        "name": "red_cushion",
+        "category": "object",
+        "state": "on_sofa",
+        "last_seen": "2026-07-14T10:00:00Z",
+        "place": "living_room"
+      }
+    },
+    {
+      "id": "event:home-001:2026-07-14T10:00:00Z",
+      "type": "semantic_event",
+      "content": "I adopted a Maltese dog yesterday.",
+      "info": {
+        "time_ref": "2026-07-14T10:00:00Z",
+        "session_id": "home-001",
+        "place": "living_room",
+        "confidence": 0.95,
+        "adapter_version": "probe-v1",
+        "extractor_model": "probe-llm"
+      }
+    },
+    {
+      "id": "evidence:frames/home-001/000100.jpg",
+      "type": "evidence",
+      "content": "Image evidence: frames/home-001/000100.jpg",
+      "info": {
+        "modality": "image",
+        "source_id": "frames/home-001/000100.jpg",
+        "time_ref": "2026-07-14T10:00:00Z",
+        "place": "living_room"
+      }
+    },
+    {
+      "id": "entity:Maltese_dog:home-001",
+      "type": "entity",
+      "content": "Maltese_dog",
+      "info": {
+        "name": "Maltese_dog",
+        "category": "animal",
+        "state": "sitting_on_sofa",
+        "last_seen": "2026-07-14T10:00:00Z",
+        "place": "living_room"
+      }
+    },
+    {
+      "id": "evidence:frames/home-002/000020.jpg",
+      "type": "evidence",
+      "content": "Image evidence: frames/home-002/000020.jpg",
+      "info": {
+        "modality": "image",
+        "source_id": "frames/home-002/000020.jpg",
+        "time_ref": "2026-07-15T08:00:00Z",
+        "place": "backyard"
+      }
+    },
+    {
+      "id": "place:living_room",
+      "type": "place",
+      "content": "living_room",
+      "info": {
+        "name": "living_room"
+      }
+    },
+    {
+      "id": "place:backyard",
+      "type": "place",
+      "content": "backyard",
+      "info": {
+        "name": "backyard"
+      }
+    },
+    {
+      "id": "event:home-002:2026-07-15T08:00:00Z",
+      "type": "semantic_event",
+      "content": "The dog is playing in the backyard.",
+      "info": {
+        "time_ref": "2026-07-15T08:00:00Z",
+        "session_id": "home-002",
+        "place": "backyard",
+        "confidence": 0.95,
+        "adapter_version": "probe-v1",
+        "extractor_model": "probe-llm"
+      }
+    },
+    {
+      "id": "entity:Maltese_dog:home-002",
+      "type": "entity",
+      "content": "Maltese_dog",
+      "info": {
+        "name": "Maltese_dog",
+        "category": "animal",
+        "state": "running",
+        "last_seen": "2026-07-15T08:00:00Z",
+        "place": "backyard"
+      }
+    }
+  ]
+}
+
+=== QUERY: Where is the dog now? ===
+{
+  "query": "Where is the dog now?",
+  "seed_nodes": [
+    "event:home-002:2026-07-15T08:00:00Z",
+    "place:living_room",
+    "place:backyard"
+  ],
+  "seed_scores": {
+    "event:home-002:2026-07-15T08:00:00Z": 0.285,
+    "place:living_room": 0.1,
+    "place:backyard": 0.1
+  },
+  "retrieved_node_ids": [
+    "evidence:frames/home-002/000020.jpg",
+    "place:living_room",
+    "place:backyard",
+    "event:home-002:2026-07-15T08:00:00Z",
+    "entity:Maltese_dog:home-002"
+  ],
+  "retrieved_edges": [
+    [
+      "event:home-002:2026-07-15T08:00:00Z",
+      "location",
+      "place:backyard"
+    ],
+    [
+      "event:home-002:2026-07-15T08:00:00Z",
+      "provenance",
+      "evidence:frames/home-002/000020.jpg"
+    ],
+    [
+      "event:home-002:2026-07-15T08:00:00Z",
+      "observation",
+      "entity:Maltese_dog:home-002"
+    ],
+    [
+      "entity:Maltese_dog:home-002",
+      "location",
+      "place:backyard"
+    ]
+  ],
+  "evidence": [
+    {
+      "id": "evidence:frames/home-002/000020.jpg",
+      "type": "evidence",
+      "content": "Image evidence: frames/home-002/000020.jpg",
+      "info": {
+        "modality": "image",
+        "source_id": "frames/home-002/000020.jpg",
+        "time_ref": "2026-07-15T08:00:00Z",
+        "place": "backyard"
+      }
+    },
+    {
+      "id": "place:living_room",
+      "type": "place",
+      "content": "living_room",
+      "info": {
+        "name": "living_room"
+      }
+    },
+    {
+      "id": "place:backyard",
+      "type": "place",
+      "content": "backyard",
+      "info": {
+        "name": "backyard"
+      }
+    },
+    {
+      "id": "event:home-002:2026-07-15T08:00:00Z",
+      "type": "semantic_event",
+      "content": "The dog is playing in the backyard.",
+      "info": {
+        "time_ref": "2026-07-15T08:00:00Z",
+        "session_id": "home-002",
+        "place": "backyard",
+        "confidence": 0.95,
+        "adapter_version": "probe-v1",
+        "extractor_model": "probe-llm"
+      }
+    },
+    {
+      "id": "entity:Maltese_dog:home-002",
+      "type": "entity",
+      "content": "Maltese_dog",
+      "info": {
+        "name": "Maltese_dog",
+        "category": "animal",
+        "state": "running",
+        "last_seen": "2026-07-15T08:00:00Z",
+        "place": "backyard"
+      }
+    }
+  ]
+}
+
+=== QUERY: Show me the image evidence from the living room. ===
+{
+  "query": "Show me the image evidence from the living room.",
+  "seed_nodes": [
+    "evidence:frames/home-001/000100.jpg",
+    "evidence:frames/home-002/000020.jpg",
+    "event:home-002:2026-07-15T08:00:00Z"
+  ],
+  "seed_scores": {
+    "evidence:frames/home-001/000100.jpg": 0.2566666666666667,
+    "evidence:frames/home-002/000020.jpg": 0.2566666666666667,
+    "event:home-002:2026-07-15T08:00:00Z": 0.082
+  },
+  "retrieved_node_ids": [
+    "evidence:frames/home-001/000100.jpg",
+    "evidence:frames/home-002/000020.jpg",
+    "place:backyard",
+    "event:home-002:2026-07-15T08:00:00Z",
+    "entity:Maltese_dog:home-002"
+  ],
+  "retrieved_edges": [
+    [
+      "event:home-002:2026-07-15T08:00:00Z",
+      "location",
+      "place:backyard"
+    ],
+    [
+      "event:home-002:2026-07-15T08:00:00Z",
+      "provenance",
+      "evidence:frames/home-002/000020.jpg"
+    ],
+    [
+      "event:home-002:2026-07-15T08:00:00Z",
+      "observation",
+      "entity:Maltese_dog:home-002"
+    ],
+    [
+      "entity:Maltese_dog:home-002",
+      "location",
+      "place:backyard"
+    ]
+  ],
+  "evidence": [
+    {
+      "id": "evidence:frames/home-001/000100.jpg",
+      "type": "evidence",
+      "content": "Image evidence: frames/home-001/000100.jpg",
+      "info": {
+        "modality": "image",
+        "source_id": "frames/home-001/000100.jpg",
+        "time_ref": "2026-07-14T10:00:00Z",
+        "place": "living_room"
+      }
+    },
+    {
+      "id": "evidence:frames/home-002/000020.jpg",
+      "type": "evidence",
+      "content": "Image evidence: frames/home-002/000020.jpg",
+      "info": {
+        "modality": "image",
+        "source_id": "frames/home-002/000020.jpg",
+        "time_ref": "2026-07-15T08:00:00Z",
+        "place": "backyard"
+      }
+    },
+    {
+      "id": "place:backyard",
+      "type": "place",
+      "content": "backyard",
+      "info": {
+        "name": "backyard"
+      }
+    },
+    {
+      "id": "event:home-002:2026-07-15T08:00:00Z",
+      "type": "semantic_event",
+      "content": "The dog is playing in the backyard.",
+      "info": {
+        "time_ref": "2026-07-15T08:00:00Z",
+        "session_id": "home-002",
+        "place": "backyard",
+        "confidence": 0.95,
+        "adapter_version": "probe-v1",
+        "extractor_model": "probe-llm"
+      }
+    },
+    {
+      "id": "entity:Maltese_dog:home-002",
+      "type": "entity",
+      "content": "Maltese_dog",
+      "info": {
+        "name": "Maltese_dog",
+        "category": "animal",
+        "state": "running",
+        "last_seen": "2026-07-15T08:00:00Z",
+        "place": "backyard"
+      }
+    }
+  ]
+}
