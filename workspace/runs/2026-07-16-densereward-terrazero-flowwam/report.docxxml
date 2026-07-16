@@ -1,0 +1,193 @@
+<title>Paper Scout Research Report - 2026-07-16</title>
+
+<p>This run covers the July 14–15 paper drop and finds three unusually concrete threads around a single bet: <b>scalable robot learning is increasingly powered by synthetic training signals rather than more human data</b>. DenseReward generates physically realistic failures and dense progress rewards in simulation; TerraZero turns real-world map geometry into an unbounded procedural driving curriculum for zero-demonstration self-play; FlowWAM treats optical flow as a video-native action representation so a single pretrained video generator can both predict actions and render action-conditioned futures. Below each thread is investigated as a mechanism first and a set of numbers second.</p>
+
+<callout emoji="✅" background-color="light-green">
+  <p><b>Standout:</b> FlowWAM (arXiv 2607.13017) is the clearest seed for follow-up because its full policy code is public and the paper’s central architectural claims largely survive a code trace. DenseReward and TerraZero are conceptually strong but still paper-only releases.</p>
+</callout>
+
+<h1>Theme 1: Reward Learning from Synthesized Failures</h1>
+
+<p>Reinforcement learning for manipulation has been stuck between sparse binary rewards that are easy to specify and dense rewards that require painstaking engineering. DenseReward asks whether a vision-language model can learn dense, per-timestep progress scores if it is trained on a dataset where failures are synthesized physically rather than relabeled from successes.</p>
+
+<h2>DenseReward: Dense Reward Learning via Failure Synthesis for Robotic Manipulation</h2>
+<p>Fang et al. (2026) · arXiv:2607.13033 · <a href="https://dense-reward.github.io/">project page</a></p>
+
+<p>The core idea is a pipeline that decomposes pick-and-place manipulation into five phases—<b>Reach, Grasp, Lift, Move, Place</b>—and then induces six failure modes by perturbing a motion-planning pipeline built on GraspNet and CuRobo. The failures are physical, not counterfactual: collision avoidance is disabled for <i>Collision</i>; the grasp target is offset for <i>Miss</i>; rotation noise is injected during Move for <i>Fall</i>; Gaussian joint noise is added for <i>Smooth</i>; a collision is followed by replanning for <i>Recover</i>; and <i>Success</i> is unperturbed. Validity checks at phase boundaries filter physically implausible episodes.</p>
+
+<p>[[figure-anchor:densereward:overview]]</p>
+
+<p>The reward model itself is a Qwen3-VL-4B-Instruct fine-tuned with LoRA rank 16. It takes a language instruction, the current RGB frame, and <b>two historical frames</b> and outputs a scalar <latex>r_t \in [0,1]</latex> rounded to three decimals. The historical-frame ablation is telling: MAE drops from 0.096 (no history) to 0.088 (one frame) to 0.081 (two frames), then rises slightly to 0.086 with three frames—more context introduces noise.</p>
+
+<p>What makes the reward signal different from prior work is that it is <b>dense and failure-aware</b>. Success trajectories rise monotonically; collision/miss/fall trajectories rise to the failure event and then decay, preserving partial-progress information; recover trajectories dip and resume. The paper does not give a closed-form reward formula, so I reconstructed the shapes from the qualitative rules and the result is shown below.</p>
+
+<p>[[figure-anchor:densereward:curves]]</p>
+
+<p>On the authors’ internal benchmark DenseReward reports MAE 0.081, well below RoboReward-8B (0.230) and zero-shot VLMs such as Qwen3-VL-4B (0.289). The MPC experiment is small but clean: 28 candidate actions per step are scored by the reward model, and DenseReward achieves the lowest average end-effector-to-object distance (0.229 vs. 0.267 for RoboReward-4B). The real-world DSRL result is the most eye-catching in a narrow sense: on a Franka arm, adding DenseReward improves success from 40% to 80% on “stack the cups” and from 30% to 70% on “put ball in basket,” with only ~10–20 real-world rollouts each.</p>
+
+<p>The biggest caveat is reproducibility. As of this run the project-page “Code” and “Dataset” buttons are <code>href="#"</code> placeholders with HTML comments reading <code>&lt;!-- TODO: fill in arXiv / code / dataset URLs when available --&gt;</code>. The dense-reward GitHub organization only hosts the website repo. So the strong MAE and RL numbers cannot be independently checked, and the benchmark is author-constructed. Compared to RoboReward, which relabels successful demos to create negatives and predicts trajectory-level rewards, DenseReward is genuinely different: it synthesizes physically realistic failure trajectories and predicts per-timestep progress. The idea is clean; the artifact release is not.</p>
+
+<h1>Theme 2: Driving Simulation for Zero-Demonstration Self-Play</h1>
+
+<p>Closed-loop driving policies are usually trained on logged human trajectories or inside slow, feature-rich simulators. TerraZero argues you can have speed, fidelity, and zero demonstrations at the same time by building a fast C simulator and procedurally generating every scenario from real map geometry.</p>
+
+<h2>TerraZero: Procedural Driving Simulation for Zero-Demonstration Self-Play at Scale</h2>
+<p>Wu, Rangesh et al. (2026) · arXiv:2607.13028 · <a href="https://terra-applied.github.io/TerraZero">project page</a></p>
+
+<p>TerraZero is a vectorized object-level driving simulator and PPO training stack from Applied Intuition. The engineering split is deliberate: a C simulation engine runs dynamics, observation construction, reward computation, and traffic-light state machines on the CPU, while PyTorch policy/value networks and PPO updates run on the GPU. The two communicate over a <b>zero-copy path</b>: shared numpy buffers are reinterpreted as fp16/bf16 tensors. The reported throughput is 560K agent-steps/sec on a consumer GPU, 1.30M on a single server GPU, and 2.80M on an 8-GPU node.</p>
+
+<p>[[figure-anchor:terrazero:overview]]</p>
+
+<p>The procedural generator treats logged data <b>only as map geometry</b>. It pulls maps from Waymo Open Motion, nuPlan (Las Vegas, Boston, Pittsburgh, Singapore), and five CARLA towns, then randomizes initialization, goals, agent dimensions, kinematic coefficients, reward weights, signal controllers (NEMA, Christmas, round-robin), and a mix of rule-based NPCs: IDM/PDM vehicles, parked/crashed vehicles, construction zones, ORCA pedestrians, and jaywalkers. The kinematic coefficients <latex>(c_{\text{throttle}}, c_{\text{steer}}, c_{\text{acc}}, c_{\text{vel}})</latex> are sampled per agent in <latex>[0.5, 1.5]</latex> and exposed in the observation, so one network learns to adapt online.</p>
+
+<p>The training recipe is PPO with GAE, V-trace off-policy corrections, PopArt value normalization, prioritized advantage sampling, and synchronized normalization statistics across DDP/Ray ranks. Notably, the authors trade sample efficiency for compute efficiency: they discard low-advantage segments and rely on aggressive off-policy correction rather than on-policy data. The planner is a 3.5M-parameter MLP; the sim agent is a 6.7M-parameter heterogeneous network. Both use ego + Deep Sets encoders over partners, road, and traffic entities. Every reported policy trains from scratch with random initialization—no human demonstrations, no imitation, no logged trajectories, no fallback planner at inference.</p>
+
+<table>
+  <colgroup>
+    <col width="220"/>
+    <col width="180"/>
+    <col width="120"/>
+    <col width="280"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Benchmark</th>
+      <th background-color="light-gray">Metric</th>
+      <th background-color="light-gray">Value</th>
+      <th background-color="light-gray">Context</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>InterPlan long-tail (80-scenario)</td>
+      <td>Reactive score</td>
+      <td>67.87</td>
+      <td>First fully learned policy to top the benchmark</td>
+    </tr>
+    <tr>
+      <td>nuPlan val14 reactive</td>
+      <td>Score / safety</td>
+      <td>92.27</td>
+      <td>Best no-at-fault-collision and time-to-collision scores</td>
+    </tr>
+    <tr>
+      <td>WOSAC 2024 vehicles</td>
+      <td>Realism</td>
+      <td>0.740</td>
+      <td>Matches SPACeR (0.741), no reference policy</td>
+    </tr>
+    <tr>
+      <td>WOSAC 2024 VRUs</td>
+      <td>Realism</td>
+      <td>0.683</td>
+      <td>Trails SPACeR (0.729), beats HR-PPO (0.668)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The SPACeR comparison is the sharpest framing. SPACeR, from the same group, anchors self-play to a pretrained tokenized reference model and leads on VRU realism; TerraZero shows you can approach similar vehicle realism without that reference policy at all. The cross-dataset transfer is also striking: a policy trained only on right-hand-traffic cities generalizes to left-hand-traffic Singapore, and CARLA-trained policies perform on par with those trained on hundreds of thousands of real scenarios.</p>
+
+<p>But like DenseReward, TerraZero has no public source code, model weights, or terrabin scenario converters. The GitHub repos are project-page mirrors. The relationship to the later TerraTransfer paper confirms the simulator is a real internal codebase—TerraTransfer explicitly says it uses “our vectorized simulator” TerraZero for Phase 1 self-play—but external reproducibility is currently zero. The 1.3M SPS claim is physically plausible but unverified.</p>
+
+<h1>Theme 3: Optical Flow as a Unified Action Representation</h1>
+
+<p>World Action Models (WAMs) reuse pretrained video generators for both policy and world modeling, but the action representation has remained awkward: numerical tokens are embodiment-specific, learned latent actions are abstract, and image-space conditions are usually static “where” cues rather than “how” motion cues. FlowWAM proposes optical flow as the action modality.</p>
+
+<h2>FlowWAM: Optical Flow as a Unified Action Representation for World Action Models</h2>
+<p>Chen et al. (2026) · arXiv:2607.13017 · <a href="https://flow-wam.github.io">project page</a> · <a href="https://github.com/YixiangChen515/FlowWAM">code (policy)</a> · <a href="https://github.com/YixiangChen515/FlowWAM_WorldArena">code (world model)</a></p>
+
+<p>The key observation is that optical flow is already a video: a per-pixel displacement field <latex>\mathbf{f}_t \in \mathbb{R}^{H \times W \times 2}</latex> can be mapped to an RGB image with an HSV color-wheel encoding,</p>
+
+<p><latex>\text{H} = \frac{\operatorname{atan2}(v,u) + \pi}{2\pi}, \quad \text{S} = \frac{\|\mathbf{f}_t\|}{m}, \quad \text{V} = 1,</latex></p>
+
+<p>where <latex>m</latex> is a magnitude cap. Because the resulting <latex>F_t</latex> has the same format as an RGB frame, it can be encoded by the same VAE and processed by the same diffusion transformer as the visual stream. FlowWAM builds on Wan2.2-TI2V-5B. The only stream-specific parameters are separate patch embeddings and heads for RGB and flow, plus a small learnable <code>stream_embed</code> token so the shared blocks can tell the modalities apart.</p>
+
+<p>[[figure-anchor:flowwam:overview]]</p>
+
+<p>Inside each DiT block the RGB and flow tokens are concatenated for joint self-attention, then split back to their respective streams. This lets the model do two things with one architecture:</p>
+
+<ul>
+  <li><b>Policy mode:</b> both RGB and flow latents are noised and jointly denoised; the generated flow plan is decoded into actions by an <b>action expert</b>.</li>
+  <li><b>World-model mode:</b> the flow latents are set to the clean VAE encoding of a desired motion trajectory and held fixed; only the RGB latents are denoised.</li>
+</ul>
+
+<p>The action expert is a ~780M-parameter transformer that cross-attends to per-layer hidden states of the video DiT, conditions on the current proprioceptive state, and predicts a flow-matching velocity for an N-step action chunk. A neat train/test alignment trick: during training the latents fed to the video DiT are noised with probability 0.5 and the noise level is passed to the action expert as an auxiliary embedding, matching the imperfect generated latents it sees at inference.</p>
+
+<p>On RoboTwin 2.0 FlowWAM reports 92.94% success under the Clean setting and 92.14% under Random, ahead of <latex>\pi_{0.5}</latex>, X-VLA, Motus, GigaWorld-Policy, X-WAM, and Fast-WAM. Pretraining on action-unlabeled human egocentric video (EgoDex) gives a larger gain under Random than Clean, which is the expected signature of visual-robustness transfer. On WorldArena it reports EWMScore 63.71, with the largest margin on Trajectory Accuracy.</p>
+
+<p>The code trace supports most of the paper’s claims. The HSV codec is reversible and implemented in <code>reversible_flow_codec.py</code>; my pure-numpy probe gives ~0.001 px round-trip error for meaningful magnitudes. The dual-stream architecture, joint attention, action expert, and noise mixing are all present. But two caveats emerged:</p>
+
+<ol>
+  <li>The WorldArena repo omits the learnable <code>stream_embed</code> described in Appendix A.1, so the released world-model code deviates from the paper.</li>
+  <li>The WorldArena inference script loads an external <b>SeedVR stage-2 refiner</b> by default, so the 63.71 EWMScore is not produced by the dual-stream model alone.</li>
+  <li>The EgoDex action-unlabeled pretraining stage is described but <b>not released</b>; the only “stage 1” checkpoint in the WorldArena repo is trained on RoboTwin.</li>
+</ol>
+
+<p>These are manageable caveats for an unusually complete release. The genuine novelty is architectural: optical flow is not an auxiliary target or planning intermediate, but a full video stream that is generated for policy and conditioned on for world modeling inside the same pretrained DiT.</p>
+
+<h1>Shortlist: Other Papers Worth Noticing</h1>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>ChunkFlow</b> (2607.12992)</td>
+      <td>Seam-aware training and execution for chunked VLA policies to reduce boundary jitter.</td>
+      <td>Tackles a real inference-time artifact when VLAs emit actions in overlapping chunks.</td>
+      <td><a href="https://arxiv.org/abs/2607.12992">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>ExToken</b> (2607.12931)</td>
+      <td>Structured exploration tokens for sample-efficient VLA reinforcement fine-tuning.</td>
+      <td>Argues trajectory diversity matters more than rollout count for VLA-RL scaling.</td>
+      <td><a href="https://arxiv.org/abs/2607.12931">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>UR-VC</b> (2607.12892)</td>
+      <td>Unsupervised correction of time-derived progress proxies for manipulation.</td>
+      <td>Dense progress labels from normalized time are noisy; this learns to fix them.</td>
+      <td><a href="https://arxiv.org/abs/2607.12892">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>Jetson-PI</b> (2607.12659)</td>
+      <td>Foresight-aligned asynchronous inference for onboard VLA deployment on Jetson Orin.</td>
+      <td>Directly addresses the latency-control-frequency trade-off for edge robots.</td>
+      <td><a href="https://arxiv.org/abs/2607.12659">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>TrustVLA</b> (2607.12571)</td>
+      <td>Mechanism-guided inference-time defense against VLA backdoors.</td>
+      <td>Security angle on deployed VLAs: poisoned triggers can hijack long-horizon behavior.</td>
+      <td><a href="https://arxiv.org/abs/2607.12571">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>VistaVLA</b> (2607.12356)</td>
+      <td>3D Gaussian-grounded VLA for manipulation with geometry and semantic awareness.</td>
+      <td>Another entry in the “explicit 3D scene representation for VLAs” line.</td>
+      <td><a href="https://arxiv.org/abs/2607.12356">arXiv</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h1>Cross-Cutting Observations</h1>
+
+<p><b>Synthetic signals are the shared bet.</b> All three deep threads generate their own training signal instead of collecting more human data: DenseReward synthesizes failures, TerraZero synthesizes scenarios, FlowWAM synthesizes motion plans as flow videos. This is a coherent shift in the field’s research direction.</p>
+
+<p><b>Code availability is the main differentiator.</b> FlowWAM ships full policy and world-model repositories; DenseReward and TerraZero are paper-only releases with placeholder project pages. That does not make the latter wrong, but it does make their strong quantitative claims provisional.</p>
+
+<p><b>What remains uncertain.</b> For DenseReward, the actual reward formula and the independence of the benchmark are unknown. For TerraZero, throughput and the exact training stability recipe are unverified. For FlowWAM, the unreleased EgoDex pretraining stage and the external SeedVR refiner mean the scalability and WorldArena numbers need closer scrutiny than the RoboTwin numbers.</p>
+
+<p><b>What to build next.</b> The most buildable idea is FlowWAM’s flow-as-action representation: it is concrete, code is available, and the same representation can be tested on new robots by swapping the action expert. The most important open question is whether the DenseReward failure-synthesis recipe transfers to non-pick-place tasks such as tool use and deformable-object manipulation.</p>

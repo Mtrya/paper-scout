@@ -1,5 +1,5 @@
-# code/
+# Code Lab Bench
 
-Ignored lab bench for active external-signal work: clone repositories, create local environments, run probes, write temporary reimplementations, and patch upstream code here.
+Ignored scratch space for cloning repos, running probes, and experimenting.
+Durable work should be promoted to a run thread under runs/<run-id>/<thread-id>/.
 
-Before finalizing a run, promote durable evidence into `runs/<run-id>/<thread>/code/` or `runs/<run-id>/<thread>/patches/`, then clean this directory back to this README.

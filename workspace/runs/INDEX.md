@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-07-16 — 2026-07-14 to 2026-07-15
+- Doc: https://fudan-nlp.feishu.cn/docx/UIt3d2fE0oc8F7xZ0aAcPaFMnyf
+- Run: runs/2026-07-16-densereward-terrazero-flowwam/
+- Deep threads: DenseReward failure synthesis for dense rewards (2607.13033), TerraZero procedural driving sim and zero-demo self-play (2607.13028), FlowWAM optical flow as unified action representation for WAMs (2607.13017)
+- Covered papers: 2607.13033, 2607.13028, 2607.13017
+- Shortlisted papers: 2607.12992, 2607.12931, 2607.12892, 2607.12659, 2607.12571, 2607.12356
+
 ## 2026-07-14 — 2026-07-08 to 2026-07-14
 - Doc: https://fudan-nlp.feishu.cn/docx/CQBSdrQELoOXcExGR83cZzasnvc
 - Run: runs/2026-07-14-genception-lhtb-robodojo/
