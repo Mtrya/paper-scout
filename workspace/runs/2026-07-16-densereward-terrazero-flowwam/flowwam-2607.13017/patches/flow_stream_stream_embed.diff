@@ -1,0 +1,33 @@
+--- /home/alpheratz/Projects/paper-scout/workspace/code/FlowWAM/diffsynth/models/wan_video_dit_dual_stream.py	2026-07-16 08:17:53.413084738 +0800
++++ /home/alpheratz/Projects/paper-scout/workspace/code/FlowWAM_WorldArena/diffsynth/models/wan_video_dit_dual_stream.py	2026-07-16 08:17:56.532674105 +0800
+@@ -19,10 +19,6 @@
+ 
+     Architecture mirrors the pretrained DiT's patch_embedding and head.
+     Weights are deep-copied so both streams start from identical init.
+-
+-    A learnable ``stream_embed`` is added to flow tokens after patchification
+-    so that the shared DiT blocks can distinguish flow tokens from RGB tokens
+-    during joint self-attention.
+     """
+ 
+     def __init__(self, dit):
+@@ -30,7 +26,6 @@
+         self.patch_size = tuple(dit.patch_size)
+         self.flow_patch_embedding = copy.deepcopy(dit.patch_embedding)
+         self.flow_head = copy.deepcopy(dit.head)
+-        self.stream_embed = nn.Parameter(torch.zeros(1, 1, dit.dim))
+ 
+     def patchify(self, flow_latent):
+         """Apply flow patch embedding.
+--- /home/alpheratz/Projects/paper-scout/workspace/code/FlowWAM/diffsynth/pipelines/wan_video_dual_stream.py	2026-07-16 08:17:53.413441062 +0800
++++ /home/alpheratz/Projects/paper-scout/workspace/code/FlowWAM_WorldArena/diffsynth/pipelines/wan_video_dual_stream.py	2026-07-16 08:17:56.533058411 +0800
+@@ -191,9 +191,6 @@
+     f_f, h_f, w_f = flow_5d.shape[2:]
+     flow_tokens = rearrange(flow_5d, 'b c f h w -> b (f h w) c').contiguous()
+ 
+-    # ---- Stream-type embedding: lets shared blocks distinguish flow from RGB ----
+-    flow_tokens = flow_tokens + flow_stream.stream_embed.to(dtype=flow_tokens.dtype, device=flow_tokens.device)
+-
+     # ---- RoPE (both RGB and Flow get independent positional encoding) ----
+     rgb_freqs = torch.cat([
+         dit.freqs[0][:f_r].view(f_r, 1, 1, -1).expand(f_r, h_r, w_r, -1),
