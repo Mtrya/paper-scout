@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-07-17 — 2026-07-16
+- Doc: https://fudan-nlp.feishu.cn/docx/DVafdVjjvowpWPxo7x8cIJzmnQe
+- Run: runs/2026-07-17-gigaworld05-harness-spear/
+- Deep threads: GigaWorld-Policy-0.5 action-centered WAM code+weights verification (2607.13960), Harness Handbook behavior localization + mini-handbook probe on real Terminus-2 (2607.13285), SPEAR UE reflection-driven simulator code trace (2607.06701)
+- Covered papers: 2607.13960, 2607.13285, 2607.06701
+- Shortlisted papers: 2607.13104, 2607.12747, 2607.07702, 2607.12625, 2607.13921, 2607.12477, 2607.12395, 2607.13125, 2607.13639, 2607.09786
+
 ## 2026-07-16 — 2026-07-14 to 2026-07-15
 - Doc: https://fudan-nlp.feishu.cn/docx/UIt3d2fE0oc8F7xZ0aAcPaFMnyf
 - Run: runs/2026-07-16-densereward-terrazero-flowwam/

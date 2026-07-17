@@ -1,0 +1,37 @@
+Phase I: 107 internal functions, 195 resolved internal call edges, 318 unresolved call sites
+  top unresolved callees (dynamic/external-attr): [('append', 72), ('debug', 37), ('join', 27), ('exec', 25), ('get', 18), ('strip', 12), ('isoformat', 10), ('error', 10)]
+Phase II: assigned 106/107 functions; provenance: {'rule': 99, 'rule-ambiguous': 5, 'callgraph-propagation': 2}; unmapped: 1
+    UNMAPPED: Terminus2.setup (terminus_2.py:370-389)
+Phase III: handbook rendered to handbook-out/ (68 state registers)
+
+Failure-mode probes:
+  decorated functions (wrappers break naive static edges): 11
+    Terminus2.name: @staticmethod, @override
+    Terminus2.version: @override
+    Terminus2.setup: @override
+    Terminus2._parse_skill_frontmatter: @staticmethod
+    Terminus2._query_llm: @retry(stop=stop_after_attempt(3), retry=retry_if_not_exception_type(ContextLengthExceededError) & retry_if_exception_type(Exception), reraise=True)
+    Terminus2.run: @override
+  functions using getattr (dynamic dispatch): ['Terminus2._query_llm']
+  cross-file call edges resolved via self._attr type inference: 10
+
+==========================================================================
+BEHAVIOR LOCALIZATION DEMO — paper's Terminus-2 Q1:
+  "require marking task_complete THREE times, with are-you-sure re-prompts"
+==========================================================================
+
+[handbook path] stages matched: ['stage-4', 'stage-5']
+[handbook path] registers.md entry `_pending_completion` -> 3 functions:
+    Terminus2.__init__                     terminus_2.py:156-344  lines with `_pending_completion`: [305]
+    Terminus2._reset_per_run_state         terminus_2.py:1542-1556 lines with `_pending_completion`: [1553]
+    Terminus2._run_agent_loop              terminus_2.py:1231-1540 lines with `_pending_completion`: [1405, 1409, 1412, 1417, 1532]
+[handbook path] locators verified against current source: 3/3
+[grep] 'task_complete': 41 hits
+[grep] 'completion': 36 hits
+[grep] 'pending_completion': 7 hits
+
+[paper's answer key]
+   - Terminus2.__init__ (flag init)
+   - Terminus2._reset_per_run_state (per-run clear)
+   - Terminus2._run_agent_loop observation branch (set/clear flag)
+   - Terminus2._run_agent_loop completion gate (test flag, return)

@@ -1,0 +1,79 @@
+{
+  "pilots": [
+    [
+      3e-05,
+      0.2573,
+      0.17233,
+      0.416832,
+      "keep"
+    ],
+    [
+      4.316e-05,
+      0.256593,
+      0.172893,
+      0.449387,
+      "observe (baseline)"
+    ],
+    [
+      6e-05,
+      0.252476,
+      0.173318,
+      0.409764,
+      "keep -> SELECTED"
+    ],
+    [
+      8e-05,
+      0.261832,
+      0.175986,
+      0.461381,
+      "discard"
+    ]
+  ],
+  "extra": [
+    [
+      "lr=6e-5, bs=12",
+      0.572,
+      "discard"
+    ],
+    [
+      "lr=6e-5, bs=8",
+      0.556,
+      "discard"
+    ],
+    [
+      "lr=6e-5, frames=64",
+      null,
+      "stopped early (slow steps)"
+    ]
+  ],
+  "long_run": [
+    [
+      10000,
+      0.000507,
+      null
+    ],
+    [
+      30000,
+      0.000113,
+      "keep (best ckpt)"
+    ],
+    [
+      50000,
+      0.000173,
+      "discard: regressed"
+    ]
+  ],
+  "verdict": {
+    "is_grid_search": false,
+    "evidence": [
+      "candidates depend on prior results (LR sweep -> bs sweep at best LR -> steps)",
+      "explicit keep/discard/early-stop decisions, incl. abandoning frames=64 probe",
+      "30K checkpoint chosen by regression detection at 50K"
+    ],
+    "but_shallow": [
+      "only 3 effective LR candidates + 2 batch sizes; a human could run this sweep",
+      "no code/architecture mutations shown - search stays inside hyperparameter space",
+      "multi-objective conflict (visual vs action loss) resolved by a hard-coded preference"
+    ]
+  }
+}

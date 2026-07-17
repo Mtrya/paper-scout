@@ -1,0 +1,27 @@
+== Parameter accounting (validated vs checkpoint headers) ==
+visual expert : 4.908 B  (81.5%)
+action expert : 1.008 B  (16.7%)
+embeddings    : 103.0 M
+TOTAL         : 6.0190 B   (checkpoint: 6.0216 B, fp32, 24.086 GB)
+
+== Per-action-chunk FLOPs (48-action horizon, 10 flow steps) ==
+GWP-0.5 action-only (deployed)                prefix   1.19 TF + steps   1.00 TF =   2.18 TFLOP
+GWP-0 dense action-only                       prefix   1.19 TF + steps   4.74 TF =   5.93 TFLOP
+GWP-0.5 full WAM (train-style joint)          prefix   0.00 TF + steps  24.85 TF =  24.85 TFLOP
+
+MoT vs dense (action-only)     : 2.72x less compute
+action-only vs full-WAM joint  : 11.39x less compute (excl. VAE-decode of future)
+
+== Cross-check vs paper Table 4 latency ratios ==
+RTX 4090: GWP-0 293 ms / GWP-0.5 110 ms = 2.66x   (FLOP ratio 2.72x)
+A100    : GWP-0 360 ms / GWP-0.5 189 ms = 1.90x   (same model; A100 more
+          overhead-tolerant -> fixed costs weigh more)
+Motus joint-generation 3231 ms on A100 = 17.1x GWP-0.5 -> consistent with
+          full future-video denoising + VAE decode per chunk
+
+== Where the 85 ms goes (deployment stack, qualitative) ==
+per chunk: 1x VAE encode (320x384 composite) + 1x prefix pass (121 tokens,
+dominated by 120 ref tokens through the 4.9B visual expert) + 10x48-token action-
+expert steps. Per-step active params = action expert only (1.0B of 6.0B total).
+189->140 ms (A100) and 110->85 ms (4090) from C++ runtime = removing Python/
+dispatch overhead on tiny kernels; steps are 48-token launches, overhead-bound.
