@@ -1,0 +1,27 @@
+== Mask shape (289, 289) (S=1, A=48, R=120, F=120) ==
+
+    query \ key | state  | action |  ref   | future |
+      state   | ALLOW  |  ----  | ALLOW  |  ----  |
+      action  | ALLOW  | ALLOW  | ALLOW  |  ----  |
+       ref    | ALLOW  |  ----  | ALLOW  |  ----  |
+      future  | ALLOW  | ALLOW  | ALLOW  | ALLOW  |
+
+== Exactness check: action-only inference vs full WAM ==
+max |out_full - out_no_future| over all non-future queries: 2.498e-16
+=> EXACT. Because no non-future query ever attends to future keys,
+   removing the future block leaves state/ref/action outputs bit-identical.
+   This is WHY future-video generation is optional at inference: the mask makes
+   the future stream a pure information SINK (reads everything, read by nothing
+   except itself), so it only ever acts as a training-time supervision branch.
+
+== Counterfactual (if action COULD attend to future) ==
+max change in action outputs when future is dropped: 0.261
+=> the action-centered mask is precisely what licenses the train/inference asymmetry.
+
+== Information flow ==
+training : (obs,state,text) -> action ; (obs,state,text,ACTION) -> future video
+           future loss backprops INTO action tokens (future queries read action keys),
+           so actions are shaped to be good 'plans' for the world model = dense supervision.
+inference: future stream never instantiated; [state|action|ref] subsequence runs alone;
+           prefix (state+ref) KV cached once per chunk; only 48 action tokens denoised
+           for 10 flow-matching steps.
