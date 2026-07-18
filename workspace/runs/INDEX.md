@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-07-18 — 2026-07-17
+- Doc: https://fudan-nlp.feishu.cn/docx/P3S7dtwhyomKNZxULvocMplknX6
+- Run: runs/2026-07-18-badwam-robotttt-gamestate/
+- Deep threads: BadWAM world-action drift toy-WAM reconstruction + attack probe (2607.15207), RoboTTT fast-weight context probe (2607.15275), Pixels-to-States game-engine taxonomy triangulation (2607.14076)
+- Covered papers: 2607.15207, 2607.15275, 2607.14076
+- Shortlisted papers: 2607.13399, 2607.14777, 2607.15038, 2607.14187, 2607.14935, 2607.14952
+
 ## 2026-07-17 — 2026-07-16
 - Doc: https://fudan-nlp.feishu.cn/docx/DVafdVjjvowpWPxo7x8cIJzmnQe
 - Run: runs/2026-07-17-gigaworld05-harness-spear/
