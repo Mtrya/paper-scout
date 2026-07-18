@@ -1,0 +1,155 @@
+<title>Paper Scout Research Report - 2026-07-18</title>
+
+<p>This run asked a simple question of the 2026-07-17 pool: <b>where does state live in the new world(-action) models, and who is actually solving it?</b> Three papers answered from three directions, and together they sketch the frontier. <b>From Pixels to States</b> argues that interactive world models will not become game engines until state stops being entangled in pixels — our six-model triangulation says the diagnosis is correct, and the strongest counterexamples are partial at best. <b>BadWAM</b> shows that even the state WAMs <i>do</i> carry — their imagined futures — is not bound to the actions they execute; we rebuilt the attacked object from scratch and mapped the full strength–stealth frontier of world-action drift. And <b>RoboTTT</b> offers the most constructive answer we have seen: make the policy's recurrent state a set of fast weights updated by an inner-loop loss, and 8K-timestep visuomotor context becomes usable at 30 Hz. Our probes verified the constant-cost mechanism, and also found where it quietly depends on training rather than architecture.</p>
+
+<callout emoji="✅" background-color="light-green">
+  <p><b>Standout:</b> RoboTTT (Jiang et al., NVIDIA/Stanford/UT Austin) is the clearest buildable idea of the period — TTT fast weights give a VLA a carried, self-updating state with flat per-step latency, unlocking one-shot imitation from human video and the first context-length scaling curve in robotics. No code release yet, so our from-scratch probe of the mechanism is the verification.</p>
+</callout>
+
+<h1>World models have a state problem</h1>
+
+<p>Two papers this week attack the same weakness from opposite sides. One is a position paper with a data engine; the other is an adversarial analysis with code. Our investigations added what both were missing: cross-model evidence for the first, and a mechanistic explanation for the second.</p>
+
+<h2>From Pixels to States: the game-engine lens holds up against six recent world models</h2>
+<p>Meng et al. (Alaya Lab, 2026) · <a href="https://huggingface.co/papers/2607.14076">HF</a> · <a href="https://arxiv.org/abs/2607.14076">PDF</a></p>
+
+<p>The paper's organizing lens is the loop every conventional game engine runs: player <b>action</b> updates an explicit <b>state</b> (HP, stamina, cooldowns, boss phase) according to rules, and the <b>observation</b> is rendered <i>from</i> that state. Video-generative "game engines" collapse this loop — they predict pixels from pixels, with state entangled in the observations. The authors taxonomize the field along four dimensions: <b>D1</b> action control (geometric trajectories → motor signals → semantic events), <b>D2</b> state dynamics (entangled in observations → learned latents → explicit descriptions), <b>D3</b> persistence (stored past-copies vs. updating estimates of the present), and <b>D4</b> real-time generation — with one distinction we found genuinely sharp: control latency must be minimized, but <i>consequence</i> latency must be <b>accurate</b>, not early. A boss's enrage timer should fire at the rule-defined moment, not whenever the generator drifts there. No existing model schedules outcomes; they only shrink delays.</p>
+
+<p>A position paper stands or falls on whether its diagnosis describes the actual landscape, so we classified six recent world-action models from this workspace's coverage along the four dimensions, with evidence quoted from each paper's text. The result:</p>
+
+<p>[[figure-anchor:pixels-to-states:taxonomy-matrix]]</p>
+
+<p>The diagnosis holds. Zero of six keep explicit symbolic state in the generation loop. The interesting structure is in the counterexamples: <b>Kairos</b> carries a genuine recurrent latent state (a GLA state matrix with formal error bounds) — but it is uninterpretable and trained only to predict visuals, exactly the paper's caveat that "learned latent" is not "explicit." <b>ActWorld</b> has the best memory design (event-routed tokens that update rather than store) but nothing grounds those tokens in state transitions. <b>GigaWorld-1</b> independently confirms the premise from the evaluation side: across 324k policy rollouts, evaluator quality tracked long-horizon state fidelity, not visual realism. And <b>BadWAM</b> — the next thread — shows the loop is also open on the action side: even carried imagined futures are not bound to executed actions. Explicit state exists in this landscape only as <i>data and evaluation</i> (MIRA's privileged-state probes, WildWorld, EgoCS-400K), never inside the loop.</p>
+
+<p>To make the claim mechanistic rather than rhetorical, we built the smallest possible demonstration: an HP-3 boss fight where HP is pixel-invisible, so the same strike either kills or merely wounds depending on accumulated history. A windowed implicit model decays from 0.95 outcome-prediction accuracy to chance exactly as state-changing events leave its context window; an explicit carried state with a <i>learned</i> transition rule (which recovered h′ = h − hit to three decimal places) stays at 1.0 regardless of spacing.</p>
+
+<p>[[figure-anchor:pixels-to-states:forgetting-curve]]</p>
+
+<p>The paper's other contribution is a data engine: 90+ hours of Black Myth: Wukong boss encounters with frame-aligned keyboard/mouse actions, engine-exported states (poses, animations, skills, HP/stamina), and RGB+depth, captured by crowdsourced players through an instrumented ReShade/OBS pipeline with zero extra hardware, then textualized into slot-structured captions via Qwen3-VL. <b>The dataset itself is not released</b> (no links in v1; the same lab's prior WildWorld page already 404s — a cautionary pattern), but the pipeline is the reusable part and is directly transplantable to robot teleoperation logging, where frame-aligned privileged state is equally scarce.</p>
+
+<p>Honest limitations: the paper trains no model and runs no experiment on its own data — it is analysis plus infrastructure. D2 and D3 are not independent axes (an explicit state almost forces an updating memory). And the engine analogy's causal force is left unaddressed: conditioning generation on an explicit state is not the same as the state <i>determining</i> the outcome, which is what "rendered from state" actually buys you.</p>
+
+<hr/>
+
+<h2>BadWAM: imagination and action share a thin, attackable subspace</h2>
+<p>Li, Yang, Wang (NUS, HK PolyU, 2026) · <a href="https://huggingface.co/papers/2607.15207">HF</a> · <a href="https://arxiv.org/abs/2607.15207">PDF</a> · <a href="https://github.com/LiQiiiii/BadWAM">Code</a></p>
+
+<p>WAMs promise that coupling action generation with future prediction buys robustness and auditability — you can check an action against its imagined future. BadWAM formalizes how that promise breaks: a <b>world-action drift attack</b> perturbs the observation (L∞ budget ε=0.06) to maximize action shift, optionally subject to keeping the imagined future close to clean. The objective is a Lagrangian relaxation,</p>
+
+<p><latex>\delta_t^\star = \arg\max_{\|\delta_t\|_\infty \le \epsilon} \; D_{\mathrm{act}}(a^\delta_{t:t+H-1}, a_{t:t+H-1}) \;-\; \lambda \, D_{\mathrm{img}}(z^\delta, z)</latex></p>
+
+<p>optimized black-box by 1-direction SPSA (Rademacher probes, signed-PGD update, 17 forward queries per replan). Our code trace of the official repo confirms the implementation matches the paper exactly, including a `desynchronization_score = D_act / D_img` diagnostic and a universal-patch variant the paper only sketches. The headline: the action-only attack cuts one FastWAM variant from 96.5% to 43.1% closed-loop success on LIBERO, and the paper's motivation figure shows failures carry large action shifts at every level of future shift — the desynchronization is the point, not a side effect.</p>
+
+<p>[[figure-anchor:badwam:paper-motivation]]</p>
+
+<p>The release ships no checkpoints, so to test whether the phenomenon is real — and <i>why</i> it works — we rebuilt the attacked object: a minimal numpy WAM (32×32 visual point-mass reaching with a gripper channel, where a premature gripper close is an irreversible mis-grasp), in three variants mirroring the paper's three FastWAMs: action-from-latent only (<i>direct</i>), action from the jointly-trained latent (<i>joint</i>), and strict imagine-then-act where actions are decoded only from the predicted future (<i>idm</i>). We then attacked them with a line-faithful reimplementation of the paper's optimizer plus a white-box PGD reference.</p>
+
+<p>The drift phenomenon reproduced cleanly, and the λ sweep traces the full strength–stealth frontier:</p>
+
+<p>[[figure-anchor:badwam:lambda-frontier]]</p>
+
+<p>White-box, the attack is devastating (joint: 100%→15% success; idm: 99%→20%; even the imagination-free direct variant falls to 35% — so coupling neither protects nor uniquely exposes the policy). Imagination preservation slides along a real frontier: at λ=0.1 the idm attack still cuts success to 75% while reducing imagination drift by 63%. But two findings complicate the paper's story. First, the <b>black-box recipe barely works in our toy</b>: the paper's m=1, 17-query attack never dents closed-loop success, and even at 15× the query budget (257 queries/replan) success stays ≥92%. The paper's strong black-box numbers likely lean on real-task fragility and high-dimensional image structure; query-efficient drift is not automatic. Second, there is a <b>geometric ceiling on stealth</b>: input-Jacobian SVD shows the action head's sensitivity is strongly low-rank (participation ratio ≈1.5–1.9) and lives almost entirely <i>inside</i> the imagination head's broader sensitivity (cross-sensitivity 0.97–0.99; only 1–5% of action sensitivity lies outside the imagination's top-99% subspace). A perfectly stealthy drift — large action shift, zero imagination shift — is geometrically near-impossible, which is why λ≥0.3 eventually neutralizes the attack in our toy.</p>
+
+<p>[[figure-anchor:badwam:mechanism]]</p>
+
+<p>The right way to read BadWAM, then: WAM coupling does not create a new magnitude of vulnerability (the direct variant is just as attackable), it creates a new <b>stealth surface</b> — deployments that gate on imagined futures can be fooled into certifying a hijacked action. For anyone building imagine-then-check safety monitors, the actionable number is the frontier, not the endpoint: moderate λ preserves most attack strength while halving future drift, and our mechanism analysis says that trade is forced by geometry, not by the optimizer.</p>
+
+<h1>Fast weights as the robot's working memory</h1>
+
+<h2>RoboTTT: 8K-timestep visuomotor context at flat latency — verified, with one caveat about where the reliability comes from</h2>
+<p>Jiang et al. (NVIDIA, Stanford, UT Austin, 2026) · <a href="https://huggingface.co/papers/2607.15275">HF</a> · <a href="https://arxiv.org/abs/2607.15275">PDF</a> · <a href="https://research.nvidia.com/labs/gear/robottt/">Project</a></p>
+
+<p>RoboTTT inserts one test-time-training layer after the attention of each of the 16 DiT layers in GR00T N1.7's action head (538M→690M params). Attention runs <i>within</i> a timestep over 16 learned register tokens; the TTT layers run <i>across</i> timesteps on per-step outputs, so the 8K-step history lives in fast weights, not in a KV cache. The inner loop is one SGD step on a key→value reconstruction loss through a 2-layer MLP,</p>
+
+<p><latex>W_t \leftarrow W_{t-1} - \eta \nabla_W \| f_{W_{t-1}}(K_t) - V_t \|^2, \qquad O_t = f_{W_t}(Q_t)</latex></p>
+
+<p>with meta-learned init W₀, per-channel η, and a tanh gate (α init 1e-3) protecting the pretrained backbone. Because the recurrent state is the weights, per-step inference cost is context-independent. Two training details carry real weight: <b>sequence action forcing</b> (independent flow-matching noise level per action chunk — removing it collapses training) and TBPTT with fast weights carried across segments. Loss-masking then turns arbitrary context into pure fast-weight updates, which is what enables the two most striking capabilities: one-shot imitation from a human video (video as context, robot trajectory as target: 6/10 vs 0/10 for a gated-delta baseline) and DAgger Distillation (failures as context, corrections as target: +36% vs +9%).</p>
+
+<p>The headline numbers: 79% average task completion vs 42% for GR00T N1.7 and 56% for the GDN variant; the only policy to complete a 5-minute, 10-stage gear-assembly task (2/10); and the paper's centerpiece — a context-length scaling curve, the first in robotics:</p>
+
+<p>[[figure-anchor:robotttt:paper-scaling]]</p>
+
+<p>No code was released, so we rebuilt the mechanism and stress-tested its three load-bearing claims on a toy in-context visuomotor task (2D point-mass with per-episode latent target and gain, heavy observation noise, multi-phase repeated-reach structure as a multi-stage analogue): a faithful TTT-MLP layer with TBPTT, a gated delta-rule layer (≈ gated TTT-linear), KV-cached causal attention, and a no-context MLP, all ~50K params.</p>
+
+<p>[[figure-anchor:robotttt:probe-scaling]]</p>
+
+<p>[[figure-anchor:robotttt:probe-latency]]</p>
+
+<p>What the probe confirms, and what it complicates:</p>
+
+<ul>
+  <li><b>Constant-cost claim: verified mechanistically.</b> Per-step latency is flat for TTT (0.31 ms) and the delta rule (0.14 ms) out to 2048 steps, while KV-cached attention grows linearly and crosses TTT near t≈1000; cumulative cost is O(T) vs O(T²). The TTT constant is ~2.1× the delta rule's — the inner gradient step is real work — so the win is asymptotic, not constant-factor.</li>
+  <li><b>Fast weights genuinely do in-context learning.</b> The inner reconstruction loss falls 0.315→0.05 over a rollout (spiking at phase boundaries), and TTT reaches R²≈0.87 on held-out tasks vs 0.81 no-context — learning happens in weight space, exactly as advertised.</li>
+  <li><b>Caveat 1 — reliability is bought with training, not architecture.</b> Ungated SGD on fast weights is not intrinsically stable: fast-weight drift grows steadily over long rollouts, TTT's accuracy erodes 0.89→0.73 when evaluated at 2× its training horizon, and a TTT model trained at 64-step context outright diverges at 512 (R²→−2.9). The gated delta rule stays flat throughout. RoboTTT's 8K robustness rests on training at 8K (the paper trains with long-context curricula and says little about this), not on a mechanism that is stable by construction.</li>
+  <li><b>Caveat 2 — the nonlinear-fast-model advantage did not reproduce at toy scale.</b> Within the training window, TTT, gated delta, and attention tie; on extrapolation the simpler gated linear recurrence is <i>more</i> stable. The paper's own GDN baseline also underperforms RoboTTT (56% vs 79%), so the nonlinear inner model may matter at real-data scale — but our probe says it is not the source of the context-scaling behavior per se. What carries the scaling is carried-state + long-context training, and a gated linear state gets you the same latency profile more cheaply.</li>
+  <li><b>Caveat 0 — toy saturation.</b> All architectures plateau from ~48 steps on our task because the toy hits Bayes saturation after ~1.5 reach trials; the paper's "steady gains without saturation" to 8K is enabled by the mechanism but rests on real-task richness. Believe the direction, not the universality.</li>
+</ul>
+
+<p>Assessment: real-robot-only evaluation on a single embodiment, small-N cells (10–20 trials), one task for the human-video claim, and no code — yet this is still the most consequential robot-learning paper of the period, because it converts "context" from a prompt-engineering notion into a trained, carried state with a scaling curve. Read together with the first theme, RoboTTT is one answer to the implicit-state diagnosis: the fast weights are a learned, updating estimate of the present — D3's "updating memory" — though no more explicit or inspectable than Kairos's latent matrix.</p>
+
+<h1>Agent post-training and multimodal notes</h1>
+
+<p>Lighter notices from the pool, clustered. None survived to deep-dive depth, but two pairs are worth knowing about.</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">Paper</th>
+      <th background-color="light-gray">Key Contribution</th>
+      <th background-color="light-gray">Why It Matters</th>
+      <th background-color="light-gray">Links</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Demystifying On-Policy Distillation</b> (2026)</td>
+      <td>Systematic study: OPD is an exploration catalyst, not a capability expander; names two pathologies — student-teacher mismatch and length exploitation.</td>
+      <td>Precisely frames when OPD helps agentic RL: dense token-level guidance steers exploration, and prompt diversity beats per-problem sampling. Pairs with SEED below.</td>
+      <td><a href="https://huggingface.co/papers/2607.13399">HF</a> / <a href="https://arxiv.org/abs/2607.13399">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>SEED: Self-Evolving On-Policy Distillation</b> (2026)</td>
+      <td>Converts completed on-policy trajectories into natural-language hindsight skills, then distills their behavioral effect back into the policy during RL.</td>
+      <td>Attacks the sparse-reward supervision gap in long-horizon agents without an external teacher — a self-distillation complement to the OPD analysis.</td>
+      <td><a href="https://huggingface.co/papers/2607.14777">HF</a> / <a href="https://arxiv.org/abs/2607.14777">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>Video = World + Event Stream (Wan-Streamer v0.3)</b> (2026)</td>
+      <td>Reframes native-streaming video as a persistent world plus a changing event stream; pretrains on "predict how the world responds in real time," specialized to full-duplex audio-visual interaction.</td>
+      <td>The world/event decomposition is the same state-vs-observation split as Pixels-to-States, arriving from the streaming-video side — evidence the framing is converging.</td>
+      <td><a href="https://huggingface.co/papers/2607.15038">HF</a> / <a href="https://arxiv.org/abs/2607.15038">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>RxBrain (Hy-Embodied-RxBrain)</b> (2026)</td>
+      <td>Embodied foundation model writing plans as a single sequence interleaving language structure with visual imagination of intermediate/final states.</td>
+      <td>Another vote for joint reasoning+imagination interfaces; worth watching against LingBot/RynnWorld coverage, but claims await open artifacts.</td>
+      <td><a href="https://huggingface.co/papers/2607.14187">HF</a> / <a href="https://arxiv.org/abs/2607.14187">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>VideoChat3</b> (2026)</td>
+      <td>Fully open video MLLM targeting efficient generalist understanding across motion, long video, and streaming interaction.</td>
+      <td>Open-weights video understanding keeps closing on proprietary; useful as the perception front-end for embodied agents.</td>
+      <td><a href="https://huggingface.co/papers/2607.14935">HF</a> / <a href="https://arxiv.org/abs/2607.14935">PDF</a></td>
+    </tr>
+    <tr>
+      <td><b>LongStraw</b> (2026)</td>
+      <td>Long-context RL beyond 2M tokens under a fixed GPU budget.</td>
+      <td>Complementary axis to RoboTTT: scaling context in token-space RL rather than weight-space recurrence.</td>
+      <td><a href="https://huggingface.co/papers/2607.14952">HF</a> / <a href="https://arxiv.org/abs/2607.14952">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h1>Cross-cutting observations</h1>
+
+<p>The three deep threads converge on one arc. <b>State is the binding constraint on world(-action) models, and the field is starting to pay it down.</b> Pixels-to-States documents the debt: six of six recent models keep state implicit, and persistence mechanisms are either past-copies or ungrounded latents. BadWAM prices a piece of the debt: implicit coupling between imagination and action is not a safety feature — it is a monitorable-looking surface that can be driven apart along a measurable frontier, with a geometric ceiling set by shared low-rank input sensitivity. RoboTTT shows one repayment plan: carry the state in fast weights with a self-supervised inner objective, train long-context, and you get flat-latency memory plus in-context adaptation — at the cost of stability guarantees that currently come from training rather than structure.</p>
+
+<p>The open question this run leaves on the table: <b>can a carried state be made both explicit and learned?</b> Kairos's recurrent matrix is carried but opaque; the game-engine lens wants explicit and rule-governed; RoboTTT's fast weights are learned and self-updating but inspectable only by probe. A WAM whose carried state is a structured, queryable object — HP bars for robots, effectively — would satisfy all three papers at once, and the Pixels-to-States data engine (engine-exported states, frame-aligned) is exactly the supervision such a model would need. That is the buildable idea we would pursue next.</p>
+
+<p><b>Run notes.</b> MinerU's API token expired mid-run (401); papers were read via arXiv HTML full text instead, with no loss of depth. All probes are preserved in the run packet: the toy WAM + BadWAM attack suite (numpy, reproducible in minutes), the TTT/delta/attention context-scaling probe with trained checkpoints, and the six-model state taxonomy with quoted evidence.</p>

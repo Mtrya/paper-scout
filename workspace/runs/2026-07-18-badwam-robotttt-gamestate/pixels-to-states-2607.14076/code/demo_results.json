@@ -1,0 +1,87 @@
+{
+  "W": 32,
+  "HP0": 3,
+  "learned_transition": {
+    "alpha": 1.0000000000000544,
+    "beta": -1.000000000000278,
+    "gamma": -1.5543122344752192e-15,
+    "true": {
+      "alpha": 1.0,
+      "beta": -1.0,
+      "gamma": 0.0
+    }
+  },
+  "gaps": [
+    {
+      "gap": 8,
+      "gap_over_W": 0.25,
+      "acc_implicit_window": 0.94625,
+      "acc_explicit_state": 1.0
+    },
+    {
+      "gap": 12,
+      "gap_over_W": 0.375,
+      "acc_implicit_window": 0.9,
+      "acc_explicit_state": 1.0
+    },
+    {
+      "gap": 16,
+      "gap_over_W": 0.5,
+      "acc_implicit_window": 0.84375,
+      "acc_explicit_state": 1.0
+    },
+    {
+      "gap": 20,
+      "gap_over_W": 0.625,
+      "acc_implicit_window": 0.7525,
+      "acc_explicit_state": 1.0
+    },
+    {
+      "gap": 24,
+      "gap_over_W": 0.75,
+      "acc_implicit_window": 0.60875,
+      "acc_explicit_state": 1.0
+    },
+    {
+      "gap": 32,
+      "gap_over_W": 1.0,
+      "acc_implicit_window": 0.53375,
+      "acc_explicit_state": 1.0
+    },
+    {
+      "gap": 48,
+      "gap_over_W": 1.5,
+      "acc_implicit_window": 0.51125,
+      "acc_explicit_state": 1.0
+    },
+    {
+      "gap": 64,
+      "gap_over_W": 2.0,
+      "acc_implicit_window": 0.515,
+      "acc_explicit_state": 1.0
+    },
+    {
+      "gap": 96,
+      "gap_over_W": 3.0,
+      "acc_implicit_window": 0.4875,
+      "acc_explicit_state": 1.0
+    },
+    {
+      "gap": 128,
+      "gap_over_W": 4.0,
+      "acc_implicit_window": 0.48875,
+      "acc_explicit_state": 1.0
+    }
+  ],
+  "visible_count_diagnostic": {
+    "24": {
+      "1": 0.5933333333333334
+    },
+    "48": {
+      "0": 0.48833333333333334
+    },
+    "96": {
+      "0": 0.515
+    }
+  }
+}
