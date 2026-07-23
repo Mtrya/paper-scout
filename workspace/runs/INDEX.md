@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-07-23 — 2026-07-20 to 2026-07-23
+- Doc: https://fudan-nlp.feishu.cn/docx/KLFOdbM3Co7RcUxSBFfcDOlqnxb
+- Run: runs/2026-07-23-xiaomi-mva-drift/
+- Deep threads: Xiaomi-Robotics-1 scaling audit + XR-0 lineage verification (2607.15330), Masked Visual Actions code+LoRA weight probe (2607.19343), long-horizon drift mechanisms taxonomy across ABot-World-0/AlayaWorld/SGF (2607.19191, 2607.18367, 2607.20368)
+- Covered papers: 2607.15330, 2607.19343, 2607.19191, 2607.18367, 2607.20368
+- Shortlisted papers: 2607.11498, 2607.13429, 2607.20207, 2607.14183, 2607.17977, 2607.16401, 2607.16204, 2607.18703, 2607.15524, 2607.18171, 2607.14186
+
 ## 2026-07-18 — 2026-07-17
 - Doc: https://fudan-nlp.feishu.cn/docx/P3S7dtwhyomKNZxULvocMplknX6
 - Run: runs/2026-07-18-badwam-robotttt-gamestate/
