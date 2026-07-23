@@ -1,0 +1,16 @@
+17:from mibot.models.VLM.qwen3vl import Qwen3VLForConditionalGeneration
+27:    """AdaLN modulation: shift-scale transformation used in DiT.
+29:    Returns ``x * (1 + scale) + shift``, following the DiT / AdaLN-Zero
+279:    """DiT decoder layer with AdaLN modulation conditioned on diffusion timestep.
+302:        # AdaLN: produces 6 modulation parameters (shift/scale/gate for attn & ffn)
+313:        """Forward pass with AdaLN modulation.
+329:        # Attention block with AdaLN
+337:        # FFN block with AdaLN
+349:    """Diffusion Transformer that cross-attends to VLM KV-cache with AdaLN timestep conditioning.
+412:        num_steps: int = 5,
+435:        self.beta = Beta(1.5, 1.0)
+442:        self.vlm = Qwen3VLForConditionalGeneration.from_pretrained(
+498:        - ``"beta"``: Beta(1.5, 1.0) rescaled to (0, 0.999)
+547:        """Euler integration: generate action from noise over ``num_steps`` steps.
+581:        1. Embed timestep *t* → 6 AdaLN modulation parameters per layer.
+710:        action, and predicts the velocity.  During inference, runs Euler

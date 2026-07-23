@@ -1,0 +1,14 @@
+[collect:pessimistic] 3 productive h/op-day -> 33,333 operator-days = 133 ops x 1yr or 267 ops x 6mo
+[collect:mid        ] 5 productive h/op-day -> 20,000 operator-days = 80 ops x 1yr or 160 ops x 6mo
+[collect:optimistic ] 7 productive h/op-day -> 14,286 operator-days = 57 ops x 1yr or 114 ops x 6mo
+[label:clip=10s]  36.0M clips ->   29.8 captions/s sustained for 14 days
+[label:clip=20s]  18.0M clips ->   14.9 captions/s sustained for 14 days
+[label:clip=30s]  12.0M clips ->    9.9 captions/s sustained for 14 days
+[storage: 4Mbps] ~180 TB video (excl. pose/actions, raw frames)
+[storage: 8Mbps] ~360 TB video (excl. pose/actions, raw frames)
+[storage:16Mbps] ~720 TB video (excl. pose/actions, raw frames)
+
+Context: RDT2 (arXiv 2602.03310, Feb 2026), the largest *open* UMI corpus,
+is 10,000+ hours -> XR-1 pre-train corpus is ~10x that, and ~50x OXE-scale
+teleop corpora. But the paper's scaling EVIDENCE (Fig 5) only spans
+2.5k-20k hours (12.5%-100% of ~20k h); 20k->100k is a 5x unvalidated leap.

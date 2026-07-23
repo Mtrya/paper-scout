@@ -1,0 +1,75 @@
+{
+  "source": "papers/robotics/xiaomi-robotics1-2607.15330.md (arXiv 2607.15330v2, 22 Jul 2026, pdftotext -layout)",
+  "table1_model_variants": [
+    {"model": "XR-1-2B",  "vlm_layers": 28, "vlm_hidden": 2048, "vlm_params_B": 2.1, "dit_hidden": 1024, "dit_params_B": 0.470, "total_params_B": 2.6},
+    {"model": "XR-1-5B",  "vlm_layers": 36, "vlm_hidden": 2560, "vlm_params_B": 4.4, "dit_hidden": 1024, "dit_params_B": 0.604, "total_params_B": 5.1},
+    {"model": "XR-1-10B", "vlm_layers": 36, "vlm_hidden": 4096, "vlm_params_B": 8.8, "dit_hidden": 2048, "dit_params_B": 1.5,   "total_params_B": 10.5}
+  ],
+  "table2_robocasa_avg_success_pct": {
+    "UVA": 50.0, "UWM": 60.8, "pi0.5": 62.1, "pi0-FAST": 63.6, "GR00T N1.6": 66.2,
+    "Cosmos Policy": 67.1, "RLDX-1": 70.6, "World2Act": 72.6, "Xiaomi-Robotics-1": 74.5
+  },
+  "table3_robocasa365_success_pct": [
+    {"method": "Diffusion Policy",    "avg": 6.1,  "atomic": 15.7, "comp_seen": 0.2,  "comp_unseen": 1.3},
+    {"method": "pi0.5",               "avg": 16.9, "atomic": 39.6, "comp_seen": 7.1,  "comp_unseen": 1.2},
+    {"method": "GigaWorld-Policy 0.1","avg": 20.7, "atomic": 44.4, "comp_seen": 11.8, "comp_unseen": 2.9},
+    {"method": "GR00T-N1.6",          "avg": 21.9, "atomic": 51.1, "comp_seen": 9.4,  "comp_unseen": 1.7},
+    {"method": "WorldDreamer",        "avg": 35.3, "atomic": 66.3, "comp_seen": 26.7, "comp_unseen": 9.0},
+    {"method": "Qwen-RobotManip",     "avg": 35.9, "atomic": 68.6, "comp_seen": 20.1, "comp_unseen": 14.9},
+    {"method": "RLDX-1",              "avg": 36.0, "atomic": 67.6, "comp_seen": 27.9, "comp_unseen": 8.5},
+    {"method": "ABot-M0.5",           "avg": 40.4, "atomic": 75.9, "comp_seen": 38.3, "comp_unseen": 2.7},
+    {"method": "ABot-M0.6",           "avg": 46.6, "atomic": 79.4, "comp_seen": 48.3, "comp_unseen": 7.9},
+    {"method": "Xiaomi-Robotics-1",   "avg": 57.4, "atomic": 80.2, "comp_seen": 57.1, "comp_unseen": 32.1}
+  ],
+  "table3_crosscheck_official_leaderboard": {
+    "url": "https://robocasa.ai/leaderboard.html (fetched 2026-07-23, leaderboard updated 07/21/2026)",
+    "xiaomi_robotics_1": {"rank": 1, "overall": 57.4, "atomic": 80.2, "comp_seen": 57.1, "comp_unseen": 32.1, "open_source": false, "training_config": "batch 512, 120k steps"},
+    "note": "Official leaderboard matches Table 3 exactly; XR-1 entry verified by benchmark maintainers. ABot-M0.5 overall is 40.3 on leaderboard vs 40.4 in paper table (rounding)."
+  },
+  "table5_robodojo_score_over_successrate": [
+    {"method": "GalaxeaVLA (G0)",      "generalization": [4.53, 2.83],  "precision": [8.10, 3.83],  "long_horizon": [12.60, 5.58], "memory": [3.17, 1.89],  "open": [0.70, 0.67], "average": [5.82, 2.96]},
+    {"method": "GigaWorld-Policy",     "generalization": [5.34, 2.89],  "precision": [6.15, 1.83],  "long_horizon": [15.51, 8.92], "memory": [3.46, 2.22],  "open": [0.54, 0.50], "average": [6.20, 3.27]},
+    {"method": "StarVLA-alpha",        "generalization": [3.93, 2.33],  "precision": [9.90, 4.33],  "long_horizon": [14.15, 6.50], "memory": [3.34, 2.44],  "open": [0.68, 0.58], "average": [6.40, 3.24]},
+    {"method": "Xiaomi-Robotics-0",    "generalization": [7.43, 5.56],  "precision": [8.42, 4.58],  "long_horizon": [13.51, 6.92], "memory": [5.07, 3.67],  "open": [0.22, 0.17], "average": [6.93, 4.18]},
+    {"method": "X-WAM",                "generalization": [7.39, 3.33],  "precision": [6.72, 1.83],  "long_horizon": [17.47, 9.08], "memory": [6.32, 4.67],  "open": [0.57, 0.25], "average": [7.69, 3.83]},
+    {"method": "X-VLA",                "generalization": [10.48, 6.78], "precision": [18.32, 12.00],"long_horizon": [16.53, 9.75], "memory": [4.76, 3.56],  "open": [0.55, 0.50], "average": [10.13, 6.52]},
+    {"method": "pi0.5",                "generalization": [13.37, 8.17], "precision": [12.40, 5.50], "long_horizon": [23.54, 14.67],"memory": [5.78, 4.56],  "open": [1.98, 1.67], "average": [11.41, 6.91]},
+    {"method": "Spatial Forcing",      "generalization": [14.12, 9.33], "precision": [17.33, 10.58],"long_horizon": [23.26, 14.58],"memory": [5.43, 4.11],  "open": [1.78, 1.58], "average": [12.38, 8.04]},
+    {"method": "Hy-Embodied-0.5-VLA",  "generalization": [11.77, 8.39], "precision": [13.81, 8.00], "long_horizon": [25.74, 14.92],"memory": [13.37, 12.11],"open": [0.65, 0.58], "average": [13.07, 8.80]},
+    {"method": "Xiaomi-Robotics-1",    "generalization": [23.55, 17.00],"precision": [26.69, 18.83],"long_horizon": [38.39, 23.67],"memory": [7.81, 6.56],  "open": [3.94, 3.58], "average": [20.07, 13.93]}
+  ],
+  "table5_notes": {
+    "metric_definition": "RoboDojo reports score / success rate; score = partial progress 0-100, SR = binary completion; average = mean over 5 capability dimensions (robodojo-2607.04434.md lines 96-98, 210)",
+    "abstract_vs_project_page": "Abstract quotes average SCORE (20.07 vs 13.07); project page quotes average SUCCESS RATE (13.93 vs 8.80). Same table, two metrics. Paper body: 'absolute improvements of 7% and 5.13%' = 20.07-13.07 and 13.93-8.80.",
+    "memory_dimension": "XR-1 LOSES the Memory dimension to Hy-Embodied-0.5-VLA (7.81 vs 13.37 score) because XR-1 uses no history observation; it ranks first in only 4/5 dimensions.",
+    "human_reference": "RoboDojo paper reports human teleop at 80.42 score / 76.03% SR - XR-1 at 20.07/13.93 remains far below human."
+  },
+  "fig8_posttraining_success_pct_chart_read": {
+    "note": "values read from Fig. 8 bar labels (220 dpi render); +/-1-2pp reading tolerance; per-task means do not exactly reproduce the Average bars, suggesting the average is computed over rollouts not task means. Trial count per bar is NOT stated in the paper.",
+    "data_scaling_order": ["100%", "50%", "25%", "12.5%", "0% (Qwen3-VL init)"],
+    "data_scaling": {
+      "Average": [75, 69, 56, 53, 26],
+      "Shoe Storage": [75, 83, 42, 42, 0],
+      "Bag Packing": [63, 63, 52, 30, 7],
+      "Table Organization": [82, 67, 56, 63, 48],
+      "Sofa Tidying": [80, 70, 67, 70, 33]
+    },
+    "model_scaling_order": ["10B", "5B", "2B"],
+    "model_scaling": {
+      "Average": [79, 75, 61],
+      "Shoe Storage": [92, 75, 58],
+      "Bag Packing": [67, 63, 56],
+      "Table Organization": [89, 82, 70],
+      "Sofa Tidying": [77, 80, 60]
+    },
+    "non_monotonicity_finding": "per-task data scaling is NOT monotonic (Shoe Storage 50%:83 > 100%:75; Table Org 12.5%:63 > 25%:56; Sofa 12.5%:70 > 25%:67; model scaling Sofa 5B:80 > 10B:77). Monotonicity holds only on the 4-task average; with unstated trial counts the per-task wobbles are plausibly noise, which softens the paper's clean 'monotonic scaling' narrative.",
+    "data_fraction_note": "pre-training fractions are of ~20k hours UMI, i.e. 2.5k/5k/10k/20k hours - NOT of the 100k corpus"
+  },
+  "downstream_finetuning": {
+    "tasks": ["phone packing", "laundry loading", "printer refilling", "box packing"],
+    "low_data": {"hours_total": 36, "avg_hours_per_task": "<10", "XR-1": {"success": 75, "progress": 90}, "pi0.5": {"success": 40, "progress": 66}},
+    "high_data": {"hours_total": 144, "note": "85% vs 53% per project page (low vs high is <10h vs <40h per task)"},
+    "trials_per_task": 10,
+    "caveat": "only 10 trials/task -> Wilson 95% CI on a single-task 75% estimate is roughly +/- 13pp; per-task deltas vs pi0.5 within noise for some tasks"
+  }
+}

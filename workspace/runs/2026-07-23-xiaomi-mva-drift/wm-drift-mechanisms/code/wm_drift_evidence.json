@@ -1,0 +1,108 @@
+{
+  "thread": "wm-drift-mechanisms",
+  "date_compiled": "2026-07-23",
+  "scope": "Cross-paper comparison of anti-drift mechanisms in interactive/autoregressive video world models",
+  "local_text_caches": {
+    "abot": "papers/world-models/abot-world0-2607.19191.md (pdftotext -layout, 1932 lines, pre-existing)",
+    "alayaworld": "papers/world-models/alayaworld-2607.18367.md (fetched 2026-07-23 from https://arxiv.org/html/2607.18367v1 via curl, HTML->text via bs4, 380 lines, complete document)",
+    "sgf": "papers/world-models/self-gradient-forcing-2607.20368.md (fetched 2026-07-23 from https://arxiv.org/html/2607.20368v1 via curl, HTML->text via bs4, 589 lines, complete document)"
+  },
+  "papers": [
+    {
+      "id": "abot-world0",
+      "arxiv": "2607.19191",
+      "title": "ABot-World-0: Infinite Interactive World Rollout on a Single Desktop GPU",
+      "mechanism_name": "LongForcing",
+      "diagnosed_drift_cause": "teacher-horizon mismatch: teacher supervision covers only short horizons, so long student self-rollouts enter context regions with no distribution-matching signal and drift (paper frames drift explicitly as a distribution-shift problem, Sec. 6)",
+      "fix": "final DMD stage on LONG student self-rollouts, scored by an extended-horizon teacher; distribution-level correction, no frame-level matching",
+      "pipeline_context": "bidirectional teacher -> (1) teacher forcing to causal student on GT history -> (2) causal ODE distillation to few-step -> (3) LongForcing DMD on long self-rollouts",
+      "claimed_horizons": {
+        "quantitative": "60-second rollouts (LongForcing ablation); WorldRoamBench benchmark horizon",
+        "qualitative": "hour-scale and day-scale rollouts shown as sampled checkpoints (Sec. 5.1.2, Fig. 5-7)"
+      },
+      "drift_metrics": {
+        "drift_curves": "YES - Fig. 10: HPSv3, high-saturation pixel ratio, perceptual blur score, patch repeat ratio vs time (0-60s), LongForcing vs adapted Causal-Forcing baseline",
+        "benchmark": "WorldRoamBench sub-dimensions (Strict/Partial Acc, Traj. Score, Aesthetic, Imaging, Mechanics, Memory) vs Genie 3, HappyOyster, LingBot-World, HY-World 1.5",
+        "identity_consistency_long_horizon": "qualitative only (hour/day-scale checkpoints); no quantitative identity metric at >60s"
+      },
+      "deployment": {
+        "claim": "720p (1280x704) 16 FPS, 1.2s action-to-first-frame, <=19.3 GiB VRAM, single RTX 5090 (paper Table 1)",
+        "stack": "LightVAE decoder (TAEHV-inspired), FP8/low-bit DiT (LightX2V practice), SageAttention2, Fast-RoPE + Triton kernels, bounded KV cache w/ rolling eviction + KV-cache quantization, FramePack-style module swapping"
+      },
+      "artifacts": {
+        "code": {"url": "https://github.com/amap-cvlab/ABot-World", "status": "VERIFIED 2026-07-23 via GitHub API: exists, 883 stars, Apache-2.0, inference code + gradio demo + quantizer + web_client; pushed 2026-07-22"},
+        "weights": {"url": "https://huggingface.co/acvlab/ABot-World-0-5B-LF", "status": "VERIFIED 2026-07-23 via hf-mirror API: exists, 992 downloads, Apache-2.0, base Wan2.2-TI2V-5B; also on ModelScope (amap_cvlab/ABot-World-0-5B-LF)"},
+        "not_released": "bidirectional teacher model; 500-hour action-annotated training dataset (promised 'very soon' as of 2026-07-10)",
+        "demo": "online playground https://abot-world.amap.com + HF Space acvlab/abot-world-interactive (listed in README, not independently verified)"
+      }
+    },
+    {
+      "id": "alayaworld",
+      "arxiv": "2607.18367",
+      "title": "AlayaWorld: Interactive Long-Horizon World Modeling - Full Technical Report",
+      "mechanism_name": "corrupted-history training (Helios drift simulation + error bank of own rollout residuals); bounded visual context (sink + compressed temporal history + geometry-aligned spatial memory + nearby frame)",
+      "diagnosed_drift_cause": "context-quality robustness: at inference the model must condition on its own imperfect past (blur, illumination/color shift, noise, model-specific residuals); a model trained on clean history cannot recover from a corrupted prefix",
+      "fix": "training-time corruption of temporal-memory / spatial-memory / nearby context tokens (sink kept clean): (a) Helios-style latent corruptions - additive noise, down/up blur, saturation shift; (b) error bank (StableVideoInfinity-style) replaying the model's OWN reconstruction residuals bucketed by chunk length and noise level, warm-up scheduled; plus discrete AR distillation (DMD + self-forcing++ + consistency) to 4 steps/chunk",
+      "pipeline_context": "LTX-2.3 (22B multimodal, audio removed -> ~13B video DiT; abstract says 15B) -> (i) bidirectional full FT -> (ii) AR training w/ memory + camera control + anti-drift training + Next Forcing head -> (iii) 4-step discrete distillation",
+      "claimed_horizons": {
+        "quantitative": "iWorld-Bench Action Control + Memory Ability tasks (per-clip horizon not stated in report); WorldMark suite via World Model Arena Elo (warena.ai)",
+        "qualitative": "'extended rollouts' (Fig. 8); repo README: 1 chunk ~= 1.33s @24fps, ~45 chunks ~= 1 minute; '--ttc' flag recommended for ~1 min rollouts"
+      },
+      "drift_metrics": {
+        "drift_curves": "NO - endpoint benchmark metrics only",
+        "benchmark": "iWorld-Bench: best on 7 of 8 metrics vs Cosmos, HunyuanVideo-1.5, WAN 2.2, YUME 1.5, Matrix-Game 2.0, HY-World 1.5; drift-sensitive wins: Brightness Consistency 0.9492, Color Temp. Constraint 0.9379, Sharpness Retention 0.8361, Memory Symmetry 0.8871 (Table 3)",
+        "identity_consistency_long_horizon": "loop-closure Memory Ability metrics (Memory Symmetry, Trajectory Alignment) quantify revisit consistency, but horizon unspecified; long-rollout stability claim is qualitative (Fig. 8)"
+      },
+      "deployment": {
+        "claim": "24 fps at 540p/720p, 4 denoising steps/chunk, ~1 chunk/s-scale; report does NOT state inference hardware or VRAM",
+        "stack": "15B-class DiT + Gemma-3-12B text encoder (gated) + Depth-Anything-3 (giant) for spatial memory; merged_infer.safetensors alone is 33.6 GB; multi-GPU Ulysses context parallel supported; test-time '--ttc' Pathwise Test-Time Correction re-anchors chunks to first frame to curb appearance drift (in released code, NOT in the paper)"
+      },
+      "artifacts": {
+        "code": {"url": "https://github.com/AlayaLab/AlayaWorld", "status": "VERIFIED 2026-07-23 via GitHub API: exists, 646 stars, inference code released 2026-07-16, pushed 2026-07-23; training code + training data on roadmap, NOT yet released"},
+        "weights": {"url": "https://huggingface.co/AlayaLab/AlayaWorld", "status": "VERIFIED 2026-07-23 via hf-mirror API: exists, 196 downloads, 33.6 GB merged_infer.safetensors, LTX-2 Community License (non-commercial/academic; >=$10M revenue needs commercial license)"},
+        "license_caveat": "LTX-2 community license, non-commercial; ABot and SGF are Apache-2.0"
+      }
+    },
+    {
+      "id": "self-gradient-forcing",
+      "arxiv": "2607.20368",
+      "title": "Self Gradient Forcing: Native Long Video Extrapolation",
+      "mechanism_name": "Self Gradient Forcing (SGF), two-pass context-gradient reconstruction",
+      "diagnosed_drift_cause": "historical context-gradient gap: Self Forcing trains on own-rollout histories (fixes exposure bias) but the historical KV cache is frozen rollout state; future losses supervise cache READING but never the clean-timestep (t_ctx=0) computation that WRITES generated latents into K/V memory; shared DiT parameters updated at noisy timesteps can silently degrade the unsupervised cache-writing path",
+      "fix": "Pass 1: no-grad serial rollout matching inference, record context latents + noisy latents at a sampled exit step. Pass 2: parallel reconstruction of the exit-step computation - recorded context re-encoded at clean timestep as stop-gradient INPUT but with gradients through the context K/V formation and future-to-context attention. Restores memory-writing supervision without serial BPTT (79->87 GB peak, 10.39->11.71 s/5 steps; direct differentiable cache OOMs)",
+      "pipeline_context": "training-only method on top of Self Forcing / Causal Forcing lineage; Wan2.1-T2V-1.3B-scale causal DiT; evaluated frame-wise (sink4/FIFO16) and chunk-wise (sink3/FIFO6/chunk3), TF / causal-CD / causal-ODE inits",
+      "claimed_horizons": {
+        "quantitative": "5s training window; evaluation at 5s (VBench), 60s (VBench-Long prompts), 240s (128 MovieGen prompts, VBench-Long metrics)",
+        "qualitative": "abstract claims 'several minutes'; tables top out at 240s = 4 min"
+      },
+      "drift_metrics": {
+        "drift_curves": "NO - endpoint metrics at 3 horizons (5/60/240s), not metric-vs-time within a rollout",
+        "benchmark": "paired SGF vs Self Forcing under matched init/prompts/seeds/geometry: VBench-Long subject consistency, background consistency, imaging, motion smoothness, flickering, aesthetics; GSB human study >1900 paired judgments, all positive (e.g. +48.7% frame-wise 240s TF init)",
+        "identity_consistency_long_horizon": "subject consistency 0.936->0.969 (causal-ODE 240s frame-wise); background 0.943->0.966; qualitative strips show identity/crop/layout drift in SF vs SGF",
+        "confound_noted_by_authors": "dynamic degree can be HIGHER for Self Forcing because scene jumps/deformations create large incoherent apparent motion (App. G)"
+      },
+      "deployment": {
+        "claim": "training-time method; inference identical to Self Forcing (streaming KV cache); training measured at 79-87 GB GPU memory (H100-class)",
+        "stack": "FlexAttention compiled static block-sparse causal mask for Pass 2"
+      },
+      "artifacts": {
+        "code": {"url": "https://github.com/zhuang2002/Self_Gradient_Forcing", "status": "VERIFIED 2026-07-23 via GitHub API: exists, 65 stars, Apache-2.0, FULL release same day as paper (2026-07-23): training code (train.py, trainer/), inference.py, demo.py, configs; Causal-Forcing-based setup"},
+        "weights": {"url": "https://huggingface.co/JunhaoZhuang/Self_Gradient_Forcing", "status": "VERIFIED 2026-07-23 via hf-mirror API: exists, 61 downloads, framewise + chunkwise SGF checkpoints, Apache-2.0, Wan2.1 base"},
+        "note": "paper says 'code and models will be released' but release happened by 2026-07-23 (README news dated 2026-07-23)"
+      }
+    }
+  ],
+  "baseline_context": {
+    "self_forcing": "Huang et al. 2025; diagnoses exposure bias (train on GT context vs inference on self-generated context); fixes by DMD-scored self-rollout training; all three papers build on this paradigm",
+    "related_local_readings": [
+      "papers/world-models/nextforcing-2606.11187.md (Next Forcing: future-aware supervision; AlayaWorld uses a Next Forcing head as auxiliary loss)",
+      "papers/world-models/badwam-2607.15207.md (world-action drift; prior deep dive runs/2026-07-18-badwam-robotttt-gamestate/)",
+      "papers/world-models/physisforcing-2606.28128.md"
+    ]
+  },
+  "verification_log": {
+    "method": "GitHub REST api.github.com/repos + /search; HF via hf-mirror.com/api/models; arXiv HTML via curl; project pages via FetchURL",
+    "date": "2026-07-23",
+    "raw_evidence_file": "code/artifact_verification.log"
+  }
+}

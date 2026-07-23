@@ -1,0 +1,140 @@
+<title>Paper Scout Research Report - 2026-07-23</title>
+
+<p>This run covered the 2026-07-20 to 2026-07-23 Hugging Face pool (103 papers) and went deep on three threads. The headline finding is about <b>evidence quality, not results</b>. <b>Xiaomi-Robotics-1</b> claims VLA scaling from 100K hours of UMI trajectories — our table-level audit shows the benchmark numbers are real (one is already leaderboard-verified), but the scaling curves that carry the paper's thesis stop at 20K hours, and the "crucial" auto-labeling pipeline is never ablated. <b>Masked Visual Actions</b> turns a video model into a forward/inverse dynamics model with a 15-hour LoRA — our weight-level probe of the released adapters shows exactly where that interface lives in the network, and exactly how thin the policy-evaluation evidence is (a 7-point correlation). And a three-paper cluster on <b>long-horizon interactive world models</b> (ABot-World-0, AlayaWorld, Self Gradient Forcing) turned out to be one coherent stack: four distinct diagnoses of drift, four composable fixes — with the uncomfortable common gap that nobody measures identity or controllability decay past one minute.</p>
+
+<callout emoji="✅" background-color="light-green">
+  <p><b>Standout:</b> the drift-mechanisms cluster is the most buildable finding of the period. SGF's two-pass training (code released same-day, Apache-2.0) supervises how context is <i>written</i> into the KV cache — a gap Self Forcing leaves open — and it bolts cleanly onto ABot-World-0's causal student, whose 5B weights already run at 720p/16FPS on a single consumer GPU. The composability map below is directly actionable.</p>
+</callout>
+
+<h1>VLA progress this week is alignment and data, not architecture</h1>
+
+<p>No new VLA architecture showed up in this pool. What showed up instead: frame alignment (robot-centric pointmaps), representation alignment during finetuning, semantic-geometric decoupling for grasping, two egocentric data releases, and one very large data-scale bet from Xiaomi. The field is currently spending its effort fixing what behavior cloning breaks and feeding models more real trajectories — which makes the Xiaomi paper the right thing to audit closely.</p>
+
+<h2>Xiaomi-Robotics-1: the numbers are real, the scaling story is thinner than the title</h2>
+<p>Guo et al. (Xiaomi, 2026) · <a href="https://huggingface.co/papers/2607.15330">HF</a> · <a href="https://arxiv.org/abs/2607.15330">PDF</a> · <a href="https://robotics.xiaomi.com/xiaomi-robotics-1.html">Project</a> · <a href="https://github.com/XiaomiRobotics/Xiaomi-Robotics-1">Repo (README only)</a></p>
+
+<p>The paper's pitch: pre-train a VLA on <b>100,000 hours</b> of embodiment-free UMI trajectories spanning 1,700+ scenarios, auto-labeled by a VLM pipeline that describes scene-state transitions per clip; post-train on 7,200 hours of in-home real-robot data plus cross-embodiment mixes; obtain a foundation policy that adapts to new tasks from a few hours of demos. Reported results are strong: 75% success at &lt;10h of demos per task vs π0.5's 40%, and SOTA on four sim benchmarks. Before anything else, we resolved a confusing surface inconsistency — the abstract, the project page, and the paper body quote <i>different</i> headline numbers:</p>
+
+<table>
+  <colgroup><col width="150"/><col width="150"/><col width="150"/><col width="300"/></colgroup>
+  <thead><tr><th background-color="light-gray">Benchmark</th><th background-color="light-gray">Abstract says</th><th background-color="light-gray">Project page says</th><th background-color="light-gray">What it actually is</th></tr></thead>
+  <tbody>
+    <tr><td>RoboDojo</td><td>20.07 vs 13.07</td><td>13.93 vs 8.80</td><td>Same table, two metrics. RoboDojo reports <b>score / success-rate</b> pairs; the abstract quotes average score, the page quotes average SR. Table 5 gives both: XR-1 = 20.07/13.93, Hy-Embodied-0.5-VLA = 13.07/8.80. All baselines match the public leaderboard exactly.</td></tr>
+    <tr><td>RoboCasa365</td><td>57.6 (v1) / 57.4 (v2)</td><td>57.4</td><td>v1→v2 editing artifact; the v2 intro still carries a stray "57.6". The official robocasa.ai leaderboard (updated 2026-07-21) lists XR-1 at <b>57.4, rank #1</b> — benchmark-maintainer-verified.</td></tr>
+  </tbody>
+</table>
+
+<p>So the benchmark claims hold up to external scrutiny. The scaling claims are another matter. Three findings from our audit:</p>
+
+<p><b>1. Every scaling curve stops at ~20K hours — one fifth of the title number.</b> Figures 5 and 8 sweep data fractions of a ~20K-hour UMI subset (2.5K→20K) and model sizes 2.6B→10.5B. The "no saturation" claim rests on three doublings whose marginal post-train gains are already <i>declining</i> (+27, +16, +6pp). The 20K→100K leap — the paper's entire premise — is a 5× unvalidated extrapolation: the 100K model appears only in benchmark tables, never in a scaling curve.</p>
+
+<p>[[figure-anchor:xiaomi:pretrain-scaling]]</p>
+
+<p><b>2. The smooth monotonic improvement is an averaging artifact.</b> We digitized Fig. 8's bars: per-task scaling is visibly non-monotonic — Shoe Storage hits 83% at 50% data vs 75% at 100%; Sofa Tidying scores 80% at 5B vs 77% at 10B. The clean "Average" column hides regressions on individual tasks, and trial counts per bar are never stated.</p>
+
+<p>[[figure-anchor:xiaomi:posttrain-scaling]]</p>
+
+<p><b>3. The auto-labeling pipeline — called "crucial" in the abstract — is completely unablated.</b> What the paper discloses: fixed-length clips (length never stated), Qwen3.5-27B writing structured <code>Gripper:/Object:{state-change}</code> captions, ~2 weeks of processing for 100K hours. No verification pass, no failure-mode analysis, and no label-granularity-vs-scale ablation — meaning conditioning quality and data scale are fully confounded at every scaling point. The downstream instruction-alignment stage exists precisely because these auto-labels are <i>not</i> natural instructions, which is itself telling.</p>
+
+<p>Two more things worth knowing. First, the lineage: we verified against the open XR-0 codebase that XR-1 is the <b>same architecture</b> (Qwen3-VL + DiT mixture-of-transformers, verbatim noise schedule and 5-step Euler integrator) with a new data recipe; the one genuinely new mechanism is a Choice-Policies auxiliary loss fixing a copy shortcut where the DiT attends to the VLM's action tokens. Second, the Fermi check: 100K UMI hours implies roughly 60–270 full-time collectors for a year, 180–720TB of video, and O(100) inference GPUs for labeling — about 10× RDT2's 10K hours, the largest <i>open</i> UMI corpus. This is an industrial moat, not a recipe a lab can follow. And the reproducibility verdict as of today: repo is README+PDF (246 stars), no weights anywhere, and the real-robot adaptation claims rest on ~10 trials per task (±13pp CIs) with private data. Buried caveat worth surfacing: XR-1 <i>loses</i> RoboDojo's Memory dimension (7.81 vs 13.37) because it observes no history — and the human teleop reference on RoboDojo is 80.4, so 20.07 is SOTA but far from human.</p>
+
+<table>
+  <colgroup><col width="200"/><col width="230"/><col width="230"/><col width="90"/></colgroup>
+  <thead><tr><th background-color="light-gray">Paper</th><th background-color="light-gray">Key Contribution</th><th background-color="light-gray">Why It Matters</th><th background-color="light-gray">Links</th></tr></thead>
+  <tbody>
+    <tr><td><b>See like a Robot: Robot-Centric Pointmaps for VLAs</b> (2026)</td><td>Feeds VLA policies pointmaps in the robot's own frame instead of the camera frame — a drop-in change for π0.5/SmolVLA.</td><td>Fixes a quiet coordinate-frame mismatch; gains widen specifically under unseen camera placements, i.e. real deployment shift.</td><td><a href="https://arxiv.org/abs/2607.11498">PDF</a></td></tr>
+    <tr><td><b>Anchor-Align: Generalizable VLA Finetuning</b> (2026)</td><td>Diagnoses BC finetuning erasing pretrained VLM representations and misaligning language with action; anchors representations during finetuning.</td><td>Real-robot success 28→54% and 37→60% on two VLA families — large gains from not destroying the backbone, no new architecture.</td><td><a href="https://arxiv.org/abs/2607.13429">PDF</a></td></tr>
+    <tr><td><b>SeededGrasp</b> (2026)</td><td>VLM predicts a "seed point" that conditions a lightweight multi-embodiment grasp generator; 2.5M-grasp cluttered-tabletop dataset, code+data released.</td><td>Clean semantic/geometric split: let the VLM decide <i>what</i>, a small specialist decide <i>how</i> — a working System-1/2 pattern for grasping.</td><td><a href="https://arxiv.org/abs/2607.20207">PDF</a></td></tr>
+    <tr><td><b>Open-AoE</b> (2026)</td><td>~2,000h open egocentric manipulation dataset (500+ contributors, MANO hand annotations, atomic actions) with retargeting and training toolchain.</td><td>The open-data counterweight to Xiaomi's closed 100K hours; explicitly targets VLA, WAM, and world-model training.</td><td><a href="https://arxiv.org/abs/2607.14183">PDF</a></td></tr>
+    <tr><td><b>RynnBrain 1.1</b> (2026)</td><td>Embodied foundation model family (2B/9B/122B-A10B) with contact-point prediction, native 3D grounding, cross-embodiment VLA on three humanoids.</td><td>Solid version-bump report from a team shipping consistently; contact-point prediction is a useful supervision signal to steal.</td><td><a href="https://arxiv.org/abs/2607.17977">PDF</a></td></tr>
+  </tbody>
+</table>
+
+<h1>Video models as robot-facing world models</h1>
+
+<p>Two papers this week ask what a video foundation model can <i>do</i> for robotics beyond pretty rollouts. One proposes a control interface; the other audits whether any of these models understand physics. Our probe of the first found real substance in the weights — and a headline number that needs an asterisk.</p>
+
+<h2>Masked Visual Actions: a 15-hour LoRA control interface — we read the weights to find where it lives</h2>
+<p>Alzayer, Huang et al. (Stanford/UMD/Harvard, 2026) · <a href="https://huggingface.co/papers/2607.19343">HF</a> · <a href="https://arxiv.org/abs/2607.19343">PDF</a> · <a href="https://masked-visual-actions.github.io/">Project</a> · <a href="https://github.com/HadiZayer/masked-visual-actions">Code</a> · <a href="https://huggingface.co/HadiZayer/masked-visual-actions">Weights</a></p>
+
+<p>The idea: express action as a <b>partially revealed trajectory in pixel space</b>. Reveal the robot's motion and the video model becomes a forward dynamics model predicting the scene's response; reveal the desired <i>object</i> motion and the same checkpoint recovers robot behavior consistent with that outcome. One 15-hour finetune of Wan2.2-Fun-A14B-Control, one checkpoint, three downstream uses (planning by ranking candidate futures, policy evaluation, action extraction).</p>
+
+<p>[[figure-anchor:mva:interface]]</p>
+
+<p>Reading the released code and pinned DiffSynth-Studio pipeline source told us what the paper's prose does not: <b>there is no mask channel</b>. A masked visual action is an ordinary RGB video fed through the base model's native <code>control_video</code> input — VAE-encoded and channel-concatenated with the noisy latents, with the reference first frame prepended as an extra token frame. The mask exists only implicitly in pixel space (unrevealed = uniform gray; revealed entity keeps its pixels), built by SAM cut-outs ("A robotic arm") or translucent URDF renders with bright-red gripper fingers. The released <code>infer.py</code> exercises only the forward direction; inverse modeling from object masks is claimed zero-shot, and the renderer that makes the control videos is "coming soon."</p>
+
+<p>We then probed the released LoRA weights directly (both experts, 2.45GB each, SHA256 recorded). The adapters are <b>fat</b> — rank 256 across all 40 blocks, 1.23B params per expert, ~8.8% of the 14B expert — and their structure is informative:</p>
+
+<p>[[figure-anchor:mva:lora-norms]]</p>
+
+<p>Per-block update norms peak at DiT blocks 2–3 (~165) and decay monotonically to ~12 at block 39, in both experts: <b>the interface lives in the early blocks</b>, where the control channel is first fused. And the high-noise expert (which handles global structure) rewires <code>cross_attn.k/q</code> hardest — the text pathway being subordinated to the visual control channel — while high/low profiles correlate at r=0.912. This is the kind of fact you cannot get from the paper: the "15-hour finetune" is not a light touch, it is a targeted rewiring of the model's conditioning front-end.</p>
+
+<p>The headline downstream claim needs scrutiny. The r=0.982 correlation between imagined-rollout outcomes and real execution is <b>7 task-level points from a single open-loop Diffusion Policy</b> on RoboCasa (10 rollouts per scene, manual rubric) — a correlation across per-task success rates, not a rank correlation across policies or checkpoints, with acknowledged positive bias. The planning gains (+7–26%, Best-of-10, Gemini-judged with a genuinely careful anti-hallucination protocol in the appendix) are actually the stronger evidence. And the 90% action-extraction number comes with a favorable setup: baselines only see the first generated frame. Our verdict: a clever, honest engineering result — a cross-embodiment control interface for the price of a LoRA — but "world model for policy evaluation" is oversold on seven points. Local reproduction is blocked precisely: ~67GB of bf16 weights vs a 16GB card, and DiffSynth disk-offload would stream ~2.8TB per 81-frame clip.</p>
+
+<table>
+  <colgroup><col width="200"/><col width="230"/><col width="230"/><col width="90"/></colgroup>
+  <thead><tr><th background-color="light-gray">Paper</th><th background-color="light-gray">Key Contribution</th><th background-color="light-gray">Why It Matters</th><th background-color="light-gray">Links</th></tr></thead>
+  <tbody>
+    <tr><td><b>Apple-π: Thinking with Video Towards Law-Grounded Physical Intelligence</b> (2026)</td><td>Physics benchmark for video world models with stage-resolved diagnosis (Perception→Formulation→Deduction); best model scores 0.473.</td><td>The skeptic's counterweight to MVA-style optimism: today's video models are not law-grounded, and the stage breakdown shows <i>where</i> they fail.</td><td><a href="https://arxiv.org/abs/2607.16401">PDF</a></td></tr>
+    <tr><td><b>Masked Diffusion LMs as Text-Based World Models</b> (2026)</td><td>1.2B–7B masked diffusion LMs as steerable text world models for agentic RL; beat AR LLMs 4× their size; up to 47% zero-shot gains on ScienceWorld/ALFWorld/AppWorld; open-sourced with 239K trajectories.</td><td>Cheap, steerable environment simulators for agent training — directly usable infrastructure if the transition fidelity holds up.</td><td><a href="https://arxiv.org/abs/2607.16204">PDF</a></td></tr>
+  </tbody>
+</table>
+
+<h1>The drift stack: four diagnoses of long-horizon world-model decay</h1>
+
+<p>Three papers in one week attack the same problem — autoregressive video world models drift off-distribution in long closed-loop rollouts — and each blames a different layer of the stack. Read together they form a coherent taxonomy rather than competing claims, so we investigated them as one thread.</p>
+
+<h2>ABot-World-0 × AlayaWorld × Self Gradient Forcing: same problem, four layers, composable fixes</h2>
+<p>Jiang et al. / AlayaWorld Team / Zhuang et al. (2026) · <a href="https://arxiv.org/abs/2607.19191">ABot PDF</a> · <a href="https://arxiv.org/abs/2607.18367">AlayaWorld PDF</a> · <a href="https://arxiv.org/abs/2607.20368">SGF PDF</a> · <a href="https://github.com/amap-cvlab/ABot-World">ABot Code</a> · <a href="https://github.com/AlayaLab/AlayaWorld">AlayaWorld Code</a> · <a href="https://github.com/zhuang2002/Self_Gradient_Forcing">SGF Code</a></p>
+
+<p>All three inherit the shared baseline: <b>Self Forcing</b> fixes exposure bias by training on the model's own rollouts scored by distribution-matching distillation. None claims to improve on that layer. What each adds:</p>
+
+<p>[[figure-anchor:drift:taxonomy]]</p>
+
+<p><b>AlayaWorld</b> diagnoses a <i>context-quality gap</i>: the model cannot recover from its own degraded past. Its fix is corrupted-history training — Helios-style latent corruptions (noise/blur/saturation) plus an <b>error bank</b> of its own reconstruction residuals, bucketed by chunk length and noise level — applied to temporal and spatial-memory tokens while the sink frame stays clean. <b>SGF</b> diagnoses a subtler <i>memory-writing gradient gap</i>: in vanilla Self Forcing the history KV cache is frozen rollout state, so future losses supervise cache <i>reading</i> but never cache <i>writing</i> — the clean-timestep K/V formation drifts as shared DiT parameters update. The fix is a two-pass scheme that re-opens gradients through context K/V formation without backpropagating the serial rollout:</p>
+
+<pre lang="python" caption="SGF two-pass training (reconstructed from the paper's algorithm)"><code># Pass 1: no-grad autoregressive rollout, exactly matching inference
+with torch.no_grad():
+    ctx, noisy = rollout_to_exit_step(model, prompt)   # self-generated context + exit-step latents
+
+# Pass 2: parallel context-gradient reconstruction at the recorded exit step
+ctx_sg = ctx.detach()                # generated context as stop-gradient CLEAN latents
+kv = model.encode_kv(ctx_sg)         # gradients flow through HOW context becomes K/V
+loss = mse(model.denoise(noisy, kv=kv), target)   # future losses supervise memory-writing
+loss.backward()                      # +13% wall-clock; direct differentiable cache OOMs</code></pre>
+
+<p><b>ABot-World-0</b> diagnoses a <i>teacher-horizon mismatch</i>: the distillation teacher only demonstrates short horizons, so long student rollouts have no supervision target. LongForcing runs the final DMD stage on <i>long</i> student self-rollouts against an <i>extended-horizon</i> teacher — and the paper explicitly rejects the over-anchoring alternative (sinks "delay" drift but lock the scene).</p>
+
+<p><b>Composability — the actionable result.</b> SGF vs corrupted-history training is cleanly orthogonal (memory encoding vs input robustness). LongForcing overlaps with corrupted-history in effect (self-rollout DMD implicitly trains on imperfect context) but neither subsumes the other — corrupted-history is teacher-free and explicitly teaches <i>recovery</i>. And bolting SGF onto the others: clean for ABot (chunk-wise causal DiT with sink+FIFO KV cache is exactly SGF's evaluated geometry), partial for AlayaWorld (its H_φ history compressor and non-differentiable depth-warped spatial memory sit outside SGF's gradient picture).</p>
+
+<p><b>Evidence quality, ranked.</b> ABot is the only paper with actual <i>drift curves</i> — four metrics vs time over 60s — but they are self-baseline-only and stop at one minute. SGF is the best-controlled (matched init/seed/geometry, 5s training window extrapolating to 240s, &gt;1,900 human GSB judgments) but reports endpoints only and is non-interactive. AlayaWorld has the broadest benchmark (iWorld-Bench, big margins on drift-sensitive metrics) but never states the horizon and shows no curves. The common gap is stark: <b>nobody quantifies identity or controllability decay at 10–60 minutes</b>, which is the regime "interactive world model" actually promises.</p>
+
+<p><b>Artifact status today (all verified).</b> ABot ships code (883★) and 5B weights that run at 720p/16FPS in 19.3GiB — a 24GB consumer card suffices. AlayaWorld ships inference code and 33.6GB of weights under LTX-2's <b>non-commercial</b> license, with gated dependencies (Gemma-3-12B, DA3-Giant). SGF shipped full training+inference code and checkpoints <i>the same day as the paper</i>; inference is desktop-feasible (Wan2.1-1.3B scale), training wants ~87GB. For a lab with one good GPU, the buildable path is ABot weights now, SGF's two-pass when you next train.</p>
+
+<table>
+  <colgroup><col width="200"/><col width="230"/><col width="230"/><col width="90"/></colgroup>
+  <thead><tr><th background-color="light-gray">Paper</th><th background-color="light-gray">Key Contribution</th><th background-color="light-gray">Why It Matters</th><th background-color="light-gray">Links</th></tr></thead>
+  <tbody>
+    <tr><td><b>Generative World Renderer at the Speed of Play</b> (2026)</td><td>Systems report on distilling an interactive world renderer to play-speed latency.</td><td>Mostly engineering of known recipes, but the latency budget breakdown is useful for anyone deploying these models.</td><td><a href="https://arxiv.org/abs/2607.18703">PDF</a></td></tr>
+  </tbody>
+</table>
+
+<h1>Harnesses as optimizable artifacts</h1>
+
+<p>A quieter thread in the pool: the agent harness itself is becoming a first-class thing to optimize, not fixed scaffolding. Three papers worth noticing, none deep-dived this run.</p>
+
+<table>
+  <colgroup><col width="200"/><col width="230"/><col width="230"/><col width="90"/></colgroup>
+  <thead><tr><th background-color="light-gray">Paper</th><th background-color="light-gray">Key Contribution</th><th background-color="light-gray">Why It Matters</th><th background-color="light-gray">Links</th></tr></thead>
+  <tbody>
+    <tr><td><b>Recursive Harness Self-Improvement</b> (2026)</td><td>Treats the agent harness as an optimizable prompt-level artifact; a few RHI iterations beat max-reasoning-effort baselines at ~60% lower inference cost.</td><td>Directly adjacent to heuristic-learning ideas: the open question is whether learned harnesses transfer across task families or are per-task prompt overfitting.</td><td><a href="https://arxiv.org/abs/2607.15524">PDF</a></td></tr>
+    <tr><td><b>FlashRT</b> (2026)</td><td>Coding-agent harness that lifts reference implementations of real-time multimodal systems (incl. video world models) into optimized multi-GPU deployments; up to 70× latency cut, beats vLLM-Omni on AMD.</td><td>Agent-driven systems optimization aimed at exactly the world-model workloads above; the chain-of-program IR + measurement-gated loop is an inspectable design.</td><td><a href="https://arxiv.org/abs/2607.18171">PDF</a></td></tr>
+    <tr><td><b>NexForge</b> (2026)</td><td>Requirement-driven synthesis of executable agent tasks; lifts an open 35B-A3B model to 75.3% Terminal-Bench 2.1 (SOTA open-source); models public.</td><td>Task synthesis as the lever for agent capability — complements RHI's harness-level optimization from the data side.</td><td><a href="https://arxiv.org/abs/2607.14186">PDF</a></td></tr>
+  </tbody>
+</table>
+
+<h1>Cross-cutting observations</h1>
+
+<p><b>The release gap split cleanly this week.</b> We verified artifact status for every deep-dive paper: ABot-World-0 (code+weights), AlayaWorld (code+weights, non-commercial), SGF (full code+checkpoints, same-day), Masked Visual Actions (inference code + both LoRAs; renderer, data, and eval code missing) all shipped <i>something</i> usable. The biggest claim of the week — Xiaomi's 100K hours — shipped a README and a PDF. The pattern is becoming reliable: the more industrial the result, the thinner the artifact. Plan your reading time accordingly.</p>
+
+<p><b>Evidence quality is the bottleneck, not ideas.</b> Xiaomi's scaling thesis rests on a 5× extrapolation past the last measured point; MVA's policy-evaluation claim rests on 7 correlation points; every drift paper stops measuring at 60–240 seconds while promising open-ended interaction. All three threads had a good idea <i>and</i> a gap between the idea and its demonstration. The most useful community contribution right now would not be another mechanism — it would be a shared, long-horizon, identity-and-controllability benchmark that runs for an hour.</p>

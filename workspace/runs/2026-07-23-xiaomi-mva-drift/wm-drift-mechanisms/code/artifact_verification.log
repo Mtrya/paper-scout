@@ -1,0 +1,72 @@
+# Artifact verification log — wm-drift-mechanisms thread, 2026-07-23
+# All checks run from this machine on 2026-07-23 (UTC).
+
+## 1. AlayaLab/AlayaWorld (GitHub)
+GET https://api.github.com/repos/AlayaLab/AlayaWorld
+-> 200 OK. full_name AlayaLab/AlayaWorld, private=false, created 2026-07-07,
+   pushed_at 2026-07-23T04:57:22Z, stargazers 646, forks 26, license NOASSERTION.
+   Contents: LICENSE, NOTICE, README.md, THIRD_PARTY_LICENSES.md, requirements.txt,
+   dirs: assets, configs, flash_alaya, inference, playground.
+README.md (raw, main) states:
+  - 2026-07-16: inference code released + pretrained weights on HF.
+  - Roadmap: [x] inference code, [x] pretrained weights, [ ] training code, [ ] training data (partial).
+  - Weights layout: merged_infer.safetensors (DiT+VAE+text-encoder+history-encoder bundle);
+    external: google/gemma-3-12b-it-qat-q4_0-unquantized (GATED), ByteDance-Seed/Depth-Anything-3,
+    depth-anything/DA3NESTED-GIANT-LARGE-1.1; optional madebyollin/taehv bank decoder.
+  - License: LTX-2 Community License Agreement — academic/non-commercial only.
+inference/README.md: `--ttc` = "Pathwise Test-Time Correction — curbs appearance drift over
+long rollouts"; "re-anchors each chunk to the first frame" (inference-time anti-drift, NOT in paper).
+
+## 2. AlayaLab/AlayaWorld (Hugging Face, via hf-mirror)
+GET https://hf-mirror.com/api/models/AlayaLab/AlayaWorld
+-> 200 OK. gated=false, downloads 196, likes 13, lastModified 2026-07-20,
+   siblings: merged_infer.safetensors, usedStorage 33,609,234,116 bytes (~33.6 GB),
+   license_name ltx-2-community-license-agreement, base_model Lightricks/LTX-2.3.
+
+## 3. amap-cvlab/ABot-World (GitHub)
+GET https://api.github.com/repos/amap-cvlab/ABot-World
+-> 200 OK. stargazers 883, created 2026-04-16, pushed 2026-07-22T14:42:42Z,
+   description "Infinite Interactive World Rollout on a Single Desktop GPU".
+   Contents: pipeline/, quantizer/, scripts/, utils/, wan/, web_client/, configs/, LICENSE (Apache-2.0).
+README.md states:
+  - 2026-07-09: released causal student ABot-World-0-5B-LF + inference code + gradio demo + studio.
+  - Roadmap unchecked: bidirectional teacher model; 500-hour action-annotated dataset.
+  - Checkpoint layout: Wan2.2_VAE.pth, taew2_2.pth, models_t5_umt5-xxl-enc-bf16.pth,
+    diffusion_pytorch_model.safetensors (distilled generator merged), google/umt5-xxl.
+  - Acknowledges: Causal Forcing, AngelSlim, LightX2V, taehv, Wan2.2, Helios kernels.
+
+## 4. acvlab/ABot-World-0-5B-LF (Hugging Face, via hf-mirror)
+GET https://hf-mirror.com/api/models?search=ABot-World
+-> found acvlab/ABot-World-0-5B-LF: downloads 992, likes 37, created 2026-07-09,
+   license apache-2.0, base_model Wan-AI/Wan2.2-TI2V-5B. Also mirrored on ModelScope
+   (amap_cvlab/ABot-World-0-5B-LF, per README).
+
+## 5. zhuang2002/Self_Gradient_Forcing (GitHub)
+GET https://api.github.com/search/repositories?q=self+gradient+forcing
+-> top hit zhuang2002/Self_Gradient_Forcing, 65 stars, pushed 2026-07-23T02:29:18Z.
+   Contents: demo.py, inference.py, train.py, trainer/, model/, pipeline/, wan/, configs/,
+   scripts/, prompts/, setup.py, LICENSE (Apache-2.0).
+README.md news: "2026-07-23: Paper, model checkpoints, inference scripts, and training code
+are publicly released." (i.e., released same day as the arXiv paper; the paper text's
+"will be released" is already stale.)
+Download script pulls Wan2.1-T2V-1.3B/14B base, Causal-Forcing init checkpoints
+(ar_diffusion/causal_cd/causal_ode), and released SGF checkpoints (framewise + chunkwise).
+Default inference: 963 latent frames ~= 240 s @ 16 fps; KV geometry sink4/FIFO16/current1
+(framewise), sink3/FIFO6/current3 (chunkwise) — matches paper Sec. 4.1.
+
+## 6. JunhaoZhuang/Self_Gradient_Forcing (Hugging Face, via hf-mirror)
+GET https://hf-mirror.com/api/models?search=Self%20Gradient%20Forcing
+-> found JunhaoZhuang/Self_Gradient_Forcing: downloads 61, likes 4, created 2026-07-22,
+   license apache-2.0, arxiv:2607.20368.
+
+## 7. Project pages
+https://zhuang2002.github.io/SelfGradientForcing/ — live; hosts 60s/240s frame-wise and
+chunk-wise lock-step video comparisons, feasibility table (SF 79.01GB vs SGF 87.01GB peak,
+10.39s vs 11.71s / 5 steps; direct differentiable cache OOM), Pass1/Pass2 recovery table.
+https://alaya-lab.github.io/AlayaWorld/ — linked from paper and repo (not re-fetched in full).
+https://abot-world.amap.com — online playground linked from ABot README (not independently run).
+
+## 8. Paper text caches (durable)
+papers/world-models/alayaworld-2607.18367.md   <- curl https://arxiv.org/html/2607.18367v1 (168,972 bytes HTML, complete), bs4 HTML->text, 380 lines.
+papers/world-models/self-gradient-forcing-2607.20368.md <- curl https://arxiv.org/html/2607.20368v1 (410,782 bytes HTML, complete; first attempt truncated at 115,906 bytes on timeout, refetched), 589 lines.
+papers/world-models/abot-world0-2607.19191.md <- pre-existing pdftotext -layout dump, 1932 lines.
