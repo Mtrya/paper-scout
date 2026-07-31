@@ -10,6 +10,9 @@ user-invocable: false
 
 ```text
 .
+├── memory/
+│   ├── MEMORY.md                         # 近稳定的研究方向入口
+│   └── <date>-memory.md                  # typed 跨巡航记忆
 ├── papers/<area>/<slug>-<id>.md          # 下载的论文 Markdown
 ├── code/                                 # 忽略的实验台,用于外部信号工作
 ├── drafts/                               # 忽略的 DocxXML、媒体与暂存产物
@@ -43,6 +46,8 @@ user-invocable: false
 
 ## 目录规则
 
+- `memory/MEMORY.md`:被追踪的近稳定研究方向入口,不作为逐轮索引。
+- `memory/<date>-memory.md`:被追踪的跨巡航记忆;条目 schema 与检索规则遵循 `memory-manage`。
 - `papers/`:被追踪的持久论文文本缓存。
 - `code/`:忽略的实验台。在这里克隆仓库、创建虚拟环境、跑实验、给上游代码打补丁、写临时探针。不要把有用工作的唯一副本留在这里。
 - `drafts/`:忽略的暂存区。随意覆盖。绝不把持久内容放在这里。
@@ -68,6 +73,7 @@ git check-ignore -v <path>
 
 需要追踪:
 
+- `memory/` 下的长期入口与日期记忆
 - `papers/` 下的论文 Markdown
 - `runs/<run-id>/report.docxxml` 已交付报告源文件
 - `runs/<run-id>/checklist.md` 运行清单
@@ -166,11 +172,12 @@ python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mod
 
 ## 预检
 
-1. 确保 `papers/`、`code/`、`runs/`、`drafts/` 存在,缺失则创建。
+1. 确保 `memory/`、`papers/`、`code/`、`runs/`、`drafts/` 存在,缺失则创建。
 2. 读 `runs/INDEX.md`(如存在)。
-3. 运行前检查 git 状态。如果工作区有无关改动,停下并报告。
-4. 在分支上开始本次巡航,而不是 `main`/`master`。使用形如 `scout/YYYY-MM-DD` 或 `scout/YYYY-MM-DD-<topic>` 的分支,撞名时加后缀。
-5. 绝不把候选池或暂存写进 `runs/`。
+3. 按 `memory-manage` 完成与本轮主题相关的记忆检索。
+4. 运行前检查 git 状态。如果工作区有无关改动,停下并报告。
+5. 在分支上开始本次巡航,而不是 `main`/`master`。使用形如 `scout/YYYY-MM-DD` 或 `scout/YYYY-MM-DD-<topic>` 的分支,撞名时加后缀。
+6. 绝不把候选池或暂存写进 `runs/`。
 
 ## 收尾与 PR
 
@@ -184,11 +191,11 @@ python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mod
 python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode final
 ```
 
-4. 检查 `git status --short`。它应该只显示持久的论文缓存、运行包和 `runs/INDEX.md`。
+4. 检查 `git status --short`。它应该只显示持久的日期记忆、论文缓存、运行包和 `runs/INDEX.md`。
 5. 只暂存持久产出:
 
 ```bash
-git add papers runs
+git add memory papers runs
 ```
 
 6. 用以运行为中心的信息提交,例如 `Add 2026-06-07 paper scout report`。
