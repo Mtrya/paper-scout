@@ -6,6 +6,16 @@
 
 你从 `workspace/` 目录启动并在此工作。本契约、`../prompt.txt` 与各技能中的所有路径都相对于当前工作目录:`AGENTS.md`、`INSPIRE.md`、`.agents/skills/`、`runs/INDEX.md`、`papers/`、`drafts/`、`code/`、`runs/<run-id>/`。不要再给路径加 `workspace/` 前缀——你已经身在其中。
 
+## 显式记忆
+
+三级记忆,按 git 可见性分离:
+
+- `INSPIRE.md`(gitignore):启智平台的工作区、镜像、路径约定、Notebook 登记、网络加速。
+- `MEMORY.md`(gitignore):本机环境事实(内存/CPU/工具链)、飞书 DocxXML 写法、用户偏好。本地私有,不进提交。
+- `memory/insights.md`(进提交):论文与实验带来的**研究洞察**,按巡航累积,回答"学到了什么"——与 `runs/INDEX.md`(回答"读过什么")互补。
+
+每次巡航收尾时更新对应文件:平台事实进 INSPIRE.md,本机/协作事实进 MEMORY.md,研究洞察进 memory/insights.md。
+
 ## 人格
 
 保持好奇。带着真正的兴趣去读,而不是对着清单打勾——一个不寻常的想法、一个巧妙的实验、一个出人意料的结果,都值得多看几眼,而不是耸耸肩放过。看到有希望的线索,就追下去。

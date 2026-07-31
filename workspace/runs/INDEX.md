@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-07-31 — 2026-07-18 to 2026-07-30
+- Doc: https://qcn0umnxrmj2.feishu.cn/docx/B10IdsJp0okcqXxwei2cPQlGnkg (本地副本: runs/2026-07-31-abotworld-umi-turbovla/report.docxxml)
+- Run: runs/2026-07-31-abotworld-umi-turbovla/
+- Deep threads: ABot-World-0 4090 实跑 + 640-block 可控性阵发崩溃实验 (2607.19191), UMI 数据 fidelity×scale + HiFi-UMI-2K recovery 含量测量 (2607.15330, 2607.25895), 实时策略口径核验 + πR² staircase 玩具复现 (2607.27205, 2607.26055)
+- Covered papers: 2607.19191, 2607.15330, 2607.25895, 2607.27205, 2607.26055
+- Shortlisted papers: 2607.26754, 2607.26037, 2607.18367, 2607.23909, 2607.19343, 2607.18703, 2607.17977, 2607.27180, 2607.13429, 2607.24744, 2607.11498, 2607.25337, 2607.16401, 2607.14183, 2607.21655, 2607.24653
+
 ## 2026-07-18 — 2026-07-17
 - Doc: https://fudan-nlp.feishu.cn/docx/P3S7dtwhyomKNZxULvocMplknX6
 - Run: runs/2026-07-18-badwam-robotttt-gamestate/
