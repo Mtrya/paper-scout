@@ -1,0 +1,106 @@
+{
+    "_README": [
+        "UMI-like bimanual 20-D EEF format exported to LeRobot v3.0.",
+        "state/action vectors are [right_10d, left_10d].",
+        "Each 10D block is [position_xyz, rotation_6d_first_two_rows, gripper_angle_rad].",
+        "Actions are absolute next-state targets with the final target repeated at the last row.",
+        "Videos are materialized from media.<stream>.frame_index and aligned to data rows when available."
+    ],
+    "state": {
+        "right_eef_pose": {
+            "start": 0,
+            "end": 9,
+            "rotation_type": "rotation_6d",
+            "rotation_6d_layout": "first_two_rows",
+            "absolute": true,
+            "dtype": "float32",
+            "original_key": "observation.state"
+        },
+        "right_eef_gripper": {
+            "start": 9,
+            "end": 10,
+            "absolute": true,
+            "dtype": "float32",
+            "unit": "rad",
+            "original_key": "observation.state"
+        },
+        "left_eef_pose": {
+            "start": 10,
+            "end": 19,
+            "rotation_type": "rotation_6d",
+            "rotation_6d_layout": "first_two_rows",
+            "absolute": true,
+            "dtype": "float32",
+            "original_key": "observation.state"
+        },
+        "left_eef_gripper": {
+            "start": 19,
+            "end": 20,
+            "absolute": true,
+            "dtype": "float32",
+            "unit": "rad",
+            "original_key": "observation.state"
+        }
+    },
+    "action": {
+        "right_eef_pose": {
+            "start": 0,
+            "end": 9,
+            "rotation_type": "rotation_6d",
+            "rotation_6d_layout": "first_two_rows",
+            "absolute": true,
+            "dtype": "float32",
+            "original_key": "action"
+        },
+        "right_eef_gripper": {
+            "start": 9,
+            "end": 10,
+            "absolute": true,
+            "dtype": "float32",
+            "unit": "rad",
+            "original_key": "action"
+        },
+        "left_eef_pose": {
+            "start": 10,
+            "end": 19,
+            "rotation_type": "rotation_6d",
+            "rotation_6d_layout": "first_two_rows",
+            "absolute": true,
+            "dtype": "float32",
+            "original_key": "action"
+        },
+        "left_eef_gripper": {
+            "start": 19,
+            "end": 20,
+            "absolute": true,
+            "dtype": "float32",
+            "unit": "rad",
+            "original_key": "action"
+        }
+    },
+    "video": {
+        "head_main": {
+            "original_key": "observation.images.head_main"
+        },
+        "head_main_stereo_right": {
+            "original_key": "observation.images.head_main_stereo_right"
+        },
+        "left_hand_down": {
+            "original_key": "observation.images.left_hand_down"
+        },
+        "left_hand_up": {
+            "original_key": "observation.images.left_hand_up"
+        },
+        "right_hand_down": {
+            "original_key": "observation.images.right_hand_down"
+        },
+        "right_hand_up": {
+            "original_key": "observation.images.right_hand_up"
+        }
+    },
+    "annotation": {
+        "human.action.task_description": {
+            "original_key": "task_index"
+        }
+    }
+}
