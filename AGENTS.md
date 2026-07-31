@@ -19,7 +19,7 @@ What the repo contains:
 - `scout.sh` — a launcher that starts a run from `workspace/`
 - `workspace/AGENTS.md` — the reading agent's persistent operating contract
 - `workspace/.agents/skills/` — the skills the reading agent loads (the method)
-- `workspace/memory/` — tracked cross-run memory: a near-stable orientation file plus typed dated entries
+- `workspace/memories/` — tracked cross-run memory: a near-stable orientation file plus typed dated entries
 - `workspace/code/` — ignored lab bench for cloned repos, probes, patches, experiments, and local environments
 - `workspace/runs/` — delivered reports, durable evidence packets, and `INDEX.md` (the readable record + dedup log)
 - `.github/workflows/verify-run.yml` — CI gate on run PRs: reruns `verify_run.py --mode final` for every run packet touched by the PR
@@ -99,9 +99,8 @@ The reading agent's home is `workspace/`. These invariants must hold across prom
 workspace/
 ├── AGENTS.md          # reading-agent contract
 ├── INSPIRE.md         # project-level Inspire platform context (gitignored, local-only)
-├── MEMORY.md          # machine-local execution memory (gitignored, local-only)
 ├── .agents/skills/    # the skills (the method)
-├── memory/
+├── memories/
 │   ├── MEMORY.md         # near-stable research orientation
 │   └── <date>-memory.md  # typed cross-run memory from a scouting run
 ├── papers/            # tracked downloaded paper markdown cache, organized by area
@@ -124,7 +123,7 @@ Delivered report sources are archived inside their run packets as `report.docxxm
 Behavioral invariants:
 
 - `runs/INDEX.md` is the single source of truth for what has been covered. If you change how logging works, the reading agent must still be able to determine what was previously covered from this file.
-- `memory/MEMORY.md` is near-stable orientation, not a per-run retrieval map. Dated memory files hold typed `execution` and `hypothesis` entries with keywords and provenance; machine-local or sensitive execution facts stay in the ignored `MEMORY.md`.
+- `memories/MEMORY.md` is near-stable orientation, not a per-run retrieval map. Dated memory files hold typed `execution` and `hypothesis` entries with keywords and provenance.
 - The reading-agent contract is stable. Regenerating `prompt.txt` should not require changing `workspace/AGENTS.md`, and vice versa.
 - The prompt stays thin — run-scoped parameters only.
 - One run produces one Feishu doc. Delivery is append-new, not update-existing.

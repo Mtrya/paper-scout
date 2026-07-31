@@ -4,15 +4,12 @@
 
 ## 工作目录
 
-你从 `workspace/` 目录启动并在此工作。本契约、`../prompt.txt` 与各技能中的所有路径都相对于当前工作目录:`AGENTS.md`、`MEMORY.md`、`.agents/skills/`、`memory/`、`runs/INDEX.md`、`papers/`、`drafts/`、`code/`、`runs/<run-id>/`。不要再给路径加 `workspace/` 前缀——你已经身在其中。
+你从 `workspace/` 目录启动并在此工作。本契约、`../prompt.txt` 与各技能中的所有路径都相对于当前工作目录:`AGENTS.md`、`MEMORY.md`、`.agents/skills/`、`memories/`、`runs/INDEX.md`、`papers/`、`drafts/`、`code/`、`runs/<run-id>/`。不要再给路径加 `workspace/` 前缀——你已经身在其中。
 
-## 显式记忆
+## 记忆
 
-显式记忆按内容与 git 可见性分离:
-
-- `MEMORY.md`(gitignore):**执行层**操作记忆——本机环境、飞书交付链路、启智平台约定。本地私有,不进提交,也不要在 PR 描述等公开场合并提它。
-- `memory/MEMORY.md`(进提交):长期研究主线、读者信息与记忆边界,保持短且近稳定,不作为条目索引。
-- `memory/<date>-memory.md`(进提交):每次巡航值得跨轮复用的记忆,以不同 schema 区分研究猜想与可移植、已脱敏的执行经验。
+- `memories/MEMORY.md`(进提交):长期研究主线、读者信息与记忆边界,保持短且近稳定,不作为条目索引。
+- `memories/<date>-memory.md`(进提交):每次巡航值得跨轮复用的记忆,以不同 schema 区分研究猜想与可移植、已脱敏的执行经验。
 
 记忆的检索、分类、字段、更新与隐私边界遵循 `memory-manage` 技能。`runs/INDEX.md` 始终是覆盖与去重事实源;运行包始终是报告与证据事实源,记忆不替代两者。
 

@@ -10,7 +10,7 @@ user-invocable: false
 
 ```text
 .
-├── memory/
+├── memories/
 │   ├── MEMORY.md                         # 近稳定的研究方向入口
 │   └── <date>-memory.md                  # typed 跨巡航记忆
 ├── papers/<area>/<slug>-<id>.md          # 下载的论文 Markdown
@@ -46,8 +46,8 @@ user-invocable: false
 
 ## 目录规则
 
-- `memory/MEMORY.md`:被追踪的近稳定研究方向入口,不作为逐轮索引。
-- `memory/<date>-memory.md`:被追踪的跨巡航记忆;条目 schema 与检索规则遵循 `memory-manage`。
+- `memories/MEMORY.md`:被追踪的近稳定研究方向入口,不作为逐轮索引。
+- `memories/<date>-memory.md`:被追踪的跨巡航记忆;条目 schema 与检索规则遵循 `memory-manage`。
 - `papers/`:被追踪的持久论文文本缓存。
 - `code/`:忽略的实验台。在这里克隆仓库、创建虚拟环境、跑实验、给上游代码打补丁、写临时探针。不要把有用工作的唯一副本留在这里。
 - `drafts/`:忽略的暂存区。随意覆盖。绝不把持久内容放在这里。
@@ -73,7 +73,7 @@ git check-ignore -v <path>
 
 需要追踪:
 
-- `memory/` 下的长期入口与日期记忆
+- `memories/` 下的长期入口与日期记忆
 - `papers/` 下的论文 Markdown
 - `runs/<run-id>/report.docxxml` 已交付报告源文件
 - `runs/<run-id>/checklist.md` 运行清单
@@ -172,7 +172,7 @@ python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mod
 
 ## 预检
 
-1. 确保 `memory/`、`papers/`、`code/`、`runs/`、`drafts/` 存在,缺失则创建。
+1. 确保 `memories/`、`papers/`、`code/`、`runs/`、`drafts/` 存在,缺失则创建。
 2. 读 `runs/INDEX.md`(如存在)。
 3. 按 `memory-manage` 完成与本轮主题相关的记忆检索。
 4. 运行前检查 git 状态。如果工作区有无关改动,停下并报告。
