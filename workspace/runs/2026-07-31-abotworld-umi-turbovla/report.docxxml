@@ -1,101 +1,119 @@
 <title>Paper Scout 研究报告 - 2026-07-31</title>
 
-<p>本轮巡航覆盖 2026-07-18 ~ 07-30 的论文池,三条深度线程指向同一个主题:<b>具身智能的"工程化时刻"——世界模型开始被当作可交互系统来运营,UMI 数据开始被当作真机的替代品来审计,实时策略开始把延迟当作一等公民来设计</b>。我们没有停在论文文本上:三条线程各配了一个真实验——在 48GB 4090 上实跑 ABot-World-0 并测量其长程可控性;下载 HiFi-UMI-2K 全量 chunk 测量演示数据中的 recovery 含量;为 πR² 的 staircase 调度写了可运行的玩具复现并检验其扰动模态盲区。三个实验一个证实猜想、一个证伪猜想、一个测出了论文从未测量的现象。</p>
+<p>本轮巡航覆盖 2026-07-18 ~ 07-30 的论文池。选出的三篇(组)论文讲的是三个不同的故事,我们没有硬凑共同主题,而是逐篇精读:一个团队想把"无限长交互世界模型"做成单张消费级显卡上可运营的系统;两个团队同时把 UMI(手持夹爪、无真机采集)数据推向保真与规模两个极限;两篇实时策略论文把推理延迟当作设计的一等公民。每篇(组)都配了一个研究动作:在 48GB 4090 上实跑 ABot-World-0 并测量它的长程可控性;下载 HiFi-UMI-2K 全量数据测量演示中的 recovery 含量;为 πR² 的 staircase 调度写可运行的玩具复现检验它的扰动模态盲区。三个动作一个证实猜想、一个证伪猜想、一个测出了论文从未测量的现象。</p>
 
 <callout emoji="✅" background-color="light-green">
   <p><b>本期最值得知道的三个结论:</b>(1) ABot-World-0 的"无限长交互"在统计意义上成立——10.7 分钟 rollout 无长期漂移——但它的失败方式是<b>阵发性的</b>:两次数十秒的全面失控(指令跟随率塌到 0.25)后自行恢复,画质与听话度同步崩溃同步回来;(2) UMI 数据能不能取代真机,fidelity 决定"能否收官"、scale 决定"能走多远",而 90.2% 的演示零方向反转说明 recovery 覆盖是 UMI 采集范式的结构性盲区;(3) πR² 式 staircase 调度的优势不是模态特异的(玩具实验证伪了我们的猜想),但它的实现空间是一片零文档的雷区——三种看似自然的写法全部发散。</p>
 </callout>
 
-<h1>世界模型的工程化:ABot-World-0 的"无限"有多结实</h1>
+<h1>一、ABot-World-0:一台 5090 上的"无限"世界模拟器,成色几何</h1>
 
-<p>交互式世界模型今年的叙事是"无限长、可操控、实时"。ABot-World-0 是目前把这三件事同时做得最像真的的开源工作:5B DiT + Long-Forcing 训练 + 全套量化推理栈,宣称 5090 上 16FPS、1.2s 首帧延迟、无限长 rollout。我们追踪了它的官方代码,并在启智 4090(48GB)上实际跑通了完整推理栈,测量了论文从未测量的维度:<b>长 rollout 中模型还听不听话</b>。</p>
+<h2>论文讲了什么</h2>
 
-<h2>ABot-World-0:架构核验与 4090 实测</h2>
-<p>ABot 团队(2026) · <a href="https://arxiv.org/abs/2607.19191">arXiv</a> · <a href="https://huggingface.co/acvlab/ABot-World-0-5B-LF">Weights</a></p>
+<p>交互式世界模型的目标不是生成一段好看的视频,而是一个可以进入、控制、持续演化的环境:动作改变状态,状态以画面形式反馈,世界在长程交互中保持连贯。ABot-World-0(ABot 团队,2026 · <a href="https://arxiv.org/abs/2607.19191">arXiv</a> · <a href="https://huggingface.co/acvlab/ABot-World-0-5B-LF">权重</a>)把这件事定义为一个系统工程:数据、控制、训练、部署四个瓶颈必须同时解开,任何单一轴上的强项都撑不起一个"本地可持久运营的世界模拟器"。</p>
 
-<p>代码核验确立的事实:动作注入是一个 270M 参数的 conv adapter(占 5.27B 总参数的 5.1%)——8 键 multi-hot 广播成 32 通道常量图,经 PixelUnshuffle+Conv+residual block 在 patch-embedding 输出处加性注入,控制带宽只有每 block 一次采样(~1.3Hz);"无限长"的机制是 21 latent 帧滚动窗(约 7 秒记忆)+ 5 张预生成参考图以负 RoPE 钉为永不被驱逐的 attention sink——超过 7 秒的世界一致性只活在这 5 张图里;官方 demo 实际以 12FPS 录制,论文的 16FPS 是 5090 上的 DiT 生成速率。我们的 4090 实测(int8-torchao + flash-attn 2.8.2):峰值显存 31.2GB allocated / 39GB reserved——高于论文 5090 FP8 路径的 19.3GiB,但 48GB 卡上充裕;640 block 生成耗时 48 分钟。</p>
+<p>它的答案是一个 5B 的动作条件视频世界模型,四个子系统各对应一个瓶颈。数据侧:WorldExplorer 用 agent 按训练反馈主动采集,多源数据(AAA 游戏、仿真引擎、互联网视频)过 14 项确定性质检 + VLM 语义评估,并统一标注动作与文本。训练侧:先训一个双向 teacher,再经 teacher forcing 与 ODE 蒸馏逐步转成因果 student;关键的最后一级是他们提出的 LongForcing——让长视野 teacher 在 student 自己的长程 rollout 上做分布匹配,直接抑制"学生生成历史变成下一步输入"造成的漂移。控制侧:原始键盘输入统一了场景漫游与第三人称角色控制,reference-character memory 提供持续的外观线索。部署侧:轻量 VAE 解码器、低比特 DiT 推理、有界 KV 缓存组成的流式推理栈。宣称指标:单张 RTX 5090 上 720P 16FPS、1.2 秒动作到首帧延迟、峰值显存约 19GiB、无限长 rollout。</p>
 
 <p>[[figure-anchor:abotworld:architecture]]</p>
 
-<p><b>我们的实验:可控性曲线。</b>论文展示了 60 秒无视觉伪影,但从未测过长 rollout 的 action-following。我们的猜想是"视觉不崩时听话度已先衰减"。实验设计:640 block(≈10.7 分钟 @12fps)rollout,动作协议 J(左看)×8s / W(前进)×8s / L(右看)×8s / W×8s 循环,对输出视频逐 block 做光流分析——yaw 段用全局水平流方向与指令比对,walk 段用径向膨胀量对首段归一。</p>
+<h2>代码核验:机制比叙事更具体</h2>
+
+<p>我们追踪了官方代码与权重,几个比论文叙述更具体的事实:动作注入是一个 270M 参数的 conv adapter(占 5.27B 总参数的 5.1%)——8 键 multi-hot 广播成 32 通道常量图,经 PixelUnshuffle+Conv+residual block 在 patch-embedding 输出处加性注入,控制带宽只有每 block 一次采样(约 1.3Hz);"无限长"的机制是 21 latent 帧滚动窗(约 7 秒记忆)+ 5 张预生成参考图以负 RoPE 钉为永不被驱逐的 attention sink——也就是说,超过 7 秒的世界一致性只活在这 5 张图里;官方 demo 实际以 12FPS 录制,论文的 16FPS 是 5090 上的 DiT 生成速率。我们的 4090 实测(int8-torchao + flash-attn 2.8.2):峰值显存 31.2GB allocated / 39GB reserved——高于论文 5090 FP8 路径的 19.3GiB,但 48GB 卡上充裕;640 block 生成耗时 48 分钟。</p>
+
+<h2>我们的实验:论文没测的长程可控性</h2>
+
+<p>上面的机制分析自然引出一个论文没有回答的问题:既然超过 7 秒的一致性只由 5 张参考图锚定,那 10 分钟之后模型还听不听话?论文展示了 60 秒无视觉伪影,但从未测过长 rollout 的 action-following。我们的猜想是:<b>视觉不崩的时候,听话度可能已经在先衰减</b>——毕竟滚动窗里真正的记忆只有 7 秒。</p>
+
+<p>实验设计:在启智 4090(48GB)上跑 640 block(约 10.7 分钟 @12FPS)rollout,动作协议为 J(左看)×8s / W(前进)×8s / L(右看)×8s / W×8s 循环;对输出视频逐 block 做光流分析——yaw 段用全局水平流方向与指令比对,walk 段用径向膨胀量对首段归一。</p>
 
 <p>[[figure-anchor:abotworld:controllability-decay]]</p>
 
-<p><b>猜想被部分证伪,真实现象更有意思。</b>yaw 跟随率(16-block 滑窗)在 10.7 分钟里<b>没有长期衰减</b>(前 1/4 段 0.96,后 1/4 段 0.94)——滚动窗 + 参考图 sink 确实让 rollout 在统计意义上无限续命。但失败是<b>阵发性的</b>:block 130-180 跟随率塌到 0.25,block 460-500 塌到 0.74-0.82,每次持续数十秒后自行恢复到 ~1.0;崩溃窗不与动作协议的相位转换对齐。抽帧提供了直观证据:崩溃窗(block 165)同时出现画面涂抹伪影与角色静止,而健康窗与 rollout 末尾(block 630)画面完好——<b>画质与可控性同步阵发恶化、同步恢复</b>,而不是我们猜想的先后分离。这恰好佐证了机制分析的推断:超过 ~7 秒的一致性只活在 5 张参考图里,当滚动窗内容与 sink 的冲突越过临界点,模型就短暂"失神",再被 sink 重新锚定。诚实的局限:N=1 rollout、单 prompt、int8+sdpa 路径(非论文的 FP8+SageAttention 配置);walk 膨胀指标被场景纹理混淆,不作结论;崩溃的触发条件(场景内容?窗口状态?)是明确的后续问题。</p>
+<p><b>猜想被部分证伪,而真实现象更有意思。</b>yaw 跟随率(16-block 滑窗)在 10.7 分钟里<b>没有长期衰减</b>(前 1/4 段 0.96,后 1/4 段 0.94)——滚动窗 + 参考图 sink 确实让 rollout 在统计意义上无限续命。但失败是<b>阵发性的</b>:block 130-180 跟随率塌到 0.25,block 460-500 塌到 0.74-0.82,每次持续数十秒后自行恢复到约 1.0;崩溃窗不与动作协议的相位转换对齐。抽帧提供了直观证据:崩溃窗(block 165)同时出现画面涂抹伪影与角色静止,而健康窗与 rollout 末尾(block 630)画面完好——<b>画质与可控性同步阵发恶化、同步恢复</b>,而不是我们猜想的先后分离。这恰好佐证机制层面的推断:当滚动窗内容与 sink 的冲突越过临界点,模型就短暂"失神",再被 sink 重新锚定。</p>
 
-<p>工程现实也要记录:开源推理栈在 4090 上并非开箱即用——lightx2v_kernel 需要 CUTLASS 源码构建(我们用 stub 绕过,代价是 FP8 路径不可用);xformers 把 flash-attn 版本钉死在 ≤2.8.2;Ada 架构上 SageAttention 断言失败需要回退 sdpa。这些摩擦不改变结论,但复现者应预期半天的环境成本。</p>
-
-<hr/>
-
-<h1>UMI 数据的 fidelity 与 scale:两份同期答案,一个坐标系</h1>
-
-<p>UMI(手持夹爪 + 视觉重建,robot-free 采集)一直被当作"便宜但脏"的预训练数据。本周期的两篇论文把它推到两个不同的极限:Xiaomi-Robotics-1 把规模推到 100k+ 小时并给出迁移 scaling 曲线;HiFi-UMI 把保真度推到 ~3mm/µs 级同步,并认真追问"能不能完全不要真机数据"。我们把两篇放进同一个 fidelity × scale 坐标系,结论互补:<b>fidelity 决定 UMI 数据能否"收官"(去掉真机 anchor),scale 决定它能走多远</b>。我们自己的数据侧实验补上了第三条边:UMI 采集范式存在一个两篇论文都没解决的结构性盲区——recovery 分布。</p>
-
-<h2>HiFi-UMI:parity 是买来的,但账单很诚实</h2>
-<p>HiFi-UMI 团队(2026) · <a href="https://arxiv.org/abs/2607.25895">arXiv</a> · <a href="https://huggingface.co/papers/2607.25895">HF</a></p>
-
-<p>保真升级是实打实的工程:头戴离线 stereo-inertial SLAM(刻意放弃全局 loop closure 换 workspace-local 精度)→ ~3mm(原始 UMI ~6mm);µs 级 GPIO 硬件同步(&lt;40µs);每手 2 个非平行 fisheye ~200° 视场;双手相对位姿同帧原生测量。每条轨迹还要在仿真里对目标 embodiment 做 WBC replay 验证,不可行者丢弃(累计可用率 ~96%)。我们下载了其公开数据集 HiFi-UMI-2K 的第一个 chunk 全量(478,810 帧 / 1,125 episodes / 38 任务)核验:LeRobot v3.0、25fps、6 路相机、20 维双臂 EEF state/action,逐帧 validity mask 与论文声明一致;<b>action[t] 与 state[t+1] 逐位精确相等</b>(max diff = 0.0),确认 action 即 next-state 目标。</p>
-
-<p>核心结果——三个 backbone × 4 个双臂任务,UMI-only 与 in-domain 遥操作各 40 rollouts 打到 aggregate parity(−2.5pp ~ +3.1pp)——是真实的,但<b>parity 用 ~10× 数据买</b>(3200 vs 300 条/任务,作者自己声明)。失败结构也有信息量:UMI 策略 nominal 执行更流畅,但 contact 不完美时恢复更弱(WAM Remote Insertion −7.5pp);WAM oracle 诊断还暴露了 gripper 通道语义未校准的问题——20 维动作空间里 2 维的跨接口对齐,靠评测回避而非解决。Scaling 证据比小米干净:log-log power-law α=0.268 / R²=0.993,~3200 条/任务饱和。</p>
-
-<p>[[figure-anchor:umi:hifi-capture]]</p>
-
-<p><b>我们的实验:recovery 弱是数据的原罪,不是管线的缺陷。</b>猜想:UMI 演示天然排斥 recovery——采集者追求一次流畅完成,犯错-纠偏片段根本不会被录下来;fidelity 再高,也记录不到不存在的行为。对全部 1,125 条 episode 的双手 EEF 轨迹做方向反转统计(120° 阈值、归一化为 reversals/10s):<b>90.2% 的 episode 双手零方向反转</b>,reversals/10s 中位数为 0,仅 2.0% 的 episode 超过 1 次/10s;按任务分解,38 个任务的中位数全部为 0——没有任何任务系统性包含纠偏行为。这从数据侧解释了 Remote Insertion 的恢复弱,也划出下一个 fidelity frontier 的位置:不是更准的 pose,而是 <b>recovery/接触扰动的覆盖</b>——它在"演示者自然操作"的采集范式下无法免费获得,需要刻意设计的犯错协议或仿真扰动增广。</p>
-
-<h2>Xiaomi-Robotics-1:迁移曲线是真的,账本被转移了</h2>
-<p>小米机器人团队(2026) · <a href="https://arxiv.org/abs/2607.15330">arXiv</a> · <a href="https://huggingface.co/papers/2607.15330">HF</a></p>
-
-<p>全文最有分量的证据是 UMI pretraining 的迁移曲线:同一 post-train recipe 下,out-of-box(unseen 环境+物体)成功率随 UMI 数据量 26%(无 pretrain)→53%(12.5%)→75%(100%),contact-rich 任务从 0%→75%,且无饱和迹象;模型档位(2B/5B/10B)之间的差距小于数据档差距——"数据量是当前主要瓶颈"。</p>
-
-<p>[[figure-anchor:umi:xiaomi-data-scaling]]</p>
-
-<p>但成本没有消失,只是被转移:(1)auto-labeling 是等长切片 + Qwen3.5-27B 标 state-transition 描述,2 周标完 100k+ 小时,<b>全文没有任何标注质量控制</b>,而 post-training 还必须额外桥接"state-transition 描述 → imperative instruction"的分布鸿沟(代价:1k+ 小时人工标注);(2)<b>论文从未做"去掉真机数据"的 ablation</b>——7,200 小时真机数据(post-train 采样占 85%)是否必要,他们没问,这正是 HiFi-UMI 切入的缝隙;(3)scaling 曲线本身不干净:12.5%/25% 档 validation MSE 先降后升,只有 4 个数据点。值得记录的 negative result:DiT attend 到 VLM 的 action tokens 会掉点(shortcut 学习),因此 action tokens 被排除出 DiT attention。</p>
-
-<p>两篇合在一起的图景:Xiaomi 做 mobile manipulation 的广度(瓶颈是 scale 与覆盖率),HiFi-UMI 做 stationary bimanual 的精度(瓶颈是轨迹与接触保真)。给从业者的直接推论:pose 精度到 ~3mm 后边际价值递减,接下来的杠杆排序是 recovery 覆盖 &gt; force/tactile 信号 &gt; 更高的 pose 精度——后两者两篇都没有,前者我们的测量说明 UMI 范式给不了。</p>
+<p>置信度与局限要摆明:N=1 rollout、单 prompt、int8+sdpa 路径(非论文的 FP8+SageAttention 配置);walk 膨胀指标被场景纹理混淆,不作结论;崩溃的触发条件(场景内容?窗口状态?)是明确的后续问题。工程现实也值得记录:开源推理栈在 4090 上并非开箱即用——lightx2v_kernel 需要 CUTLASS 源码构建(我们用 stub 绕过,代价是 FP8 路径不可用);xformers 把 flash-attn 版本钉死在 ≤2.8.2;Ada 架构上 SageAttention 断言失败需要回退 sdpa。这些摩擦不改变结论,但复现者应预期半天的环境成本。</p>
 
 <hr/>
 
-<h1>实时策略:瓶颈不是 FLOPS,是观测陈旧度管理</h1>
+<h1>二、UMI 数据的两条极限路线:HiFi-UMI 的 fidelity,小米的 scale</h1>
 
-<p>大 backbone 的 action-chunking flow policy 又慢又开环,两篇论文给出互补解法:TurboVLA 换掉 LLM 中心架构(V+L→A 直接映射的小模型),πR² 保留大 backbone、改造推理时序(proprioception-reactive diffusion forcing)。我们端到端追踪了 TurboVLA 的官方代码与 checkpoint,并为 πR² 的调度设计写了一个可运行的玩具复现——后者的过程本身就成了一项发现。</p>
+<p>先交代背景:UMI(Universal Manipulation Interface)是一个手持的、带传感器的夹爪,让人类在真实环境里直接演示操作,不需要机器人参与——采集成本远低于遥操作,但数据"脏":SLAM 位姿漂移、同步不准、视场受限。因此目前的共识用法是把 UMI 数据当预训练底料,post-training 时再加一小份真机数据做"anchor"。本周期两篇论文恰好各把一个极限推到了头:HiFi-UMI 问"保真度够不够高,高到可以把真机 anchor 彻底去掉",Xiaomi-Robotics-1 问"规模够不够大,大到 scaling 曲线直接迁移到真机泛化"。</p>
 
-<h2>TurboVLA:方向干净,数字要重述</h2>
-<p>H-EmbodVis 团队(2026) · <a href="https://arxiv.org/abs/2607.27205">arXiv</a> · <a href="https://github.com/H-EmbodVis/TurboVLA">Code</a></p>
+<h2>HiFi-UMI 论文:用 fidelity 换掉真机 anchor</h2>
 
-<p>三个口径问题,全部有代码或文件级证据:(1)<b>"0.2B 参数"</b>——LIBERO 部署图实际只有 ~107M(DINOv3-B 86.6M + 21M heads,与 4 个 fp32 checkpoint 各 426.5MB 精确吻合);BERT 文本编码器被离线缓存,推理时只是一次查表,0.2B 只在把不运行的 BERT 算进去时成立。(2)<b>"32Hz"</b>——这是 chunk 预测率(1/31.2ms);每个 12 步 chunk 开环执行,真实 replan 率 ~2.7 次/秒;仓库没有任何延迟/显存 benchmark 脚本,31.2ms 无法从发布代码复现。(3)<b>两个延迟数字口径不对称</b>:LIBERO 31.2ms 不含 BERT,RoboTwin 43.4ms 含 live BERT,且 RoboTwin 评测叠加了 ≤50 个重叠 chunk 的 temporal ensembling——60.2% 不是单 pass 策略的原始分数。架构上,其核心"双向视觉-语言交互"是 Grounding DINO feature enhancer 的整体移植且依赖其预训练初始化——97.7% LIBERO 均值里 grounding 初始化贡献多少,消融没有分离。值得肯定的方向:把感知-语言融合从 LLM 权重剥离、用 grounding 预训练替代,&lt;1GB VRAM 量级从权重文件大小可独立验证为真。</p>
+<p>HiFi-UMI(Simple AI,2026 · <a href="https://arxiv.org/abs/2607.25895">arXiv</a> · <a href="https://huggingface.co/datasets/simple-world-lab/HiFi-UMI-2K">数据集</a>)的赌注是:与其保留真机数据,不如把 robot-free 数据的保真度推到可信。硬件与软件协同设计:头戴离线 stereo-inertial SLAM(刻意放弃全局 loop closure,换 workspace-local 约 3mm 精度,原始 UMI 约 6mm);共享微秒级 GPIO 硬件触发(&lt;40µs 同步);每手 2 个非平行 fisheye 相机,约 200° 视场;双手相对位姿同帧原生测量而非事后重建。每条轨迹还要在仿真里对目标 embodiment 做全身控制 replay 验证,不可行者丢弃(累计可用率约 96%)。</p>
 
-<h2>πR²:优雅的调度,零消融的实现空间</h2>
-<p>πR² 团队(2026) · <a href="https://arxiv.org/abs/2607.26055">arXiv</a></p>
+<p>核心结果是 zero-robot post-training:只用 HiFi-UMI 数据 post-train 的策略直接部署真机,在 3 个 backbone(StarVLA-QwenPI、OpenPI-π、LingBot-VA)× 4 个双臂任务上与 in-domain 遥操作打到 aggregate parity(−2.5 / +3.1 / −0.6 个百分点)——尽管遥操作基线在评测场景采集而 HiFi-UMI 一条都没有;最强策略在精密插入任务上达 85%。同一语料 4,000 小时预训练在 10 个未见任务上把 action error 降 41%。随论文开源 HiFi-UMI-2K:2,000 小时微秒同步、超宽视场演示(总采集 20,000+ 小时)。</p>
 
-<p>机制本身优雅:per-position staircase 噪声级 + 每次调用只做 1 个 Euler 子步,fast channel(proprio,每 tick 新鲜)与 slow channel(V+L,异步 + delay embedding)分离;架构改动只有一行(AdaLN 从全局共享改 per-position)。真机结果(xArm6+XHand 4 任务均值 61% vs RTC 40% / sync 29%)是强的,但核验发现一串保留项:"+30%" 是单任务最大值(均值 +21pp);25Hz 部署用了第二张 GPU;真机表没有 w/o-async 行,两个贡献无法分离;<b>delay embedding 从未被单独消融</b>。</p>
+<p>[[figure-anchor:umi:hifi-overview]]</p>
 
-<p><b>我们的实验一(猜想被证伪):staircase 的优势不是模态特异的。</b>πR² 的 fast channel 只有 proprio,我们猜想其优势应当集中在 proprio 可见扰动(手臂冲量)上、在纯视觉扰动(目标跳变)上消失。1D 点质量玩具 + diffusion-forcing flow policy(per-slot τ、delay embedding),sync vs staircase × 延迟 {1,3,5} tick × 8 seeds:两种扰动模态的误差几乎完全重合,没有任何模态不对称。玩具层面的真实规律是延迟档:d=1 时 staircase 付质量税(err_all 0.645 vs sync 0.544,+19%),d=5 时反超(0.687 vs 0.734)——last-minute finalization 在观测陈旧时兑现价值,方向与论文"随延迟增长 πR² 持平、RTC 崩塌"一致,但幅度温和得多。</p>
+<p>我们下载了公开数据集的第一个 chunk 全量(478,810 帧 / 1,125 episodes / 38 任务)做实核验:LeRobot v3.0 格式、25fps、6 路相机、20 维双臂 EEF state/action,逐帧 validity mask 与论文声明一致;<b>action[t] 与 state[t+1] 逐位精确相等</b>(max diff = 0.0),确认 action 即 next-state 目标——这个语义核验很便宜,但不做它,后面的运动学分析全是错的。</p>
 
-<p><b>我们的实验二(意外的主要发现):staircase 的实现空间极其容易踩空。</b>在得到上面这张表之前,连续三种看似自然的实现全部灾难性失败(误差为 sync 的 2–6 倍):(i) rolling buffer 前槽钉死在 τ=1,而训练分布 τ~U[0,1) 从不含 1,τ embedding 外推出野动作;(ii) 把每 tick 步长设为 1/(H−1),高 τ 区流场增益 1/(1−τ)≈15 使欧拉迭代进入临界不稳定,τ≈0.9 槽位内容腐化成 ±3 的垃圾再被当作动作发射;(iii) 全 buffer 每 tick 步进,动作在发射前 12 tick 就定型后冻结,等效 12-tick 开环执行、误差发散。能工作的设计必须同时满足:与 sync 相同的 K 层去噪网格、只有前 K 槽每 tick 步进(动作的 K 步去噪恰好落在发射前最后 K tick)、前槽在当 tick 观测下完成最后一步后立即发射。πR² 论文对这些实现选择零消融——"1 个 Euler 子步"的一句话背后是一片复现者会真实踩进去的雷区,这可能也解释了为什么 naive-async 基线在论文真机表里表现不稳定。</p>
+<p>同时要诚实地说:parity 是买来的——UMI-only 用了约 10× 数据(3200 vs 300 条/任务,作者自己声明)。失败结构也有信息量:UMI 策略 nominal 执行更流畅,但 contact 不完美时恢复更弱(WAM Remote Insertion −7.5pp);WAM oracle 诊断还暴露了 gripper 通道语义未校准的问题——20 维动作空间里 2 维的跨接口对齐,靠评测回避而非解决。Scaling 证据比小米干净:log-log power-law α=0.268 / R²=0.993,约 3200 条/任务饱和。</p>
+
+<p>[[figure-anchor:umi:hifi-tasks]]</p>
+
+<h2>Xiaomi-Robotics-1 论文:100k 小时的 scaling 迁移</h2>
+
+<p>Xiaomi-Robotics-1(小米机器人团队,2026 · <a href="https://arxiv.org/abs/2607.15330">arXiv</a>)走的是另一条路:沿 LLM 的 scaling 范式,把 VLA 的预训练数据推到 100k+ 小时真实 UMI 轨迹。两个关键设计让这件事可行:一是 scalable auto-labeling——把轨迹等长切片,用 Qwen3.5-27B 标注描述场景状态转移的自然语言,两周标完 100k+ 小时;模型据此学习"把场景从当前状态变换到语言指定目标状态"的动作生成。二是 Mixture-of-Transformers 架构——预训练 VLM(Qwen3-VL)编码观测与语言,层数匹配但 hidden 更小的 DiT 以 VLM 的 KV cache 为条件用 flow matching 生成 action chunk。Post-training 用 10k+ 小时跨本体数据桥接两个鸿沟:UMI 夹爪→机器人本体、state-transition 描述→祈使句指令。</p>
+
+<p>全文最有分量的证据是迁移曲线:同一 post-train recipe 下,out-of-box(未见环境+物体)成功率随 UMI 预训练数据量 26%(无预训练)→53%(12.5%)→75%(100%),contact-rich 任务从 0%→75%,且无饱和迹象;模型档位(2B/5B/10B)之间的差距小于数据档差距——"数据量是当前主要瓶颈"。下游 RoboCasa365 上到 57.6% SOTA,还能完成 10 分钟级的行李箱打包长程任务。</p>
+
+<p>[[figure-anchor:umi:xiaomi-overview]]</p>
+
+<p>但成本没有消失,只是被转移:(1) auto-labeling 两周标完 100k 小时,<b>全文没有任何标注质量控制</b>,而 post-training 还必须额外桥接 prompt 分布鸿沟(代价:1k+ 小时人工标注);(2) <b>论文从未做"去掉真机数据"的 ablation</b>——7,200 小时真机数据(post-train 采样占 85%)是否必要,他们没问,这正是 HiFi-UMI 切入的缝隙;(3) scaling 曲线本身不干净:12.5%/25% 档 validation MSE 先降后升,只有 4 个数据点。值得记录的 negative result:DiT attend 到 VLM 的 action tokens 会掉点(shortcut 学习),因此 action tokens 被排除出 DiT attention。</p>
+
+<h2>我们的实验:recovery 缺失是数据的原罪,不是管线的缺陷</h2>
+
+<p>两篇论文都在讨论 UMI 数据的"保真"与"规模",但 HiFi-UMI 自己的失败分析露了马脚:UMI 策略 nominal 更流畅、contact 不完美时恢复更弱。我们猜想这不是工程缺陷,而是<b>采集范式的结构性盲区</b>:演示者追求一次流畅完成,犯错-纠偏片段根本不会被录下来——fidelity 再高,也记录不到不存在的行为。</p>
+
+<p>实验设计:对 HiFi-UMI-2K 全部 1,125 条 episode 的双手 EEF 轨迹做方向反转统计(120° 阈值、归一化为 reversals/10s)——recovery 行为的最低限度代理。先做语义核验(action 即 next-state,见上),再算指标。</p>
+
+<p>[[figure-anchor:umi:recovery-reversals]]</p>
+
+<p>结果干净得近乎刺眼:<b>90.2% 的 episode 双手零方向反转</b>,reversals/10s 中位数为 0,仅 2.0% 的 episode 超过 1 次/10s;按任务分解,38 个任务的中位数全部为 0——没有任何任务系统性包含纠偏行为。猜想证实,而且是高置信:全量数据、指标直接、语义核验过。这从数据侧解释了 Remote Insertion 的恢复弱,也划出了下一个 fidelity frontier 的位置:不是更准的 pose,而是 <b>recovery/接触扰动的覆盖</b>——它在"演示者自然操作"的范式下无法免费获得,需要刻意设计的犯错协议或仿真扰动增广。</p>
+
+<p>两篇合在一起的图景:fidelity 决定 UMI-only 能否"收官"(去掉真机 anchor),scale 决定 out-of-box 泛化能走多远;成本从不消失只转移(小米:标注→prompt 桥接;HiFi-UMI:遥操作→硬件工程+逐条仿真验证)。给从业者的直接推论:pose 精度到约 3mm 后边际价值递减,接下来的杠杆排序是 recovery 覆盖 &gt; force/tactile 信号 &gt; 更高的 pose 精度。</p>
+
+<hr/>
+
+<h1>三、实时策略:两篇论文,同一个敌人——观测陈旧度</h1>
+
+<p>大 backbone 的 action-chunking flow policy 有两个娘胎里的毛病:chunk 开环执行期间对感官输入无反应;大模型 + 多步去噪的推理延迟让预测基于陈旧观测。本周期的两篇论文给出互补解法:TurboVLA 把 LLM 从执行通路里拿掉换绝对速度;πR² 保留大 backbone,改造推理时序换反应性。我们端到端追踪了 TurboVLA 的官方代码与 checkpoint,并为 πR² 的调度设计写了一个可运行的玩具复现——后者的过程本身就成了一项发现。</p>
+
+<h2>TurboVLA 论文:V+L→A,把 LLM 请出执行通路</h2>
+
+<p>TurboVLA(H-EmbodVis,华中科技+华为,2026 · <a href="https://arxiv.org/abs/2607.27205">arXiv</a> · <a href="https://github.com/H-EmbodVis/TurboVLA">代码</a>)的出发点是:LLM-centric 的 V→L→A 通路让每次策略调用都要过一遍几十亿参数的语言模型,而执行级控制其实不需要开放式语言生成——指令给定后,策略只需要用语言决定"当前视觉证据该如何引导动作"。于是它把范式改成 V+L→A:DINOv3 独立编码视觉,BERT 编码指令(可离线缓存),两者经 Grounding DINO 式的轻量双向交互直接融合,单次前向输出连续 action chunk。宣称指标:0.2B 参数、31.2ms 延迟(4090)、0.9GB 推理显存、LIBERO 97.7% 平均成功率。</p>
+
+<p>[[figure-anchor:realtime:turbovla-arch]]</p>
+
+<p>我们的代码与文件级核验发现三个口径问题:(1) <b>"0.2B 参数"</b>——LIBERO 部署图实际只有约 107M(DINOv3-B 86.6M + 21M heads,与 4 个 fp32 checkpoint 各 426.5MB 精确吻合);BERT 文本编码器被离线缓存,推理时只是一次查表,0.2B 只在把不运行的 BERT 算进去时成立。(2) <b>"32Hz"</b>——这是 chunk 预测率(1/31.2ms);每个 12 步 chunk 开环执行,真实 replan 率约 2.7 次/秒;仓库没有任何延迟/显存 benchmark 脚本,31.2ms 无法从发布代码复现。(3) <b>两个延迟数字口径不对称</b>:LIBERO 31.2ms 不含 BERT,RoboTwin 43.4ms 含 live BERT,且 RoboTwin 评测叠加了至多 50 个重叠 chunk 的 temporal ensembling——60.2% 不是单 pass 策略的原始分数。此外其核心"双向视觉-语言交互"是 Grounding DINO feature enhancer 的整体移植且依赖其预训练初始化——97.7% 里 grounding 初始化贡献多少,消融没有分离。值得肯定的是方向本身:把感知-语言融合从 LLM 权重剥离,&lt;1GB VRAM 量级从权重文件大小可独立验证为真。</p>
+
+<h2>πR² 论文:保留大 backbone,改造推理时序</h2>
+
+<p>πR²(CMU,2026 · <a href="https://arxiv.org/abs/2607.26055">arXiv</a>)解同一道题的另一侧:不缩小模型,让 chunk 在执行中保持反应性。它基于 diffusion forcing 的 per-position 噪声调度,贡献两个想法。第一,把条件拆成 fast/slow 两个通道:proprioception(关节位置、力矩、接触力)每 tick 新鲜——它足以支撑接触、滑移这类局部反应;视觉-语言特征异步更新并带 delay embedding——它提供全局引导。第二,latency-adaptive 噪声调度:把 in-flight 的动作当作 inpainting 条件,每次调用只推进 1 个 Euler 子步,让同一个训练好的模型适配不同硬件延迟。架构改动只有一行:AdaLN 从全局共享改为 per-position。真机结果:在 xArm6+XHand 上微调 GR00T-N1.7,25Hz 控制下每 40ms 用上新观测,replan 约 4 倍于基座;4 任务均值 61% vs RTC 40% / sync 29%。</p>
+
+<p>[[figure-anchor:realtime:pir2-concept]]</p>
+
+<p>核验的保留项:"+30%" 是单任务最大值(均值 +21pp);25Hz 部署用了第二张 GPU;真机表没有 w/o-async 行,两个贡献无法分离;<b>delay embedding 从未被单独消融</b>。</p>
+
+<h2>我们的实验:模态猜想之死,与一张实现雷区地图</h2>
+
+<p>πR² 的 fast channel 只有 proprio,我们由此猜想:staircase 的优势应当是模态特异的——在 proprio 可见扰动(手臂被冲量撞击)上显著,在纯视觉扰动(目标位置跳变)上消失。实验设计:1D 点质量玩具环境 + diffusion-forcing flow policy(per-slot τ、delay embedding),对比 sync(一次性去噪整个 chunk)与 staircase,扫观测延迟 d∈{1,3,5} tick × 8 seeds。</p>
+
+<p>[[figure-anchor:realtime:pir2-toy]]</p>
+
+<p><b>猜想被证伪。</b>两种扰动模态的误差几乎完全重合,没有任何模态不对称。玩具层面的真实规律是延迟档:d=1 时 staircase 付质量税(err_all 0.645 vs sync 0.544,+19%),d=5 时反超(0.687 vs 0.734)——last-minute finalization 在观测陈旧时兑现价值,方向与论文"随延迟增长 πR² 持平、RTC 崩塌"一致,但幅度温和得多。置信度说明:8 seeds 下结论在玩具内部可靠,但玩具是 1D、无记忆专家、不计算力价格,外推到真机需谨慎。</p>
+
+<p><b>意外的主要发现:staircase 的实现空间极其容易踩空。</b>在得到上面这张表之前,连续三种看似自然的实现全部灾难性失败(误差为 sync 的 2–6 倍):(i) rolling buffer 前槽钉死在 τ=1,而训练分布 τ~U[0,1) 从不含 1,τ embedding 外推出野动作;(ii) 把每 tick 步长设为 1/(H−1),高 τ 区流场增益 1/(1−τ)≈15 使欧拉迭代进入临界不稳定,τ≈0.9 槽位内容腐化成 ±3 的垃圾再被当作动作发射;(iii) 全 buffer 每 tick 步进,动作在发射前 12 tick 就定型冻结,等效 12-tick 开环执行、误差发散。能工作的设计必须同时满足:与 sync 相同的 K 层去噪网格、只有前 K 槽每 tick 步进(动作的 K 步去噪恰好落在发射前最后 K tick)、前槽在当 tick 观测下完成最后一步后立即发射。πR² 论文对这些实现选择零消融——"1 个 Euler 子步"的一句话背后是一片复现者会真实踩进去的雷区,这可能也解释了为什么 naive-async 基线在论文真机表里表现不稳定。</p>
 
 <p>两篇合看:TurboVLA 用小模型换绝对速度,牺牲了语言理解的在线性(文本缓存假设指令集封闭);πR² 保留大模型语义、用调度数学换反应性,依赖 proprio 传感与第二张卡。共同的诚实结论是:<b>实时性的瓶颈不在 FLOPS,而在观测陈旧度的管理</b>——谁更新观测、多晚更新、以什么噪声粒度更新。</p>
-<h1>跨主题观察</h1>
 
-<p>三条线程共享一个深层结构:<b>这个领域的瓶颈正在从"能力"转向"运营"</b>。世界模型的问题不再是能不能生成,而是长程运营中状态与可控性如何保持(ABot 的可控性衰减、滚动窗的内存语义);UMI 数据的问题不再是能不能采集,而是数据分布里缺什么(recovery)、成本被转移到哪里(标注质控、replay 验证);实时策略的问题不再是 FLOPS,而是观测陈旧度的调度(谁更新、多晚更新、以什么噪声粒度更新)。三个实验恰好各打中一层:衰减曲线是运营指标,recovery 含量是分布审计,staircase 雷区是调度实现。一个可执行的共同建议:<b>论文的"长/大/快"声明都应该配一条随资源消耗变化的衰减曲线</b>——可控性-vs-时长、成功率-vs-数据量、质量-vs-延迟——单点数字在这个时代已经不够了。</p>
+<hr/>
 
-<h1>轻量留意(未深挖,按信号强度排序)</h1>
+<h1>这次巡航带走了什么</h1>
 
-<table>
-<tr><th>论文</th><th>定位</th><th>为什么留意</th></tr>
-<tr><td>StatePlay (2607.26754)</td><td>状态感知游戏世界模型,mechanics-consistent 生成</td><td>正面回应"世界模型的状态问题",与 ABot 线程直接互补</td></tr>
-<tr><td>Wonder (2607.26037)</td><td>Video World Model Done Better</td><td>与 ABot 同赛道的直接竞争者,路线差异值得对照</td></tr>
-<tr><td>AlayaWorld (2607.18367)</td><td>Interactive Long-Horizon World Modeling 全技术报告</td><td>长程交互世界模型的完整工程栈,ABot 的参照系</td></tr>
-<tr><td>WorldDiT (2607.23909)</td><td>统一 world+action 建模的扩散架构</td><td>横跨世界模型与 VLA 两条线程的架构方案</td></tr>
-<tr><td>Masked Visual Actions (2607.19343)</td><td>统一世界建模的掩码视觉动作</td><td>动作表示层的替代路线</td></tr>
-<tr><td>Generative World Renderer at the Speed of Play (2607.18703)</td><td>实时生成式世界渲染</td><td>世界模型推理工程化对照组</td></tr>
-<tr><td>RynnBrain 1.1 (2607.17977)</td><td>更强更泛化的具身基础模型</td><td>VLA 基座演进信号</td></tr>
-<tr><td>HumanCLAW (2607.27180)</td><td>Can VLMs Act Through a Body?</td><td>VLM 具身化的概念性拷问,与实时策略线程互补</td></tr>
-<tr><td>Anchor-Align (2607.13429)</td><td>表征锚定 + 语言-动作对齐的 VLA 泛化微调</td><td>与 UMI 的 anchor 问题(数据侧 vs 表征侧)遥相呼应</td></tr>
-<tr><td>Data Pyramid (2607.24744)</td><td>具身操作的数据金字塔组织</td><td>与 fidelity×scale 框架互补的数据分层视角</td></tr>
-<tr><td>Robot-Centric Pointmaps (2607.11498)</td><td>机器人中心点图表示的 VLA</td><td>感知表示对策略的影响</td></tr>
-<tr><td>TD-JEPA (2607.25337)</td><td>plan-aware 表示学习用于潜在世界模型 MPC</td><td>表示学习+世界模型控制路线信号</td></tr>
-<tr><td>Apple-π (2607.16401)</td><td>视频推理基准,面向定律级物理智能</td><td>大厂对"物理定律 grounding"的评测定义</td></tr>
-<tr><td>Open-AoE (2607.14183)</td><td>开放第一视角操作数据集与工具链</td><td>UMI 之外的另一条 egocentric 数据路线</td></tr>
-<tr><td>Progress Reward survey (2607.21655)</td><td>机器人学习过程奖励综述</td><td>奖励设计背景工具</td></tr>
-<tr><td>Kimi K3 (2607.24653)</td><td>Open Frontier Intelligence 模型报告</td><td>VLA 所依赖的基座能力背景</td></tr>
-</table>
+<p>三个故事各不相同,我们不强行缝合。但方法论上这一轮确实留下了两样东西。其一是一个评估主张:这个时代"长/大/快"的系统声明,单点数字已经不够了——可控性应该配一条随时间的曲线(ABot 的阵发崩溃在 60 秒评测里完全隐形),成功率应该配一条随数据量的曲线,实时性应该配一条随延迟的曲线;三个实验恰好各打中一层。其二是一个心态验证:猜想被证伪不亏——模态猜想死了,但追它的过程踩出了一张 staircase 实现雷区地图,对复现者来说,这张地图可能比原猜想更有用。</p>
+
+<h1>轻量留意</h1>
+
+<p>几篇与本期线程呼应、值得知道存在的工作:世界模型一侧,<a href="https://arxiv.org/abs/2607.26754">StatePlay (2607.26754)</a> 正面处理"世界模型的状态一致性"问题,与 ABot 的阵发崩溃现象直接互补;<a href="https://arxiv.org/abs/2607.26037">Wonder (2607.26037)</a> 与 <a href="https://arxiv.org/abs/2607.18367">AlayaWorld (2607.18367)</a> 是同赛道的参照系。UMI/数据一侧,<a href="https://arxiv.org/abs/2607.13429">Anchor-Align (2607.13429)</a> 把"anchor"问题从数据侧搬到了表征侧,<a href="https://arxiv.org/abs/2607.24744">Data Pyramid (2607.24744)</a> 给出与 fidelity×scale 互补的数据分层视角,<a href="https://arxiv.org/abs/2607.14183">Open-AoE (2607.14183)</a> 是 UMI 之外的另一条 egocentric 数据路线。实时策略之外,<a href="https://arxiv.org/abs/2607.25337">TD-JEPA (2607.25337)</a> 的 plan-aware 表示学习 + 潜在世界模型 MPC,是"表示→世界模型→控制"路线的信号,值得后续跟踪。</p>
