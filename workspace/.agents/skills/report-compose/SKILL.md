@@ -1,81 +1,83 @@
 ---
 name: report-compose
-description: "Compose, publish, and archive the Paper Scout research report as Lark DocxXML, including structure, illustrative artifacts, local media insertion, Feishu delivery, and user notification. Load lark-doc and lark-im for command details."
+description: "以 Lark DocxXML 撰写、发布并存档 Paper Scout 研究报告,包括结构、图示产物、本地媒体插入、飞书交付与用户通知。命令细节加载 lark-doc 与 lark-im。"
 user-invocable: false
 ---
 
 # report-compose
 
-This skill owns the Write and Deliver steps. The output is one canonical research report: the local `runs/<run-id>/report.docxxml` source and the published Feishu document. Paper text, code probes, patches, MinerU outputs, and working notes are source traces, not parallel user-facing deliverables.
+本技能负责写作与交付两个步骤。产出是一份权威研究报告:本地的 `runs/<run-id>/report.docxxml` 源文件和发布的飞书文档。论文文本、代码探针、补丁、MinerU 输出和工作笔记是源材料,不是并行的用户交付物。
 
-Load `lark-doc` before drafting or publishing. Follow its DocxXML references for syntax, especially `references/lark-doc-xml.md`. Load `lark-im` before notification. For local image placement, follow `references/figure-embedding.md`.
+起草或发布前加载 `lark-doc`,遵循其 DocxXML 参考文档的语法,尤其是 `references/lark-doc-xml.md`。通知前加载 `lark-im`。本地图片插入遵循 `references/figure-embedding.md`。
 
-## Report Contract
+## 报告契约
 
-Recent papers are research seeds, not the boundary of the report. Start from what is new, then follow the strongest threads: related papers, code, artifacts, diagnostics, experiments, equations, and buildable questions. The report should foreground what the run learned from the paper plus external signals, not merely reorganize paper text.
+近期论文是研究的种子,不是报告的边界。从新东西出发,沿着最强的线索走:相关论文、代码、产物、诊断、实验、公式、可建造的问题。报告前置的是从论文加外部信号中学到的东西,而不是论文文本的重组。
 
-Illustrative artifacts are first-class: equations, code snippets, pseudocode, paper figures, result figures, curated diagrams, produced artifacts, and real tables. Their purpose is not to decorate the report, but to demonstrate the mechanism, result, contrast, or failure mode faster than prose can.
+图示产物是一等公民:公式、代码片段、伪代码、论文插图、结果图、策展图表、产出物、真实表格。它们的目的不是装饰报告,而是比文字更快地展示机制、结果、对比或失败模式。
 
-A good report is insight-dense and scannable. Plain prose should orient the reader, explain what to notice, and keep the logic fluent. Do not deliver a dense pile of prose that merely reorganizes paper text.
+好的报告洞见密集且可扫读。平实的文字负责定位读者、讲清该看什么、保持逻辑流畅。不要交付一堆只是把论文文本重新排列的密实文字。
 
-## Format Rules
+报告以中文撰写。
 
-- Author as DocxXML. v2 API. No `--title` flag - use a `<title>` element at the start and do not repeat it in the body.
-- Use a sensible `<h1>` / `<h2>` hierarchy. Feishu auto-generates a table of contents.
-- Callout children must be block elements (`<p>`, headings, lists). No bare text, no tables or code blocks inside callouts.
-- Escape `<`, `>`, `&` as `&lt;`, `&gt;`, `&amp;` in text and code.
-- DocxXML is a fragment format with multiple top-level blocks. Do not validate it with a standard single-root XML parser.
-- Temporary media anchors must be standalone top-level paragraphs, unique within the doc, and easy to delete after media insertion, for example `<p>[[figure-anchor:paper-slug:overview]]</p>`.
-- Include at least two unique `[[figure-anchor:...]]` anchors in the local `report.docxxml`. The delivered Feishu doc should not leave visible placeholder anchors after media insertion.
-- Inside `<latex>` blocks, use a single backslash for LaTeX commands (`\pi`, `\mathcal{L}`); a double backslash (`\\`) is a line-break command and will render each token on a new line.
+## 格式规则
 
-## Structure
+- 以 DocxXML 写作,v2 API。不用 `--title` 标志——在开头放一个 `<title>` 元素,正文不再重复。
+- 使用合理的 `<h1>` / `<h2>` 层级。飞书会自动生成目录。
+- callout 的子元素必须是块级元素(`<p>`、标题、列表)。不要裸文本,不要在 callout 内放表格或代码块。
+- 文本和代码中的 `<`、`>`、`&` 要转义为 `&lt;`、`&gt;`、`&amp;`。
+- DocxXML 是片段格式,有多个顶层块。不要用标准的单根 XML 解析器校验它。
+- 临时媒体锚点必须是独立的顶层段落,在文档内唯一,且在媒体插入后易于删除,例如 `<p>[[figure-anchor:paper-slug:overview]]</p>`。
+- 本地 `report.docxxml` 中至少包含两个不同的 `[[figure-anchor:...]]` 锚点。交付的飞书文档在媒体插入后不应留下可见的占位锚点。
+- 在 `<latex>` 块内,LaTeX 命令用单个反斜杠(`\pi`、`\mathcal{L}`);双反斜杠(`\\`)是换行命令,会把每个符号渲染到新行。
 
-Organize by theme, not as a flat list.
+## 结构
+
+按主题组织,不要平铺成列表。
 
 ```xml
-<title>Paper Scout Research Report - YYYY-MM-DD</title>
-Opening synthesis (2-4 sentences)
-<h1>Theme A</h1>
-  mini-synthesis (1-3 sentences)
-  shortlist table (lightly-noticed papers only; omit if none)
-  <h2>Deep thread</h2> + research narrative + illustrative artifacts
+<title>Paper Scout 研究报告 - YYYY-MM-DD</title>
+开篇综述(2-4 句)
+<h1>主题 A</h1>
+  小综述(1-3 句)
+  短名单表(仅轻量留意的论文;没有则省略)
+  <h2>深度线程</h2> + 研究叙事 + 图示产物
   <hr/>
-  <h2>Deep thread</h2> + research narrative + illustrative artifacts
-<h1>Theme B</h1>
+  <h2>深度线程</h2> + 研究叙事 + 图示产物
+<h1>主题 B</h1>
   ...
-Optional: <h1>Cross-cutting observations</h1>
+可选:<h1>跨主题观察</h1>
 ```
 
-### Opening Synthesis
+### 开篇综述
 
-Answer: *What did this run discover?* Name the themes the rest of the report will use.
+回答:*这次巡航发现了什么?*点出报告其余部分将使用的主题。
 
-If one paper was clearly exceptional:
+如果有一篇论文明显出众:
 
 ```xml
 <callout emoji="✅" background-color="light-green">
-  <p><b>Standout:</b> [Title] is the clearest seed for [research thread]. [Why.]</p>
+  <p><b>亮点:</b>[标题]是[研究线程]最清晰的种子。[原因。]</p>
 </callout>
 ```
 
-If the period was weak, say so plainly. Do not pad.
+如果这一时期整体平淡,直说。不要硬凑。
 
-### Theme Sections
+### 主题小节
 
-One `<h1>` per actual theme. Derive themes from the research threads, not from a fixed taxonomy.
+每个真实主题一个 `<h1>`。主题从研究线程中生长出来,不套固定分类法。
 
-Rules:
+规则:
 
-- Do not duplicate paper summaries. A lightly noticed paper should appear in one shortlist table. A deep thread should get one main narrative location, though it may reference other papers where they clarify the thread.
-- Put deep threads as `<h2>` research sections inside their theme.
-- Put lightly-noticed papers as rows in a per-theme shortlist table.
-- Fold one-stray-paper themes into a broader theme or a catch-all.
-- If the pool does not cluster, use a single `<h1>Highlights</h1>`.
+- 不要重复论文摘要。一篇轻量留意的论文只出现在一个短名单表里。一个深度线程有一个主要叙事位置,但可以在能讲清线程的地方引用其他论文。
+- 深度线程作为 `<h2>` 研究小节放进所属主题。
+- 轻量留意的论文作为每个主题短名单表的行。
+- 只有一篇孤文的主题,并入更大的主题或兜底主题。
+- 如果论文池无法聚类,用单个 `<h1>精选</h1>`。
 
-#### Shortlist Table
+#### 短名单表
 
-Four columns: **Paper**, **Key Contribution**, **Why It Matters**, **Links**.
+四列:**论文**、**核心贡献**、**为什么重要**、**链接**。
 
 ```xml
 <table>
@@ -87,165 +89,165 @@ Four columns: **Paper**, **Key Contribution**, **Why It Matters**, **Links**.
   </colgroup>
   <thead>
     <tr>
-      <th background-color="light-gray">Paper</th>
-      <th background-color="light-gray">Key Contribution</th>
-      <th background-color="light-gray">Why It Matters</th>
-      <th background-color="light-gray">Links</th>
+      <th background-color="light-gray">论文</th>
+      <th background-color="light-gray">核心贡献</th>
+      <th background-color="light-gray">为什么重要</th>
+      <th background-color="light-gray">链接</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><b>Title</b> (Author et al., 2026)</td>
-      <td>What they did.</td>
-      <td>Why this user should care.</td>
+      <td><b>标题</b>(作者等,2026)</td>
+      <td>他们做了什么。</td>
+      <td>这位用户为什么该关心。</td>
       <td><a href="url">HF</a> / <a href="url">PDF</a></td>
     </tr>
   </tbody>
 </table>
 ```
 
-Keep contribution and relevance distinct. Omit the table if every paper in the theme is covered by deep threads. Tables with paragraph-length cells do not count as illustrative artifacts.
+贡献与相关性要分开写。如果主题里每篇论文都被深度线程覆盖了,就省略表格。单元格塞满段落的表格不算图示产物。
 
-### Deep Thread Sections
+### 深度线程小节
 
-Each deep thread is an `<h2>` inside its theme, separated by `<hr/>`. A thread may center on one paper, a comparison, a method question, a code/probe result, or a buildable idea inspired by papers.
+每个深度线程是所属主题下的一个 `<h2>`,用 `<hr/>` 分隔。线程可以围绕一篇论文、一次比较、一个方法问题、一个代码/探针结果,或一个由论文激发的可建造想法。
 
-Header format:
+头部格式:
 
 ```xml
-<h2>Paper Title</h2>
-<p>Author et al. (2026) · <a href="url">HF</a> · <a href="url">PDF</a></p>
+<h2>论文标题</h2>
+<p>作者等(2026)· <a href="url">HF</a> · <a href="url">PDF</a></p>
 ```
 
-Write as fluent narrative, not a fixed template. Every deep thread should explain the question, the core mechanism, what the investigation found, what external signals support it, and what remains uncertain.
+写成流畅的叙事,不要套固定模板。每个深度线程都应讲清:问题是什么、核心机制、调查发现了什么、哪些外部信号支撑、还有什么不确定。
 
-Use DocxXML features where they carry understanding:
+在能承载理解的地方使用 DocxXML 特性:
 
-- `<latex>` for equations that clarify the mechanism.
-- `<pre lang="python" caption="..."><code>...</code></pre>` for compact code or pseudocode snippets.
-- `<grid>` for two-way comparisons.
-- `<table>` for structured multi-way comparisons, metrics, or ablations.
-- Local image anchors for paper figures, qualitative examples, failure cases, or curated diagrams that should appear near the relevant prose.
+- `<latex>` 用于讲清机制的公式。
+- `<pre lang="python" caption="..."><code>...</code></pre>` 用于紧凑的代码或伪代码片段。
+- `<grid>` 用于两方对比。
+- `<table>` 用于结构化的多方对比、指标或消融。
+- 本地图片锚点用于论文插图、定性示例、失败案例,或应出现在相关文字附近的策展图表。
 
-Use the artifact that best serves the explanation:
+选择最服务于解释的产物:
 
-- use the paper's main figure when describing the paper itself
-- use code snippets, pseudocode, or equations when they explain a method, loop, algorithm, or derivation more clearly than prose
-- use the paper's experiment figures, result figures, or tables when covering reported results
-- use produced artifacts and tables to demonstrate what the run discovered
+- 讲论文本身时,用论文的主图
+- 解释方法、回路、算法或推导时,用代码片段、伪代码或公式——当它们比文字更清楚
+- 覆盖报告的结果时,用论文的实验图、结果图或表格
+- 展示本次巡航的发现时,用产出物和表格
 
-Map MinerU image files to figure numbers by checking the caption and surrounding main-text references rather than inferring from filenames.
+把 MinerU 图片文件映射到图号时,要看图注和正文的引用,不要从文件名猜。
 
-### Illustration Plan
+### 图示计划
 
-Before writing the final draft, keep a scratch illustration plan for each deep thread:
+写最终稿之前,为每个深度线程留一份临时的图示计划:
 
-- artifact type: equation / code / pseudocode / paper figure / result figure / curated diagram / produced artifact / real table
-- source: paper asset, codebase, related paper, diagnostic, experiment, or agent-created diagram
-- purpose: what the artifact helps the reader understand
-- placement: nearby paragraph or temporary media anchor
+- 产物类型:公式 / 代码 / 伪代码 / 论文插图 / 结果图 / 策展图表 / 产出物 / 真实表格
+- 来源:论文资产、代码库、相关论文、诊断、实验,或代理自绘图表
+- 目的:这个产物帮助读者理解什么
+- 位置:附近的段落或临时媒体锚点
 
-Use artifacts wherever they make the report clearer and easier to scan while preserving the logic of the narrative. If a deep thread has no useful artifact, the prose should make clear why.
+在能让报告更清楚、更易扫读且不破坏叙事逻辑的地方使用产物。如果某个深度线程没有合适的产物,文字应讲清原因。
 
-### Cross-cutting Observations
+### 跨主题观察
 
-Add a closing `<h1>` only for a pattern that cuts across themes: a convergence, absence, shift, reusable method idea, or open research question. Skip if there is nothing to say.
+只当存在横跨主题的模式时,才加收尾的 `<h1>`:一次趋同、一个空缺、一次转变、一个可复用的方法想法,或一个开放研究问题。没什么可说就跳过。
 
-## Delivery
+## 交付
 
-All `docs` commands carry `--api-version v2`. Create and update as the bot. The local source is `runs/<run-id>/report.docxxml`.
+所有 `docs` 命令都带 `--api-version v2`。以 bot 身份创建和更新。本地源文件是 `runs/<run-id>/report.docxxml`。
 
-Before creating the real doc, ensure the run checklist is complete and run:
+创建真实文档之前,确保运行清单已完成,并运行:
 
 ```bash
 python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode prepublish
 ```
 
-### Feishu delivery (requires lark-cli)
+### 飞书交付(需要 lark-cli)
 
-If `lark-cli` is available on PATH, proceed with the full Feishu flow below. If `lark-cli` is **not** available, skip directly to the **Local-only fallback** section.
+如果 PATH 上有 `lark-cli`,走下面的完整飞书流程。如果**没有** `lark-cli`,直接跳到**仅本地兜底**小节。
 
-Before creating the real doc, run the same create command with `--dry-run`:
+创建真实文档之前,先用 `--dry-run` 跑一遍同样的创建命令:
 
 ```bash
 lark-cli docs +create --api-version v2 --dry-run --as bot \
   --content @runs/<run-id>/report.docxxml
 ```
 
-Create the doc:
+创建文档:
 
 ```bash
 lark-cli docs +create --api-version v2 --as bot \
   --content @runs/<run-id>/report.docxxml
 ```
 
-The bot owns the resulting doc. There is **no `--parent-token`** and no configured folder/wiki destination - do not add one. The `<title>` element inside the content sets the document title. Capture `data.document.document_id` and `data.document.url` from the response.
+bot 拥有产出的文档。**没有 `--parent-token`**,也没有配置文件夹/知识库目的地——不要自己加。内容里的 `<title>` 元素设置文档标题。从响应中捕获 `data.document.document_id` 和 `data.document.url`。
 
-If the report is long enough to risk a single create call becoming unwieldy, create a skeleton first, then append each theme with `docs +update --command append`; dry-run each append before the real update.
+如果报告长到单次创建调用可能难以驾驭,先创建骨架,再用 `docs +update --command append` 逐主题追加;每次追加前先 dry-run。
 
-After the doc exists, insert local media into the temporary anchors, delete the anchors in Feishu, and fetch once to verify order. Follow `references/figure-embedding.md` for the exact command shape. Keep the anchors in the local `report.docxxml` source.
+文档存在之后,把本地媒体插入临时锚点,删除飞书中的锚点,再抓取一次验证顺序。确切的命令形态见 `references/figure-embedding.md`。本地 `report.docxxml` 源文件中保留锚点。
 
-Then load `lark-im` and send the user a direct message containing the doc `url`. Use `--text` (not `--markdown` or `--content`) so Feishu auto-unfurls the doc URL into a rich preview card:
+然后加载 `lark-im`,给用户发一条包含文档 `url` 的私信。用 `--text`(不是 `--markdown` 或 `--content`),这样飞书会把文档 URL 自动展开成富预览卡片:
 
 ```bash
 lark-cli im +messages-send --as bot --user-id <ou_xxx> \
   --text "https://<tenant>.feishu.cn/docx/<doc_id>"
 ```
 
-A run is complete only once this direct message is sent and confirmed. If recipient resolution or sending fails, stop and report it.
+只有当这条私信发出并确认后,一次巡航才算完成。如果收件人解析或发送失败,停下并报告。
 
-After the DM is confirmed:
+私信确认之后:
 
-1. Ensure the delivered DocxXML source is preserved at `runs/<run-id>/report.docxxml`.
-2. Preserve the document `url` so `workspace-manage` can record it in `runs/INDEX.md`.
+1. 确保已交付的 DocxXML 源文件保存在 `runs/<run-id>/report.docxxml`。
+2. 保存文档 `url`,交给 `workspace-manage` 记入 `runs/INDEX.md`。
 
-### Local-only fallback (no lark-cli)
+### 仅本地兜底(无 lark-cli)
 
-When `lark-cli` is not installed, Feishu delivery is skipped gracefully. Do not treat this as an error. Instead:
+当 `lark-cli` 未安装时,优雅地跳过飞书交付。不要视为错误。改为:
 
-1. Ensure the DocxXML source is preserved at `runs/<run-id>/report.docxxml`.
-2. Tell the user where the report was saved, using the absolute workspace path, for example:
+1. 确保 DocxXML 源文件保存在 `runs/<run-id>/report.docxxml`。
+2. 用工作区绝对路径告诉用户报告保存在哪里,例如:
 
-   > Feishu delivery skipped (lark-cli not found). Report saved to:
+   > 飞书交付已跳过(未找到 lark-cli)。报告已保存到:
    > `/absolute/path/to/workspace/runs/<run-id>/report.docxxml`
 
-3. Proceed to `workspace-manage` finalization as normal. Record the run in `runs/INDEX.md` with the local file path in place of a Feishu URL.
+3. 照常进入 `workspace-manage` 收尾流程。在 `runs/INDEX.md` 中用本地文件路径代替飞书 URL 记录本次巡航。
 
-## What Not To Do
+## 不要做什么
 
-- Do not omit or duplicate the `<title>`.
-- Do not use `overwrite` to fix a report mid-run. Use `append`, or the block-level edit commands documented in `lark-doc`.
-- Do not put bare text, tables, or code blocks inside a `<callout>`.
-- Do not write "achieves state-of-the-art." Write the number, benchmark, and comparison.
-- Do not use a flat bullet list for the whole report.
-- Do not stamp the same five sub-headers onto every deep thread.
-- Do not duplicate a deep thread as a shortlist row.
-- Do not present one giant shortlist table for the whole pool.
-- Do not hardcode the theme list.
-- Do not ship a deep thread that restates the abstract.
-- Do not leave temporary media anchors visible in the delivered doc.
-- Do not skip the DM and consider delivery complete (unless lark-cli is unavailable and you are following the local-only fallback).
-- Do not use `--markdown` or `post` content for the notification URL; it renders as a plain blue hyperlink instead of a Feishu doc card.
-- Do not invent recipient resolution rules; follow `lark-im`.
+- 不要省略或重复 `<title>`。
+- 不要用 `overwrite` 在巡航中途修报告。用 `append`,或 `lark-doc` 中文档化的块级编辑命令。
+- 不要在 `<callout>` 里放裸文本、表格或代码块。
+- 不要写"取得了 SOTA"。写数字、基准和比较对象。
+- 不要整份报告都用平铺的要点列表。
+- 不要给每个深度线程盖上同样的五个小标题。
+- 不要把深度线程又复制成短名单的一行。
+- 不要把整个论文池做成一张巨大的短名单表。
+- 不要硬编码主题列表。
+- 不要交付只是复述摘要的深度线程。
+- 不要在交付的文档里留下可见的临时媒体锚点。
+- 不要跳过私信就认为交付完成(除非 lark-cli 不可用且你在走仅本地兜底)。
+- 通知 URL 不要用 `--markdown` 或 `post` 内容;那会渲染成朴素的蓝色链接,而不是飞书文档卡片。
+- 不要发明收件人解析规则;遵循 `lark-im`。
 
-## Checklist
+## 清单
 
-- [ ] `lark-doc` loaded
-- [ ] `lark-im` loaded before notification
-- [ ] DocxXML source in `runs/<run-id>/report.docxxml`
-- [ ] `<title>` present, not duplicated
-- [ ] Opening synthesis names research themes
-- [ ] Shortlist tables are per-theme and lightly-noticed only
-- [ ] Each deep thread has an illustration plan
-- [ ] Illustrative artifacts included where they clarify the finding
-- [ ] At least two unique figure anchors present in the local report source
-- [ ] Run checklist complete
-- [ ] Workspace verifier passes in prepublish mode
-- [ ] Local media anchors inserted, resolved, deleted, and verified
-- [ ] Callouts used only where they earn attention
-- [ ] `<`, `>`, `&` escaped per `lark-doc`
-- [ ] LaTeX commands inside `<latex>` use single backslashes
-- [ ] Create/update commands dry-run before live write
-- [ ] Feishu URL captured
-- [ ] User DM confirmed
-- [ ] URL handed to `workspace-manage` for `runs/INDEX.md`
+- [ ] 已加载 `lark-doc`
+- [ ] 通知前已加载 `lark-im`
+- [ ] DocxXML 源文件在 `runs/<run-id>/report.docxxml`
+- [ ] `<title>` 存在且不重复
+- [ ] 开篇综述点出了研究主题
+- [ ] 短名单表按主题组织且只含轻量留意的论文
+- [ ] 每个深度线程有图示计划
+- [ ] 在能讲清发现的地方使用了图示产物
+- [ ] 本地报告源文件中至少有两个不同的图锚点
+- [ ] 运行清单已完成
+- [ ] 工作区校验器 prepublish 模式通过
+- [ ] 本地媒体锚点已插入、解析、删除并验证
+- [ ] callout 只用在真正值得注意的地方
+- [ ] `<`、`>`、`&` 已按 `lark-doc` 转义
+- [ ] `<latex>` 内的 LaTeX 命令使用单反斜杠
+- [ ] 创建/更新命令在真实写入前做过 dry-run
+- [ ] 飞书 URL 已捕获
+- [ ] 用户私信已确认
+- [ ] URL 已交给 `workspace-manage` 记入 `runs/INDEX.md`

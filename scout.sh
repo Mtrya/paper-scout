@@ -78,7 +78,7 @@ fi
 cd "$repo_root/workspace"
 
 today="$(date +%F)"
-prompt="$(printf 'Today is %s.\n\n' "$today"; cat "$repo_root/prompt.txt")"
+prompt="$(printf '今天是 %s。\n\n' "$today"; cat "$repo_root/prompt.txt")"
 
 case "$agent" in
     codex)

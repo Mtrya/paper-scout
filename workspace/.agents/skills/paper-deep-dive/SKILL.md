@@ -1,100 +1,100 @@
 ---
 name: paper-deep-dive
-description: "Investigate a selected paper or paper-inspired research question by reading the paper, seeking external signals, preserving evidence, and extracting report-ready insight."
+description: "通过读论文、寻找外部信号、保存证据、提炼可直接入报告的洞见,深入调查一篇选定的论文或由论文激发的研究问题。"
 user-invocable: true
 ---
 
 # paper-deep-dive
 
-Do not summarize from the outside. Enter the paper as a researcher: understand the core idea, make it concrete, and learn something by tracing, running, reimplementing, deriving, comparing, or building a small probe. Critique is welcome when it is earned by investigation, but critique is not the goal.
+不要从外面做摘要。以研究者的姿态进入论文:理解核心想法,把它变具体,通过追踪、运行、复现、推导、比较或做一个小探针来学到东西。由调查赢得的批评是受欢迎的,但批评不是目标。
 
-For workspace layout, thread packets, and verifier rules, follow `workspace-manage`.
+工作区布局、线程包与校验器规则,遵循 `workspace-manage`。
 
-## Thread Packet
+## 线程包
 
-A thread is a durable unit of investigation under `runs/<run-id>/<thread-id>/`. It may be one paper, a comparison across papers, a method question, a code path, or a buildable idea inspired by the paper.
+一个线程是 `runs/<run-id>/<thread-id>/` 下的持久调查单元。它可以是一篇论文、一次跨论文比较、一个方法问题、一条代码路径,或一个由论文激发的可建造想法。
 
-Use one of these shapes:
+使用以下形态之一:
 
 - `README.md` + `code/`
 - `README.md` + `patches/`
 - `README.md` + `code/` + `patches/`
 - `BLOCKER.md`
 
-`README.md` explains what was attempted, what evidence was preserved, how to rerun it when applicable, and what the result means for the report. `BLOCKER.md` is for the rare case where no meaningful external signal could be preserved; it should state the blocker plainly enough that the report can be honest about it.
+`README.md` 说明尝试了什么、保留了什么证据、如何重跑(如适用),以及结果对报告意味着什么。`BLOCKER.md` 用于极少数情况:没有任何有意义的外部信号可以保留;它应把障碍讲得足够清楚,让报告可以诚实地面对它。
 
-## Acquire And Read
+## 获取与阅读
 
-1. Acquire the paper through `paper-source` (`hf papers read` or arXiv PDF + MinerU) and save the Markdown to `papers/<area>/<slug>-<id>.md`.
-2. Read the full paper, including appendix.
-3. Identify the paper's problem, claimed contribution, core mechanism, key evidence, and the questions that matter for this run.
+1. 通过 `paper-source` 获取论文(`hf papers read` 或 arXiv PDF + MinerU),把 Markdown 存到 `papers/<area>/<slug>-<id>.md`。
+2. 通读全文,包括附录。
+3. 识别论文的问题、声称的贡献、核心机制、关键证据,以及对本次巡航重要的问题。
 
-## Make The Method Concrete
+## 把方法变具体
 
-Explain the method densely enough that you could roughly reimplement or modify it:
+把方法讲到足够密,密到你可以大致复现或修改它:
 
-- inputs and outputs
-- major stages and how they connect
-- non-obvious design choices
-- equations, losses, metrics, prompts, data transforms, or control loops that carry the method
-- what the reported experiments actually demonstrate and what remains untested
+- 输入与输出
+- 主要阶段及其连接方式
+- 不直观的设计选择
+- 承载方法的公式、损失、指标、提示词、数据变换或控制回路
+- 报告的实验真正证明了什么,还有什么没被检验
 
-Fill in skipped derivations when needed; note when you are supplementing rather than quoting.
+需要时补上被跳过的推导;注明你是在补充而不是引用。
 
-## Seek External Signals
+## 寻找外部信号
 
-Insight comes from the paper plus external signals. Let the investigation iterate: ask a live question, take the strongest feasible constructive action, inspect the result, reinterpret the thread, and decide what question follows.
+洞见来自论文加外部信号。让调查迭代起来:提出一个活的问题,采取最强的可行建设性动作,检视结果,重新解读线程,决定下一个问题。
 
-Prefer actions such as:
+优先选择这类动作:
 
-- trace official code end to end
-- run a small path through the implementation
-- inspect configs, preprocessing, data samples, checkpoints, or evaluation scripts
-- profile or probe a component
-- reimplement the core mechanism on a toy case
-- derive a missing detail
-- compare with a related implementation or paper
-- run a small ablation, metric check, or benchmark subset
+- 端到端追踪官方代码
+- 在实现里跑通一条小路径
+- 检查配置、预处理、数据样本、检查点或评测脚本
+- 对某个组件做性能剖析或探针
+- 在玩具案例上复现核心机制
+- 推导一个缺失的细节
+- 与相关实现或论文比较
+- 跑一个小消融、指标核验或基准子集
 
-When official code or artifacts exist, use them as the strongest signal. Clone or work under `code/`, using explicit command working directories and direct environment binaries rather than relying on persistent `cd` or virtualenv activation.
+当官方代码或产物存在时,它们是最强的信号,要用起来。在 `code/` 下克隆或工作,使用显式的命令工作目录和直接的环境二进制路径,而不是依赖持久的 `cd` 或虚拟环境激活。
 
-If official artifacts are partial or unusable, do not stop at that observation. Reimplement the core idea at a humble scale, inspect related implementations, or read related papers that can test what is new. If none of those actions is meaningful within the run's resources, preserve `BLOCKER.md`.
+如果官方产物不完整或不可用,不要停在这个观察上。以谦逊的规模复现核心想法,检查相关实现,或读能检验新东西的相关论文。如果这些动作在巡航资源内都无意义,保留 `BLOCKER.md`。
 
-Related papers count as external signals when they answer a real question: whether a claimed baseline comparison is fair, whether the mechanism is genuinely new, whether a prior method already solves the same problem, or whether a related implementation clarifies the missing code.
+相关论文在回答真实问题时也算外部信号:声称的基线比较是否公平、机制是否真的新、先前方法是否已解决同一问题、相关实现是否补上了缺失的代码。
 
-Use subagents when the work splits cleanly, for example one agent tracing code while another checks related papers or builds a small probe.
+当工作可以干净地拆分时使用子代理,例如一个代理追踪代码,另一个检查相关论文或做小探针。
 
-## Compare The Neighborhood
+## 比较邻里
 
-Situate the thread against 1-3 load-bearing neighbors when it sharpens the finding: key baselines, closest competing approaches, method predecessors, or related codebases. Keep this bounded. The goal is triangulation, not a literature review.
+当能让发现更锐利时,把线程放进 1–3 个承重邻居的坐标里:关键基线、最接近的竞争方法、方法前身,或相关代码库。保持有界。目标是三角验证,不是文献综述。
 
-## Extract Report Material
+## 提炼报告材料
 
-Capture material that will make the report insight-dense and scannable:
+捕捉能让报告洞见密集且可扫读的材料:
 
-- the research question and what the run learned
-- the core mechanism in words, equations, pseudocode, or compact snippets
-- paper figures, result tables, experiment figures, or produced artifacts that clarify the story
-- limitations, blockers, and uncertainty that affect what the report can responsibly claim
-- the research takeaway: what this thread teaches the run, what the report should claim because of it, and what remains unresolved
+- 研究问题,以及这次巡航学到了什么
+- 用文字、公式、伪代码或紧凑代码片段表达的核心机制
+- 能讲清故事的论文插图、结果表格、实验图或产出物
+- 影响报告能负责任地声称什么的局限、障碍与不确定性
+- 研究结论:这个线程教会本次巡航什么、报告因此应该声称什么、还有什么没解决
 
-## Preserve Evidence
+## 保存证据
 
-Before report delivery, promote durable work from `code/` into the thread packet:
+报告交付前,把持久工作从 `code/` 晋升到线程包:
 
-- agent-written probes, reimplementations, wrappers, metric checks, synthetic experiments, or compact runnable examples go under `runs/<run-id>/<thread-id>/code/`
-- patches against official code go under `runs/<run-id>/<thread-id>/patches/`
-- report-facing media and small result artifacts go under `runs/<run-id>/assets/`
-- raw cloned repos, venvs, large logs, caches, and scratch remain ignored and are cleaned after durable evidence is promoted
+- 代理写的探针、复现、封装、指标核验、合成实验或紧凑可运行示例,放入 `runs/<run-id>/<thread-id>/code/`
+- 针对官方代码的补丁,放入 `runs/<run-id>/<thread-id>/patches/`
+- 面向报告的媒体与小型结果产物,放入 `runs/<run-id>/assets/`
+- 原始克隆仓库、虚拟环境、大日志、缓存与暂存保持被忽略,在持久证据晋升后清理
 
-Run the workspace verifier as directed by `workspace-manage`; if it fails, fix the packet rather than weakening the evidence.
+按 `workspace-manage` 的指引运行工作区校验器;如果失败,修正运行包,而不是削弱证据。
 
-## What Not To Do
+## 不要做什么
 
-- Do not deliver paraphrase as investigation.
-- Do not treat the abstract as ground truth.
-- Do not skip code inspection when usable code exists.
-- Do not stop at "no code"; try a reconstruction, related implementation, or related-paper triangulation.
-- Do not perform cargo-cult reproduction. Spend resources when the expected insight justifies them.
-- Do not let related-work exploration become a literature review.
-- Do not stop at logging a code-paper discrepancy; explain what the gap means in the context of related work and the broader research question.
+- 不要把转述当作调查交付。
+- 不要把摘要当作事实。
+- 有可用代码时,不要跳过代码检查。
+- 不要停在"没有代码";尝试重构、相关实现或相关论文三角验证。
+- 不要作秀式复现。资源的投入要由预期洞见来辩护。
+- 不要让相关工作的探索变成文献综述。
+- 不要停在记录代码与论文的不一致;解释这个差距在相关工作和更大的研究问题中意味着什么。

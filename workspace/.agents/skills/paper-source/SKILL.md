@@ -1,30 +1,30 @@
 ---
 name: paper-source
-description: "Discover and pull a broad recent pool of papers from the configured source. Default is Hugging Face Papers; other sources will be added to this skill as the workflow grows."
+description: "从配置的来源发现并拉取宽泛的近期论文池。默认来源是 Hugging Face Papers;随着工作流演进,更多来源会加入本技能。"
 user-invocable: true
 ---
 
 # paper-source
 
-This skill covers how to gather papers.
+本技能负责论文的获取方式。
 
-## What to Gather
+## 要收集什么
 
-For each candidate, preserve enough metadata to support later triage:
+每个候选论文保留足够支撑后续分诊的元数据:
 
-- title
-- paper id and any alternative identifiers
-- authors
-- abstract or summary snippet
-- links to project pages, repos, model cards, or dataset cards when available
+- 标题
+- 论文 id 及其他标识符
+- 作者
+- 摘要或概要片段
+- 项目主页、代码仓库、模型卡、数据集卡等链接(如有)
 
-If you persist the candidate pool to disk, write it to `drafts/` (scratch, may be overwritten) — never to `runs/`, which holds only durable notes.
+如果将候选池落盘,写入 `drafts/`(暂存区,可被覆盖)——绝不写入 `runs/`,那里只放持久笔记。
 
-## Source A: Hugging Face Papers
+## 来源 A:Hugging Face Papers
 
-Use the `hf` CLI for quick paper scouting, scanning and filtering, never for reading.
+用 `hf` CLI 做快速的论文侦查、扫读与筛选,不用于精读。
 
-List papers:
+列出论文:
 
 ```bash
 hf papers ls --sort trending --limit N
@@ -32,42 +32,46 @@ hf papers ls --date YYYY-MM-DD --limit N
 hf papers ls --week YYYY-Www --limit N
 ```
 
-Get paper metadata:
+获取论文元数据:
 
 ```bash
 hf papers info <paper-id>
 ```
 
-Search papers by keyword:
+按关键词搜索:
 
 ```bash
 hf papers search "<query>" --limit N
 ```
 
-Use `--format json` when structured output is easier to process.
+结构化输出更易处理时,使用 `--format json`。
 
-## Source B: ArXiv PDF + MinerU
+## 其他来源
 
-Use ArXiv PDF + MinerU for paper reading, with its more reliable full-text and figure/table extraction.
+HF 是默认池,但不是唯一的网。主动检查当前环境里可用的其他论文来源与数据工具(搜索插件、arXiv 接口、订阅源等),在 HF 覆盖不足时用起来——尤其是按领域和日期做补充扫荡。
 
-End-to-end script:
+## 来源 B:arXiv PDF + 本地 MinerU
+
+精读论文用 arXiv PDF + 本地 MinerU,全文与图表抽取更可靠。
+
+端到端脚本:
 
 ```bash
 .agents/skills/paper-source/scripts/arxiv-mineru-parse.sh <paper-id> <area> <slug>
 ```
 
-The script downloads the PDF to `drafts/`, submits the arXiv PDF URL to MinerU, polls for completion, extracts the result zip under `drafts/`, copies the resulting Markdown to `papers/<area>/<slug>-<paper-id>.md`, then removes the transient PDF, zip, and task/result JSON files. It assumes `curl`, `jq`, `unzip`, and a MinerU token at `~/.config/mineru/token`.
+脚本将 PDF 下载到 `drafts/`,调用本地 `mineru` 解析,把产出的 Markdown 复制到 `papers/<area>/<slug>-<paper-id>.md`,然后清理临时 PDF 与解析输出。依赖 `curl` 和本地 `mineru`(经 `uv tool install 'mineru[all]'` 安装)。首次运行需要模型权重;若自动下载失败,先执行 `mineru-models-download -s modelscope -m pipeline`。
 
-Useful options:
+常用选项:
 
 ```bash
-.agents/skills/paper-source/scripts/arxiv-mineru-parse.sh <paper-id> <area> <slug> --model pipeline
+.agents/skills/paper-source/scripts/arxiv-mineru-parse.sh <paper-id> <area> <slug> --backend pipeline
 .agents/skills/paper-source/scripts/arxiv-mineru-parse.sh <paper-id> <area> <slug> --copy-images
 ```
 
-With `--copy-images`, the script also copies extracted images from `drafts/` to `assets/` for easier reference during deep dives and writing.
+`--copy-images` 会把抽取的图片一并复制到 `drafts/images/<slug>-<paper-id>/`,便于深挖与写作时引用;进入报告的图片再按 `paper-deep-dive` 的证据规则晋升到运行包。
 
-If you only need the PDF audit artifact, use:
+只需要 PDF 审计产物时:
 
 ```bash
 .agents/skills/paper-source/scripts/fetch-arxiv-pdf.sh <paper-id> <slug>

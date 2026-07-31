@@ -73,6 +73,7 @@ Each file has a distinct job. Do not let them bleed into each other.
 - Check whether a change belongs in the file you are editing or another one. Use the file purposes above.
 - After editing, verify the instruction hierarchy stays consistent — no contradictions between the prompt, the reading-agent contract, and the skills.
 - Preserve the existing voice and density. These files are concise; do not inflate them with hedging, repetition, or meta-commentary.
+- Workspace instruction files (`prompt.txt`, `workspace/AGENTS.md`, the skills) and delivered reports are written in Chinese; keep them in Chinese when editing. Root-level files stay in English.
 - Do not give the reading agent instructions it cannot reasonably follow. If an instruction depends on a capability that may be absent, add a fallback.
 
 ## What Not to Add

@@ -1,202 +1,196 @@
 ---
 name: workspace-manage
-description: "Workspace layout, naming rules, artifact tracking and cleanup policy, run-packet verifier, branch/PR finalization, and INDEX.md coverage log for Paper Scout."
+description: "Paper Scout 的工作区布局、命名规则、产物追踪与清理策略、运行包校验器、分支/PR 收尾,以及 INDEX.md 覆盖日志。"
 user-invocable: false
 ---
 
 # workspace-manage
 
-## Layout
+## 布局
 
 ```text
 .
-├── papers/<area>/<slug>-<id>.md          # downloaded paper markdown
-├── code/                                 # ignored lab bench for active external-signal work
-├── drafts/                               # ignored DocxXML, media, and scratch artifacts
+├── papers/<area>/<slug>-<id>.md          # 下载的论文 Markdown
+├── code/                                 # 忽略的实验台,用于外部信号工作
+├── drafts/                               # 忽略的 DocxXML、媒体与暂存产物
 └── runs/
-    ├── INDEX.md                          # coverage log / dedup source
-    └── <run-id>/                         # durable run packet
-        ├── report.docxxml                # delivered report source
-        ├── checklist.md                  # human completion gate
-        ├── assets/                       # report-facing assets and small result artifacts
-        └── <thread-id>/                  # paper or cross-paper research thread
-            ├── README.md                 # required when evidence is preserved
-            ├── code/                     # optional preserved probes, scripts, reimplementations
-            └── patches/                  # optional preserved patches against external code
+    ├── INDEX.md                          # 覆盖日志 / 去重事实源
+    └── <run-id>/                         # 持久运行包
+        ├── report.docxxml                # 已交付报告的源文件
+        ├── checklist.md                  # 人工完成闸门
+        ├── assets/                       # 面向报告的资产与小型结果产物
+        └── <thread-id>/                  # 论文或跨论文研究线程
+            ├── README.md                 # 保留证据时必需
+            ├── code/                     # 可选保留的探针、脚本、复现
+            └── patches/                  # 可选保留的针对外部代码的补丁
 ```
 
-A thread is a durable unit of investigation. It may be one paper, a comparison across papers, a method question, a code path, or a buildable idea inspired by the paper pool. A thread directory may also contain only `BLOCKER.md` when no meaningful external signal could be preserved.
+一个线程是一个持久的调查单元。它可以是一篇论文、一次跨论文比较、一个方法问题、一条代码路径,或一个由论文池激发的可建造想法。当没有任何有意义的外部信号可以保留时,线程目录也可以只含 `BLOCKER.md`。
 
-## Naming
+## 命名
 
-Run ids should be date-led and human-readable when practical, such as `2026-06-07-cosmos3-grail-qwenvla`. Do not force a clever slug when the paper set does not have one.
+运行 id 以日期开头、尽量可读,例如 `2026-06-07-cosmos3-grail-qwenvla`。论文集没有现成名字时,不要硬造花哨的 slug。
 
-Paper cache files lead with a title slug and trail with the paper id:
+论文缓存文件以标题 slug 开头、论文 id 结尾:
 
 - `papers/vla/robosemanticbench-2606.02277.md`
 - `papers/world-models/cosmos3-2606.02800.md`
 
-Thread ids should be readable and stable:
+线程 id 要可读且稳定:
 
 - `runs/2026-06-07-cosmos3-grail-qwenvla/cosmos3-2606.02800/`
 - `runs/2026-06-07-cosmos3-grail-qwenvla/action-tokenization/`
 
-## Directory Rules
+## 目录规则
 
-- `papers/`: tracked durable paper-text cache.
-- `code/`: ignored lab bench. Clone repos, create venvs, run experiments, patch upstream code, and write scratch probes here. Do not leave the only durable copy of useful work here.
-- `drafts/`: ignored scratch. Overwrite freely. Never put durable content here.
-- `runs/<run-id>/report.docxxml`: tracked delivered report source.
-- `runs/<run-id>/checklist.md`: tracked human completion gate.
-- `runs/<run-id>/assets/`: tracked flat home for report-facing assets and small result artifacts.
-- `runs/<run-id>/<thread-id>/README.md`: tracked explanation for preserved code or patches.
-- `runs/<run-id>/<thread-id>/code/`: tracked curated code worth preserving.
-- `runs/<run-id>/<thread-id>/patches/`: tracked curated patches worth preserving.
-- `runs/<run-id>/<thread-id>/BLOCKER.md`: tracked blocker note when no code or patch evidence can be preserved.
-- Workspace root: no loose run scripts or scratch outputs.
+- `papers/`:被追踪的持久论文文本缓存。
+- `code/`:忽略的实验台。在这里克隆仓库、创建虚拟环境、跑实验、给上游代码打补丁、写临时探针。不要把有用工作的唯一副本留在这里。
+- `drafts/`:忽略的暂存区。随意覆盖。绝不把持久内容放在这里。
+- `runs/<run-id>/report.docxxml`:被追踪的已交付报告源文件。
+- `runs/<run-id>/checklist.md`:被追踪的人工完成闸门。
+- `runs/<run-id>/assets/`:被追踪的扁平目录,放面向报告的资产与小型结果产物。
+- `runs/<run-id>/<thread-id>/README.md`:被追踪的说明,解释保留的代码或补丁。
+- `runs/<run-id>/<thread-id>/code/`:被追踪的、值得保留的精选代码。
+- `runs/<run-id>/<thread-id>/patches/`:被追踪的、值得保留的精选补丁。
+- `runs/<run-id>/<thread-id>/BLOCKER.md`:无法保留代码或补丁证据时,被追踪的障碍说明。
+- 工作区根目录:不放散落的运行脚本或临时输出。
 
-## Artifact Policy
+## 产物策略
 
-Before staging, check `workspace/.gitignore` and the actual status:
+暂存之前,检查 `.gitignore` 与实际状态:
 
 ```bash
 git status --short --ignored
 git check-ignore -v <path>
 ```
 
-Never force-add ignored files. If an ignored file should be durable, move a curated copy, patch, result, or README into the correct tracked run packet first.
+绝不强制添加被忽略的文件。如果某个被忽略的文件应当持久化,先把精选的副本、补丁、结果或 README 移入正确的被追踪运行包。
 
-Track:
+需要追踪:
 
-- paper markdown under `papers/`
-- delivered report source at `runs/<run-id>/report.docxxml`
-- run checklist at `runs/<run-id>/checklist.md`
-- report-facing assets under `runs/<run-id>/assets/`
-- thread evidence under `runs/<run-id>/<thread-id>/`
+- `papers/` 下的论文 Markdown
+- `runs/<run-id>/report.docxxml` 已交付报告源文件
+- `runs/<run-id>/checklist.md` 运行清单
+- `runs/<run-id>/assets/` 下面向报告的资产
+- `runs/<run-id>/<thread-id>/` 下的线程证据
 - `runs/INDEX.md`
 
-Clean after confirmed delivery:
+确认交付后清理:
 
-- `code/` back to only `README.md`
-- `drafts/` back to only `README.md`
-- other ignored scratch only after durable evidence has been promoted
+- `code/` 回到只剩 `README.md`
+- `drafts/` 回到只剩 `README.md`
+- 其他被忽略的暂存,仅在持久证据已晋升之后清理
 
-## Verifier
+## 校验器
 
-Use the verifier as the machine-checkable subset of the run contract. The checklist remains the broader human contract.
+把校验器当作运行契约中可机器检查的子集。清单仍然是更广的人工契约。
 
-Run before publishing:
+发布前运行:
 
 ```bash
 python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode prepublish
 ```
 
-Run after delivery, cleanup, and index update:
+交付、清理与索引更新之后运行:
 
 ```bash
 python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode final
 ```
 
-The verifier checks:
+校验器检查:
 
-- `report.docxxml`, `checklist.md`, and `assets/` exist.
-- `report.docxxml` contains at least two unique `[[figure-anchor:...]]` anchors.
-- there is at least one thread directory.
-- every non-reserved run-level directory is a valid thread.
-- a thread is either `BLOCKER.md`, or `README.md` with `code/`, `patches/`, or both.
-- present `code/` or `patches/` directories contain at least one non-empty file.
-- final mode leaves `code/` and `drafts/` with only their README markers.
-- final mode requires `runs/INDEX.md` to mention the run id.
+- `report.docxxml`、`checklist.md`、`assets/` 存在。
+- `report.docxxml` 含有至少两个不同的 `[[figure-anchor:...]]` 锚点。
+- 至少存在一个线程目录。
+- 每个非保留的运行级目录都是合法线程。
+- 线程要么是 `BLOCKER.md`,要么是 `README.md` 加 `code/`、`patches/` 或两者兼有。
+- 存在的 `code/` 或 `patches/` 目录内至少有一个非空文件。
+- final 模式下 `code/` 和 `drafts/` 只剩各自的 README 标记。
+- final 模式要求 `runs/INDEX.md` 提到该运行 id。
 
-## Checklist Template
+## 清单模板
 
-Use `runs/<run-id>/checklist.md` as the run's human completion contract. It must exist and be true before publishing, but it is not machine-parsed.
+`runs/<run-id>/checklist.md` 是本次巡航的人工完成契约。发布前它必须存在且全部为真,但它不被机器解析。
 
 ```md
-# Paper Scout Run Checklist
+# Paper Scout 巡航清单
 
-## Run
-- Run id:
-- Period covered:
-- Report:
-- Feishu doc:
+## 运行
+- 运行 id:
+- 覆盖时段:
+- 报告:
+- 飞书文档:
 
-## Research Contract
-- [ ] The report foregrounds insight earned from the paper plus external signals, not paper reorganization.
-- [ ] Each deep thread has a constructive research action or a precise blocker.
-- [ ] Critical claims are backed by code, probes, patches, related work, data samples, derivations, produced artifacts, or explicitly stated blockers.
-- [ ] The report explains what the run learned that was not obvious from rereading the paper text alone.
+## 研究契约
+- [ ] 报告前置的是从论文加外部信号中赢得的洞见,而不是论文内容的重组。
+- [ ] 每个深度线程都有建设性的研究动作,或一个精确的障碍说明。
+- [ ] 关键论断有代码、探针、补丁、相关工作、数据样本、推导、产出物支撑,或明确陈述的障碍。
+- [ ] 报告讲清了这次巡航学到的、仅靠重读论文文本无法看出的东西。
 
-## Report Contract
-- [ ] The report is scannable: clear opening synthesis, strong sectioning, useful figures/tables/equations/snippets, and fluent logic.
-- [ ] At least two figure anchors are present in `report.docxxml`.
-- [ ] Deep thread sections read as research narratives, not template-filled summaries.
-- [ ] Lightly noticed papers and deep threads are separated cleanly.
+## 报告契约
+- [ ] 报告可扫读:清晰的开篇综述、有力的分节、有用的图/表/公式/代码片段、流畅的逻辑。
+- [ ] `report.docxxml` 中至少有两个图锚点。
+- [ ] 深度线程读起来像研究叙事,而不是填模板的摘要。
+- [ ] 轻量留意的论文与深度线程被干净地区分开。
 
-## Preservation Contract
-- [ ] Durable evidence is in thread directories.
-- [ ] Report-facing assets are in `assets/`.
-- [ ] `code/` and `drafts/` do not contain the only copy of durable work.
-- [ ] Workspace verifier passes in prepublish mode.
+## 保存契约
+- [ ] 持久证据在线程目录中。
+- [ ] 面向报告的资产在 `assets/` 中。
+- [ ] `code/` 和 `drafts/` 不持有持久工作的唯一副本。
+- [ ] 工作区校验器 prepublish 模式通过。
 
-## Publication Contract
-- [ ] Report published.
-- [ ] User notification confirmed.
-- [ ] `runs/INDEX.md` updated.
-- [ ] Workspace verifier passes in final mode.
+## 发布契约
+- [ ] 报告已发布。
+- [ ] 用户通知已确认。
+- [ ] `runs/INDEX.md` 已更新。
+- [ ] 工作区校验器 final 模式通过。
 ```
 
 ## INDEX.md
 
-Persistent dedup log. Append-only, newest-first.
+持久去重日志。只追加,新的在前。
 
-**Read before scouting.** Do not repeat papers or research threads already covered unless explicitly overridden. Shortlisted papers may reappear if still relevant.
+**侦查之前先读。**不要重复已覆盖的论文或研究线程,除非被明确推翻。短名单中的论文如仍相关,可以再次出现。
 
-**Append after confirmed delivery.** Record:
+**确认交付后追加。**记录:
 
-- run date/time
-- period covered
-- Feishu doc URL
-- run packet path
-- deep threads
-- covered papers
-- shortlisted papers
+- 运行日期/时间
+- 覆盖时段
+- 飞书文档 URL
+- 运行包路径
+- 深度线程
+- 已覆盖论文
+- 短名单论文
 
-Keep entries concise. Do not rewrite history.
+条目保持简洁。不要改写历史。
 
-## Preflight
+## 预检
 
-1. Ensure `papers/`, `code/`, `runs/`, and `drafts/` exist. Create missing ones.
-2. Read `runs/INDEX.md` if present.
-3. Inspect git state before the run. If the workspace has unrelated changes, stop and report them.
-4. Start the run on a branch, not `main`/`master`. Use a branch such as `scout/YYYY-MM-DD` or `scout/YYYY-MM-DD-<topic>`, adding a suffix on collision.
-5. Never write candidate pools or scratch to `runs/`.
+1. 确保 `papers/`、`code/`、`runs/`、`drafts/` 存在,缺失则创建。
+2. 读 `runs/INDEX.md`(如存在)。
+3. 运行前检查 git 状态。如果工作区有无关改动,停下并报告。
+4. 在分支上开始本次巡航,而不是 `main`/`master`。使用形如 `scout/YYYY-MM-DD` 或 `scout/YYYY-MM-DD-<topic>` 的分支,撞名时加后缀。
+5. 绝不把候选池或暂存写进 `runs/`。
 
-## Finalization And PR
+## 收尾与 PR
 
-After the Feishu doc is created, media is inserted, the user DM is confirmed, and `runs/INDEX.md` is updated:
+在飞书文档已创建、媒体已插入、用户私信已确认、`runs/INDEX.md` 已更新之后:
 
-1. Move all durable material into tracked locations according to the Artifact Policy.
-2. Clean ignored scratch so `code/` and `drafts/` contain only their README markers.
-3. Run final verification:
+1. 按产物策略把所有持久材料移入被追踪的位置。
+2. 清理被忽略的暂存,使 `code/` 和 `drafts/` 只剩各自的 README 标记。
+3. 运行最终校验:
 
 ```bash
 python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode final
 ```
 
-4. Review `git status --short`. It should show only durable paper cache, run packets, and `runs/INDEX.md`.
-5. Stage only durable outputs:
+4. 检查 `git status --short`。它应该只显示持久的论文缓存、运行包和 `runs/INDEX.md`。
+5. 只暂存持久产出:
 
 ```bash
 git add papers runs
 ```
 
-6. Commit with a run-focused message, for example `Add 2026-06-07 paper scout report`.
-7. Push the branch and create a ready-to-review PR. Do not create a draft PR:
-
-```bash
-git push -u origin HEAD
-gh pr create --title "Add YYYY-MM-DD research report" --body "Adds the delivered report, paper cache, and preserved research evidence for the YYYY-MM-DD Paper Scout run."
-```
-
-8. If push or PR creation fails because auth/network is unavailable, stop and report the branch name, commit SHA, and exact failure.
+6. 用以运行为中心的信息提交,例如 `Add 2026-06-07 paper scout report`。
+7. 推送分支并创建 ready-to-review 的 PR。创建 ready-to-review PR，等待 CI 通过，然后合并。
+8. 拉取

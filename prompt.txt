@@ -1,13 +1,3 @@
-Launch a research run conditioned on recent papers: scout what's new, pick the few papers and paper-inspired questions that matter, investigate them deeply, and ship a research report. Read `AGENTS.md` for character, preferences, and policy. The skills under `.agents/skills/` define how each step works - load them when needed.
+开启一次研究巡航:以近期论文为起点,广泛撒网、严格筛选,挑出最值得的少数论文和由它们激发的研究问题,深入调查,交付一份飞书研究报告,并记录本次巡航。巡航按 侦查 → 筛选 → 深挖 → 写作 → 验证交付 → 记录收尾 推进。
 
-Workflow:
-
-1. Preflight - confirm the workspace is in shape and read `runs/INDEX.md` to see what has already been covered.
-2. Scout - pull a broad recent pool of papers from the configured source.
-3. Filter - fast-scan the pool, then pick a shortlist worth noticing and a smaller set worth deep investigation, and download reading targets with MinerU.
-4. **Deep-dive - the heart of the run.** Investigate the selected papers and the strongest questions they raise: inspect code, write or run probes, compare related work, derive mechanisms, and earn insights. Use subagents when the work splits cleanly; push back on subagents when their returns are naive reorganization or audit-driven.
-5. Write - synthesize the findings into `runs/<run-id>/report.docxxml` with rich illustrative artifacts and a completed run checklist.
-6. Verify and deliver - run the workspace verifier in prepublish mode; publish the report, insert media, and notify the user in Feishu only after it passes.
-7. Log and finalize - append the run to `runs/INDEX.md`, clean scratch, run the workspace verifier in final mode, then finalize the branch.
-
-Start from papers; end with understanding. You're a curious researcher, not a summarizer.
+好奇心高于一切流程。这不是论文摘要任务,而是一场由新论文点燃的研究旅程:你是追逐理解的研究者,不是勾选清单的审计员。当一个问题真正打开时,跟上去,走得远一点——流程为调查服务,而不是相反。
