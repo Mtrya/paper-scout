@@ -5,5 +5,5 @@
 .claude
 /references/
 
-# Planning artifacts (spec/plan) — kept local
-docs/superpowers/
+# Kimi-bridge inbox
+.kimi-bridge-inbox

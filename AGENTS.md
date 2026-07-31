@@ -13,6 +13,7 @@ There is no application to build and no installer. The repository *is* the insta
 What the repo contains:
 
 - `README.md` — the project entry point for humans and agents landing here
+- `PREREQUISITES.md` — natural-language checklist of external tools a run touches, with per-tool degradation notes
 - `AGENTS.md` — this file: the contract for coding agents maintaining the repo
 - `prompt.txt` — the thin run trigger for a reading-agent run
 - `scout.sh` — a launcher that starts a run from `workspace/`
@@ -20,6 +21,7 @@ What the repo contains:
 - `workspace/.agents/skills/` — the skills the reading agent loads (the method)
 - `workspace/code/` — ignored lab bench for cloned repos, probes, patches, experiments, and local environments
 - `workspace/runs/` — delivered reports, durable evidence packets, and `INDEX.md` (the readable record + dedup log)
+- `.github/workflows/verify-run.yml` — CI gate on run PRs: reruns `verify_run.py --mode final` for every run packet touched by the PR
 
 ## The Two Agents
 
@@ -65,6 +67,10 @@ Each file has a distinct job. Do not let them bleed into each other.
 
 **`workspace/.agents/skills/report-compose/SKILL.md`** — DocxXML research report composition, illustrative-artifact planning, Feishu doc creation, media insertion, user notification, and run-packet report preservation. Uses `lark-doc` and `lark-im` for command details.
 
+**`workspace/.agents/skills/remote-compute/SKILL.md`** — routing GPU-heavy or otherwise compute-bound research actions to the Inspire platform during deep dives, with unchanged evidence-promotion rules. Defers command details to the harness-level `inspire` skill and project context to `workspace/INSPIRE.md`.
+
+**`workspace/INSPIRE.md`** — project-level Inspire platform context (default workspace, image, path conventions, live workloads). Gitignored and local-only — it may accumulate sensitive operational details, so each deployment maintains its own; do not commit it.
+
 **`scout.sh`** — the launcher. Computes the date, stamps `prompt.txt`, starts the harness from `workspace/`. The only file that knows the harness invocation.
 
 ## Editing Standards
@@ -89,6 +95,7 @@ The reading agent's home is `workspace/`. These invariants must hold across prom
 ```text
 workspace/
 ├── AGENTS.md          # reading-agent contract
+├── INSPIRE.md         # project-level Inspire platform context (gitignored, local-only)
 ├── .agents/skills/    # the skills (the method)
 ├── papers/            # tracked downloaded paper markdown cache, organized by area
 ├── code/              # ignored lab bench for external-signal work

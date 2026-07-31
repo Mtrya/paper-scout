@@ -192,5 +192,14 @@ git add papers runs
 ```
 
 6. 用以运行为中心的信息提交,例如 `Add 2026-06-07 paper scout report`。
-7. 推送分支并创建 ready-to-review 的 PR。创建 ready-to-review PR，等待 CI 通过，然后合并。
-8. 拉取
+7. 推送分支并创建 ready-to-review 的 PR(不要创建 draft PR)。
+8. 等待 CI 通过后合并,然后切回 `main` 并同步最新状态:
+
+```bash
+gh pr checks --watch
+gh pr merge --squash --delete-branch
+git switch main
+git pull
+```
+
+9. 如果推送、PR 创建或合并因认证/网络不可用而失败,停下并报告分支名、提交 SHA 和确切的失败原因;不要强行收尾。

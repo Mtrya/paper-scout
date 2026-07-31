@@ -1,0 +1,37 @@
+name: verify-run
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify changed run packets
+        run: |
+          set -euo pipefail
+          base="${{ github.event.pull_request.base.sha }}"
+          mapfile -t run_dirs < <(
+            git diff --name-only "$base"...HEAD -- 'workspace/runs/*/*' \
+              | cut -d/ -f1-3 | sort -u
+          )
+          if [[ ${#run_dirs[@]} -eq 0 ]]; then
+              echo "No run packets changed; skipping verification."
+              exit 0
+          fi
+          failed=0
+          for run_dir in "${run_dirs[@]}"; do
+              [[ -d "$run_dir" ]] || continue
+              echo "=== Verifying $run_dir (final mode) ==="
+              python3 workspace/.agents/skills/workspace-manage/scripts/verify_run.py \
+                  "$run_dir" --mode final || failed=1
+          done
+          exit "$failed"

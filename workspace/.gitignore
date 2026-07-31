@@ -1,6 +1,9 @@
 # Ignore all files by default
 *
 
+# Reading-agent contract and platform context
+!AGENTS.md
+
 # Agent skills and scripts
 !.agents/
 !.agents/skills/
@@ -26,3 +29,6 @@ code/*
 
 # Local-only agent settings
 .agents/settings.local.json
+
+# Kimi-bridge inbox
+.kimi-bridge-inbox
