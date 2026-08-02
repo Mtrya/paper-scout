@@ -1,0 +1,32 @@
+{
+  "A-selfrec-b0.01": {
+    "beta": 0.01,
+    "cross_shadow": false,
+    "r2_color_moving": 0.1228,
+    "r2_color_static": 0.0451,
+    "r2_direction": 0.8399,
+    "mse_self": 0.00688,
+    "mse_cross": 0.00696,
+    "cross_self_ratio": 1.0114
+  },
+  "Ahb-selfrec-b1.0": {
+    "beta": 1.0,
+    "cross_shadow": false,
+    "r2_color_moving": 0.2535,
+    "r2_color_static": 0.1107,
+    "r2_direction": 0.61,
+    "mse_self": 0.01053,
+    "mse_cross": 0.01053,
+    "cross_self_ratio": 1.0
+  },
+  "B-crosshadow-b0.01": {
+    "beta": 0.01,
+    "cross_shadow": true,
+    "r2_color_moving": 0.0745,
+    "r2_color_static": 0.0083,
+    "r2_direction": 0.8732,
+    "mse_self": 0.00684,
+    "mse_cross": 0.00688,
+    "cross_self_ratio": 1.0058
+  }
+}

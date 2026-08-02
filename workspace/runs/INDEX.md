@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-08-02 — 2026-07-31 to 2026-08-02
+- Doc: https://fudan-nlp.feishu.cn/docx/Pfa4dqGlVoC9q4xmUd6cudzDnzh
+- Run: runs/2026-08-02-ace-phizero-shadowdancer/
+- Deep threads: ACE-Data-0 测量引擎规格核验 + 发布状态三角验证 (2607.28625), PhiZero 精读 + Wan2.2-5B 8 场景物理失败模式解剖实验 (2607.28624), ShadowDancer 精读 + sprites cross-shadow 正则/配对机制探针 (2607.28362)
+- Covered papers: 2607.28625, 2607.28624, 2607.28362
+- Shortlisted papers: 2607.27180, 2607.26056, 2607.26037, 2607.26754, 2607.27380, 2607.26760, 2607.28227, 2607.28568, 2607.22798, 2607.23402
+
 ## 2026-07-31 — 2026-07-18 to 2026-07-30
 - Doc: https://qcn0umnxrmj2.feishu.cn/docx/B10IdsJp0okcqXxwei2cPQlGnkg (本地副本: runs/2026-07-31-abotworld-umi-turbovla/report.docxxml)
 - Run: runs/2026-07-31-abotworld-umi-turbovla/
