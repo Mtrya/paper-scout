@@ -68,7 +68,7 @@ Each file has a distinct job. Do not let them bleed into each other.
 
 **`workspace/.agents/skills/paper-deep-dive/SKILL.md`** — deep investigation of a single paper: reading, code inspection, resource-proportional research actions, related-work comparison, and structured analysis notes.
 
-**`workspace/.agents/skills/report-compose/SKILL.md`** — DocxXML research report composition, illustrative-artifact planning, Feishu doc creation, media insertion, user notification, and run-packet report preservation. Uses `lark-doc` and `lark-im` for command details.
+**`workspace/.agents/skills/report-compose/SKILL.md`** — DocxXML research report composition, illustrative-artifact planning, Feishu doc creation, media insertion, user notification, and run-packet report preservation. `scripts/push_report.py` automates chunked push, anchor-based image placement, and verification. Uses `lark-doc` and `lark-im` for command details.
 
 **`workspace/.agents/skills/remote-compute/SKILL.md`** — routing GPU-heavy or otherwise compute-bound research actions to the Inspire platform during deep dives, with unchanged evidence-promotion rules. Defers command details to the harness-level `inspire` skill and project context to `workspace/INSPIRE.md`.
 
