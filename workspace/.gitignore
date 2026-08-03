@@ -18,8 +18,8 @@
 !runs/**
 
 # Committable research insights memory
-!memory/
-!memory/**
+!memories/
+!memories/**
 
 # Scratch
 drafts/*
