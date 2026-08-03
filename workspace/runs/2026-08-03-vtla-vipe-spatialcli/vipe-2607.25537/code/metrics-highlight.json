@@ -1,0 +1,104 @@
+{
+  "0008": {
+    "slug": "ball-hits-duck",
+    "frames": 120,
+    "frames_iou": 114,
+    "st_iou": 0.0108,
+    "weighted_s_iou": 0.0667,
+    "mse": 0.00243,
+    "energy_real_peak": 0.97,
+    "energy_gen_peak": 1.5,
+    "energy_gen_mean": 0.273,
+    "energy_real_mean": 0.169
+  },
+  "0032": {
+    "slug": "balls-collide",
+    "frames": 120,
+    "frames_iou": 119,
+    "st_iou": 0.0125,
+    "weighted_s_iou": 0.1461,
+    "mse": 0.0068,
+    "energy_real_peak": 1.39,
+    "energy_gen_peak": 3.72,
+    "energy_gen_mean": 1.163,
+    "energy_real_mean": 0.253
+  },
+  "0053": {
+    "slug": "double-cradle",
+    "frames": 120,
+    "frames_iou": 119,
+    "st_iou": 0.0236,
+    "weighted_s_iou": 0.0524,
+    "mse": 0.01466,
+    "energy_real_peak": 2.21,
+    "energy_gen_peak": 8.01,
+    "energy_gen_mean": 2.998,
+    "energy_real_mean": 0.916
+  },
+  "0065": {
+    "slug": "fill-glass-red-drink",
+    "frames": 120,
+    "frames_iou": 119,
+    "st_iou": 0.0049,
+    "weighted_s_iou": 0.0373,
+    "mse": 0.0029,
+    "energy_real_peak": 0.91,
+    "energy_gen_peak": 1.51,
+    "energy_gen_mean": 0.394,
+    "energy_real_mean": 0.245
+  },
+  "0089": {
+    "slug": "liquid-overfill",
+    "frames": 120,
+    "frames_iou": 119,
+    "st_iou": 0.0001,
+    "weighted_s_iou": 0.0048,
+    "mse": 0.0084,
+    "energy_real_peak": 1.46,
+    "energy_gen_peak": 1.21,
+    "energy_gen_mean": 0.572,
+    "energy_real_mean": 0.581
+  },
+  "0140": {
+    "slug": "paper-smoke",
+    "frames": 120,
+    "frames_iou": 119,
+    "st_iou": 0.0124,
+    "weighted_s_iou": 0.0544,
+    "mse": 0.00674,
+    "energy_real_peak": 0.77,
+    "energy_gen_peak": 2.41,
+    "energy_gen_mean": 1.206,
+    "energy_real_mean": 0.235
+  },
+  "0146": {
+    "slug": "roll-behind-box",
+    "frames": 120,
+    "frames_iou": 119,
+    "st_iou": 0.0044,
+    "weighted_s_iou": 0.0245,
+    "mse": 0.00157,
+    "energy_real_peak": 0.99,
+    "energy_gen_peak": 1.63,
+    "energy_gen_mean": 0.667,
+    "energy_real_mean": 0.122
+  },
+  "0182": {
+    "slug": "unstable-block-stack",
+    "frames": 120,
+    "frames_iou": 119,
+    "st_iou": 0.013,
+    "weighted_s_iou": 0.1115,
+    "mse": 0.0165,
+    "energy_real_peak": 4.13,
+    "energy_gen_peak": 7.8,
+    "energy_gen_mean": 1.216,
+    "energy_real_mean": 0.374
+  },
+  "_average": {
+    "st_iou": 0.0102,
+    "weighted_s_iou": 0.0622,
+    "mse": 0.0075,
+    "iq_orig_estimate": 3.6
+  }
+}

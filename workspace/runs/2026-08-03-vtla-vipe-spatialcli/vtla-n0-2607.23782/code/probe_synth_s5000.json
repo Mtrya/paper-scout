@@ -1,0 +1,29 @@
+{
+  "groups": {
+    "null": {
+      "cos_cent": 0.2551855742931366,
+      "one_minus_cos_cent": 0.7448144257068634,
+      "relL2": 1.0343255996704102
+    },
+    "shuffle": {
+      "cos_cent": 0.7373777031898499,
+      "one_minus_cos_cent": 0.26262229681015015,
+      "relL2": 0.22366732358932495
+    },
+    "vlswap": {
+      "cos_cent": 0.06288932263851166,
+      "one_minus_cos_cent": 0.9371106773614883,
+      "relL2": 0.4091721773147583
+    },
+    "padpert": {
+      "cos_cent": 0.17715799808502197,
+      "one_minus_cos_cent": 0.822842001914978,
+      "relL2": 0.5236812233924866
+    }
+  },
+  "z_xsample_cos_cent": -0.1618323028087616,
+  "R_tactile_over_vl": 0.280246830128523,
+  "z_gate": -0.01161204744130373,
+  "ckpt_missing": [],
+  "ckpt_unexpected": []
+}

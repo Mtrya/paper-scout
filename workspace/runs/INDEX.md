@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-08-03 — 2026-08-02 to 2026-08-03
+- Doc: https://fudan-nlp.feishu.cn/docx/IOIwdEw2hoSguvxr1qNcs3YunWg
+- Run: runs/2026-08-03-vtla-vipe-spatialcli/
+- Deep threads: N₀-VTLA 精读 + 代码解剖(放出权重≠论文架构)+ 真实权重合成批次 z 敏感性探针 (2607.23782), VIPE 精读 + Wan2.2-5B 条件帧编辑反向检验(8 场景 × 3 编辑真实生成) (2607.25537), SpatialCLI 精读 + 放出范围核验(Internalize 数据未放出) (2607.27703)
+- Covered papers: 2607.23782, 2607.25537, 2607.27703
+- Shortlisted papers: 2607.28415, 2607.22561, 2607.21848, 2607.22393, 2607.23806, 2607.25308
+
 ## 2026-08-02 — 2026-07-31 to 2026-08-02
 - Doc: https://fudan-nlp.feishu.cn/docx/Pfa4dqGlVoC9q4xmUd6cudzDnzh
 - Run: runs/2026-08-02-ace-phizero-shadowdancer/
