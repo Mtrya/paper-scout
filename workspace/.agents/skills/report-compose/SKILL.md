@@ -165,27 +165,23 @@ python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mod
 
 ### 飞书交付(需要 lark-cli)
 
-如果 PATH 上有 `lark-cli`,走下面的完整飞书流程。如果**没有** `lark-cli`,直接跳到**仅本地兜底**小节。
+如果 PATH 上有 `lark-cli`(或可通过 `npx --yes @larksuite/cli` 拉起),走下面的完整飞书流程。如果**没有**,直接跳到**仅本地兜底**小节。
 
-创建真实文档之前,先用 `--dry-run` 跑一遍同样的创建命令:
-
-```bash
-lark-cli docs +create --api-version v2 --dry-run --as bot \
-  --content @runs/<run-id>/report.docxxml
-```
-
-创建文档:
+首选方式是运行本技能的推送脚本,它封装了分段、插图与验证的全部细节:
 
 ```bash
-lark-cli docs +create --api-version v2 --as bot \
-  --content @runs/<run-id>/report.docxxml
+python .agents/skills/report-compose/scripts/push_report.py <run-id> \
+  --user-id <ou_xxx>            # 不给 --user-id 则只建文档不通知
+  # --dry-run 只分段并打印计划  # --cli 覆盖 lark-cli 调用前缀
 ```
 
-bot 拥有产出的文档。**没有 `--parent-token`**,也没有配置文件夹/知识库目的地——不要自己加。内容里的 `<title>` 元素设置文档标题。从响应中捕获 `data.document.document_id` 和 `data.document.url`。
+脚本做的事(手工流程等价物,需要手工时按此执行):
 
-如果报告长到单次创建调用可能难以驾驭,先创建骨架,再用 `docs +update --command append` 逐主题追加;每次追加前先 dry-run。
+1. **分段推送**。单次 `--content` 超过 ~10KB 会被静默截断,脚本按顶层块边界把 `report.docxxml` 切成 ≤5.8KB 的段:首段 `docs +create`(从响应捕获 `data.document.document_id` 与 `data.document.url`),其余 `docs +update --command append`。**每步必须检查返回 JSON 的 `ok` 字段**——错误可能只走 stderr,"Command executed successfully" 字样不代表成功。
+2. **锚点插图**。`[[figure-anchor:...]]` 独占段落在导入时会被飞书丢弃,不能依赖 `--selection-with-ellipsis` 匹配锚点文本。脚本从源文件取锚点的前一个正文块,在带块 id 的抓取结果中定位(块内去标签匹配),`docs +media-insert` 插图到末尾,再 `docs +update --command block_move_after` 移到该块之后;同一锚点多张图按 `runs/<run-id>/assets/figures.json` 的顺序链式移动。图清单格式见脚本 docstring。
+3. **验证**。重新抓取核对 `<img>` 数量,防止孤儿图。
 
-文档存在之后,把本地媒体插入临时锚点,删除飞书中的锚点,再抓取一次验证顺序。确切的命令形态见 `references/figure-embedding.md`。本地 `report.docxxml` 源文件中保留锚点。
+bot 拥有产出的文档。**没有 `--parent-token`**,也没有配置文件夹/知识库目的地——不要自己加。内容里的 `<title>` 元素设置文档标题。
 
 然后加载 `lark-im`,给用户发一条包含文档 `url` 的私信。用 `--text`(不是 `--markdown` 或 `--content`),这样飞书会把文档 URL 自动展开成富预览卡片:
 

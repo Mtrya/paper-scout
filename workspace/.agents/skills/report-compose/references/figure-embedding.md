@@ -25,39 +25,19 @@
 
 ## 插入媒体
 
-文档存在之后,在图片路径可以是相对路径的目录里运行 `docs +media-insert`。绝对 `--file` 路径会被拒绝。
+**实测(2026-08-02/08-03 两轮巡航):`[[figure-anchor:...]]` 独占段落在 DocxXML 导入时会被飞书整体丢弃**,无法用 `--selection-with-ellipsis` 匹配。可用的块位置法如下(`scripts/push_report.py` 已封装,含图清单 `assets/figures.json` 驱动):
 
-```bash
-cd drafts/<paper-slug>-<paper-id>-mineru
-lark-cli docs +media-insert --as bot \
-  --doc "<document_id>" \
-  --file images/<figure>.jpg \
-  --selection-with-ellipsis '[[figure-anchor:paper-a:overview]]' \
-  --width 800 --height 449 \
-  --align center \
-  --caption "论文 A 概览"
-```
+1. 带块 id 抓取:`docs +fetch --doc <id> --as bot --detail with-ids`。
+2. 在源文件里取锚点的前一个正文块(跳过连续锚点行),用其段尾文本在抓取结果中定位块 id——块内要先去标签再匹配,因为抓取结果会在 `<b>` 等内联标签周围插入额外空格。
+3. 插图(默认落到文档末尾):`docs +media-insert --doc <id> --as bot --file <相对路径> --caption "<图注>"`,从返回 JSON 取 `data.block_id`。
+4. 移位:`docs +update --doc <id> --as bot --command block_move_after --block-id <目标块id> --src-block-ids <图块id>`。同一位置多张图时链式移动(后一张移到前一张之后)保持顺序。
+5. 重新抓取核对 `<img>` 数量,防孤儿图。
 
-默认媒体插入到匹配的锚点之后。图片应出现在锚点之前时,加 `--before`。`--width` 和 `--height` 两个都传以保证可靠;旧版 `lark-cli` 可能无法自动探测抽取的论文图片尺寸。
-
-## 删除锚点
-
-带块 id 抓取文档,找到锚点段落,删除该块:
-
-```bash
-lark-cli docs +fetch --api-version v2 --as bot --doc "<document_id>" --detail full
-lark-cli docs +update --api-version v2 --as bot \
-  --doc "<document_id>" \
-  --command block_delete \
-  --block-id "<anchor_block_id>"
-```
-
-再抓取一次验证最终顺序。预期的模式是:相关正文、插入的 `<img>`、后续正文,然后是下一篇论文或下一节。
+`--file` 只接受 cwd 相对路径,绝对路径报 `unsafe file path`。
 
 ## 实践要点
 
-- `docs +media-insert` 适用于本地图片,返回图片块 id 和文件 token。
+- `docs +media-insert` 适用于本地图片,返回图片块 id 和文件 token;已上传图的 file token 可在 overwrite 后以 `<img src="TOKEN">` 直接引用。
 - 报告文档为 bot 所有时,使用 `--as bot`。
-- 对 `paper-source` 的 `--copy-images` 复制的图片,从 `drafts/images/<slug>-<paper-id>/` 目录运行,传相对文件名。
-- 对原始 MinerU 输出,从解出目录运行,传 `images/<figure>.jpg`。
-- 如果选择文本出现多次,使用 `--selection-with-ellipsis` 支持的 `start...end` 形式,或把锚点写得更具体。
+- 每步检查返回 JSON 的 `ok` 字段;错误可能只走 stderr,"Command executed successfully" 字样不代表成功。
+- 本地 `report.docxxml` 源文件中保留锚点;交付的飞书文档里锚点已被导入丢弃,无需删除。

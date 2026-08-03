@@ -1,0 +1,9 @@
+{
+  "vtla:teaser": {"file": "assets/vtla-teaser.jpg", "caption": "N₀-VTLA:触觉作为预测目标的 predict-not-react 架构(论文 Figure 1)"},
+  "vtla:probe": {"file": "assets/vtla-probe-bars.png", "caption": "合成扰动探针:两个批次 R=0.41/0.28,VL 扰动让 z 移动得比触觉扰动更多"},
+  "vipe:teaser": {"file": "assets/vipe-fig1-teaser.jpg", "caption": "VIPE:简笔画任务图编辑成写实场景,Veo 3.1 物理推理 41.3→59.3%(论文 Figure 1)"},
+  "vipe:edits-grid": {"file": "assets/vipe-edits-grid-3scenes.jpg", "caption": "三个场景的四种条件帧:原图 / 方向箭头 / 椭圆高亮 / 简笔画"},
+  "vipe:strips-0008": {"file": "assets/vipe-0008-4cond-strips.jpg", "caption": "0008 球撞鸭子:箭头几帧内消失,简笔画条件过曝崩坏"},
+  "vipe:strips-0140": {"file": "assets/vipe-0140-4cond-strips.jpg", "caption": "0140 纸与烟:箭头被转译成拨杆捅纸,简笔画下纸漂移成折纸状物"},
+  "spatialcli:teaser": {"file": "assets/spatialcli-fig1.jpg", "caption": "SpatialCLI:Call→Learn→Internalize 三阶段框架(论文 Figure 1)"}
+}
