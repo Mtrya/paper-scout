@@ -1,0 +1,94 @@
+{
+  "source": "MemoryVLA commit d732ea9072bc063399ccc817aed74ab172eb50be",
+  "scope": "single-token algebraic mirror of CogMemBank._consolidate_with_token_merge",
+  "configuration": {
+    "episodes": 400,
+    "timesteps": 128,
+    "dimension": 64,
+    "capacity": 16,
+    "seed": 7,
+    "output": "/inspire/qb-ilm/project/cq-scientific-cooperation-zone/ky26021/embodied-research/memory-causal/memoryvla-consolidation-audit.json"
+  },
+  "slots_observed": 6400,
+  "summary": {
+    "frames": {
+      "median": 3.0,
+      "p95": 32.0,
+      "max": 32.0,
+      "min": 1.0
+    },
+    "timestamp_error": {
+      "median": 0.75,
+      "p95": 30.00000000046566,
+      "max": 30.00000000046566,
+      "min": 0.0
+    },
+    "max_to_uniform_weight_ratio": {
+      "median": 1.0,
+      "p95": 16.0,
+      "max": 16.0,
+      "min": 1.0
+    },
+    "min_to_uniform_weight_ratio": {
+      "median": 1.0,
+      "p95": 1.0,
+      "max": 1.0,
+      "min": 1.4901161193847656e-08
+    },
+    "effective_fraction": {
+      "median": 1.0,
+      "p95": 1.0,
+      "max": 1.0,
+      "min": 0.09375
+    }
+  },
+  "worst_slot": {
+    "timestamp": 32,
+    "start": 32,
+    "end": 63,
+    "frames": 32,
+    "weighted_centroid": 62.00000000046566,
+    "timestamp_error": 30.00000000046566,
+    "max_to_uniform_weight_ratio": 16.0,
+    "min_to_uniform_weight_ratio": 1.4901161193847656e-08,
+    "effective_frames": 3.0,
+    "effective_fraction": 0.09375,
+    "episode": 0,
+    "slot": 13,
+    "weights": {
+      "32": 4.656612873077393e-10,
+      "33": 4.656612873077393e-10,
+      "34": 9.313225746154785e-10,
+      "35": 1.862645149230957e-09,
+      "36": 3.725290298461914e-09,
+      "37": 7.450580596923828e-09,
+      "38": 1.4901161193847656e-08,
+      "39": 2.9802322387695312e-08,
+      "40": 5.960464477539063e-08,
+      "41": 1.1920928955078125e-07,
+      "42": 2.384185791015625e-07,
+      "43": 4.76837158203125e-07,
+      "44": 9.5367431640625e-07,
+      "45": 1.9073486328125e-06,
+      "46": 3.814697265625e-06,
+      "47": 7.62939453125e-06,
+      "48": 1.52587890625e-05,
+      "49": 3.0517578125e-05,
+      "50": 6.103515625e-05,
+      "51": 0.0001220703125,
+      "52": 0.000244140625,
+      "53": 0.00048828125,
+      "54": 0.0009765625,
+      "55": 0.001953125,
+      "56": 0.00390625,
+      "57": 0.0078125,
+      "58": 0.015625,
+      "59": 0.03125,
+      "60": 0.0625,
+      "61": 0.125,
+      "62": 0.25,
+      "63": 0.5
+    }
+  },
+  "interpretation_boundary": "The unequal leaf weights and stale timestamps follow from the released merge rule; the random-walk frequency statistics do not estimate downstream policy impact."
+}

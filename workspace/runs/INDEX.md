@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-08-05 — 2026-07-20 to 2026-08-05
+- Doc: https://fudan-nlp.feishu.cn/docx/Mc34d9LkeounK4xcyrLcpqIDnmf
+- Run: runs/2026-08-05-visual-memory-posthoc-faithfulness/
+- Deep threads: VLA 视觉记忆：NativeMEM/SOMA 精读 + MemoryVLA 固定槽 consolidation 代码审计与完整 checkpoint 结构核验 + History-Swap benchmark 设计（2607.06678, 2605.22283）, hindsight 合理化：Post-Hoc Reasoning 分阶段 Qwen3-VL-8B activation steering + Faithful Self-Evolvers 扰动代码审计与 uptake×robustness 二维重定义（2603.01437, 2601.22436）
+- Covered papers: 2607.06678, 2605.22283, 2603.01437, 2601.22436
+- Shortlisted papers: —（四篇均进入两条深挖线；本条为同日初稿经用户反馈后的唯一 canonical 大修版）
+
 ## 2026-08-03 — 2026-08-02 to 2026-08-03
 - Doc: https://fudan-nlp.feishu.cn/docx/IOIwdEw2hoSguvxr1qNcs3YunWg
 - Run: runs/2026-08-03-vtla-vipe-spatialcli/

@@ -1,0 +1,717 @@
+{
+  "probe": {
+    "task_url": "https://raw.githubusercontent.com/google/BIG-bench/main/bigbench/benchmark_tasks/sports_understanding/task.json",
+    "model": "/inspire/qb-ilm/project/cq-scientific-cooperation-zone/ky26021/embodied-research/deft-probe/models/Qwen3-VL-8B-Instruct",
+    "n_total": 240,
+    "n_parsed": 238,
+    "n_train": 159,
+    "n_test": 79,
+    "model_accuracy": 0.7899159663865546,
+    "model_yes_rate": 0.42436974789915966,
+    "layer_aucs": [
+      0.4564102564102564,
+      0.6051282051282052,
+      0.6352564102564102,
+      0.6198717948717949,
+      0.6403846153846153,
+      0.6217948717948718,
+      0.5846153846153846,
+      0.5839743589743589,
+      0.6083333333333334,
+      0.6448717948717948,
+      0.6698717948717949,
+      0.6474358974358975,
+      0.6057692307692308,
+      0.5935897435897436,
+      0.566025641025641,
+      0.5846153846153845,
+      0.6423076923076924,
+      0.882051282051282,
+      0.9429487179487179,
+      0.9583333333333333,
+      0.9698717948717949,
+      0.9685897435897436,
+      0.9737179487179487,
+      0.9724358974358975,
+      0.9724358974358974,
+      0.9660256410256409,
+      0.9647435897435898,
+      0.9615384615384616,
+      0.9576923076923077,
+      0.933974358974359,
+      0.917948717948718,
+      0.9057692307692308,
+      0.9,
+      0.8839743589743589,
+      0.8602564102564103,
+      0.8448717948717949
+    ],
+    "best_layer": 22,
+    "best_auc": 0.9737179487179487,
+    "probe_direction_norm": 15.689277648925781,
+    "permutation_max_auc_mean": 0.7746602564102565,
+    "permutation_max_auc_p95": 0.970576923076923,
+    "n_intervention_examples": 24,
+    "alphas": [
+      4.0
+    ],
+    "modes": [
+      "prefill",
+      "prefill_all",
+      "early_reasoning_4",
+      "reasoning",
+      "answer",
+      "all_decode",
+      "orthogonal"
+    ]
+  },
+  "n_intervention_records": 528,
+  "aggregate": {
+    "prefill": {
+      "2.0": {
+        "n": 24,
+        "flips": 1,
+        "flip_rate": 0.041666666666666664,
+        "parsed": 24,
+        "parsed_rate": 1.0,
+        "wilson95": [
+          0.007393265354805126,
+          0.20242226248842232
+        ]
+      },
+      "4.0": {
+        "n": 24,
+        "flips": 1,
+        "flip_rate": 0.041666666666666664,
+        "parsed": 24,
+        "parsed_rate": 1.0,
+        "wilson95": [
+          0.007393265354805126,
+          0.20242226248842232
+        ]
+      },
+      "8.0": {
+        "n": 24,
+        "flips": 1,
+        "flip_rate": 0.041666666666666664,
+        "parsed": 24,
+        "parsed_rate": 1.0,
+        "wilson95": [
+          0.007393265354805126,
+          0.20242226248842232
+        ]
+      },
+      "12.0": {
+        "n": 24,
+        "flips": 0,
+        "flip_rate": 0.0,
+        "parsed": 24,
+        "parsed_rate": 1.0,
+        "wilson95": [
+          0.0,
+          0.13798057582897535
+        ]
+      }
+    },
+    "prefill_all": {
+      "2.0": {
+        "n": 0,
+        "flips": 0,
+        "flip_rate": null,
+        "parsed": 0,
+        "parsed_rate": null,
+        "wilson95": [
+          0.0,
+          0.0
+        ]
+      },
+      "4.0": {
+        "n": 24,
+        "flips": 2,
+        "flip_rate": 0.08333333333333333,
+        "parsed": 24,
+        "parsed_rate": 1.0,
+        "wilson95": [
+          0.023158327842973503,
+          0.258492152014506
+        ]
+      },
+      "8.0": {
+        "n": 0,
+        "flips": 0,
+        "flip_rate": null,
+        "parsed": 0,
+        "parsed_rate": null,
+        "wilson95": [
+          0.0,
+          0.0
+        ]
+      },
+      "12.0": {
+        "n": 0,
+        "flips": 0,
+        "flip_rate": null,
+        "parsed": 0,
+        "parsed_rate": null,
+        "wilson95": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "early_reasoning_4": {
+      "2.0": {
+        "n": 0,
+        "flips": 0,
+        "flip_rate": null,
+        "parsed": 0,
+        "parsed_rate": null,
+        "wilson95": [
+          0.0,
+          0.0
+        ]
+      },
+      "4.0": {
+        "n": 24,
+        "flips": 2,
+        "flip_rate": 0.08333333333333333,
+        "parsed": 24,
+        "parsed_rate": 1.0,
+        "wilson95": [
+          0.023158327842973503,
+          0.258492152014506
+        ]
+      },
+      "8.0": {
+        "n": 0,
+        "flips": 0,
+        "flip_rate": null,
+        "parsed": 0,
+        "parsed_rate": null,
+        "wilson95": [
+          0.0,
+          0.0
+        ]
+      },
+      "12.0": {
+        "n": 0,
+        "flips": 0,
+        "flip_rate": null,
+        "parsed": 0,
+        "parsed_rate": null,
+        "wilson95": [
+          0.0,
+          0.0
+        ]
+      }
+    },
+    "reasoning": {
+      "2.0": {
+        "n": 24,
+        "flips": 8,
+        "flip_rate": 0.3333333333333333,
+        "parsed": 23,
+        "parsed_rate": 0.9583333333333334,
+        "wilson95": [
+          0.17971978688379642,
+          0.5329404050591954
+        ]
+      },
+      "4.0": {
+        "n": 24,
+        "flips": 14,
+        "flip_rate": 0.5833333333333334,
+        "parsed": 18,
+        "parsed_rate": 0.75,
+        "wilson95": [
+          0.3883433764938864,
+          0.7553265275346177
+        ]
+      },
+      "8.0": {
+        "n": 24,
+        "flips": 7,
+        "flip_rate": 0.2916666666666667,
+        "parsed": 16,
+        "parsed_rate": 0.6666666666666666,
+        "wilson95": [
+          0.14914460334164278,
+          0.49168063658709704
+        ]
+      },
+      "12.0": {
+        "n": 24,
+        "flips": 0,
+        "flip_rate": 0.0,
+        "parsed": 7,
+        "parsed_rate": 0.2916666666666667,
+        "wilson95": [
+          0.0,
+          0.13798057582897535
+        ]
+      }
+    },
+    "answer": {
+      "2.0": {
+        "n": 24,
+        "flips": 1,
+        "flip_rate": 0.041666666666666664,
+        "parsed": 24,
+        "parsed_rate": 1.0,
+        "wilson95": [
+          0.007393265354805126,
+          0.20242226248842232
+        ]
+      },
+      "4.0": {
+        "n": 24,
+        "flips": 3,
+        "flip_rate": 0.125,
+        "parsed": 24,
+        "parsed_rate": 1.0,
+        "wilson95": [
+          0.04344255039315584,
+          0.3100428814785757
+        ]
+      },
+      "8.0": {
+        "n": 24,
+        "flips": 4,
+        "flip_rate": 0.16666666666666666,
+        "parsed": 23,
+        "parsed_rate": 0.9583333333333334,
+        "wilson95": [
+          0.06678568000728924,
+          0.3585347038786943
+        ]
+      },
+      "12.0": {
+        "n": 24,
+        "flips": 6,
+        "flip_rate": 0.25,
+        "parsed": 24,
+        "parsed_rate": 1.0,
+        "wilson95": [
+          0.1199920347934233,
+          0.4489982531210644
+        ]
+      }
+    },
+    "all_decode": {
+      "2.0": {
+        "n": 24,
+        "flips": 9,
+        "flip_rate": 0.375,
+        "parsed": 23,
+        "parsed_rate": 0.9583333333333334,
+        "wilson95": [
+          0.21159133433631458,
+          0.5729038096209293
+        ]
+      },
+      "4.0": {
+        "n": 24,
+        "flips": 17,
+        "flip_rate": 0.7083333333333334,
+        "parsed": 18,
+        "parsed_rate": 0.75,
+        "wilson95": [
+          0.508319363412903,
+          0.8508553966583573
+        ]
+      },
+      "8.0": {
+        "n": 24,
+        "flips": 10,
+        "flip_rate": 0.4166666666666667,
+        "parsed": 16,
+        "parsed_rate": 0.6666666666666666,
+        "wilson95": [
+          0.24467347246538232,
+          0.6116566235061137
+        ]
+      },
+      "12.0": {
+        "n": 24,
+        "flips": 5,
+        "flip_rate": 0.20833333333333334,
+        "parsed": 7,
+        "parsed_rate": 0.2916666666666667,
+        "wilson95": [
+          0.0924468910478809,
+          0.40470844485235474
+        ]
+      }
+    },
+    "orthogonal": {
+      "2.0": {
+        "n": 24,
+        "flips": 1,
+        "flip_rate": 0.041666666666666664,
+        "parsed": 23,
+        "parsed_rate": 0.9583333333333334,
+        "wilson95": [
+          0.007393265354805126,
+          0.20242226248842232
+        ]
+      },
+      "4.0": {
+        "n": 24,
+        "flips": 1,
+        "flip_rate": 0.041666666666666664,
+        "parsed": 24,
+        "parsed_rate": 1.0,
+        "wilson95": [
+          0.007393265354805126,
+          0.20242226248842232
+        ]
+      },
+      "8.0": {
+        "n": 24,
+        "flips": 3,
+        "flip_rate": 0.125,
+        "parsed": 22,
+        "parsed_rate": 0.9166666666666666,
+        "wilson95": [
+          0.04344255039315584,
+          0.3100428814785757
+        ]
+      },
+      "12.0": {
+        "n": 24,
+        "flips": 1,
+        "flip_rate": 0.041666666666666664,
+        "parsed": 13,
+        "parsed_rate": 0.5416666666666666,
+        "wilson95": [
+          0.007393265354805126,
+          0.20242226248842232
+        ]
+      }
+    }
+  },
+  "paired": {
+    "2.0": {
+      "prefill_all_vs_orthogonal": {
+        "both": 0,
+        "left_only": 0,
+        "right_only": 0,
+        "neither": 0,
+        "exact_two_sided_p": 1.0
+      },
+      "early_reasoning_4_vs_orthogonal": {
+        "both": 0,
+        "left_only": 0,
+        "right_only": 0,
+        "neither": 0,
+        "exact_two_sided_p": 1.0
+      },
+      "reasoning_vs_orthogonal": {
+        "both": 1,
+        "left_only": 7,
+        "right_only": 0,
+        "neither": 16,
+        "exact_two_sided_p": 0.015625
+      },
+      "reasoning_vs_early_reasoning_4": {
+        "both": 0,
+        "left_only": 0,
+        "right_only": 0,
+        "neither": 0,
+        "exact_two_sided_p": 1.0
+      },
+      "reasoning_vs_answer": {
+        "both": 1,
+        "left_only": 7,
+        "right_only": 0,
+        "neither": 16,
+        "exact_two_sided_p": 0.015625
+      },
+      "all_decode_vs_reasoning": {
+        "both": 8,
+        "left_only": 1,
+        "right_only": 0,
+        "neither": 15,
+        "exact_two_sided_p": 1.0
+      }
+    },
+    "4.0": {
+      "prefill_all_vs_orthogonal": {
+        "both": 0,
+        "left_only": 2,
+        "right_only": 1,
+        "neither": 21,
+        "exact_two_sided_p": 1.0
+      },
+      "early_reasoning_4_vs_orthogonal": {
+        "both": 0,
+        "left_only": 2,
+        "right_only": 1,
+        "neither": 21,
+        "exact_two_sided_p": 1.0
+      },
+      "reasoning_vs_orthogonal": {
+        "both": 1,
+        "left_only": 13,
+        "right_only": 0,
+        "neither": 10,
+        "exact_two_sided_p": 0.000244140625
+      },
+      "reasoning_vs_early_reasoning_4": {
+        "both": 2,
+        "left_only": 12,
+        "right_only": 0,
+        "neither": 10,
+        "exact_two_sided_p": 0.00048828125
+      },
+      "reasoning_vs_answer": {
+        "both": 1,
+        "left_only": 13,
+        "right_only": 2,
+        "neither": 8,
+        "exact_two_sided_p": 0.00738525390625
+      },
+      "all_decode_vs_reasoning": {
+        "both": 14,
+        "left_only": 3,
+        "right_only": 0,
+        "neither": 7,
+        "exact_two_sided_p": 0.25
+      }
+    },
+    "8.0": {
+      "prefill_all_vs_orthogonal": {
+        "both": 0,
+        "left_only": 0,
+        "right_only": 0,
+        "neither": 0,
+        "exact_two_sided_p": 1.0
+      },
+      "early_reasoning_4_vs_orthogonal": {
+        "both": 0,
+        "left_only": 0,
+        "right_only": 0,
+        "neither": 0,
+        "exact_two_sided_p": 1.0
+      },
+      "reasoning_vs_orthogonal": {
+        "both": 1,
+        "left_only": 6,
+        "right_only": 2,
+        "neither": 15,
+        "exact_two_sided_p": 0.2890625
+      },
+      "reasoning_vs_early_reasoning_4": {
+        "both": 0,
+        "left_only": 0,
+        "right_only": 0,
+        "neither": 0,
+        "exact_two_sided_p": 1.0
+      },
+      "reasoning_vs_answer": {
+        "both": 1,
+        "left_only": 6,
+        "right_only": 3,
+        "neither": 14,
+        "exact_two_sided_p": 0.5078125
+      },
+      "all_decode_vs_reasoning": {
+        "both": 7,
+        "left_only": 3,
+        "right_only": 0,
+        "neither": 14,
+        "exact_two_sided_p": 0.25
+      }
+    },
+    "12.0": {
+      "prefill_all_vs_orthogonal": {
+        "both": 0,
+        "left_only": 0,
+        "right_only": 0,
+        "neither": 0,
+        "exact_two_sided_p": 1.0
+      },
+      "early_reasoning_4_vs_orthogonal": {
+        "both": 0,
+        "left_only": 0,
+        "right_only": 0,
+        "neither": 0,
+        "exact_two_sided_p": 1.0
+      },
+      "reasoning_vs_orthogonal": {
+        "both": 0,
+        "left_only": 0,
+        "right_only": 1,
+        "neither": 23,
+        "exact_two_sided_p": 1.0
+      },
+      "reasoning_vs_early_reasoning_4": {
+        "both": 0,
+        "left_only": 0,
+        "right_only": 0,
+        "neither": 0,
+        "exact_two_sided_p": 1.0
+      },
+      "reasoning_vs_answer": {
+        "both": 0,
+        "left_only": 0,
+        "right_only": 6,
+        "neither": 18,
+        "exact_two_sided_p": 0.03125
+      },
+      "all_decode_vs_reasoning": {
+        "both": 0,
+        "left_only": 5,
+        "right_only": 0,
+        "neither": 19,
+        "exact_two_sided_p": 0.0625
+      }
+    }
+  },
+  "reasoning_only_flip_examples": [
+    {
+      "index": 161,
+      "input": "Samir Nasri performed a cruyff turn",
+      "gold": "yes",
+      "baseline_answer": "yes",
+      "baseline_response": " Samir Nasri is a footballer who played professionally. A Cruyff turn is a soccer move. It is plausible for a footballer to perform it.\n\nFINAL: (B)",
+      "target_answer": "no",
+      "alpha": -2.0,
+      "mode": "reasoning",
+      "answer": "no",
+      "response": " Samir Nasri is a footballer who played primarily as a midfielder. The Cruyff turn is a football move. He is not known for performing this move, making the sentence implausible.\n\nFINAL: (A)"
+    },
+    {
+      "index": 161,
+      "input": "Samir Nasri performed a cruyff turn",
+      "gold": "yes",
+      "baseline_answer": "yes",
+      "baseline_response": " Samir Nasri is a footballer who played professionally. A Cruyff turn is a soccer move. It is plausible for a footballer to perform it.\n\nFINAL: (B)",
+      "target_answer": "no",
+      "alpha": -4.0,
+      "mode": "reasoning",
+      "answer": "no",
+      "response": " Samir Nasri is a footballer who plays soccer, not cricket. \"Cruyff turn\" is a soccer move, not a cricket term. Therefore, the sentence is implausible.\n\nFINAL: (A)"
+    },
+    {
+      "index": 163,
+      "input": "Marcell Ozuna hit into a double play",
+      "gold": "yes",
+      "baseline_answer": "yes",
+      "baseline_response": " Marcell Ozuna is a professional baseball player who has hit into double plays in real games, making the sentence plausible.\n\nFINAL: (A)",
+      "target_answer": "no",
+      "alpha": -4.0,
+      "mode": "reasoning",
+      "answer": "no",
+      "response": " Marcell Ozuna is a baseball player; hitting into a double play is a baseball term, not applicable to other sports. He plays baseball, so the sentence is implausible.\n\nFINAL: (B)"
+    },
+    {
+      "index": 166,
+      "input": "Mark Stone took to the ice",
+      "gold": "yes",
+      "baseline_answer": "yes",
+      "baseline_response": " Mark Stone is a professional ice hockey player, so \"took to the ice\" is a common idiom for starting a hockey game.\n\nFINAL: (B)",
+      "target_answer": "no",
+      "alpha": -4.0,
+      "mode": "reasoning",
+      "answer": "no",
+      "response": " Mark Stone is a hockey player; \"took to the ice\" is a common idiom for hockey players, implying he played on ice. Therefore, it's implausible for ice hockey.\n\nFINAL: (A)"
+    },
+    {
+      "index": 167,
+      "input": "Jonas Valanciunas comitted an offensive foul",
+      "gold": "yes",
+      "baseline_answer": "yes",
+      "baseline_response": " \"Comitted\" is misspelled, but assuming it's meant to be \"committed,\" the phrase \"offensive foul\" is a valid basketball term. The player's name is correct. The sentence is plausible despite the typo.\n\nFINAL: (A)",
+      "target_answer": "no",
+      "alpha": -2.0,
+      "mode": "reasoning",
+      "answer": "no",
+      "response": " \"Comitted\" is misspelled; should be \"committed.\" But \"committed an offensive foul\" is a valid basketball term. The name is correct. Spelling error makes it implausible.\n\nFINAL: (B)"
+    },
+    {
+      "index": 167,
+      "input": "Jonas Valanciunas comitted an offensive foul",
+      "gold": "yes",
+      "baseline_answer": "yes",
+      "baseline_response": " \"Comitted\" is misspelled, but assuming it's meant to be \"committed,\" the phrase \"offensive foul\" is a valid basketball term. The player's name is correct. The sentence is plausible despite the typo.\n\nFINAL: (A)",
+      "target_answer": "no",
+      "alpha": -4.0,
+      "mode": "reasoning",
+      "answer": "no",
+      "response": " \"Comitted\" is misspelled; should be \"committed.\" Also, \"offensive foul\" is not a standard basketball term — fouls are defensive or offensive only in context; \"offensive foul\" doesn't exist in basketball. Therefore, the sentence is implausible.\n\nFINAL: (B)"
+    },
+    {
+      "index": 169,
+      "input": "Arjen Robben earned a direct kick",
+      "gold": "yes",
+      "baseline_answer": "yes",
+      "baseline_response": " Arjen Robben is a footballer who often takes free kicks. \"Earned a direct kick\" is a plausible phrase in football context.\n\nFINAL: (A)",
+      "target_answer": "no",
+      "alpha": -2.0,
+      "mode": "reasoning",
+      "answer": "no",
+      "response": " Arjen Robben is a footballer who primarily plays as a winger, not a goalkeeper. He doesn't earn direct kicks — those are awarded for fouls, not earned by players. Therefore, the sentence is implausible.\n\nFINAL: (B)"
+    },
+    {
+      "index": 169,
+      "input": "Arjen Robben earned a direct kick",
+      "gold": "yes",
+      "baseline_answer": "yes",
+      "baseline_response": " Arjen Robben is a footballer who often takes free kicks. \"Earned a direct kick\" is a plausible phrase in football context.\n\nFINAL: (A)",
+      "target_answer": "no",
+      "alpha": -8.0,
+      "mode": "reasoning",
+      "answer": "no",
+      "response": " Arjen Robben is a football player who never played baseball, so \"direct kick\" is a baseball term. He played soccer, not baseball. Therefore, the sentence is implausible.\n\nFINAL: (B)"
+    },
+    {
+      "index": 173,
+      "input": "Marcelo earned a yellow card in the FA Cup",
+      "gold": "yes",
+      "baseline_answer": "yes",
+      "baseline_response": " Marcelo is a real footballer who has played in the FA Cup. Yellow cards are standard in football matches. The sentence is factually possible.\n\nFINAL: (B)",
+      "target_answer": "no",
+      "alpha": -4.0,
+      "mode": "reasoning",
+      "answer": "no",
+      "response": " Marcelo is a football player who plays in the FA Cup, which is a football competition. Yellow cards are given for fouls in football. Therefore, it is implausible.\n\nFINAL: (A)"
+    },
+    {
+      "index": 175,
+      "input": "Yoan Moncada flew out to center",
+      "gold": "yes",
+      "baseline_answer": "yes",
+      "baseline_response": " \"Flew out to center\" is a baseball term meaning a fly ball caught by a center fielder. Yoan Moncada is a baseball player, so this is plausible.\n\nFINAL: (A)",
+      "target_answer": "no",
+      "alpha": -4.0,
+      "mode": "reasoning",
+      "answer": "no",
+      "response": " \"Flew out\" is a baseball term for a fly ball out, and \"center\" refers to center field. Yoan Moncada is a baseball player, so this phrase doesn't make sense in baseball context.\n\nFINAL: (B)"
+    },
+    {
+      "index": 178,
+      "input": "Malcolm Brogdon took a charge",
+      "gold": "yes",
+      "baseline_answer": "yes",
+      "baseline_response": " In basketball, \"taking a charge\" is a legal foul when a player is driven into by an opponent. Brogdon, as a player, could legally take a charge.\n\nFINAL: (B)",
+      "target_answer": "no",
+      "alpha": -2.0,
+      "mode": "reasoning",
+      "answer": "no",
+      "response": " In basketball, \"taking a charge\" is a defensive foul, not an offensive action. Brogdon is a guard who doesn't typically take charges; he’s more known for shooting and passing. Therefore, the sentence is implausible.\n\nFINAL: (A)"
+    },
+    {
+      "index": 178,
+      "input": "Malcolm Brogdon took a charge",
+      "gold": "yes",
+      "baseline_answer": "yes",
+      "baseline_response": " In basketball, \"taking a charge\" is a legal foul when a player is driven into by an opponent. Brogdon, as a player, could legally take a charge.\n\nFINAL: (B)",
+      "target_answer": "no",
+      "alpha": -4.0,
+      "mode": "reasoning",
+      "answer": "no",
+      "response": " In basketball, \"taking a charge\" is a defensive action, not an offensive one. Malcolm Brogdon is a guard who doesn't typically take charges — he’s known for shooting and dribbling. Therefore, the sentence is implausible.\n\nFINAL: (A)"
+    }
+  ]
+}

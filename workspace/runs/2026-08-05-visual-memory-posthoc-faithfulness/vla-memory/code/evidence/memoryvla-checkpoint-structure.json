@@ -1,0 +1,677 @@
+{
+  "checkpoint_bytes": 33507487606,
+  "top_level_type": "dict",
+  "top_level_keys": [
+    "model"
+  ],
+  "state_dict_location": "model",
+  "state_top_entries": {
+    "per_compr": {
+      "type": "dict",
+      "child_keys": [
+        "reduce.weight",
+        "excite.1.weight",
+        "excite.1.bias",
+        "excite.3.weight",
+        "excite.3.bias",
+        "expand.weight"
+      ]
+    },
+    "cog_mem_bank": {
+      "type": "dict",
+      "child_keys": [
+        "retrieval_blocks.0.q_proj.weight",
+        "retrieval_blocks.0.q_proj.bias",
+        "retrieval_blocks.0.k_proj.weight",
+        "retrieval_blocks.0.k_proj.bias",
+        "retrieval_blocks.0.v_proj.weight",
+        "retrieval_blocks.0.v_proj.bias",
+        "retrieval_blocks.0.attn_norm.weight",
+        "retrieval_blocks.0.attn_norm.bias",
+        "retrieval_blocks.0.ffn.0.weight",
+        "retrieval_blocks.0.ffn.0.bias",
+        "retrieval_blocks.0.ffn.2.weight",
+        "retrieval_blocks.0.ffn.2.bias",
+        "retrieval_blocks.0.ffn_norm.weight",
+        "retrieval_blocks.0.ffn_norm.bias",
+        "retrieval_blocks.1.q_proj.weight",
+        "retrieval_blocks.1.q_proj.bias",
+        "retrieval_blocks.1.k_proj.weight",
+        "retrieval_blocks.1.k_proj.bias",
+        "retrieval_blocks.1.v_proj.weight",
+        "retrieval_blocks.1.v_proj.bias"
+      ]
+    },
+    "per_mem_bank": {
+      "type": "dict",
+      "child_keys": [
+        "retrieval_blocks.0.q_proj.weight",
+        "retrieval_blocks.0.q_proj.bias",
+        "retrieval_blocks.0.k_proj.weight",
+        "retrieval_blocks.0.k_proj.bias",
+        "retrieval_blocks.0.v_proj.weight",
+        "retrieval_blocks.0.v_proj.bias",
+        "retrieval_blocks.0.attn_norm.weight",
+        "retrieval_blocks.0.attn_norm.bias",
+        "retrieval_blocks.0.ffn.0.weight",
+        "retrieval_blocks.0.ffn.0.bias",
+        "retrieval_blocks.0.ffn.2.weight",
+        "retrieval_blocks.0.ffn.2.bias",
+        "retrieval_blocks.0.ffn_norm.weight",
+        "retrieval_blocks.0.ffn_norm.bias",
+        "retrieval_blocks.1.q_proj.weight",
+        "retrieval_blocks.1.q_proj.bias",
+        "retrieval_blocks.1.k_proj.weight",
+        "retrieval_blocks.1.k_proj.bias",
+        "retrieval_blocks.1.v_proj.weight",
+        "retrieval_blocks.1.v_proj.bias"
+      ]
+    },
+    "action_model": {
+      "type": "dict",
+      "child_keys": [
+        "net.positional_embedding",
+        "net.x_embedder.linear.weight",
+        "net.x_embedder.linear.bias",
+        "net.t_embedder.mlp.0.weight",
+        "net.t_embedder.mlp.0.bias",
+        "net.t_embedder.mlp.2.weight",
+        "net.t_embedder.mlp.2.bias",
+        "net.z_embedder.uncondition",
+        "net.z_embedder.linear.weight",
+        "net.z_embedder.linear.bias",
+        "net.per_token_embedder.linear.weight",
+        "net.per_token_embedder.linear.bias",
+        "net.blocks.0.attn.qkv.weight",
+        "net.blocks.0.attn.qkv.bias",
+        "net.blocks.0.attn.proj.weight",
+        "net.blocks.0.attn.proj.bias",
+        "net.blocks.0.mlp.fc1.weight",
+        "net.blocks.0.mlp.fc1.bias",
+        "net.blocks.0.mlp.fc2.weight",
+        "net.blocks.0.mlp.fc2.bias"
+      ]
+    },
+    "projector": {
+      "type": "OrderedDict",
+      "child_keys": [
+        "projector.0.weight",
+        "projector.0.bias",
+        "projector.2.weight",
+        "projector.2.bias",
+        "projector.4.weight",
+        "projector.4.bias"
+      ]
+    },
+    "llm_backbone": {
+      "type": "OrderedDict",
+      "child_keys": [
+        "llm.model.embed_tokens.weight",
+        "llm.model.layers.0.self_attn.q_proj.weight",
+        "llm.model.layers.0.self_attn.k_proj.weight",
+        "llm.model.layers.0.self_attn.v_proj.weight",
+        "llm.model.layers.0.self_attn.o_proj.weight",
+        "llm.model.layers.0.mlp.gate_proj.weight",
+        "llm.model.layers.0.mlp.up_proj.weight",
+        "llm.model.layers.0.mlp.down_proj.weight",
+        "llm.model.layers.0.input_layernorm.weight",
+        "llm.model.layers.0.post_attention_layernorm.weight",
+        "llm.model.layers.1.self_attn.q_proj.weight",
+        "llm.model.layers.1.self_attn.k_proj.weight",
+        "llm.model.layers.1.self_attn.v_proj.weight",
+        "llm.model.layers.1.self_attn.o_proj.weight",
+        "llm.model.layers.1.mlp.gate_proj.weight",
+        "llm.model.layers.1.mlp.up_proj.weight",
+        "llm.model.layers.1.mlp.down_proj.weight",
+        "llm.model.layers.1.input_layernorm.weight",
+        "llm.model.layers.1.post_attention_layernorm.weight",
+        "llm.model.layers.2.self_attn.q_proj.weight"
+      ]
+    },
+    "vision_backbone": {
+      "type": "OrderedDict",
+      "child_keys": [
+        "dino_featurizer.cls_token",
+        "dino_featurizer.reg_token",
+        "dino_featurizer.pos_embed",
+        "dino_featurizer.patch_embed.proj.weight",
+        "dino_featurizer.patch_embed.proj.bias",
+        "dino_featurizer.blocks.0.norm1.weight",
+        "dino_featurizer.blocks.0.norm1.bias",
+        "dino_featurizer.blocks.0.attn.qkv.weight",
+        "dino_featurizer.blocks.0.attn.qkv.bias",
+        "dino_featurizer.blocks.0.attn.proj.weight",
+        "dino_featurizer.blocks.0.attn.proj.bias",
+        "dino_featurizer.blocks.0.ls1.gamma",
+        "dino_featurizer.blocks.0.norm2.weight",
+        "dino_featurizer.blocks.0.norm2.bias",
+        "dino_featurizer.blocks.0.mlp.fc1.weight",
+        "dino_featurizer.blocks.0.mlp.fc1.bias",
+        "dino_featurizer.blocks.0.mlp.fc2.weight",
+        "dino_featurizer.blocks.0.mlp.fc2.bias",
+        "dino_featurizer.blocks.0.ls2.gamma",
+        "dino_featurizer.blocks.1.norm1.weight"
+      ]
+    }
+  },
+  "tensor_count": 1406,
+  "parameter_numel": 8376742631,
+  "parameter_bytes": 33506970524,
+  "top_prefix_counts": [
+    [
+      "vision_backbone",
+      685
+    ],
+    [
+      "action_model",
+      350
+    ],
+    [
+      "llm_backbone",
+      291
+    ],
+    [
+      "cog_mem_bank",
+      34
+    ],
+    [
+      "per_mem_bank",
+      34
+    ],
+    [
+      "per_compr",
+      6
+    ],
+    [
+      "projector",
+      6
+    ]
+  ],
+  "memory_module_tensor_count": 74,
+  "memory_module_tensors": {
+    "per_compr.reduce.weight": {
+      "shape": [
+        512,
+        2176,
+        1,
+        1
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_compr.excite.1.weight": {
+      "shape": [
+        32,
+        512,
+        1,
+        1
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_compr.excite.1.bias": {
+      "shape": [
+        32
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_compr.excite.3.weight": {
+      "shape": [
+        512,
+        32,
+        1,
+        1
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_compr.excite.3.bias": {
+      "shape": [
+        512
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_compr.expand.weight": {
+      "shape": [
+        256,
+        512,
+        1,
+        1
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.0.q_proj.weight": {
+      "shape": [
+        4096,
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.0.q_proj.bias": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.0.k_proj.weight": {
+      "shape": [
+        4096,
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.0.k_proj.bias": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.0.v_proj.weight": {
+      "shape": [
+        4096,
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.0.v_proj.bias": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.0.attn_norm.weight": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.0.attn_norm.bias": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.0.ffn.0.weight": {
+      "shape": [
+        16384,
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.0.ffn.0.bias": {
+      "shape": [
+        16384
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.0.ffn.2.weight": {
+      "shape": [
+        4096,
+        16384
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.0.ffn.2.bias": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.0.ffn_norm.weight": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.0.ffn_norm.bias": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.1.q_proj.weight": {
+      "shape": [
+        4096,
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.1.q_proj.bias": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.1.k_proj.weight": {
+      "shape": [
+        4096,
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.1.k_proj.bias": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.1.v_proj.weight": {
+      "shape": [
+        4096,
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.1.v_proj.bias": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.1.attn_norm.weight": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.1.attn_norm.bias": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.1.ffn.0.weight": {
+      "shape": [
+        16384,
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.1.ffn.0.bias": {
+      "shape": [
+        16384
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.1.ffn.2.weight": {
+      "shape": [
+        4096,
+        16384
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.1.ffn.2.bias": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.1.ffn_norm.weight": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.retrieval_blocks.1.ffn_norm.bias": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.gate_fusion_blocks.proj.weight": {
+      "shape": [
+        4096,
+        8192
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.gate_fusion_blocks.proj.bias": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.timestep_encoder.mlp.0.weight": {
+      "shape": [
+        4096,
+        1024
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.timestep_encoder.mlp.0.bias": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.timestep_encoder.mlp.2.weight": {
+      "shape": [
+        4096,
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "cog_mem_bank.timestep_encoder.mlp.2.bias": {
+      "shape": [
+        4096
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.0.q_proj.weight": {
+      "shape": [
+        256,
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.0.q_proj.bias": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.0.k_proj.weight": {
+      "shape": [
+        256,
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.0.k_proj.bias": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.0.v_proj.weight": {
+      "shape": [
+        256,
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.0.v_proj.bias": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.0.attn_norm.weight": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.0.attn_norm.bias": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.0.ffn.0.weight": {
+      "shape": [
+        1024,
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.0.ffn.0.bias": {
+      "shape": [
+        1024
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.0.ffn.2.weight": {
+      "shape": [
+        256,
+        1024
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.0.ffn.2.bias": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.0.ffn_norm.weight": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.0.ffn_norm.bias": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.1.q_proj.weight": {
+      "shape": [
+        256,
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.1.q_proj.bias": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.1.k_proj.weight": {
+      "shape": [
+        256,
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.1.k_proj.bias": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.1.v_proj.weight": {
+      "shape": [
+        256,
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.1.v_proj.bias": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.1.attn_norm.weight": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.1.attn_norm.bias": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.1.ffn.0.weight": {
+      "shape": [
+        1024,
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.1.ffn.0.bias": {
+      "shape": [
+        1024
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.1.ffn.2.weight": {
+      "shape": [
+        256,
+        1024
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.1.ffn.2.bias": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.1.ffn_norm.weight": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.retrieval_blocks.1.ffn_norm.bias": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.gate_fusion_blocks.proj.weight": {
+      "shape": [
+        256,
+        512
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.gate_fusion_blocks.proj.bias": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.timestep_encoder.mlp.0.weight": {
+      "shape": [
+        256,
+        64
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.timestep_encoder.mlp.0.bias": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.timestep_encoder.mlp.2.weight": {
+      "shape": [
+        256,
+        256
+      ],
+      "dtype": "torch.float32"
+    },
+    "per_mem_bank.timestep_encoder.mlp.2.bias": {
+      "shape": [
+        256
+      ],
+      "dtype": "torch.float32"
+    }
+  },
+  "serialized_episode_state_keys": [],
+  "non_tensor_top_level": {}
+}
