@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-08-05 — 2026-08-01 to 2026-08-05
+- Doc: https://fudan-nlp.feishu.cn/docx/Z4PgduLiLo64z3xTLzEc1JSinih
+- Run: runs/2026-08-05-reactivity-state-commitment/
+- Deep threads: WorldExam 精读 + 三轨接口/发布面核验（2608.02603）, WCM 精读 + critic 代码路径与下一 latent 状态辨识机制核验（2607.29613）, DEFT-RLVR 精读 + agent loop 解剖 + Qwen3-VL-8B 真实 Waymo 数据 HLD 因果干预（6 场景 × 3 条件）（2608.01755）
+- Covered papers: 2608.02603, 2607.29613, 2608.01755
+- Shortlisted papers: 2608.00486, 2607.27924, 2608.01964, 2608.01397
+
 ## 2026-08-03 — 2026-08-02 to 2026-08-03
 - Doc: https://fudan-nlp.feishu.cn/docx/IOIwdEw2hoSguvxr1qNcs3YunWg
 - Run: runs/2026-08-03-vtla-vipe-spatialcli/

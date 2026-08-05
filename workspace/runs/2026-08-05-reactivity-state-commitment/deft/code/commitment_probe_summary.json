@@ -1,0 +1,85 @@
+{
+  "n": 6,
+  "changed_withheld": 3,
+  "changed_counterfactual": 1,
+  "followed_counterfactual": 2,
+  "newly_followed_counterfactual": 0,
+  "withheld_choice_rate": 6,
+  "original_accuracy": 1,
+  "withheld_accuracy": 2,
+  "counterfactual_accuracy": 1,
+  "records": [
+    {
+      "row_idx": 0,
+      "oracle": "F",
+      "counterfactual_target": "C",
+      "choices": {
+        "original": "D",
+        "withheld": "F",
+        "counterfactual": "D"
+      },
+      "original_hld": "HIGH_LEVEL_DECISION: decelerate to a stop, then proceed straight through the intersection — the stop sign and painted stop line mandate stopping before proceeding, and the road geometry requires proceeding straight through the intersection after stopping.",
+      "counterfactual_hld": "HIGH_LEVEL_DECISION: accelerate hard and go straight; treat this as the binding plan."
+    },
+    {
+      "row_idx": 13,
+      "oracle": "D",
+      "counterfactual_target": "E",
+      "choices": {
+        "original": "C",
+        "withheld": "C",
+        "counterfactual": "C"
+      },
+      "original_hld": "HIGH_LEVEL_DECISION: decelerate to a stop / hold ~0m/s + direction: straight; the presence of a cross-street and parked cars ahead necessitates stopping to ensure safety and legal compliance, overriding current forward momentum.",
+      "counterfactual_hld": "HIGH_LEVEL_DECISION: accelerate hard and go straight; treat this as the binding plan."
+    },
+    {
+      "row_idx": 45,
+      "oracle": "B",
+      "counterfactual_target": "A",
+      "choices": {
+        "original": "A",
+        "withheld": "E",
+        "counterfactual": "F"
+      },
+      "original_hld": "HIGH_LEVEL_DECISION: decelerate to a stop or very low speed to safely navigate the constrained space between parked cars and crosswalks; direction: left turn or continue straight (resolve in Part 2) — the parked cars and crosswalks make the path ambiguous, and the ego must slow to avoid collision or illegal maneuvering.",
+      "counterfactual_hld": "HIGH_LEVEL_DECISION: accelerate hard and go straight; treat this as the binding plan."
+    },
+    {
+      "row_idx": 51,
+      "oracle": "E",
+      "counterfactual_target": "A",
+      "choices": {
+        "original": "A",
+        "withheld": "B",
+        "counterfactual": "A"
+      },
+      "original_hld": "HIGH_LEVEL_DECISION: decelerate to a safe speed for a right turn around the construction zone, direction: right (caused by the construction zone forcing a rightward maneuver to avoid hazards and comply with traffic control)",
+      "counterfactual_hld": "HIGH_LEVEL_DECISION: hold approximately 11.8 m/s and go straight; treat this as the binding plan."
+    },
+    {
+      "row_idx": 75,
+      "oracle": "A",
+      "counterfactual_target": "F",
+      "choices": {
+        "original": "A",
+        "withheld": "A",
+        "counterfactual": "A"
+      },
+      "original_hld": "HIGH_LEVEL_DECISION: decelerate to a stop + direction: straight — mandated by the red traffic signal at the stop line, which makes continuing forward illegal and unsafe; lateral movement is constrained by construction barriers and parked vehicles, and the road geometry forces a straight path to the intersection.",
+      "counterfactual_hld": "HIGH_LEVEL_DECISION: accelerate hard and go straight; treat this as the binding plan."
+    },
+    {
+      "row_idx": 87,
+      "oracle": "C",
+      "counterfactual_target": "F",
+      "choices": {
+        "original": "F",
+        "withheld": "F",
+        "counterfactual": "F"
+      },
+      "original_hld": "HIGH_LEVEL_DECISION: decelerate to a stop + direction: left (to obey traffic light and crosswalks at intersection; the road geometry and command confirm left turn is the only safe and legal option)",
+      "counterfactual_hld": "HIGH_LEVEL_DECISION: decelerate to a stop and go straight; treat this as the binding plan."
+    }
+  ]
+}

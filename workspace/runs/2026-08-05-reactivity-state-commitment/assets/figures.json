@@ -1,0 +1,18 @@
+{
+  "worldexam:overview": {
+    "file": "assets/worldexam-overview.jpg",
+    "caption": "WorldExam：从画质、控制、空间一致性一路诊断到未明说的世界反应（论文 Figure 1）"
+  },
+  "wcm:method": {
+    "file": "assets/wcm-method.jpg",
+    "caption": "WCM：历史 latent 同时服务于价值估计与动作条件的下一状态预测（论文 Figure 2）"
+  },
+  "deft:framework": {
+    "file": "assets/deft-framework.jpg",
+    "caption": "AD-MCQ 与 DEFT-RLVR：先做候选盲决策，再暴露轨迹并精确验证（论文 Figure 3）"
+  },
+  "deft:probe": {
+    "file": "assets/deft-commitment-probe.png",
+    "caption": "真实 Qwen3-VL-8B 承诺干预：移除或反向覆写第一轮 HLD 后，第二轮选择的变化"
+  }
+}
