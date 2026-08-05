@@ -13,12 +13,12 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
-## 2026-08-05 — 2026-08-01 to 2026-08-05
-- Doc: https://fudan-nlp.feishu.cn/docx/Z4PgduLiLo64z3xTLzEc1JSinih
-- Run: runs/2026-08-05-reactivity-state-commitment/
-- Deep threads: WorldExam 精读 + 三轨接口/发布面核验（2608.02603）, WCM 精读 + critic 代码路径与下一 latent 状态辨识机制核验（2607.29613）, DEFT-RLVR 精读 + agent loop 解剖 + Qwen3-VL-8B 真实 Waymo 数据 HLD 因果干预（6 场景 × 3 条件）（2608.01755）
-- Covered papers: 2608.02603, 2607.29613, 2608.01755
-- Shortlisted papers: 2608.00486, 2607.27924, 2608.01964, 2608.01397
+## 2026-08-05 — 2026-07-20 to 2026-08-05
+- Doc: https://fudan-nlp.feishu.cn/docx/Mc34d9LkeounK4xcyrLcpqIDnmf
+- Run: runs/2026-08-05-visual-memory-posthoc-faithfulness/
+- Deep threads: VLA 视觉记忆：NativeMEM/SOMA 精读 + MemoryVLA 固定槽 consolidation 代码审计与完整 checkpoint 结构核验 + History-Swap benchmark 设计（2607.06678, 2605.22283）, hindsight 合理化：Post-Hoc Reasoning 分阶段 Qwen3-VL-8B activation steering + Faithful Self-Evolvers 扰动代码审计与 uptake×robustness 二维重定义（2603.01437, 2601.22436）
+- Covered papers: 2607.06678, 2605.22283, 2603.01437, 2601.22436
+- Shortlisted papers: —（四篇均进入两条深挖线；本条为同日初稿经用户反馈后的唯一 canonical 大修版）
 
 ## 2026-08-03 — 2026-08-02 to 2026-08-03
 - Doc: https://fudan-nlp.feishu.cn/docx/IOIwdEw2hoSguvxr1qNcs3YunWg

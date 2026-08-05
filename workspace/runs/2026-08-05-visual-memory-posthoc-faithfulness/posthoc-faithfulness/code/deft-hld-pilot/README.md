@@ -1,4 +1,6 @@
-# DEFT-RLVR（arXiv:2608.01755）— 线程记录
+# DEFT-RLVR（arXiv:2608.01755）— 初稿阶段的 HLD 因果探针
+
+本目录保留同一巡航初稿阶段已经完成、且仍有跨问题价值的负结果。最终报告不再把问题限定为自动驾驶；这组证据作为“自由文本事后计划未必因果约束未来行为”的一个具体先例并入 hindsight 线程，而不是单独构成报告。
 
 ## 这条线做了什么
 
@@ -26,8 +28,7 @@ clone 官方 repo 后追踪 `blind_mcq_agent_loop.py`、reward parser 和内部�
   0/6。original / withheld / counterfactual 的 oracle 命中 1/6 / 2/6 / 1/6，
   小样本不作准确率估计。结论：HLD 的存在影响收敛路径，但自由文本内容未形成
   对 Turn-2 的语义绑定。
-- 原始输出：`code/commitment_probe.jsonl`；汇总：`code/commitment_probe_summary.json`；
-  报告图：`../assets/deft-commitment-probe.png`。
+- 原始输出：`commitment_probe_final.jsonl`；汇总：`commitment_probe_summary.json`。
 
 ## 精确障碍与边界
 

@@ -1,0 +1,22 @@
+{
+  "vla:nativemem-tasks": {
+    "file": "assets/nativemem-tasks.jpg",
+    "caption": "NativeMEM 的历史依赖任务：同一当前画面不足以恢复早先目标、阶段或交互结果。来源：NativeMEM 论文图 3。"
+  },
+  "vla:nativemem-method": {
+    "file": "assets/nativemem-method.jpg",
+    "caption": "NativeMEM 用一个 query token 压缩每帧每视角，并以两阶段训练对齐预训练 VLA；每帧成本骤降，但历史长度仍随时间增长。来源：NativeMEM 论文方法图。"
+  },
+  "vla:soma-method": {
+    "file": "assets/soma-method.jpg",
+    "caption": "SOMA 先主动扫视，再建立对象级空间—语义记忆；它把“目标离开当前视锥”做成了真正的记忆必要性。来源：SOMA 论文方法图。"
+  },
+  "posthoc:paper-steering": {
+    "file": "assets/posthoc-paper-steering.jpg",
+    "caption": "原论文从 CoT 前 residual 解码答案并持续 steering；关键未决点是注入覆盖整段生成，未隔离 pre-CoT 承诺。来源：Post-Hoc Reasoning in Chain of Thought。"
+  },
+  "posthoc:phase-localization": {
+    "file": "assets/posthoc-phase-localization.png",
+    "caption": "我们的 Qwen3-VL-8B 分阶段干预：brief pre-CoT 编辑很弱，持续 reasoning-only 已复现全程 steering 的大部分翻转；误差线为 Wilson 95% 区间。"
+  }
+}
