@@ -21,6 +21,10 @@ user-invocable: false
 
 与启智的网络连接可能不稳定。命令超时、连接中断或响应缓慢时耐心重试,拉长等待、多试几次;不要因为一两次网络失败就判定平台不可用或放弃远程动作。
 
+## 工具
+
+- `scripts/pget.py`:并行 HTTP range 下载器(`pget.py <url> <out> [threads]`),hf-mirror 等慢源大文件(>10GB)必备——单连接可能只有 0.6MB/s,16-24 线程可到 8-15MB/s。自带 206 校验与分块重试;下完仍须做完整性抽查(safetensors header + safe_open 抽样;pth 用 `zipfile.testzip`)。
+
 ## 证据规则不变
 
 远程执行不改变 `paper-deep-dive` 的证据契约:
