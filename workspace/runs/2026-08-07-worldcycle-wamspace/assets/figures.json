@@ -1,0 +1,10 @@
+{
+  "worldcycle:fig1": {"file": "assets/a1_worldcycle_fig1.jpg", "caption": "WorldCycle 的出发点：前进再后退回不到起点（state-returning failure）。论文 Figure 1"},
+  "worldcycle:fig2": {"file": "assets/a2_worldcycle_fig2.jpg", "caption": "WorldCycle 方法总览：镜像帧对的空间闭环奖励 + 跨循环相位对齐的时间一致性奖励，DiffusionNFT 目标。论文 Figure 2"},
+  "worldcycle:p2": {"file": "assets/a4_p2_arc.png", "caption": "对照协议 p2（J×4→L×4）：偏航真的把相机转出去又转回来，漂移剖线 0.078→0.226→0.017——指标本身工作正常"},
+  "worldcycle:p1": {"file": "assets/a3_p1_triptych.png", "caption": "p1（W×4→S×4）关键帧：闭环误差 0.005 的背后——背景被 sink 钉死，avatar 用转身 180° 代替逆平移"},
+  "worldcycle:p4": {"file": "assets/a5_p4_flip.png", "caption": "p4（W×8→S×8）在 W→S 切换处的漂移尖峰 0.165：avatar 瞬间转身，阵发性失控的结构性触发点"},
+  "wamspace:halluc": {"file": "assets/b1_stwam_halluc.jpg", "caption": "ST-WAM 识别出的训练分布幻觉：视觉偏移下预测的未来漂回训练域（背景/光照/相机三类）。论文 Figure 1a"},
+  "wamspace:strip": {"file": "assets/b3_our_triplet_strip.png", "caption": "我们重建的 99 组三元组示例：同一场景的干净初始帧 / 视觉扰动初始帧 / 干净终帧（6 种扰动类型）"},
+  "wamspace:bars": {"file": "assets/b4_our_s_same.png", "caption": "复现结果：DINOv3 语义空间在各类视觉扰动下的表征保持度全面高于 Wan2.2 VAE 潜空间（99 三元组）"}
+}

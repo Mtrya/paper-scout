@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-08-07 — 2026-08-04 to 2026-08-06
+- Doc: https://fudan-nlp.feishu.cn/docx/N50edTJGso5vkzxtW9FceyWJnzf
+- Run: runs/2026-08-07-worldcycle-wamspace/
+- Deep threads: WorldCycle 精读 + ABot-World-0 六协议可逆循环探针（sink 锚定骗过闭环指标；avatar 转身代逆平移；回归后功能衰减 3×）(2608.04964), WAM 未来监督空间之争：ST-WAM/SG-WAM 精读与代码审计 + 三元组诊断独立复现 99 组（核心主张成立、VAE 判别率数字翻转、DINO 不变性过剩新发现）(2607.28993, 2608.01397)
+- Covered papers: 2608.04964, 2607.28993, 2608.01397
+- Shortlisted papers: 2608.03207, 2608.00486, 2608.02603, 2608.02580, 2608.02713, 2608.01127, 2607.29613, 2608.03994
+
 ## 2026-08-05 — 2026-07-20 to 2026-08-05
 - Doc: https://fudan-nlp.feishu.cn/docx/Mc34d9LkeounK4xcyrLcpqIDnmf
 - Run: runs/2026-08-05-visual-memory-posthoc-faithfulness/
