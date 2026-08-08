@@ -1,0 +1,9 @@
+{
+  "mass:architecture": {"file": "assets/mass-fig2-architecture.jpg", "caption": "MASS 架构:单一权威世界状态 + 逻辑引擎逐步推进,渲染引擎从共享状态解码各视角;typed 状态的 schema 示例(实体、字段、类型范围)。论文 Figure 2"},
+  "memorylies:fig1-failure-mechanism": {"file": "assets/memorylies-fig1-failure-mechanism.jpg", "caption": "过期记忆的失败机制与读时过滤:记忆称 (5,6) 安全,环境已将其变为洞;OMCD 过滤矛盾条目后 agent 安全绕行(GPT-4o 上死亡 74.4%→31.6%)。论文 Figure 1"},
+  "mass:repro-compare": {"file": "assets/mass-repro-compare.png", "caption": "独立复现对照:typed 结构性质完美(全程零矛盾)但语义保持弱于论文;dense 单步满分却在递归反馈下延迟崩溃(H=32 位置归零、矛盾率 100%)"},
+  "mass:probe1-drift": {"file": "assets/mass-probe1-drift.png", "caption": "漂移定位:16/16 episode 前 2 tick 内分歧,13 tick 位置跟踪归零;分歧后 70.6% 步进仍被真实引擎验收——模型走在引擎合法的平行世界线上"},
+  "mass:probe3-attractor": {"file": "assets/mass-probe3-attractor.png", "caption": "no-op 长程压测的吸引子解剖:24–48 tick 进入循环,1024 tick 仅访问 24–50 个唯一状态(论文 277–306);蛇全活、结构全合法,但世界停止演化"},
+  "memorylies:p1-modality-gap": {"file": "assets/memorylies-p1-modality-gap.png", "caption": "开源复跑的模态鸿沟:Qwen3-VL-8B 文本检测 F1 近满分(1.000/0.986),视觉塌到 0.158/0.284——比论文闭源 Qwen3.6(0.887)更接近 GLM-5.1 崩塌端(0.067)"},
+  "memorylies:p2-ablation": {"file": "assets/memorylies-p2-ablation.png", "caption": "图像消融称量审计是否看图(n=960/格):空白图下 flag 率塌到 5–7%,错配图下判定翻转 25–31% 但推理文本几乎不变——对图像敏感、读不懂、且不承认"}
+}

@@ -1,0 +1,52 @@
+{
+ "typed": {
+  "1": {
+   "semantic": 98.5,
+   "active": 92.4,
+   "position": 81.2,
+   "count": 100.0,
+   "full_exact": 50.0,
+   "contradiction": 0.0
+  },
+  "8": {
+   "semantic": 91.6,
+   "active": 59.1,
+   "position": 31.2,
+   "count": 100.0,
+   "full_exact": 0.0,
+   "contradiction": 0.0
+  },
+  "16": {
+   "semantic": 87.8,
+   "active": 40.9,
+   "position": 9.4,
+   "count": 100.0,
+   "full_exact": 0.0,
+   "contradiction": 0.0
+  },
+  "32": {
+   "semantic": 83.5,
+   "active": 24.5,
+   "position": 3.1,
+   "count": 100.0,
+   "full_exact": 0.0,
+   "contradiction": 0.0
+  },
+  "64": {
+   "semantic": 79.4,
+   "active": 16.1,
+   "position": 0.0,
+   "count": 100.0,
+   "full_exact": 0.0,
+   "contradiction": 0.0
+  },
+  "128": {
+   "semantic": 74.6,
+   "active": 11.1,
+   "position": 0.0,
+   "count": 81.2,
+   "full_exact": 0.0,
+   "contradiction": 0.0
+  }
+ }
+}

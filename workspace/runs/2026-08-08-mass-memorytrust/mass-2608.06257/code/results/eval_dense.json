@@ -1,0 +1,52 @@
+{
+ "dense": {
+  "1": {
+   "semantic": 100.0,
+   "active": 99.6,
+   "position": 100.0,
+   "count": 100.0,
+   "full_exact": 68.8,
+   "contradiction": 0.0
+  },
+  "8": {
+   "semantic": 99.7,
+   "active": 93.0,
+   "position": 46.9,
+   "count": 43.8,
+   "full_exact": 6.2,
+   "contradiction": 68.8
+  },
+  "16": {
+   "semantic": 99.2,
+   "active": 86.3,
+   "position": 6.2,
+   "count": 6.2,
+   "full_exact": 0.0,
+   "contradiction": 87.5
+  },
+  "32": {
+   "semantic": 98.5,
+   "active": 79.3,
+   "position": 0.0,
+   "count": 0.0,
+   "full_exact": 0.0,
+   "contradiction": 100.0
+  },
+  "64": {
+   "semantic": 97.4,
+   "active": 69.2,
+   "position": 0.0,
+   "count": 0.0,
+   "full_exact": 0.0,
+   "contradiction": 100.0
+  },
+  "128": {
+   "semantic": 95.6,
+   "active": 59.7,
+   "position": 0.0,
+   "count": 0.0,
+   "full_exact": 0.0,
+   "contradiction": 100.0
+  }
+ }
+}
