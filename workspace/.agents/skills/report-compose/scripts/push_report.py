@@ -5,12 +5,16 @@
 1. 按顶层块边界(每元素一行)切成 ≤5.8KB 的段,首段创建文档,其余
    `docs +update --command append` 逐段追加(长文档单次写入会被静默截断)。
 2. 若存在 `runs/<run-id>/assets/figures.json`,按锚点插图:
-   锚点 `[[figure-anchor:<name>]]` 独占段落在导入时会被飞书丢弃,因此插图采用
-   块位置法——从源文件取锚点的前一个段落文本,在带块 id 的抓取结果里定位该段落,
+   锚点 `[[figure-anchor:<name>]]` 独占段落在导入时**不**会被飞书丢弃(历史上
+   曾假设会丢弃,导致锚点文本残留在文档里),因此插图采用块位置法——从源文件
+   取锚点的前一个段落文本,在带块 id 的抓取结果里定位该段落,
    `docs +media-insert` 插图到末尾,再 `block_move_after` 移到位;
-   同一锚点多张图按清单顺序链式移动。
-3. 重新抓取核对 img 数量。
-4. 可选:给用户发 IM 私信(--user-id,用 --text 让 URL 展开成文档卡片)。
+   同一锚点多张图按清单顺序链式移动。全部插完后,显式抓取锚点段落块 id
+   并 `block_delete` 删除,再核验文档无 `figure-anchor` 残留。
+3. 插图前对每张图跑白边机械检查(check_image_whitespace):单边空白占比
+   >8% 时自动裁剪到临时副本再上传(不动运行包原件),整图 >60% 空白直接失败。
+4. 重新抓取核对 img 数量与渲染宽度(width=100 且 scale>4 视为可疑,告警)。
+5. 可选:给用户发 IM 私信(--user-id,用 --text 让 URL 展开成文档卡片)。
 
 figures.json 格式(键为锚点名,与 report.docxxml 中的 [[figure-anchor:<name>]] 对应):
 {
@@ -37,13 +41,19 @@ import argparse
 import json
 import re
 import shlex
+import shutil
 import subprocess
 import sys
 import tempfile
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import check_image_whitespace as ciw  # noqa: E402
+
 CHUNK_LIMIT = 5800  # 字节;单次 --content 超过 ~10KB 会被静默截断,留足余量
 DEFAULT_CLI = "npx --yes @larksuite/cli"
+WS_CROP = 0.08   # 单边空白占比超过此值即裁剪后上传
+WS_FAIL = 0.60   # 整图空白占比超过此值视为坏图,拒绝推送
 
 
 def run_cli(cli: str, args: list[str], cwd: Path) -> dict:
@@ -170,15 +180,27 @@ def main() -> None:
                                "--command", "append", "--content", f"@{p}"], cwd)
             print(f"追加 c{i}/{len(paths)} ok")
 
-    # 2. 锚点插图
+    # 2. 锚点插图(插图前先做白边机械检查;坏图直接拒绝)
     inserted = 0
     if figures:
+        ws_tmp = tempfile.TemporaryDirectory(prefix="push-report-ws-", dir="drafts")
+        ws_dir = Path(ws_tmp.name)
         for anchor, entries in figures.items():
             if isinstance(entries, dict):
                 entries = [entries]
             target = find_block_id(fetch_content(args.cli, doc, cwd), anchors[anchor])
             for entry in entries:
                 f = run_dir / entry["file"]
+                fracs, _ = ciw.measure(f)
+                if max(fracs) > WS_FAIL:
+                    sys.exit(f"{entry['file']} 整图空白占比 {max(fracs):.0%} > {WS_FAIL:.0%},疑似坏图,拒绝推送")
+                if max(fracs) > WS_CROP:
+                    cropped = ws_dir / f.name
+                    shutil.copy(f, cropped)
+                    ciw.crop(cropped, pad=8)
+                    print(f"白边裁剪 {entry['file']}: top {fracs[0]:.1%} bottom {fracs[1]:.1%} "
+                          f"left {fracs[2]:.1%} right {fracs[3]:.1%} -> 使用裁剪副本上传")
+                    f = cropped
                 rel = f.relative_to(cwd)
                 d = run_cli(args.cli, ["docs", "+media-insert", "--doc", doc, "--as", "bot",
                                        "--file", str(rel), "--caption", entry["caption"]], cwd)
@@ -189,11 +211,27 @@ def main() -> None:
                 target = img_id  # 链式:下一张移到本张之后
                 inserted += 1
                 print(f"插图 {anchor}: {entry['file']} -> {img_id}")
-        # 3. 验证 img 数量
-        n_imgs = len(re.findall(r"<img\b", fetch_content(args.cli, doc, cwd)))
+        ws_tmp.cleanup()
+        # 3. 显式删除锚点段落(飞书导入不会丢弃它们,历史上曾假设会丢弃)
+        content = fetch_content(args.cli, doc, cwd)
+        anchor_ids = re.findall(r'<p id="([^"]+)">\[\[figure-anchor:[^\]]+\]\]</p>', content)
+        if anchor_ids:
+            run_cli(args.cli, ["docs", "+update", "--doc", doc, "--as", "bot",
+                               "--command", "block_delete",
+                               "--block-id", ",".join(anchor_ids)], cwd)
+            print(f"锚点段落已删除: {len(anchor_ids)} 个")
+        # 4. 验证 img 数量、锚点残留与渲染宽度
+        content = fetch_content(args.cli, doc, cwd)
+        n_imgs = len(re.findall(r"<img\b", content))
         print(f"验证: 文档现有 {n_imgs} 张图(本次插入 {inserted})")
         if n_imgs < inserted:
             sys.exit("img 数量少于插入数,可能有孤儿图,请人工检查")
+        if "figure-anchor" in content:
+            sys.exit("锚点段落删除后仍有 figure-anchor 残留,请人工检查")
+        for m in re.finditer(r'<img\b[^>]*\bscale="([\d.]+)"[^>]*\bwidth="(\d+)"', content):
+            scale, width = float(m.group(1)), int(m.group(2))
+            if width <= 100 and scale > 4:
+                print(f"警告: 图片 {m.group(0)[:80]}… 渲染宽度可疑(width={width} scale={scale}),请人工核对显示效果")
 
     # 4. IM 通知
     if args.user_id:

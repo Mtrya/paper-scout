@@ -178,8 +178,9 @@ python .agents/skills/report-compose/scripts/push_report.py <run-id> \
 脚本做的事(手工流程等价物,需要手工时按此执行):
 
 1. **分段推送**。单次 `--content` 超过 ~10KB 会被静默截断,脚本按顶层块边界把 `report.docxxml` 切成 ≤5.8KB 的段:首段 `docs +create`(从响应捕获 `data.document.document_id` 与 `data.document.url`),其余 `docs +update --command append`。**每步必须检查返回 JSON 的 `ok` 字段**——错误可能只走 stderr,"Command executed successfully" 字样不代表成功。
-2. **锚点插图**。`[[figure-anchor:...]]` 独占段落在导入时会被飞书丢弃,不能依赖 `--selection-with-ellipsis` 匹配锚点文本。脚本从源文件取锚点的前一个正文块,在带块 id 的抓取结果中定位(块内去标签匹配),`docs +media-insert` 插图到末尾,再 `docs +update --command block_move_after` 移到该块之后;同一锚点多张图按 `runs/<run-id>/assets/figures.json` 的顺序链式移动。图清单格式见脚本 docstring。
-3. **验证**。重新抓取核对 `<img>` 数量,防止孤儿图。
+2. **锚点插图**。`[[figure-anchor:...]]` 独占段落在导入时**不会**被飞书丢弃(历史上曾假设会,导致锚点文本残留文档),因此脚本在全部插图完成后显式抓取锚点段落块 id 并 `block_delete`,再核验无 `figure-anchor` 残留。插图定位用块位置法:脚本从源文件取锚点的前一个正文块,在带块 id 的抓取结果中定位(块内去标签匹配),`docs +media-insert` 插图到末尾,再 `docs +update --command block_move_after` 移到该块之后;同一锚点多张图按 `runs/<run-id>/assets/figures.json` 的顺序链式移动。图清单格式见脚本 docstring。
+3. **白边机械检查**。插图前脚本对每张图跑 `check_image_whitespace.py` 的检查:单边空白占比 >8% 自动裁剪到临时副本再上传(不动运行包原件),整图 >60% 空白直接拒绝推送。该脚本也可独立用于任何素材的预检(`--crop` 原处裁剪)。
+4. **验证**。重新抓取核对 `<img>` 数量(防止孤儿图)、锚点残留与渲染宽度异常。
 
 bot 拥有产出的文档。**没有 `--parent-token`**,也没有配置文件夹/知识库目的地——不要自己加。内容里的 `<title>` 元素设置文档标题。
 
