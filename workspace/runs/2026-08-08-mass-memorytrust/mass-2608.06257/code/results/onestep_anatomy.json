@@ -1,0 +1,43 @@
+{
+ "ckpt": "ckpt_typed.pt",
+ "n_predictions": 512,
+ "error_rate": {
+  "tick": 0.0,
+  "food": 0.9805,
+  "head": 0.1426,
+  "body": 0.2549,
+  "heading": 0.0,
+  "alive": 0.0,
+  "dead_at": 0.0
+ },
+ "counts": {
+  "tick": [
+   0,
+   512
+  ],
+  "food": [
+   502,
+   512
+  ],
+  "head": [
+   146,
+   1024
+  ],
+  "body": [
+   261,
+   1024
+  ],
+  "heading": [
+   0,
+   1024
+  ],
+  "alive": [
+   0,
+   1024
+  ],
+  "dead_at": [
+   0,
+   0
+  ]
+ }
+}

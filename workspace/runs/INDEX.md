@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-08-08 — 2026-08-06 to 2026-08-08
+- Doc: https://fudan-nlp.feishu.cn/docx/TKxSdihK6oEffBxiCUhcnSlxnHh
+- Run: runs/2026-08-08-mass-memorytrust/
+- Deep threads: MASS 精读 + typed-carrier 核心消融独立复现（5.61M/2.85M 双模型）+ 三探针（合法平行世界线 70.6%、确定性流 tick 1 全分歧、世界死亡吸引子 24–50 唯一状态）(2608.06257), When Memory Lies 精读 + SpatialSTALE 测试床重建与校准 + 模态鸿沟开源复跑（Qwen3-VL-8B 文本 1.000 vs 视觉 0.158)+ 图像消融（"对图像敏感但读不懂"第三种失败模式）+ 四因素仲裁曲线（文本天花板 null result)(2608.04574)
+- Covered papers: 2608.06257, 2608.04574
+- Shortlisted papers: 2608.05369, 2608.01964, 2608.05013, 2607.23783, 2608.06197, 2608.05042, 2608.03392, 2608.06374
+
 ## 2026-08-07 — 2026-08-04 to 2026-08-06
 - Doc: https://fudan-nlp.feishu.cn/docx/N50edTJGso5vkzxtW9FceyWJnzf
 - Run: runs/2026-08-07-worldcycle-wamspace/
