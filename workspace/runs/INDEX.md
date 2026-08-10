@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-08-10 — 2026-08-08 to 2026-08-10
+- Doc: https://fudan-nlp.feishu.cn/docx/ViE2dEgqmonnOqx3CnZcHAWOnDd
+- Run: runs/2026-08-10-roundtrip-worldtrace-simwam/
+- Deep threads: Round-Trip Consistency 精读 + 六机制 Lorenz/单摆对照探针("吸引子失明"猜想证伪为虚警,C_i 测的是逆向腿)(2608.00675), WorldTrace 精读 + Qwen3 真实权重 RoPE 相消三组测量(逐频率存活、logit 平凡性、softmax 读权重)(2608.07408), SimWAM 精读 + 推理路径审计(视频塔未退场)+ 双 checkpoint census/IL-RL delta + 4090 prefill 截断探针(表征第 ~15 层收敛、prefill 仅占延迟 4.5%)(2608.07468)
+- Covered papers: 2608.00675, 2608.07408, 2608.07468
+- Shortlisted papers: 2608.05424, 2608.06729, 2608.06375, 2608.06994, 2608.06799, 2608.01851, 2608.05219, 2608.05703, 2608.06756
+
 ## 2026-08-08 — 2026-08-06 to 2026-08-08
 - Doc: https://fudan-nlp.feishu.cn/docx/TKxSdihK6oEffBxiCUhcnSlxnHh
 - Run: runs/2026-08-08-mass-memorytrust/

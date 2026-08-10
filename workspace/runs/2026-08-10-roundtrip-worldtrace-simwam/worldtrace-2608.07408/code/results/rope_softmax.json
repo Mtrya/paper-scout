@@ -1,0 +1,22 @@
+[
+  {
+    "M": 8,
+    "stride": 4,
+    "Dt": 28,
+    "n": 191,
+    "naive_ratio_median": 0.10471435455190922,
+    "naive_ratio_mean": 0.08093894779574787,
+    "canon_ratio_median": 0.12458361659817387,
+    "canon_ratio_mean": 0.15215568237850538
+  },
+  {
+    "M": 32,
+    "stride": 1,
+    "Dt": 31,
+    "n": 287,
+    "naive_ratio_median": 0.0030098825032510855,
+    "naive_ratio_mean": 0.015288508922500088,
+    "canon_ratio_median": 0.016396388517569086,
+    "canon_ratio_mean": 0.051962721707487815
+  }
+]
