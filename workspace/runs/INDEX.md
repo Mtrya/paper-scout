@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-08-12 — 2026-08-11 to 2026-08-12
+- Doc: https://fudan-nlp.feishu.cn/docx/AwcedMOnpo0EyAxs5mFclI3inAe
+- Run: runs/2026-08-12-rynnvalue-shortcuts-ouroboros/
+- Deep threads: RynnValue 精读 + 官方 4B 权重八条件捷径压力测试(内容接地证实 shuffle ρ=0.76;多尺度回退检测;frozen 时序泄漏与 Success 假阴性两个警告)(2608.09853), Invisible Shortcuts 精读 + 三真实编码器 MP/SPD 实测(SigLIP 57%/CLIP 53%/DINOv2 18% 痕迹梯度)(2608.05424), Ouroboros 精读 + 947 commit git 考古(74% agent 署名、BIBLE 自修订 12 次、86.74% 官方 PR 未合入)(2608.08311)
+- Covered papers: 2608.09853, 2608.05424, 2608.08311
+- Shortlisted papers: 2608.09888, 2608.09819, 2608.07169, 2608.08285, 2608.08097, 2608.08722
+
 ## 2026-08-10 — 2026-08-08 to 2026-08-10
 - Doc: https://fudan-nlp.feishu.cn/docx/ViE2dEgqmonnOqx3CnZcHAWOnDd
 - Run: runs/2026-08-10-roundtrip-worldtrace-simwam/

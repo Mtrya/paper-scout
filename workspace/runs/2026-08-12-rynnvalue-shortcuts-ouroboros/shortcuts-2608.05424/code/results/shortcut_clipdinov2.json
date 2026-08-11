@@ -1,0 +1,34 @@
+{
+ "qualities": [
+  30,
+  50,
+  70,
+  85,
+  95
+ ],
+ "per_class": 50,
+ "encoders": {
+  "clip": {
+   "MP_jpeg_acc": 0.5266666666666666,
+   "MP_chance": 0.2,
+   "SP_baseline_q95": 0.988,
+   "SP_pos_same": 0.992,
+   "SP_neg_same": 0.972,
+   "SPD_delta": 0.020000000000000018,
+   "disp_same_q95_q30_mean": 0.058008477091789246,
+   "disp_inter_mean": 0.5166059732437134,
+   "disp_ratio": 0.11228766292333603
+  },
+  "dinov2": {
+   "MP_jpeg_acc": 0.18,
+   "MP_chance": 0.2,
+   "SP_baseline_q95": 0.998,
+   "SP_pos_same": 0.996,
+   "SP_neg_same": 0.998,
+   "SPD_delta": 0.0020000000000000018,
+   "disp_same_q95_q30_mean": 0.031615711748600006,
+   "disp_inter_mean": 0.9623302221298218,
+   "disp_ratio": 0.03285328671336174
+  }
+ }
+}

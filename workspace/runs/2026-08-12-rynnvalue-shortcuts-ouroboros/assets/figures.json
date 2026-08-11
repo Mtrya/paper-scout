@@ -1,0 +1,8 @@
+{
+ "rynnvalue:fig1-overview": {"file": "assets/rynnvalue-fig1-overview.jpg", "caption": "RynnValue 的形态:一个骨干,价值头输出剩余秒数,语言头输出描述/匹配/成功判定(论文 Figure 1)"},
+ "rynnvalue:stress-test": {"file": "assets/rynnvalue-stress-test.png", "caption": "捷径压力测试:同一视频八种受控扰动,逐前缀价值读数。打乱条件下 v 与内容相关 ρ=0.76、与位置无关 ρ=-0.03;循环重播每次精准上跳(本巡航实测)"},
+ "shortcuts:fig1": {"file": "assets/shortcuts-fig1.png", "caption": "元数据(JPEG 质量、曝光、光圈、焦距)的分布随语义类别显著不同——捷径信号的预训练来源(论文 Figure 1)"},
+ "shortcuts:probe": {"file": "assets/shortcuts-probe.png", "caption": "探针结果:随机指派压缩质量后,SigLIP/CLIP 特征中压缩痕迹线性可解码(MP 57%/53%),DINOv2 贴随机基线(18%);语义翻转 SPD 均≈0(本巡航实测)"},
+ "ouroboros:fig-arch": {"file": "assets/ouroboros-arch.jpg", "caption": "Ouroboros 的演化循环:自由演化与经验驱动演化都汇入 reviewed-commit 门禁(论文架构图)"},
+ "ouroboros:git-archaeology": {"file": "assets/ouroboros-git-archaeology.png", "caption": "git 考古:947 个 commit 中 74% 由 agent 署名,蓝线为 agent 自修订宪法 BIBLE.md 的 12 个时刻(本巡航统计)"}
+}

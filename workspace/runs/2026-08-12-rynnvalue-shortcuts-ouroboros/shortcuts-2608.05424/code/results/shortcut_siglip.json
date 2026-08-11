@@ -1,0 +1,23 @@
+{
+ "qualities": [
+  30,
+  50,
+  70,
+  85,
+  95
+ ],
+ "per_class": 50,
+ "encoders": {
+  "siglip": {
+   "MP_jpeg_acc": 0.5666666666666667,
+   "MP_chance": 0.2,
+   "SP_baseline_q95": 1.0,
+   "SP_pos_same": 1.0,
+   "SP_neg_same": 0.992,
+   "SPD_delta": 0.008000000000000007,
+   "disp_same_q95_q30_mean": 0.05631742998957634,
+   "disp_inter_mean": 0.552760124206543,
+   "disp_ratio": 0.10188402980566025
+  }
+ }
+}
