@@ -13,6 +13,14 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-08-13 — 2026-08-11 to 2026-08-13
+- Doc: https://fudan-nlp.feishu.cn/docx/UlnrdNhbKoG2x8xeuD0c5A1cnnd
+- Run: runs/2026-08-13-geniworld-uopsd-nwat/
+- Deep threads: GeniWorld 精读 + Ctrl-World 代码三角验证 + 四条件接口消融玩具重建(渲染接口域内/接地优势属实,但论文盲区答案偏"接地":static≈shuffle≈motion;OOD 泛化与 few-step 鲁棒性在玩具尺度不成立→归因预训练先验而非接口)(2608.06332), U-OPSD 精读 + 方法重建 + 错误共识训练动态探针(巩固侧 pass@1 +5.7/+11.0 泛化成立、失明侧一字不动、放大侧在 held-out 露出尾巴 wrong_agree 0.589→0.701;τ=0.5 把"自信地错∩不一致"交集切掉)(2608.06296), NWAT 轻线程(位置>打分器;模糊效用信号下学习型价值模型打不过启发式,与 RynnValue/U-OPSD 拼出监督信号清晰度光谱)(2608.08389)
+- Covered papers: 2608.06332, 2608.06296, 2608.08389
+- Shortlisted papers: 2608.10915, 2608.10744, 2608.10299, 2608.09096, 2608.02508, 2608.10875
+- 背景: Dyna-2 新闻(2026-08-10,1M 小时人类视频 WAM,宣称首个纯人类数据 scaling law;技术报告未放出,数字待核验)
+
 ## 2026-08-12 — 2026-08-11 to 2026-08-12
 - Doc: https://fudan-nlp.feishu.cn/docx/AwcedMOnpo0EyAxs5mFclI3inAe
 - Run: runs/2026-08-12-rynnvalue-shortcuts-ouroboros/
