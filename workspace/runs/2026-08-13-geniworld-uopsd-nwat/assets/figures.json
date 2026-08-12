@@ -1,0 +1,7 @@
+{
+  "geniworld:method": {"file": "assets/geniworld-method.jpg", "caption": "GeniWorld 方法:数值动作经 URDF 渲染成视觉动作,与视频潜变量通道拼接注入 Wan2.2-TI2V-5B 流匹配主干(论文 Fig.2)"},
+  "geniworld:convergence": {"file": "assets/plots/convergence.png", "caption": "四条件接口消融的域内收敛曲线(50 步采样像素 MSE,对数轴;12M 参数 3D-UNet,合成双连杆臂环境)"},
+  "geniworld:ood": {"file": "assets/plots/ood_fewstep.png", "caption": "左:域内 vs OOD 背景(条纹/点阵)的像素 MSE;右:few-step 采样(50/10/5 步)退化。渲染条件域内更好但 OOD 相对退化更陡,few-step 无差异"},
+  "uopsd:perclass": {"file": "assets/plots/per_class.png", "caption": "U-OPSD 探针:按基模型共识分类的逐类命运——maj@8 正确率、错误共识一致度与答案多样性在训练前后的变化"},
+  "nwat:pipeline": {"file": "assets/nwat-pipeline.jpg", "caption": "NWAT 的深研 agent 管线与三个剪枝干预点:Pre-Retrieval / Post-Retrieval / Pre-Synthesis(论文 Fig.1)"}
+}
