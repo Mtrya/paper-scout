@@ -75,13 +75,42 @@ def run_cli(cli: str, args: list[str], cwd: Path) -> dict:
 
 
 def chunk_docxxml(text: str) -> list[str]:
-    """按非空行(每个顶层块一行)切 ≤CHUNK_LIMIT 字节的段,不跨块。"""
+    """按非空行(每个顶层块一行)切 ≤CHUNK_LIMIT 字节的段,不跨块。
+
+    table/pre/callout 等多行元素整体视为不可分单元:历史上一张表格恰好
+    跨段边界时,后半段 tbody 会被飞书导入器压成表格外的裸段落。
+    """
+    lines = [l for l in text.split("\n") if l.strip()]
+    units: list[str] = []
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        m = re.match(r"<(\w+)[ >/]", line)
+        tag = m.group(1) if m else ""
+        if tag in ("table", "pre", "callout") and f"</{tag}>" not in line:
+            buf, j = line, i + 1
+            while j < len(lines) and f"</{tag}>" not in lines[j]:
+                buf += "\n" + lines[j]
+                j += 1
+            if j < len(lines):
+                buf += "\n" + lines[j]
+                j += 1
+            units.append(buf)
+            i = j
+        else:
+            units.append(line)
+            i += 1
+    for u in units:
+        if len(u.encode()) > CHUNK_LIMIT:
+            raise RuntimeError(
+                f"多行元素超过单段上限 {CHUNK_LIMIT} 字节,请拆成多个元素: {u[:60]}..."
+            )
     chunks, cur = [], ""
-    for line in (l for l in text.split("\n") if l.strip()):
-        if cur and len((cur + line).encode()) > CHUNK_LIMIT:
+    for u in units:
+        if cur and len((cur + u + "\n").encode()) > CHUNK_LIMIT:
             chunks.append(cur)
             cur = ""
-        cur += line + "\n"
+        cur += u + "\n"
     if cur:
         chunks.append(cur)
     if not chunks:
