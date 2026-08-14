@@ -211,3 +211,10 @@ Entry format:
 - Shortlisted papers: 2606.09828, 2606.12072, 2606.07100
 
 ---
+## 2026-08-14 — 2026-08-12 to 2026-08-14
+- Doc: https://fudan-nlp.feishu.cn/docx/P9EvdAocBodeppxMXwocrPbVnrd
+- Run: runs/2026-08-14-rift-forewam-simcol/
+- Deep threads: 免 rollout WAM 谱系精读 + 玩具重建(RIFT 干预协议全复现:四项破坏干预 0% 成功率、终态重放部分恢复;五变体同骨干:单趟生产者 0-7.5% vs rollout 26.2%,噪声槽 7.5%>learned token 0%;计划注入探针:动作跟随指令不跟随注入缓存,读动力学值不读计划身份)(2608.11521, 2608.11605), 模拟器坍缩最小复现(Qwen3-4B×P4G-mini REINFORCE G=4×20 步:single/cot 坍缩签名可见,口头化采样保多样性方向复现;cot 修复在玩具尺度未复现)(2608.12253)
+- Covered papers: 2608.11521, 2608.11605, 2608.12253, 2608.04404, 2603.16666, 2604.25859
+- Shortlisted papers: 2608.11739, 2608.11671, 2608.12063, 2608.11350, 2608.12078, 2608.12314
+- 背景: 免 rollout WAM 三方案同日收敛(RIFT anticipation token / ForeWAM 噪声槽 / Faster-WAM),监督信号"分布形状轴"确立(点估计退化梯度、分布保持留信息区间)

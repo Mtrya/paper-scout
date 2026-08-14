@@ -1,0 +1,181 @@
+{
+  "variant": "vs",
+  "steps": [
+    {
+      "step": 0,
+      "train_reward": 0.0,
+      "policy_nll": 1.240646481513977,
+      "distinct2": 0.43484881444420276,
+      "self_bleu2": 0.12054537622535351,
+      "sec": 268.5
+    },
+    {
+      "step": 1,
+      "train_reward": 0.5,
+      "policy_nll": 1.204021394252777,
+      "distinct2": 0.5486111111111112,
+      "self_bleu2": 0.1077156228383667,
+      "sec": 259.8
+    },
+    {
+      "step": 2,
+      "train_reward": 0.25,
+      "policy_nll": 1.1502467542886734,
+      "distinct2": 0.569075334943993,
+      "self_bleu2": 0.08439176748602374,
+      "sec": 273.4
+    },
+    {
+      "step": 3,
+      "train_reward": 0.5,
+      "policy_nll": 0.9339029043912888,
+      "distinct2": 0.5382297551789077,
+      "self_bleu2": 0.11504277675267197,
+      "sec": 280.8
+    },
+    {
+      "step": 4,
+      "train_reward": 0.5,
+      "policy_nll": 1.1397408694028854,
+      "distinct2": 0.39952857984678847,
+      "self_bleu2": 0.13806335616959692,
+      "sec": 286.3
+    },
+    {
+      "step": 5,
+      "train_reward": 0.75,
+      "policy_nll": 1.1301755905151367,
+      "distinct2": 0.5390791027154663,
+      "self_bleu2": 0.12183355129642501,
+      "sec": 288.6
+    },
+    {
+      "step": 6,
+      "train_reward": 0.5,
+      "policy_nll": 1.058176338672638,
+      "distinct2": 0.5334812424364663,
+      "self_bleu2": 0.10147419356342444,
+      "sec": 280.3
+    },
+    {
+      "step": 7,
+      "train_reward": 0.25,
+      "policy_nll": 0.9682269245386124,
+      "distinct2": 0.5612494895875868,
+      "self_bleu2": 0.10268403183714656,
+      "sec": 287.3
+    },
+    {
+      "step": 8,
+      "train_reward": 0.25,
+      "policy_nll": 0.956980511546135,
+      "distinct2": 0.45523415977961434,
+      "self_bleu2": 0.1425916321893979,
+      "sec": 296.4
+    },
+    {
+      "step": 9,
+      "train_reward": 0.5,
+      "policy_nll": 1.055165708065033,
+      "distinct2": 0.5175784921977815,
+      "self_bleu2": 0.11615284091607951,
+      "sec": 298.2
+    },
+    {
+      "step": 10,
+      "train_reward": 0.5,
+      "policy_nll": 1.0416463166475296,
+      "distinct2": 0.5429149053482816,
+      "self_bleu2": 0.10752580932648499,
+      "sec": 295.7
+    },
+    {
+      "step": 11,
+      "train_reward": 0.0,
+      "policy_nll": 1.1535825431346893,
+      "distinct2": 0.5462618752581578,
+      "self_bleu2": 0.10154578442962972,
+      "sec": 271.6
+    },
+    {
+      "step": 12,
+      "train_reward": 0.75,
+      "policy_nll": 1.383818581700325,
+      "distinct2": 0.42013729977116704,
+      "self_bleu2": 0.1250523598246229,
+      "sec": 284.1
+    },
+    {
+      "step": 13,
+      "train_reward": 0.25,
+      "policy_nll": 0.9854393750429153,
+      "distinct2": 0.5286124401913875,
+      "self_bleu2": 0.11323840021857115,
+      "sec": 302.0
+    },
+    {
+      "step": 14,
+      "train_reward": 0.5,
+      "policy_nll": 1.1863498538732529,
+      "distinct2": 0.4952970864877265,
+      "self_bleu2": 0.10713905761853086,
+      "sec": 257.1
+    },
+    {
+      "step": 15,
+      "train_reward": 0.25,
+      "policy_nll": 1.215371996164322,
+      "distinct2": 0.4583670169765562,
+      "self_bleu2": 0.12233298696942352,
+      "sec": 294.4
+    },
+    {
+      "step": 16,
+      "train_reward": 1.0,
+      "policy_nll": 0.9365550428628922,
+      "distinct2": 0.4447608200455581,
+      "self_bleu2": 0.12669100699273866,
+      "sec": 293.7
+    },
+    {
+      "step": 17,
+      "train_reward": 0.25,
+      "policy_nll": 1.0058776140213013,
+      "distinct2": 0.5327154772937905,
+      "self_bleu2": 0.10389769394941188,
+      "sec": 296.0
+    },
+    {
+      "step": 18,
+      "train_reward": 0.25,
+      "policy_nll": 2.4031472951173782,
+      "distinct2": 0.44852444244199147,
+      "self_bleu2": 0.12711106946663311,
+      "sec": 303.3
+    },
+    {
+      "step": 19,
+      "train_reward": 0.75,
+      "policy_nll": 1.1147476136684418,
+      "distinct2": 0.51673011420557,
+      "self_bleu2": 0.09580900939776874,
+      "sec": 289.1
+    }
+  ],
+  "train_reward": [],
+  "policy_nll": [],
+  "distinct2": [],
+  "self_bleu2": [],
+  "panel": {
+    "7": {
+      "emotional": 0.625,
+      "busy": 0.5,
+      "hostile": 0.75
+    },
+    "15": {
+      "emotional": 0.625,
+      "busy": 0.5,
+      "hostile": 0.0
+    }
+  }
+}

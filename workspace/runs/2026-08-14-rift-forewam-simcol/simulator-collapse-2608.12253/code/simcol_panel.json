@@ -1,0 +1,17 @@
+{
+  "单冻结模拟器": {
+    "emotional": 0.75,
+    "busy": 0.375,
+    "hostile": 0.125
+  },
+  "口头化采样": {
+    "emotional": 0.625,
+    "busy": 0.5,
+    "hostile": 0.0
+  },
+  "共同训练": {
+    "emotional": 0.625,
+    "busy": 0.0,
+    "hostile": 0.0
+  }
+}

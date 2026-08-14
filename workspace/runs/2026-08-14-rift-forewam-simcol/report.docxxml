@@ -1,0 +1,223 @@
+<title>Paper Scout 研究报告 - 2026-08-14</title>
+<p>这期巡航抓到两条看似独立、实则共享同一深层结构的线。<b>第一条</b>在具身侧:WAM 的"未来读"在推理时应该以什么形态存在。同一周内三个独立团队把答案收敛到同一个形状——把未来表示一次性物化成一趟预填充的 K/V 缓存,而不是迭代解码像素;其中 RIFT 带来了一套可以直接搬运的因果工具:对"动作-未来"接口做记录-编辑-重放的配对闭环干预。<b>第二条</b>在智能体侧:Levine 组的"模拟器坍缩"——当 RL 的训练环境本身是一个坍缩到单一 mode 的 LLM 模拟器,策略会几何级地坍缩成对它的 exploit,且训练奖励一路上涨、泛化一路下跌。两条线在同一个变量上汇合,也正是上一轮 U-OPSD 讨论的延续:<b>监督信号一旦退化成点估计——条件均值、一致性、模拟器的 mode——梯度就只会在分布的尖峰上打转;把分布结构保住(条件流匹配的未来、口头化分布、共同训练的移动目标),学习才留在信息区间里。</b></p>
+<callout emoji="✅" background-color="light-green">
+  <p><b>亮点:</b>RIFT 是"WAM 未来读"这条线迄今最干净的种子。它没有加新架构组件堆分数,而是先问了一个机制问题——动作专家消费的到底是迭代 rollout 的过程,还是它的未来表示——然后用四模型、四十任务、两千配对试验的干预电池回答了:是后者。消费与生产一旦拆开,整个方向从"要不要未来想象"(Fast-WAM 的答案:大部分不要)升级成"未来表示怎么一次性生产出来"(RIFT/ForeWAM/Faster-WAM 三种答案)。这个因果工具比它的结果更值钱。</p>
+</callout>
+<h1>WAM 的未来读:从迭代 rollout 到单趟缓存</h1>
+<p>这条线的起点是一个经济学问题。WAM 把动作条件在"预测的未来"上,这个条件化买来了大约 1.6–1.9 个百分点的 LIBERO 成功率(Fast-WAM-Joint 98.4% vs 纯当前观测的 Fast-WAM 96.8%),代价是 3.3–9.6 倍的推理延迟(780–2270ms vs 236ms 每动作块,A800 单卡)。</p>
+[[figure-anchor:wam-rollout-free:rift-latency]]
+<p>Fast-WAM 给出的答案是"大部分不值得":把未来分支在部署时砍掉,靠训练期共训保留收益,于是领域停在了 96.8% 与 235.7ms 的折中点上。PFD 换了一条路:把生成未来对动作侧的净效应蒸馏进一个纯当前观测的修正器,追到 97.3%。一周前的 Faster-WAM 则把天平往反方向推:它在 LIBERO-Plus 上测出未来条件化对 OOD 鲁棒性"关键"(49.14%→73.57%),主张未来表示不是可选的训练信号,而是推理期上下文——只是不必每层每步都重算(SparseMoT 只让视频-动作交互发生在少数层,Interval KV-Fusion 聚合多深度未来表示,比 Joint-WAM 快 2.21 倍,权重已放 HF)。</p>
+<p>真正的突破发生在本轮窗口的 08-12:RIFT 与 ForeWAM 同日挂出,两篇都同意"动作需要未来条件化",但都不再解码未来视频,而是把"未来的表示"做成一个<b>一次性计算、全程复用</b>的缓存。加上 Faster-WAM,三个方案构成同一问题的三种物化形态:学习型 anticipation tokens(RIFT)、噪声查询子空间 + 转移教师(ForeWAM)、稀疏层间交互(Faster-WAM)。</p>
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">论文</th>
+      <th background-color="light-gray">核心贡献</th>
+      <th background-color="light-gray">为什么重要</th>
+      <th background-color="light-gray">链接</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>G0.5: One Autoregressive Stream for Robot Reasoning and Action</b>(Hang Zhao 组等,2026)</td>
+      <td>单一自回归流同时发射推理 token 与动作 token,跨本体可学习动作 tokenizer + 原生 CoT 交错 + 视觉记忆;宣称真机 76.7% vs π0.5 53.3%。</td>
+      <td>接口战线的"同流"形态:推理与动作共享一组权重,指令直接操纵动作粒度与任务时域;数字激进,代码未见,值得跟踪但不采信。</td>
+      <td><a href="https://arxiv.org/abs/2608.11739">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>StellaVLA: In-Context Structured Demonstration</b>(2026)</td>
+      <td>把检索到的专家轨迹离线转写成"计划+子目标+言语化 3D 运动"的结构化演示,测试期 in-context 注入;双流训练内化推理,推理时只跑动作专家,零额外延迟。</td>
+      <td>"教为什么而不是教什么"的 test-time 适应路线,VLA-Arena 第一(0.63 vs 0.44);与本期缓存路线同属"不重新训练就拿到更强条件化"的家族。</td>
+      <td><a href="https://arxiv.org/abs/2608.11671">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>Learning Loco-Manipulation From SMPC Demonstrations</b>(Schuck 等,ETH/TUM/Stanford,2026)</td>
+      <td>用 SMPC 在仿真里自动生成大规模离线数据,纯稀疏奖励做 offline-to-online RL,策略最终超越最优控制教师;Spot 与 G1 真机验证。</td>
+      <td>控制主线的教师-学生形态:自动化的"可微教师"替代手工奖励塑形;与 U-OPSD 的教师问题互为镜像——这边教师是真的。</td>
+      <td><a href="https://arxiv.org/abs/2608.12063">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>SHAPER: Self-Evolving Embodied Agents via Skill-Harness Evolution</b>(2026)</td>
+      <td>冻结模型同时当规划者与优化器,在目标环境 rollout 里演化可复用技能与上下文 harness,不更新权重;VLABench/ESI-Bench 上超过 SFT 与 test-time scaling 基线。</td>
+      <td>对上一轮 U-OPSD 讨论的直接呼应:自改进需要外部锚,这里的锚是目标环境的 rollout 反馈;train-free 路线值得单独跟踪。</td>
+      <td><a href="https://arxiv.org/abs/2608.11350">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>Better Slots, Better Worlds</b>(Nazirjonov 等,Martius 组,2026)</td>
+      <td>对象中心世界模型的受控研究:无监督 slot 质量(FG-ARI/mBO)与规划成功率正相关但饱和;slot 绑好之后,先前方法依赖的 proprioception 输入与掩码偏置都不再必要;分布偏移下预训练特征是鲁棒性的主要贡献者。</td>
+      <td>"拆开归纳偏置与预训练先验"归因原则在表征侧的又一实例——与我们 08-13 对 GeniWorld 的归因是同一把手术刀。</td>
+      <td><a href="https://arxiv.org/abs/2608.12078">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>StateFlow: Building, Evolving, and Accessing 3D World States</b>(2026)</td>
+      <td>预可视化领域的状态中心框架:把 2D 生成内容提升为持久、可编辑的 3D 世界状态,演化只做局部修改,相机规划靠渲染反馈反射而非纯 VLM 语义。</td>
+      <td>"持久显式世界状态"从机器人侧溢出到创意工具侧的一次实例;状态复用与增量编辑的设计与 WAM 缓存复用共享同一哲学。</td>
+      <td><a href="https://arxiv.org/abs/2608.12314">arXiv</a></td>
+    </tr>
+  </tbody>
+</table>
+<hr/>
+<h2>RIFT:动作专家读的是未来表示,不是 rollout 过程</h2>
+<p>Zhang 等(2026,EvoScene-VLA 作者群,基于 Fast-WAM 开源代码与 Wan2.2-5B 骨干)· <a href="https://arxiv.org/abs/2608.11521">arXiv</a> · 代码未放出</p>
+<h3>机制:一个干净到奢侈的干预协议</h3>
+<p>RIFT 的问题精确得有点反常:动作生成需要的是"演化的 rollout 轨迹",还是"未来的表示"?这个问题的可检验性来自 WAM 架构的一个结构事实——<b>视频 token 不能 attend 动作 token</b>,所以未来侧的 K/V 缓存对动作是完全独立的,可以记录、编辑、重放,而动作侧在配对种子下保持逐位相同。干预的读出也不是潜空间距离,而是<b>闭环物理执行</b>:EE-ADE 是干预轨迹与原轨迹末端执行器的平均漂移(厘米),成功率是任务是否完成。</p>
+<p>六种干预,四种模型(Fast-WAM-Joint、Fast-WAM-IDM、Cosmos Policy、LingBot-VA),全部 40 个 LIBERO 任务,每个模型-干预组合 2000 次配对试验:</p>
+<table>
+  <colgroup>
+    <col width="170"/>
+    <col width="140"/>
+    <col width="110"/>
+    <col width="230"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">干预(保留原 key 轨迹)</th>
+      <th background-color="light-gray">EE-ADE(cm)</th>
+      <th background-color="light-gray">成功率</th>
+      <th background-color="light-gray">读数</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>原版 rollout(Joint)</td>
+      <td>0(定义)</td>
+      <td>98.4%</td>
+      <td>基准</td>
+    </tr>
+    <tr>
+      <td>掩码未来读</td>
+      <td>18.7</td>
+      <td>9.7%</td>
+      <td>未来读不是装饰,砍掉即崩</td>
+    </tr>
+    <tr>
+      <td>空间乱序(帧内 patch 换位)</td>
+      <td>14.3</td>
+      <td>65.2%</td>
+      <td>空间位置重要,但破坏程度有限</td>
+    </tr>
+    <tr>
+      <td>时间交换(帧间换位)</td>
+      <td>15.6</td>
+      <td>0.7%</td>
+      <td>时间顺序几乎是全部:轨迹结构被毁</td>
+    </tr>
+    <tr>
+      <td>噪声 / 冻结当前值</td>
+      <td>17.2 / 18.3</td>
+      <td>≤40.9% / ≤6.5%</td>
+      <td>值内容本身携带信息</td>
+    </tr>
+    <tr>
+      <td><b>终态干净缓存重放</b>(每步都用最后一步的 K/V)</td>
+      <td><b>1.9</b></td>
+      <td><b>97.9%</b></td>
+      <td><b>固定终态缓存几乎完全恢复执行</b></td>
+    </tr>
+  </tbody>
+</table>
+<p>两个发现:(1)动作读的是"位置绑定的未来值"——值要对,位置要对,时间顺序尤其要对;(2)动作<b>不</b>需要缓存随去噪步演化——一个终态干净缓存固定复用即可(Cosmos-2 同样成立:1.7cm/98.2%)。表内数字是 Fast-WAM-Joint 的;噪声与冻结当前两行的成功率上限是跨四个模型的范围。RIFT 把这拆成<b>消费侧充分性</b>(固定缓存够用)与<b>生产侧必要性</b>(这个缓存目前仍然来自迭代 rollout)两个命题。消费侧的答案已经拿到;生产侧才是 RIFT 自己的设计。</p>
+<p>RIFT 的设计:把 rollout 生成的未来 token 换成 <b>m 个学习型 anticipation token</b>,对齐到未来潜帧的时空位置(全对齐 m=196),一次视频主干 prefill 写满逐层 K/V,动作专家经原接口读取。训练两条前向:原生视频流损失保持动力学监督;部署匹配前向用 [首帧; E] 构造缓存训练动作流。关键的选择是监督形态:<b>不用 L2 回归单一观测未来,而用条件流匹配</b>——对未来潜斑块的分布做速度场监督——外加一个 stopped-gradient 的 L2 线性探针(只进探针不进控制器,顺便成了免费的 L2-FM 不一致性不确定性监视器:CUSUM 校准时序,在 33 条失败 rollout 上平均提前 210 步报警)。</p>
+<latex>
+x_{\sigma}=(1-\sigma)Y+\sigma\epsilon,\qquad v^{\star}_{\sigma}=\epsilon-Y,\qquad \mathcal{C}_{\phi}(o,l)=\mathrm{CachePrefill}_{\phi}([f_0(o);E],o,l)
+</latex>
+<p>部署时每个动作块一次 prefill + 10 步动作流,无视频去噪、无 VAE 解码:98.8% LIBERO @ 247.9ms = 纯当前观测的 1.1 倍,而 rollout 系是 3.3–9.6 倍。RoboTwin 2.0 双机械臂 92.9/92.6(clean/randomized),是所有对比方法里最高的。两个消融值得记住:L2 与 FM 只差 0.4 个点(98.37 vs 98.8)——说明在 LIBERO 这种"给定指令未来基本确定"的数据上,条件均值坍缩的问题不大,FM 的价值在分布形态而不是单点精度;token 数从 m=2 扫到 196,哪怕 m=4 就超过无缓存基线(96.75%),全对齐最优——接口容量单调但收益集中在少数 token 就能拿到的部分。</p>
+<p>一个诚实的边界:RIFT 的"值侧约束"没有分离 key 与 value 的贡献,终态重放也没有证明"关键轨迹可以冻结"——它证明的是值演化不重要。另外干预量级跨模型不可比(架构、检查点不同),论文自己只承诺 within-model 的比较。这些都不削弱主要结论,但划出了工具本身的适用范围。</p>
+[[figure-anchor:wam-rollout-free:rift-interventions]]
+<h3>我们的玩具重建:同一协议,受控环境,外加一个论文没问的问题</h3>
+<p>RIFT 没放代码,但其主张的核心是一个可移植的因果协议而非特定实现。我们在远端 4090 上做了玩具尺度的独立重建:64×64 合成双连杆臂搬运任务,两条策略模式(直搬/高弧绕行)让"给定观测的未来"天然双模。骨干是联合视频+动作流匹配模型:视频分支用 3D-UNet 对 [当前观测帧 | 8 帧未来] 做流匹配,瓶颈特征图投影成逐位置 K/V 作为"未来缓存";动作分支 16 个 token × 4 层 transformer,每层经交叉注意力读这个缓存(与 RIFT 的视频→动作接口同构;玩具尺度把逐层 K/V 收窄为瓶颈单尺度特征,这一偏差已注明)。训练用滑窗采样(任意中间帧作观测、8 帧未来、16 步动作块——闭环执行第二块起喂的就是中途状态,这是第一版全灭后补上的关键前提)。第一版用 DiT 生成 8 帧 64×64 视频,流损失平台在 0.64 学不动;换成同尺度验证过可达 ~0.08 MSE 的 3D-UNet 后,joint 的联合损失稳定收敛到 0.04。五个变体:joint(rollout 基线)、currentonly(纯当前观测)、rift-l2、rift-fm(学习型 anticipation 未来帧,L2/FM 监督)、noiseslots(ForeWAM 式噪声槽单趟 prefill)。干预电池、闭环执行、配对种子、EE-ADE 与成功率的定义全部照搬 RIFT 的协议,外加一个 RIFT 没有问的问题:<b>当指令(观测侧)与注入的未来缓存(计划侧)冲突时,动作跟谁走?</b>——把"动作读的是未来"从相关层面推到因果层面。</p>
+[[figure-anchor:wam-rollout-free:toy-interventions]]
+<p>joint 变体在 80 个 held-out 任务上拿到 26.2% 成功率——玩具尺度下学会搬运的明确证据。干预电池的读出与 RIFT 方向一致:<b>掩码未来读、噪声值、空间乱序、时间交换四项破坏干预全部把成功率打到 0%</b>,轨迹漂移(EE-ADE)分别 7.56/7.60/7.40/6.92 像素——动作的执行能力几乎完全寄生在未来缓存上。<b>冻结当前</b>(当前观测的值铺满未来位置)同样 0%,但漂移只有 1.11 像素:没有未来信息时动作迅速收敛到保守路线,不探索。<b>终态干净缓存重放</b>恢复到 11.2%/3.44 像素——方向与论文(97.9%/1.9cm)一致但恢复不完整。玩具尺度上"固定终态缓存即够用"只成立了一半:值演化确实不重要(重放救回了四成成功率),但缓存的生产质量在这里是短板(见下节),重放恢复的上限被生产侧卡住。四条破坏干预的漂移量级接近,说明位置、时间顺序、值的身份都是动作读取的要素——与论文"位置绑定"的结论吻合。</p>
+[[figure-anchor:wam-rollout-free:toy-producers]]
+<p>五个变体的对比把"生产侧必要性"在玩具尺度上放大成一个陡峭的台阶:rollout 26.2%;纯当前观测 3.8%;<b>学习型 anticipation 的 rift-l2 与 rift-fm 都是 0%</b>;噪声槽 noiseslots 7.5%。单趟生产者的延迟确实砍下来了(29.5–30.0ms vs rollout 51.6ms/块,58%),但缓存质量没有跟上——真实论文里 anticipation token 几乎无损追平 rollout(98.8% vs 98.4%),玩具尺度差出 26 个点。两个解释:一是 12000 步的玩具训练对"从观测预测 8 帧未来"本身就不充分,双模数据下 L2 回归条件均值会把两条路平均成模糊的一张图(rift-l2 的轨迹漂移 7.24 像素,是 anticipation/噪声槽三档里最大的,正是这个症状);二是我们的瓶颈缓存只有单尺度特征,而 RIFT 的接口是逐层全尺度 K/V,生产侧容量差着数量级。值得注意的反而是 <b>noiseslots 以 7.5% 打赢了 learned token 的 0%</b>——"未来槽不用学、学怎么问就行"(ForeWAM 的核心论点)在玩具尺度上站住了:σ=1 的噪声槽读的是视频分支在去噪第一步的内部状态,那个状态由流匹配权重编码了未来分布,比欠拟合的 anticipation token 更靠谱。rift-fm 的漂移(5.82 像素)在单趟生产者里最小——条件 FM 的多模表达能力在漂移上留下了微弱但方向正确的签名。</p>
+[[figure-anchor:wam-rollout-free:toy-planprobe]]
+<p>计划注入探针给出了本实验最干净的因果读出:60 对双模任务上,给指令 A 的 rollout 注入模式 B 的未来缓存,<b>注入后轨迹跟随 B 专家路径的比例是 0%</b>——动作从头到尾跟着指令 A 走,没有一例被注入的未来"劫持"。但注入并非无效果:注入 B 缓存的成功率是 33.3%,高于原版 A 的 26.2%。两个数字放在一起,把"动作从缓存里读什么"收窄了:<b>动作读的是缓存里的动力学值(物体怎么动、抓取何时发生),而不是计划身份(走哪条路)</b>。B 的缓存携带的是同一任务的另一条有效轨迹,其中共享的搬运物理仍帮到了 A 的执行;而"计划"本身由观测侧(指令/模式条件)决定。这与 RIFT 的消费侧充分性相容,但把因果结构说得更细:未来缓存是执行能力的来源,不是意图的来源。两个附带观察:注入轨迹第 4 步的末端到两条专家路径的距离几乎相等(4.35 像素)——注入没有把轨迹推向任何一条专家路径,而是推向一个"按 A 的指令走、借 B 的动力"的混合路线;对照 replay(不注入)的轨迹漂移为 0.0,协议本身的配对一致性无懈可击。</p>
+<hr/>
+<h2>ForeWAM:噪声槽 prefill,以及三个方案为何收敛到同一形状</h2>
+<p>Wu 等(2026,上海交大 + ACE Robotics)· <a href="https://arxiv.org/abs/2608.11605">arXiv</a> · 仅项目页,无代码</p>
+<p>ForeWAM 从另一端切入同一个问题。它的出发点是分类学的:显式未来 WAM(级联/联合)有未来读但慢;直接策略 WAM(Fast-WAM)快但动作 DiT 没有通往预测动力学的显式接口。它的答案惊人地省事——<b>未来槽根本不用学</b>:部署时把未来位置填上纯噪声,以 σ=1 跑一次视频主干 prefill,把逐层 K/V 缓存下来给动作去噪全程复用。为什么噪声也行?因为视频分支被流匹配目标训练过"从纯噪声恢复未来",它在 σ=1 的内部状态本身就是"给定当前观测,未来可能是什么"的最强摘要——噪声槽是查询子空间,网络的权重里已经装满了未来分布。这比 RIFT 的 anticipation token 更激进:不学习任何未来内容,只学习"怎么问"。</p>
+<p>补上这条通道的第二个组件是 16 个动力学寄存器:由冻结的 LaWM 潜动作教师(逆动力学编码器,把视觉转移编码成 32 维量化潜动作)监督,鼓励寄存器捕获交互诱导的转移——物体运动、接触变化、任务进展。教师与真值未来只存在于训练期。注意力路由上,未来槽可以读当前帧与寄存器,动作 token 读全部——K/V 通道(分布式视觉上下文)与寄存器通道(紧凑转移摘要)互补。</p>
+[[figure-anchor:wam-rollout-free:forewam-paradigms]]
+<p>数字侧 ForeWAM 的策略与 RIFT 不同:它用 1.3B 的 Wan2.1-T2V 骨干(总参数 2B,是 Fast-WAM 的 1/3)、不做具身预训练,主战场放在<b>鲁棒性</b>。标准 LIBERO 96.7%(比 Fast-WAM 低 0.9,自认);LIBERO-Plus 61.6% vs Fast-WAM 51.5%(+10.1),其中相机视角扰动 +46.1、传感器噪声 +21.1,但机器人初始位姿扰动反而更低——鲁棒性增益是结构性的,不是全谱的。延迟 667→568ms,OneDP 两步蒸馏的 Flash 版 220ms(-67%)。消融:Base 53.6 / 仅 Future-KV 58.5 / 仅 LA 监督 58.0 / 两者 61.6——两个通道的互补是配置级结果,论文对因果声明保持了恰当的克制。</p>
+<p>把三个方案并排,收敛的形状很清楚——"未来条件化"的物化从像素移到了缓存,生产从迭代移到了单趟:</p>
+<table>
+  <colgroup>
+    <col width="120"/>
+    <col width="150"/>
+    <col width="150"/>
+    <col width="130"/>
+    <col width="130"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">方案</th>
+      <th background-color="light-gray">未来表示的来源</th>
+      <th background-color="light-gray">生产机制</th>
+      <th background-color="light-gray">骨干/参数</th>
+      <th background-color="light-gray">主打主张</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Fast-WAM(2026-03)</td>
+      <td>无(训练期共训)</td>
+      <td>—</td>
+      <td>Wan2.2-5B/6B</td>
+      <td>96.8% @ 235.7ms,不需要未来</td>
+    </tr>
+    <tr>
+      <td>PFD(2026-04)</td>
+      <td>蒸馏进当前观测修正器</td>
+      <td>训练期蒸馏</td>
+      <td>Wan2.2-5B 家族</td>
+      <td>97.3% @ 257ms</td>
+    </tr>
+    <tr>
+      <td>Faster-WAM(08-05)</td>
+      <td>未来表示(一次性计算)</td>
+      <td>SparseMoT 稀疏交互 + Interval KV 融合</td>
+      <td>Wan2.2 家族</td>
+      <td>LIBERO-Plus +24.4;2.21× Joint-WAM</td>
+    </tr>
+    <tr>
+      <td><b>RIFT(08-12)</b></td>
+      <td>学习型 anticipation tokens</td>
+      <td>单趟 prefill + 条件 FM 监督</td>
+      <td>Wan2.2-5B/6B</td>
+      <td>98.8% @ 247.9ms = 1.1×;干预因果链</td>
+    </tr>
+    <tr>
+      <td><b>ForeWAM(08-12)</b></td>
+      <td>噪声槽查询 + 动力学寄存器</td>
+      <td>σ=1 单趟 prefill + 潜动作教师</td>
+      <td>Wan2.1-1.3B/2B</td>
+      <td>LIBERO-Plus 61.6%(+10.1);Flash 220ms</td>
+    </tr>
+  </tbody>
+</table>
+<p>三个同日同题方案之间的张力比共识更有信息量:RIFT 把增益押在延迟与上限(98.8% 追平 rollout),ForeWAM 押在鲁棒性与小模型,Faster-WAM 押在两者中间并声称未来条件化对 OOD "关键"——而 Fast-WAM 最早的回答是"可以不要"。这个分歧无法靠互相引用解决,因为三篇的评测口径、骨干、数据都不对齐(比如 ForeWAM 自测 Fast-WAM 为 97.6%,RIFT 自测为 96.8%;延迟口径也各说各话)。真正能裁决分歧的实验是同一个受控主干上跑齐四档:无未来读、训练期未来、单趟缓存、迭代 rollout——这正是上文玩具重建里五变体同骨干的设计,结果已在上节的对比图里。</p>
+<h1>模拟器坍缩:当外部锚本身是坍缩的分布</h1>
+<p>上一轮我们和用户一起把 U-OPSD 的问题钉在"一致性监督没有外部信号,只能锐化已有分布"。这轮池子里一篇论文把问题反转过来问:<b>如果外部信号本身是一个 mode-collapsed 的 LLM 呢?</b>这不是假设——多轮 RL 的标准做法就是用单个冻结 LLM 扮演用户当训练环境。</p>
+<h2>One Frozen Simulator Is Not Enough</h2>
+<p>Yu 等(2026,Stanford/UW/UCB/NYU/Northeastern:Levine、Manning、Shi)· <a href="https://arxiv.org/abs/2608.12253">arXiv</a> · SCOPE 框架(声明开源,仓库尚未公开可寻)</p>
+<p>论文把失败模式命名为<b>模拟器坍缩</b>,并给出了一条从定义到部署 regret 的完整理论链。定义是刻意的:坍缩不是"模拟器输出单一",而是<b>在策略实际访问的 rollout 上</b>,模拟器每轮偏离其 mode 的概率之和 ε̄_H 接近零——一个全数据集上多样、但在训练轨迹上几乎确定的模拟器同样是坍缩的。链条如下:</p>
+<p><b>定理 3.2(梯度偏向 mode-user 目标):</b>坍缩不使梯度消失,而是把它偏向"每个用户都确定地吐出 mode"的假想环境——‖∇J_φ(θ) − ∇J_mode(θ)‖ ≤ 2BR_max·ε̄_H(θ)。<b>引理 3.3 + 式 6(方差分解):</b>把奖励方差按来源拆成模拟器侧对比与智能体侧对比两项;坍缩让模拟器侧对比趋零,于是 group-relative advantage 只剩"谁更会 exploit 这个 mode"的排名,用户鲁棒性从比较中出局。<b>命题 3.4/推论 3.5(熵几何收敛):</b>只要 mode-exploit 策略集有正优势差 Δ_x,KL 正则化软最大更新就以几何速率 g_x 把策略质量收敛到该集合。<b>命题 3.6(部署 regret):</b>真实用户的行为落在 exploit 集之外的部分按质量 q_⋆ 折成 regret 下界。</p>
+<latex>
+\mathrm{Var}[R_x\mid x]=\underbrace{\mathbb{E}_{\xi_{\pi}}[\mathrm{Var}_{\xi_U}(R_x\mid x,\xi_{\pi})]}_{\text{simulator-side}}+\underbrace{\mathrm{Var}_{\xi_{\pi}}[\mathbb{E}_{\xi_U}(R_x\mid x,\xi_{\pi})]}_{\text{agent-side}}
+</latex>
+<p>两个修复分别攻击链条的两个负载假设。推理期方案<b>口头化采样</b>(Verbalized Sampling):每一轮先让冻结模拟器吐出带概率的候选回复分布,再按该分布采样——恢复的是 RLHF 锐化之前的 reference 分布,让 ε_φ 每轮保持在零之上(命题 3.7 给出恢复 reference 梯度的界)。训练期方案<b>共同训练</b>(Co-Training):模拟器与策略在同一 rollout 上同时更新,策略想锁定的 mode 每步都在移动,几何收敛失去固定靶点。两个修复的实证:τ²-bench 上 VS +9.4/+7.1(Retail/Airline),CoT 再推到 +14.4/+14.6,群体共同训练最高;策略熵从近零被拉回;人类实验(N=40/格)确认 CoT 提升真实任务结果、两个修复都提升对话自然度。CooperBench 对称合作同样成立:固定搭档 cross-play 撞上搭档能力天花板,self-play 才能突破。</p>
+<p>最值得抄走的细节在附录里:共同训练时模拟器自己的奖励函数不能是"对抗"(难倒策略)也不能是"合作"(帮策略成功)——两者都会让模拟器重新坍缩到新的 mode。正确的是 SPICE 式的方差课程:让模拟器奖励<b>对批内方差 σ²≈0.25(成功率≈0.5)做贡献</b>,把模拟器保持在信息区间里。这与上一轮我们在 U-OPSD 里看到的 τ=0.5 阈值、以及 RIFT 用条件 FM 而非 L2,是同一个原则的三个实例:监督的价值由它保持的分布结构决定,而不是由它的平均强度决定。</p>
+<h3>我们的最小复现:P4G-mini × Qwen3-4B</h3>
+<p>SCOPE 仓库在论文发布两天后仍不可寻,我们把核心现象在最小尺度上重建:Qwen3-4B-Instruct 同时当策略(募捐者)与模拟器(捐赠者),P4G-mini 任务(≤5 轮说服,奖励=解析出的捐款额 ∈ {0,1,2}),REINFORCE G=4 + group-relative z-score advantage,LoRA r=32,三变体 × 20 步:single(冻结模拟器,标准做法)、vs(每轮先口头化 4 候选分布再采样)、cot(模拟器同 LoRA 更新,优势 = |R_τ − R̄|/σ_R 的 SPICE 式方差奖励)。每步记录训练奖励、策略多样性(distinct-2 与 self-BLEU-2,熵坍缩的实证签名)、以及三个人设面板(emotional/busy/hostile,训练期未见)的 held-out 表现。VLLM 路线因节点驱动不兼容放弃,推理与训练走同一份 bf16 权重(引擎包住 live LoRA,更新即时生效),逐轮 NLL 反传把单进程峰值压在 25GB 内。</p>
+[[figure-anchor:simulator-collapse:curves]]
+<p>三个变体各 20 步(G=4)的读出,与论文的对应关系是"两对一错"。<b>坍缩签名本身复现了</b>:冻结模拟器的 single 变体 distinct-2 从 0.407 单调下滑到 0.378,共同训练的 cot 变体更明显——distinct-2 0.415→0.318,self-BLEU-2 0.132→0.166,策略输出在 20 步内肉眼可见地收窄到同一批话术。<b>口头化采样的方向性证据最强</b>:vs 变体的 distinct-2 不降反升(0.435→0.517),self-BLEU-2 下行(0.121→0.096)——每轮先让冻结模拟器吐出带概率的候选分布再采样,确实把策略留在了信息区间里,这与论文 τ²-bench 上 VS +9.4/+7.1 的方向一致。训练奖励三变体都在噪声里(single 0.75→1.25、vs 0.0→0.75、cot 1.0→0.0),20 步 × G=4 的尺度下不是可信证据,如实记为未收敛。<b>没有复现的是 cot 的修复效果</b>:论文里共同训练最强(+14.4/+14.6),我们的玩具尺度上 cot 的坍缩趋势与 single 一样明显甚至更陡。最可能的解释是尺度:SPICE 式方差奖励(|R_τ − R̄|/σ_R)依赖奖励的批内方差承载信号,G=4 的批太小、捐款额 {0,1,2} 的支撑太窄,模拟器几乎每步都在追逐一个噪声靶点。三个人设面板(每格仅 4 条 rollout,置信度低)方向上与论文一致:vss 的 busy 面板(0.5)高于 single(0.375),但 cot 的 busy/hostile 面板为 0——小样本下不足以支持任何结论。总的说:坍缩是真实且容易复现的,VS 的机制在最小尺度上可复现,CoT 需要比 20 步 × G=4 大得多的预算才能判断。</p>
+<hr/>
+<h1>跨主题观察:监督信号的信息区间</h1>
+<p>把这一轮的五个方案与上一轮的积累并排,一张一致的图浮现出来:<b>退化成点估计的监督会杀死梯度,而保住分布的监督会让学习留在信息区间。</b>U-OPSD 的一致性(08-13)是点估计——它只能锐化已有分布,失明的错误一字不动;RIFT 的选择(条件 FM 而非 L2 回归)是分布保持——多模未来下回归条件均值会把两种有效策略平均成模糊的一张图,而 FM 学的是整个速度场;ForeWAM 的噪声槽在 σ=1 处 prefill,恰好是"去噪网络第一步内部状态"——那一步编码的是未来分布而非某个采样;模拟器坍缩的修复(口头化分布恢复 reference、共同训练保持移动目标、SPICE 式方差课程)是同一个原则在环境侧的三次应用。反面证据同样齐整:直接提示(RLAIF 式锐化)、对抗/合作的模拟器奖励、L2 回归单点未来——都在把分布压尖。</p>
+<p>这给"外部锚"的上一轮结论加了一条重要修正:外部信号不只是"有没有"的问题,还有"分布形状"的问题。一个坍缩的外部锚(单模拟器、一致性、条件均值)并不比没有锚好多少——它提供梯度,但梯度指向它自己的尖峰。设计任何自监督/自训练循环时,值得先问两个问题:信号携带正确性吗(清晰度轴,08-13 的结论),以及信号保持分布吗(形状轴,本轮的结论)。两条轴独立:真值派生但点估计的信号(单条演示的 L2 回归)会坍缩;无真值但分布保持的信号(FM 的未来、口头化分布)至少能留在信息区间里。</p>
