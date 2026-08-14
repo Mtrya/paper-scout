@@ -74,28 +74,47 @@ def chat_prompt(sys_msg, history, final_user=None):
     return parts
 
 
-def rollout_nll(peft_model, tok, dev, sys_msg, entries, max_len=2048):
-    """Per-utterance NLL of an agent's own utterances given the true context.
-    entries: list of (user_utt, own_utt) turns for THIS agent.
-    Returns list of per-turn mean NLL (nan if empty)."""
+def batch_rollout_nll(peft_model, tok, dev, sys_msg, entries_per_traj, adv=None,
+                      max_len=1536):
+    """Per-trajectory NLL of an agent's own utterances, memory-bounded:
+    each turn uses a one-turn context window (token-level REINFORCE weighting
+    is insensitive to long-range conditioning) and its graph is backpropagated
+    (when adv is given) and released immediately. Peak memory stays around a
+    ~1.2k-token forward/backward instead of a 2k-token one (which OOMs)."""
     import torch.nn.functional as F
     nlls = []
-    for i, (user_utt, own_utt) in enumerate(entries):
-        prior = entries[:i]
-        msgs = chat_prompt(sys_msg, prior, final_user=user_utt)
-        prompt_txt = tok.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True)
-        full = tok.apply_chat_template(msgs + [{"role": "assistant", "content": own_utt}],
-                                       tokenize=False, add_generation_prompt=False)
-        prompt_ids = tok(prompt_txt, return_tensors="pt").input_ids.to(dev)
-        full_ids = tok(full, return_tensors="pt").input_ids.to(dev)
-        if full_ids.shape[1] <= prompt_ids.shape[1] or full_ids.shape[1] > max_len:
-            continue
-        with torch.no_grad():
-            logits = peft_model(input_ids=full_ids).logits[:, prompt_ids.shape[1] - 1:-1]
-        target = full_ids[:, prompt_ids.shape[1]:]
-        nll = F.cross_entropy(logits.reshape(-1, logits.shape[-1]),
-                              target.reshape(-1), reduction="none").mean()
-        nlls.append(float(nll))
+    n_traj = len(entries_per_traj)
+    for g, entries in enumerate(entries_per_traj):
+        s, c = torch.zeros((), device=dev), 0.0
+        n_turns = len(entries)
+        for t, (user_utt, own_utt) in enumerate(entries):
+            msgs = chat_prompt(sys_msg, entries[max(0, t - 1):t],
+                               final_user=user_utt)
+            p = tok.apply_chat_template(msgs, tokenize=False, add_generation_prompt=True)
+            f = tok.apply_chat_template(
+                msgs + [{"role": "assistant", "content": own_utt}],
+                tokenize=False, add_generation_prompt=False)
+            enc_p = tok([p], return_tensors="pt", padding=True).to(dev)
+            enc_f = tok([f], return_tensors="pt", padding=True, truncation=True,
+                        max_length=max_len).to(dev)
+            logits = peft_model(input_ids=enc_f.input_ids,
+                                attention_mask=enc_f.attention_mask).logits
+            plen = int(enc_p.input_ids.ne(tok.pad_token_id).sum(dim=1)[0])
+            lg = logits[0, plen - 1:-1]
+            tg = enc_f.input_ids[0, plen:]
+            m = tg.ne(tok.pad_token_id).float()
+            if m.sum() < 1:
+                continue
+            nll_turn = (F.cross_entropy(lg, tg, reduction="none") * m).sum() / m.sum()
+            if adv is not None:
+                # release this turn's graph right away: weight = adv_g / (n_traj * n_turns)
+                (nll_turn * adv[g] / max(n_traj * n_turns, 1)).backward()
+            s = s + nll_turn.detach()
+            c += 1.0
+        if c == 0:
+            nlls.append(None)
+        else:
+            nlls.append(s / c)
     return nlls
 
 
@@ -108,22 +127,35 @@ class HFEngine:
 
     def generate(self, prompts, sampling_params):
         import torch as T
+        if isinstance(sampling_params, dict):
+            mt, temp, top_p = (sampling_params["max_tokens"],
+                               sampling_params["temperature"],
+                               sampling_params["top_p"])
+        else:
+            mt, temp, top_p = (sampling_params.max_tokens,
+                               sampling_params.temperature,
+                               sampling_params.top_p)
+        was_training = self.model.training
         self.model.eval()
         outs = []
-        for i in range(0, len(prompts), 8):
-            batch = prompts[i:i + 8]
+        # keep the batch tiny: padded left-aligned batches fall back to eager
+        # attention and materialize full scores (seq^2 per head per layer);
+        # a large batch OOMs even a 47GB card.
+        for i in range(0, len(prompts), 2):
+            batch = prompts[i:i + 2]
             enc = self.tok(batch, return_tensors="pt", padding=True,
                            truncation=True, max_length=1024).to(self.model.device)
             with T.no_grad():
                 gen = self.model.generate(
-                    **enc, max_new_tokens=sampling_params.max_tokens,
-                    do_sample=True, temperature=sampling_params.temperature,
-                    top_p=sampling_params.top_p, pad_token_id=self.tok.pad_token_id,
+                    **enc, max_new_tokens=mt,
+                    do_sample=True, temperature=temp,
+                    top_p=top_p, pad_token_id=self.tok.pad_token_id,
                     eos_token_id=self.tok.eos_token_id)
             for j, g in enumerate(gen):
                 in_len = enc.input_ids[j].shape[0]
                 text = self.tok.decode(g[in_len:], skip_special_tokens=True)
                 outs.append(_SimpleOut(text))
+        self.model.train(was_training)
         return outs
 
 
@@ -216,7 +248,7 @@ def run_rollout(policy_llm, sim_llm, tok, variant, G):
                 dist_prompts.append(tok.apply_chat_template(
                     msgs[:-1] + [{"role": "user", "content": p_texts[g] + "\n\n" + VS_DIST_PROMPT}],
                     tokenize=False, add_generation_prompt=True))
-            dist_texts, _ = sample_distribution(sim_llm, tok, dist_prompts, max_tokens=600)
+            dist_texts, _ = sample_distribution(sim_llm, tok, dist_prompts, max_tokens=250)
             s_replies = []
             for t in dist_texts:
                 cands = []
@@ -262,6 +294,7 @@ def main():
     args = ap.parse_args()
     os.makedirs(args.out, exist_ok=True)
     os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+    os.environ.setdefault("PYTORCH_CUDA_ALLOC_CONF", "expandable_segments:True")
 
     from transformers import AutoTokenizer, AutoModelForCausalLM
     from peft import LoraConfig, get_peft_model
@@ -280,29 +313,37 @@ def main():
         policy_llm = LLM(**engine_kw)
         sim_llm = LLM(**engine_kw)
     else:
-        from transformers import AutoModelForCausalLM as AM
-        policy_llm = HFEngine(AM.from_pretrained(args.base, torch_dtype=torch.bfloat16).cuda(), tok)
-        sim_llm = HFEngine(AM.from_pretrained(args.base, torch_dtype=torch.bfloat16).cuda(), tok)
+        policy_llm = sim_llm = None  # hf engines wrap the live peft models below
     dev = torch.device(args.driver_device)
     if args.driver_device.startswith("cuda"):
         torch.cuda.set_device(dev)
 
     # ---------------- driver LoRA models (same GPU as engines)
-    base_pol = AutoModelForCausalLM.from_pretrained(args.base, torch_dtype=torch.bfloat16).to(dev)
+    base_pol = AutoModelForCausalLM.from_pretrained(args.base, dtype=torch.bfloat16).to(dev)
     lora_cfg = LoraConfig(r=args.lora_r, lora_alpha=args.lora_r * 2,
                           target_modules=["q_proj", "k_proj", "v_proj", "o_proj",
                                           "gate_proj", "up_proj", "down_proj"],
                           task_type="CAUSAL_LM")
     pol_peft = get_peft_model(base_pol, lora_cfg)
     pol_opt = torch.optim.AdamW([p for p in pol_peft.parameters() if p.requires_grad], lr=args.lr)
-    sim_peft, sim_opt = None, None
+    sim_peft, sim_opt, base_sim = None, None, None
     if args.variant == "cot":
-        base_sim = AutoModelForCausalLM.from_pretrained(args.base, torch_dtype=torch.bfloat16).to(dev)
+        base_sim = AutoModelForCausalLM.from_pretrained(args.base, dtype=torch.bfloat16).to(dev)
         sim_peft = get_peft_model(base_sim, lora_cfg)
         sim_opt = torch.optim.AdamW([p for p in sim_peft.parameters() if p.requires_grad], lr=args.lr)
+    if args.backend != "vllm":
+        # hf: engines wrap the live (peft) driver models — inference always sees
+        # the current weights; single/vs simulator stays a frozen base.
+        # (This avoids holding 3-4 full 4B copies, which OOMs a 24GB card.)
+        if base_sim is None:
+            base_sim = AutoModelForCausalLM.from_pretrained(args.base, dtype=torch.bfloat16).to(dev)
+        policy_llm = HFEngine(pol_peft, tok)
+        sim_llm = HFEngine(sim_peft if sim_peft is not None else base_sim, tok)
 
     def reload_engine(which):
         nonlocal policy_llm, sim_llm, pol_peft, pol_opt, sim_peft, sim_opt
+        if args.backend != "vllm":
+            return  # hf engines wrap the live peft models; merge/reload unnecessary
         merged_dir = f"{args.out}/merged_{which}"
         src = pol_peft if which == "policy" else sim_peft
         src = src.merge_and_unload()
@@ -323,7 +364,7 @@ def main():
         # re-wrap a fresh LoRA on the merged weights and rebuild the optimizer
         # (merge_and_unload strips the adapter; old opt params would dangle)
         new_base = AutoModelForCausalLM.from_pretrained(
-            merged_dir, torch_dtype=torch.bfloat16).to(dev)
+            merged_dir, dtype=torch.bfloat16).to(dev)
         new_peft = get_peft_model(new_base, lora_cfg)
         new_opt = torch.optim.AdamW([p for p in new_peft.parameters() if p.requires_grad],
                                     lr=args.lr)
@@ -336,13 +377,13 @@ def main():
             gc.collect(); torch.cuda.empty_cache()
             policy_llm = LLM(model=merged_dir, **engine_kw) if args.backend == "vllm" \
                 else HFEngine(AutoModelForCausalLM.from_pretrained(
-                    merged_dir, torch_dtype=torch.bfloat16).cuda(), tok)
+                    merged_dir, dtype=torch.bfloat16).cuda(), tok)
         else:
             del sim_llm
             gc.collect(); torch.cuda.empty_cache()
             sim_llm = LLM(model=merged_dir, **engine_kw) if args.backend == "vllm" \
                 else HFEngine(AutoModelForCausalLM.from_pretrained(
-                    merged_dir, torch_dtype=torch.bfloat16).cuda(), tok)
+                    merged_dir, dtype=torch.bfloat16).cuda(), tok)
 
     results = dict(variant=args.variant, steps=[], train_reward=[], policy_nll=[],
                    distinct2=[], self_bleu2=[], panel={})
@@ -353,28 +394,17 @@ def main():
         # ---------------- policy update (group-relative z-score REINFORCE)
         r = np.array(rewards)
         rbar, rstd = r.mean(), r.std() + 1e-6
-        adv = (r - rbar) / rstd
-        # per-trajectory policy NLL = mean over its own turns (faithful context)
-        p_nll_per_traj = []
-        for g in range(args.G):
-            nlls = rollout_nll(pol_peft, tok, dev, POLICY_SYS, p_entries[g])
-            p_nll_per_traj.append(np.nanmean(nlls) if nlls else float("nan"))
+        adv_t = torch.tensor((r - rbar) / rstd, device=dev)
         pol_opt.zero_grad()
-        nll_t = torch.tensor([v if v == v else 0.0 for v in p_nll_per_traj], device=dev)
-        adv_t = torch.tensor(adv, device=dev)
-        loss = (nll_t * adv_t).mean()
-        loss.backward()
+        nll_t = batch_rollout_nll(pol_peft, tok, dev, POLICY_SYS, p_entries,
+                                  adv=adv_t)
         pol_opt.step()
+        p_nll_vals = [n.cpu().item() if n is not None else float("nan") for n in nll_t]
         if args.variant == "cot" and sim_peft is not None:
-            s_nll_per_traj = []
-            for g in range(args.G):
-                nlls = rollout_nll(sim_peft, tok, dev, DONOR_SYS, s_entries[g])
-                s_nll_per_traj.append(np.nanmean(nlls) if nlls else float("nan"))
-            sim_adv = np.abs(r - rbar) / rstd  # SPICE-style variance reward
+            sim_adv = torch.tensor(np.abs(r - rbar) / rstd, device=dev)  # SPICE-style variance reward
             sim_opt.zero_grad()
-            nll_s = torch.tensor([v if v == v else 0.0 for v in s_nll_per_traj], device=dev)
-            loss_s = (nll_s * torch.tensor(sim_adv, device=dev)).mean()
-            loss_s.backward()
+            nll_s = batch_rollout_nll(sim_peft, tok, dev, DONOR_SYS, s_entries,
+                                      adv=sim_adv)
             sim_opt.step()
         # ---------------- engine reload
         if step % args.merge_every == (args.merge_every - 1):
@@ -384,7 +414,7 @@ def main():
         # ---------------- metrics
         all_sim_texts = [e[1] for g in range(args.G) for e in s_entries[g]]
         all_pol_texts = [e[1] for g in range(args.G) for e in p_entries[g]]
-        nll_flat = [v for v in p_nll_per_traj if v == v]
+        nll_flat = [v for v in p_nll_vals if v == v]
         rec = dict(step=step, train_reward=float(r.mean()),
                    policy_nll=float(np.nanmean(nll_flat)) if nll_flat else None,
                    distinct2=distinct2(all_pol_texts),

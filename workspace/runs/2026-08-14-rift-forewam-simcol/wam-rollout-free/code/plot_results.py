@@ -10,9 +10,15 @@ import sys
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
 import numpy as np
 
-plt.rcParams.update({"font.size": 9, "axes.spines.top": False, "axes.spines.right": False})
+_CJK = "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"
+if os.path.exists(_CJK):
+    fm.fontManager.addfont(_CJK)
+    plt.rcParams["font.sans-serif"] = ["Noto Sans CJK JP"]
+plt.rcParams.update({"font.size": 9, "axes.spines.top": False, "axes.spines.right": False,
+                     "axes.unicode_minus": False})
 
 
 def load(p):
@@ -48,7 +54,7 @@ def plot_producers(evalj, out_dir, tag):
              "rift-l2": "RIFT-L2(anticipation)", "rift-fm": "RIFT-FM(anticipation)",
              "noiseslots": "ForeWAM 式(噪声槽 prefill)"}
     for k in ["joint", "currentonly", "rift-l2", "rift-fm", "noiseslots"]:
-        if k not in evalj:
+        if k not in evalj or "sr" not in evalj[k]:
             continue
         d = evalj[k]
         rows.append(dict(name=names.get(k, k), sr=d["sr"] * 100,
