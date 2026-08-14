@@ -1,0 +1,9 @@
+{
+  "wam-rollout-free:rift-latency": {"file": "assets/rift-fig1-latency.jpg", "caption": "RIFT 论文 Fig.1:LIBERO 成功率对部署延迟的对数散点。灰方块=无未来读,蓝圆=rollout 产出的未来读,RIFT(橙星)=单趟 anticipation token,位于 rollout 档的成功率、current-only 档的延迟(每动作块 ms,A800)"},
+  "wam-rollout-free:rift-interventions": {"file": "assets/rift-fig2-interventions.jpg", "caption": "RIFT 论文 Fig.2:未来缓存干预对执行轨迹与成功率的影响。柱长=EE-ADE(厘米),柱尾=成功率;掩码/噪声/冻结当前破坏执行,终态干净缓存重放几乎原样恢复(1.9cm/97.9%)"},
+  "wam-rollout-free:toy-interventions": {"file": "assets/plots/interventions_v3.png", "caption": "我们的玩具重建(合成双连杆臂,联合视频+动作流匹配模型):RIFT 式六干预 × 配对 EE-ADE 与成功率,读出与论文方向一致的程度"},
+  "wam-rollout-free:toy-producers": {"file": "assets/plots/producers_v3.png", "caption": "五变体同骨干对比:rollout / 纯当前观测 / RIFT-L2 / RIFT-FM / ForeWAM 式噪声槽的成功率(左轴)与每块延迟(右轴,玩具尺度相对值)"},
+  "wam-rollout-free:toy-planprobe": {"file": "assets/plots/planprobe_v3.png", "caption": "计划注入探针:指令(观测侧)为模式 A 时,注入模式 B 的未来缓存,第 4 步末端执行器距离——动作跟指令走还是跟注入的未来走"},
+  "wam-rollout-free:forewam-paradigms": {"file": "assets/forewam-fig1-paradigms.jpg", "caption": "ForeWAM 论文 Fig.1:WAM 四种范式。级联/联合 WAM 暴露未来但慢;直接策略 WAM 快但无未来接口;ForeWAM 以隐藏未来槽 K/V + 动力学寄存器补上接口(斜纹=噪声变量)"},
+  "simulator-collapse:curves": {"file": "assets/plots/simcol_curves.png", "caption": "我们的 P4G-mini × Qwen3-4B 最小复现:三变体(单冻结模拟器/口头化采样/共同训练)的训练奖励、策略多样性 distinct-2 与 self-BLEU-2 曲线"}
+}

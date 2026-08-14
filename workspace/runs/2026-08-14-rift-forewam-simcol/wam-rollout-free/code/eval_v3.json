@@ -1,0 +1,72 @@
+{
+  "joint": {
+    "original": {
+      "sr": 0.2625,
+      "ade": 0.0,
+      "n": 80
+    },
+    "mask": {
+      "sr": 0.0,
+      "ade": 7.563077041226208,
+      "n": 80
+    },
+    "noise": {
+      "sr": 0.0,
+      "ade": 7.601891552260463,
+      "n": 80
+    },
+    "frozenpresent": {
+      "sr": 0.0,
+      "ade": 1.1052672256520795,
+      "n": 80
+    },
+    "shuffle": {
+      "sr": 0.0,
+      "ade": 7.398298897285386,
+      "n": 80
+    },
+    "swap": {
+      "sr": 0.0,
+      "ade": 6.915004433386029,
+      "n": 80
+    },
+    "finalclean": {
+      "sr": 0.1125,
+      "ade": 3.4364040603374746,
+      "n": 80
+    },
+    "latency_ms_per_chunk": 51.60114974722538
+  },
+  "plan_probe": {
+    "step4_dist_to_expertA": 4.3466714805168625,
+    "step4_dist_to_expertB": 4.3466714805168625,
+    "control_replay_ade": 0.0,
+    "injected_success_rate": 0.3333333333333333,
+    "frac_following_injected_plan": 0.0,
+    "n": 60
+  },
+  "currentonly": {
+    "sr": 0.0375,
+    "ade_vs_rollout": 8.430247960887218,
+    "n": 80,
+    "latency_ms_per_chunk": 30.014784324754817
+  },
+  "rift-l2": {
+    "sr": 0.0,
+    "ade_vs_rollout": 7.235900284159409,
+    "n": 80,
+    "latency_ms_per_chunk": 29.745802655816078
+  },
+  "rift-fm": {
+    "sr": 0.0,
+    "ade_vs_rollout": 5.821299271953038,
+    "n": 80,
+    "latency_ms_per_chunk": 29.49322946369648
+  },
+  "noiseslots": {
+    "sr": 0.075,
+    "ade_vs_rollout": 5.624967443791041,
+    "n": 80,
+    "latency_ms_per_chunk": 29.901795455279704
+  }
+}
