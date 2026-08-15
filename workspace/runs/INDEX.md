@@ -13,6 +13,14 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-08-15 — 2026-08-13 to 2026-08-15
+- Doc: https://fudan-nlp.feishu.cn/docx/M51udmbAiomUdZx0EhDcM6rynhc
+- Run: runs/2026-08-15-cmd-evoke/
+- Deep threads: CMD 精读 + 线性高斯玩具三对照(acausal 梯度比解析单调增 0.08→0.38;关键发现=错配代价是训练瞬态而非稳态:W=A 良性不动点,同预算下双向学生被拖慢,ar=0.9 因果 16 轮到真值/双向 32 轮,途中部署误差差 0.42=4 倍噪声底;Prefix Scoring 同量级,ar=0.9 误差 0.441→0.169)(2608.13391), EVOKE 代码审计 + H200 真机实跑(57GB 权重;diffusion 2.01s/chunk 复现论文 2.11s 口径,完整管线 10.2s;segment prompt 切换实测生效;warp-off 对照证实"warp=唯一相机通道"但零样本 i2v 下 warp on 反而色彩漂移)(2608.13546), DreamX-Phi 作交叉邻居(离线完整轨迹下双向 DMD 合法,补全规则另一面)(2608.13489)
+- Covered papers: 2608.13391, 2608.13546, 2608.13489
+- Shortlisted papers: 2608.13552, 2608.13049, 2608.11739, 2608.12990, 2608.10538, 2608.13560, 2608.11350
+- 背景: 监督信号第三轴(部署信息集对齐)确立——与清晰度轴、分布形状轴并列;CMD(时间边界)/EVOKE(时域+条件调度+空间状态)/DreamX-Phi(离线合法性)三篇同日收敛
+
 ## 2026-08-13 — 2026-08-11 to 2026-08-13
 - Doc: https://fudan-nlp.feishu.cn/docx/UlnrdNhbKoG2x8xeuD0c5A1cnnd
 - Run: runs/2026-08-13-geniworld-uopsd-nwat/

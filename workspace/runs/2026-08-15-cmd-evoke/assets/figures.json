@@ -1,0 +1,12 @@
+{
+  "cmd:mismatch": [
+    {"file": "assets/cmd_probe_fig.png", "caption": "CMD 玩具探针三面板:(a) 双向教师监督中未来控制的权重(解析);(b) 相同训练预算下双向学生被 acausal 监督拖慢(ar=0.7/0.8/0.9);(c) 教师见真值前缀 vs 学生 rollout 前缀(Prefix Scoring)的部署误差。"},
+    {"file": "assets/cmd_efficient.jpg", "caption": "CMD 论文图 3:块因果掩码一次前向给所有目标打分,前缀=生成该目标时的学生输出。"}
+  ],
+  "evoke:mechanism": {"file": "assets/evoke_hourscale.png", "caption": "EVOKE 论文图 1:七条不间断两小时 rollout(连续相机控制,3 步/chunk,无 CFG),每行六帧均匀采样。"},
+  "evoke:rollout": {"file": "assets/evoke_warp_ablation.png", "caption": "我们的 H200 实跑:i2v22 输入上,上排=几何 warp 开启(画面持续深蓝化、纹理流失),下排=同 seed 同轨迹关闭 warp(色彩纹理稳定、帧间抖动)。抽帧带官方 demo 的 joystick HUD。"},
+  "evoke:frames": [
+    {"file": "assets/evoke_seg_strip.png", "caption": "segment demo:chunk 3 切换 prompt 后天空从蓝+太阳变为绿色极光,地面结构保持(绿像素占比 0.15→0.81)。"},
+    {"file": "assets/evoke_color_trends.png", "caption": "三组视频的逐帧色彩趋势:warp 组红通道单调塌缩,nowarp 组稳定,segment 组在切换点天空剧变。"}
+  ]
+}
