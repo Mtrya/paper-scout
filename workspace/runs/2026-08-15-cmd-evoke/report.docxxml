@@ -1,0 +1,103 @@
+<title>Paper Scout 研究报告 - 2026-08-15</title>
+<p>本轮巡航由三篇同一天(08-13)挂出的论文点燃:Context-Matched Distillation(CMD,NVIDIA)、Alaya-EVOKE、DreamX-Phi 1.0。它们互不相识,却从三个方向把"蒸馏教师"从固定摆设变成一等设计对象。上两轮我们给自监督信号钉了两条轴——清晰度(真值派生&gt;构造信号&gt;一致性)与分布形状(点估计退化梯度、分布保持留信息);这一轮出现第三条轴:<b>部署信息集对齐</b>——教师打分时看到什么,学生就学到什么,错位则以部署误差的形式偿还。我们在可解析的线性高斯世界里把 CMD 的机制量化成三个可测的量,把 EVOKE 的 57GB 权重搬上 H200 实跑,并让 DreamX-Phi 作为"合法反例"补全规则的另一半。</p>
+<h1>蒸馏教师的部署信息集</h1>
+<p>自回归视频生成的学生是因果的:它生成第 t 帧时只看得见过去与当前控制。而标准 DMD 蒸馏里,教师对着<b>完整的</b>生成片段打分——双向注意力让第 t 帧的 score 依赖未来帧与未来控制。学生被拉向一个它部署时永远无法复现的信息集。三篇论文分别处理这个错配的三个切面。</p>
+<h2>CMD:教师看未来的代价,可以在玩具里称重</h2>
+<p>Hmrishav Bandyopadhyay, Xuanchi Ren, Sanja Fidler 等(NVIDIA, 2026)· <a href="https://arxiv.org/abs/2608.13391">arXiv</a> · <a href="https://hmrishavbandy.github.io/cmd-site/">项目页</a></p>
+<p>CMD 的做法干净到可以一句话说完:把双向教师微调成因果教师(Diffusion Forcing 目标),用同一个因果模型初始化几步学生,蒸馏时学生照常自回归 rollout、教师用块因果掩码一次前向给所有 noised 目标打分,且打分的前缀就是<b>生成该目标时缓存的学生输出</b>(Prefix Scoring);早期学生前缀里有结构化漂移伪影,给前缀加一点高斯噪声让教师别盯着这些不可靠细节(Prefix Corruption)。论文的消融里,双向→因果一步把 VBench-I2V 总分拉高 5.68;相机控制(ray map)下 camera-pose 误差全面下降。</p>
+<p>CMD 没放代码("Code soon"),所以核心主张只能靠独立重建来检验。我们选了最省算力也最可解析的载体:线性高斯世界 <latex>x_t = A x_{t-1} + B c_t + \varepsilon_t,\quad \varepsilon\sim\mathcal{N}(0,\sigma^2 I)</latex>,d=8、T=32,控制是平滑随机游走(相机轨迹式)。在这个世界里,两类教师的条件均值有闭式:因果教师是滤波均值 <latex>A x_{t-1}+B c_t</latex>;双向教师是固定区间平滑器</p>
+<latex>\mu_b = (Q^{-1}+A^\top Q^{-1}A)^{-1}\left[Q^{-1}(A x_{t-1}+B c_t) + A^\top Q^{-1}(x_{t+1}-B c_{t+1})\right]</latex>
+<p>未来控制 c_{t+1} 显式出现在监督目标里。学生是一步线性因果映射 <latex>\hat{x}_t = W \hat{x}_{t-1} + U c_t</latex>,部署时永远只用前缀;蒸馏=用学生自回归 rollout 迭代拟合各自教师的条件均值。这套设置把一个原本只存在于注意力掩码里的声明,变成了三个可以直接测量的量。</p>
+[[figure-anchor:cmd:mismatch]]
+<p><b>第一个量:监督对未来的敏感度。</b>解析上,<latex>||\partial\mu_b/\partial c_{t+1}||/||\partial\mu_b/\partial c_t||</latex> 从 ar=0.2 的 0.084 单调升到 ar=0.95 的 0.379——世界记忆越强,双向教师监督里未来控制的权重越大,最高接近当前控制的四成。因果教师这个量恒为零。<b>第二个量:错配的代价是训练瞬态,不是稳态偏差。</b>这个世界里存在一个漂亮的良性不动点:如果学生完全复刻真值动态 <latex>W=A</latex>,那么代入平滑均值后未来项与当前项恰好合并,<latex>\mu_b</latex> 坍缩回滤波均值 <latex>A\hat{x}_{t-1}+B c_t</latex>——未来不再携带新信息。所以充分训练下两类学生殊途同归。但<b>相同训练预算</b>下,双向学生被 acausal 监督拖慢:ar=0.9 时因果学生 16 轮就到真值(||W−A||=0),双向学生 32 轮才到;部署误差差在 4–8 轮处最大(0.34/0.42,噪声底 0.09 的四倍以上),随预算增大消失。真实 DMD 的训练步数总是有限的——CMD 修的不是收敛点,是收敛速度与途中的偏差。我们用稳态线性化推了投影解的解析式,与样本估计一致到 0.006,确认折叠机制成立;迭代蒸馏恰好停在收敛途中,这就是我们最初测到的那 0.417 的来源。<b>第三个量:前缀上下文的保真。</b>教师见真值前缀(base CMD)与学生自己 rollout 的前缀(Prefix Scoring)对照,ar=0.9 时前者误差 0.441、后者 0.169——用生成时的真实上下文打分,收益与修复信息边界同量级。</p>
+<p>一个诚实的 null:Prefix Corruption 在我们的世界里无益(||W−A|| 反而增大)。这不意外——它的机制是让教师对漂移伪影鲁棒,而我们的前缀没有伪影。把三件事分开讲:信息边界与上下文保真是部署信息集的两个正交维度,corruption 是对付输入分布的稳定化措施。</p>
+<p>DreamX-Phi 1.0(阿里,同一天)恰好补上规则的另一半:它同样用 DMD2 蒸馏(加 GAN 判别器),但学生<b>一次性生成完整未来片段</b>、条件里是完整双机械臂动作轨迹——离线部署,双向教师与学生信息集天然一致,合法。同一条规则的两面:教师可以看多远,由部署时的信息集决定,而不是由教师的架构决定。</p>
+<h1>无尽世界的工程解:EVOKE 上真机</h1>
+<p>EVOKE 的问题比 CMD 再往上一层:交互世界模型要同时满足持久记忆、低延迟、长程一致,三者对模型提出互相冲突的要求。它的解法是把"状态"与"监督"都从学生身上拆出去——场景几何放外部相机索引的状态库,长程能力由重新设计的教师蒸馏进来。这是真开源(Apache-2.0,权重全链),我们把 57GB 学生权重搬上启智 H200 实跑,验证论文的关键声称。</p>
+[[figure-anchor:evoke:mechanism]]
+<h2>审计:有界循环是真的,"无限"是修辞</h2>
+<p>代码审计确认了几个论文没有明说的事实。第一,<b>世界状态库是相机的唯一通道</b>:infer_single.py 的注释写明"warp is this model's only camera channel"——chunk 0 之后,相机控制完全经几何 warp 注入,没有旁路。这意味着状态库一身二任:持久记忆+控制通道,关掉它同时失去两者。第二,每步调用有界是代码级事实:FrameBank 是 8-bit 量化 keyframe 存储(FIFO 驱逐),检索按共可见性选最多 8 个源视图,z-buffer 渲染只进最粗的金字塔阶段,可见性剪枝按覆盖收费而非按时长。第三,"endless"的准确含义是<b>每步成本有界+光度稳定</b>,不是场景身份永久保持——论文 4.2 自己承认内容描述符随时间的 decorrelate 与真实视频对照同速,4.4 的 revisit 实验只承诺"可辨识而非像素保真重建"。这是少见的诚实。</p>
+[[figure-anchor:evoke:rollout]]
+<h2>实跑:H200 上的五个小时</h2>
+<p>把 57GB 学生权重搬上启智 H200 的过程本身就是一场小规模的基础设施考古:镜像源文件损坏(shard4 与 vigeo.pt 是截断文件,九点采样都漏检,只有逐 shard 完整加载才现形)、NGC 镜像的 pip 隐藏索引、diffusers 0.39 与 torch 2.4 的签名不兼容、以及一个只在长序列触发的 UCX 信号处理 segfault。修复链的终点是一个继承系统 torch 2.7 的 venv 加两处补丁。跑通之后,官方 launcher 原样重放四个实验:i2v 冒烟、22-chunk 主实验、6-chunk 的 segment prompt 切换、以及论文没做的 warp-off 因果对照。</p>
+<p><b>计时核验。</b>论文称"每个 1.5s chunk 用 2.11s 生成"——我们实测 diffusion 部分 2.01s/chunk(warp 0.80s + 3 步去噪 2.01s),<b>与论文口径一致</b>。但完整管线是 10.2s/chunk:decode+落盘占 7.4s。22 chunks(789 帧、32.9s 视频)总耗时 5 分 39 秒,显存峰值 44.7GB。论文的数字是"扩散墙钟",不包含解码与编码——这在 4.4 节有声明,但值得把两个口径摆在一起,因为"实时交互"的承诺落在哪个口径上差别很大。</p>
+<p><b>机制验证一:prompt 切换真的会重写天空。</b>segment demo 在 chunk 3 切换文本,视频第 4.5s 起天空从蓝+太阳变为绿色极光:绿色像素占比 0.15→0.81 跳变,地面几何与纹理保持(底部带位移≈0、边缘密度全程稳定),仅整体被重新打光(亮度 131→112)。"文本统治自由演化的内容,几何抵抗覆盖已锚定的观测"——论文 4.4 的这条分工在实测里干净复现。</p>
+<p><b>机制验证二:warp 是相机的唯一通道,但零样本下它的账没算赢。</b>关掉几何 warp(--geo_drop_warp,同 seed 同轨迹)后,相机轨迹不再驱动画面——与代码审计的结论一致。但对照暴露了一个论文没覆盖的盲区:这个 ckpt 只在 v2v 条件上训练,i2v 是官方 launcher 承认的零样本模式;在零样本输入上,warp 开启的一路出现单调色彩漂移(红通道 59→14、饱和度 141→233、边缘密度减半,画面持续"深蓝化"),而 warp 关闭的一路色彩与纹理全程稳定(红通道 56→51),代价只是帧间内容抖动更大。几何 warp 在训练域内是相机通道与持久记忆,在训练域外它引入的是 ViGeo 深度渲染的域差异。单 seed 单场景的观察,不过度概括——但这正是"真开源"的价值:这类盲区只有实跑才看得见。</p>
+[[figure-anchor:evoke:frames]]
+<p>一个诚实的限制:示例相机轨迹前 15 秒几乎静止(偏航 ~0.07°/帧),"相机跟随"的检验强度有限;warp on/off 两组都没出现可测的刚体平移,差异集中在色彩与内容演化。所有抽帧都带官方 demo 的 joystick HUD(Move/Rot 圆形控件),引用时请注意。</p>
+<h2>同一主题的短名单</h2>
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">论文</th>
+      <th background-color="light-gray">核心贡献</th>
+      <th background-color="light-gray">为什么重要</th>
+      <th background-color="light-gray">链接</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>PlayWorld</b>(HKU, 2026)</td>
+      <td>用多模态 Agent Player 追逐长程目标来评测交互世界模型,171 个场景,四个维度(几何一致、交互保真、视外演化、insight 演化)。</td>
+      <td>长程交互评测从"固定动作序列"换成"智能体追目标",把"无限声明"变成可测量的东西;与 EVOKE 互补——一个造世界,一个量世界。</td>
+      <td><a href="https://arxiv.org/abs/2608.13552">arXiv</a> · <a href="https://github.com/kxding/PlayWorld">代码</a></td>
+    </tr>
+    <tr>
+      <td><b>H2R-Bench</b>(2026)</td>
+      <td>human-to-robot 操作视频生成的基准,评估世界模型跨具身迁移能力。</td>
+      <td>Dyna-2 把"人类视频预训练世界模型"推到台前后,这个基准是该路线的评测接口;值得与 Dyna-2 技术报告一起跟踪。</td>
+      <td><a href="https://arxiv.org/abs/2608.13049">arXiv</a></td>
+    </tr>
+  </tbody>
+</table>
+<h1>池子里其余值得留意</h1>
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">论文</th>
+      <th background-color="light-gray">核心贡献</th>
+      <th background-color="light-gray">为什么重要</th>
+      <th background-color="light-gray">链接</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>G0.5</b>(2026)</td>
+      <td>单流自回归 VLA:推理 token 与动作 token 同一组权重同一目标,学习型跨具身动作 tokenizer + 原生 CoT + 视觉记忆模块。</td>
+      <td>直接挑战"VLM 编码器+流匹配动作专家"的主流配方;prompt 直接操纵动作粒度/任务视野的说法值得用权重检验(未放代码)。</td>
+      <td><a href="https://arxiv.org/abs/2608.11739">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>LycheeMemory V2</b>(2026)</td>
+      <td>语义段级整合替代逐轮 eager 整合,长程记忆成本下降。</td>
+      <td>智能体记忆工程的一条实用路线(1161 stars);与我们的"记忆=按需查表"结论在消费侧互补。</td>
+      <td><a href="https://arxiv.org/abs/2608.12990">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>SKILLER</b>(2026)</td>
+      <td>语言级 RL 从(小)语言模型里抽取可复用技能。</td>
+      <td>与 U-OPSD/SPICE 线同源:自监督循环里技能的形态与抽取;小模型上的干净设置值得对照。</td>
+      <td><a href="https://arxiv.org/abs/2608.10538">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>AutoDesign</b> / <b>Self-Evolving Embodied Agents</b>(2026)</td>
+      <td>元级 harness 优化:让 harness 自己积累经验、迭代设计,用于长程 agentic 设计 / 具身智能体技能演化。</td>
+      <td>harness 层演化是本轮"教师设计"的系统侧孪生问题;无权重放出,暂列观察。</td>
+      <td><a href="https://arxiv.org/abs/2608.13560">arXiv</a> · <a href="https://arxiv.org/abs/2608.11350">arXiv</a></td>
+    </tr>
+  </tbody>
+</table>
+<h1>跨主题观察:监督信号的第三轴</h1>
+<p>把这一轮放进前两轮的坐标系:监督信号现在有三条正交的检查轴——<b>清晰度</b>(离真值派生多远)、<b>分布形状</b>(点估计还是分布保持)、<b>部署信息集</b>(教师打分的信息集与部署是否一致)。CMD 与 EVOKE 都是"不修学生、修教师"的路线:一个修教师的时间边界,一个修教师的时域与条件调度。这与读者在 U-OPSD 讨论里提的"让教师自己更强"是同一条战线的两个入口:一致性监督修不动失明通道,但信息集对齐修的是梯度指向,两者不冲突。DreamX-Phi 的离线合法性提醒我们这条轴的检查顺序:先问部署时模型看得见什么,再问教师该看见什么。</p>
