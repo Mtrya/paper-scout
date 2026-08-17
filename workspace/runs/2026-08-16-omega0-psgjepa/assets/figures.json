@@ -17,7 +17,7 @@
  },
  "psg:teaser": {
   "file": "assets/psgjepa_teaser.png",
-  "caption": "PSG-JEPA 方法与证据总览:训练时加状态头/转移头两个接地头,推理时丢弃;右栏为可辨识性、规划样本效率与策略学习三层证据"
+  "caption": "PSG-JEPA 方法与证据总览:训练时加状态头/转移头两个对齐头,推理时丢弃;右栏为可辨识性、规划样本效率与策略学习三层证据"
  },
  "cosmos3:overview": {
   "file": "assets/cosmos3_overview.png",
@@ -53,7 +53,7 @@
  },
  "psg:probe": {
   "file": "assets/psg_probe_dims.png",
-  "caption": "逐维可辨识性探针(上:浅=LeWM baseline,深=PSG;下:各维度像素可见性)。缺口集中在像素看不见的维度(腕部偏航 dim5、末端姿态 dim15/16、关节速度 dim6-11),接地头精确补上;未被监督的 privileged 组原地不动"
+  "caption": "逐维可辨识性探针(上:浅=LeWM baseline,深=PSG;下:各维度像素可见性)。缺口集中在像素看不见的维度(腕部偏航 dim5、末端姿态 dim15/16、关节速度 dim6-11),对齐头精确补上;未被监督的 privileged 组原地不动"
  },
  "psg:rollout": {
   "file": "assets/psg_rollout_mse.png",
