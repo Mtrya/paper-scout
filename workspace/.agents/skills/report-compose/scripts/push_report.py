@@ -243,7 +243,7 @@ def main() -> None:
         ws_tmp.cleanup()
         # 3. 显式删除锚点段落(飞书导入不会丢弃它们,历史上曾假设会丢弃)
         content = fetch_content(args.cli, doc, cwd)
-        anchor_ids = re.findall(r'<p id="([^"]+)">\[\[figure-anchor:[^\]]+\]\]</p>', content)
+        anchor_ids = re.findall(r'<p id="([^"]+)">(?:\[\[figure-anchor:[^\]]+\]\])+</p>', content)
         if anchor_ids:
             run_cli(args.cli, ["docs", "+update", "--doc", doc, "--as", "bot",
                                "--command", "block_delete",

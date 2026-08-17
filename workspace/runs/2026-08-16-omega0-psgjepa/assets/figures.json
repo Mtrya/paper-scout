@@ -1,0 +1,62 @@
+{
+ "omega0:teaser": {
+  "file": "assets/omega0_teaser.png",
+  "caption": "ω-0 总览:动作 DiT 输出 SONIC 全身动作潜变量;右上为 ω-HOME 数据集的任务与模态构成"
+ },
+ "omega0:timeseries": {
+  "file": "assets/timeseries_concurrency.png",
+  "caption": "单集运动活动时序(0.15 rad/s 阈值线):拖地时腿/臂/基座/手部速度全程叠加;拿苹果则是先移动、后操作的串行模式"
+ },
+ "omega0:summary": {
+  "file": "assets/task_summary.png",
+  "caption": "五任务三指标汇总:运动帧并发占比(左)、遥操作命令→实测关节时延(中)、命令跟踪 RMSE(右)"
+ },
+ "omega0:frame": {
+  "file": "assets/mop_exo_frame.png",
+  "caption": "ω-HOME 第三人称视角一帧:拖地任务中的全身并发 loco-manipulation"
+ },
+ "psg:teaser": {
+  "file": "assets/psgjepa_teaser.png",
+  "caption": "PSG-JEPA 方法与证据总览:训练时加状态头/转移头两个接地头,推理时丢弃;右栏为可辨识性、规划样本效率与策略学习三层证据"
+ },
+ "cosmos3:overview": {
+  "file": "assets/cosmos3_overview.png",
+  "caption": "Cosmos 3 的五模态统一:同一模型按输入输出配置切换为 VLM、文生图、音视联生、策略/WAM、前向与逆动力学"
+ },
+ "cosmos3:action_repr": {
+  "file": "assets/cosmos3_action_repr.png",
+  "caption": "跨本体动作统一为几何伪动作:自车位姿/相机运动 9D,单臂 10D,双臂 20D,人形 29D(3D 平移 + 6D 旋转 + 抓取状态)"
+ },
+ "cosmos3:video_action": {
+  "file": "assets/cosmos3_video_action.png",
+  "caption": "held-out RoboLab 上的视频-动作一致性:每对上行是仿真器执行真值,下行是模型对同一段动作预测的未来(wrist 与 left 两相机)"
+ },
+ "marionette:overview": {
+  "file": "assets/marionette_overview.png",
+  "caption": "Marionette 管线:ActionGPT 决策→PoseGPT 动画→零参数图形桥渲染几何→观测模型只涂外观;控制仅在两处注入(动作 token 与根位移)"
+ },
+ "marionette:bridge": {
+  "file": "assets/marionette_bridge_strip.jpg",
+  "caption": "12 秒生成 rollout:上行为图形桥栅格化的姿态控制帧(地形深度+双实体骨架),下行为观测模型渲染的 RGB——两行共享的几何由桥闭式计算,不经神经网络"
+ },
+ "aird:outcome": {
+  "file": "assets/aird_outcome.png",
+  "caption": "七模型结果层全景:左为总体 avg@3(实心)与 best@3(全高),右为四类任务的分布;avg 比 best 更能区分模型"
+ },
+ "aird:interexp": {
+  "file": "assets/aird_interexp.png",
+  "caption": "任务间经验复用:带/不带 lessons 的 avg@3(柱)与增益 Δ(线);最弱的 DeepSeek 获益最大,最强的 Opus 几乎无增益"
+ },
+ "aird:novelty": {
+  "file": "assets/aird_novelty.png",
+  "caption": "252 个最优解的新颖性审计:44% 是已知技术的组合堆叠,真创新仅 3 例,评测漏洞利用 16 例(五倍于创新);右侧为三个通过人工复核的新颖解"
+ },
+ "psg:probe": {
+  "file": "assets/psg_probe_dims.png",
+  "caption": "逐维可辨识性探针(上:浅=LeWM baseline,深=PSG;下:各维度像素可见性)。缺口集中在像素看不见的维度(腕部偏航 dim5、末端姿态 dim15/16、关节速度 dim6-11),接地头精确补上;未被监督的 privileged 组原地不动"
+ },
+ "psg:rollout": {
+  "file": "assets/psg_rollout_mse.png",
+  "caption": "开环 rollout 潜空间 MSE(3 帧上下文、记录动作序列):长视野(15/30 步)PSG 稳定优于 LeWM,短视野(5 步)两者持平"
+ }
+}

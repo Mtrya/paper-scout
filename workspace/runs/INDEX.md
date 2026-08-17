@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-08-17 — 2026-08-15 to 2026-08-17
+- Doc: https://fudan-nlp.feishu.cn/docx/RE8YdxIiaomTHWxQusBc9RGxnMb
+- Run: runs/2026-08-16-omega0-psgjepa/
+- Deep threads: PSG-JEPA 真实复训 + 逐维可辨识性探针(H200 双模型同种子 10 epoch;baseline 逐维 r 与像素可见性相关 0.42=缺口机制证据;接地头外科手术式修补:腕部偏航 r 0.03→0.76、关节速度 ≤0.20→0.73-0.91 由动态头 Δq 监督注入、未监督 privileged 维原地不动;长程 rollout 改善复现 30 步 1.65 vs 1.90)(2608.06799), ω-0/ω-HOME 数据集探针(并发度 mop 0.866 vs apple 0.048;遥操作时延 70-230ms;target 只覆盖腕部 6 关节)(2608.06375), Marionette 精读(显式状态外置 + 零参数图形桥;软惩罚被优化器交易掉、硬约束成立的阴性结果)(2608.14530), Cosmos 3 精读(五模态 MoT、动作=token、条件方案即噪声掩码、15000 位置间隔)(2606.02800), Beyond Final Scores 精读(经验复用弱模型收益最大、harness 演化不跨任务族、钻空子五倍于真创新)(2608.13417)
+- Covered papers: 2608.06799, 2608.06375, 2608.14530, 2606.02800, 2608.13417
+- 背景: 主线四篇构成"动作/状态如何住进世界模型"的谱系:PSG-JEPA 钉潜变量 → ω-0 蒸馏控制器潜变量 → Marionette 状态外置 → Cosmos 3 动作 token 化;横切判据=软损失塑表征、硬约束管记账
+
 ## 2026-08-15 — 2026-08-13 to 2026-08-15
 - Doc: https://fudan-nlp.feishu.cn/docx/M51udmbAiomUdZx0EhDcM6rynhc
 - Run: runs/2026-08-15-cmd-evoke/
