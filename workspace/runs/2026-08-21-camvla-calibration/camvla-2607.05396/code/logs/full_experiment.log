@@ -1,0 +1,65 @@
+CamVLA 机制复现完整日志
+time_start=2026-07-28 08:54:02
+datasets=['canonical_narrow', 'multiview_wide', 'noisy_shifted']
+train_cfg={'steps': 1500, 'batch_size': 128, 'lr': 0.002, 'eval_every': 300, 'seed': 0, 'device': 'cpu', 'success_mse_coef': 0.12, 'lambda_cam': 1.0, 'lambda_geo': 0.75}
+deployment_assumption: 推理仅依赖单目 RGB 代理特征+本体+任务；不喂显式外参标定矩阵。
+[A1] geometry unit tests: {"max_recon_err": 1.9845870143629155e-15, "max_tau_impact": 0.0, "perturb_mono_increasing": 1.0, "perturb_trans_err_at_15deg": 0.02899515862677869, "perturb_trans_err_at_45deg": 0.08500950373668632, "pass": 1.0}
+[A2] wrote a2_perturbation_curve.png; err@15°=0.0310, err@45°=0.0907
+
+=== train canonical_narrow/base params=19239 device=cpu steps=1500 thresh=0.005071 ===
+step=300 loss={'loss_base': 0.001425444264896214} seen_sr=0.9756 seen_mse=0.001623 unseen_sr=0.0059 unseen_mse=0.120091
+step=600 loss={'loss_base': 0.0011652617249637842} seen_sr=0.9932 seen_mse=0.001123 unseen_sr=0.0049 unseen_mse=0.120521
+step=900 loss={'loss_base': 0.0010501552606001496} seen_sr=0.9961 seen_mse=0.000889 unseen_sr=0.0059 unseen_mse=0.118045
+step=1200 loss={'loss_base': 0.0008051690529100597} seen_sr=0.9980 seen_mse=0.000816 unseen_sr=0.0059 unseen_mse=0.118209
+step=1500 loss={'loss_base': 0.0007527304696850479} seen_sr=0.9980 seen_mse=0.000799 unseen_sr=0.0059 unseen_mse=0.118134
+[done] {"dataset": "canonical_narrow", "variant": "base", "params": 19239, "elapsed_sec": 32.15532207489014, "success_thresh": 0.0050712770815324855, "action_std": 0.59344083070755, "seen": {"mse": 0.0007994746940092057, "success_rate": 0.998046875, "n": 1024.0, "success_thresh": 0.0050712770815324855}, "unseen": {"mse": 0.1181341020300124, "success_rate": 0.005859375, "n": 1024.0, "success_thresh": 0.0050712770815324855}, "ckpt": "canonical_narrow_base.pt"}
+
+=== train canonical_narrow/camvla params=38445 device=cpu steps=1500 thresh=0.005295 ===
+step=300 loss={'loss_base': 0.001283816760405898, 'loss_cam': 0.0009954158449545503, 'loss_geo': 0.006288955919444561, 'loss_total': 0.006995949428528547} seen_sr=0.9492 seen_mse=0.001848 unseen_sr=0.0059 unseen_mse=0.100406 handeye_err_deg=35.383
+step=600 loss={'loss_base': 0.0009940328309312463, 'loss_cam': 0.0006605327362194657, 'loss_geo': 0.001854601432569325, 'loss_total': 0.0030455165542662144} seen_sr=0.9990 seen_mse=0.000910 unseen_sr=0.0049 unseen_mse=0.098881 handeye_err_deg=35.329
+step=900 loss={'loss_base': 0.0008330759010277689, 'loss_cam': 0.0004798511799890548, 'loss_geo': 0.0017246988136321306, 'loss_total': 0.002606451278552413} seen_sr=0.9971 seen_mse=0.000821 unseen_sr=0.0078 unseen_mse=0.098701 handeye_err_deg=35.232
+step=1200 loss={'loss_base': 0.0007378923473879695, 'loss_cam': 0.0004098899371456355, 'loss_geo': 0.001584462122991681, 'loss_total': 0.002336129080504179} seen_sr=1.0000 seen_mse=0.000729 unseen_sr=0.0068 unseen_mse=0.100233 handeye_err_deg=35.543
+step=1500 loss={'loss_base': 0.00065708375768736, 'loss_cam': 0.00038681048317812383, 'loss_geo': 0.0015733195468783379, 'loss_total': 0.002223883755505085} seen_sr=1.0000 seen_mse=0.000714 unseen_sr=0.0068 unseen_mse=0.099856 handeye_err_deg=35.431
+[done] {"dataset": "canonical_narrow", "variant": "camvla", "params": 38445, "elapsed_sec": 33.42139410972595, "success_thresh": 0.005294920774127154, "action_std": 0.6063850522041321, "seen": {"mse": 0.0007137629089015718, "success_rate": 1.0, "n": 1024.0, "success_thresh": 0.005294920774127154, "handeye_rot_err_deg": 2.0794380340898444, "cam_action_mse": 0.0004429933847376333}, "unseen": {"mse": 0.09985605276847309, "success_rate": 0.0068359375, "n": 1024.0, "success_thresh": 0.005294920774127154, "handeye_rot_err_deg": 35.431089708191465, "cam_action_mse": 0.005910854576029578}, "ckpt": "canonical_narrow_camvla.pt"}
+
+=== train multiview_wide/base params=19303 device=cpu steps=1500 thresh=0.005118 ===
+step=300 loss={'loss_base': 0.0038029963616281748} seen_sr=0.8350 seen_mse=0.003315 unseen_sr=0.7598 unseen_mse=0.004182
+step=600 loss={'loss_base': 0.0029785814695060253} seen_sr=0.9482 seen_mse=0.002311 unseen_sr=0.8057 unseen_mse=0.003749
+step=900 loss={'loss_base': 0.0019941062200814486} seen_sr=0.9775 seen_mse=0.001906 unseen_sr=0.8711 unseen_mse=0.003114
+step=1200 loss={'loss_base': 0.00214032968506217} seen_sr=0.9824 seen_mse=0.001704 unseen_sr=0.8799 unseen_mse=0.003028
+step=1500 loss={'loss_base': 0.0016482218634337187} seen_sr=0.9824 seen_mse=0.001659 unseen_sr=0.8887 unseen_mse=0.002950
+[done] {"dataset": "multiview_wide", "variant": "base", "params": 19303, "elapsed_sec": 31.790709972381592, "success_thresh": 0.005117881605027429, "action_std": 0.596161425113678, "seen": {"mse": 0.0016593002814886404, "success_rate": 0.982421875, "n": 1024.0, "success_thresh": 0.005117881605027429}, "unseen": {"mse": 0.0029496327757385643, "success_rate": 0.888671875, "n": 1024.0, "success_thresh": 0.005117881605027429}, "ckpt": "multiview_wide_base.pt"}
+
+=== train multiview_wide/camvla params=38509 device=cpu steps=1500 thresh=0.004948 ===
+step=300 loss={'loss_base': 0.0025274932850152254, 'loss_cam': 0.0019171356689184904, 'loss_geo': 0.00393213564530015, 'loss_total': 0.00739373080432415} seen_sr=0.9150 seen_mse=0.002572 unseen_sr=0.8604 unseen_mse=0.003052 handeye_err_deg=3.001
+step=600 loss={'loss_base': 0.001929028774611652, 'loss_cam': 0.0014726126100867987, 'loss_geo': 0.002774645574390888, 'loss_total': 0.005482625216245651} seen_sr=0.9707 seen_mse=0.001844 unseen_sr=0.9053 unseen_mse=0.002642 handeye_err_deg=2.904
+step=900 loss={'loss_base': 0.001889920560643077, 'loss_cam': 0.001253526657819748, 'loss_geo': 0.0023638871498405933, 'loss_total': 0.004916362464427948} seen_sr=0.9805 seen_mse=0.001648 unseen_sr=0.9346 unseen_mse=0.002322 handeye_err_deg=2.853
+step=1200 loss={'loss_base': 0.001706898445263505, 'loss_cam': 0.0012103620683774352, 'loss_geo': 0.002441555727273226, 'loss_total': 0.0047484273090958595} seen_sr=0.9873 seen_mse=0.001494 unseen_sr=0.9365 unseen_mse=0.002267 handeye_err_deg=2.841
+step=1500 loss={'loss_base': 0.0014086755691096187, 'loss_cam': 0.0010502375662326813, 'loss_geo': 0.00223257252946496, 'loss_total': 0.004133342765271664} seen_sr=0.9912 seen_mse=0.001468 unseen_sr=0.9463 unseen_mse=0.002238 handeye_err_deg=2.817
+[done] {"dataset": "multiview_wide", "variant": "camvla", "params": 38509, "elapsed_sec": 31.53024435043335, "success_thresh": 0.004948174670486246, "action_std": 0.586193859577179, "seen": {"mse": 0.0014675879857115603, "success_rate": 0.9912109375, "n": 1024.0, "success_thresh": 0.004948174670486246, "handeye_rot_err_deg": 2.496467000855546, "cam_action_mse": 0.001063163268703704}, "unseen": {"mse": 0.0022379729103505497, "success_rate": 0.9462890625, "n": 1024.0, "success_thresh": 0.004948174670486246, "handeye_rot_err_deg": 2.8165836297921283, "cam_action_mse": 0.0016012620553880197}, "ckpt": "multiview_wide_camvla.pt"}
+
+=== train noisy_shifted/base params=19271 device=cpu steps=1500 thresh=0.004319 ===
+step=300 loss={'loss_base': 0.005747714079916477} seen_sr=0.3770 seen_mse=0.006456 unseen_sr=0.0117 unseen_mse=0.031178
+step=600 loss={'loss_base': 0.004696799907833338} seen_sr=0.5312 seen_mse=0.005000 unseen_sr=0.0137 unseen_mse=0.028849
+step=900 loss={'loss_base': 0.004372553899884224} seen_sr=0.6309 seen_mse=0.004249 unseen_sr=0.0137 unseen_mse=0.029540
+step=1200 loss={'loss_base': 0.004276938270777464} seen_sr=0.6797 seen_mse=0.003966 unseen_sr=0.0146 unseen_mse=0.029520
+step=1500 loss={'loss_base': 0.004200167488306761} seen_sr=0.6943 seen_mse=0.003900 unseen_sr=0.0127 unseen_mse=0.029371
+[done] {"dataset": "noisy_shifted", "variant": "base", "params": 19271, "elapsed_sec": 29.904606580734253, "success_thresh": 0.004318739570152553, "action_std": 0.5476426482200623, "seen": {"mse": 0.003899516133742509, "success_rate": 0.6943359375, "n": 1024.0, "success_thresh": 0.004318739570152553}, "unseen": {"mse": 0.029371304286428312, "success_rate": 0.0126953125, "n": 1024.0, "success_thresh": 0.004318739570152553}, "ckpt": "noisy_shifted_base.pt"}
+
+=== train noisy_shifted/camvla params=38477 device=cpu steps=1500 thresh=0.004270 ===
+step=300 loss={'loss_base': 0.005954447202384472, 'loss_cam': 0.004403200000524521, 'loss_geo': 0.023927312344312668, 'loss_total': 0.028303131461143494} seen_sr=0.4385 seen_mse=0.005749 unseen_sr=0.1865 unseen_mse=0.011770 handeye_err_deg=8.134
+step=600 loss={'loss_base': 0.0047593931667506695, 'loss_cam': 0.004065974149852991, 'loss_geo': 0.009669482707977295, 'loss_total': 0.016077479347586632} seen_sr=0.5742 seen_mse=0.004546 unseen_sr=0.1592 unseen_mse=0.018571 handeye_err_deg=12.945
+step=900 loss={'loss_base': 0.004069777671247721, 'loss_cam': 0.003446087474003434, 'loss_geo': 0.008770810440182686, 'loss_total': 0.014093972742557526} seen_sr=0.6660 seen_mse=0.003895 unseen_sr=0.1309 unseen_mse=0.026460 handeye_err_deg=16.514
+step=1200 loss={'loss_base': 0.0037606186233460903, 'loss_cam': 0.0033872886560857296, 'loss_geo': 0.007383984513580799, 'loss_total': 0.012685895897448063} seen_sr=0.7002 seen_mse=0.003588 unseen_sr=0.1191 unseen_mse=0.028453 handeye_err_deg=17.690
+step=1500 loss={'loss_base': 0.003759389277547598, 'loss_cam': 0.003295782720670104, 'loss_geo': 0.008412905037403107, 'loss_total': 0.013364850543439388} seen_sr=0.7158 seen_mse=0.003520 unseen_sr=0.1172 unseen_mse=0.028784 handeye_err_deg=17.786
+[done] {"dataset": "noisy_shifted", "variant": "camvla", "params": 38477, "elapsed_sec": 28.192991018295288, "success_thresh": 0.004269664144109135, "action_std": 0.544522225856781, "seen": {"mse": 0.003519554272457981, "success_rate": 0.7158203125, "n": 1024.0, "success_thresh": 0.004269664144109135, "handeye_rot_err_deg": 2.761608717882673, "cam_action_mse": 0.003100490160207414}, "unseen": {"mse": 0.02878437339239781, "success_rate": 0.1171875, "n": 1024.0, "success_thresh": 0.004269664144109135, "handeye_rot_err_deg": 17.786023035464765, "cam_action_mse": 0.006053084635055939}, "ckpt": "noisy_shifted_camvla.pt"}
+
+=== SUMMARY TABLE ===
+dataset	variant	params	seen_sr	unseen_sr	seen_mse	unseen_mse	handeye_deg
+canonical_narrow	base	19239	0.9980	0.0059	0.000799	0.118134	nan
+canonical_narrow	camvla	38445	1.0000	0.0068	0.000714	0.099856	35.431089708191465
+multiview_wide	base	19303	0.9824	0.8887	0.001659	0.002950	nan
+multiview_wide	camvla	38509	0.9912	0.9463	0.001468	0.002238	2.8165836297921283
+noisy_shifted	base	19271	0.6943	0.0127	0.003900	0.029371	nan
+noisy_shifted	camvla	38477	0.7158	0.1172	0.003520	0.028784	17.786023035464765
+time_end=2026-07-28 08:57:13

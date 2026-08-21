@@ -1,0 +1,58 @@
+{
+ "camvla:arch": {
+  "file": "assets/figures/camvla_arch.png",
+  "caption": "CamVLA 架构:Action Head 预测相机系 delta 动作,Geometric Head 从 image encoder 特征回归 hand-eye(平移 τ + axis-angle 旋转 ω),执行时只经估计的 R 旋转自由向量合成基座系动作"
+ },
+ "ocvla:main": {
+  "file": "assets/figures/ocvla_main.png",
+  "caption": "OC-VLA 方法总览:给定外参 T 把动作目标变换进相机系监督(数据集端预处理、模型零改动),推理时再经 T 逆变换回基座系执行"
+ },
+ "arccalib:main": {
+  "file": "assets/figures/arccalib_main.png",
+  "caption": "ARC-Calib 无标记标定管线:单关节探索运动在本体上画 3D 圆→透视投影成椭圆→共享朝向椭圆拟合与锥面分解恢复旋转轴→轴共线/共面约束迭代求解 camera-to-base"
+ },
+ "fastcal:fig2": {
+  "file": "assets/figures/fastcal_fig2.png",
+  "caption": "FastCal 松耦合公式:各传感器独立输出相对位姿流(里程计/SLAM),外参估计退化为单对传感器的 6×6 最小二乘,信息矩阵随手可得,接入现有系统只需订阅位姿流"
+ },
+ "axisguide:teaser": {
+  "file": "assets/figures/axisguide_teaser.png",
+  "caption": "AxisGuide teaser:把基座系坐标轴(红/绿/蓝)投影渲染进图像作为提示通道、与 RGB 拼接(首层卷积 3→6),动作空间不动;右侧为 LIBERO-Spatial 与真机 Pick Up 的增益"
+ },
+ "barx:method": {
+  "file": "assets/figures/barx_method.png",
+  "caption": "BARX 方法图:跨本体先验数据上训练 VLA 自回归预测辅助表示(2D EE 轨迹/语言运动/物体框,文本形式)再预测动作(ECoT),RoboCasa-X 三个源本体 → 三个目标本体"
+ },
+ "expa:observability": {
+  "file": "assets/figures/ekf_observability.png",
+  "caption": "实验 A 场景 1:直线(左)/平面(中)/体积(右)运动的旋转误差收敛与滑窗 FIM 最小特征值——直线留一维不可观方向,误差停在初值投影(19°);平面/体积满秩,收敛到 0.3–0.5°"
+ },
+ "expa:drift": {
+  "file": "assets/figures/ekf_drift.png",
+  "caption": "实验 A 场景 3:相机被碰(5°/2 cm 阶跃)+ 随机游走蠕变下的跟踪,三档 Q——匹配蠕变模型时阶跃半恢复 ~9 s、稳态 RMS 0.88°;Q 过小滞后、Q 过大测量噪声主导"
+ },
+ "expa:timescale": {
+  "file": "assets/figures/ekf_timescale.png",
+  "caption": "实验 A 场景 4:收敛后误差时间序列的自相关函数——滤波误差 ACF(1)=0.90–0.96、1/e 相关时间 ~7 s(慢变偏差);同幅度 iid 对照 ACF(1)≈0.007"
+ },
+ "expa:inconsistency": {
+  "file": "assets/figures/ekf_inconsistency.png",
+  "caption": "实验 A 附加发现:Q=0 时 IEKF 从大初值落入有偏局部最优(平移偏差种子相关 2–15 cm,NEES 1e2–1e4),同一数据批处理 Gauss-Newton 收敛到 0.38 cm 接近 CRB;加肘关节特征或过程噪声下限后消除"
+ },
+ "expb:views": {
+  "file": "assets/figures/repr_views.png",
+  "caption": "blob-world 三种视角下的渲染示例(EE 绿斑、目标红斑、三个灰斑干扰):相机 rig 绕基座 z 轴旋转构成视角,斑表观大小 ∝ 1/深度、深度可弱观测"
+ },
+ "expb:yawsweep": {
+  "file": "assets/figures/repr_yawsweep.png",
+  "caption": "实验 B 测试 1:单视角训练的基座系(Base)头在 −45°~+45° 视角扫描下成功率锯齿状脆断(19 点中 8 点成功率为 0,平均 0.48),相机系(Cam)头 19 点全 1.0、终距恒定"
+ },
+ "expb:errorstruct": {
+  "file": "assets/figures/repr_errorstruct_k5.png",
+  "caption": "实验 B 测试 3(K=5,5 步开环段):同边缘分布 N(0,σ) 的三种误差形态下,静态偏差在 σ=20° 时成功率降到 0.90(T1-Cam,左)与 0.98(T2-Cam,右),iid/AR(1) 仍为 1.0——误差的时间结构比幅度更决定成败"
+ },
+ "expc:viewprobe": {
+  "file": "assets/figures/openvla_viewprobe.png",
+  "caption": "实验 C:OpenVLA-7B × LIBERO-Spatial 视角扰动——raw 随 |θ| 单调崩塌(±15° 全 0),Rz 动作系补偿只在 task0@+10° 显著恢复(0.40→1.00),task1 全程不可救:崩溃以视觉编码漂移为主、动作系失配为辅"
+ }
+}

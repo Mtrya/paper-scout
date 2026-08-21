@@ -13,6 +13,14 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-08-21 — 外参标定 × 相机中心动作(老师交办专题,不限近期)
+- Doc: https://fudan-nlp.feishu.cn/docx/XyOpdswlmokrp9xMAzPcBgPSnJl
+- Run: runs/2026-08-21-camvla-calibration/
+- Deep threads: CamVLA 精读 + 第三方复现代码核验(相机系 delta + 几何头自估 hand-eye,平移相消,特征源消融)(2607.05396), OC-VLA 精读 + Dita 代码核验(官方仓空壳=Dita+flag;训练只依赖 R、部署端平移误差以 R^⊤δt 泄漏)(2508.13103), 标定线(ARC-Calib 探索运动 3 次 0.0225rad;FastCal 松耦合+FIM 秩揭示 TSVD+时间衰减;结构可观≠数据集可观)(2503.14701, 1902.10585), 动作接口线误差路径谱系(AxisGuide 渲染坐标轴 6°/3cm 内不掉、BARX EE traces 收益在训练期、ContactFlow 3D 接触点条件整链敏感)(2606.06761, 2607.27549, 2607.26579), 实验 A:EKF 在线 hand-eye(直线运动留 1 维不可观 FIM 1.3e-9 vs 体积 1.9e3;体积运动近 CRB 0.21°/0.11cm;Q 匹配阶跃半恢复 ~9s;误差 ACF(1)=0.90-0.96 慢变偏差;Q=0 自信地错 vs 批处理 GN 达 CRB), 实验 B:blob-world 孪生头(Base 单视角 8/19 点脆断 vs Cam 全 1.0;K=1 三种误差形态全补偿,K=5 static 唯一破功 0.90/0.98——边界=重规划频率), 实验 C:OpenVLA-7B×LIBERO-Spatial 真实权重 222 集(baseline 85% 复现;raw ±15°=0 崩溃复现;rescue 只在 task0@+10° 恢复 0.40→1.00,±15° 双符号均 0——崩溃以视觉编码漂移为主、动作系失配为辅)
+- Covered papers: 2607.05396, 2508.13103, 2503.14701, 1902.10585, 2606.06761, 2607.27549, 2607.26579
+- Shortlisted papers: 2604.15814, 2601.08034, 2408.10562, 2503.14051, 2311.01335, 2603.05868, 2506.22242, 2510.02268, 2601.08414, 2601.01188
+- 背景: 外参来源四代谱系 × 动作表示误差路径谱系;三条判据:delta 动作只需旋转(平移相消)、误差时间结构×重规划频率是成败边界、动作系修复是感知修复的补集;架构空白=学习式冷启动+滤波热维护+协方差进策略没人做全
+
 ## 2026-08-17 — 2026-08-15 to 2026-08-17
 - Doc: https://fudan-nlp.feishu.cn/docx/RE8YdxIiaomTHWxQusBc9RGxnMb
 - Run: runs/2026-08-16-omega0-psgjepa/

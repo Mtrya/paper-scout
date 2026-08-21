@@ -1,0 +1,438 @@
+{
+ "tasks": {
+  "0": {
+   "-15.0": {
+    "raw": {
+     "success_rate": 0.0,
+     "successes": 0,
+     "n": 5
+    },
+    "rescue": {
+     "success_rate": 0.0,
+     "successes": 0,
+     "n": 5
+    }
+   },
+   "-10.0": {
+    "raw": {
+     "success_rate": 0.0,
+     "successes": 0,
+     "n": 5
+    },
+    "rescue": {
+     "success_rate": 0.0,
+     "successes": 0,
+     "n": 5
+    }
+   },
+   "-5.0": {
+    "raw": {
+     "success_rate": 1.0,
+     "successes": 5,
+     "n": 5
+    },
+    "rescue": {
+     "success_rate": 0.6,
+     "successes": 3,
+     "n": 5
+    }
+   },
+   "0.0": {
+    "baseline": {
+     "success_rate": 0.85,
+     "successes": 17,
+     "n": 20
+    }
+   },
+   "5.0": {
+    "raw": {
+     "success_rate": 0.8,
+     "successes": 8,
+     "n": 10
+    },
+    "rescue": {
+     "success_rate": 0.9,
+     "successes": 9,
+     "n": 10
+    }
+   },
+   "10.0": {
+    "raw": {
+     "success_rate": 0.4,
+     "successes": 4,
+     "n": 10
+    },
+    "rescue": {
+     "success_rate": 1.0,
+     "successes": 10,
+     "n": 10
+    }
+   },
+   "15.0": {
+    "raw": {
+     "success_rate": 0.0,
+     "successes": 0,
+     "n": 5
+    },
+    "rescue": {
+     "success_rate": 0.0,
+     "successes": 0,
+     "n": 10
+    }
+   }
+  },
+  "1": {
+   "-15.0": {
+    "raw": {
+     "success_rate": 0.0,
+     "successes": 0,
+     "n": 5
+    },
+    "rescue": {
+     "success_rate": 0.0,
+     "successes": 0,
+     "n": 5
+    }
+   },
+   "-10.0": {
+    "raw": {
+     "success_rate": 0.2,
+     "successes": 1,
+     "n": 5
+    },
+    "rescue": {
+     "success_rate": 0.0,
+     "successes": 0,
+     "n": 5
+    }
+   },
+   "-5.0": {
+    "raw": {
+     "success_rate": 0.4,
+     "successes": 2,
+     "n": 5
+    },
+    "rescue": {
+     "success_rate": 0.0,
+     "successes": 0,
+     "n": 5
+    }
+   },
+   "0.0": {
+    "baseline": {
+     "success_rate": 0.85,
+     "successes": 17,
+     "n": 20
+    }
+   },
+   "5.0": {
+    "raw": {
+     "success_rate": 0.1,
+     "successes": 1,
+     "n": 10
+    },
+    "rescue": {
+     "success_rate": 0.0,
+     "successes": 0,
+     "n": 10
+    }
+   },
+   "10.0": {
+    "raw": {
+     "success_rate": 0.0,
+     "successes": 0,
+     "n": 7
+    },
+    "rescue": {
+     "success_rate": 0.0,
+     "successes": 0,
+     "n": 10
+    }
+   },
+   "15.0": {
+    "raw": {
+     "success_rate": 0.0,
+     "successes": 0,
+     "n": 5
+    },
+    "rescue": {
+     "success_rate": 0.0,
+     "successes": 0,
+     "n": 5
+    }
+   }
+  }
+ },
+ "conditions": [
+  {
+   "task": 0,
+   "theta_deg": -15.0,
+   "mode": "raw",
+   "rescue_sign": 1.0,
+   "success_rate": 0.0,
+   "successes": 0,
+   "n": 5
+  },
+  {
+   "task": 0,
+   "theta_deg": -15.0,
+   "mode": "rescue",
+   "rescue_sign": -1.0,
+   "success_rate": 0.2,
+   "successes": 1,
+   "n": 5
+  },
+  {
+   "task": 0,
+   "theta_deg": -15.0,
+   "mode": "rescue",
+   "rescue_sign": 1.0,
+   "success_rate": 0.0,
+   "successes": 0,
+   "n": 5
+  },
+  {
+   "task": 0,
+   "theta_deg": -10.0,
+   "mode": "raw",
+   "rescue_sign": 1.0,
+   "success_rate": 0.0,
+   "successes": 0,
+   "n": 5
+  },
+  {
+   "task": 0,
+   "theta_deg": -10.0,
+   "mode": "rescue",
+   "rescue_sign": 1.0,
+   "success_rate": 0.0,
+   "successes": 0,
+   "n": 5
+  },
+  {
+   "task": 0,
+   "theta_deg": -5.0,
+   "mode": "raw",
+   "rescue_sign": 1.0,
+   "success_rate": 1.0,
+   "successes": 5,
+   "n": 5
+  },
+  {
+   "task": 0,
+   "theta_deg": -5.0,
+   "mode": "rescue",
+   "rescue_sign": 1.0,
+   "success_rate": 0.6,
+   "successes": 3,
+   "n": 5
+  },
+  {
+   "task": 0,
+   "theta_deg": 0.0,
+   "mode": "baseline",
+   "rescue_sign": 1.0,
+   "success_rate": 0.85,
+   "successes": 17,
+   "n": 20
+  },
+  {
+   "task": 0,
+   "theta_deg": 5.0,
+   "mode": "raw",
+   "rescue_sign": 1.0,
+   "success_rate": 0.8,
+   "successes": 8,
+   "n": 10
+  },
+  {
+   "task": 0,
+   "theta_deg": 5.0,
+   "mode": "rescue",
+   "rescue_sign": 1.0,
+   "success_rate": 0.9,
+   "successes": 9,
+   "n": 10
+  },
+  {
+   "task": 0,
+   "theta_deg": 10.0,
+   "mode": "raw",
+   "rescue_sign": 1.0,
+   "success_rate": 0.4,
+   "successes": 4,
+   "n": 10
+  },
+  {
+   "task": 0,
+   "theta_deg": 10.0,
+   "mode": "rescue",
+   "rescue_sign": 1.0,
+   "success_rate": 1.0,
+   "successes": 10,
+   "n": 10
+  },
+  {
+   "task": 0,
+   "theta_deg": 15.0,
+   "mode": "raw",
+   "rescue_sign": 1.0,
+   "success_rate": 0.0,
+   "successes": 0,
+   "n": 5
+  },
+  {
+   "task": 0,
+   "theta_deg": 15.0,
+   "mode": "rescue",
+   "rescue_sign": -1.0,
+   "success_rate": 0.0,
+   "successes": 0,
+   "n": 5
+  },
+  {
+   "task": 0,
+   "theta_deg": 15.0,
+   "mode": "rescue",
+   "rescue_sign": 1.0,
+   "success_rate": 0.0,
+   "successes": 0,
+   "n": 10
+  },
+  {
+   "task": 1,
+   "theta_deg": -15.0,
+   "mode": "raw",
+   "rescue_sign": 1.0,
+   "success_rate": 0.0,
+   "successes": 0,
+   "n": 5
+  },
+  {
+   "task": 1,
+   "theta_deg": -15.0,
+   "mode": "rescue",
+   "rescue_sign": -1.0,
+   "success_rate": 0.0,
+   "successes": 0,
+   "n": 5
+  },
+  {
+   "task": 1,
+   "theta_deg": -15.0,
+   "mode": "rescue",
+   "rescue_sign": 1.0,
+   "success_rate": 0.0,
+   "successes": 0,
+   "n": 5
+  },
+  {
+   "task": 1,
+   "theta_deg": -10.0,
+   "mode": "raw",
+   "rescue_sign": 1.0,
+   "success_rate": 0.2,
+   "successes": 1,
+   "n": 5
+  },
+  {
+   "task": 1,
+   "theta_deg": -10.0,
+   "mode": "rescue",
+   "rescue_sign": 1.0,
+   "success_rate": 0.0,
+   "successes": 0,
+   "n": 5
+  },
+  {
+   "task": 1,
+   "theta_deg": -5.0,
+   "mode": "raw",
+   "rescue_sign": 1.0,
+   "success_rate": 0.4,
+   "successes": 2,
+   "n": 5
+  },
+  {
+   "task": 1,
+   "theta_deg": -5.0,
+   "mode": "rescue",
+   "rescue_sign": 1.0,
+   "success_rate": 0.0,
+   "successes": 0,
+   "n": 5
+  },
+  {
+   "task": 1,
+   "theta_deg": 0.0,
+   "mode": "baseline",
+   "rescue_sign": 1.0,
+   "success_rate": 0.85,
+   "successes": 17,
+   "n": 20
+  },
+  {
+   "task": 1,
+   "theta_deg": 5.0,
+   "mode": "raw",
+   "rescue_sign": 1.0,
+   "success_rate": 0.1,
+   "successes": 1,
+   "n": 10
+  },
+  {
+   "task": 1,
+   "theta_deg": 5.0,
+   "mode": "rescue",
+   "rescue_sign": 1.0,
+   "success_rate": 0.0,
+   "successes": 0,
+   "n": 10
+  },
+  {
+   "task": 1,
+   "theta_deg": 10.0,
+   "mode": "raw",
+   "rescue_sign": 1.0,
+   "success_rate": 0.0,
+   "successes": 0,
+   "n": 7
+  },
+  {
+   "task": 1,
+   "theta_deg": 10.0,
+   "mode": "rescue",
+   "rescue_sign": 1.0,
+   "success_rate": 0.0,
+   "successes": 0,
+   "n": 10
+  },
+  {
+   "task": 1,
+   "theta_deg": 15.0,
+   "mode": "raw",
+   "rescue_sign": 1.0,
+   "success_rate": 0.0,
+   "successes": 0,
+   "n": 5
+  },
+  {
+   "task": 1,
+   "theta_deg": 15.0,
+   "mode": "rescue",
+   "rescue_sign": -1.0,
+   "success_rate": 0.0,
+   "successes": 0,
+   "n": 5
+  },
+  {
+   "task": 1,
+   "theta_deg": 15.0,
+   "mode": "rescue",
+   "rescue_sign": 1.0,
+   "success_rate": 0.0,
+   "successes": 0,
+   "n": 5
+  }
+ ]
+}

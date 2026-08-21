@@ -1,0 +1,227 @@
+{
+  "train_cfg": {
+    "steps": 1500,
+    "batch_size": 128,
+    "lr": 0.002,
+    "eval_every": 300,
+    "seed": 0,
+    "device": "cpu",
+    "success_mse_coef": 0.12,
+    "lambda_cam": 1.0,
+    "lambda_geo": 0.75
+  },
+  "geometry": {
+    "max_recon_err": 1.9845870143629155e-15,
+    "max_tau_impact": 0.0,
+    "perturb_mono_increasing": 1.0,
+    "perturb_trans_err_at_15deg": 0.02899515862677869,
+    "perturb_trans_err_at_45deg": 0.08500950373668632,
+    "pass": 1.0
+  },
+  "perturbation": {
+    "yaw_offset_deg": [
+      0,
+      5,
+      10,
+      15,
+      20,
+      25,
+      30,
+      35,
+      40,
+      45,
+      50,
+      55,
+      60,
+      65,
+      70,
+      75,
+      80,
+      85,
+      90
+    ],
+    "mean_trans_err": [
+      0.0,
+      0.010343451865009979,
+      0.020667214381511548,
+      0.030951635680790224,
+      0.041177138782374556,
+      0.05132425885993105,
+      0.06137368029366751,
+      0.07130627343871301,
+      0.08110313103948426,
+      0.09074560422072124,
+      0.1002153379866811,
+      0.10949430616091584,
+      0.11856484570012374,
+      0.1274096903167562,
+      0.1360120033463773,
+      0.1443554097972117,
+      0.1524240275208719,
+      0.16020249744493076,
+      0.1676760128097884
+    ],
+    "mean_rot_err": [
+      0.0,
+      0.022974318536943893,
+      0.045904904152777794,
+      0.06874810717449271,
+      0.09146044426681392,
+      0.11399868120520153,
+      0.13631991517465353,
+      0.15838165643765315,
+      0.18014190921579873,
+      0.20155925163115535,
+      0.22259291455515293,
+      0.24320285921494067,
+      0.2633498534094658,
+      0.2829955461901989,
+      0.3021025408643437,
+      0.32063446618156705,
+      0.3385560455687422,
+      0.3558331642809094,
+      0.372432934340633
+    ],
+    "figure": "a2_perturbation_curve.png"
+  },
+  "runs": [
+    {
+      "dataset": "canonical_narrow",
+      "variant": "base",
+      "params": 19239,
+      "elapsed_sec": 32.15532207489014,
+      "success_thresh": 0.0050712770815324855,
+      "action_std": 0.59344083070755,
+      "seen": {
+        "mse": 0.0007994746940092057,
+        "success_rate": 0.998046875,
+        "n": 1024.0,
+        "success_thresh": 0.0050712770815324855
+      },
+      "unseen": {
+        "mse": 0.1181341020300124,
+        "success_rate": 0.005859375,
+        "n": 1024.0,
+        "success_thresh": 0.0050712770815324855
+      },
+      "ckpt": "canonical_narrow_base.pt"
+    },
+    {
+      "dataset": "canonical_narrow",
+      "variant": "camvla",
+      "params": 38445,
+      "elapsed_sec": 33.42139410972595,
+      "success_thresh": 0.005294920774127154,
+      "action_std": 0.6063850522041321,
+      "seen": {
+        "mse": 0.0007137629089015718,
+        "success_rate": 1.0,
+        "n": 1024.0,
+        "success_thresh": 0.005294920774127154,
+        "handeye_rot_err_deg": 2.0794380340898444,
+        "cam_action_mse": 0.0004429933847376333
+      },
+      "unseen": {
+        "mse": 0.09985605276847309,
+        "success_rate": 0.0068359375,
+        "n": 1024.0,
+        "success_thresh": 0.005294920774127154,
+        "handeye_rot_err_deg": 35.431089708191465,
+        "cam_action_mse": 0.005910854576029578
+      },
+      "ckpt": "canonical_narrow_camvla.pt"
+    },
+    {
+      "dataset": "multiview_wide",
+      "variant": "base",
+      "params": 19303,
+      "elapsed_sec": 31.790709972381592,
+      "success_thresh": 0.005117881605027429,
+      "action_std": 0.596161425113678,
+      "seen": {
+        "mse": 0.0016593002814886404,
+        "success_rate": 0.982421875,
+        "n": 1024.0,
+        "success_thresh": 0.005117881605027429
+      },
+      "unseen": {
+        "mse": 0.0029496327757385643,
+        "success_rate": 0.888671875,
+        "n": 1024.0,
+        "success_thresh": 0.005117881605027429
+      },
+      "ckpt": "multiview_wide_base.pt"
+    },
+    {
+      "dataset": "multiview_wide",
+      "variant": "camvla",
+      "params": 38509,
+      "elapsed_sec": 31.53024435043335,
+      "success_thresh": 0.004948174670486246,
+      "action_std": 0.586193859577179,
+      "seen": {
+        "mse": 0.0014675879857115603,
+        "success_rate": 0.9912109375,
+        "n": 1024.0,
+        "success_thresh": 0.004948174670486246,
+        "handeye_rot_err_deg": 2.496467000855546,
+        "cam_action_mse": 0.001063163268703704
+      },
+      "unseen": {
+        "mse": 0.0022379729103505497,
+        "success_rate": 0.9462890625,
+        "n": 1024.0,
+        "success_thresh": 0.004948174670486246,
+        "handeye_rot_err_deg": 2.8165836297921283,
+        "cam_action_mse": 0.0016012620553880197
+      },
+      "ckpt": "multiview_wide_camvla.pt"
+    },
+    {
+      "dataset": "noisy_shifted",
+      "variant": "base",
+      "params": 19271,
+      "elapsed_sec": 29.904606580734253,
+      "success_thresh": 0.004318739570152553,
+      "action_std": 0.5476426482200623,
+      "seen": {
+        "mse": 0.003899516133742509,
+        "success_rate": 0.6943359375,
+        "n": 1024.0,
+        "success_thresh": 0.004318739570152553
+      },
+      "unseen": {
+        "mse": 0.029371304286428312,
+        "success_rate": 0.0126953125,
+        "n": 1024.0,
+        "success_thresh": 0.004318739570152553
+      },
+      "ckpt": "noisy_shifted_base.pt"
+    },
+    {
+      "dataset": "noisy_shifted",
+      "variant": "camvla",
+      "params": 38477,
+      "elapsed_sec": 28.192991018295288,
+      "success_thresh": 0.004269664144109135,
+      "action_std": 0.544522225856781,
+      "seen": {
+        "mse": 0.003519554272457981,
+        "success_rate": 0.7158203125,
+        "n": 1024.0,
+        "success_thresh": 0.004269664144109135,
+        "handeye_rot_err_deg": 2.761608717882673,
+        "cam_action_mse": 0.003100490160207414
+      },
+      "unseen": {
+        "mse": 0.02878437339239781,
+        "success_rate": 0.1171875,
+        "n": 1024.0,
+        "success_thresh": 0.004269664144109135,
+        "handeye_rot_err_deg": 17.786023035464765,
+        "cam_action_mse": 0.006053084635055939
+      },
+      "ckpt": "noisy_shifted_camvla.pt"
+    }
+  ]
+}
