@@ -167,11 +167,13 @@ def main() -> None:
     ap.add_argument("--user-id", default=None, help="IM 收件人 open_id;不给则不通知")
     ap.add_argument("--im-text", default=None, help="自定义私信文本(默认:报告标题+URL)")
     ap.add_argument("--dry-run", action="store_true", help="只分段并打印计划,不写入")
+    ap.add_argument("--report", default="report.docxxml",
+                    help="报告文件名(默认 report.docxxml;组会版等变体用 report_group.docxxml)")
     args = ap.parse_args()
 
     cwd = Path.cwd()
     run_dir = cwd / "runs" / args.run_id
-    report = run_dir / "report.docxxml"
+    report = run_dir / args.report
     if not report.is_file():
         sys.exit(f"找不到 {report}")
 
