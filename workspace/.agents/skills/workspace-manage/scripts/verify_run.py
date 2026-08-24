@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 FIGURE_ANCHOR_RE = re.compile(r"\[\[figure-anchor:([^\]]+)\]\]")
-RUN_RESERVED = {"assets", "report.docxxml", "checklist.md", "README.md"}
+RUN_RESERVED = {"assets", "report.docxxml", "report_group.docxxml", "checklist.md", "README.md"}
 THREAD_BLOCKER_SHAPE = {"BLOCKER.md"}
 THREAD_EVIDENCE_SHAPES = (
     {"README.md", "code"},

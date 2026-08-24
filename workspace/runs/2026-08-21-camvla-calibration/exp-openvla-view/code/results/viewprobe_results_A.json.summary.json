@@ -1,0 +1,19 @@
+{
+ "task_suite": "libero_spatial",
+ "mode": "raw",
+ "theta_deg": 5.0,
+ "rescue_sign": 1.0,
+ "tasks": {
+  "0": {
+   "description": "pick up the black bowl between the plate and the ramekin and place it on the plate",
+   "success_rate": 0.8,
+   "n": 10
+  },
+  "1": {
+   "description": "pick up the black bowl next to the ramekin and place it on the plate",
+   "success_rate": 0.1,
+   "n": 10
+  }
+ },
+ "tag": "raw-th5"
+}

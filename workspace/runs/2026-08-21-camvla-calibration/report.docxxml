@@ -1,0 +1,525 @@
+<title>Paper Scout 研究报告 - 2026-08-21</title>
+<p>这轮巡航回答老师交办的两个问题,而它们其实是同一个问题的两面。问题一:相机外参(hand-eye,相机坐标系到机器人坐标系的刚性变换)能不能不在部署时一次性标定,而是在运动中逐渐掌握——用卡尔曼滤波在 VLA 环路外跑,或让模型从历史里学会。问题二:外参确定之后,动作应该用什么坐标系表示,才既跨本体、又对 VLM 友好。两个问题的连接点是一句被反复验证的话:标准 VLA 的脆性根因,是动作定义在基座系、观测落在相机系,中间的相机→基座变换被隐式背进了网络权重——π0 单视角训练在 RLBench 上 65.3%,相机绕基座转 15° 就崩到 6.3%。外参从哪来(问题一)、外参进到哪里去(问题二),是这条因果链的头和尾。本轮深挖了四条线——外参来源的四代谱系、CamVLA 与 OC-VLA 这对「自估 vs 给定」的对照、标定线的核心概念「可观性」、动作接口线的误差路径横切——并为此做了三个实验:两个玩具级但严格的仿真实验(滤波式在线标定、动作参考系与误差时间结构),以及一个在启智平台 4090 上跑完的真实权重实验(OpenVLA-7B × LIBERO-Spatial 视角扰动分解,222 集)——它给出的答案对「动作参考系修复」这条路线并不完全友好,详见第 7 节。</p>
+<h1>外参从哪来:四代谱系,与动作表示的两条路线</h1>
+<p>相机外参是视觉机器人系统的几何粘合剂:感知得到的像素必须变换到机器人坐标系才能变成动作。传统范式是部署时一次标定、之后视为常数,而 VLA 时代这个假设被两股压力打破——部署现场相机被碰、重挂、手持、移动基座漂移;以及跨本体/跨部署的标定成本与「开箱即用」诉求的直接冲突。FastCal 的作者在真实物流机器人上实测过漂移的规模:14 天、120+ km 运行、150 kg 载荷、卡车运输、一次 joystick 撞击之后,外参确实显著变化。按「信息从哪来」,整个外参估计谱系可以分成四代,每一代的失效模式各不相同:</p>
+<table>
+<colgroup>
+<col width="190"/>
+<col width="230"/>
+<col width="190"/>
+<col width="230"/>
+</colgroup>
+<thead>
+<tr>
+<th background-color="light-gray">代际</th>
+<th background-color="light-gray">信息来源</th>
+<th background-color="light-gray">核心假设</th>
+<th background-color="light-gray">失效模式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><b>离线标记式 AX=XB</b>——Tsai-Lenz(1989)、Shiu-Ahmad(1987),工业事实标准</td>
+<td>标定板/标记物位姿估计 + 关节运动学</td>
+<td>运动学准确、标记物全程可见、过程有人参与</td>
+<td>人工与设置成本高;对运动覆盖不足的退化构型敏感;外参一变就得重来,无在线能力</td>
+</tr>
+<tr>
+<td><b>无标记几何</b>——ARC-Calib(2503.14701)、LRBO(2311.01335)、FEEPE(2503.14051)</td>
+<td>机器人本体自然特征(光流/角点/3D 检测)+ 自身运动学</td>
+<td>相机能看见机器人本体;机器人能执行受控运动</td>
+<td>遮挡/出画即断;低纹理表面光流退化;只解决冷启动,无运行期漂移跟踪</td>
+</tr>
+<tr>
+<td><b>在线滤波与可观性管理</b>——FastCal(1902.10585)、iKalibr(T-RO 2025)、Continual Hand-Eye(2604.15814)</td>
+<td>各传感器自身的里程计/SLAM 位姿流(松耦合),无目标、无人工、被动消费平台日常运动</td>
+<td>外参变化是慢过程;运动激发的自由度子空间已知可判</td>
+<td>非完整平台的不可观方向;噪声让不可观方向「假装」可观;参数漂移</td>
+</tr>
+<tr>
+<td><b>学习式单图</b>——Kalib(2408.10562)、LRBO、Fiducial Exoskeletons(2601.08034)、CamVLA(2607.05396)</td>
+<td>单帧 RGB + 训练先验</td>
+<td>训练数据覆盖部署视角</td>
+<td>跨本体泛化;单帧不可观视角下输出「自信但无信息」的估计;无显式不确定性</td>
+</tr>
+</tbody>
+</table>
+<p>动作表示路线是正交的另一维。标准 VLA 的动作空间定义在基座系,视觉观测在相机系,网络被迫隐式学习相机↔基座变换——这个隐变量一旦在部署时改变,策略就崩。把动作从「本体运动学空间」搬到「图像可对齐的空间」,所有路线都在做这件事,但搬法分两族:<b>数值族</b>把动作直接写成相机系向量(OC-VLA 用已知外参变换标签,CamVLA 让网络自估外参),误差经旋转进入执行;<b>提示族</b>保持动作不动、把坐标含义摊进图像(AxisGuide 渲染坐标轴提示、BARX 预测 2D 末端轨迹、ContactFlow 投影 3D 接触点),误差经投影进入但方向提示有冗余容错。一条贯穿全篇的标尺:</p>
+<callout emoji="💡" background-color="light-green">
+<p><b>越免标定,误差越往网络的隐式部分挪;越几何化,误差越可审计。</b>CamVLA 免标定但把 hand-eye 塞给网络当回归任务(误差进旋转);AxisGuide 要标定但误差只进提示、不进动作数值。这决定了后面每一条线的回答方式。</p>
+</callout>
+<h1>CamVLA 与 OC-VLA:自估外参 vs 给定外参</h1>
+<p>这一对是理解整条主线的钥匙:两篇论文独立得出同一个表示结论——动作应该落在观测空间——却在外参的归属上走到两个极端。CamVLA(2607.05396,NTU + 阿里达摩院,2026-07)训练时把外参当监督、部署时零外参;OC-VLA(2508.13103,浙大 + 上海 AI Lab + SenseTime + 南大 + 清华,AAAI 2026)训练与部署两端都硬依赖给定的外参。并排精读加上代码核验,能拆出一层论文自己没写明的机制差异。</p>
+<h2>CamVLA:动作与视觉同系,外参由几何头自己算</h2>
+<p>Haodong Yan 等(NTU + Alibaba DAMO,2026)· <a href="https://arxiv.org/abs/2607.05396">arXiv</a> · <a href="https://github.com/alibaba-damo-academy/CamVLA">项目页(无代码)</a></p>
+[[figure-anchor:camvla:arch]]
+<p>CamVLA 的诊断直指结构根因:标准 VLA 从相机视角的观测直接预测基座系动作,相机→基座的手眼变换 T 不在输入里,只能被隐式编码进权重——论文称之为 geometric entanglement。它的修法极简:两个并行头共享视觉骨干。<b>Action Head</b> 预测相机系 delta 动作 <latex>\Delta A_c=[\Delta p_c,\ \Delta r_c,\ g]</latex>(平移 + axis-angle 旋转 + 夹爪);<b>Geometric Head</b> 是一个三层 MLP(hidden 1024,GELU),对 image encoder 的视觉 token 做 mean pooling 后回归 6-DoF hand-eye 矩阵(平移 τ + axis-angle 旋转 ω),只占 +6.3M 参数(0.19%)、+1ms 延迟;最后是<b>确定性的几何合成</b>:delta 动作是自由向量,只经估计的旋转矩阵旋转:</p>
+<latex>\Delta p_b=R\,\Delta p_c,\qquad \Delta r_b=R\,\Delta r_c</latex>
+<p>这里有一个论文附录 B 用 log 映射的旋转共轭等变性严格证明、但值得单独划出来的性质:<b>平移 τ 在相对动作下严格相消</b>——基座系位姿差 <latex>\Delta Q_b=R\,\Delta Q_c R^\top</latex>,τ 根本进不了执行。外参误差只有旋转分量影响执行,平移回归得再歪也没有物理后果。训练损失 <latex>\mathcal{L}=\mathcal{L}_{\text{act}}+\lambda\mathcal{L}_{\text{ext}}</latex>(λ=0.1),真值外参只做监督,部署零外参——calibration-free、depth-free、single-view。</p>
+<p>证据链:RLBench 六任务、训练视角 15° 间隔、5° 网格评测未见视角,π0 从 33.2% 提到 51.4%(+18.2),GR00T N1.7 从 28.4% 提到 38.4%;真机 Franka 在 15° 偏移下 baseline 崩到 16.0%/14.7%,CamVLA 保 29.3%/33.0%,另有手持连续移动相机的定性演示。几何头精度与训练视角密度强相关:15° 间隔训练时旋转误差 1.41°,与「外参已知」上界只差 0.9 个点;45° 间隔时涨到 8.28°,成功率 21.2% 仍高于 baseline 的 16.8%——自估外参在视角稀少时退化成「视角分类 + 插值」,但比没有强。附录还有个特征源消融值得记住:几何头吃 image encoder 浅层特征时旋转误差 1.4°;吃 VLM backbone 深层特征成功率更高(53.5%)但几何精度变差(3.7°)且过拟合离散训练视角、在中间角度出现定位尖峰——语义越深,空间越钝;而 Detach 梯度则全面崩(20.9%、36°),说明几何监督必须端到端塑形特征。</p>
+<p><b>诚实标注弱点。</b>只覆盖第三人称单目,腕部相机、极端视角与高精任务仍未解决;官方代码未放出(仓库只是项目页 HTML),只有第三方玩具级复现(Frankie01234/camvla-camera-robust,合成数据 + MLP,结论方向一致但规模有限)。还有一处对本文最要紧的空白,放在对照小节末尾展开。</p>
+<hr/>
+<h2>OC-VLA:给定外参,把动作目标先变换进相机系</h2>
+<p>ZJU + 上海 AI Lab 等(2026)· <a href="https://arxiv.org/abs/2508.13103">arXiv</a> · <a href="https://github.com/ZTY0213/OC-VLA">官方仓库(空壳)</a></p>
+[[figure-anchor:ocvla:main]]
+<p>OC-VLA 从观测-动作空间错位切入:视觉编码器(DINOv2/CLIP)在图像坐标系里被监督,动作却几乎总定义在机器人基座系——尤其当数据跨异构视角预训练(DROID 有 1417 个相机位姿)时,同一动作被同一个基座系监督信号硬约束,产生学习冲突。它的立场是:给定外参 <latex>T\in SE(3)</latex>(世界→相机),把动作目标先变换进相机系再监督,让感知与动作共享一个坐标系。论文宣称的目标是群 delta:相机系位姿 <latex>P_{ci}=T P_{wi}</latex>,<latex>A_{cam}=P_{c2}P_{c1}^{-1}=T\,A_{world}\,T^{-1}</latex>,再转成 7 维 <latex>\langle x,y,z,\text{roll},\text{pitch},\text{yaw},g\rangle</latex> 监督;推理时把预测的相机系动作经 <latex>T^{-1}</latex> 变回基座系执行。模型结构(Dita 的 334M:CLIP 文本编码 + DINOv2 + 4 层 Q-Former/FiLM + 12 层因果 Transformer)零改动——整体是数据集端的预处理。</p>
+<p><b>代码核验把宣称和实现之间的缝隙照了出来。</b>OC-VLA 官方仓库只有 LICENSE + README 两个文件,正文即「Code 见 Dita 仓库」;Dita 的 README 白纸黑字写着"This Codebase can also be used to run OC-VLA, set the <code>use_baseframe_action=False</code>"——<b>OC-VLA 就是 Dita 加一个 flag</b>,贡献主体在经验故事(坐标系选择)而非新结构。真正的变换实现(utils/data_utils.py::process_traj_v3)与论文公式有两处不一致:平移 delta 是朴素坐标差 <latex>\Delta p=t_{c2}-t_{c1}=R(p_2-p_1)</latex>,不是群 delta 的平移分量(后者 <latex>t_{c2}-R_{c2}R_{c1}^\top t_{c1}</latex> 在代码里被注释掉了);旋转 delta 用四元数 w-1 编码而非论文声称的欧拉 7 维(默认 use_euler=0)。由此推出论文没有指明的两条推论:</p>
+<p><b>推论一:训练目标只依赖 T 的旋转部分 R。</b>无论坐标差还是共轭,平移 t 都严格相消——外参平移在训练端物理上无作用。<b>推论二:部署端却全 T 参与。</b>推理时 cal_action/cal_action_from_pose(来自 OpenVLA 的 robot_utils)把当前位姿经 <latex>\tilde{T}</latex> 转进相机系、把目标经 <latex>\tilde{T}^{-1}</latex> 转回基座系,于是外参平移误差 δt 以常值偏置 <latex>R^\top\delta t</latex> 泄漏进每一步执行。</p>
+<latex>\delta p_{\text{step}}=R^\top\delta t</latex>
+<p>这恰好是 CamVLA 用结构消除掉的东西:CamVLA 执行端只用估计的 R 旋转自由向量 delta、当前位姿始终留在基座系,平移从不进入管线。换言之,<b>OC-VLA 的部署缺口 = CamVLA 的卖点</b>——这是两篇论文在「外参的归属」上最干净的一次对位。</p>
+<p>证据链(含弱证据):ManiSkill2 从零训练,5 任务、30 万相机视角池、每轨迹随机 20 视角渲染,相机系目标全面占优,离散动作空间差距最大(+13.8pp):</p>
+<table>
+<colgroup>
+<col width="120"/>
+<col width="110"/>
+<col width="110"/>
+<col width="100"/>
+<col width="130"/>
+<col width="130"/>
+<col width="140"/>
+</colgroup>
+<thead>
+<tr>
+<th background-color="light-gray">动作空间</th>
+<th background-color="light-gray">目标系</th>
+<th background-color="light-gray">All</th>
+<th background-color="light-gray">PickCube</th>
+<th background-color="light-gray">PickClutterYCB</th>
+<th background-color="light-gray">PickSingleEGAD</th>
+<th background-color="light-gray">PickSingleYCB</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>连续</td>
+<td>基座</td>
+<td>45.2%</td>
+<td>71.0%</td>
+<td>15.0%</td>
+<td>48.0%</td>
+<td>30.0%</td>
+</tr>
+<tr>
+<td>连续</td>
+<td>相机</td>
+<td>53.2%</td>
+<td>88.0%</td>
+<td>19.0%</td>
+<td>48.0%</td>
+<td>46.0%</td>
+</tr>
+<tr>
+<td>离散</td>
+<td>基座</td>
+<td>38.6%</td>
+<td>61.0%</td>
+<td>8.0%</td>
+<td>45.0%</td>
+<td>28.0%</td>
+</tr>
+<tr>
+<td>离散</td>
+<td>相机</td>
+<td>52.4%</td>
+<td>80.0%</td>
+<td>19.0%</td>
+<td>50.0%</td>
+<td>19.0%</td>
+</tr>
+</tbody>
+</table>
+<p>真机(Franka + Robotiq,10-shot):固定视角 68.0% vs 基座系 58.0%;新颖相机零样本 54.0%(−14pp)vs OFT 42.0%(−21.3pp)、基座系 41.3%;相机微扰下 73.8% vs 61.3%。<b>一个必须点破的协议事实</b>:新颖视角与相机微扰两个设置都要求「先重标定拿到新外参」再评估——它的 robustness 属于动作表示(策略无需重训),不是对外参不确定性的鲁棒;外参误差本身从未被注入测试。弱点:单 seed 无方差、真机数据私有不可复现、无 checkpoint,复现成本偏高。</p>
+<hr/>
+<h2>对照:一个消除平移泄漏,一个把平移泄漏写进执行</h2>
+<p>把两条线的机制并排放,结论可以压缩成一句话:<b>delta 动作只需要旋转</b>——自由向量经 R 旋转,平移在相对动作里严格相消(CamVLA 附录 B),而把「当前位姿经外参往返」写进执行路径(OC-VLA 部署端)的代价,就是外参平移误差以常值偏置泄漏进每一步。这直接回答了主题二的一个子问题:相机系动作表示对外参的依赖,其实只有旋转这一半;代价最大的部分(平移标定)可以完全移出执行管线。CamVLA 与 OC-VLA 各自还缺一块:OC-VLA 从未注入外参误差评测(它是测「外参失准伤害」的更自然对象,因为它真的用 T);CamVLA 附录 C 的噪声鲁棒性实验注入的是<b>每步独立重采样</b>的噪声——而真实失准(相机被碰、慢漂移)是<b>时间相关的静态/慢变偏差</b>。论文没有测静态偏差。这个缺口正是我们实验 B 的核心对照,后文第 6 节会看到它如何被填上。</p>
+<h1>可观性:标定线的核心战场</h1>
+<p>滤波式在线标定这条谱系(FastCal 线)和探索运动式无标记标定(ARC-Calib 线)共享同一个底层问题,也是整个「滤波 vs 模型自估」之争的裁判标准:<b>什么样的运动让外参可估?不可观方向怎么办?</b>ARC-Calib 与 FastCal 一个主动规划运动、一个被动消费日常运动,但都收敛到同一套答案。</p>
+<h2>ARC-Calib:用探索性运动替代标记物</h2>
+<p>Rice/Yale(Dollar &amp; Kaiyu Hang,2025)· <a href="https://arxiv.org/abs/2503.14701">arXiv</a> · 无官方代码</p>
+[[figure-anchor:arccalib:main]]
+<p>ARC-Calib 把标定板换成机器人的探索性运动:每次只动一个关节,本体上每个点画一个 3D 圆,透视投影在像平面表现为椭圆。光流/角点跟踪 L 个关键点后,做<b>共享朝向的椭圆拟合</b>(强制所有椭圆长轴同向),每个椭圆张成一个以相机为顶点的 3D 锥面,锥面特征分解给出 4 个候选圆平面法向,用轨迹旋转方向消掉一半;对每个候选轴再把轨迹透视投影到以轴为法向的平面做 2D 圆拟合,所有圆心应落在一条线上(RANSAC 直线),最后按归一化圆拟合误差选最优候选。标定优化用两个几何约束把旋转与平移解耦:轴共线(旋转)约束 <latex>\lfloor\vec{\mathcal{A}}_i^c\rfloor_\times R_{bc}\vec{\mathcal{A}}_i^b=0</latex> 线性化为 <latex>H_r r_{bc}=0</latex>(3N×9);共面(平移)约束 <latex>\rho_i\cdot(R_{bc}\mathcal{D}_i^b+t_{bc})=0</latex> 化为 <latex>H_p r_{bc}+K_p t_{bc}=0</latex>。合并后先解旋转(SVD 投影回 SO(3))再回代平移,<b>3 次非退化运动即可给出初始解</b>。仿真里 3 次运动后旋转误差 0.0225 rad、平移 0.0786 m,25 次后收敛到 0.0042 rad / 0.0065 m——误差随运动数量单调下降,这就是「可观性随运动覆盖增长」的宏观形态。实机(Franka + D415)以掩码 IoU 度量:0.94 vs 传统 AprilTag 标定包 0.84,平均 26.5 次运动收敛。</p>
+<p>协议弱点值得记牢:没有显式可观性分析(靠随机多轴覆盖兜底,对比 FastCal 的 FIM 秩分析);平移可观性天生弱(共面约束里若参考点矢量与轴平行则退化,单轴旋转对 t 的约束信息少,收敛到 0.0065 m 需要 ~25 次运动正是这个弱约束的体现);需要全程看到机器人本体;是一次性初始化工具,无运行期漂移跟踪。</p>
+<hr/>
+<h2>FastCal:松耦合、信息论选段与秩揭示更新</h2>
+<p>Nobre &amp; Heckman(Colorado Boulder,2019)· <a href="https://arxiv.org/abs/1902.10585">arXiv</a> · 无官方代码</p>
+[[figure-anchor:fastcal:fig2]]
+<p>FastCal 面向 long-term autonomy:非刚性安装、碰撞、热胀造成的外参慢漂移,以及非完整平台导致的不可观方向。它的设计是三件套。<b>其一,松耦合公式</b>:不在完整 SLAM 里紧耦合联合估计,而是让每个传感器独立输出相对位姿流,外参估计退化成单对传感器的 6×6 最小二乘——秒解、信息矩阵随手可得,接入现有系统只需订阅位姿流,代价是放弃 landmark 联合信息。<b>其二,信息论选段</b>:不逐帧评估(逐帧信息增益太小),累积相对变换超过 0.15 m 或 10° 才成一个候选段;换入判据是候选段熵 <latex>h=\tfrac12\ln|2\pi e\Sigma_\Theta|</latex> 同时低于队列最差段且处于局部熵极小。</p>
+<p><b>其三,全文核心——可观性感知更新</b>。法方程里 <latex>\mathbf{J}^T\mathbf{G}^{-1}\mathbf{J}</latex> 就是 Fisher 信息矩阵(FIM);用 Cholesky <latex>\mathbf{G}^{-1}=\mathbf{L}^T\mathbf{L}</latex> 标准化后做 SVD <latex>\mathbf{LJ}=\mathbf{USV}^T</latex>,取数值秩 <latex>r=\arg\max_i\,\sigma_i\ge\theta_{\varepsilon svd}</latex>(默认 0.1),更新只沿前 r 个奇异方向:</p>
+<latex>\delta\hat\Theta=\sum_{i=1}^{r}\frac{\mathbf{u}_i^T\mathbf{r}}{\sigma_i}\mathbf{v}_i</latex>
+<p>奇异值低于阈值的方向保持初始值、不更新——即使矩阵在噪声下「数值上满秩」,秩揭示分解也能识别出真实不可观方向。这一手同时避开了「手动正则化不可观方向」的两个毛病:丢弃有用信息、隐含偏置。论文明确点破了教科书可观性分析(Hermann-Krener)证的是<b>结构可观</b>——存在某条数据集使它可观——而<b>不保证当前数据集可观</b>;数值秩分析补的正是这一点。这个「结构可观 ≠ 数据集可观」的区分,是整个滤波分支的立足点。最后,<b>时间衰减</b>让队列里的旧段按指数 <latex>p(t;\lambda)=\lambda e^{-\lambda t}</latex>(λ=0.04,期望寿命 1/λ)自然衰亡、新段持续注入,队列跟踪慢漂移,无需 change-point 回归,代价是局部即时精度换长期稳健。真实实验是仓库物流机器人 14 天、120+ km:平面运动下竖直方向完全不可观,FastCal 把它钳在初始值——<b>钳位是正确行为,不是估计失败</b>;速度比紧耦合路线快一个数量级。</p>
+<p>两者对「滤波 vs 模型自估」之争的裁决可以提前预告:单帧回归在「相机看不到本体」的视角下,输出的是用训练先验填上的不可观方向,且没有任何机制告诉策略它有多不确定;滤波则显式识别不可观方向、钳在先前值,协方差全程可查。<b>单帧回归的信息量上限由「当前帧能看到什么」决定,滤波的信息量上限由「运动历史激发出哪些方向」决定。</b>两者不是互斥,而是冷启动与热维护的分工——这是后文混合架构的伏笔。</p>
+<h1>动作接口:误差沿着哪条路径进入执行</h1>
+<p>主题二的另一半问题——什么表示对 VLM 友好、跨本体——由动作接口线的三篇近作从三个不同位置攻击同一根因,为相机系动作提供旁证与对偶。与主线关系最紧的横切问题是:<b>外参误差沿着哪条路径进入执行?</b>五条线的答案各不相同,按敏感度排成一条谱:</p>
+<table>
+<colgroup>
+<col width="150"/>
+<col width="300"/>
+<col width="220"/>
+</colgroup>
+<thead>
+<tr>
+<th background-color="light-gray">方法</th>
+<th background-color="light-gray">动作/条件的载体与误差路径</th>
+<th background-color="light-gray">外参依赖与容忍度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><b>OC-VLA</b></td>
+<td>相机系 SE(3) delta;训练标签变换与推理反变换都含外参,平移偏置 <latex>R^\top\delta t</latex> 直接进动作数值</td>
+<td>最标定敏感:全 T 参与执行</td>
+</tr>
+<tr>
+<td><b>CamVLA</b></td>
+<td>相机系 delta,执行只经自估 R 旋转自由向量;平移 τ 物理相消</td>
+<td>误差路径唯一:旋转误差 × 相机系位移;15° 偏移下自估 R 误差 9.4°、平移误差 27 cm(无物理后果)仍保 29–33%</td>
+</tr>
+<tr>
+<td><b>AxisGuide</b></td>
+<td>基座系动作不动,坐标轴提示渲染进图像;误差只进提示、不进动作数值</td>
+<td>必须已知标定,但 6°/3 cm 内成功率几乎不掉(推理期扰动实验)</td>
+</tr>
+<tr>
+<td><b>BARX EE traces</b></td>
+<td>2D 图像内轨迹(文本),无外参依赖;误差路径走检测器而非标定</td>
+<td>无外参;但 2D→执行要另一次映射,误差在映射里</td>
+</tr>
+<tr>
+<td><b>ContactFlow</b></td>
+<td>3D 接触点轨迹投影(7 通道视频条件);外参→深度→点图→mask→接触,整条感知链都进条件信号</td>
+<td>整链敏感;真机 8/10 说明总误差在开环验证预算内,但无分环节误差报告</td>
+</tr>
+</tbody>
+</table>
+<p>读这条谱的关键是它两端合起来给出的经验上界:<b>方向级信息(自估旋转、坐标轴提示)容忍 ~10° 级误差,直接数值化外参(OC-VLA 式)的容忍度由 T 的平移项主导。</b>CamVLA 把 6-DoF 标定误差问题降成 3-DoF 旋转误差问题,这是「自估 hand-eye」路线最实在的卖点。</p>
+<h2>AxisGuide:对偶路线——把基座系坐标轴渲染进图像</h2>
+<p>Korea U(2026)· <a href="https://arxiv.org/abs/2606.06761">arXiv</a> · <a href="https://github.com/JiyunJang-24/AxisGuide-code">代码(Apache-2.0,与论文一致)</a></p>
+[[figure-anchor:axisguide:teaser]]
+<p>AxisGuide 是「免标定」家族的反命题:它接受已知标定,但把标定信息降级为冗余提示。动机实验很直观:SmolVLA 在「基座清晰可见」的简单 pick-up 任务上,物体换到未见位置就失败——模型把图像↔动作向量当记忆背下来,没学会「基座系 +x 在图像里指哪」。方法:用内参 K、外参 <latex>T_{c\leftarrow w}</latex>、EE 位姿把基座系三个单位方向投影到图像,<latex>\Delta u^{(k)}=\Pi(p_w+\varepsilon e_k)-\Pi(p_w)</latex>,归一化后画在以 EE 投影像素为锚点的三通道图上(x/y/z 红/绿/蓝),与 RGB 通道拼接成 6 通道输入——只改 backbone 首层卷积 3→6,其余不动,+0.590M 参数、+5.41 ms/推理。</p>
+<p>证据:LIBERO-Spatial 未见位置 52.38→65.71(+13.33pp),而场景级空间 cue(消失点、AimBot 式)无增益——动作坐标系 cue 才有用;真机 Pick Up 30.12→50.00;多视图(前 + 腕部相机)真机 Flip Pot +20.00pp——腕部相机视角连续变化时坐标提示最有用;视角泛化平均 +8.34pp 但个别角度(−30°、+10°)反而低于 KYC,非一致优势。最值钱的是它的标定鲁棒性表:推理时注入 0–6°/0–3 cm 外参扰动,成功率 61.4–65.7% 基本平,仍超无扰动 baseline——<b>提示被当成有噪声的方向信息,不随标定误差数值化地进入动作</b>。弱点:实验范围窄(仅 LIBERO + 3 个真机任务)、提示需要每帧 EE 位姿 + 内外参、无跨本体实验、消融表里多种 cue 变体论文只报最终版。</p>
+<hr/>
+<h2>BARX 与 ContactFlow:行为对齐的中间表示</h2>
+<p>Stanford(2026)· <a href="https://arxiv.org/abs/2607.27549">arXiv</a> · <a href="https://github.com/ajaysridhar0/barx">代码(MIT,与论文一致)</a></p>
+[[figure-anchor:barx:method]]
+<p>BARX 证明「图像内、行为对齐」的中间表示是跨本体迁移的有效对齐通道:训练时让 VLA 自回归预测辅助表示(物体框、语言运动、未来 EE 2D 轨迹)再预测动作(ECoT 链),三种表示里 EE 2D 轨迹最有用;RoboCasa-X 上先验数据从无到 XP-3K,表示增益从 +5% 涨到 +19%;真机跨本体(sim→real)Joint Reps 带来 +28% task progress。两条对叙事重要的修正:<b>其一,推理时不必预测表示</b>——只预测动作与「先预测表示再动作」几乎等价(与 Chen et al. CoRL'25 独立一致),表示的主要收益在训练期隐式产生,这是对「中间表示=执行时接口」的纠偏;<b>其二,表示不是万能的</b>——Panda-OG(未见过的末端执行器)上组合反而输给只用 traces,大本体间隙仍是短板。我们抽查了官方代码,表示确实以文本 QA 形式进序列(如 "predict the end-effector's future 2D trace to...",答案保留 2 位小数),仿真 trace 确实是特权真值——代码与论文一致。</p>
+<p>Bonn(2026)· <a href="https://arxiv.org/abs/2607.26579">arXiv</a> · 投稿前状态,无整合代码</p>
+<p>ContactFlow 把条件收缩到极致:每时刻一组稀疏 7 通道控制帧 <latex>C_t=\{c_t^{(i)}\},\ c_t^{(i)}=(x,y,z,\Delta x,\Delta y,\Delta z,w)\in\mathbb{R}^7</latex>——物体表面接触点在相机系的 3D 位置与位移(主动动力学,刻意排除门把手松开后的被动运动),w 为置信度。它是世界模型的<b>条件接口</b>(验证器语义),不是动作命令:条件视频经 ControlNet/VACE 注入 Wan 系 latent DiT,预测遮掉 actor 的未来帧。DROID 上 DreamSim 0.035–0.039 全面优于 Kinema4D/CTRL-World/TesserAct,真机闭环 8/10 个未见场景预测正确(π0.5 直跑真机 0 成功,验证步是部署能 work 的原因);但 egocentric 视角(EgoDex)全线失败,接触估计链每环都依赖「标定的静态外参相机 + 可靠深度」,这是提示族里对感知链依赖最重的一条。</p>
+<p>三篇加两条主线合起来给动作表示家族画了一幅完整的图:表示收益在训练期(BARX)、条件可以收缩到接触点(ContactFlow)、提示对标定误差天然鲁棒(AxisGuide)——<b>而 CamVLA 的「自估 hand-eye + 相机系 delta」恰好站在数值族与提示族之间:动作数值化(误差进 R)但几何自估(免标定)</b>。提示族与数值族共享同一个设计约束:误差要么经旋转、要么经投影进入,总要有一个「冗余容错」层。</p>
+<h1>实验 A:滤波式在线标定能做什么、不能做什么</h1>
+<p>从文献回到证据。标定线的两个深挖对象(ARC-Calib、FastCal)都没有官方代码,我们选择亲手写一个干净的玩具级但严格的仿真证据,回答三个问题:<b>滤波在执行过程中动态估计相机外参,收敛到多准?漂移跟不跟得上?误差长什么样?</b>全部数值本机实跑(无 GPU,~10 分钟),代码在 exp-handeye-ekf/ 线程的 code/ 下,可复现。</p>
+<p><b>设置。</b>3-DOF 空间臂(基座 yaw + 两个 pitch 关节,连杆 0.30/0.30/0.15 m),解析 FK/IK,脚本控制器 20 Hz;eye-to-hand 针孔相机内参已知(f=500 px、128×128、无畸变),外参待估,初值故意加偏(旋转 30° + 平移 0.3 m,协方差 P0 相应)。估计器是误差态 IEKF:名义位姿 <latex>\hat{T}\in SE(3)</latex> + 6 维左乘摄动误差态 <latex>\delta=(\delta\theta,\delta t)</latex>,每步重投影测量更新,Jacobian 数值中心差分,更新迭代 3 次。先把量纲锚住:相机距臂 ~2.2 m,1 px 像素噪声对应的平移 CRB ≈ 0.5 cm、旋转 CRB ≈ 0.15°——后面所有「2 cm 级偏差」都要放在这个量级下看。</p>
+<h2>可观性由运动几何决定,滤波改变不了</h2>
+[[figure-anchor:expa:observability]]
+<p>三种运动形态(单特征点 = 经典 PnP 问题):EE 沿直线往复、平面 Lissajous、三维 Lissajous(不可通约频率)。结果干净得几乎可以当教科书例:</p>
+<table>
+<colgroup>
+<col width="110"/>
+<col width="150"/>
+<col width="150"/>
+<col width="150"/>
+<col width="160"/>
+<col width="90"/>
+</colgroup>
+<thead>
+<tr>
+<th background-color="light-gray">运动</th>
+<th background-color="light-gray">旋转误差(°)</th>
+<th background-color="light-gray">平移误差(cm)</th>
+<th background-color="light-gray">协方差迹</th>
+<th background-color="light-gray">滑窗 FIM 最小特征值</th>
+<th background-color="light-gray">NEES</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>直线</td>
+<td><b>19.0 ± 14.3</b></td>
+<td><b>16.8 ± 10.2</b></td>
+<td>0.341</td>
+<td><b>1.3e-9</b></td>
+<td><b>3.2e4</b></td>
+</tr>
+<tr>
+<td>平面</td>
+<td>0.49 ± 0.08</td>
+<td>2.06 ± 1.69</td>
+<td>4.5e-5</td>
+<td>1.2e3</td>
+<td>105</td>
+</tr>
+<tr>
+<td>体积</td>
+<td>0.34 ± 0.10</td>
+<td>5.75 ± 2.27</td>
+<td>3.3e-5</td>
+<td>1.9e3</td>
+<td>1.6e3</td>
+</tr>
+</tbody>
+</table>
+<p>直线运动留下 1 维不可观方向:绕运动直线轴的相机旋转,耦合一个特定平移(解析可观族 <latex>\mathrm{Exp}(\delta)=(\mathrm{Rot}(v,\beta),\,(I-\mathrm{Rot}(v,\beta))p_0)</latex> 的切向量与数值 FIM 零向量 cos 相似度 = 1.0000)。滤波沿该方向不收敛——旋转误差停在初值投影分量(19°),协方差保持先验,NEES 爆炸到 3.2e4:滤波器沿不可观方向<b>严重过自信</b>。平面与体积运动 FIM 满秩(最小特征值从 1e-9 到 1e3,相差 12 个数量级),旋转误差收敛到 0.3–0.5°,接近 CRB 行为。这个结果把 FastCal「结构可观 ≠ 数据集可观」的判断量化成了具体数字:滤波能做的只是把运动已激发的方向榨干,它改变不了运动几何本身。</p>
+<h2>漂移跟踪:Q 是「跟踪带宽 vs 噪声拒绝」的旋钮</h2>
+[[figure-anchor:expa:drift]]
+<p>相机在 t=48 s 处被「碰」:阶跃 5° + 2 cm,随后随机游走蠕变(0.15°/s 旋转、1.5 mm/s^0.5 平移);EKF 从已标定状态起步,只测跟踪能力。Q(过程噪声)三档,同一数据只换 Q:</p>
+<table>
+<colgroup>
+<col width="140"/>
+<col width="180"/>
+<col width="160"/>
+<col width="190"/>
+</colgroup>
+<thead>
+<tr>
+<th background-color="light-gray">Q(相对蠕变模型)</th>
+<th background-color="light-gray">阶跃后恢复时间(rot&lt;1.2°)</th>
+<th background-color="light-gray">半恢复(种子0)</th>
+<th background-color="light-gray">蠕变段稳态 RMS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.001× (过小)</td>
+<td>64–77 s(阶跃后 16–29 s)</td>
+<td>14.6 s</td>
+<td>旋转 1.33° / 平移 1.14 cm</td>
+</tr>
+<tr>
+<td>1× (匹配)</td>
+<td>61–65 s(阶跃后 13–17 s)</td>
+<td><b>8.9 s</b></td>
+<td><b>旋转 0.88° / 平移 0.55 cm</b></td>
+</tr>
+<tr>
+<td>100× (过大)</td>
+<td>50–61 s(阶跃后 2–13 s)</td>
+<td>7.0 s</td>
+<td>旋转 3.35° / 平移 1.95 cm</td>
+</tr>
+</tbody>
+</table>
+<p>Q 匹配蠕变模型时,滤波干净地跟踪阶跃 + 随机游走(稳态 RMS 0.88° ≈ 蠕变幅度 1.27° 的 2/3);Q 过小恢复慢且滞后,Q 过大恢复快但测量噪声主导。<b>Q 的选择就是在线标定的核心旋钮</b>——这正是 FastCal 用时间衰减参数 λ 在做的事。</p>
+<h2>误差的时间结构:滤波误差是慢变偏差,不是白噪声</h2>
+[[figure-anchor:expa:timescale]]
+<p>静态外参收敛后取误差时间序列算自相关(ACF):Q 匹配时 ACF(1)=0.895、1/e 相关时间 ~137 步 ≈ 7 s;Q 减到 0.1× 时 ACF(1)=0.959、相关更长。对照组(同幅度 iid 噪声)ACF(1)=0.007,全部落在 95% 置信带 ±0.041 内。</p>
+<table>
+<colgroup>
+<col width="150"/>
+<col width="110"/>
+<col width="160"/>
+<col width="130"/>
+<col width="130"/>
+</colgroup>
+<thead>
+<tr>
+<th background-color="light-gray">配置</th>
+<th background-color="light-gray">ACF(1)</th>
+<th background-color="light-gray">1/e 滞后</th>
+<th background-color="light-gray">ACF(50)</th>
+<th background-color="light-gray">误差 std</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q 匹配</td>
+<td>0.895</td>
+<td>137 步 ≈ 7 s</td>
+<td>旋转 0.68 / 平移 0.13</td>
+<td>0.58° / 0.16 cm</td>
+</tr>
+<tr>
+<td>Q 0.1×</td>
+<td>0.959</td>
+<td>152 步 ≈ 8 s</td>
+<td>旋转 0.69 / 平移 0.27</td>
+<td>0.22° / 0.10 cm</td>
+</tr>
+<tr>
+<td>同幅度 iid</td>
+<td><b>0.007</b></td>
+<td>~0</td>
+<td>~0</td>
+<td>(同 std)</td>
+</tr>
+</tbody>
+</table>
+<p>这是两种估计范式在<b>时间结构</b>上的本质区别:<b>滤波输出「记忆」了过去的误差(慢变偏差),每帧独立重采样的学习式估计输出彼此独立</b>。下游做估计误差建模、累积偏差、长时可靠性实验时,这个区别直接决定误差模型的形态——而真实失准(被碰、慢漂)恰好是静态/高相关形态,这正是实验 B 会放大检验的点。</p>
+<h2>「自信地错」:Q=0 的教科书陷阱</h2>
+[[figure-anchor:expa:inconsistency]]
+<p>还有一个教科书式陷阱值得摆上桌:单特征点 + Q=0(静态假设)时,IEKF 从 30°/0.3 m 大初值落入<b>有偏局部最优</b>——线性化误差 + 协方差坍缩锁死,稳态平移偏差种子相关、2–15 cm,NEES 1e2–1e4(严重过自信);同一份数据跑批处理 Gauss-Newton 却收敛到 0.38 cm,接近 CRB(0.51 cm)。<b>偏差是滤波器收敛伪影,不是信息极限。</b>加第二个特征(肘关节点)把偏差压到 ~1.5 cm,再给过程噪声下限则彻底消除(NEES ~10,0.1 cm)。对工程的含义直接:实际部署必须给 Q 一个下限(或做平滑/重线性化),这与 FastCal 对「参数漂移」的工程处理直接呼应——滤波能「自信地」错,而学习式估计在单帧不可观视角下同样「自信但无信息」,只是错的形态不同。</p>
+<p><b>实验 A 一句话收束</b>:滤波式在线标定在运动充分时收敛到近 CRB(体积运动 + 2 特征 + σ=1 px → 旋转 0.2°、平移 0.11 cm),能跟踪慢漂移与阶跃扰动(Q 匹配时半恢复 ~9 s),显式给出协方差;代价是运动不足时沿不可观方向不收敛且过自信、误差强时间相关、Q 必须工程化调优。<b>它需要运动激励 + 运动学已知 + 特征可见,而学习式单帧回归(CamVLA 线)的优势是零激励也能给出(不确定的)估计——两者的互补定位由可观性概念精确划出。</b></p>
+<h1>实验 B:动作参考系,与误差的时间结构</h1>
+<p>第二个实验直接对着 CamVLA 附录 C 的空白打:把「相机系 vs 基座系动作」与「外参误差的时间结构」放在同一个可控世界里,验证两个猜想——其一,纠缠是实证的,但形态是「不可预测的脆断」而非平滑退化;其二,<b>每步独立重采样的误差(白噪声)被闭环策略补偿,静态/慢变偏差(真实失准)在低频率重规划下才显形</b>。全部本机 CPU 实跑,代码在 exp-action-repr/ 线程的 code/ 下。</p>
+<h2>设置:blob world 里的一对孪生头</h2>
+[[figure-anchor:expb:views]]
+<p>基座系 3D 工作空间(±0.5 立方体),EE 绿斑、目标红斑、三个固定灰斑干扰;oracle 比例控制器生成演示(步长裁剪 ≤0.08,成功 = 终距 &lt; 0.08)。相机 rig 绕基座 z 轴旋转构成视角(<latex>R_{bc}(\theta)=R_z(\theta)R_{bc}(0)</latex>,相机始终看向原点)。两个头同架构、同数据集、同种子,唯一差别是输出坐标系:<b>Base 头</b>预测基座系 delta 直接执行;<b>Cam 头</b>预测相机系 delta,执行前用估计外参合成 <latex>\Delta p_b=R_{bc}(\theta_{est})\Delta p_c</latex>。单视角训练(T1,yaw=0,5000 集)与稀疏多视角(T2,−30°/0/30°,4500 集)各一套;误差注入只在 Cam 头上做,<latex>\theta_{est}=\theta+\varepsilon(t)</latex>,三种形态边缘分布严格同为 N(0,σ):iid(每步独立,即 CamVLA 附录式)、static(整集固定,失准/被碰)、AR(1)(<latex>\varepsilon_{t+1}=\rho\varepsilon_t+\eta</latex>,ρ∈{0.5,0.9},滤波/漂移)。</p>
+<h2>测试 1:单视角训练的基座系头是「不可预测的脆断」</h2>
+[[figure-anchor:expb:yawsweep]]
+<p>训练 yaw=0,评测 −45°~+45° 每 5°(19 点 × 50 集):Base 头 19 点中 <b>8 个点成功率 0</b>(含 ±10°/±15°),部分角度(±20°/±25°/±45°)又「碰巧」能用——成功率呈锯齿状,平均 0.48,失败时终距高达 0.85–0.87(停在边界);Cam 头 19 点全 1.0,终距 0.063–0.066 恒定。数据规模有调节效应:26k 样本时 Base 在 ±15° 直接「逃跑式」失败(终距 2.8–3.1),43k 样本时部分角度学会逆投影而好转,<b>但从未整体稳健——纠缠是「数据不够时被放大、数据够了也不消失」的不对称</b>。多视角稀疏训练(T2)把 Base 平均提到 ~0.70,但盲区依旧(训练视角之间的插值点 +10°/−15° 与范围外的 −40° 成功率为 0):Base 学到的是「各训练视角附近的局部贴图」,插值与外推都没有保证,而 Cam 头 3 视角训练下 19 点全 1.0。</p>
+<h2>测试 3(核心):重规划频率是成败的边界</h2>
+[[figure-anchor:expb:errorstruct]]
+<p>Cam 头在训练视角评测,注入三种误差形态,K 为开环段长度(K=1 每步重规划;K=5 模拟低帧率 VLA 的 5 步开环段)。结果的分界异常清晰:</p>
+<table>
+<colgroup>
+<col width="100"/>
+<col width="120"/>
+<col width="120"/>
+<col width="120"/>
+<col width="120"/>
+</colgroup>
+<thead>
+<tr>
+<th background-color="light-gray">σ</th>
+<th background-color="light-gray">iid</th>
+<th background-color="light-gray">static</th>
+<th background-color="light-gray">AR(0.5)</th>
+<th background-color="light-gray">AR(0.9)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td colspan="5" background-color="light-gray">K=1(每步重规划):三种误差形态全 σ 成功率 1.00,终距 0.062–0.067</td>
+</tr>
+<tr>
+<td colspan="5" background-color="light-gray">K=5(5 步开环段,低帧率 VLA 形态;每格为 T1-Cam / T2-Cam 成功率)</td>
+</tr>
+<tr>
+<td>0°</td>
+<td>1.00 / 1.00</td>
+<td>1.00 / 1.00</td>
+<td>1.00 / 1.00</td>
+<td>1.00 / 1.00</td>
+</tr>
+<tr>
+<td>15°</td>
+<td>1.00 / 1.00</td>
+<td>1.00 / 1.00</td>
+<td>1.00 / 1.00</td>
+<td>1.00 / 1.00</td>
+</tr>
+<tr>
+<td>20°</td>
+<td>1.00 / 1.00</td>
+<td><b>0.90 / 0.98</b></td>
+<td>1.00 / 1.00</td>
+<td>1.00 / 1.00</td>
+</tr>
+</tbody>
+</table>
+<p>(每个 σ 两列分别为 T1-Cam / T2-Cam 成功率;K=5 下 σ=20° 终距:T1 static 0.080 vs iid 0.061,T2 static 0.067 vs iid 0.057,AR 系介于其间且 ρ 越大越接近 static。)</p>
+<p>判决成立,而且边界条件清晰:<b>静态偏差是唯一让成功率破 1.0 的误差结构</b>。K=1 时三种形态(同边缘分布)全被反馈补偿——σ=20° 成功率仍是 1.0,这正对应 CamVLA 附录的实验形态(每步独立噪声 + 高频重规划),解释了它「对噪声鲁棒」的结论;K=5 时 static 在 σ=20° 降到 0.90/0.98,iid 与 AR 仍 1.0,且终距上 static 系统性高于 iid(0.080 vs 0.061)。机制很朴素:开环段内不能重定向,静态偏差把整段动作一致旋转,横向漂移按段长累积(≈ K·v·sinσ);iid 在段内零均值、段间自校正;AR(1) 介于其间。<b>真实失准(相机被碰、慢漂)正是 static/高 ρ 形态,而滤波式外参估计的误差正是高 ρ 的 AR——敏感区就在这里;CamVLA 附录式的 iid 噪声鲁棒性不能外推到真实失准场景。</b></p>
+<p>对部署的工程启示是一句可以带进组会的结论:<b>提高策略的重规划频率,比任何误差幅度的硬上限都更能容忍外参失准</b>;反过来,低帧率 VLA + 校准偏差的组合是最坏情况。</p>
+<h1>实验 C:真实权重上的视角扰动分解</h1>
+<p>本轮巡航的「真实验」——在真实 OpenVLA-7B 权重 + 真实 LIBERO-Spatial 上独立复核 CamVLA 报告的「相机绕基座旋转 15° 成功率崩塌」现象,并做论文没做的分解:<b>视角崩溃里,视觉编码漂移与动作参考系失配各占多少?</b>实验在启智平台(openvla-viewprobe,1×4090)完成,共 222 集逐集记录,代码与补丁在 exp-openvla-view/ 线程。</p>
+<p><b>设计。</b>2 任务(LIBERO-Spatial task 0/1)× θ∈{±5, ±10, ±15} × {raw, rescue},正角度每条件 10 集、负角度 5 集,baseline(θ=0)每任务 20 集(7B 单步推理 ~0.6 s 的耗时折衷)。raw = 整集静态相机扰动(相机绕基座竖直轴整体旋转 θ,回合 reset 后设定);rescue = 同 raw,但把 OpenVLA 输出的 7 维 EE delta(平移 + axis-angle 旋转,夹爪不变)用 <latex>R_z(\pm\theta)</latex> 后乘补偿——推导:相机绕基座 z 转 +θ ⇔ 场景在视野中绕该轴转 −θ,策略若「跟着场景几何走」,输出 = <latex>R_z(-\theta)\cdot</latex> 真实动作,故 rescue = <latex>R_z(+\theta)\cdot</latex> 预测。<b>若 rescue 恢复成功率,说明崩溃主要来自动作参考系失配;若 rescue 无效,说明视觉编码在扰动视角下已漂移得不可用。</b></p>
+[[figure-anchor:expc:viewprobe]]
+<p><b>结果。</b>baseline 34/40 = 85%,与 OpenVLA 公开 LIBERO-Spatial ~84.7% 一致,pipeline 可信;raw 条件下崩溃复现且随 |θ| 单调恶化。rescue 的答案则是否定的多于肯定的:</p>
+<table>
+<colgroup>
+<col width="90"/>
+<col width="130"/>
+<col width="130"/>
+<col width="130"/>
+<col width="130"/>
+</colgroup>
+<thead>
+<tr>
+<th background-color="light-gray">θ</th>
+<th background-color="light-gray">task0 raw</th>
+<th background-color="light-gray">task0 rescue</th>
+<th background-color="light-gray">task1 raw</th>
+<th background-color="light-gray">task1 rescue</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0°</td>
+<td colspan="4">baseline 0.85(n=20/任务)</td>
+</tr>
+<tr>
+<td>+5°</td>
+<td>0.80(n=10)</td>
+<td>0.90</td>
+<td>0.10(n=10)</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>+10°</td>
+<td>0.40(n=10)</td>
+<td><b>1.00</b></td>
+<td>0.00(n=7)</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>+15°</td>
+<td>0.00(n=5)</td>
+<td>0.00(双符号均 0)</td>
+<td>0.00(n=5)</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>−5°</td>
+<td>1.00(n=5)</td>
+<td>0.60</td>
+<td>0.40(n=5)</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>−10°</td>
+<td>0.00(n=5)</td>
+<td>0.00</td>
+<td>0.20(n=5)</td>
+<td>0.00</td>
+</tr>
+<tr>
+<td>−15°</td>
+<td>0.00(n=5)</td>
+<td>0.00</td>
+<td>0.00(n=5)</td>
+<td>0.00</td>
+</tr>
+</tbody>
+</table>
+<p>三个观察。<b>其一,rescue 只在唯一一个格子里显著生效:task0@+10° 从 0.40 恢复到 1.00</b>——在该任务该角度,策略输出确实「跟着旋转后的场景几何走」,动作系补偿是对症的。<b>其二,除此之外 rescue 全面无效甚至有害</b>:±15° 两个符号都救不回 0%;task1 全程不可救(+5° raw 已只剩 0.10);task0@−5° raw 本来 1.00,rescue 反而降到 0.60——当策略输出在基座系里本来就是对的(视觉没被骗),强行补偿就是注入误差。<b>其三,崩溃的任务间差异巨大且不对称</b>:task0 在 −5° 完全免疫、+10° 才减半,task1 在 ±5° 就已濒死——视角敏感性强烈依赖任务几何(目标物体的空间布局),不是单一标量。</p>
+<p>结论:<b>OpenVLA 的视角崩溃以视觉编码漂移为主、动作参考系失配为辅。</b>把 CamVLA 式的「动作参考系修复」拆开单独测试,它只在崩溃的中段(感知半失能、策略仍跟场景几何)有效;感知完全漂移后(±15°)没有任何动作端补偿能救。这给混合架构补了一块重要的边界证据:动作系修复是「感知修复」的补集而非替代品——相机系动作表示解决的是误差进入执行的路径问题,不能让视觉骨干在未见视角下看得更准。统计口径提醒:负角度条件 n=5、task1@+10° raw n=7,单格数字的置信区间较宽,但「rescue 只在感知半失能区有效」的定性形态跨格子一致。</p>
+<h1>综合:混合架构与组会要点</h1>
+<p>四条深挖线 + 三个实验,把老师交办的两件事拼成了一张可以落地的图。</p>
+<h2>混合架构:学习式冷启动 + 滤波热维护 + 协方差进策略</h2>
+<p>滤波与模型自估不是二选一,而是不同时间尺度与信息结构的分工——这个判断在实验里得到了双向验证:滤波的精度来自时间累积、误差是慢变偏差、运动不足时沿不可观方向「自信地错」;单帧回归零激励可用、误差近似逐步独立,但静态精度受训练视角密度限制(15° 间隔 1.4° vs 45° 间隔 8.3°)。工程上最合理的姿态是组合,而且 FastCal 的 Θ 初始猜测本来就是粗先验——<b>把粗先验换成 CamVLA 式单帧回归的输出,是现成的接口</b>:</p>
+<table>
+<colgroup>
+<col width="150"/>
+<col width="230"/>
+<col width="290"/>
+</colgroup>
+<thead>
+<tr>
+<th background-color="light-gray">阶段</th>
+<th background-color="light-gray">负责什么</th>
+<th background-color="light-gray">证据/来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><b>学习式冷启动</b>(单帧回归,毫秒级)</td>
+<td>相机挪位/重装后立即可用;误差近似逐步独立,闭环友好</td>
+<td>CamVLA 几何头 +0.19% 参数;实验 B 证实 iid 误差被 K=1 闭环完全补偿</td>
+</tr>
+<tr>
+<td><b>滤波热维护</b>(EKF 在线,秒级)</td>
+<td>吸收碰撞/热胀漂移、给策略传协方差;显式钳住不可观方向</td>
+<td>实验 A:Q 匹配半恢复 ~9 s、蠕变 RMS 0.88°;FastCal TSVD 秩揭示 + 时间衰减</td>
+</tr>
+<tr>
+<td><b>协方差进策略</b>(风险感知的 action 生成)</td>
+<td>把「估计不确定性」而不是点估计喂给策略;单帧回归给不出这个</td>
+<td>实验 A 的 NEES 教训:滤波沿不可观方向过自信,显式不确定性是它的核心资产;开放问题,未见实现</td>
+</tr>
+</tbody>
+</table>
+<p>这个架构还天然回答了主题二:delta 动作执行端只需要旋转——外参估计的平移分量可以完全移出执行管线(实验 B 的 Cam 头只经 <latex>R_{bc}</latex> 合成,平移误差结构上无作用)。但实验 C 给了一个同样重要的反向边界:<b>动作系修复管不了感知</b>——把 OpenVLA 的输出用后乘 <latex>R_z(\theta)</latex> 补偿,只在「感知半失能、策略仍跟场景几何」的中段有效(task0@+10° 0.40→1.00),感知完全漂移后(±15°)双符号均 0%。所以混合架构之外还有第三条腿:鲁棒视觉骨干或多视角训练(感知修复)不可替代。要做的组合实验也很直接:在线标定器重估 T 喂回 OC-VLA 式部署管线,测端到端成功率保持;或用滤波给 CamVLA 的逐帧自估做时序融合,看能否逼近 GT 上界、代价是不是引入时间相关误差(我们的实验 A/B 已经分别把两头量好)。</p>
+<h2>给组会的四条 takeaway</h2>
+<p><b>1. 误差的时间结构比幅度更决定成败。</b>相同边缘分布下,每步独立噪声被闭环补偿,静态/慢变偏差在低频率重规划下唯一破功(实验 B:K=1 全 1.0,K=5 static 0.90)——真实失准是 static/高 ρ 形态,CamVLA 附录的 iid 噪声鲁棒性不能外推。滤波式估计的误差 ACF(1)=0.90–0.96(实验 A),正是这个敏感形态。</p>
+<p><b>2. 提高重规划频率是性价比最高的容忍手段。</b>比任何误差幅度的硬上限都有效;低帧率 VLA + 校准偏差 = 最坏情况。对 VLA 工程:动作输出频率与闭环延迟是比标定精度更硬的杠杆。</p>
+<p><b>3. 相机系 delta 动作把 6-DoF 标定问题降成 3-DoF 旋转问题。</b>平移在相对动作下严格相消(CamVLA 附录 B、OC-VLA 代码核验),执行端只需 R;方向级信息(自估旋转、坐标轴提示)容忍 ~10° 级误差(AxisGuide Table IV + CamVLA 真机 15°)。动作表示选型上,数值族(相机系 delta)与提示族(坐标轴/轨迹/接触点)共享「误差经旋转或投影进入」的设计约束,区别只在免标定的程度与误差可审计性。</p>
+<p><b>4. 动作系修复是感知修复的补集,不是替代品。</b>真实 OpenVLA-7B × LIBERO 上,视角崩溃以视觉编码漂移为主:几何补偿(rescue)只在感知半失能的中段把一个格子从 0.40 救到 1.00,±15° 双符号均 0%,感知完全漂移后动作端无计可施(实验 C,222 集)。相机系动作表示决定误差进入执行的路径,但视觉骨干在未见视角下的精度是独立的前缀瓶颈——「换坐标系」不能替代「看得准」。</p>
+<p>轻量留意的其余论文都已在正文按位置带过:标定线旁的 Kalib(2408.10562,视觉基础模型跟踪参考点 + PnP)、FEEPE(2503.14051,基础模型特征 + CAD 配准)、LRBO(2311.01335,单帧点云定位底座,0.930 mm/0.265°)、Continual Hand-Eye(2604.15814,回放缓冲防遗忘的持续标定)、Fiducial Exoskeletons(2601.08034,连杆 3D 打印标记,机器人未上电也能用)、在线标定的工程化参考 iKalibr(ethz-asl/iKalibr)、多相机在线标定 SPARK(2601.08414)与 DST-Calib(2601.01188);CamVLA 的「外参已知」竞争者 AnyCamVLA(2603.05868,视图合成)、4D-VLA(2506.22242,反投影)、Jiang et al.(2510.02268,ray embedding)——注意这三条恰恰都以精确外参为前提,与 CamVLA 的自估立场互补,也反向印证了主题一的重要性:它们把最脆弱的一环留在了部署时。</p>

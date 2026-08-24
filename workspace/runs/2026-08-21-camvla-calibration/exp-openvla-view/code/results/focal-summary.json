@@ -1,0 +1,148 @@
+{
+ "conditions": [
+  {
+   "task": 0,
+   "fovy_pct": -10.0,
+   "crop_pct": 0.0,
+   "focal_dev_pct": 12.277,
+   "success_rate": 0.7,
+   "successes": 7,
+   "n": 10
+  },
+  {
+   "task": 0,
+   "fovy_pct": -5.0,
+   "crop_pct": 0.0,
+   "focal_dev_pct": 5.831,
+   "success_rate": 0.7,
+   "successes": 7,
+   "n": 10
+  },
+  {
+   "task": 0,
+   "fovy_pct": -2.5,
+   "crop_pct": 0.0,
+   "focal_dev_pct": 2.844,
+   "success_rate": 0.7,
+   "successes": 7,
+   "n": 10
+  },
+  {
+   "task": 0,
+   "fovy_pct": 0.0,
+   "crop_pct": 0.0,
+   "focal_dev_pct": 0.0,
+   "success_rate": 1.0,
+   "successes": 10,
+   "n": 10
+  },
+  {
+   "task": 0,
+   "fovy_pct": 0.0,
+   "crop_pct": 5.0,
+   "focal_dev_pct": 5.263,
+   "success_rate": 0.9,
+   "successes": 9,
+   "n": 10
+  },
+  {
+   "task": 0,
+   "fovy_pct": 2.5,
+   "crop_pct": 0.0,
+   "focal_dev_pct": -2.713,
+   "success_rate": 0.9,
+   "successes": 9,
+   "n": 10
+  },
+  {
+   "task": 0,
+   "fovy_pct": 5.0,
+   "crop_pct": 0.0,
+   "focal_dev_pct": -5.303,
+   "success_rate": 0.9,
+   "successes": 9,
+   "n": 10
+  },
+  {
+   "task": 0,
+   "fovy_pct": 10.0,
+   "crop_pct": 0.0,
+   "focal_dev_pct": -10.15,
+   "success_rate": 0.4,
+   "successes": 4,
+   "n": 10
+  },
+  {
+   "task": 1,
+   "fovy_pct": -10.0,
+   "crop_pct": 0.0,
+   "focal_dev_pct": 12.277,
+   "success_rate": 0.7,
+   "successes": 7,
+   "n": 10
+  },
+  {
+   "task": 1,
+   "fovy_pct": -5.0,
+   "crop_pct": 0.0,
+   "focal_dev_pct": 5.831,
+   "success_rate": 0.7,
+   "successes": 7,
+   "n": 10
+  },
+  {
+   "task": 1,
+   "fovy_pct": -2.5,
+   "crop_pct": 0.0,
+   "focal_dev_pct": 2.844,
+   "success_rate": 1.0,
+   "successes": 10,
+   "n": 10
+  },
+  {
+   "task": 1,
+   "fovy_pct": 0.0,
+   "crop_pct": 0.0,
+   "focal_dev_pct": 0.0,
+   "success_rate": 1.0,
+   "successes": 10,
+   "n": 10
+  },
+  {
+   "task": 1,
+   "fovy_pct": 0.0,
+   "crop_pct": 5.0,
+   "focal_dev_pct": 5.263,
+   "success_rate": 0.9,
+   "successes": 9,
+   "n": 10
+  },
+  {
+   "task": 1,
+   "fovy_pct": 2.5,
+   "crop_pct": 0.0,
+   "focal_dev_pct": -2.713,
+   "success_rate": 1.0,
+   "successes": 10,
+   "n": 10
+  },
+  {
+   "task": 1,
+   "fovy_pct": 5.0,
+   "crop_pct": 0.0,
+   "focal_dev_pct": -5.303,
+   "success_rate": 0.6,
+   "successes": 6,
+   "n": 10
+  },
+  {
+   "task": 1,
+   "fovy_pct": 10.0,
+   "crop_pct": 0.0,
+   "focal_dev_pct": -10.15,
+   "success_rate": 0.8,
+   "successes": 8,
+   "n": 10
+  }
+ ]
+}

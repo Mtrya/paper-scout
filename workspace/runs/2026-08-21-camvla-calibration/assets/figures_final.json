@@ -1,0 +1,110 @@
+{
+ "expe:focal": {
+  "file": "assets/figures/expe_focal.png",
+  "caption": "焦距扰动实验(OpenVLA-7B × LIBERO-Spatial):等效焦距偏差 ±10% 时成功率仍保 60–70%,对照外参旋转 ±10° 已崩到 0–40%;center-crop 5% 预处理通道更温和(90%)"
+ },
+ "expd:observability": {
+  "file": "assets/figures/expd_observability.png",
+  "caption": "内参联合可观性:六种运动形态的滑窗 FIM 谱(左)与剔除外参后的焦距边际信息/Schur 补 CRB(右)——纯平移留 2 维精确零方向,偏航扫掠下焦距 CRB 反而最差(~700%),体积/摆动形态靠深度多样性把焦距 CRB 压到 ~58%"
+ },
+ "expd:joint": {
+  "file": "assets/figures/expd_joint.png",
+  "caption": "联合估计的结构性退化(体积运动 + 双特征,180 s):只估外参时平移 CRB 0.095 cm,联合估焦距后恶化到 5.08 cm(53 倍,集中在焦距↔平移耦合方向);外参紧时焦距 10% 偏差 180 s 收敛到 0.13%,外参松时卡在 4–12%"
+ },
+ "expd:drift": {
+  "file": "assets/figures/expd_drift.png",
+  "caption": "内参热维护四联图:A 分层 Q 下 30 分钟 2% 热漂移跟踪滞后 <0.6%;B 换镜头焦距阶跃 +5% 约 3–4 秒恢复;C 焦距错 5% 反噬外参平移 3.6 cm(≈90 倍基线)而旋转几乎免疫;D 焦距失配在滤波创新 RMS 里不留痕迹——无声吸收,无免费告警"
+ },
+ "arccalib:main": {
+  "file": "assets/figures/arccalib_main.png",
+  "caption": "ARC-Calib 无标记标定管线:单关节探索运动在本体上画 3D 圆→透视投影成椭圆→共享朝向椭圆拟合与锥面分解恢复旋转轴→轴共线/共面约束迭代求解 camera-to-base"
+ },
+ "fastcal:fig2": {
+  "file": "assets/figures/fastcal_fig2.png",
+  "caption": "FastCal 松耦合公式:各传感器独立输出相对位姿流(里程计/SLAM),外参估计退化为单对传感器的 6×6 最小二乘,信息矩阵随手可得,接入现有系统只需订阅位姿流"
+ },
+ "expa:observability": {
+  "file": "assets/figures/ekf_observability.png",
+  "caption": "实验 A 场景 1:直线(左)/平面(中)/体积(右)运动的旋转误差收敛与滑窗 FIM 最小特征值——直线留一维不可观方向,误差停在初值投影(19°);平面/体积满秩,收敛到 0.3–0.5°"
+ },
+ "expa:drift": {
+  "file": "assets/figures/ekf_drift.png",
+  "caption": "实验 A 场景 3:相机被碰(5°/2 cm 阶跃)+ 随机游走蠕变下的跟踪,三档 Q——匹配蠕变模型时阶跃半恢复 ~9 s、稳态 RMS 0.88°;Q 过小滞后、Q 过大测量噪声主导"
+ },
+ "expa:timescale": {
+  "file": "assets/figures/ekf_timescale.png",
+  "caption": "实验 A 场景 4:收敛后误差时间序列的自相关函数——滤波误差 ACF(1)=0.90–0.96、1/e 相关时间 ~7 s(慢变偏差);同幅度 iid 对照 ACF(1)≈0.007"
+ },
+ "expa:inconsistency": {
+  "file": "assets/figures/ekf_inconsistency.png",
+  "caption": "实验 A 附加发现:Q=0 时 IEKF 从大初值落入有偏局部最优(平移偏差种子相关 2–15 cm,NEES 1e2–1e4),同一数据批处理 Gauss-Newton 收敛到 0.38 cm 接近 CRB;加肘关节特征或过程噪声下限后消除"
+ },
+ "expc:viewprobe": {
+  "file": "assets/figures/openvla_viewprobe.png",
+  "caption": "实验 C:OpenVLA-7B × LIBERO-Spatial 视角扰动——raw 随 |θ| 单调崩塌(±15° 全 0),Rz 动作系补偿只在 task0@+10° 显著恢复(0.40→1.00),task1 全程不可救:崩溃以视觉编码漂移为主、动作系失配为辅"
+ },
+ "camvla:arch": {
+  "file": "assets/figures/camvla_arch.png",
+  "caption": "CamVLA 架构:Action Head 预测相机系 delta 动作,Geometric Head 从 image encoder 特征回归 hand-eye(平移 τ + axis-angle 旋转 ω),执行时只经估计的 R 旋转自由向量合成基座系动作"
+ },
+ "ocvla:main": {
+  "file": "assets/figures/ocvla_main.png",
+  "caption": "OC-VLA 方法总览:给定外参 T 把动作目标变换进相机系监督(数据集端预处理、模型零改动),推理时再经 T 逆变换回基座系执行"
+ },
+ "axisguide:teaser": {
+  "file": "assets/figures/axisguide_teaser.png",
+  "caption": "AxisGuide teaser:把基座系坐标轴(红/绿/蓝)投影渲染进图像作为提示通道、与 RGB 拼接(首层卷积 3→6),动作空间不动;右侧为 LIBERO-Spatial 与真机 Pick Up 的增益"
+ },
+ "barx:method": {
+  "file": "assets/figures/barx_method.png",
+  "caption": "BARX 方法图:跨本体先验数据上训练 VLA 自回归预测辅助表示(2D EE 轨迹/语言运动/物体框,文本形式)再预测动作(ECoT),RoboCasa-X 三个源本体 → 三个目标本体"
+ },
+ "expb:views": {
+  "file": "assets/figures/repr_views.png",
+  "caption": "blob-world 三种视角下的渲染示例(EE 绿斑、目标红斑、三个灰斑干扰):相机 rig 绕基座 z 轴旋转构成视角,斑表观大小 ∝ 1/深度、深度可弱观测"
+ },
+ "expb:yawsweep": {
+  "file": "assets/figures/repr_yawsweep.png",
+  "caption": "实验 B 测试 1:单视角训练的基座系(Base)头在 −45°~+45° 视角扫描下成功率锯齿状脆断(19 点中 8 点成功率为 0,平均 0.48),相机系(Cam)头 19 点全 1.0、终距恒定"
+ },
+ "expb:errorstruct": {
+  "file": "assets/figures/repr_errorstruct_k5.png",
+  "caption": "实验 B 测试 3(K=5,5 步开环段):同边缘分布 N(0,σ) 的三种误差形态下,静态偏差在 σ=20° 时成功率降到 0.90(T1-Cam,左)与 0.98(T2-Cam,右),iid/AR(1) 仍为 1.0——误差的时间结构比幅度更决定成败"
+ },
+ "expb2:yaw": {
+  "file": "assets/figures/expb2_yaw.png",
+  "caption": "实验 B2a:给 Base 头相机位姿输入后的 19-yaw 泛化——T1 位姿恒定(无学习信号)时 Base+位姿 0.400 不增反微降,T2 三值位姿 0.809 仍有盲区,DENSE 稠密位姿三线全部收敛到 ~1.0:差别主要是信息可得性"
+ },
+ "expb2:embodiment": {
+  "file": "assets/figures/expb2_embodiment.png",
+  "caption": "实验 B2b 跨本体 50/50 混训:Cam 头无本体标签在训练本体 E1/E2(0.962/0.994)与未见本体 E3(0.983)上几乎无损,所有基座系条件(含位姿、含本体标签)停在 ~0.4——相机系表示与本体/机位构造性解耦"
+ },
+ "transporter:main": {
+  "file": "assets/figures/transporter_main.png",
+  "caption": "Transporter Networks 机制图:(a) 顶视场景 (b) pick 热图(argmax 出抓取点)(c) 以 pick 为中心的 crop 模板匹配生成 place 热图——动作就是两次热图 argmax,精度上界=3.125 mm/像素"
+ },
+ "rvt2:main": {
+  "file": "assets/figures/rvt2_main.png",
+  "caption": "RVT-2 两级 coarse-to-fine 架构:粗级在固定虚拟视角热图定兴趣区→围绕 3D 共识点放大 4 倍重渲染→细级特写视角精定位;全谱系唯一给出真机毫米级证据(插 peg/插 plug)"
+ },
+ "pivot:main": {
+  "file": "assets/figures/pivot_main.png",
+  "caption": "PIVOT 迭代视觉提示:编号候选箭头画在图上,VLM 逐轮挑选+细化(Iteration 0→1),选中的箭头映射为动作——相机假设最轻(单 RGB),但深度与 3D 旋转超出 VLM 可靠范围"
+ },
+ "expg:workspace": {
+  "file": "assets/figures/expg_workspace.png",
+  "caption": "实验 G 工作空间精度预算:ZED2 双目 0.5 m 处深度误差 4.7 mm、1 m 处 18.6 mm(Z² 恶化);1 cm 抓取可达深度 ZED2 0.69 m / D435 0.48 m,2 mm 插入商品双目全程不可达;单目+已知平面(右下)在平面误差 5 mm 内全场 <10 mm"
+ },
+ "exph:parallax": {
+  "file": "assets/figures/exph_parallax.png",
+  "caption": "实验 H 运动视差:(a) 视差深度只认基线 a——10 cm 横向运动 + 2 帧 ≈ 一次 10 cm 基线双目;(b) 固定总基线拆 N 帧几乎不帮忙;(c) 沿视线方向运动信息量为零"
+ },
+ "exph:2pt": {
+  "file": "assets/figures/exph_2pt.png",
+  "caption": "实验 H 两点旋转可观性:(a) 平面内旋转由连线方向给出,f=448、间距 71.7 px 时 0.57°——白送;(b) 出平面旋转靠投影缩短,斜视角(45°)0.40° 但正对相机一阶奇点发散、符号二义"
+ },
+ "exph:budget": {
+  "file": "assets/figures/exph_budget.png",
+  "caption": "信息预算收束表(绿 <5 mm/<1°,黄 5–30 mm/1–10°,红 奇点/>30 mm/>10°):深度买基线(立体或运动,4–5 mm@0.5 m)、平面内旋转两点白送(0.57°)、出平面旋转没有免费午餐——1° 级必须外观模板(价值在像素平均+破二义,不在几何)"
+ }
+}

@@ -1,0 +1,19 @@
+{
+ "task_suite": "libero_spatial",
+ "mode": "rescue",
+ "theta_deg": 15.0,
+ "rescue_sign": -1.0,
+ "tasks": {
+  "0": {
+   "description": "pick up the black bowl between the plate and the ramekin and place it on the plate",
+   "success_rate": 0.0,
+   "n": 5
+  },
+  "1": {
+   "description": "pick up the black bowl next to the ramekin and place it on the plate",
+   "success_rate": 0.0,
+   "n": 5
+  }
+ },
+ "tag": "probe-rescue-p15-s-"
+}
