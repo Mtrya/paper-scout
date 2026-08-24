@@ -13,7 +13,11 @@
    并 `block_delete` 删除,再核验文档无 `figure-anchor` 残留。
 3. 插图前对每张图跑白边机械检查(check_image_whitespace):单边空白占比
    >8% 时自动裁剪到临时副本再上传(不动运行包原件),整图 >60% 空白直接失败。
-4. 重新抓取核对 img 数量与渲染宽度(width=100 且 scale>4 视为可疑,告警)。
+   插图时显式传 --width(横图 min(自然宽,740)、竖图 min(自然宽,500),高度由
+   CLI 按纵横比自动算)——不传时 media-insert 默认尺寸不稳定,实测出现过
+   scale=7.28 与 width=height=100 的小框事故(2026-08-21)。
+4. 重新抓取核对 img 数量与渲染宽度(显示宽 ≈ 自然宽/scale,显示宽 <200px
+   或 scale>4 视为可疑,告警;img 块可能只有 scale 没有 width 属性)。
 5. 可选:给用户发 IM 私信(--user-id,用 --text 让 URL 展开成文档卡片)。
 
 figures.json 格式(键为锚点名,与 report.docxxml 中的 [[figure-anchor:<name>]] 对应):
@@ -231,8 +235,17 @@ def main() -> None:
                           f"left {fracs[2]:.1%} right {fracs[3]:.1%} -> 使用裁剪副本上传")
                     f = cropped
                 rel = f.relative_to(cwd)
+                # 显式指定显示宽度:不传 --width 时 media-insert 的默认尺寸不稳定
+                # (实测同一次推送里有的图 scale=7.28、有的被存成 100x100),
+                # 图会以极小的框显示。高度由 CLI 按纵横比自动计算。
+                from PIL import Image
+                with Image.open(f) as im:
+                    nat_w, nat_h = im.size
+                max_w = 500 if nat_h > nat_w else 740  # 竖图收窄,横图铺满栏宽
+                disp_w = min(nat_w, max_w)
                 d = run_cli(args.cli, ["docs", "+media-insert", "--doc", doc, "--as", "bot",
-                                       "--file", str(rel), "--caption", entry["caption"]], cwd)
+                                       "--file", str(rel), "--caption", entry["caption"],
+                                       "--width", str(disp_w)], cwd)
                 img_id = d["data"]["block_id"]
                 run_cli(args.cli, ["docs", "+update", "--doc", doc, "--as", "bot",
                                    "--command", "block_move_after",
@@ -257,10 +270,28 @@ def main() -> None:
             sys.exit("img 数量少于插入数,可能有孤儿图,请人工检查")
         if "figure-anchor" in content:
             sys.exit("锚点段落删除后仍有 figure-anchor 残留,请人工检查")
-        for m in re.finditer(r'<img\b[^>]*\bscale="([\d.]+)"[^>]*\bwidth="(\d+)"', content):
-            scale, width = float(m.group(1)), int(m.group(2))
-            if width <= 100 and scale > 4:
-                print(f"警告: 图片 {m.group(0)[:80]}… 渲染宽度可疑(width={width} scale={scale}),请人工核对显示效果")
+        # 渲染宽度检查:img 块可能只带 scale、没有 width 属性(旧正则因此漏检)。
+        # 显示宽度 ≈ 自然宽度 / scale;scale>4 或 width<=100 都视为可疑。
+        nat_widths = {}
+        for entries in figures.values():
+            for entry in (entries if isinstance(entries, list) else [entries]):
+                try:
+                    from PIL import Image
+                    with Image.open(run_dir / entry["file"]) as im:
+                        nat_widths[entry["file"].rsplit("/", 1)[-1]] = im.size[0]
+                except Exception:
+                    pass
+        for m in re.finditer(r'<img\b[^>]*>', content):
+            tag = m.group(0)
+            name_m = re.search(r'\bname="([^"]*)"', tag)
+            scale_m = re.search(r'\bscale="([\d.]+)"', tag)
+            width_m = re.search(r'\bwidth="(\d+)"', tag)
+            nat = nat_widths.get(name_m.group(1)) if name_m else None
+            scale = float(scale_m.group(1)) if scale_m else 1.0
+            width = int(width_m.group(1)) if width_m else None
+            disp = width if width else (nat / scale if nat else None)
+            if (width is not None and width <= 100) or (disp is not None and disp < 200) or scale > 4:
+                print(f"警告: 图片 {tag[:80]}… 渲染宽度可疑(显示≈{disp and round(disp)}px scale={scale}),请人工核对显示效果")
 
     # 4. IM 通知
     if args.user_id:
