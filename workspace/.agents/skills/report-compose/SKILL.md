@@ -175,7 +175,8 @@ python .agents/skills/report-compose/scripts/push_report.py <run-id> \
   # --dry-run 只分段并打印计划  # --cli 覆盖 lark-cli 调用前缀
   # --report/--figures 改报告源与配图清单路径(相对运行包目录)
   # --existing-doc <URL|token> 追加到既有文档而非新建(wiki 链接直接传;
-  #   丢弃 <title>、全部段落 append 到文末;bot 需已有该文档编辑权限)
+  #   丢弃 <title>、全部段落 append 到文末;bot 需已有该文档编辑权限,
+  #   未授权时加 --as user 改用以用户身份操作)
 ```
 
 脚本做的事(手工流程等价物,需要手工时按此执行):

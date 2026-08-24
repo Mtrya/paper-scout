@@ -40,9 +40,11 @@ file 相对运行包目录。锚点名必须是顶层独立段落(裸行,不要�
       --report assets/report_final.docxxml --figures assets/figures_final.json \
       --existing-doc "https://fudan-nlp.feishu.cn/wiki/<token>" --user-id ou_xxx
   --report/--figures 改报告与配图清单路径(仍相对运行包目录);--existing-doc
-  给 URL 或 token 时不新建文档、丢弃 <title>、全部段落 append 到文末;
-  bot 必须已有该文档的编辑权限(无权限时 append 返回 ok:true 但
-  data.result=failed,run_cli 已加守卫直接报错,2026-08-24 起)。
+  给 URL 或 token 时不新建文档、丢弃 <title>、全部段落 append 到文末。
+  身份:文档操作默认 --as bot,加 `--as user` 改用用户身份(目标文档未授权
+  给 bot 时的退路,2026-08-24 实测自有 wiki 文档 append/插图/删块正常;
+  IM 通知始终走 bot)。bot 身份下无权限时 append 返回 ok:true 但
+  data.result=failed,run_cli 已加守卫直接报错(2026-08-24 起)。
 
 注意:每步都检查 lark-cli 返回 JSON 的 ok 字段与 data.result;错误可能只走
 stderr 或 warnings,不能凭 "Command executed successfully" 字样判断成功。
@@ -171,8 +173,8 @@ def find_block_id(content: str, text_frag: str) -> str:
     raise RuntimeError(f"正文中找不到锚点前驱文本: …{frag[-40:]}")
 
 
-def fetch_content(cli: str, doc: str, cwd: Path) -> str:
-    d = run_cli(cli, ["docs", "+fetch", "--doc", doc, "--as", "bot", "--detail", "with-ids"], cwd)
+def fetch_content(cli: str, doc: str, cwd: Path, ident: str = "bot") -> str:
+    d = run_cli(cli, ["docs", "+fetch", "--doc", doc, "--as", ident, "--detail", "with-ids"], cwd)
     return d["data"]["document"]["content"]
 
 
@@ -190,7 +192,11 @@ def main() -> None:
                          "全部段落追加到该文档末尾,并丢弃 <title> 元素(文档已有标题)")
     ap.add_argument("--figures", default="assets/figures.json",
                     help="插图清单(相对运行包目录,默认 assets/figures.json;变体报告可用别的清单)")
+    ap.add_argument("--as", dest="identity", default="bot", choices=["bot", "user"],
+                    help="文档操作身份(默认 bot;用户私有文档/未授权 wiki 用 user,"
+                         "实测 user 身份对自有 wiki 文档 append 正常,2026-08-24)")
     args = ap.parse_args()
+    ident = args.identity
 
     cwd = Path.cwd()
     run_dir = cwd / "runs" / args.run_id
@@ -236,16 +242,16 @@ def main() -> None:
             url = doc if doc.startswith("http") else f"https://fudan-nlp.feishu.cn/docx/{doc}"
             print(f"追加到既有文档: {doc} ({len(paths)} 段)")
             for i, p in enumerate(paths, 1):
-                run_cli(args.cli, ["docs", "+update", "--doc", doc, "--as", "bot",
+                run_cli(args.cli, ["docs", "+update", "--doc", doc, "--as", ident,
                                    "--command", "append", "--content", f"@{p}"], cwd)
                 print(f"追加 c{i}/{len(paths)} ok")
         else:
-            d = run_cli(args.cli, ["docs", "+create", "--as", "bot", "--content", f"@{paths[0]}"], cwd)
+            d = run_cli(args.cli, ["docs", "+create", "--as", ident, "--content", f"@{paths[0]}"], cwd)
             doc = d["data"]["document"]["document_id"]
             url = d["data"]["document"]["url"]
             print(f"创建: {doc} {url}")
             for i, p in enumerate(paths[1:], 2):
-                run_cli(args.cli, ["docs", "+update", "--doc", doc, "--as", "bot",
+                run_cli(args.cli, ["docs", "+update", "--doc", doc, "--as", ident,
                                    "--command", "append", "--content", f"@{p}"], cwd)
                 print(f"追加 c{i}/{len(paths)} ok")
 
@@ -257,7 +263,7 @@ def main() -> None:
         for anchor, entries in figures.items():
             if isinstance(entries, dict):
                 entries = [entries]
-            target = find_block_id(fetch_content(args.cli, doc, cwd), anchors[anchor])
+            target = find_block_id(fetch_content(args.cli, doc, cwd, ident), anchors[anchor])
             for entry in entries:
                 f = run_dir / entry["file"]
                 fracs, _ = ciw.measure(f)
@@ -279,11 +285,11 @@ def main() -> None:
                     nat_w, nat_h = im.size
                 max_w = 500 if nat_h > nat_w else 740  # 竖图收窄,横图铺满栏宽
                 disp_w = min(nat_w, max_w)
-                d = run_cli(args.cli, ["docs", "+media-insert", "--doc", doc, "--as", "bot",
+                d = run_cli(args.cli, ["docs", "+media-insert", "--doc", doc, "--as", ident,
                                        "--file", str(rel), "--caption", entry["caption"],
                                        "--width", str(disp_w)], cwd)
                 img_id = d["data"]["block_id"]
-                run_cli(args.cli, ["docs", "+update", "--doc", doc, "--as", "bot",
+                run_cli(args.cli, ["docs", "+update", "--doc", doc, "--as", ident,
                                    "--command", "block_move_after",
                                    "--block-id", target, "--src-block-ids", img_id], cwd)
                 target = img_id  # 链式:下一张移到本张之后
@@ -291,15 +297,15 @@ def main() -> None:
                 print(f"插图 {anchor}: {entry['file']} -> {img_id}")
         ws_tmp.cleanup()
         # 3. 显式删除锚点段落(飞书导入不会丢弃它们,历史上曾假设会丢弃)
-        content = fetch_content(args.cli, doc, cwd)
+        content = fetch_content(args.cli, doc, cwd, ident)
         anchor_ids = re.findall(r'<p id="([^"]+)">(?:\[\[figure-anchor:[^\]]+\]\])+</p>', content)
         if anchor_ids:
-            run_cli(args.cli, ["docs", "+update", "--doc", doc, "--as", "bot",
+            run_cli(args.cli, ["docs", "+update", "--doc", doc, "--as", ident,
                                "--command", "block_delete",
                                "--block-id", ",".join(anchor_ids)], cwd)
             print(f"锚点段落已删除: {len(anchor_ids)} 个")
         # 4. 验证 img 数量、锚点残留与渲染宽度
-        content = fetch_content(args.cli, doc, cwd)
+        content = fetch_content(args.cli, doc, cwd, ident)
         n_imgs = len(re.findall(r"<img\b", content))
         print(f"验证: 文档现有 {n_imgs} 张图(本次插入 {inserted})")
         if n_imgs < inserted:
