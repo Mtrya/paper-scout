@@ -28,15 +28,24 @@ figures.json 格式(键为锚点名,与 report.docxxml 中的 [[figure-anchor:<n
     {"file": "assets/b.jpg", "caption": "第二张(链在前一张之后)"}
   ]
 }
-file 相对运行包目录。锚点名必须是顶层独立段落。
+file 相对运行包目录。锚点名必须是顶层独立段落(裸行,不要包 <p>)。
 
 用法(在 workspace/ 下运行):
   python .agents/skills/report-compose/scripts/push_report.py <run-id> [--dry-run]
   python .agents/skills/report-compose/scripts/push_report.py <run-id> \\
       --user-id ou_xxx [--im-text "可选自定义私信文本"]
 
-注意:每步都检查 lark-cli 返回 JSON 的 ok 字段;错误可能只走 stderr,
-不能凭 "Command executed successfully" 字样判断成功。
+追加到既有文档(组会版/个人探索文档等场景):
+  python .agents/skills/report-compose/scripts/push_report.py <run-id> \
+      --report assets/report_final.docxxml --figures assets/figures_final.json \
+      --existing-doc "https://fudan-nlp.feishu.cn/wiki/<token>" --user-id ou_xxx
+  --report/--figures 改报告与配图清单路径(仍相对运行包目录);--existing-doc
+  给 URL 或 token 时不新建文档、丢弃 <title>、全部段落 append 到文末;
+  bot 必须已有该文档的编辑权限(无权限时 append 返回 ok:true 但
+  data.result=failed,run_cli 已加守卫直接报错,2026-08-24 起)。
+
+注意:每步都检查 lark-cli 返回 JSON 的 ok 字段与 data.result;错误可能只走
+stderr 或 warnings,不能凭 "Command executed successfully" 字样判断成功。
 """
 
 from __future__ import annotations
@@ -75,6 +84,13 @@ def run_cli(cli: str, args: list[str], cwd: Path) -> dict:
     if not d.get("ok"):
         err = d.get("error", {})
         raise RuntimeError(f"lark-cli 失败: {' '.join(args[:3])}: {err.get('message', d)}")
+    data = d.get("data") or {}
+    if isinstance(data, dict) and data.get("result") not in (None, "ok", "success"):
+        # ok:true 只代表传输层成功;result:failed + warnings 里才是真实失败
+        # (2026-08-24:bot 无 wiki 文档编辑权限时 17 段 append 全部静默失败)
+        raise RuntimeError(
+            f"lark-cli 结果失败: {' '.join(args[:3])}: {data.get('warnings') or data}"
+        )
     return d
 
 
@@ -169,6 +185,11 @@ def main() -> None:
     ap.add_argument("--dry-run", action="store_true", help="只分段并打印计划,不写入")
     ap.add_argument("--report", default="report.docxxml",
                     help="报告文件名(默认 report.docxxml;组会版等变体用 report_group.docxxml)")
+    ap.add_argument("--existing-doc", default=None,
+                    help="既有文档 URL 或 token(/docx/ 与 /wiki/ 均可);给出时不新建文档,"
+                         "全部段落追加到该文档末尾,并丢弃 <title> 元素(文档已有标题)")
+    ap.add_argument("--figures", default="assets/figures.json",
+                    help="插图清单(相对运行包目录,默认 assets/figures.json;变体报告可用别的清单)")
     args = ap.parse_args()
 
     cwd = Path.cwd()
@@ -182,7 +203,7 @@ def main() -> None:
     anchors = parse_anchors(text)
 
     figures = {}
-    manifest = run_dir / "assets" / "figures.json"
+    manifest = run_dir / args.figures
     if manifest.is_file():
         figures = json.loads(manifest.read_text())
         unknown = set(figures) - set(anchors)
@@ -198,7 +219,11 @@ def main() -> None:
         print(f"dry-run:分段已写入 {tmp},未推送")
         return
 
-    # 1. 创建 + 分段追加
+    # 1. 创建 + 分段追加(--existing-doc 时跳过创建,全部追加;首段丢弃 <title>)
+    if args.existing_doc:
+        chunks = [re.sub(r"<title>.*?</title>", "", c, count=1) if i == 0 else c
+                  for i, c in enumerate(chunks)]
+        chunks = [c for c in chunks if c.strip()]
     with tempfile.TemporaryDirectory(prefix="push-report-", dir="drafts") as tmp_str:
         tmp = Path(tmp_str)
         paths = []
@@ -206,14 +231,23 @@ def main() -> None:
             p = tmp / f"c{i}.xml"
             p.write_text(c)
             paths.append(p.relative_to(cwd))
-        d = run_cli(args.cli, ["docs", "+create", "--as", "bot", "--content", f"@{paths[0]}"], cwd)
-        doc = d["data"]["document"]["document_id"]
-        url = d["data"]["document"]["url"]
-        print(f"创建: {doc} {url}")
-        for i, p in enumerate(paths[1:], 2):
-            run_cli(args.cli, ["docs", "+update", "--doc", doc, "--as", "bot",
-                               "--command", "append", "--content", f"@{p}"], cwd)
-            print(f"追加 c{i}/{len(paths)} ok")
+        if args.existing_doc:
+            doc = args.existing_doc
+            url = doc if doc.startswith("http") else f"https://fudan-nlp.feishu.cn/docx/{doc}"
+            print(f"追加到既有文档: {doc} ({len(paths)} 段)")
+            for i, p in enumerate(paths, 1):
+                run_cli(args.cli, ["docs", "+update", "--doc", doc, "--as", "bot",
+                                   "--command", "append", "--content", f"@{p}"], cwd)
+                print(f"追加 c{i}/{len(paths)} ok")
+        else:
+            d = run_cli(args.cli, ["docs", "+create", "--as", "bot", "--content", f"@{paths[0]}"], cwd)
+            doc = d["data"]["document"]["document_id"]
+            url = d["data"]["document"]["url"]
+            print(f"创建: {doc} {url}")
+            for i, p in enumerate(paths[1:], 2):
+                run_cli(args.cli, ["docs", "+update", "--doc", doc, "--as", "bot",
+                                   "--command", "append", "--content", f"@{p}"], cwd)
+                print(f"追加 c{i}/{len(paths)} ok")
 
     # 2. 锚点插图(插图前先做白边机械检查;坏图直接拒绝)
     inserted = 0

@@ -39,3 +39,7 @@ code/*
 
 # Python bytecode caches
 __pycache__/
+
+# Toy-experiment datasets & weights are regenerable; keep them local (GitHub rejects >100MB, 2026-08-24)
+workspace/runs/*/exp-*/code/checkpoints/*.npz
+workspace/runs/*/exp-*/code/checkpoints/*.pt

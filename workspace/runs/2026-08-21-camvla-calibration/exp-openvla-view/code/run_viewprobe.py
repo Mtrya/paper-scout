@@ -158,6 +158,31 @@ def rescue_action(action, theta_deg, sign):
     return a
 
 
+def set_fovy_perturbation(env, fovy_pct, cam_name="agentview"):
+    """相机内参扰动:cam_fovy *= (1 + fovy_pct/100)(模拟个体差异/换相机/热漂移)。
+    返回 (默认 fovy, 扰动后 fovy)。等效焦距 f_eff = h/(2·tan(fovy/2))。"""
+    sim = env.sim
+    cam_id = sim.model.camera(cam_name).id
+    f0 = float(sim.model.cam_fovy[cam_id])
+    sim.model.cam_fovy[cam_id] = f0 * (1.0 + fovy_pct / 100.0)
+    sim.forward()
+    return f0, float(sim.model.cam_fovy[cam_id])
+
+
+def crop_obs_image(obs, crop_pct, cam_name="agentview"):
+    """预处理通道对照:渲染图 center-crop crop_pct% 再 resize 回原分辨率。
+    等价于焦距 ×1/(1-crop_pct/100) 的沉默预处理失配(数据集管线真实形态)。"""
+    img = obs[cam_name + "_image"]
+    if crop_pct <= 0:
+        return img
+    p = PILImage.fromarray(img)
+    w, h = p.size
+    nw, nh = int(round(w * (1 - crop_pct / 100.0))), int(round(h * (1 - crop_pct / 100.0)))
+    left, top = (w - nw) // 2, (h - nh) // 2
+    p = p.crop((left, top, left + nw, top + nh)).resize((w, h), PILImage.BILINEAR)
+    return np.asarray(p)
+
+
 # ---- main -------------------------------------------------------------------
 def main():
     ap = argparse.ArgumentParser()
@@ -165,9 +190,11 @@ def main():
     ap.add_argument("--tasks", nargs="+", type=int, required=True, help="任务索引")
     ap.add_argument("--checkpoint", required=True, help="本地权重目录")
     ap.add_argument("--num-trials", type=int, default=20)
-    ap.add_argument("--mode", choices=["baseline", "raw", "rescue"], required=True)
+    ap.add_argument("--mode", choices=["baseline", "raw", "rescue", "focal"], required=True)
     ap.add_argument("--theta-deg", type=float, default=0.0)
     ap.add_argument("--rescue-sign", type=float, default=1.0, help="±1")
+    ap.add_argument("--fovy-pct", type=float, default=0.0, help="fovy 相对扰动 %(实验 E)")
+    ap.add_argument("--crop-pct", type=float, default=0.0, help="渲染图 center-crop %(预处理对照)")
     ap.add_argument("--num-steps-wait", type=int, default=10)
     ap.add_argument("--center-crop", type=int, default=1)
     ap.add_argument("--out-json", required=True)
@@ -212,7 +239,8 @@ def main():
     if os.path.exists(args.out_json):
         with open(args.out_json) as f:
             results = json.load(f)
-    done_keys = {(r["task"], r["theta_deg"], r["mode"], r["rescue_sign"], r["episode"], r.get("tag", ""))
+    done_keys = {(r["task"], r["theta_deg"], r["mode"], r["rescue_sign"], r["episode"], r.get("tag", ""),
+                  r.get("fovy_pct", 0.0), r.get("crop_pct", 0.0))
                  for r in results}
 
     cam_info_written = False
@@ -252,16 +280,22 @@ def main():
         task_res = {"task": task_id, "description": task_description,
                     "episodes": [], "successes": 0}
         for ep in range(args.num_trials):
-            if (task_id, args.theta_deg, args.mode, args.rescue_sign, ep, args.tag) in done_keys:
+            if (task_id, args.theta_deg, args.mode, args.rescue_sign, ep, args.tag,
+                    args.fovy_pct, args.crop_pct) in done_keys:
                 print(f"[skip] task {task_id} ep {ep} (done)", flush=True)
                 continue
 
             env.reset()
             obs = env.set_init_state(initial_states[ep])
 
-            # 相机扰动:整集静态
+            # 相机外参扰动(实验 C):整集静态
             if args.mode in ("raw", "rescue") and args.theta_deg != 0:
                 rotate_camera_about_base(env, args.theta_deg, base_xy)
+
+            # 相机内参扰动(实验 E):fovy 整集静态
+            fovy_default = fovy_used = None
+            if args.mode == "focal" and args.fovy_pct != 0:
+                fovy_default, fovy_used = set_fovy_perturbation(env, args.fovy_pct)
 
             t, success, done = 0, False, False
             steps_taken = 0
@@ -270,6 +304,9 @@ def main():
                     obs, reward, done, info = env.step(get_libero_dummy_action(cfg.model_family))
                     t += 1
                     continue
+                if args.crop_pct > 0:
+                    obs = dict(obs)
+                    obs["agentview_image"] = crop_obs_image(obs, args.crop_pct)
                 img = get_libero_image(obs, resize_size)
                 observation = {
                     "full_image": img,
@@ -300,6 +337,8 @@ def main():
             ep_rec = {
                 "task": task_id, "theta_deg": args.theta_deg, "mode": args.mode,
                 "rescue_sign": args.rescue_sign, "episode": ep, "tag": args.tag,
+                "fovy_pct": args.fovy_pct, "crop_pct": args.crop_pct,
+                "fovy_default": fovy_default, "fovy_used": fovy_used,
                 "success": bool(success), "steps": int(steps_taken),
                 "final_eef_pos": obs["robot0_eef_pos"].tolist(),
                 "final_eef_quat": obs["robot0_eef_quat"].tolist(),
@@ -319,7 +358,8 @@ def main():
         # 汇总只统计本进程实际跑的(去掉 skip 的旧条目口径由 README 说明;此处用最新 JSON 重算)
         fresh = [r for r in results if r["task"] == task_id and r["mode"] == args.mode
                  and r["theta_deg"] == args.theta_deg and r["rescue_sign"] == args.rescue_sign
-                 and r.get("tag", "") == args.tag]
+                 and r.get("tag", "") == args.tag
+                 and r.get("fovy_pct", 0.0) == args.fovy_pct and r.get("crop_pct", 0.0) == args.crop_pct]
         sr = sum(r["success"] for r in fresh) / len(fresh) if fresh else None
         summary["tasks"][str(task_id)] = {"description": task_description,
                                           "success_rate": sr, "n": len(fresh)}

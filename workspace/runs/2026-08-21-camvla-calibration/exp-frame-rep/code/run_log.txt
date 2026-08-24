@@ -1,0 +1,124 @@
+[par] all datasets cached
+[par] training 16 models sequentially (measured: parallel training has ~no throughput gain on this box)...
+  - t1_base_pose  (ds=t1_5000)
+  - t1_cam  (ds=t1_5000)
+  - t2_base  (ds=t2_4500)
+  - t2_base_pose  (ds=t2_4500)
+  - t2_cam  (ds=t2_4500)
+  - dense_base  (ds=dense_4500)
+  - dense_base_pose  (ds=dense_4500)
+  - dense_cam  (ds=dense_4500)
+  - scan1000_base_pose  (ds=t2_1000)
+  - scan1000_cam  (ds=t2_1000)
+  - scan4000_base_pose  (ds=t2_4000)
+  - scan4000_cam  (ds=t2_4000)
+  - b2b_cam  (ds=b2b_5000)
+  - b2b_base_pose  (ds=b2b_5000)
+  - b2b_base_pose_label  (ds=b2b_5000)
+  - b2b_base  (ds=b2b_5000)
+[base_pose] train 43039 samples x 15 epochs
+  [base_pose] ep 5/15 mse=0.000072
+  [base_pose] ep 10/15 mse=0.000064
+  [base_pose] ep 15/15 mse=0.000058
+[base_pose] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/t1_base_pose.pt
+[cam] train 43039 samples x 15 epochs
+  [cam] ep 5/15 mse=0.000079
+  [cam] ep 10/15 mse=0.000063
+  [cam] ep 15/15 mse=0.000064
+[cam] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/t1_cam.pt
+[base] train 38180 samples x 15 epochs
+  [base] ep 5/15 mse=0.000088
+  [base] ep 10/15 mse=0.000075
+  [base] ep 15/15 mse=0.000069
+[base] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/t2_base.pt
+[base_pose] train 38180 samples x 15 epochs
+  [base_pose] ep 5/15 mse=0.000083
+  [base_pose] ep 10/15 mse=0.000075
+  [base_pose] ep 15/15 mse=0.000072
+[base_pose] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/t2_base_pose.pt
+[cam] train 38180 samples x 15 epochs
+  [cam] ep 5/15 mse=0.000076
+  [cam] ep 10/15 mse=0.000065
+  [cam] ep 15/15 mse=0.000066
+[cam] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/t2_cam.pt
+[base] train 38191 samples x 15 epochs
+  [base] ep 5/15 mse=0.000100
+  [base] ep 10/15 mse=0.000087
+  [base] ep 15/15 mse=0.000083
+[base] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/dense_base.pt
+[base_pose] train 38191 samples x 15 epochs
+  [base_pose] ep 5/15 mse=0.000097
+  [base_pose] ep 10/15 mse=0.000080
+  [base_pose] ep 15/15 mse=0.000073
+[base_pose] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/dense_base_pose.pt
+[cam] train 38191 samples x 15 epochs
+  [cam] ep 5/15 mse=0.000083
+  [cam] ep 10/15 mse=0.000071
+  [cam] ep 15/15 mse=0.000063
+[cam] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/dense_cam.pt
+[base_pose] train 8503 samples x 15 epochs
+  [base_pose] ep 5/15 mse=0.000236
+  [base_pose] ep 10/15 mse=0.000111
+  [base_pose] ep 15/15 mse=0.000085
+[base_pose] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/scan1000_base_pose.pt
+[cam] train 8503 samples x 15 epochs
+  [cam] ep 5/15 mse=0.000128
+  [cam] ep 10/15 mse=0.000094
+  [cam] ep 15/15 mse=0.000073
+[cam] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/scan1000_cam.pt
+[base_pose] train 33988 samples x 15 epochs
+  [base_pose] ep 5/15 mse=0.000097
+  [base_pose] ep 10/15 mse=0.000072
+  [base_pose] ep 15/15 mse=0.000073
+[base_pose] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/scan4000_base_pose.pt
+[cam] train 33988 samples x 15 epochs
+  [cam] ep 5/15 mse=0.000086
+  [cam] ep 10/15 mse=0.000067
+  [cam] ep 15/15 mse=0.000065
+[cam] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/scan4000_cam.pt
+[cam] train 42844 samples x 15 epochs
+  [cam] ep 5/15 mse=0.000074
+  [cam] ep 10/15 mse=0.000062
+  [cam] ep 15/15 mse=0.000061
+[cam] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/b2b_cam.pt
+[base_pose] train 42844 samples x 15 epochs
+  [base_pose] ep 5/15 mse=0.000079
+  [base_pose] ep 10/15 mse=0.000063
+  [base_pose] ep 15/15 mse=0.000061
+[base_pose] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/b2b_base_pose.pt
+[base_pose_label] train 42844 samples x 15 epochs
+  [base_pose_label] ep 5/15 mse=0.000082
+  [base_pose_label] ep 10/15 mse=0.000064
+  [base_pose_label] ep 15/15 mse=0.000063
+[base_pose_label] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/b2b_base_pose_label.pt
+[base] train 42844 samples x 15 epochs
+  [base] ep 5/15 mse=0.000078
+  [base] ep 10/15 mse=0.000070
+  [base] ep 15/15 mse=0.000068
+[base] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/b2b_base.pt
+[par] training done in 4953s
+[par] evaluating 25 groups x 19 yaws x 50 eps...
+
+========== FINAL RUN SUMMARY (2026-08-24, resumed session) ==========
+driver: par_run.py (sequential train, 4 threads) + 7 x eval_group.py (independent procs, 1 thread each)
+note: fork+torch-pool deadlock in the eval pool -> eval via independent processes;
+      >4 torch threads on small tensors -> barrier thrash (measured 20x slower at 8 threads).
+T1-base: mean_success=0.474 (se 0.104)
+T1-base_pose: mean_success=0.400 (se 0.101)
+T1-cam: mean_success=1.000 (se 0.000)
+T2-base: mean_success=0.711 (se 0.096)
+T2-base_pose: mean_success=0.809 (se 0.054)
+T2-cam: mean_success=0.996 (se 0.002)
+DENSE-base: mean_success=0.999 (se 0.001)
+DENSE-base_pose: mean_success=1.000 (se 0.000)
+DENSE-cam: mean_success=1.000 (se 0.000)
+SCAN n=1000 base_pose: mean_success=0.699 (se 0.086)
+SCAN n=1000 cam: mean_success=0.999 (se 0.001)
+SCAN n=4000 base_pose: mean_success=0.905 (se 0.044)
+SCAN n=4000 cam: mean_success=1.000 (se 0.000)
+B2b-cam: E1: sr=0.962 fd=0.069 | E2: sr=0.994 fd=0.066 | E3: sr=0.983 fd=0.068
+B2b-base_pose: E1: sr=0.382 fd=0.448 | E2: sr=0.420 fd=0.432 | E3: sr=0.416 fd=0.434
+B2b-base_pose_label: E1: sr=0.461 fd=0.435 | E2: sr=0.438 fd=0.441 | E3: sr=0.413 fd=0.452
+B2b-base_ref: E1: sr=0.449 fd=0.428 | E2: sr=0.488 fd=0.420 | E3: sr=0.474 fd=0.422
+figures: fig_b2a1_yaw_generalization / fig_b2a2_sample_complexity / fig_b2b_cross_embodiment / fig_b2b_cam_flatness (all cropped)
+results.json written; verify_run prepublish PASS.
