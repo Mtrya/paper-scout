@@ -1,0 +1,104 @@
+[
+  {
+    "episode": "ep000",
+    "n_frames": 240,
+    "ee_speed_max": 0.025135395861703547,
+    "gripper_pix": [
+      238,
+      26
+    ],
+    "gripper_corr": 0.8838203149715129,
+    "affine_resid_median": 2.474589095249638,
+    "affine_resid_p95": 5.6493244283794,
+    "affine_inlier_frac": 1.0,
+    "gripper_vis_frac": 1.0,
+    "vis_frac_t_end": 0.9563541666666666,
+    "bg_disp_median_end": 0.2068050503730774,
+    "conf_mean": 0.975347101688385
+  },
+  {
+    "episode": "ep001",
+    "n_frames": 193,
+    "ee_speed_max": 0.014349463411155318,
+    "gripper_pix": [
+      306,
+      14
+    ],
+    "gripper_corr": 0.7657674146904618,
+    "affine_resid_median": 3.225942984290052,
+    "affine_resid_p95": 16.120245696784874,
+    "affine_inlier_frac": 0.9430051813471503,
+    "gripper_vis_frac": 1.0,
+    "vis_frac_t_end": 0.9418055555555556,
+    "bg_disp_median_end": 0.14020127058029175,
+    "conf_mean": 0.9543892741203308
+  },
+  {
+    "episode": "ep002",
+    "n_frames": 239,
+    "ee_speed_max": 0.03323185105623805,
+    "gripper_pix": [
+      207,
+      50
+    ],
+    "gripper_corr": 0.833021182014001,
+    "affine_resid_median": 2.2068634367937765,
+    "affine_resid_p95": 4.293906992882551,
+    "affine_inlier_frac": 1.0,
+    "gripper_vis_frac": 1.0,
+    "vis_frac_t_end": 0.9533333333333334,
+    "bg_disp_median_end": 0.7685046195983887,
+    "conf_mean": 0.9663945436477661
+  },
+  {
+    "episode": "ep003",
+    "n_frames": 667,
+    "ee_speed_max": 0.025315562219392754,
+    "gripper_pix": [
+      301,
+      25
+    ],
+    "gripper_corr": 0.745466655713862,
+    "affine_resid_median": 5.7236263627047865,
+    "affine_resid_p95": 23.286683995438473,
+    "affine_inlier_frac": 0.6251874062968515,
+    "gripper_vis_frac": 1.0,
+    "vis_frac_t_end": 0.8971701388888889,
+    "bg_disp_median_end": 0.23851947486400604,
+    "conf_mean": 0.9248586893081665
+  },
+  {
+    "episode": "ep004",
+    "n_frames": 283,
+    "ee_speed_max": 0.021922158199048754,
+    "gripper_pix": [
+      127,
+      59
+    ],
+    "gripper_corr": 0.7105119924768863,
+    "affine_resid_median": 3.3106449218183482,
+    "affine_resid_p95": 42.81184628159405,
+    "affine_inlier_frac": 0.7879858657243817,
+    "gripper_vis_frac": 0.833922261484099,
+    "vis_frac_t_end": 0.9570138888888889,
+    "bg_disp_median_end": 48.029212951660156,
+    "conf_mean": 0.9592549204826355
+  },
+  {
+    "episode": "ep005",
+    "n_frames": 150,
+    "ee_speed_max": 0.027386917796480472,
+    "gripper_pix": [
+      296,
+      31
+    ],
+    "gripper_corr": 0.5605433266684384,
+    "affine_resid_median": 7.1273390381626065,
+    "affine_resid_p95": 83.56082012577592,
+    "affine_inlier_frac": 0.5,
+    "gripper_vis_frac": 0.8666666666666667,
+    "vis_frac_t_end": 0.9441493055555555,
+    "bg_disp_median_end": 0.2670242190361023,
+    "conf_mean": 0.9823122620582581
+  }
+]
