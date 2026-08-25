@@ -16,8 +16,8 @@ Entry format:
 ## 2026-08-24 — 2026-08-18 to 2026-08-24(推理时算力专题)
 - Doc: https://fudan-nlp.feishu.cn/docx/SZx8d42kDoom9Hxn5FvcPSSBnXe
 - Run: runs/2026-08-24-tau0vla-dalewm/
-- Deep threads: τ₀-VLA 精读 + 代码解剖 + 启智实跑(混合线性注意力骨干 18/24 层 GatedDeltaNet;零样本夹爪常数偏移失败 MSE 0.01126;冻骨干微调 500 步 202 秒 MSE→0.00264;FM 步数 K=1≈K=10 平台期;from_pretrained 静默解冻 bug 及补丁)(2608.16885), DA-LeWM 诊断复刻到自家 LeWM/PSG 检查点(Plan-Real 0.665→0.670 接地头不修决策对齐预言证实;CEM elite 崩塌复现;Cube 缺口以扰动演示候选补上;Claim-1 0.583→0.722)(2608.18746), ForgeWM 精读(四阶段因果化+少步化;1 步 72.1 FPS 质量反超;test-time scaling 走平与 τ₀ FM 平台期互证)(2608.14022)
-- Covered papers: 2608.16885, 2608.18746, 2608.14022
+- Deep threads: τ₀-VLA 精读 + 代码解剖 + 启智实跑(混合线性注意力骨干 18/24 层 GatedDeltaNet;零样本夹爪常数偏移失败 MSE 0.01126;冻骨干微调 500 步 202 秒 MSE→0.00264;FM 步数 K=1≈K=10 平台期;from_pretrained 静默解冻 bug 及补丁)(2608.16885), DA-LeWM 诊断复刻到自家 LeWM/PSG 检查点(Plan-Real 0.665→0.670 接地头不修决策对齐预言证实;CEM elite 崩塌复现;Cube 缺口以扰动演示候选补上;Claim-1 0.583→0.722)(2608.18746), Dyna-2 官方博客按技术报告精读(100 万小时纯人类视频 WAM;嵌套等比例 ladder;首个人→机零样本转移 scaling law;视频=独立 scaling axis 归因实验;单步蒸馏追逐博弈 10203ms→110ms)
+- Covered papers: 2608.16885, 2608.18746, dyna-2-blog(https://www.dyna.co/dyna-2);2608.14022(ForgeWM)曾精读但因不符合窄定义世界模型从报告撤下
 - Shortlisted papers: 2608.19891, 2608.16590, 2608.14036, 2608.19197, 2608.18701, 2608.14441, 2608.15008, 2608.17393
 - 背景: 三篇共同指向"推理算力往哪花"(高层束搜索/低层砍步数/排序保真是地基);低维控制分布上多步去噪边际收益薄的跨域互证;决策对齐与信息充分性独立轴在自家模型上证真,下一步动作=加 inverse/goal-action 头
 
