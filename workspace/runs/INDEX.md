@@ -13,6 +13,14 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-08-26 — 2026-08-25(WAM 接口形态专题)
+- Doc: https://fudan-nlp.feishu.cn/docx/JZA7djXUEoVGTwxXQVIcpxXXnch
+- Run: runs/2026-08-26-hydra0-ld4wam-unimem/
+- Deep threads: Hydra-0 精读 + 实验 A(AllTracker×DROID 6 集地基噪声:中位 2-7px 干净但阵发性爆发,半数集 p95 16-84px、inlier 低至 50%,ep004 相机中途被动漂移 48px;仿射拟合吸收未知外参的残差法)(2608.18077), LD4WAM 精读 + LDM 代码核验 + 实验 B(冻结 LDM 在 OOD DROID 上的运动探针:val R²≈0.02-0.07 全地板、仅 z 维可解 0.20→0.39;DINOv3 过拟合对照 train 0.99/val 负;幅度对照排除逐集外参错位;检索 same_ep 0.376 vs cross_ep 0.162=外观泄漏;roll ±π 环绕假警报修复)(2608.22403), UniMem 精读 + openpi fork 代码审计(事件驱动记忆、关键帧缓存 90ms 恒定;null 权重 0.02 的 append-only 不对称;作者自文档化 seeding PE bug;MemER 失败模式实证分层接口脆性;无权重)(2608.22869)
+- Covered papers: 2608.18077, 2608.22403, 2608.22869
+- Shortlisted papers: 2608.22591(WorldToken), 2608.22364(WAM-OPD), 2608.23486(GeoWAM), 2608.20430(RISE), 2608.23224(TOWN-VLA), 2608.20169(Task-CoEvolve);2608.23189(EchoWM)、2608.23565(ReWorld)按窄定义减分
+- 背景: WAM 动作接口三形态拼齐(Dyna-2 分离边际场 / Hydra-0 像素流 / LD4WAM 潜动力学桥),两个实验各咬后两者一口:像素流地基噪声阵发、潜桥 OOD 掉崖;记忆线 UniMem 投"单骨干+自我监测上行"一票。悬念:z 维幸存或可作跨域鲁棒性探针;阵发坏段是否=接触密集段
+
 ## 2026-08-24 — 2026-08-18 to 2026-08-24(推理时算力专题)
 - Doc: https://fudan-nlp.feishu.cn/docx/SZx8d42kDoom9Hxn5FvcPSSBnXe
 - Run: runs/2026-08-24-tau0vla-dalewm/

@@ -1,0 +1,38 @@
+{
+  "hydra0:method": {
+    "file": "assets/hydra0_method.png",
+    "caption": "Hydra-0 的两条管线:离线训练把多本体视频(UMI/双臂/Franka)经视频派生的 action flow(本体点+物体点的图像平面轨迹)变成世界模型的监督信号;在线部署则在 Isaac Lab 里滚动机器人几何、投影成相机平面的 action flow 来驱动因果世界模型做自回归预测"
+  },
+  "hydra0:pipe": {
+    "file": "assets/hydra0_pipe.png",
+    "caption": "Hydra-0 的 pipe-bending 概念验证四行链路:人类演示 → AllTracker 提取物体(软管)action flow → 以 flow 为条件生成视频 → 策略执行。整条链路不需要该任务的机器人专家演示"
+  },
+  "expa:overlays": {
+    "file": "assets/expa_overlays.png",
+    "caption": "我们在 DROID 外视角上跑 AllTracker 的稠密轨迹:黄圈=与末端执行器运动最相关的像素点的当前轨迹位置(目视确认贴在夹爪上),绿点=运动相关性最高像素的 home 位置。ep004 右列可见整段轨迹漂移——该集相机/场景中途被动过"
+  },
+  "expa:resid": {
+    "file": "assets/expa_resid.png",
+    "caption": "六集 DROID 的逐帧残差:把 EE 三维轨迹用最优仿射映射投到像素平面(常数外参被仿射吸收)后与 tracker 轨迹之差。上排时间序列(log 刻度,虚线=8px RANSAC 阈值),下排汇总:中位数只有 2-7px,但尾部才是故事——半数集 p95 达 16-84px、inlier 比例低至 50%"
+  },
+  "ld4wam:method": {
+    "file": "assets/ld4wam_method.png",
+    "caption": "LD4WAM 的全貌:左侧是 Latent Dynamics Model(冻结 DINOv3 → 时空 Transformer → SoftVQ 离散化,语义重建头+运动对齐头双监督);右侧是 WDAM 三专家 MoT(视频/latent/动作三 expert 共享自注意力,latent 以可学 query 作信息桥);下排是三阶段训练流程"
+  },
+  "ld4wam:retrieval": {
+    "file": "assets/ld4wam_retrieval.png",
+    "caption": "论文展示的域内跨数据集检索(定性证据):给定 Agibot-World/EgoDex 的查询 clip,latent 能在 RoboMind2.0/Ego4D/EgoVerse 等其他数据集中按运动方向(前进/后退/上移)检索到对应片段——这是 latent 编码运动信息的域内证据,与我们在 OOD DROID 上的定量探针恰好互补"
+  },
+  "expb:probe": {
+    "file": "assets/expb_probe.png",
+    "caption": "OOD 探针三连:左=五种数据条件下 LDM latent 与 DINOv3 特征差的 ΔEE 回归 val R²,LDM 全程贴地板而 DINOv3 train≈1.0/val 为负(纯过拟合对照);中=逐维分解,只有 z(垂直)分量可解码且随时距增大;右=幅度对照(对任意固定外参不变),只在含静止帧的 all 子集上靠静止/运动这一比特可解,运动帧内部落到地板——排除了逐集外参错位的替代解释"
+  },
+  "unimem:labeling": {
+    "file": "assets/unimem_labeling.png",
+    "caption": "UniMem 的事件驱动记忆:事件分类器在动作签名上检测阶段切换(抓起勺子/舀豆/倒豆),触发才把事件文本追加进记忆 M_t、把当前帧写入关键帧集 H_t;未触发时两者保持不动"
+  },
+  "unimem:latency": {
+    "file": "assets/unimem_latency.png",
+    "caption": "推理延迟对比:双系统 VLM(MemER)300-500ms 且随上下文增长;朴素视频输入(π0.5+V.E.)随帧数线性增长;UniMem 的关键帧缓存几乎恒定在 90ms,16 个关键帧×4 相机只比单帧基线多 25ms"
+  }
+}

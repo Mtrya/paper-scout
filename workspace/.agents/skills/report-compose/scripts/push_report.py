@@ -13,9 +13,12 @@
    并 `block_delete` 删除,再核验文档无 `figure-anchor` 残留。
 3. 插图前对每张图跑白边机械检查(check_image_whitespace):单边空白占比
    >8% 时自动裁剪到临时副本再上传(不动运行包原件),整图 >60% 空白直接失败。
-   插图时显式传 --width(横图 min(自然宽,740)、竖图 min(自然宽,500),高度由
-   CLI 按纵横比自动算)——不传时 media-insert 默认尺寸不稳定,实测出现过
-   scale=7.28 与 width=height=100 的小框事故(2026-08-21)。
+   插图时显式传 --width 与 --height(横图 min(自然宽,740)、竖图 min(自然宽,500),
+   高度按素材实际纵横比算出,不再依赖 CLI 自动计算)——不传时 media-insert
+   默认尺寸不稳定,实测出现过 scale=7.28 与 width=height=100 的小框事故
+   (2026-08-21);只传 --width 时也出过高度算错、图被压小且框内大片留白
+   的事故(2026-08-24 组会文档,事后由用户手动拉大修复)。每张插入后立即
+   回读块 width/height 校验(容差 ±3px),不符则删除重插一次,仍不符即中止。
 4. 重新抓取核对 img 数量与渲染宽度(显示宽 ≈ 自然宽/scale,显示宽 <200px
    或 scale>4 视为可疑,告警;img 块可能只有 scale 没有 width 属性)。
 5. 可选:给用户发 IM 私信(--user-id,用 --text 让 URL 展开成文档卡片)。
@@ -230,7 +233,7 @@ def main() -> None:
         chunks = [re.sub(r"<title>.*?</title>", "", c, count=1) if i == 0 else c
                   for i, c in enumerate(chunks)]
         chunks = [c for c in chunks if c.strip()]
-    with tempfile.TemporaryDirectory(prefix="push-report-", dir="drafts") as tmp_str:
+    with tempfile.TemporaryDirectory(prefix="push-report-", dir=cwd / "drafts") as tmp_str:
         tmp = Path(tmp_str)
         paths = []
         for i, c in enumerate(chunks, 1):
@@ -258,7 +261,7 @@ def main() -> None:
     # 2. 锚点插图(插图前先做白边机械检查;坏图直接拒绝)
     inserted = 0
     if figures:
-        ws_tmp = tempfile.TemporaryDirectory(prefix="push-report-ws-", dir="drafts")
+        ws_tmp = tempfile.TemporaryDirectory(prefix="push-report-ws-", dir=cwd / "drafts")
         ws_dir = Path(ws_tmp.name)
         for anchor, entries in figures.items():
             if isinstance(entries, dict):
@@ -277,18 +280,36 @@ def main() -> None:
                           f"left {fracs[2]:.1%} right {fracs[3]:.1%} -> 使用裁剪副本上传")
                     f = cropped
                 rel = f.relative_to(cwd)
-                # 显式指定显示宽度:不传 --width 时 media-insert 的默认尺寸不稳定
-                # (实测同一次推送里有的图 scale=7.28、有的被存成 100x100),
-                # 图会以极小的框显示。高度由 CLI 按纵横比自动计算。
+                # 显式指定显示宽高:不传时 media-insert 的默认尺寸不稳定
+                # (实测有的图 scale=7.28、有的被存成 100x100,2026-08-21;
+                # 只传 --width 时高度被自动算错、图被压小+框内大片留白,2026-08-24)。
+                # 宽高都按(可能裁剪过的)素材实际纵横比算好传入,插入后立即回读校验。
                 from PIL import Image
                 with Image.open(f) as im:
                     nat_w, nat_h = im.size
                 max_w = 500 if nat_h > nat_w else 740  # 竖图收窄,横图铺满栏宽
                 disp_w = min(nat_w, max_w)
-                d = run_cli(args.cli, ["docs", "+media-insert", "--doc", doc, "--as", ident,
-                                       "--file", str(rel), "--caption", entry["caption"],
-                                       "--width", str(disp_w)], cwd)
-                img_id = d["data"]["block_id"]
+                disp_h = round(disp_w * nat_h / nat_w)
+                img_id = None
+                for _attempt in (1, 2):
+                    d = run_cli(args.cli, ["docs", "+media-insert", "--doc", doc, "--as", ident,
+                                           "--file", str(rel), "--caption", entry["caption"],
+                                           "--width", str(disp_w), "--height", str(disp_h)], cwd)
+                    cand = d["data"]["block_id"]
+                    m = re.search(r'<img\b[^>]*id="' + re.escape(cand) + r'"[^>]*>',
+                                  fetch_content(args.cli, doc, cwd, ident))
+                    bw = re.search(r'\bwidth="(\d+)"', m.group(0)) if m else None
+                    bh = re.search(r'\bheight="(\d+)"', m.group(0)) if m else None
+                    if bw and bh and abs(int(bw.group(1)) - disp_w) <= 3 \
+                            and abs(int(bh.group(1)) - disp_h) <= 3:
+                        img_id = cand
+                        break
+                    run_cli(args.cli, ["docs", "+update", "--doc", doc, "--as", ident,
+                                       "--command", "block_delete", "--block-id", cand], cwd)
+                    print(f"插图尺寸校验失败(期望 {disp_w}x{disp_h},实得 "
+                          f"{bw and bw.group(1)}x{bh and bh.group(1)}),已删除坏块,重试")
+                if img_id is None:
+                    sys.exit(f"{entry['file']} 两次插入后尺寸仍不符,推送中止,请人工检查")
                 run_cli(args.cli, ["docs", "+update", "--doc", doc, "--as", ident,
                                    "--command", "block_move_after",
                                    "--block-id", target, "--src-block-ids", img_id], cwd)
