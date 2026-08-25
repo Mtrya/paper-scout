@@ -1,10 +1,28 @@
 {
-  "tau0:teaser": {"file": "assets/tau0_teaser.png", "caption": "τ₀-VLA 总览:左为 40,115 小时三类预训练数据(遥操作/自主/UMI),中为高层策略的测试时搜索(proposal→world model 想象→value 打分→reflective 定稿),下为低层 VLA,右为三类能力展示"},
+  "tau0:teaser": {
+    "file": "assets/tau0_teaser.png",
+    "caption": "τ₀-VLA 总览:左为 40,115 小时三类预训练数据(遥操作/自主/UMI),中为高层策略的测试时搜索(proposal→world model 想象→value 打分→reflective 定稿),下为低层 VLA,右为三类能力展示"
+  },
   "tau0:traj": [
-    {"file": "assets/tau0_zeroshot_traj.png", "caption": "零样本 base ckpt 开环预测(橙)对 GT(蓝),100 个锚点 × H=30。夹爪两通道(左上两格)预测恒定卡在 0.80 附近而 GT 恒为 1.00——常数偏移型失败;臂关节能跟上形状但漂移明显"},
-    {"file": "assets/tau0_ft500_traj.png", "caption": "冻骨干专家微调 500 步(202 秒)后同一评估:夹爪回到 1.00 附近,臂关节跟踪显著收紧。蓝线方形波般的转折是敲锣动作的关节 delta 模式"}
+    {
+      "file": "assets/tau0_zeroshot_traj.png",
+      "caption": "零样本 base ckpt 开环预测(橙)对 GT(蓝),100 个锚点 × H=30。夹爪两通道(左上两格)预测恒定卡在 0.80 附近而 GT 恒为 1.00——常数偏移型失败;臂关节能跟上形状但漂移明显"
+    },
+    {
+      "file": "assets/tau0_ft500_traj.png",
+      "caption": "冻骨干专家微调 500 步(202 秒)后同一评估:夹爪回到 1.00 附近,臂关节跟踪显著收紧。蓝线方形波般的转折是敲锣动作的关节 delta 模式"
+    }
   ],
-  "dalewm:protocol": {"file": "assets/dalewm_protocol.png", "caption": "DA-LeWM 的 Plan-Real Spearman 协议(论文 Fig.2):同一对起点/目标下,64 条候选动作序列分别走潜空间 rollout(得 c_lat)与真实环境 rollout(得 c_real),对每个起点-目标对算 Spearman 排序相关再取均值"},
-  "dalewm:alignfig": {"file": "assets/dalewm_align_fig.png", "caption": "我们在自家 cube-single 检查点上的诊断:(a) PSG 接地头几乎不改变 Plan-Real 排序保真(0.665 vs 0.670,30 对);(b) 两模型的排序保真都随 CEM 收敛崩塌,复现论文的 elite saturation;(c) 潜位移-动作位移相关性 PSG 反而更高(0.72 vs 0.58)"},
-  "forgewm:overview": {"file": "assets/forgewm_overview.png", "caption": "ForgeWM 总览(论文 Fig.2):(A) 游戏原生动作接口(键盘离散量走 cross-attention,鼠标连续量窗口化融合);(B) 四阶段因果训练:双向域教师→教师强制因果→在线一致性蒸馏初始化→on-policy 分布匹配,产出 1/2/4 步三个学生;(C) 双路径部署:在线用少步学生交互,事后对草稿重加噪细化"}
+  "dalewm:protocol": {
+    "file": "assets/dalewm_protocol.png",
+    "caption": "DA-LeWM 的 Plan-Real Spearman 协议(论文 Fig.2):同一对起点/目标下,64 条候选动作序列分别走潜空间 rollout(得 c_lat)与真实环境 rollout(得 c_real),对每个起点-目标对算 Spearman 排序相关再取均值"
+  },
+  "dalewm:alignfig": {
+    "file": "assets/dalewm_align_fig.png",
+    "caption": "我们在自家 cube-single 检查点上的诊断:(a) PSG 接地头几乎不改变 Plan-Real 排序保真(0.665 vs 0.670,30 对);(b) 两模型的排序保真都随 CEM 收敛崩塌,复现论文的 elite saturation;(c) 潜位移-动作位移相关性 PSG 反而更高(0.72 vs 0.58)"
+  },
+  "dyna2:onestep": {
+    "file": "assets/dyna2_onestep.jpg",
+    "caption": "Dyna-2 单步蒸馏的几何诊断(官方博客 Fig.16):教师的概率流路径局部直而全局弯(58°),一步直线跨越必然落在支撑集外;解法让学生追逐随自己移动的慢目标。下排:教师 1 步=所有未来的平均(糊)、Dyna-2 单步学生(锐利)、教师 50 步对照"
+  }
 }
