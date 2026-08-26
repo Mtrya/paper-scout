@@ -151,12 +151,20 @@ def parse_anchors(text: str) -> dict[str, str]:
         m = re.fullmatch(r"\[\[figure-anchor:([^\]]+)\]\]", line.strip())
         if m:
             j = i - 1
-            while j >= 0 and re.fullmatch(r"\[\[figure-anchor:[^\]]+\]\]", lines[j].strip()):
-                j -= 1
-            if j < 0:
-                raise RuntimeError(f"锚点 {m.group(1)} 之前没有正文块")
-            prev = re.sub(r"<[^>]+>", " ", lines[j])
-            prev = re.sub(r"\s+", " ", prev).strip()
+            prev = ""
+            while j >= 0:
+                if re.fullmatch(r"\[\[figure-anchor:[^\]]+\]\]", lines[j].strip()):
+                    j -= 1
+                    continue
+                prev = re.sub(r"<[^>]+>", " ", lines[j])
+                prev = re.sub(r"\s+", " ", prev).strip()
+                if prev:
+                    break
+                j -= 1  # 纯标签行(如 </table>)没有可匹配文本,继续向前找
+            if not prev:
+                raise RuntimeError(
+                    f"锚点 {m.group(1)} 之前没有可定位的文本块"
+                    "(紧跟表格/图片时请把锚点前移到一个段落之后)")
             anchors[m.group(1)] = prev[-60:]  # 用段尾片段匹配,避开开头重复措辞
     return anchors
 
@@ -168,6 +176,8 @@ def find_block_id(content: str, text_frag: str) -> str:
     周围插入额外空格,直接子串匹配会失败)。
     """
     frag = re.sub(r"\s+", " ", text_frag).strip()
+    if not frag:
+        raise RuntimeError("锚点前驱文本为空,退化为匹配首个块——拒绝静默错放")
     for m in re.finditer(r'<(\w+) id="([^"]+)"[^>]*>(.*?)</\1>', content, re.S):
         plain = re.sub(r"<[^>]+>", " ", m.group(3))
         plain = re.sub(r"\s+", " ", plain)
