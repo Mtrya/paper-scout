@@ -13,6 +13,14 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-08-27 — 2026-08-26(WAM 接口的抽象层级)
+- Doc: https://fudan-nlp.feishu.cn/docx/C3UVd4N4cosmCxxkVFIcf43anxf
+- Run: runs/2026-08-27-gigabrain-lawa-worldecho/
+- Deep threads: GigaBrain-0.7 精读(三系统:S2 PaliGemma2-3B 规划 / S1 双流 VLA 3.5B+0.5B / S3 世界价值模型 5B,子目标图+二元优势注入 prompt 推理恒取 1;骨干更大更差 Gemma4 8.5B 叠衣服 0%;双流 vs 交叉注意 0.221s vs 0.073s;System3 消融礼物包装 0→80%;RoboTwin Hard 67.9% vs π0.5 46.0% 但 Easy 反输 66.8 vs 70.7;EBench 33.30 非第一)(2608.15875), LAWA 精读 + 实验 C(潜动作意图接口=冻结 ViPRA 式分词器+SAM2 掩码辅助+第一人称预训练;RoboCasa 65.6/80.8 比 Fast-WAM +9.6/+4.5,承重墙=无预训练时比 Joint-WAM 低 3.4/2.0;实验 C 玩具 WAM-IF:全量 lawatok 3.0% vs joint 26.25% 锚点假说全量证伪,少样本 lawatok 16.0% vs 其他 3/7/7% 锚点收益只在数据稀缺处显现,与论文 few-shot 放大模式同向;全量<少样本倒挂悬案)(2608.24882), WorldEcho/WorldSync 精读 + 实验 D(off-expert 动作跟随诊断:五类查询+视觉门+SE(3) NDTW 门控误差;WorldSync=扩覆盖+AFE+IE;实验 D 玩具 AC-WM EE-ADE 中位 px n=60/类:demo 1.14/xstate 2.27/perturb 3.13/random 8.64 单调退化复现;扩覆盖 random 反略差 8.93;IE 唯一改善最远分布查询 -11%,方向同论文、幅度弱得多,论文 -34%;arm-loss≈0 玩具无纹理视觉崩溃半边复现不了)(2608.24885)
+- Covered papers: 2608.15875, 2608.24882, 2608.24885
+- Shortlisted papers: 2608.24115(PonderPounce), 2608.24101(TrAct), 2608.23041(AutoSaddler), 2608.24714(GaussianWAM), 2608.23831(ARLI), 2608.24845(LAION-BVD)
+- 背景: 三篇按接口抽象层级排开(LAWA 潜动作 token 最贴动作 / GigaBrain 标量价值+子目标图最贴语义 / WorldEcho 不立接口而给视频式未来立度量+修复配方);锚点假说分裂结果(全量证伪、few-shot 成立且放大),IE 因果消融方向成立幅度弱;逐样本 ADE 未落盘做不了显著性检验,教训记入记忆
+
 ## 2026-08-26 — 2026-08-25(WAM 接口形态专题)
 - Doc: https://fudan-nlp.feishu.cn/docx/JZA7djXUEoVGTwxXQVIcpxXXnch
 - Run: runs/2026-08-26-hydra0-ld4wam-unimem/

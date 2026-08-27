@@ -1,0 +1,8 @@
+{
+  "gigabrain:overview": {"file": "assets/figures/gigabrain07_overview.jpg", "caption": "GigaBrain-0.7 三系统架构总览:System 2 理解与规划、System 1 动作与控制(双流 VLA)、System 3 世界价值模型,右侧为经验驱动 RL 回路;顶部为头条结果(图自论文 Fig.1)"},
+  "lawa:arch": {"file": "assets/figures/lawa_arch.jpg", "caption": "LAWA 架构:视频/潜动作/动作三专家联合去噪,右侧为训练与推理的结构化注意力掩码;推理时视频分支整路丢弃(图自论文 Fig.2)"},
+  "expc:sr": {"file": "assets/figures/expc_sr.png", "caption": "实验 C:玩具 WAM 全量(左,灰柱为 08-14 存档基线)与少样本(右,200 集)下各未来接口变体的成功率;码本锚点版 lawatok 的收益只在少样本处显现"},
+  "worldecho:failures": {"file": "assets/figures/worldecho_failures.jpg", "caption": "off-expert 动作下的两种失败形态:视觉崩溃(手臂/夹爪变形消失)与动作失配(画面合理但没按查询动作动)(图自论文 Fig.2)"},
+  "worldecho:protocol": {"file": "assets/figures/worldecho_protocol.jpg", "caption": "WorldEcho 评测协议:五类动作查询 → 仿真器真值与世界模型配对 rollout → 视觉完整性门控 + SE(3) NDTW 轨迹对齐,视觉不过门直接吃固定罚分 κ(图自论文 Fig.3)"},
+  "expd:ade": {"file": "assets/figures/expd_ade.png", "caption": "实验 D:玩具 AC-WM 在四类动作查询下的 EE-ADE(左,越低越跟随查询动作)与手臂丢失率(右);IE 是唯一改善最远分布(random feasible)查询的变体"}
+}
