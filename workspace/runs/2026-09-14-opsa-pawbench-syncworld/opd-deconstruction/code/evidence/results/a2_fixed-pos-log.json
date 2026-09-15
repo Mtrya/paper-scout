@@ -1,0 +1,254 @@
+[
+  {
+    "n_tokens_selected": 3835,
+    "loss": 27.30371856689453,
+    "mean_resp_len": 1598.0,
+    "mean_abs_adv": 0.03999791666865349,
+    "mean_entropy": 2.3522918224334717,
+    "neg_adv_frac": 0.0,
+    "step": 1,
+    "secs": 71.04137563705444
+  },
+  {
+    "n_tokens_selected": 2666,
+    "loss": 31.782917022705078,
+    "mean_resp_len": 1111.0,
+    "mean_abs_adv": 0.0399940051138401,
+    "mean_entropy": 1.3377569913864136,
+    "neg_adv_frac": 0.0,
+    "step": 2,
+    "secs": 47.99740648269653
+  },
+  {
+    "n_tokens_selected": 4706,
+    "loss": 22.836671829223633,
+    "mean_resp_len": 1961.0,
+    "mean_abs_adv": 0.03999660164117813,
+    "mean_entropy": 2.4687016010284424,
+    "neg_adv_frac": 0.0,
+    "step": 3,
+    "secs": 86.59663033485413
+  },
+  {
+    "n_tokens_selected": 3741,
+    "loss": 27.29791831970215,
+    "mean_resp_len": 1559.0,
+    "mean_abs_adv": 0.039993587881326675,
+    "mean_entropy": 2.2497200965881348,
+    "neg_adv_frac": 0.0,
+    "step": 4,
+    "secs": 67.32372951507568
+  },
+  {
+    "n_tokens_selected": 3369,
+    "loss": 30.529626846313477,
+    "mean_resp_len": 1404.0,
+    "mean_abs_adv": 0.03999288007616997,
+    "mean_entropy": 1.770168662071228,
+    "neg_adv_frac": 0.0,
+    "step": 5,
+    "secs": 60.48320770263672
+  },
+  {
+    "n_tokens_selected": 3549,
+    "loss": 26.436838150024414,
+    "mean_resp_len": 1479.0,
+    "mean_abs_adv": 0.03999323770403862,
+    "mean_entropy": 2.108952283859253,
+    "neg_adv_frac": 0.0,
+    "step": 6,
+    "secs": 63.69319725036621
+  },
+  {
+    "n_tokens_selected": 3528,
+    "loss": 26.494388580322266,
+    "mean_resp_len": 1470.0,
+    "mean_abs_adv": 0.040000006556510925,
+    "mean_entropy": 2.045747995376587,
+    "neg_adv_frac": 0.0,
+    "step": 7,
+    "secs": 63.13502597808838
+  },
+  {
+    "n_tokens_selected": 3259,
+    "loss": 25.57474136352539,
+    "mean_resp_len": 1358.0,
+    "mean_abs_adv": 0.03999754786491394,
+    "mean_entropy": 1.9971851110458374,
+    "neg_adv_frac": 0.0,
+    "step": 8,
+    "secs": 58.56706428527832
+  },
+  {
+    "n_tokens_selected": 3453,
+    "loss": 28.403921127319336,
+    "mean_resp_len": 1439.0,
+    "mean_abs_adv": 0.039993055164813995,
+    "mean_entropy": 1.8189773559570312,
+    "neg_adv_frac": 0.0,
+    "step": 9,
+    "secs": 61.54784035682678
+  },
+  {
+    "n_tokens_selected": 3712,
+    "loss": 25.34390640258789,
+    "mean_resp_len": 1547.0,
+    "mean_abs_adv": 0.039991382509469986,
+    "mean_entropy": 2.369844675064087,
+    "neg_adv_frac": 0.0,
+    "step": 10,
+    "secs": 66.28376817703247
+  },
+  {
+    "n_tokens_selected": 4915,
+    "loss": 20.168132781982422,
+    "mean_resp_len": 2048.0,
+    "mean_abs_adv": 0.0399983748793602,
+    "mean_entropy": 2.5615427494049072,
+    "neg_adv_frac": 0.0,
+    "step": 11,
+    "secs": 88.72554683685303
+  },
+  {
+    "n_tokens_selected": 4701,
+    "loss": 24.421052932739258,
+    "mean_resp_len": 1959.0,
+    "mean_abs_adv": 0.039994899183511734,
+    "mean_entropy": 2.4808828830718994,
+    "neg_adv_frac": 0.0,
+    "step": 12,
+    "secs": 84.65562081336975
+  },
+  {
+    "n_tokens_selected": 3045,
+    "loss": 26.542001724243164,
+    "mean_resp_len": 1269.0,
+    "mean_abs_adv": 0.03999212384223938,
+    "mean_entropy": 2.07995867729187,
+    "neg_adv_frac": 0.0,
+    "step": 13,
+    "secs": 54.94202947616577
+  },
+  {
+    "n_tokens_selected": 4437,
+    "loss": 26.575410842895508,
+    "mean_resp_len": 1849.0,
+    "mean_abs_adv": 0.03999459743499756,
+    "mean_entropy": 2.5516819953918457,
+    "neg_adv_frac": 0.0,
+    "step": 14,
+    "secs": 81.90014433860779
+  },
+  {
+    "n_tokens_selected": 4915,
+    "loss": 21.288965225219727,
+    "mean_resp_len": 2048.0,
+    "mean_abs_adv": 0.0399983748793602,
+    "mean_entropy": 2.621046781539917,
+    "neg_adv_frac": 0.0,
+    "step": 15,
+    "secs": 90.43962240219116
+  },
+  {
+    "n_tokens_selected": 2894,
+    "loss": 28.474157333374023,
+    "mean_resp_len": 1206.0,
+    "mean_abs_adv": 0.03999447450041771,
+    "mean_entropy": 1.923293948173523,
+    "neg_adv_frac": 0.0,
+    "step": 16,
+    "secs": 52.7981641292572
+  },
+  {
+    "n_tokens_selected": 4915,
+    "loss": 23.93665313720703,
+    "mean_resp_len": 2048.0,
+    "mean_abs_adv": 0.0399983786046505,
+    "mean_entropy": 2.9717464447021484,
+    "neg_adv_frac": 0.0,
+    "step": 17,
+    "secs": 90.17886471748352
+  },
+  {
+    "n_tokens_selected": 4010,
+    "loss": 21.154552459716797,
+    "mean_resp_len": 1671.0,
+    "mean_abs_adv": 0.039996009320020676,
+    "mean_entropy": 2.1316115856170654,
+    "neg_adv_frac": 0.0,
+    "step": 18,
+    "secs": 72.63039517402649
+  },
+  {
+    "n_tokens_selected": 3355,
+    "loss": 24.223649978637695,
+    "mean_resp_len": 1398.0,
+    "mean_abs_adv": 0.03999761864542961,
+    "mean_entropy": 1.7327947616577148,
+    "neg_adv_frac": 0.0,
+    "step": 19,
+    "secs": 60.52647376060486
+  },
+  {
+    "n_tokens_selected": 4404,
+    "loss": 25.57845687866211,
+    "mean_resp_len": 1835.0,
+    "mean_abs_adv": 0.04000000283122063,
+    "mean_entropy": 2.284269332885742,
+    "neg_adv_frac": 0.0,
+    "step": 20,
+    "secs": 80.54711937904358,
+    "eval_avg4": 0.05
+  },
+  {
+    "n_tokens_selected": 3338,
+    "loss": 21.98590087890625,
+    "mean_resp_len": 1391.0,
+    "mean_abs_adv": 0.039995208382606506,
+    "mean_entropy": 2.516944408416748,
+    "neg_adv_frac": 0.0,
+    "step": 21,
+    "secs": 59.70783805847168
+  },
+  {
+    "n_tokens_selected": 4800,
+    "loss": 19.40937042236328,
+    "mean_resp_len": 2000.0,
+    "mean_abs_adv": 0.04000000283122063,
+    "mean_entropy": 2.485903263092041,
+    "neg_adv_frac": 0.0,
+    "step": 22,
+    "secs": 87.37947344779968
+  },
+  {
+    "n_tokens_selected": 4603,
+    "loss": 19.599809646606445,
+    "mean_resp_len": 1918.0,
+    "mean_abs_adv": 0.039998263120651245,
+    "mean_entropy": 2.863009452819824,
+    "neg_adv_frac": 0.0,
+    "step": 23,
+    "secs": 84.02023458480835
+  },
+  {
+    "n_tokens_selected": 3381,
+    "loss": 24.36811065673828,
+    "mean_resp_len": 1409.0,
+    "mean_abs_adv": 0.03999290615320206,
+    "mean_entropy": 1.9653503894805908,
+    "neg_adv_frac": 0.0,
+    "step": 24,
+    "secs": 61.36014723777771
+  },
+  {
+    "n_tokens_selected": 4056,
+    "loss": 22.433252334594727,
+    "mean_resp_len": 1690.0,
+    "mean_abs_adv": 0.04000000283122063,
+    "mean_entropy": 1.998468279838562,
+    "neg_adv_frac": 0.0,
+    "step": 25,
+    "secs": 73.34410071372986,
+    "eval_avg4": 0.05
+  }
+]
