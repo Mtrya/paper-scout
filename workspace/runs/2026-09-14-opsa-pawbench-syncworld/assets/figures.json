@@ -1,0 +1,30 @@
+{
+  "opd:fig1-overview": {
+    "file": "assets/opd_opsa_overview.png",
+    "caption": "OPSA 的核心图示:(a–d) 四条后训练管线——RLVR / OPD / OPSD / OPSA,后者无教师、无提示、无可验证奖励、零外部监督;(右上) AIME24 训练曲线,OPD 停滞、OPSA 持续攀升;(右下) Qwen3-1.7B 在三个数学基准上的 avg@32 与 pass@32(AIME24 13.44→48.85)。"
+  },
+  "a1:noise": {
+    "file": "assets/plot_a1_noise.png",
+    "caption": "A1 噪声复测(真实权重,367 条可用轨迹):左 = 正确答案拿到负优势的比例,中 = 错误答案拿到正优势的比例,右 = 合计噪声率(虚线为论文 4B 教师的 30.6%)。4B 教师合计 31.3% 与论文几乎重合;14B 教师的结构翻转——正确答案被否定率升到 66.7%、错误答案被肯定率降到 13.9%。"
+  },
+  "pawbench:fig1-overview": {
+    "file": "assets/pawbench_one_plausible.png",
+    "caption": "PAWBench 的三格示意:(a) 只生成一条\"看起来对\"的轨迹就宣布通过;(b) 概率未对齐的世界模型反复只给同一个结局(\"为什么总是 6?\");(c) 概率对齐的世界模型重现真实结局分布(\"看起来很均衡\")。"
+  },
+  "b:toywam-tvd": {
+    "file": "assets/plot_b_tvd.png",
+    "caption": "随机结局玩具世界的训练目标对照(五个动作的 500 次 rollout):左为与解析参考分布的 TVD,右为有效支持覆盖率。det-MSE 把全部质量押在众数(覆盖率 1/9),两条隐变量臂各覆盖 6/9,z-diffusion 的 TVD(0.10)已逼近 500 次采样的 oracle 噪声地板(0.04)。"
+  },
+  "a2:curves": {
+    "file": "assets/plot_a2_curves.png",
+    "caption": "A2 五条件的训练动态(0.6B 学生 × 1.7B 教师,每条件 40 步、固定正优势 25 步)。左:平均响应长度(灰虚线是 2048 的生成长度上限)。右:策略熵。把条件分开的是熵与长度,不是精度——单 query 条件的熵下降最快(1.32→0.92),固定正优势的熵不降反升(2.05→2.37,把概率质量推向学生自己认为最不可能的词),OPD 与固定负优势几乎重合(幅度差 20–35 倍,行为不变)。"
+  },
+  "a3:bar": {
+    "file": "assets/plot_a3_bar.png",
+    "caption": "发布权重的独立复现(AIME24,30 题 × 4 条采样,官方 grader)。base Qwen3-1.7B:pass@4 20.0 / avg@4 10.0;发布 OPSA 权重:pass@4 40.0 / avg@4 24.2。标题给出论文同基线的 avg@32 / pass@32。我们的 avg@4 是下界:30 题里有 26 题的批次至少一条回答撞到 16384 生成上限(base 5/30;同一 prompt 的 4 条批量解码,较短序列会被 padding 到最长序列的长度),而整批自然结束的 16 条回答全部正确——预算不够让它想完。"
+  },
+  "syncworld:calib": {
+    "file": "assets/syncworld_calib.png",
+    "caption": "SyncWorld 的标定 episode:初始位姿加六个自由度各扫一个方向的画面(Δx/Δy/Δz/Δyaw/Δpitch/Δroll)——一段把\"每个自由度在像素上长什么样\"展示全的交互,作为上下文喂给世界模型。"
+  }
+}

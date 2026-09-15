@@ -1,0 +1,810 @@
+{
+  "cond": "fixed-pos",
+  "ckpt": "results/a2_fixed-pos/ckpt_25.pt",
+  "n": 50,
+  "k": 4,
+  "results": [
+    {
+      "i": 0,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        304,
+        304,
+        304,
+        304
+      ]
+    },
+    {
+      "i": 1,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        724,
+        724,
+        724,
+        724
+      ]
+    },
+    {
+      "i": 2,
+      "ok": true,
+      "attempts": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "lens": [
+        344,
+        344,
+        344,
+        344
+      ]
+    },
+    {
+      "i": 3,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        252,
+        252,
+        252,
+        252
+      ]
+    },
+    {
+      "i": 4,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        385,
+        385,
+        385,
+        385
+      ]
+    },
+    {
+      "i": 5,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        152,
+        152,
+        152,
+        152
+      ]
+    },
+    {
+      "i": 6,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        434,
+        434,
+        434,
+        434
+      ]
+    },
+    {
+      "i": 7,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        1275,
+        1275,
+        1275,
+        1275
+      ]
+    },
+    {
+      "i": 8,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        189,
+        189,
+        189,
+        189
+      ]
+    },
+    {
+      "i": 9,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        815,
+        815,
+        815,
+        815
+      ]
+    },
+    {
+      "i": 10,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        474,
+        474,
+        474,
+        474
+      ]
+    },
+    {
+      "i": 11,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        1337,
+        1337,
+        1337,
+        1337
+      ]
+    },
+    {
+      "i": 12,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        400,
+        400,
+        400,
+        400
+      ]
+    },
+    {
+      "i": 13,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        206,
+        206,
+        206,
+        206
+      ]
+    },
+    {
+      "i": 14,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        510,
+        510,
+        510,
+        510
+      ]
+    },
+    {
+      "i": 15,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        1171,
+        1171,
+        1171,
+        1171
+      ]
+    },
+    {
+      "i": 16,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        298,
+        298,
+        298,
+        298
+      ]
+    },
+    {
+      "i": 17,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        577,
+        577,
+        577,
+        577
+      ]
+    },
+    {
+      "i": 18,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        627,
+        627,
+        627,
+        627
+      ]
+    },
+    {
+      "i": 19,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        1682,
+        1682,
+        1682,
+        1682
+      ]
+    },
+    {
+      "i": 20,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        117,
+        117,
+        117,
+        117
+      ]
+    },
+    {
+      "i": 21,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        929,
+        929,
+        929,
+        929
+      ]
+    },
+    {
+      "i": 22,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        1297,
+        1297,
+        1297,
+        1297
+      ]
+    },
+    {
+      "i": 23,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        449,
+        449,
+        449,
+        449
+      ]
+    },
+    {
+      "i": 24,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        1196,
+        1196,
+        1196,
+        1196
+      ]
+    },
+    {
+      "i": 25,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        2048,
+        2048,
+        2048,
+        2048
+      ]
+    },
+    {
+      "i": 26,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        903,
+        903,
+        903,
+        903
+      ]
+    },
+    {
+      "i": 27,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        258,
+        258,
+        258,
+        258
+      ]
+    },
+    {
+      "i": 28,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        317,
+        317,
+        317,
+        317
+      ]
+    },
+    {
+      "i": 29,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        293,
+        293,
+        293,
+        293
+      ]
+    },
+    {
+      "i": 30,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        248,
+        248,
+        248,
+        248
+      ]
+    },
+    {
+      "i": 31,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        138,
+        138,
+        138,
+        138
+      ]
+    },
+    {
+      "i": 32,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        316,
+        316,
+        316,
+        316
+      ]
+    },
+    {
+      "i": 33,
+      "ok": true,
+      "attempts": [
+        false,
+        true,
+        true,
+        false
+      ],
+      "lens": [
+        656,
+        656,
+        656,
+        656
+      ]
+    },
+    {
+      "i": 34,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        817,
+        817,
+        817,
+        817
+      ]
+    },
+    {
+      "i": 35,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        409,
+        409,
+        409,
+        409
+      ]
+    },
+    {
+      "i": 36,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        1086,
+        1086,
+        1086,
+        1086
+      ]
+    },
+    {
+      "i": 37,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        208,
+        208,
+        208,
+        208
+      ]
+    },
+    {
+      "i": 38,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        187,
+        187,
+        187,
+        187
+      ]
+    },
+    {
+      "i": 39,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        257,
+        257,
+        257,
+        257
+      ]
+    },
+    {
+      "i": 40,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        373,
+        373,
+        373,
+        373
+      ]
+    },
+    {
+      "i": 41,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        411,
+        411,
+        411,
+        411
+      ]
+    },
+    {
+      "i": 42,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        200,
+        200,
+        200,
+        200
+      ]
+    },
+    {
+      "i": 43,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        1844,
+        1844,
+        1844,
+        1844
+      ]
+    },
+    {
+      "i": 44,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        478,
+        478,
+        478,
+        478
+      ]
+    },
+    {
+      "i": 45,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        408,
+        408,
+        408,
+        408
+      ]
+    },
+    {
+      "i": 46,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        1457,
+        1457,
+        1457,
+        1457
+      ]
+    },
+    {
+      "i": 47,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        432,
+        432,
+        432,
+        432
+      ]
+    },
+    {
+      "i": 48,
+      "ok": true,
+      "attempts": [
+        true,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        212,
+        212,
+        212,
+        212
+      ]
+    },
+    {
+      "i": 49,
+      "ok": false,
+      "attempts": [
+        false,
+        false,
+        false,
+        false
+      ],
+      "lens": [
+        129,
+        129,
+        129,
+        129
+      ]
+    }
+  ],
+  "passk": 0.06,
+  "avgk": 0.035
+}

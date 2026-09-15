@@ -27,7 +27,7 @@ user-invocable: false
 - callout 的子元素必须是块级元素(`<p>`、标题、列表)。不要裸文本,不要在 callout 内放表格或代码块。
 - 文本和代码中的 `<`、`>`、`&` 要转义为 `&lt;`、`&gt;`、`&amp;`。
 - DocxXML 是片段格式,有多个顶层块。不要用标准的单根 XML 解析器校验它。
-- 临时媒体锚点必须是独立的顶层段落,在文档内唯一,且在媒体插入后易于删除,例如 `<p>[[figure-anchor:paper-slug:overview]]</p>`。
+- 临时媒体锚点必须是**裸行**(整行只有锚点本身,不包 `<p>` 标签),在文档内唯一,且在媒体插入后易于删除,例如单独一行 `[[figure-anchor:paper-slug:overview]]`。`push_report.py` 用整行精确匹配来定位锚点,写成 `<p>[[figure-anchor:...]]</p>` 会导致找不到锚点。
 - 本地 `report.docxxml` 中至少包含两个不同的 `[[figure-anchor:...]]` 锚点。交付的飞书文档在媒体插入后不应留下可见的占位锚点。
 - 在 `<latex>` 块内,LaTeX 命令用单个反斜杠(`\pi`、`\mathcal{L}`);双反斜杠(`\\`)是换行命令,会把每个符号渲染到新行。
 

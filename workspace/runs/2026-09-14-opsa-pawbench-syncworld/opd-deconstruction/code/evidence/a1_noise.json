@@ -1,0 +1,28 @@
+{
+  "agg": {
+    "models/Qwen3-4B-Instruct": {
+      "correct": {
+        "noisy": 39,
+        "n": 93
+      },
+      "incorrect": {
+        "noisy": 76,
+        "n": 274
+      },
+      "usable": 367
+    },
+    "models/Qwen3-14B-Instruct": {
+      "correct": {
+        "noisy": 62,
+        "n": 93
+      },
+      "incorrect": {
+        "noisy": 38,
+        "n": 274
+      },
+      "usable": 367
+    }
+  },
+  "n_results": 505,
+  "n_pairs": 505
+}

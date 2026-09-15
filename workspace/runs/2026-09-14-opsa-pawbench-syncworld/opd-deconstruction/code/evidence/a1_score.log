@@ -1,0 +1,34 @@
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:01<00:01,  1.93s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.01it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:02<00:00,  1.13s/it]
+loaded 120 cached samples; 76 remain
+pool: 505 (question, response) pairs; stripped prompt-tail prefix on 376 (mean 185 chars)
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:02<00:04,  2.01s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:03<00:01,  1.98s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:04<00:00,  1.34s/it]
+saved token scores through models/Qwen3-4B-Instruct
+Loading checkpoint shards:   0%|          | 0/8 [00:00<?, ?it/s]Loading checkpoint shards:  12%|█▎        | 1/8 [00:01<00:12,  1.83s/it]Loading checkpoint shards:  25%|██▌       | 2/8 [00:03<00:11,  1.87s/it]Loading checkpoint shards:  38%|███▊      | 3/8 [00:05<00:09,  1.88s/it]Loading checkpoint shards:  50%|█████     | 4/8 [00:07<00:07,  1.88s/it]Loading checkpoint shards:  62%|██████▎   | 5/8 [00:09<00:05,  1.88s/it]Loading checkpoint shards:  75%|███████▌  | 6/8 [00:11<00:03,  1.88s/it]Loading checkpoint shards:  88%|████████▊ | 7/8 [00:13<00:01,  1.94s/it]Loading checkpoint shards: 100%|██████████| 8/8 [00:14<00:00,  1.63s/it]Loading checkpoint shards: 100%|██████████| 8/8 [00:14<00:00,  1.79s/it]
+saved token scores through models/Qwen3-14B-Instruct
+{
+  "models/Qwen3-4B-Instruct": {
+    "correct": {
+      "noisy": 39,
+      "n": 93
+    },
+    "incorrect": {
+      "noisy": 76,
+      "n": 274
+    },
+    "usable": 367
+  },
+  "models/Qwen3-14B-Instruct": {
+    "correct": {
+      "noisy": 62,
+      "n": 93
+    },
+    "incorrect": {
+      "noisy": 38,
+      "n": 274
+    },
+    "usable": 367
+  }
+}
+models/Qwen3-4B-Instruct: usable=367 correct_noise=39/93 incorrect_noise=76/274 overall=0.313
+models/Qwen3-14B-Instruct: usable=367 correct_noise=62/93 incorrect_noise=38/274 overall=0.272
