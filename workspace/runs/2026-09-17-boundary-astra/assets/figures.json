@@ -1,0 +1,8 @@
+{
+  "sh:arch": {"file": "assets/sh_arch.jpg", "caption": "Show-Harness 架构:VLM 每步输出一个语义动作单元(MV_RIGHT/GRASP/RELEASE 等),Action Interpreter 确定性落地为机器人小段运动(安全限幅+步长),同一接口跨 VLM 与跨本体复用"},
+  "b:naming": {"file": "assets/b_naming.png", "caption": "动作语义从交互中推断:5 条件 × 5 回合,astra 全部 25/25——包括论文 1/20 的 D 条件(任意符号无约定)与论文未做的 E 条件(任意符号+仅图像);论文柱为 Fig.10a 约读"},
+  "c:intercept": {"file": "assets/c_intercept.png", "caption": "拦截族。左:匀速目标,astra 决策与全知可捕上界逐回合吻合(19 可捕捕 18、6 不可捕全弃,唯一漏判是观测吃掉窗口的刀锋局);右:4cm/s 加航向抖动,小抖动成陷阱区——j5 全可捕却只捕 2(拦截落空后错选等速追击),j15/j60 反而达到全知最优"},
+  "d:throw": {"file": "assets/d_throw.png", "caption": "非平稳投掷:5 档风漂移 × 5 回合全部 25/25 命中;代价(命中所需投数)随漂移上升,σ=4(单投漂移 2× 容差)时 astra 改用压平弹道缩短飞行时间的鲁棒投法"},
+  "a:rope": {"file": "assets/a_rope.png", "caption": "绳索族。上:四关场景(L0 刚杆/L1 链/L2 绳/L3 绳绕柱,柱旁红点是自由端);下:操作扫描成功率——oracle 全关全过,astra 的失败全部归因于判据可观测性(L0 的 180° 反转、L3 的未告知平坦性判据),无一例归因于塑形能力;L3X 屏蔽 state 泄漏的环绕数后,astra 以过绕余量对冲不可观测性"},
+  "a:perception": {"file": "assets/a_perception.png", "caption": "静态绳形感知探针(10 例 × 双通道):判据操作化后,拓扑性质(是否绕柱 ≥180°)在数值坐标与渲染图两个通道都近乎可读(8/10,失误全是恰好半圈的刀锋例);自交叉计数 9/10 与 8/10;端点距离数值通道 10/10"}
+}

@@ -1,0 +1,9 @@
+{
+  "case": "03_arc_wide",
+  "channel": "numeric",
+  "wall_s": 8.4,
+  "codex_rc": 0,
+  "answer": {
+    "q1": "yes"
+  }
+}

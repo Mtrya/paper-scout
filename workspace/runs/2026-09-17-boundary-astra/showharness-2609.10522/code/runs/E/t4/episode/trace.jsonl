@@ -1,0 +1,87 @@
+{"t_wall": 1789576221.1294897, "sim_t": 0.0, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t4/episode/obs/obs_000.png"}, "budget_left": 249}
+{"t_wall": 1789576226.7428713, "sim_t": 0.5, "kind": "act", "payload": {"unit": "A", "place": "fail"}, "budget_left": 248}
+{"t_wall": 1789576226.8595822, "sim_t": 0.5, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t4/episode/obs/obs_001.png"}, "budget_left": 247}
+{"t_wall": 1789576231.902342, "sim_t": 1.0, "kind": "act", "payload": {"unit": "B", "pick": "fail"}, "budget_left": 246}
+{"t_wall": 1789576232.0256279, "sim_t": 1.0, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t4/episode/obs/obs_002.png"}, "budget_left": 245}
+{"t_wall": 1789576236.1339507, "sim_t": 1.5, "kind": "act", "payload": {"unit": "C", "ee": [0.87, 0.783]}, "budget_left": 244}
+{"t_wall": 1789576236.2883472, "sim_t": 1.5, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t4/episode/obs/obs_003.png"}, "budget_left": 243}
+{"t_wall": 1789576242.0703535, "sim_t": 2.0, "kind": "act", "payload": {"unit": "D", "ee": [0.87, 0.803]}, "budget_left": 242}
+{"t_wall": 1789576242.1937995, "sim_t": 2.0, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t4/episode/obs/obs_004.png"}, "budget_left": 241}
+{"t_wall": 1789576247.632806, "sim_t": 2.5, "kind": "act", "payload": {"unit": "E", "ee": [0.85, 0.803]}, "budget_left": 240}
+{"t_wall": 1789576247.774902, "sim_t": 2.5, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t4/episode/obs/obs_005.png"}, "budget_left": 239}
+{"t_wall": 1789576254.450543, "sim_t": 3.0, "kind": "act", "payload": {"unit": "F", "ee": [0.85, 0.783]}, "budget_left": 238}
+{"t_wall": 1789576254.5790937, "sim_t": 3.0, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t4/episode/obs/obs_006.png"}, "budget_left": 237}
+{"t_wall": 1789576262.9491444, "sim_t": 3.5, "kind": "act", "payload": {"unit": "E", "ee": [0.83, 0.783]}, "budget_left": 236}
+{"t_wall": 1789576263.0255065, "sim_t": 4.0, "kind": "act", "payload": {"unit": "E", "ee": [0.81, 0.783]}, "budget_left": 235}
+{"t_wall": 1789576263.1258738, "sim_t": 4.5, "kind": "act", "payload": {"unit": "E", "ee": [0.79, 0.783]}, "budget_left": 234}
+{"t_wall": 1789576263.2400353, "sim_t": 5.0, "kind": "act", "payload": {"unit": "E", "ee": [0.77, 0.783]}, "budget_left": 233}
+{"t_wall": 1789576263.328784, "sim_t": 5.5, "kind": "act", "payload": {"unit": "E", "ee": [0.75, 0.783]}, "budget_left": 232}
+{"t_wall": 1789576263.405681, "sim_t": 6.0, "kind": "act", "payload": {"unit": "E", "ee": [0.73, 0.783]}, "budget_left": 231}
+{"t_wall": 1789576263.4861062, "sim_t": 6.5, "kind": "act", "payload": {"unit": "E", "ee": [0.71, 0.783]}, "budget_left": 230}
+{"t_wall": 1789576263.5673978, "sim_t": 7.0, "kind": "act", "payload": {"unit": "E", "ee": [0.69, 0.783]}, "budget_left": 229}
+{"t_wall": 1789576263.6431246, "sim_t": 7.5, "kind": "act", "payload": {"unit": "E", "ee": [0.67, 0.783]}, "budget_left": 228}
+{"t_wall": 1789576263.721288, "sim_t": 8.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.763]}, "budget_left": 227}
+{"t_wall": 1789576263.7979848, "sim_t": 8.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.743]}, "budget_left": 226}
+{"t_wall": 1789576263.8766599, "sim_t": 9.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.723]}, "budget_left": 225}
+{"t_wall": 1789576263.9540849, "sim_t": 9.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.703]}, "budget_left": 224}
+{"t_wall": 1789576264.0314136, "sim_t": 10.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.683]}, "budget_left": 223}
+{"t_wall": 1789576264.1117613, "sim_t": 10.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.663]}, "budget_left": 222}
+{"t_wall": 1789576264.1883416, "sim_t": 11.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.643]}, "budget_left": 221}
+{"t_wall": 1789576264.266139, "sim_t": 11.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.623]}, "budget_left": 220}
+{"t_wall": 1789576264.3423734, "sim_t": 12.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.603]}, "budget_left": 219}
+{"t_wall": 1789576264.4260926, "sim_t": 12.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.583]}, "budget_left": 218}
+{"t_wall": 1789576264.5065567, "sim_t": 13.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.563]}, "budget_left": 217}
+{"t_wall": 1789576264.5837038, "sim_t": 13.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.543]}, "budget_left": 216}
+{"t_wall": 1789576264.661319, "sim_t": 14.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.523]}, "budget_left": 215}
+{"t_wall": 1789576264.7480505, "sim_t": 14.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.503]}, "budget_left": 214}
+{"t_wall": 1789576264.8328168, "sim_t": 15.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.483]}, "budget_left": 213}
+{"t_wall": 1789576264.909187, "sim_t": 15.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.463]}, "budget_left": 212}
+{"t_wall": 1789576264.9857593, "sim_t": 16.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.443]}, "budget_left": 211}
+{"t_wall": 1789576265.0585966, "sim_t": 16.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.423]}, "budget_left": 210}
+{"t_wall": 1789576265.1364648, "sim_t": 17.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.403]}, "budget_left": 209}
+{"t_wall": 1789576265.2200844, "sim_t": 17.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.383]}, "budget_left": 208}
+{"t_wall": 1789576265.299204, "sim_t": 18.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.363]}, "budget_left": 207}
+{"t_wall": 1789576265.376434, "sim_t": 18.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.343]}, "budget_left": 206}
+{"t_wall": 1789576265.4531243, "sim_t": 19.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.323]}, "budget_left": 205}
+{"t_wall": 1789576265.5472858, "sim_t": 19.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.303]}, "budget_left": 204}
+{"t_wall": 1789576265.6253664, "sim_t": 20.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.283]}, "budget_left": 203}
+{"t_wall": 1789576265.7498834, "sim_t": 20.0, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t4/episode/obs/obs_007.png"}, "budget_left": 202}
+{"t_wall": 1789576270.2827053, "sim_t": 20.5, "kind": "act", "payload": {"unit": "B", "pick": "ok"}, "budget_left": 201}
+{"t_wall": 1789576276.8848755, "sim_t": 21.0, "kind": "act", "payload": {"unit": "E", "ee": [0.65, 0.283]}, "budget_left": 200}
+{"t_wall": 1789576276.989003, "sim_t": 21.5, "kind": "act", "payload": {"unit": "E", "ee": [0.63, 0.283]}, "budget_left": 199}
+{"t_wall": 1789576277.0677035, "sim_t": 22.0, "kind": "act", "payload": {"unit": "E", "ee": [0.61, 0.283]}, "budget_left": 198}
+{"t_wall": 1789576277.145737, "sim_t": 22.5, "kind": "act", "payload": {"unit": "E", "ee": [0.59, 0.283]}, "budget_left": 197}
+{"t_wall": 1789576277.2297454, "sim_t": 23.0, "kind": "act", "payload": {"unit": "E", "ee": [0.57, 0.283]}, "budget_left": 196}
+{"t_wall": 1789576277.3146715, "sim_t": 23.5, "kind": "act", "payload": {"unit": "E", "ee": [0.55, 0.283]}, "budget_left": 195}
+{"t_wall": 1789576277.392936, "sim_t": 24.0, "kind": "act", "payload": {"unit": "E", "ee": [0.53, 0.283]}, "budget_left": 194}
+{"t_wall": 1789576277.47333, "sim_t": 24.5, "kind": "act", "payload": {"unit": "E", "ee": [0.51, 0.283]}, "budget_left": 193}
+{"t_wall": 1789576277.556612, "sim_t": 25.0, "kind": "act", "payload": {"unit": "E", "ee": [0.49, 0.283]}, "budget_left": 192}
+{"t_wall": 1789576277.6340387, "sim_t": 25.5, "kind": "act", "payload": {"unit": "E", "ee": [0.47, 0.283]}, "budget_left": 191}
+{"t_wall": 1789576277.7244716, "sim_t": 26.0, "kind": "act", "payload": {"unit": "E", "ee": [0.45, 0.283]}, "budget_left": 190}
+{"t_wall": 1789576277.8078656, "sim_t": 26.5, "kind": "act", "payload": {"unit": "E", "ee": [0.43, 0.283]}, "budget_left": 189}
+{"t_wall": 1789576277.889284, "sim_t": 27.0, "kind": "act", "payload": {"unit": "E", "ee": [0.41, 0.283]}, "budget_left": 188}
+{"t_wall": 1789576277.9682949, "sim_t": 27.5, "kind": "act", "payload": {"unit": "E", "ee": [0.39, 0.283]}, "budget_left": 187}
+{"t_wall": 1789576278.0464046, "sim_t": 28.0, "kind": "act", "payload": {"unit": "E", "ee": [0.37, 0.283]}, "budget_left": 186}
+{"t_wall": 1789576278.125476, "sim_t": 28.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.303]}, "budget_left": 185}
+{"t_wall": 1789576278.2034137, "sim_t": 29.0, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.323]}, "budget_left": 184}
+{"t_wall": 1789576278.2831407, "sim_t": 29.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.343]}, "budget_left": 183}
+{"t_wall": 1789576278.3650417, "sim_t": 30.0, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.363]}, "budget_left": 182}
+{"t_wall": 1789576278.4471388, "sim_t": 30.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.383]}, "budget_left": 181}
+{"t_wall": 1789576278.525897, "sim_t": 31.0, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.403]}, "budget_left": 180}
+{"t_wall": 1789576278.611353, "sim_t": 31.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.423]}, "budget_left": 179}
+{"t_wall": 1789576278.689224, "sim_t": 32.0, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.443]}, "budget_left": 178}
+{"t_wall": 1789576278.7661643, "sim_t": 32.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.463]}, "budget_left": 177}
+{"t_wall": 1789576278.8452275, "sim_t": 33.0, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.483]}, "budget_left": 176}
+{"t_wall": 1789576278.9257073, "sim_t": 33.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.503]}, "budget_left": 175}
+{"t_wall": 1789576279.0015051, "sim_t": 34.0, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.523]}, "budget_left": 174}
+{"t_wall": 1789576279.0774581, "sim_t": 34.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.543]}, "budget_left": 173}
+{"t_wall": 1789576279.1552067, "sim_t": 35.0, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.563]}, "budget_left": 172}
+{"t_wall": 1789576279.2318428, "sim_t": 35.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.583]}, "budget_left": 171}
+{"t_wall": 1789576279.3136244, "sim_t": 36.0, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.603]}, "budget_left": 170}
+{"t_wall": 1789576279.3985872, "sim_t": 36.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.623]}, "budget_left": 169}
+{"t_wall": 1789576279.4760396, "sim_t": 37.0, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.643]}, "budget_left": 168}
+{"t_wall": 1789576279.5543032, "sim_t": 37.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.663]}, "budget_left": 167}
+{"t_wall": 1789576279.6673234, "sim_t": 37.5, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t4/episode/obs/obs_008.png"}, "budget_left": 166}
+{"t_wall": 1789576300.4533226, "sim_t": 38.0, "kind": "act", "payload": {"unit": "A", "place_err": 0.0014}, "budget_left": 165}
+{"t_wall": 1789576300.5720546, "sim_t": 38.0, "kind": "done", "payload": {"cond": "E", "success": true, "final_err": 0.0014, "sim_t": 38.0}, "budget_left": 165}
+{"t_wall": 1789576307.9855833, "sim_t": 38.0, "kind": "done", "payload": {"cond": "E", "success": true, "final_err": 0.0014, "sim_t": 38.0}, "budget_left": 165}

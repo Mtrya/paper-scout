@@ -1,0 +1,22 @@
+{
+  "cond": "A",
+  "trial": 2,
+  "seed": 102,
+  "wall_s": 29.7,
+  "codex_rc": 0,
+  "bridge_calls": 74,
+  "unit_map": {
+    "minus_x": "MV_LEFT",
+    "plus_x": "MV_RIGHT",
+    "plus_y": "MV_FWD",
+    "minus_y": "MV_BACK",
+    "pick": "PICK",
+    "place": "PLACE"
+  },
+  "score": {
+    "cond": "A",
+    "success": true,
+    "final_err": 0.0095,
+    "sim_t": 36.0
+  }
+}

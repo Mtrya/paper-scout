@@ -1,0 +1,154 @@
+{
+  "L0/seed1": {
+    "ang_err_deg": 0.05,
+    "moves": 26,
+    "pos_err": 0.0025,
+    "score": 0.8726,
+    "sim_s": 22.24,
+    "success": true
+  },
+  "L0/seed2": {
+    "ang_err_deg": 0.06,
+    "moves": 39,
+    "pos_err": 0.0072,
+    "score": 0.6395,
+    "sim_s": 29.94,
+    "success": true
+  },
+  "L0/seed3": {
+    "ang_err_deg": 0.09,
+    "moves": 30,
+    "pos_err": 0.0027,
+    "score": 0.8639,
+    "sim_s": 23.94,
+    "success": true
+  },
+  "L0/seed4": {
+    "ang_err_deg": 0.02,
+    "moves": 33,
+    "pos_err": 0.0066,
+    "score": 0.6695,
+    "sim_s": 27.94,
+    "success": true
+  },
+  "L0/seed5": {
+    "ang_err_deg": 0.05,
+    "moves": 28,
+    "pos_err": 0.0048,
+    "score": 0.7601,
+    "sim_s": 20.19,
+    "success": true
+  },
+  "L1/seed1": {
+    "max_dist": 0.0098,
+    "mean_dist": 0.0045,
+    "moves": 48,
+    "score": 0.3464,
+    "sim_s": 25.6,
+    "success": true
+  },
+  "L1/seed2": {
+    "max_dist": 0.0098,
+    "mean_dist": 0.0045,
+    "moves": 70,
+    "score": 0.3455,
+    "sim_s": 36.6,
+    "success": true
+  },
+  "L1/seed3": {
+    "max_dist": 0.0098,
+    "mean_dist": 0.0044,
+    "moves": 96,
+    "score": 0.3484,
+    "sim_s": 49.6,
+    "success": true
+  },
+  "L1/seed4": {
+    "max_dist": 0.0092,
+    "mean_dist": 0.0045,
+    "moves": 80,
+    "score": 0.3874,
+    "sim_s": 41.6,
+    "success": true
+  },
+  "L1/seed5": {
+    "max_dist": 0.0093,
+    "mean_dist": 0.0049,
+    "moves": 88,
+    "score": 0.3785,
+    "sim_s": 45.6,
+    "success": true
+  },
+  "L2/seed1": {
+    "end_err": 0.0006,
+    "max_dist": 0.0229,
+    "mean_dist": 0.0108,
+    "moves": 5,
+    "score": 0.7311,
+    "sim_s": 6.0,
+    "success": true
+  },
+  "L2/seed2": {
+    "end_err": 0.0001,
+    "max_dist": 0.0326,
+    "mean_dist": 0.015,
+    "moves": 6,
+    "score": 0.626,
+    "sim_s": 7.0,
+    "success": true
+  },
+  "L2/seed3": {
+    "end_err": 0.0001,
+    "max_dist": 0.0293,
+    "mean_dist": 0.0136,
+    "moves": 6,
+    "score": 0.6593,
+    "sim_s": 7.0,
+    "success": true
+  },
+  "L2/seed4": {
+    "end_err": 0.0001,
+    "max_dist": 0.0245,
+    "mean_dist": 0.0123,
+    "moves": 7,
+    "score": 0.923,
+    "sim_s": 7.5,
+    "success": true
+  },
+  "L2/seed5": {
+    "end_err": 0.0001,
+    "max_dist": 0.0072,
+    "mean_dist": 0.0025,
+    "moves": 4,
+    "score": 0.9844,
+    "sim_s": 5.5,
+    "success": true
+  },
+  "L3/seed1": {
+    "moves": 58,
+    "on_table": true,
+    "score": 1.0,
+    "sim_s": 30.9,
+    "success": true,
+    "winding": 0.5157,
+    "winding_delta": 1.0585
+  },
+  "L3/seed2": {
+    "moves": 57,
+    "on_table": true,
+    "score": 1.0,
+    "sim_s": 30.4,
+    "success": true,
+    "winding": 0.3518,
+    "winding_delta": 1.0686
+  },
+  "L3/seed3": {
+    "moves": 57,
+    "on_table": true,
+    "score": 1.0,
+    "sim_s": 30.4,
+    "success": true,
+    "winding": 1.8822,
+    "winding_delta": 1.0761
+  }
+}

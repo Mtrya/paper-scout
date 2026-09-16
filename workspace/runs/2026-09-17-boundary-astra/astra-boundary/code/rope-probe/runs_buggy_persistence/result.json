@@ -1,0 +1,15 @@
+{
+  "tag": "L0",
+  "trial": 0,
+  "seed": 300,
+  "wall_s": 59.9,
+  "codex_rc": 0,
+  "bridge_calls": 26,
+  "score": {
+    "success": false,
+    "pos_err": 0.3532,
+    "ang_err_deg": 151.9,
+    "score": 0.0,
+    "FINISHED": true
+  }
+}

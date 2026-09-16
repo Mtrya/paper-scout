@@ -1,0 +1,11 @@
+{
+  "case": "06_straight_near",
+  "channel": "numeric",
+  "wall_s": 9.0,
+  "codex_rc": 0,
+  "answer": {
+    "q1": "no",
+    "q2": 0,
+    "q3": "A"
+  }
+}

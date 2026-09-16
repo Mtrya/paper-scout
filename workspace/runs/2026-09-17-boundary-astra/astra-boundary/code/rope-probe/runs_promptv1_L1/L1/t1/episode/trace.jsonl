@@ -1,0 +1,201 @@
+{"kind": "grab", "payload": {"result": "ok", "node": 0, "dist": 0.0}, "sim_t": 0.5, "budget_left": 199}
+{"kind": "move", "payload": {"from": [0.4595, 0.6198], "to": [0.4106, 0.63], "requested": [0.4106, 0.63], "clipped": false}, "sim_t": 0.5, "budget_left": 198}
+{"kind": "move", "payload": {"from": [0.4106, 0.63], "to": [0.3617, 0.6402], "requested": [0.3617, 0.6402], "clipped": false}, "sim_t": 1.0, "budget_left": 197}
+{"kind": "move", "payload": {"from": [0.3617, 0.6402], "to": [0.3128, 0.6504], "requested": [0.3128, 0.6504], "clipped": false}, "sim_t": 1.5, "budget_left": 196}
+{"kind": "move", "payload": {"from": [0.3128, 0.6504], "to": [0.2639, 0.6606], "requested": [0.2639, 0.6606], "clipped": false}, "sim_t": 2.0, "budget_left": 195}
+{"kind": "move", "payload": {"from": [0.2639, 0.6606], "to": [0.2639, 0.6606], "requested": [0.2639, 0.6606], "clipped": false}, "sim_t": 2.5, "budget_left": 194}
+{"kind": "move", "payload": {"from": [0.2639, 0.6606], "to": [0.2639, 0.6606], "requested": [0.2639, 0.6606], "clipped": false}, "sim_t": 3.0, "budget_left": 193}
+{"kind": "move", "payload": {"from": [0.2639, 0.6606], "to": [0.2639, 0.6606], "requested": [0.2639, 0.6606], "clipped": false}, "sim_t": 3.5, "budget_left": 192}
+{"kind": "move", "payload": {"from": [0.2639, 0.6606], "to": [0.2639, 0.6606], "requested": [0.2639, 0.6606], "clipped": false}, "sim_t": 4.0, "budget_left": 191}
+{"kind": "move", "payload": {"from": [0.2639, 0.6606], "to": [0.2639, 0.6606], "requested": [0.2639, 0.6606], "clipped": false}, "sim_t": 4.5, "budget_left": 190}
+{"kind": "release", "payload": {"result": "ok", "node": 0}, "sim_t": 5.0, "budget_left": 189}
+{"kind": "move", "payload": {"from": [0.2639, 0.6606], "to": [0.3123, 0.6479], "requested": [0.5577, 0.5832], "clipped": true}, "sim_t": 5.2, "budget_left": 188}
+{"kind": "move", "payload": {"from": [0.3123, 0.6479], "to": [0.3606, 0.6351], "requested": [0.5577, 0.5832], "clipped": true}, "sim_t": 5.7, "budget_left": 187}
+{"kind": "move", "payload": {"from": [0.3606, 0.6351], "to": [0.409, 0.6224], "requested": [0.5577, 0.5832], "clipped": true}, "sim_t": 6.2, "budget_left": 186}
+{"kind": "move", "payload": {"from": [0.409, 0.6224], "to": [0.4573, 0.6096], "requested": [0.5577, 0.5832], "clipped": true}, "sim_t": 6.7, "budget_left": 185}
+{"kind": "move", "payload": {"from": [0.4573, 0.6096], "to": [0.5057, 0.5969], "requested": [0.5577, 0.5832], "clipped": true}, "sim_t": 7.2, "budget_left": 184}
+{"kind": "move", "payload": {"from": [0.5057, 0.5969], "to": [0.554, 0.5842], "requested": [0.5577, 0.5832], "clipped": true}, "sim_t": 7.7, "budget_left": 183}
+{"kind": "move", "payload": {"from": [0.554, 0.5842], "to": [0.5577, 0.5832], "requested": [0.5577, 0.5832], "clipped": false}, "sim_t": 8.2, "budget_left": 182}
+{"kind": "grab", "payload": {"result": "ok", "node": 8, "dist": 0.0}, "sim_t": 8.7, "budget_left": 181}
+{"kind": "move", "payload": {"from": [0.5577, 0.5832], "to": [0.6073, 0.5769], "requested": [0.7549, 0.558], "clipped": true}, "sim_t": 8.7, "budget_left": 180}
+{"kind": "move", "payload": {"from": [0.6073, 0.5769], "to": [0.6569, 0.5705], "requested": [0.7549, 0.558], "clipped": true}, "sim_t": 9.2, "budget_left": 179}
+{"kind": "move", "payload": {"from": [0.6569, 0.5705], "to": [0.7065, 0.5642], "requested": [0.7549, 0.558], "clipped": true}, "sim_t": 9.7, "budget_left": 178}
+{"kind": "move", "payload": {"from": [0.7065, 0.5642], "to": [0.7549, 0.558], "requested": [0.7549, 0.558], "clipped": false}, "sim_t": 10.2, "budget_left": 177}
+{"kind": "release", "payload": {"result": "ok", "node": 8}, "sim_t": 10.7, "budget_left": 176}
+{"kind": "move", "payload": {"from": [0.7549, 0.558], "to": [0.7834, 0.5514], "requested": [0.7834, 0.5514], "clipped": false}, "sim_t": 10.9, "budget_left": 175}
+{"kind": "grab", "payload": {"result": "ok", "node": 8, "dist": 0.0}, "sim_t": 11.4, "budget_left": 174}
+{"kind": "move", "payload": {"from": [0.7834, 0.5514], "to": [0.7549, 0.558], "requested": [0.7549, 0.558], "clipped": false}, "sim_t": 11.4, "budget_left": 173}
+{"kind": "move", "payload": {"from": [0.7549, 0.558], "to": [0.7549, 0.558], "requested": [0.7549, 0.558], "clipped": false}, "sim_t": 11.9, "budget_left": 172}
+{"kind": "move", "payload": {"from": [0.7549, 0.558], "to": [0.7549, 0.558], "requested": [0.7549, 0.558], "clipped": false}, "sim_t": 12.4, "budget_left": 171}
+{"kind": "move", "payload": {"from": [0.7549, 0.558], "to": [0.7549, 0.558], "requested": [0.7549, 0.558], "clipped": false}, "sim_t": 12.9, "budget_left": 170}
+{"kind": "release", "payload": {"result": "ok", "node": 8}, "sim_t": 13.4, "budget_left": 169}
+{"kind": "move", "payload": {"from": [0.7549, 0.558], "to": [0.7178, 0.5748], "requested": [0.7178, 0.5748], "clipped": false}, "sim_t": 13.6, "budget_left": 168}
+{"kind": "grab", "payload": {"result": "ok", "node": 7, "dist": 0.0}, "sim_t": 14.1, "budget_left": 167}
+{"kind": "move", "payload": {"from": [0.7178, 0.5748], "to": [0.7158, 0.5662], "requested": [0.7158, 0.5662], "clipped": false}, "sim_t": 14.1, "budget_left": 166}
+{"kind": "move", "payload": {"from": [0.7158, 0.5662], "to": [0.7158, 0.5662], "requested": [0.7158, 0.5662], "clipped": false}, "sim_t": 14.6, "budget_left": 165}
+{"kind": "move", "payload": {"from": [0.7158, 0.5662], "to": [0.7158, 0.5662], "requested": [0.7158, 0.5662], "clipped": false}, "sim_t": 15.1, "budget_left": 164}
+{"kind": "release", "payload": {"result": "ok", "node": 7}, "sim_t": 15.6, "budget_left": 163}
+{"kind": "move", "payload": {"from": [0.7158, 0.5662], "to": [0.6766, 0.5603], "requested": [0.6766, 0.5603], "clipped": false}, "sim_t": 15.8, "budget_left": 162}
+{"kind": "grab", "payload": {"result": "ok", "node": 6, "dist": 0.0}, "sim_t": 16.3, "budget_left": 161}
+{"kind": "move", "payload": {"from": [0.6766, 0.5603], "to": [0.6766, 0.5744], "requested": [0.6766, 0.5744], "clipped": false}, "sim_t": 16.3, "budget_left": 160}
+{"kind": "move", "payload": {"from": [0.6766, 0.5744], "to": [0.6766, 0.5744], "requested": [0.6766, 0.5744], "clipped": false}, "sim_t": 16.8, "budget_left": 159}
+{"kind": "move", "payload": {"from": [0.6766, 0.5744], "to": [0.6766, 0.5744], "requested": [0.6766, 0.5744], "clipped": false}, "sim_t": 17.3, "budget_left": 158}
+{"kind": "release", "payload": {"result": "ok", "node": 6}, "sim_t": 17.8, "budget_left": 157}
+{"kind": "move", "payload": {"from": [0.6766, 0.5744], "to": [0.6401, 0.59], "requested": [0.6401, 0.59], "clipped": false}, "sim_t": 18.0, "budget_left": 156}
+{"kind": "grab", "payload": {"result": "ok", "node": 5, "dist": 0.0}, "sim_t": 18.5, "budget_left": 155}
+{"kind": "move", "payload": {"from": [0.6401, 0.59], "to": [0.6375, 0.5825], "requested": [0.6375, 0.5825], "clipped": false}, "sim_t": 18.5, "budget_left": 154}
+{"kind": "move", "payload": {"from": [0.6375, 0.5825], "to": [0.6375, 0.5825], "requested": [0.6375, 0.5825], "clipped": false}, "sim_t": 19.0, "budget_left": 153}
+{"kind": "move", "payload": {"from": [0.6375, 0.5825], "to": [0.6375, 0.5825], "requested": [0.6375, 0.5825], "clipped": false}, "sim_t": 19.5, "budget_left": 152}
+{"kind": "release", "payload": {"result": "ok", "node": 5}, "sim_t": 20.0, "budget_left": 151}
+{"kind": "move", "payload": {"from": [0.6375, 0.5825], "to": [0.5984, 0.5774], "requested": [0.5984, 0.5774], "clipped": false}, "sim_t": 20.2, "budget_left": 150}
+{"kind": "grab", "payload": {"result": "ok", "node": 4, "dist": 0.0}, "sim_t": 20.7, "budget_left": 149}
+{"kind": "move", "payload": {"from": [0.5984, 0.5774], "to": [0.5983, 0.5907], "requested": [0.5983, 0.5907], "clipped": false}, "sim_t": 20.7, "budget_left": 148}
+{"kind": "move", "payload": {"from": [0.5983, 0.5907], "to": [0.5983, 0.5907], "requested": [0.5983, 0.5907], "clipped": false}, "sim_t": 21.2, "budget_left": 147}
+{"kind": "move", "payload": {"from": [0.5983, 0.5907], "to": [0.5983, 0.5907], "requested": [0.5983, 0.5907], "clipped": false}, "sim_t": 21.7, "budget_left": 146}
+{"kind": "release", "payload": {"result": "ok", "node": 4}, "sim_t": 22.2, "budget_left": 145}
+{"kind": "move", "payload": {"from": [0.5983, 0.5907], "to": [0.5491, 0.5996], "requested": [0.4461, 0.618], "clipped": true}, "sim_t": 22.4, "budget_left": 144}
+{"kind": "move", "payload": {"from": [0.5491, 0.5996], "to": [0.4999, 0.6084], "requested": [0.4461, 0.618], "clipped": true}, "sim_t": 22.9, "budget_left": 143}
+{"kind": "move", "payload": {"from": [0.4999, 0.6084], "to": [0.4507, 0.6172], "requested": [0.4461, 0.618], "clipped": true}, "sim_t": 23.4, "budget_left": 142}
+{"kind": "move", "payload": {"from": [0.4507, 0.6172], "to": [0.4461, 0.618], "requested": [0.4461, 0.618], "clipped": false}, "sim_t": 23.9, "budget_left": 141}
+{"kind": "grab", "payload": {"result": "ok", "node": 0, "dist": 0.0}, "sim_t": 24.4, "budget_left": 140}
+{"kind": "move", "payload": {"from": [0.4461, 0.618], "to": [0.3972, 0.6284], "requested": [0.06, 0.7], "clipped": true}, "sim_t": 24.4, "budget_left": 139}
+{"kind": "move", "payload": {"from": [0.3972, 0.6284], "to": [0.3483, 0.6388], "requested": [0.06, 0.7], "clipped": true}, "sim_t": 24.9, "budget_left": 138}
+{"kind": "move", "payload": {"from": [0.3483, 0.6388], "to": [0.2994, 0.6492], "requested": [0.06, 0.7], "clipped": true}, "sim_t": 25.4, "budget_left": 137}
+{"kind": "move", "payload": {"from": [0.2994, 0.6492], "to": [0.2505, 0.6595], "requested": [0.06, 0.7], "clipped": true}, "sim_t": 25.9, "budget_left": 136}
+{"kind": "move", "payload": {"from": [0.2505, 0.6595], "to": [0.2016, 0.6699], "requested": [0.06, 0.7], "clipped": true}, "sim_t": 26.4, "budget_left": 135}
+{"kind": "move", "payload": {"from": [0.2016, 0.6699], "to": [0.1526, 0.6803], "requested": [0.06, 0.7], "clipped": true}, "sim_t": 26.9, "budget_left": 134}
+{"kind": "move", "payload": {"from": [0.1526, 0.6803], "to": [0.1037, 0.6907], "requested": [0.06, 0.7], "clipped": true}, "sim_t": 27.4, "budget_left": 133}
+{"kind": "move", "payload": {"from": [0.1037, 0.6907], "to": [0.06, 0.7], "requested": [0.06, 0.7], "clipped": false}, "sim_t": 27.9, "budget_left": 132}
+{"kind": "move", "payload": {"from": [0.06, 0.7], "to": [0.06, 0.7], "requested": [0.06, 0.7], "clipped": false}, "sim_t": 28.4, "budget_left": 131}
+{"kind": "move", "payload": {"from": [0.06, 0.7], "to": [0.06, 0.7], "requested": [0.06, 0.7], "clipped": false}, "sim_t": 28.9, "budget_left": 130}
+{"kind": "move", "payload": {"from": [0.06, 0.7], "to": [0.06, 0.7], "requested": [0.06, 0.7], "clipped": false}, "sim_t": 29.4, "budget_left": 129}
+{"kind": "move", "payload": {"from": [0.06, 0.7], "to": [0.06, 0.65], "requested": [0.06, 0.2], "clipped": true}, "sim_t": 29.9, "budget_left": 128}
+{"kind": "move", "payload": {"from": [0.06, 0.65], "to": [0.06, 0.6], "requested": [0.06, 0.2], "clipped": true}, "sim_t": 30.4, "budget_left": 127}
+{"kind": "move", "payload": {"from": [0.06, 0.6], "to": [0.06, 0.55], "requested": [0.06, 0.2], "clipped": true}, "sim_t": 30.9, "budget_left": 126}
+{"kind": "move", "payload": {"from": [0.06, 0.55], "to": [0.06, 0.5], "requested": [0.06, 0.2], "clipped": true}, "sim_t": 31.4, "budget_left": 125}
+{"kind": "move", "payload": {"from": [0.06, 0.5], "to": [0.06, 0.45], "requested": [0.06, 0.2], "clipped": true}, "sim_t": 31.9, "budget_left": 124}
+{"kind": "move", "payload": {"from": [0.06, 0.45], "to": [0.06, 0.4], "requested": [0.06, 0.2], "clipped": true}, "sim_t": 32.4, "budget_left": 123}
+{"kind": "move", "payload": {"from": [0.06, 0.4], "to": [0.06, 0.35], "requested": [0.06, 0.2], "clipped": true}, "sim_t": 32.9, "budget_left": 122}
+{"kind": "move", "payload": {"from": [0.06, 0.35], "to": [0.06, 0.3], "requested": [0.06, 0.2], "clipped": true}, "sim_t": 33.4, "budget_left": 121}
+{"kind": "move", "payload": {"from": [0.06, 0.3], "to": [0.06, 0.25], "requested": [0.06, 0.2], "clipped": true}, "sim_t": 33.9, "budget_left": 120}
+{"kind": "move", "payload": {"from": [0.06, 0.25], "to": [0.06, 0.2], "requested": [0.06, 0.2], "clipped": false}, "sim_t": 34.4, "budget_left": 119}
+{"kind": "move", "payload": {"from": [0.06, 0.2], "to": [0.11, 0.2], "requested": [0.9, 0.2], "clipped": true}, "sim_t": 34.9, "budget_left": 118}
+{"kind": "move", "payload": {"from": [0.11, 0.2], "to": [0.16, 0.2], "requested": [0.9, 0.2], "clipped": true}, "sim_t": 35.4, "budget_left": 117}
+{"kind": "move", "payload": {"from": [0.16, 0.2], "to": [0.21, 0.2], "requested": [0.9, 0.2], "clipped": true}, "sim_t": 35.9, "budget_left": 116}
+{"kind": "move", "payload": {"from": [0.21, 0.2], "to": [0.26, 0.2], "requested": [0.9, 0.2], "clipped": true}, "sim_t": 36.4, "budget_left": 115}
+{"kind": "move", "payload": {"from": [0.26, 0.2], "to": [0.31, 0.2], "requested": [0.9, 0.2], "clipped": true}, "sim_t": 36.9, "budget_left": 114}
+{"kind": "move", "payload": {"from": [0.31, 0.2], "to": [0.36, 0.2], "requested": [0.9, 0.2], "clipped": true}, "sim_t": 37.4, "budget_left": 113}
+{"kind": "move", "payload": {"from": [0.36, 0.2], "to": [0.41, 0.2], "requested": [0.9, 0.2], "clipped": true}, "sim_t": 37.9, "budget_left": 112}
+{"kind": "move", "payload": {"from": [0.41, 0.2], "to": [0.46, 0.2], "requested": [0.9, 0.2], "clipped": true}, "sim_t": 38.4, "budget_left": 111}
+{"kind": "move", "payload": {"from": [0.46, 0.2], "to": [0.51, 0.2], "requested": [0.9, 0.2], "clipped": true}, "sim_t": 38.9, "budget_left": 110}
+{"kind": "move", "payload": {"from": [0.51, 0.2], "to": [0.56, 0.2], "requested": [0.9, 0.2], "clipped": true}, "sim_t": 39.4, "budget_left": 109}
+{"kind": "move", "payload": {"from": [0.56, 0.2], "to": [0.61, 0.2], "requested": [0.9, 0.2], "clipped": true}, "sim_t": 39.9, "budget_left": 108}
+{"kind": "move", "payload": {"from": [0.61, 0.2], "to": [0.66, 0.2], "requested": [0.9, 0.2], "clipped": true}, "sim_t": 40.4, "budget_left": 107}
+{"kind": "move", "payload": {"from": [0.66, 0.2], "to": [0.71, 0.2], "requested": [0.9, 0.2], "clipped": true}, "sim_t": 40.9, "budget_left": 106}
+{"kind": "move", "payload": {"from": [0.71, 0.2], "to": [0.76, 0.2], "requested": [0.9, 0.2], "clipped": true}, "sim_t": 41.4, "budget_left": 105}
+{"kind": "move", "payload": {"from": [0.76, 0.2], "to": [0.81, 0.2], "requested": [0.9, 0.2], "clipped": true}, "sim_t": 41.9, "budget_left": 104}
+{"kind": "move", "payload": {"from": [0.81, 0.2], "to": [0.86, 0.2], "requested": [0.9, 0.2], "clipped": true}, "sim_t": 42.4, "budget_left": 103}
+{"kind": "move", "payload": {"from": [0.86, 0.2], "to": [0.9, 0.2], "requested": [0.9, 0.2], "clipped": false}, "sim_t": 42.9, "budget_left": 102}
+{"kind": "move", "payload": {"from": [0.9, 0.2], "to": [0.9, 0.2], "requested": [0.9, 0.2], "clipped": false}, "sim_t": 43.4, "budget_left": 101}
+{"kind": "move", "payload": {"from": [0.9, 0.2], "to": [0.9, 0.2], "requested": [0.9, 0.2], "clipped": false}, "sim_t": 43.9, "budget_left": 100}
+{"kind": "move", "payload": {"from": [0.9, 0.2], "to": [0.9, 0.2], "requested": [0.9, 0.2], "clipped": false}, "sim_t": 44.4, "budget_left": 99}
+{"kind": "move", "payload": {"from": [0.9, 0.2], "to": [0.902, 0.2], "requested": [0.902, 0.2], "clipped": false}, "sim_t": 44.9, "budget_left": 98}
+{"kind": "move", "payload": {"from": [0.902, 0.2], "to": [0.904, 0.2], "requested": [0.904, 0.2], "clipped": false}, "sim_t": 45.4, "budget_left": 97}
+{"kind": "move", "payload": {"from": [0.904, 0.2], "to": [0.906, 0.2], "requested": [0.906, 0.2], "clipped": false}, "sim_t": 45.9, "budget_left": 96}
+{"kind": "move", "payload": {"from": [0.906, 0.2], "to": [0.908, 0.2], "requested": [0.908, 0.2], "clipped": false}, "sim_t": 46.4, "budget_left": 95}
+{"kind": "move", "payload": {"from": [0.908, 0.2], "to": [0.91, 0.2], "requested": [0.91, 0.2], "clipped": false}, "sim_t": 46.9, "budget_left": 94}
+{"kind": "move", "payload": {"from": [0.91, 0.2], "to": [0.912, 0.2], "requested": [0.912, 0.2], "clipped": false}, "sim_t": 47.4, "budget_left": 93}
+{"kind": "move", "payload": {"from": [0.912, 0.2], "to": [0.914, 0.2], "requested": [0.914, 0.2], "clipped": false}, "sim_t": 47.9, "budget_left": 92}
+{"kind": "move", "payload": {"from": [0.914, 0.2], "to": [0.916, 0.2], "requested": [0.916, 0.2], "clipped": false}, "sim_t": 48.4, "budget_left": 91}
+{"kind": "move", "payload": {"from": [0.916, 0.2], "to": [0.918, 0.2], "requested": [0.918, 0.2], "clipped": false}, "sim_t": 48.9, "budget_left": 90}
+{"kind": "move", "payload": {"from": [0.918, 0.2], "to": [0.92, 0.2], "requested": [0.92, 0.2], "clipped": false}, "sim_t": 49.4, "budget_left": 89}
+{"kind": "move", "payload": {"from": [0.92, 0.2], "to": [0.922, 0.2], "requested": [0.922, 0.2], "clipped": false}, "sim_t": 49.9, "budget_left": 88}
+{"kind": "move", "payload": {"from": [0.922, 0.2], "to": [0.924, 0.2], "requested": [0.924, 0.2], "clipped": false}, "sim_t": 50.4, "budget_left": 87}
+{"kind": "move", "payload": {"from": [0.924, 0.2], "to": [0.928, 0.194], "requested": [0.928, 0.194], "clipped": false}, "sim_t": 50.9, "budget_left": 86}
+{"kind": "move", "payload": {"from": [0.928, 0.194], "to": [0.932, 0.194], "requested": [0.932, 0.194], "clipped": false}, "sim_t": 51.4, "budget_left": 85}
+{"kind": "move", "payload": {"from": [0.932, 0.194], "to": [0.936, 0.194], "requested": [0.936, 0.194], "clipped": false}, "sim_t": 51.9, "budget_left": 84}
+{"kind": "move", "payload": {"from": [0.936, 0.194], "to": [0.94, 0.194], "requested": [0.94, 0.194], "clipped": false}, "sim_t": 52.4, "budget_left": 83}
+{"kind": "move", "payload": {"from": [0.94, 0.194], "to": [0.944, 0.194], "requested": [0.944, 0.194], "clipped": false}, "sim_t": 52.9, "budget_left": 82}
+{"kind": "move", "payload": {"from": [0.944, 0.194], "to": [0.948, 0.194], "requested": [0.948, 0.194], "clipped": false}, "sim_t": 53.4, "budget_left": 81}
+{"kind": "move", "payload": {"from": [0.948, 0.194], "to": [0.952, 0.194], "requested": [0.952, 0.194], "clipped": false}, "sim_t": 53.9, "budget_left": 80}
+{"kind": "move", "payload": {"from": [0.952, 0.194], "to": [0.956, 0.194], "requested": [0.956, 0.194], "clipped": false}, "sim_t": 54.4, "budget_left": 79}
+{"kind": "move", "payload": {"from": [0.956, 0.194], "to": [0.96, 0.194], "requested": [0.96, 0.194], "clipped": false}, "sim_t": 54.9, "budget_left": 78}
+{"kind": "move", "payload": {"from": [0.96, 0.194], "to": [0.964, 0.194], "requested": [0.964, 0.194], "clipped": false}, "sim_t": 55.4, "budget_left": 77}
+{"kind": "move", "payload": {"from": [0.964, 0.194], "to": [0.97, 0.1928], "requested": [0.97, 0.1928], "clipped": false}, "sim_t": 55.9, "budget_left": 76}
+{"kind": "move", "payload": {"from": [0.97, 0.1928], "to": [0.976, 0.1916], "requested": [0.976, 0.1916], "clipped": false}, "sim_t": 56.4, "budget_left": 75}
+{"kind": "move", "payload": {"from": [0.976, 0.1916], "to": [0.982, 0.1904], "requested": [0.982, 0.1904], "clipped": false}, "sim_t": 56.9, "budget_left": 74}
+{"kind": "move", "payload": {"from": [0.982, 0.1904], "to": [0.988, 0.1892], "requested": [0.988, 0.1892], "clipped": false}, "sim_t": 57.4, "budget_left": 73}
+{"kind": "move", "payload": {"from": [0.988, 0.1892], "to": [0.994, 0.188], "requested": [0.994, 0.188], "clipped": false}, "sim_t": 57.9, "budget_left": 72}
+{"kind": "move", "payload": {"from": [0.994, 0.188], "to": [1.0, 0.1868], "requested": [1.0, 0.1868], "clipped": false}, "sim_t": 58.4, "budget_left": 71}
+{"kind": "move", "payload": {"from": [1.0, 0.1868], "to": [1.006, 0.1856], "requested": [1.006, 0.1856], "clipped": false}, "sim_t": 58.9, "budget_left": 70}
+{"kind": "move", "payload": {"from": [1.006, 0.1856], "to": [1.012, 0.1844], "requested": [1.012, 0.1844], "clipped": false}, "sim_t": 59.4, "budget_left": 69}
+{"kind": "move", "payload": {"from": [1.012, 0.1844], "to": [1.018, 0.1832], "requested": [1.018, 0.1832], "clipped": false}, "sim_t": 59.9, "budget_left": 68}
+{"kind": "move", "payload": {"from": [1.018, 0.1832], "to": [1.024, 0.182], "requested": [1.024, 0.182], "clipped": false}, "sim_t": 60.4, "budget_left": 67}
+{"kind": "move", "payload": {"from": [1.024, 0.182], "to": [1.03, 0.1808], "requested": [1.03, 0.1808], "clipped": false}, "sim_t": 60.9, "budget_left": 66}
+{"kind": "move", "payload": {"from": [1.03, 0.1808], "to": [1.036, 0.1796], "requested": [1.036, 0.1796], "clipped": false}, "sim_t": 61.4, "budget_left": 65}
+{"kind": "move", "payload": {"from": [1.036, 0.1796], "to": [1.042, 0.1784], "requested": [1.042, 0.1784], "clipped": false}, "sim_t": 61.9, "budget_left": 64}
+{"kind": "move", "payload": {"from": [1.042, 0.1784], "to": [1.048, 0.1772], "requested": [1.048, 0.1772], "clipped": false}, "sim_t": 62.4, "budget_left": 63}
+{"kind": "move", "payload": {"from": [1.048, 0.1772], "to": [1.054, 0.176], "requested": [1.054, 0.176], "clipped": false}, "sim_t": 62.9, "budget_left": 62}
+{"kind": "move", "payload": {"from": [1.054, 0.176], "to": [1.062, 0.1744], "requested": [1.062, 0.1744], "clipped": false}, "sim_t": 63.4, "budget_left": 61}
+{"kind": "move", "payload": {"from": [1.062, 0.1744], "to": [1.07, 0.1728], "requested": [1.07, 0.1728], "clipped": false}, "sim_t": 63.9, "budget_left": 60}
+{"kind": "move", "payload": {"from": [1.07, 0.1728], "to": [1.078, 0.1712], "requested": [1.078, 0.1712], "clipped": false}, "sim_t": 64.4, "budget_left": 59}
+{"kind": "move", "payload": {"from": [1.078, 0.1712], "to": [1.086, 0.1696], "requested": [1.086, 0.1696], "clipped": false}, "sim_t": 64.9, "budget_left": 58}
+{"kind": "move", "payload": {"from": [1.086, 0.1696], "to": [1.094, 0.168], "requested": [1.094, 0.168], "clipped": false}, "sim_t": 65.4, "budget_left": 57}
+{"kind": "move", "payload": {"from": [1.094, 0.168], "to": [1.102, 0.1664], "requested": [1.102, 0.1664], "clipped": false}, "sim_t": 65.9, "budget_left": 56}
+{"kind": "move", "payload": {"from": [1.102, 0.1664], "to": [1.11, 0.1648], "requested": [1.11, 0.1648], "clipped": false}, "sim_t": 66.4, "budget_left": 55}
+{"kind": "move", "payload": {"from": [1.11, 0.1648], "to": [1.118, 0.1632], "requested": [1.118, 0.1632], "clipped": false}, "sim_t": 66.9, "budget_left": 54}
+{"kind": "move", "payload": {"from": [1.118, 0.1632], "to": [1.126, 0.1616], "requested": [1.126, 0.1616], "clipped": false}, "sim_t": 67.4, "budget_left": 53}
+{"kind": "move", "payload": {"from": [1.126, 0.1616], "to": [1.134, 0.16], "requested": [1.134, 0.16], "clipped": false}, "sim_t": 67.9, "budget_left": 52}
+{"kind": "move", "payload": {"from": [1.134, 0.16], "to": [1.142, 0.1584], "requested": [1.142, 0.1584], "clipped": false}, "sim_t": 68.4, "budget_left": 51}
+{"kind": "move", "payload": {"from": [1.142, 0.1584], "to": [1.15, 0.1568], "requested": [1.15, 0.1568], "clipped": false}, "sim_t": 68.9, "budget_left": 50}
+{"kind": "move", "payload": {"from": [1.15, 0.1568], "to": [1.158, 0.1552], "requested": [1.158, 0.1552], "clipped": false}, "sim_t": 69.4, "budget_left": 49}
+{"kind": "move", "payload": {"from": [1.158, 0.1552], "to": [1.166, 0.1536], "requested": [1.166, 0.1536], "clipped": false}, "sim_t": 69.9, "budget_left": 48}
+{"kind": "move", "payload": {"from": [1.166, 0.1536], "to": [1.174, 0.152], "requested": [1.174, 0.152], "clipped": false}, "sim_t": 70.4, "budget_left": 47}
+{"kind": "move", "payload": {"from": [1.174, 0.152], "to": [1.182, 0.1504], "requested": [1.182, 0.1504], "clipped": false}, "sim_t": 70.9, "budget_left": 46}
+{"kind": "move", "payload": {"from": [1.182, 0.1504], "to": [1.19, 0.1488], "requested": [1.19, 0.1488], "clipped": false}, "sim_t": 71.4, "budget_left": 45}
+{"kind": "move", "payload": {"from": [1.19, 0.1488], "to": [1.198, 0.1472], "requested": [1.198, 0.1472], "clipped": false}, "sim_t": 71.9, "budget_left": 44}
+{"kind": "move", "payload": {"from": [1.198, 0.1472], "to": [1.206, 0.1456], "requested": [1.206, 0.1456], "clipped": false}, "sim_t": 72.4, "budget_left": 43}
+{"kind": "move", "payload": {"from": [1.206, 0.1456], "to": [1.214, 0.144], "requested": [1.214, 0.144], "clipped": false}, "sim_t": 72.9, "budget_left": 42}
+{"kind": "move", "payload": {"from": [1.214, 0.144], "to": [1.222, 0.1424], "requested": [1.222, 0.1424], "clipped": false}, "sim_t": 73.4, "budget_left": 41}
+{"kind": "move", "payload": {"from": [1.222, 0.1424], "to": [1.23, 0.1408], "requested": [1.23, 0.1408], "clipped": false}, "sim_t": 73.9, "budget_left": 40}
+{"kind": "move", "payload": {"from": [1.23, 0.1408], "to": [1.238, 0.1392], "requested": [1.238, 0.1392], "clipped": false}, "sim_t": 74.4, "budget_left": 39}
+{"kind": "move", "payload": {"from": [1.238, 0.1392], "to": [1.246, 0.1376], "requested": [1.246, 0.1376], "clipped": false}, "sim_t": 74.9, "budget_left": 38}
+{"kind": "move", "payload": {"from": [1.246, 0.1376], "to": [1.254, 0.136], "requested": [1.254, 0.136], "clipped": false}, "sim_t": 75.4, "budget_left": 37}
+{"kind": "move", "payload": {"from": [1.254, 0.136], "to": [1.254, 0.136], "requested": [1.254, 0.136], "clipped": false}, "sim_t": 75.9, "budget_left": 36}
+{"kind": "move", "payload": {"from": [1.254, 0.136], "to": [1.254, 0.136], "requested": [1.254, 0.136], "clipped": false}, "sim_t": 76.4, "budget_left": 35}
+{"kind": "move", "payload": {"from": [1.254, 0.136], "to": [1.254, 0.136], "requested": [1.254, 0.136], "clipped": false}, "sim_t": 76.9, "budget_left": 34}
+{"kind": "release", "payload": {"result": "ok", "node": 0}, "sim_t": 77.4, "budget_left": 33}
+{"kind": "move", "payload": {"from": [1.254, 0.136], "to": [1.2052, 0.147], "requested": [0.9444, 0.206], "clipped": true}, "sim_t": 77.6, "budget_left": 32}
+{"kind": "move", "payload": {"from": [1.2052, 0.147], "to": [1.1565, 0.1581], "requested": [0.9444, 0.206], "clipped": true}, "sim_t": 78.1, "budget_left": 31}
+{"kind": "move", "payload": {"from": [1.1565, 0.1581], "to": [1.1077, 0.1691], "requested": [0.9444, 0.206], "clipped": true}, "sim_t": 78.6, "budget_left": 30}
+{"kind": "move", "payload": {"from": [1.1077, 0.1691], "to": [1.0589, 0.1801], "requested": [0.9444, 0.206], "clipped": true}, "sim_t": 79.1, "budget_left": 29}
+{"kind": "move", "payload": {"from": [1.0589, 0.1801], "to": [1.0102, 0.1911], "requested": [0.9444, 0.206], "clipped": true}, "sim_t": 79.6, "budget_left": 28}
+{"kind": "move", "payload": {"from": [1.0102, 0.1911], "to": [0.9614, 0.2022], "requested": [0.9444, 0.206], "clipped": true}, "sim_t": 80.1, "budget_left": 27}
+{"kind": "move", "payload": {"from": [0.9614, 0.2022], "to": [0.9444, 0.206], "requested": [0.9444, 0.206], "clipped": false}, "sim_t": 80.6, "budget_left": 26}
+{"kind": "grab", "payload": {"result": "ok", "node": 8, "dist": 0.0}, "sim_t": 81.1, "budget_left": 25}
+{"kind": "move", "payload": {"from": [0.9444, 0.206], "to": [0.9394, 0.207], "requested": [0.9394, 0.207], "clipped": false}, "sim_t": 81.1, "budget_left": 24}
+{"kind": "move", "payload": {"from": [0.9394, 0.207], "to": [0.9344, 0.208], "requested": [0.9344, 0.208], "clipped": false}, "sim_t": 81.6, "budget_left": 23}
+{"kind": "move", "payload": {"from": [0.9344, 0.208], "to": [0.9294, 0.209], "requested": [0.9294, 0.209], "clipped": false}, "sim_t": 82.1, "budget_left": 22}
+{"kind": "move", "payload": {"from": [0.9294, 0.209], "to": [0.9244, 0.21], "requested": [0.9244, 0.21], "clipped": false}, "sim_t": 82.6, "budget_left": 21}
+{"kind": "move", "payload": {"from": [0.9244, 0.21], "to": [0.9194, 0.211], "requested": [0.9194, 0.211], "clipped": false}, "sim_t": 83.1, "budget_left": 20}
+{"kind": "move", "payload": {"from": [0.9194, 0.211], "to": [0.9144, 0.212], "requested": [0.9144, 0.212], "clipped": false}, "sim_t": 83.6, "budget_left": 19}
+{"kind": "move", "payload": {"from": [0.9144, 0.212], "to": [0.9094, 0.213], "requested": [0.9094, 0.213], "clipped": false}, "sim_t": 84.1, "budget_left": 18}
+{"kind": "move", "payload": {"from": [0.9094, 0.213], "to": [0.9044, 0.214], "requested": [0.9044, 0.214], "clipped": false}, "sim_t": 84.6, "budget_left": 17}
+{"kind": "move", "payload": {"from": [0.9044, 0.214], "to": [0.8994, 0.215], "requested": [0.8994, 0.215], "clipped": false}, "sim_t": 85.1, "budget_left": 16}
+{"kind": "move", "payload": {"from": [0.8994, 0.215], "to": [0.8944, 0.216], "requested": [0.8944, 0.216], "clipped": false}, "sim_t": 85.6, "budget_left": 15}
+{"kind": "move", "payload": {"from": [0.8944, 0.216], "to": [0.8894, 0.217], "requested": [0.8894, 0.217], "clipped": false}, "sim_t": 86.1, "budget_left": 14}
+{"kind": "move", "payload": {"from": [0.8894, 0.217], "to": [0.8844, 0.218], "requested": [0.8844, 0.218], "clipped": false}, "sim_t": 86.6, "budget_left": 13}
+{"kind": "move", "payload": {"from": [0.8844, 0.218], "to": [0.8794, 0.219], "requested": [0.8794, 0.219], "clipped": false}, "sim_t": 87.1, "budget_left": 12}
+{"kind": "move", "payload": {"from": [0.8794, 0.219], "to": [0.8744, 0.22], "requested": [0.8744, 0.22], "clipped": false}, "sim_t": 87.6, "budget_left": 11}
+{"kind": "move", "payload": {"from": [0.8744, 0.22], "to": [0.8694, 0.221], "requested": [0.8694, 0.221], "clipped": false}, "sim_t": 88.1, "budget_left": 10}
+{"kind": "move", "payload": {"from": [0.8694, 0.221], "to": [0.8644, 0.222], "requested": [0.8644, 0.222], "clipped": false}, "sim_t": 88.6, "budget_left": 9}
+{"kind": "move", "payload": {"from": [0.8644, 0.222], "to": [0.8594, 0.223], "requested": [0.8594, 0.223], "clipped": false}, "sim_t": 89.1, "budget_left": 8}
+{"kind": "move", "payload": {"from": [0.8594, 0.223], "to": [0.8544, 0.224], "requested": [0.8544, 0.224], "clipped": false}, "sim_t": 89.6, "budget_left": 7}
+{"kind": "move", "payload": {"from": [0.8544, 0.224], "to": [0.8494, 0.225], "requested": [0.8494, 0.225], "clipped": false}, "sim_t": 90.1, "budget_left": 6}
+{"kind": "move", "payload": {"from": [0.8494, 0.225], "to": [0.8444, 0.226], "requested": [0.8444, 0.226], "clipped": false}, "sim_t": 90.6, "budget_left": 5}
+{"kind": "move", "payload": {"from": [0.8444, 0.226], "to": [0.8444, 0.226], "requested": [0.8444, 0.226], "clipped": false}, "sim_t": 91.1, "budget_left": 4}
+{"kind": "move", "payload": {"from": [0.8444, 0.226], "to": [0.8444, 0.226], "requested": [0.8444, 0.226], "clipped": false}, "sim_t": 91.6, "budget_left": 3}
+{"kind": "move", "payload": {"from": [0.8444, 0.226], "to": [0.8444, 0.226], "requested": [0.8444, 0.226], "clipped": false}, "sim_t": 92.1, "budget_left": 2}
+{"kind": "release", "payload": {"result": "ok", "node": 8}, "sim_t": 92.6, "budget_left": 1}
+{"kind": "done", "payload": {"success": false, "max_dist": 0.3094, "mean_dist": 0.3079, "score": 0.0, "FINISHED": true}, "sim_t": 92.8, "budget_left": 1}
+{"kind": "done", "payload": {"success": false, "max_dist": 0.3094, "mean_dist": 0.3079, "score": 0.0, "FINISHED": true}, "sim_t": 92.8, "budget_left": 1}

@@ -1,0 +1,1 @@
+{"tag": "L3X", "trial": 4, "seed": 304, "wall_s": 87.9, "codex_rc": 0, "bridge_calls": 66, "score": {"success": true, "winding": 1.7083, "winding_delta": 0.9682, "on_table": true, "score": 1.0, "FINISHED": true}}

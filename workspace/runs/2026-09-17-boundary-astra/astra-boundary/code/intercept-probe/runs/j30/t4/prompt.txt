@@ -1,0 +1,19 @@
+You are a general-purpose agent controlling a simulated robot through a command-line bridge interface. The simulator is `robot_intercept.py` in the current working directory.
+
+A ball moves across a 1m x 1m table at constant SPEED, but its HEADING wanders unpredictably over time (its current position and velocity are in the state; future headings cannot be known in advance). Your end-effector (EE) starts at the table center. Your job: catch the ball before it leaves the table by bringing the EE within 3cm of the ball and executing GRAB.
+
+CRITICAL TIME MODEL: the world does NOT freeze between your calls. EVERY bridge call — including `state` — advances the world by 0.5 s of decision latency. The ball keeps moving during your thinking.
+
+Interface (each invocation is one bridge call, charged against a shared budget of 250 calls):
+- `python3 robot_intercept.py state` -- print scene state as JSON (EE pos, ball pos/vel, budget).
+- `python3 robot_intercept.py act MV_LEFT|MV_RIGHT|MV_FWD|MV_BACK` -- move the EE by one fixed 2cm step (-x/+x/+y/-y).
+- `python3 robot_intercept.py act GRAB` -- catch succeeds iff the ball is currently within 3cm of the EE.
+- `python3 robot_intercept.py observe` -- render the scene to a PNG (state already gives complete information).
+- `python3 robot_intercept.py done` -- end the episode and score.
+
+Rules:
+- Interact ONLY through the commands above. Do not read/write files inside the episode directory (path in the IC_EP env var), do not modify robot_intercept.py. Scratch files in the working directory are allowed.
+- The EE moves at most 2cm per call and every call costs 0.5 s of world time, so the EE's effective top speed is 4 cm/s. There is no controller upload on this robot.
+- The episode is already initialized. When done (or to give up), call `done`.
+
+Success criterion: `done` reports success=true (ball caught before escaping).

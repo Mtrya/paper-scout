@@ -1,0 +1,21 @@
+You are a general-purpose agent controlling a simulated robot arm through a command-line bridge interface. The simulator is `robot_units.py` in the current working directory.
+
+The robot's end-effector (EE) moves on a 1m x 1m table. There is one block (5cm cube) and a circular goal pad (radius 5cm). Your job: pick up the block and place it so its center lands within 4cm of the pad center.
+
+Interface (each invocation is one bridge call, charged against a shared budget of 250 calls; every call also incurs 0.5 s of decision latency in simulation time):
+
+- `python3 robot_units.py state` -- print the scene state as JSON (numeric EE / block / pad coordinates, and the list of valid action units).
+- `python3 robot_units.py observe` -- render the current scene to a PNG and print its path. (`state` already gives complete geometric information.)
+- `python3 robot_units.py act <UNIT>` -- execute one action unit.
+- `python3 robot_units.py done` -- declare completion; the episode is scored immediately.
+
+Rules:
+- Interact with the robot ONLY through the commands above. Do not read, write, or modify any file inside the episode directory (its path is in the SH_EP environment variable), and do not modify robot_units.py. You may create your own scratch files in the current working directory.
+- The episode is already initialized. When finished (or to give up), call `python3 robot_units.py done`. If the budget is exhausted the episode ends automatically.
+
+
+The robot accepts a fixed set of action units (listed by `state`). What each unit does is NOT documented here. You will have to figure out the mapping from interaction itself.
+
+IMPORTANT: this robot does NOT report numeric positions anywhere — `state` gives no coordinates. The only way to see the scene is the `observe` PNG. You must infer both the action-unit effects and the geometry from the rendered images (top-down view: table x rightward, y upward in the image).
+
+Success criterion: `done` reports success=true (block center within 4cm of pad center).

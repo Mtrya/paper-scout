@@ -1,0 +1,15 @@
+{
+  "tag": "j30",
+  "jitter": 30.0,
+  "trial": 4,
+  "seed": 204,
+  "wall_s": 116.4,
+  "codex_rc": 0,
+  "bridge_calls": 104,
+  "score": {
+    "success": false,
+    "escaped": true,
+    "speed": 0.04,
+    "sim_t": 51.0
+  }
+}

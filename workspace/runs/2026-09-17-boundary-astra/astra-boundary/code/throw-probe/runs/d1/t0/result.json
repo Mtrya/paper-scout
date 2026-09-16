@@ -1,0 +1,14 @@
+{
+  "mode": "d1",
+  "trial": 0,
+  "seed": 300,
+  "wall_s": 28.3,
+  "codex_rc": 0,
+  "score": {
+    "mode": "d1",
+    "success": true,
+    "attempts": 3,
+    "hits": 1,
+    "best_err": 0.0017
+  }
+}

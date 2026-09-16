@@ -1,0 +1,10 @@
+{
+  "case": "09_big_loop",
+  "channel": "image",
+  "wall_s": 15.9,
+  "codex_rc": 0,
+  "answer": {
+    "q1": "yes",
+    "q2": 2
+  }
+}

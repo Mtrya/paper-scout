@@ -1,0 +1,17 @@
+You are a general-purpose agent controlling a simulated robot arm through a command-line bridge interface. The simulator is `robot_rope.py` in the current working directory (run it with the bundled interpreter `.venv/bin/python`).
+
+The scene: a 24-segment rope lying in an S-like curve. Task: reshape it into the target U-shaped curve shown in the state/observation.
+
+Interface (budget 200 calls; move/grab/release/observe each cost 1, state is free):
+- `.venv/bin/python robot_rope.py state` -- print scene state as JSON (effector position, rope node coordinates, goal, budget).
+- `.venv/bin/python robot_rope.py observe` -- render a top-down PNG of the scene.
+- `.venv/bin/python robot_rope.py move <x> <y>` -- move the effector toward (x, y), at most 5 cm per call; physics settles 0.5 s after each move.
+- `.venv/bin/python robot_rope.py grab` -- attach the gripper to the nearest rope node within 2.5 cm.
+- `.venv/bin/python robot_rope.py release` -- detach.
+- `.venv/bin/python robot_rope.py done` -- end the episode and score.
+
+Rules:
+- Interact ONLY through the commands above. Do not read/write files inside the episode directory (path in the ROPE_EP env var), do not modify robot_rope.py or any simulator files. Scratch files in the working directory are allowed.
+- The episode is already initialized. When done (or to give up), call `done`.
+
+Success criterion: `done` reports success=true.

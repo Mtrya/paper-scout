@@ -1,0 +1,9 @@
+{
+  "case": "04_arc_half",
+  "channel": "image",
+  "wall_s": 15.9,
+  "codex_rc": 0,
+  "answer": {
+    "q1": "yes"
+  }
+}

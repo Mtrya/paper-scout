@@ -1,0 +1,8 @@
+You are given the numeric state of a rope-on-table scene (JSON below). The rope is a polyline of nodes in `nodes_xy` (ordered from end A to end B, coordinates in metres on a 1m x 1m table). The peg is a small vertical post at `peg`.
+
+{"nodes_xy": [[0.6994, 0.3092], [0.722, 0.3422], [0.7376, 0.3791], [0.7455, 0.4183], [0.7455, 0.4583], [0.7376, 0.4975], [0.722, 0.5343], [0.6994, 0.5673], [0.6707, 0.5952], [0.637, 0.6168], [0.5998, 0.6313], [0.5603, 0.6381], [0.5204, 0.6369], [0.4814, 0.6278], [0.445, 0.6112], [0.4127, 0.5877], [0.3857, 0.5582], [0.3651, 0.5239], [0.3517, 0.4862], [0.346, 0.4466], [0.3483, 0.4067], [0.3586, 0.368], [0.3763, 0.3321], [0.4007, 0.3005], [0.431, 0.2743]], "peg": [0.5, 0.5]}
+
+Answer one question about the rope in the scene:
+Q1: Does the rope wrap at least HALF a full turn (>= 180 degrees) around the peg? Picture standing on the peg and walking along the rope from one end to the other: if your facing direction has rotated by 180 degrees or more (in either direction) because of the rope curving around the peg, answer "yes", otherwise "no". Note: a full closed loop is 360 degrees; a rope that merely passes near the peg without curving around it is near 0 degrees.
+
+Reply with ONLY a JSON object on one line: {"q1": "..."}

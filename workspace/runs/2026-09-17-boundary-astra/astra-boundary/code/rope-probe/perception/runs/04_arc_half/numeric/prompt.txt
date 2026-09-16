@@ -1,0 +1,12 @@
+You are given the numeric state of a rope-on-table scene (JSON below). The rope is a polyline of nodes in `nodes_xy` (ordered from end A to end B, coordinates in metres on a 1m x 1m table). The peg is a small vertical post at `peg`.
+
+{"nodes_xy": [[0.4309, 0.7711], [0.4, 0.7457], [0.3722, 0.7169], [0.348, 0.685], [0.3277, 0.6506], [0.3115, 0.614], [0.2997, 0.5758], [0.2924, 0.5364], [0.2897, 0.4965], [0.2917, 0.4566], [0.2984, 0.4171], [0.3096, 0.3787], [0.3251, 0.3419], [0.3449, 0.3071], [0.3686, 0.2749], [0.3959, 0.2456], [0.4263, 0.2197], [0.4596, 0.1975], [0.4953, 0.1794], [0.5328, 0.1655], [0.5717, 0.1561], [0.6114, 0.1513], [0.6514, 0.1512], [0.6911, 0.1556], [0.7301, 0.1647]], "peg": [0.5, 0.5]}
+
+Answer three questions about the rope in the scene:
+Q1: Is the rope wound around the peg (at least one full turn)? ("yes" or "no")
+Q2: How many times does the rope cross over itself? (an integer: 0, 1, 2, ...)
+Q3: Which free end of the rope is closer to the peg — end "A" (the first node in the node list / node order) or "B" (the last node)?
+
+Reply with ONLY a JSON object on one line: {"q1": "...", "q2": ..., "q3": "..."}
+
+(For Q3, end A = nodes_xy[0], end B = nodes_xy[-1].)

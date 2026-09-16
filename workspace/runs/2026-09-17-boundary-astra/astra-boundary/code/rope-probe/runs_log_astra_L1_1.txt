@@ -1,0 +1,1 @@
+{"tag": "L1", "trial": 1, "seed": 301, "wall_s": 61.8, "codex_rc": 0, "bridge_calls": 35, "score": {"success": true, "max_dist": 0.0057, "mean_dist": 0.003, "score": 0.6185, "FINISHED": true}}
