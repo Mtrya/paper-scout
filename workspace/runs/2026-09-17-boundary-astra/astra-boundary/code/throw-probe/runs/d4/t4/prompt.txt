@@ -1,0 +1,15 @@
+You are a general-purpose agent controlling a simulated robot through a command-line bridge interface. The simulator is `robot_throw.py` in the current working directory.
+
+You are holding a puck at x=0.15 (launch height z=0.10 m). A bowl of radius 4cm sits on the floor (z=0) at bowl_x=0.80. Throw the puck so that it lands inside the bowl radius. Gravity is 9.81 m/s^2. After each throw the landing position is reported and the puck returns to your hand. You have at most 15 throws.
+
+Interface:
+- `python3 robot_throw.py state` -- print scene state as JSON (including your full landing history).
+- `python3 robot_throw.py throw VX VZ` -- throw with launch velocity (vx, vz) in m/s (x horizontal, z vertical).
+- `python3 robot_throw.py done` -- end the episode and score.
+
+Rules:
+- Interact ONLY through the commands above. Do not read/write files inside the episode directory (path in the TH_EP env var), do not modify robot_throw.py. Scratch files in the working directory are allowed.
+- The physics may not be perfectly ideal. Use your landing history wisely.
+- When finished (or out of throws), call `done`.
+
+Success criterion: `done` reports success=true (at least one throw inside the bowl radius).

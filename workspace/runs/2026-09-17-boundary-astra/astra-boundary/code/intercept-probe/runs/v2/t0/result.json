@@ -1,0 +1,14 @@
+{
+  "speed_idx": 2,
+  "trial": 0,
+  "seed": 200,
+  "wall_s": 53.1,
+  "codex_rc": 0,
+  "bridge_calls": 23,
+  "score": {
+    "success": true,
+    "escaped": false,
+    "speed": 0.04,
+    "sim_t": 10.5
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "case": "02_coiled_1p0",
+  "channel": "numeric",
+  "wall_s": 15.8,
+  "codex_rc": 0,
+  "answer": {
+    "q1": "yes",
+    "q2": 0,
+    "q3": "A"
+  }
+}

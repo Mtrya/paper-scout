@@ -1,0 +1,9 @@
+{
+  "case": "00_coiled_1p5",
+  "channel": "image",
+  "wall_s": 9.9,
+  "codex_rc": 0,
+  "answer": {
+    "q1": "yes"
+  }
+}

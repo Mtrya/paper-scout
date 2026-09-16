@@ -1,0 +1,9 @@
+{"kind": "throw", "payload": {"vx": 2.45, "vz": 1.0, "land_x": 0.9334, "err": 0.1334, "hit": false}, "budget_left": 14}
+{"kind": "throw", "payload": {"vx": 2.033, "vz": 1.0, "land_x": 0.9203, "err": 0.1203, "hit": false}, "budget_left": 13}
+{"kind": "throw", "payload": {"vx": 1.0, "vz": 1.0, "land_x": 0.7568, "err": 0.0432, "hit": false}, "budget_left": 12}
+{"kind": "throw", "payload": {"vx": 1.273, "vz": 1.0, "land_x": 0.6362, "err": 0.1638, "hit": false}, "budget_left": 11}
+{"kind": "throw", "payload": {"vx": 2.0, "vz": 1.0, "land_x": 0.745, "err": 0.055, "hit": false}, "budget_left": 10}
+{"kind": "throw", "payload": {"vx": 2.2, "vz": 1.0, "land_x": 0.9202, "err": 0.1202, "hit": false}, "budget_left": 9}
+{"kind": "throw", "payload": {"vx": 8.84, "vz": -1.0, "land_x": 0.7973, "err": 0.0027, "hit": true}, "budget_left": 8}
+{"kind": "done", "payload": {"mode": "d4", "success": true, "attempts": 7, "hits": 1, "best_err": 0.0027}}
+{"kind": "done", "payload": {"mode": "d4", "success": true, "attempts": 7, "hits": 1, "best_err": 0.0027}}

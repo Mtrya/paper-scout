@@ -1,0 +1,6 @@
+You are given a top-down rendered image of a rope-on-table scene at `/home/deneb/Projects/paper-scout/workspace/code/rope-probe/perception/cases/00_coiled_1p5/render.png` (384x384 px; the rope is blue, the peg is the red dot, the table border is black). Read the image file and inspect it visually.
+
+Answer one question about the rope in the scene:
+Q1: Does the rope wrap at least HALF a full turn (>= 180 degrees) around the peg? Picture standing on the peg and walking along the rope from one end to the other: if your facing direction has rotated by 180 degrees or more (in either direction) because of the rope curving around the peg, answer "yes", otherwise "no". Note: a full closed loop is 360 degrees; a rope that merely passes near the peg without curving around it is near 0 degrees.
+
+Reply with ONLY a JSON object on one line: {"q1": "..."}

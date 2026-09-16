@@ -1,0 +1,10 @@
+{
+  "case": "08_pigtail_2x",
+  "channel": "image",
+  "wall_s": 12.8,
+  "codex_rc": 0,
+  "answer": {
+    "q1": "yes",
+    "q2": 2
+  }
+}

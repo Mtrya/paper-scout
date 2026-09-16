@@ -1,0 +1,76 @@
+{"t_wall": 1789575399.7240798, "sim_t": 0.5, "kind": "act", "payload": {"unit": "A", "place": "fail"}, "budget_left": 249}
+{"t_wall": 1789575402.6265242, "sim_t": 1.0, "kind": "act", "payload": {"unit": "B", "pick": "fail"}, "budget_left": 248}
+{"t_wall": 1789575405.6894982, "sim_t": 1.5, "kind": "act", "payload": {"unit": "C", "ee": [0.87, 0.783]}, "budget_left": 247}
+{"t_wall": 1789575408.093608, "sim_t": 2.0, "kind": "act", "payload": {"unit": "D", "ee": [0.87, 0.803]}, "budget_left": 246}
+{"t_wall": 1789575410.7112834, "sim_t": 2.5, "kind": "act", "payload": {"unit": "E", "ee": [0.85, 0.803]}, "budget_left": 245}
+{"t_wall": 1789575414.560603, "sim_t": 3.0, "kind": "act", "payload": {"unit": "F", "ee": [0.85, 0.783]}, "budget_left": 244}
+{"t_wall": 1789575422.205812, "sim_t": 3.5, "kind": "act", "payload": {"unit": "E", "ee": [0.83, 0.783]}, "budget_left": 243}
+{"t_wall": 1789575422.2952616, "sim_t": 4.0, "kind": "act", "payload": {"unit": "E", "ee": [0.81, 0.783]}, "budget_left": 242}
+{"t_wall": 1789575422.3786333, "sim_t": 4.5, "kind": "act", "payload": {"unit": "E", "ee": [0.79, 0.783]}, "budget_left": 241}
+{"t_wall": 1789575422.4958906, "sim_t": 5.0, "kind": "act", "payload": {"unit": "E", "ee": [0.77, 0.783]}, "budget_left": 240}
+{"t_wall": 1789575422.596645, "sim_t": 5.5, "kind": "act", "payload": {"unit": "E", "ee": [0.75, 0.783]}, "budget_left": 239}
+{"t_wall": 1789575422.7129567, "sim_t": 6.0, "kind": "act", "payload": {"unit": "E", "ee": [0.73, 0.783]}, "budget_left": 238}
+{"t_wall": 1789575422.8388371, "sim_t": 6.5, "kind": "act", "payload": {"unit": "E", "ee": [0.71, 0.783]}, "budget_left": 237}
+{"t_wall": 1789575422.9271746, "sim_t": 7.0, "kind": "act", "payload": {"unit": "E", "ee": [0.69, 0.783]}, "budget_left": 236}
+{"t_wall": 1789575423.009604, "sim_t": 7.5, "kind": "act", "payload": {"unit": "E", "ee": [0.67, 0.783]}, "budget_left": 235}
+{"t_wall": 1789575423.0962634, "sim_t": 8.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.763]}, "budget_left": 234}
+{"t_wall": 1789575423.1785302, "sim_t": 8.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.743]}, "budget_left": 233}
+{"t_wall": 1789575423.2589293, "sim_t": 9.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.723]}, "budget_left": 232}
+{"t_wall": 1789575423.343988, "sim_t": 9.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.703]}, "budget_left": 231}
+{"t_wall": 1789575423.4281394, "sim_t": 10.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.683]}, "budget_left": 230}
+{"t_wall": 1789575423.5090897, "sim_t": 10.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.663]}, "budget_left": 229}
+{"t_wall": 1789575423.5877953, "sim_t": 11.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.643]}, "budget_left": 228}
+{"t_wall": 1789575423.6973228, "sim_t": 11.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.623]}, "budget_left": 227}
+{"t_wall": 1789575423.807714, "sim_t": 12.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.603]}, "budget_left": 226}
+{"t_wall": 1789575423.9180152, "sim_t": 12.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.583]}, "budget_left": 225}
+{"t_wall": 1789575424.036445, "sim_t": 13.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.563]}, "budget_left": 224}
+{"t_wall": 1789575424.1377141, "sim_t": 13.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.543]}, "budget_left": 223}
+{"t_wall": 1789575424.260676, "sim_t": 14.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.523]}, "budget_left": 222}
+{"t_wall": 1789575424.3791835, "sim_t": 14.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.503]}, "budget_left": 221}
+{"t_wall": 1789575424.491113, "sim_t": 15.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.483]}, "budget_left": 220}
+{"t_wall": 1789575424.605317, "sim_t": 15.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.463]}, "budget_left": 219}
+{"t_wall": 1789575424.7215912, "sim_t": 16.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.443]}, "budget_left": 218}
+{"t_wall": 1789575424.8106568, "sim_t": 16.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.423]}, "budget_left": 217}
+{"t_wall": 1789575424.91417, "sim_t": 17.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.403]}, "budget_left": 216}
+{"t_wall": 1789575425.023901, "sim_t": 17.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.383]}, "budget_left": 215}
+{"t_wall": 1789575425.1311986, "sim_t": 18.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.363]}, "budget_left": 214}
+{"t_wall": 1789575425.2510934, "sim_t": 18.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.343]}, "budget_left": 213}
+{"t_wall": 1789575425.347937, "sim_t": 19.0, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.323]}, "budget_left": 212}
+{"t_wall": 1789575425.4554453, "sim_t": 19.5, "kind": "act", "payload": {"unit": "F", "ee": [0.67, 0.303]}, "budget_left": 211}
+{"t_wall": 1789575425.5677085, "sim_t": 20.0, "kind": "act", "payload": {"unit": "B", "pick": "ok"}, "budget_left": 210}
+{"t_wall": 1789575431.4583535, "sim_t": 20.5, "kind": "act", "payload": {"unit": "E", "ee": [0.65, 0.303]}, "budget_left": 209}
+{"t_wall": 1789575431.5662868, "sim_t": 21.0, "kind": "act", "payload": {"unit": "E", "ee": [0.63, 0.303]}, "budget_left": 208}
+{"t_wall": 1789575431.6953545, "sim_t": 21.5, "kind": "act", "payload": {"unit": "E", "ee": [0.61, 0.303]}, "budget_left": 207}
+{"t_wall": 1789575431.7893617, "sim_t": 22.0, "kind": "act", "payload": {"unit": "E", "ee": [0.59, 0.303]}, "budget_left": 206}
+{"t_wall": 1789575431.8678925, "sim_t": 22.5, "kind": "act", "payload": {"unit": "E", "ee": [0.57, 0.303]}, "budget_left": 205}
+{"t_wall": 1789575431.9515553, "sim_t": 23.0, "kind": "act", "payload": {"unit": "E", "ee": [0.55, 0.303]}, "budget_left": 204}
+{"t_wall": 1789575432.0601172, "sim_t": 23.5, "kind": "act", "payload": {"unit": "E", "ee": [0.53, 0.303]}, "budget_left": 203}
+{"t_wall": 1789575432.175817, "sim_t": 24.0, "kind": "act", "payload": {"unit": "E", "ee": [0.51, 0.303]}, "budget_left": 202}
+{"t_wall": 1789575432.2901628, "sim_t": 24.5, "kind": "act", "payload": {"unit": "E", "ee": [0.49, 0.303]}, "budget_left": 201}
+{"t_wall": 1789575432.4095685, "sim_t": 25.0, "kind": "act", "payload": {"unit": "E", "ee": [0.47, 0.303]}, "budget_left": 200}
+{"t_wall": 1789575432.5266702, "sim_t": 25.5, "kind": "act", "payload": {"unit": "E", "ee": [0.45, 0.303]}, "budget_left": 199}
+{"t_wall": 1789575432.6220398, "sim_t": 26.0, "kind": "act", "payload": {"unit": "E", "ee": [0.43, 0.303]}, "budget_left": 198}
+{"t_wall": 1789575432.7328322, "sim_t": 26.5, "kind": "act", "payload": {"unit": "E", "ee": [0.41, 0.303]}, "budget_left": 197}
+{"t_wall": 1789575432.843848, "sim_t": 27.0, "kind": "act", "payload": {"unit": "E", "ee": [0.39, 0.303]}, "budget_left": 196}
+{"t_wall": 1789575432.959984, "sim_t": 27.5, "kind": "act", "payload": {"unit": "E", "ee": [0.37, 0.303]}, "budget_left": 195}
+{"t_wall": 1789575433.0700467, "sim_t": 28.0, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.323]}, "budget_left": 194}
+{"t_wall": 1789575433.1656966, "sim_t": 28.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.343]}, "budget_left": 193}
+{"t_wall": 1789575433.2744446, "sim_t": 29.0, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.363]}, "budget_left": 192}
+{"t_wall": 1789575433.3860953, "sim_t": 29.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.383]}, "budget_left": 191}
+{"t_wall": 1789575433.4972608, "sim_t": 30.0, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.403]}, "budget_left": 190}
+{"t_wall": 1789575433.6090515, "sim_t": 30.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.423]}, "budget_left": 189}
+{"t_wall": 1789575433.720883, "sim_t": 31.0, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.443]}, "budget_left": 188}
+{"t_wall": 1789575433.8377204, "sim_t": 31.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.463]}, "budget_left": 187}
+{"t_wall": 1789575433.9744365, "sim_t": 32.0, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.483]}, "budget_left": 186}
+{"t_wall": 1789575434.065839, "sim_t": 32.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.503]}, "budget_left": 185}
+{"t_wall": 1789575434.1804287, "sim_t": 33.0, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.523]}, "budget_left": 184}
+{"t_wall": 1789575434.2889488, "sim_t": 33.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.543]}, "budget_left": 183}
+{"t_wall": 1789575434.3948336, "sim_t": 34.0, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.563]}, "budget_left": 182}
+{"t_wall": 1789575434.5091357, "sim_t": 34.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.583]}, "budget_left": 181}
+{"t_wall": 1789575434.6214037, "sim_t": 35.0, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.603]}, "budget_left": 180}
+{"t_wall": 1789575434.738187, "sim_t": 35.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.623]}, "budget_left": 179}
+{"t_wall": 1789575434.8530748, "sim_t": 36.0, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.643]}, "budget_left": 178}
+{"t_wall": 1789575434.9578917, "sim_t": 36.5, "kind": "act", "payload": {"unit": "D", "ee": [0.37, 0.663]}, "budget_left": 177}
+{"t_wall": 1789575435.0752745, "sim_t": 37.0, "kind": "act", "payload": {"unit": "A", "place_err": 0.0014}, "budget_left": 176}
+{"t_wall": 1789575435.1900039, "sim_t": 37.0, "kind": "done", "payload": {"cond": "D", "success": true, "final_err": 0.0014, "sim_t": 37.0}, "budget_left": 176}
+{"t_wall": 1789575440.6600187, "sim_t": 37.0, "kind": "done", "payload": {"cond": "D", "success": true, "final_err": 0.0014, "sim_t": 37.0}, "budget_left": 176}

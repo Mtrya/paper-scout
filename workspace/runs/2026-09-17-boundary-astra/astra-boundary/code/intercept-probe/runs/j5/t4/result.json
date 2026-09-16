@@ -1,0 +1,15 @@
+{
+  "tag": "j5",
+  "jitter": 5.0,
+  "trial": 4,
+  "seed": 204,
+  "wall_s": 68.9,
+  "codex_rc": 0,
+  "bridge_calls": 19,
+  "score": {
+    "success": true,
+    "escaped": false,
+    "speed": 0.04,
+    "sim_t": 8.5
+  }
+}

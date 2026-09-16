@@ -1,0 +1,10 @@
+{
+  "case": "05_straight_past",
+  "channel": "image",
+  "wall_s": 19.7,
+  "codex_rc": 0,
+  "answer": {
+    "q1": "no",
+    "q2": 0
+  }
+}

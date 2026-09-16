@@ -1,0 +1,22 @@
+{
+  "cond": "E",
+  "trial": 1,
+  "seed": 101,
+  "wall_s": 88.7,
+  "codex_rc": 0,
+  "bridge_calls": 89,
+  "unit_map": {
+    "minus_x": "A",
+    "plus_x": "C",
+    "plus_y": "D",
+    "minus_y": "F",
+    "pick": "E",
+    "place": "B"
+  },
+  "score": {
+    "cond": "E",
+    "success": true,
+    "final_err": 0.0081,
+    "sim_t": 39.0
+  }
+}

@@ -1,0 +1,5 @@
+{"kind": "throw", "payload": {"vx": 1.5, "vz": 1.89473, "land_x": 1.5185, "err": 0.7185, "hit": false}, "budget_left": 14}
+{"kind": "throw", "payload": {"vx": 0.71246, "vz": 1.89473, "land_x": 1.2477, "err": 0.4477, "hit": false}, "budget_left": 13}
+{"kind": "throw", "payload": {"vx": -0.5895, "vz": 1.89473, "land_x": 0.7827, "err": 0.0173, "hit": true}, "budget_left": 12}
+{"kind": "done", "payload": {"mode": "d2", "success": true, "attempts": 3, "hits": 1, "best_err": 0.0173}}
+{"kind": "done", "payload": {"mode": "d2", "success": true, "attempts": 3, "hits": 1, "best_err": 0.0173}}

@@ -1,0 +1,5 @@
+{"kind": "grab", "payload": {"result": "ok", "node": 0, "dist": 0.0}, "sim_t": 0.5, "budget_left": 199}
+{"kind": "move", "payload": {"from": [0.7567, 0.1055], "to": [0.7901, 0.1297], "requested": [0.7901, 0.1297], "clipped": false}, "sim_t": 0.5, "budget_left": 198}
+{"kind": "release", "payload": {"result": "ok", "node": 0}, "sim_t": 1.0, "budget_left": 197}
+{"kind": "done", "payload": {"success": true, "mean_dist": 0.0103, "max_dist": 0.021, "end_err": 0.0004, "score": 0.7417, "FINISHED": true}, "sim_t": 1.2, "budget_left": 197}
+{"kind": "done", "payload": {"success": true, "mean_dist": 0.0103, "max_dist": 0.021, "end_err": 0.0004, "score": 0.7417, "FINISHED": true}, "sim_t": 1.2, "budget_left": 197}

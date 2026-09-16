@@ -1,0 +1,201 @@
+{
+  "n_cases": 10,
+  "scene": "L3 (24-link rope + peg at [0.5, 0.5])",
+  "questions": {
+    "Q1": "does the rope encircle the peg? |winding| >= 0.50",
+    "Q2": "how many times does the rope cross itself?",
+    "Q3": "which free end is nearer the peg (E0 = node 0, E1 = node 24)?"
+  },
+  "cases": [
+    {
+      "case": "00_coiled_1p5",
+      "state": "cases/00_coiled_1p5/state.json",
+      "render": "cases/00_coiled_1p5/render.png",
+      "answers": {
+        "Q1_wound_around_peg": "yes",
+        "Q2_self_crossings": "2+",
+        "Q3_nearer_free_end": "E0"
+      },
+      "ground_truth": {
+        "winding_about_peg": 1.5101,
+        "wound_threshold": 0.5,
+        "self_crossings": 3,
+        "end_dist_to_peg": {
+          "E0": 0.0478,
+          "E1": 0.1595
+        }
+      }
+    },
+    {
+      "case": "01_coiled_2p2",
+      "state": "cases/01_coiled_2p2/state.json",
+      "render": "cases/01_coiled_2p2/render.png",
+      "answers": {
+        "Q1_wound_around_peg": "yes",
+        "Q2_self_crossings": "1",
+        "Q3_nearer_free_end": "E0"
+      },
+      "ground_truth": {
+        "winding_about_peg": -2.1523,
+        "wound_threshold": 0.5,
+        "self_crossings": 1,
+        "end_dist_to_peg": {
+          "E0": 0.0433,
+          "E1": 0.0644
+        }
+      }
+    },
+    {
+      "case": "02_coiled_1p0",
+      "state": "cases/02_coiled_1p0/state.json",
+      "render": "cases/02_coiled_1p0/render.png",
+      "answers": {
+        "Q1_wound_around_peg": "yes",
+        "Q2_self_crossings": "0",
+        "Q3_nearer_free_end": "E0"
+      },
+      "ground_truth": {
+        "winding_about_peg": 1.0117,
+        "wound_threshold": 0.5,
+        "self_crossings": 0,
+        "end_dist_to_peg": {
+          "E0": 0.0326,
+          "E1": 0.0348
+        }
+      }
+    },
+    {
+      "case": "03_arc_wide",
+      "state": "cases/03_arc_wide/state.json",
+      "render": "cases/03_arc_wide/render.png",
+      "answers": {
+        "Q1_wound_around_peg": "yes",
+        "Q2_self_crossings": "0",
+        "Q3_nearer_free_end": "E1"
+      },
+      "ground_truth": {
+        "winding_about_peg": 0.8243,
+        "wound_threshold": 0.5,
+        "self_crossings": 0,
+        "end_dist_to_peg": {
+          "E0": 0.276,
+          "E1": 0.236
+        }
+      }
+    },
+    {
+      "case": "04_arc_half",
+      "state": "cases/04_arc_half/state.json",
+      "render": "cases/04_arc_half/render.png",
+      "answers": {
+        "Q1_wound_around_peg": "yes",
+        "Q2_self_crossings": "0",
+        "Q3_nearer_free_end": "E0"
+      },
+      "ground_truth": {
+        "winding_about_peg": 0.556,
+        "wound_threshold": 0.5,
+        "self_crossings": 0,
+        "end_dist_to_peg": {
+          "E0": 0.2797,
+          "E1": 0.4066
+        }
+      }
+    },
+    {
+      "case": "05_straight_past",
+      "state": "cases/05_straight_past/state.json",
+      "render": "cases/05_straight_past/render.png",
+      "answers": {
+        "Q1_wound_around_peg": "no",
+        "Q2_self_crossings": "0",
+        "Q3_nearer_free_end": "E0"
+      },
+      "ground_truth": {
+        "winding_about_peg": -0.5,
+        "wound_threshold": 0.5,
+        "self_crossings": 0,
+        "end_dist_to_peg": {
+          "E0": 0.4361,
+          "E1": 0.5239
+        }
+      }
+    },
+    {
+      "case": "06_straight_near",
+      "state": "cases/06_straight_near/state.json",
+      "render": "cases/06_straight_near/render.png",
+      "answers": {
+        "Q1_wound_around_peg": "no",
+        "Q2_self_crossings": "0",
+        "Q3_nearer_free_end": "E0"
+      },
+      "ground_truth": {
+        "winding_about_peg": 0.5,
+        "wound_threshold": 0.5,
+        "self_crossings": 0,
+        "end_dist_to_peg": {
+          "E0": 0.46,
+          "E1": 0.5
+        }
+      }
+    },
+    {
+      "case": "07_pigtail_1x",
+      "state": "cases/07_pigtail_1x/state.json",
+      "render": "cases/07_pigtail_1x/render.png",
+      "answers": {
+        "Q1_wound_around_peg": "yes",
+        "Q2_self_crossings": "1",
+        "Q3_nearer_free_end": "E1"
+      },
+      "ground_truth": {
+        "winding_about_peg": -1.2145,
+        "wound_threshold": 0.5,
+        "self_crossings": 1,
+        "end_dist_to_peg": {
+          "E0": 0.1527,
+          "E1": 0.1387
+        }
+      }
+    },
+    {
+      "case": "08_pigtail_2x",
+      "state": "cases/08_pigtail_2x/state.json",
+      "render": "cases/08_pigtail_2x/render.png",
+      "answers": {
+        "Q1_wound_around_peg": "yes",
+        "Q2_self_crossings": "2+",
+        "Q3_nearer_free_end": "E0"
+      },
+      "ground_truth": {
+        "winding_about_peg": -0.8667,
+        "wound_threshold": 0.5,
+        "self_crossings": 2,
+        "end_dist_to_peg": {
+          "E0": 0.1524,
+          "E1": 0.1658
+        }
+      }
+    },
+    {
+      "case": "09_big_loop",
+      "state": "cases/09_big_loop/state.json",
+      "render": "cases/09_big_loop/render.png",
+      "answers": {
+        "Q1_wound_around_peg": "yes",
+        "Q2_self_crossings": "2+",
+        "Q3_nearer_free_end": "E0"
+      },
+      "ground_truth": {
+        "winding_about_peg": -0.8898,
+        "wound_threshold": 0.5,
+        "self_crossings": 2,
+        "end_dist_to_peg": {
+          "E0": 0.2051,
+          "E1": 0.2233
+        }
+      }
+    }
+  ]
+}

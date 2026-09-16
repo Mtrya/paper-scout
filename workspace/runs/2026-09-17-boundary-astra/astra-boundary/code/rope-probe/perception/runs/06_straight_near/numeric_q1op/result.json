@@ -1,0 +1,9 @@
+{
+  "case": "06_straight_near",
+  "channel": "numeric",
+  "wall_s": 7.2,
+  "codex_rc": 0,
+  "answer": {
+    "q1": "no"
+  }
+}

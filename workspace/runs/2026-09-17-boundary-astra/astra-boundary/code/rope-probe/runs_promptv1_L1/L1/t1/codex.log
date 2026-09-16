@@ -1,0 +1,1153 @@
+Reading additional input from stdin...
+OpenAI Codex v0.154.0
+--------
+workdir: /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+model: gpt-6-astra
+provider: openai
+approval: on-request
+sandbox: workspace-write [workdir, /tmp, $TMPDIR]
+reasoning effort: medium
+reasoning summaries: none
+session id: 01a0ab76-7f92-7b90-9cf8-0f29c32a88ca
+--------
+user
+You are a general-purpose agent controlling a simulated robot arm through a command-line bridge interface. The simulator is `robot_rope.py` in the current working directory (run it with the bundled interpreter `.venv/bin/python`).
+
+The scene: an 8-segment chain lying curved on the table. Task: straighten it so the whole chain lies close to a straight line (the exact straightness criterion is internal; make it as straight as you can).
+
+Interface (budget 200 calls; move/grab/release/observe each cost 1, state is free):
+- `.venv/bin/python robot_rope.py state` -- print scene state as JSON (effector position, rope node coordinates, goal, budget).
+- `.venv/bin/python robot_rope.py observe` -- render a top-down PNG of the scene.
+- `.venv/bin/python robot_rope.py move <x> <y>` -- move the effector toward (x, y), at most 5 cm per call; physics settles 0.5 s after each move.
+- `.venv/bin/python robot_rope.py grab` -- attach the gripper to the nearest rope node within 2.5 cm.
+- `.venv/bin/python robot_rope.py release` -- detach.
+- `.venv/bin/python robot_rope.py done` -- end the episode and score.
+
+Rules:
+- Interact ONLY through the commands above. Do not read/write files inside the episode directory (path in the ROPE_EP env var), do not modify robot_rope.py or any simulator files. Scratch files in the working directory are allowed.
+- The episode is already initialized. When done (or to give up), call `done`.
+
+Success criterion: `done` reports success=true.
+
+codex
+I’ll check the chain’s coordinates, then pull an end outward and adjust until it is straight.
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 50ms:
+{"level": "L1", "seed": 301, "ee": [0.4595, 0.6198, 0.01], "holding": null, "budget_left": 200, "sim_t": 0.5, "paths": [[0.4595, 0.6198, 0.0079], [0.4992, 0.6153, 0.0079], [0.5331, 0.5941, 0.0079], [0.5716, 0.5833, 0.0079], [0.6025, 0.5578, 0.0079], [0.6422, 0.5622, 0.0079], [0.6801, 0.5494, 0.0079], [0.716, 0.5671, 0.0079], [0.7549, 0.558, 0.0079]], "nodes_xy": [[0.4595, 0.6198], [0.4992, 0.6153], [0.5331, 0.5941], [0.5716, 0.5833], [0.6025, 0.5578], [0.6422, 0.5622], [0.6801, 0.5494], [0.716, 0.5671], [0.7549, 0.558]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py grab' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 98ms:
+{"holding": 0, "dist": 0.0, "budget_left": 199}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.4106 0.6300' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 145ms:
+{"ee": [0.4106, 0.63, 0.01], "clipped": false, "holding": 0, "sim_t": 1.0, "budget_left": 198}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 86ms:
+{"level": "L1", "seed": 301, "ee": [0.4106, 0.63, 0.01], "holding": 0, "budget_left": 198, "sim_t": 1.0, "paths": [[0.4194, 0.6265, 0.008], [0.4592, 0.6229, 0.008], [0.4939, 0.6029, 0.008], [0.5326, 0.5929, 0.008], [0.5633, 0.5672, 0.008], [0.6032, 0.5698, 0.008], [0.6401, 0.5543, 0.008], [0.6774, 0.5688, 0.008], [0.7154, 0.5563, 0.008]], "nodes_xy": [[0.4194, 0.6265], [0.4592, 0.6229], [0.4939, 0.6029], [0.5326, 0.5929], [0.5633, 0.5672], [0.6032, 0.5698], [0.6401, 0.5543], [0.6774, 0.5688], [0.7154, 0.5563]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.3617 0.6402' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 117ms:
+{"ee": [0.3617, 0.6402, 0.01], "clipped": false, "holding": 0, "sim_t": 1.5, "budget_left": 197}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.3128 0.6504' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 133ms:
+{"ee": [0.3128, 0.6504, 0.01], "clipped": false, "holding": 0, "sim_t": 2.0, "budget_left": 196}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.2639 0.6606' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 154ms:
+{"ee": [0.2639, 0.6606, 0.01], "clipped": false, "holding": 0, "sim_t": 2.5, "budget_left": 195}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 82ms:
+{"level": "L1", "seed": 301, "ee": [0.2639, 0.6606, 0.01], "holding": 0, "budget_left": 195, "sim_t": 2.5, "paths": [[0.2745, 0.6575, 0.008], [0.3144, 0.6565, 0.008], [0.3513, 0.6409, 0.008], [0.3908, 0.6346, 0.008], [0.4228, 0.6106, 0.008], [0.4628, 0.6107, 0.008], [0.4975, 0.5908, 0.008], [0.5368, 0.5984, 0.008], [0.5718, 0.579, 0.008]], "nodes_xy": [[0.2745, 0.6575], [0.3144, 0.6565], [0.3513, 0.6409], [0.3908, 0.6346], [0.4228, 0.6106], [0.4628, 0.6107], [0.4975, 0.5908], [0.5368, 0.5984], [0.5718, 0.579]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.2639 0.6606' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 170ms:
+{"ee": [0.2639, 0.6606, 0.01], "clipped": false, "holding": 0, "sim_t": 3.0, "budget_left": 194}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.2639 0.6606' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 114ms:
+{"ee": [0.2639, 0.6606, 0.01], "clipped": false, "holding": 0, "sim_t": 3.5, "budget_left": 193}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.2639 0.6606' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 112ms:
+{"ee": [0.2639, 0.6606, 0.01], "clipped": false, "holding": 0, "sim_t": 4.0, "budget_left": 192}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.2639 0.6606' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 111ms:
+{"ee": [0.2639, 0.6606, 0.01], "clipped": false, "holding": 0, "sim_t": 4.5, "budget_left": 191}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.2639 0.6606' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 105ms:
+{"ee": [0.2639, 0.6606, 0.01], "clipped": false, "holding": 0, "sim_t": 5.0, "budget_left": 190}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 111ms:
+{"level": "L1", "seed": 301, "ee": [0.2639, 0.6606, 0.01], "holding": 0, "budget_left": 190, "sim_t": 5.0, "paths": [[0.2624, 0.6608, 0.0079], [0.3024, 0.6618, 0.0079], [0.3388, 0.6452, 0.0079], [0.3784, 0.6394, 0.0079], [0.409, 0.6136, 0.0079], [0.449, 0.6143, 0.0079], [0.4835, 0.594, 0.0079], [0.5226, 0.6024, 0.0079], [0.5577, 0.5832, 0.0079]], "nodes_xy": [[0.2624, 0.6608], [0.3024, 0.6618], [0.3388, 0.6452], [0.3784, 0.6394], [0.409, 0.6136], [0.449, 0.6143], [0.4835, 0.594], [0.5226, 0.6024], [0.5577, 0.5832]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py release' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 113ms:
+{"holding": null, "budget_left": 189}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.5577 0.5832' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 138ms:
+{"ee": [0.3123, 0.6479, 0.01], "clipped": true, "holding": null, "sim_t": 5.7, "budget_left": 188}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.5577 0.5832' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 127ms:
+{"ee": [0.3606, 0.6351, 0.01], "clipped": true, "holding": null, "sim_t": 6.2, "budget_left": 187}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.5577 0.5832' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 127ms:
+{"ee": [0.409, 0.6224, 0.01], "clipped": true, "holding": null, "sim_t": 6.7, "budget_left": 186}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.5577 0.5832' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 132ms:
+{"ee": [0.4573, 0.6096, 0.01], "clipped": true, "holding": null, "sim_t": 7.2, "budget_left": 185}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.5577 0.5832' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 126ms:
+{"ee": [0.5057, 0.5969, 0.01], "clipped": true, "holding": null, "sim_t": 7.7, "budget_left": 184}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.5577 0.5832' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 62ms:
+{"ee": [0.554, 0.5842, 0.01], "clipped": true, "holding": null, "sim_t": 8.2, "budget_left": 183}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.5577 0.5832' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 154ms:
+{"ee": [0.5577, 0.5832, 0.01], "clipped": false, "holding": null, "sim_t": 8.7, "budget_left": 182}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py grab' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 164ms:
+{"holding": 8, "dist": 0.0, "budget_left": 181}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.75494 0.55799' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 227ms:
+{"ee": [0.6073, 0.5769, 0.01], "clipped": true, "holding": 8, "sim_t": 9.2, "budget_left": 180}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.75494 0.55799' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 126ms:
+{"ee": [0.6569, 0.5705, 0.01], "clipped": true, "holding": 8, "sim_t": 9.7, "budget_left": 179}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.75494 0.55799' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 175ms:
+{"ee": [0.7065, 0.5642, 0.01], "clipped": true, "holding": 8, "sim_t": 10.2, "budget_left": 178}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.75494 0.55799' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 109ms:
+{"ee": [0.7549, 0.558, 0.01], "clipped": false, "holding": 8, "sim_t": 10.7, "budget_left": 177}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 82ms:
+{"level": "L1", "seed": 301, "ee": [0.7549, 0.558, 0.01], "holding": 8, "budget_left": 177, "sim_t": 10.7, "paths": [[0.4417, 0.6121, 0.0081], [0.4816, 0.6152, 0.008], [0.5194, 0.6023, 0.008], [0.5594, 0.6015, 0.008], [0.5935, 0.5806, 0.008], [0.6333, 0.5851, 0.008], [0.6693, 0.5678, 0.008], [0.7083, 0.5766, 0.008], [0.7447, 0.5599, 0.008]], "nodes_xy": [[0.4417, 0.6121], [0.4816, 0.6152], [0.5194, 0.6023], [0.5594, 0.6015], [0.5935, 0.5806], [0.6333, 0.5851], [0.6693, 0.5678], [0.7083, 0.5766], [0.7447, 0.5599]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+codex
+Pulling an end mostly slides the chain while leaving small bends. I’ll adjust the bent nodes individually along the target line.
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py release' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 125ms:
+{"holding": null, "budget_left": 176}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 99ms:
+{"level": "L1", "seed": 301, "ee": [0.7549, 0.558, 0.01], "holding": null, "budget_left": 176, "sim_t": 10.9, "paths": [[0.4806, 0.6045, 0.0079], [0.5205, 0.6076, 0.0079], [0.5583, 0.5946, 0.0079], [0.5983, 0.5937, 0.0079], [0.6324, 0.5727, 0.0079], [0.6721, 0.5772, 0.0079], [0.7081, 0.5597, 0.0079], [0.7472, 0.5683, 0.0079], [0.7834, 0.5514, 0.0079]], "nodes_xy": [[0.4806, 0.6045], [0.5205, 0.6076], [0.5583, 0.5946], [0.5983, 0.5937], [0.6324, 0.5727], [0.6721, 0.5772], [0.7081, 0.5597], [0.7472, 0.5683], [0.7834, 0.5514]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.7834 0.5514' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 67ms:
+{"ee": [0.7834, 0.5514, 0.01], "clipped": false, "holding": null, "sim_t": 11.4, "budget_left": 175}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py grab' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 106ms:
+{"holding": 8, "dist": 0.0, "budget_left": 174}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.75494 0.55799' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 192ms:
+{"ee": [0.7549, 0.558, 0.01], "clipped": false, "holding": 8, "sim_t": 11.9, "budget_left": 173}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.75494 0.55799' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 116ms:
+{"ee": [0.7549, 0.558, 0.01], "clipped": false, "holding": 8, "sim_t": 12.4, "budget_left": 172}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.75494 0.55799' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 67ms:
+{"ee": [0.7549, 0.558, 0.01], "clipped": false, "holding": 8, "sim_t": 12.9, "budget_left": 171}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.75494 0.55799' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 105ms:
+{"ee": [0.7549, 0.558, 0.01], "clipped": false, "holding": 8, "sim_t": 13.4, "budget_left": 170}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py release' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 90ms:
+{"holding": null, "budget_left": 169}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 81ms:
+{"level": "L1", "seed": 301, "ee": [0.7549, 0.558, 0.01], "holding": null, "budget_left": 169, "sim_t": 13.6, "paths": [[0.451, 0.6105, 0.0079], [0.4909, 0.6136, 0.0079], [0.5287, 0.6007, 0.0079], [0.5687, 0.5998, 0.0079], [0.6028, 0.5789, 0.0079], [0.6426, 0.5834, 0.0079], [0.6787, 0.5663, 0.0079], [0.7178, 0.5748, 0.0079], [0.7543, 0.5582, 0.0079]], "nodes_xy": [[0.451, 0.6105], [0.4909, 0.6136], [0.5287, 0.6007], [0.5687, 0.5998], [0.6028, 0.5789], [0.6426, 0.5834], [0.6787, 0.5663], [0.7178, 0.5748], [0.7543, 0.5582]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 67ms:
+{"level": "L1", "seed": 301, "ee": [0.7549, 0.558, 0.01], "holding": null, "budget_left": 169, "sim_t": 13.6, "paths": [[0.451, 0.6105, 0.0079], [0.4909, 0.6136, 0.0079], [0.5287, 0.6007, 0.0079], [0.5687, 0.5998, 0.0079], [0.6028, 0.5789, 0.0079], [0.6426, 0.5834, 0.0079], [0.6787, 0.5663, 0.0079], [0.7178, 0.5748, 0.0079], [0.7543, 0.5582, 0.0079]], "nodes_xy": [[0.451, 0.6105], [0.4909, 0.6136], [0.5287, 0.6007], [0.5687, 0.5998], [0.6028, 0.5789], [0.6426, 0.5834], [0.6787, 0.5663], [0.7178, 0.5748], [0.7543, 0.5582]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.7178 0.5748' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 153ms:
+{"ee": [0.7178, 0.5748, 0.01], "clipped": false, "holding": null, "sim_t": 14.1, "budget_left": 168}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py grab' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 109ms:
+{"holding": 7, "dist": 0.0, "budget_left": 167}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.7157892779107833 0.5661736878774738' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 166ms:
+{"ee": [0.7158, 0.5662, 0.01], "clipped": false, "holding": 7, "sim_t": 14.6, "budget_left": 166}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.7157892779107833 0.5661736878774738' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 149ms:
+{"ee": [0.7158, 0.5662, 0.01], "clipped": false, "holding": 7, "sim_t": 15.1, "budget_left": 165}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.7157892779107833 0.5661736878774738' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 93ms:
+{"ee": [0.7158, 0.5662, 0.01], "clipped": false, "holding": 7, "sim_t": 15.6, "budget_left": 164}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py release' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 140ms:
+{"holding": null, "budget_left": 163}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 112ms:
+{"level": "L1", "seed": 301, "ee": [0.7158, 0.5662, 0.01], "holding": null, "budget_left": 163, "sim_t": 15.8, "paths": [[0.4508, 0.611, 0.0079], [0.4907, 0.6141, 0.0079], [0.5285, 0.601, 0.0079], [0.5685, 0.5993, 0.0079], [0.6017, 0.5771, 0.0079], [0.6416, 0.5798, 0.0079], [0.6766, 0.5603, 0.0079], [0.7161, 0.5663, 0.0079], [0.7511, 0.5469, 0.0079]], "nodes_xy": [[0.4508, 0.611], [0.4907, 0.6141], [0.5285, 0.601], [0.5685, 0.5993], [0.6017, 0.5771], [0.6416, 0.5798], [0.6766, 0.5603], [0.7161, 0.5663], [0.7511, 0.5469]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.6766 0.5603' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 149ms:
+{"ee": [0.6766, 0.5603, 0.01], "clipped": false, "holding": null, "sim_t": 16.3, "budget_left": 162}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py grab' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 55ms:
+{"holding": 6, "dist": 0.0, "budget_left": 161}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.6766363000488844 0.5743617477542491' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 154ms:
+{"ee": [0.6766, 0.5744, 0.01], "clipped": false, "holding": 6, "sim_t": 16.8, "budget_left": 160}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.6766363000488844 0.5743617477542491' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 133ms:
+{"ee": [0.6766, 0.5744, 0.01], "clipped": false, "holding": 6, "sim_t": 17.3, "budget_left": 159}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.6766363000488844 0.5743617477542491' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 118ms:
+{"ee": [0.6766, 0.5744, 0.01], "clipped": false, "holding": 6, "sim_t": 17.8, "budget_left": 158}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py release' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 112ms:
+{"holding": null, "budget_left": 157}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 113ms:
+{"level": "L1", "seed": 301, "ee": [0.6766, 0.5744, 0.01], "holding": null, "budget_left": 157, "sim_t": 18.0, "paths": [[0.448, 0.6102, 0.0079], [0.4878, 0.614, 0.0079], [0.5259, 0.6019, 0.0079], [0.5659, 0.6025, 0.0079], [0.6007, 0.5828, 0.0079], [0.6401, 0.59, 0.0079], [0.677, 0.5746, 0.0079], [0.7153, 0.5863, 0.0079], [0.753, 0.573, 0.0079]], "nodes_xy": [[0.448, 0.6102], [0.4878, 0.614], [0.5259, 0.6019], [0.5659, 0.6025], [0.6007, 0.5828], [0.6401, 0.59], [0.677, 0.5746], [0.7153, 0.5863], [0.753, 0.573]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.6401 0.59' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 116ms:
+{"ee": [0.6401, 0.59, 0.01], "clipped": false, "holding": null, "sim_t": 18.5, "budget_left": 156}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py grab' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 124ms:
+{"holding": 5, "dist": 0.0, "budget_left": 155}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.6374833221869856 0.5825498076310244' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 244ms:
+{"ee": [0.6375, 0.5825, 0.01], "clipped": false, "holding": 5, "sim_t": 19.0, "budget_left": 154}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.6374833221869856 0.5825498076310244' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 193ms:
+{"ee": [0.6375, 0.5825, 0.01], "clipped": false, "holding": 5, "sim_t": 19.5, "budget_left": 153}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.6374833221869856 0.5825498076310244' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 249ms:
+{"ee": [0.6375, 0.5825, 0.01], "clipped": false, "holding": 5, "sim_t": 20.0, "budget_left": 152}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py release' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 160ms:
+{"holding": null, "budget_left": 151}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 109ms:
+{"level": "L1", "seed": 301, "ee": [0.6375, 0.5825, 0.01], "holding": null, "budget_left": 151, "sim_t": 20.2, "paths": [[0.4474, 0.6108, 0.0079], [0.4873, 0.614, 0.0079], [0.5251, 0.6008, 0.0079], [0.5651, 0.5995, 0.0079], [0.5984, 0.5774, 0.0079], [0.6381, 0.5824, 0.0079], [0.6742, 0.5653, 0.0079], [0.7128, 0.5758, 0.0079], [0.7503, 0.5619, 0.0079]], "nodes_xy": [[0.4474, 0.6108], [0.4873, 0.614], [0.5251, 0.6008], [0.5651, 0.5995], [0.5984, 0.5774], [0.6381, 0.5824], [0.6742, 0.5653], [0.7128, 0.5758], [0.7503, 0.5619]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.5984 0.5774' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 135ms:
+{"ee": [0.5984, 0.5774, 0.01], "clipped": false, "holding": null, "sim_t": 20.7, "budget_left": 150}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py grab' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 85ms:
+{"holding": 4, "dist": 0.0, "budget_left": 149}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.5983303443250867 0.5907378675077997' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 170ms:
+{"ee": [0.5983, 0.5907, 0.01], "clipped": false, "holding": 4, "sim_t": 21.2, "budget_left": 148}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.5983303443250867 0.5907378675077997' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 122ms:
+{"ee": [0.5983, 0.5907, 0.01], "clipped": false, "holding": 4, "sim_t": 21.7, "budget_left": 147}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.5983303443250867 0.5907378675077997' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 101ms:
+{"ee": [0.5983, 0.5907, 0.01], "clipped": false, "holding": 4, "sim_t": 22.2, "budget_left": 146}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py release' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 92ms:
+{"holding": null, "budget_left": 145}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 80ms:
+{"level": "L1", "seed": 301, "ee": [0.5983, 0.5907, 0.01], "holding": null, "budget_left": 145, "sim_t": 22.4, "paths": [[0.4461, 0.618, 0.0079], [0.4858, 0.6228, 0.0079], [0.5242, 0.6117, 0.0079], [0.5642, 0.6123, 0.0079], [0.5982, 0.5912, 0.0079], [0.6378, 0.5967, 0.0079], [0.674, 0.5797, 0.0079], [0.7129, 0.5891, 0.0079], [0.7498, 0.5737, 0.0079]], "nodes_xy": [[0.4461, 0.618], [0.4858, 0.6228], [0.5242, 0.6117], [0.5642, 0.6123], [0.5982, 0.5912], [0.6378, 0.5967], [0.674, 0.5797], [0.7129, 0.5891], [0.7498, 0.5737]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.4461 0.618' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 97ms:
+{"ee": [0.5491, 0.5996, 0.01], "clipped": true, "holding": null, "sim_t": 22.9, "budget_left": 144}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.4461 0.618' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 108ms:
+{"ee": [0.4999, 0.6084, 0.01], "clipped": true, "holding": null, "sim_t": 23.4, "budget_left": 143}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.4461 0.618' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 163ms:
+{"ee": [0.4507, 0.6172, 0.01], "clipped": true, "holding": null, "sim_t": 23.9, "budget_left": 142}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.4461 0.618' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 145ms:
+{"ee": [0.4461, 0.618, 0.01], "clipped": false, "holding": null, "sim_t": 24.4, "budget_left": 141}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py grab' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 117ms:
+{"holding": 0, "dist": 0.0, "budget_left": 140}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.70' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 180ms:
+{"ee": [0.3972, 0.6284, 0.01], "clipped": true, "holding": 0, "sim_t": 24.9, "budget_left": 139}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.70' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 189ms:
+{"ee": [0.3483, 0.6388, 0.01], "clipped": true, "holding": 0, "sim_t": 25.4, "budget_left": 138}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.70' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 95ms:
+{"ee": [0.2994, 0.6492, 0.01], "clipped": true, "holding": 0, "sim_t": 25.9, "budget_left": 137}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.70' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 137ms:
+{"ee": [0.2505, 0.6595, 0.01], "clipped": true, "holding": 0, "sim_t": 26.4, "budget_left": 136}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.70' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 144ms:
+{"ee": [0.2016, 0.6699, 0.01], "clipped": true, "holding": 0, "sim_t": 26.9, "budget_left": 135}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.70' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 207ms:
+{"ee": [0.1526, 0.6803, 0.01], "clipped": true, "holding": 0, "sim_t": 27.4, "budget_left": 134}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.70' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 172ms:
+{"ee": [0.1037, 0.6907, 0.01], "clipped": true, "holding": 0, "sim_t": 27.9, "budget_left": 133}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.70' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 206ms:
+{"ee": [0.06, 0.7, 0.01], "clipped": false, "holding": 0, "sim_t": 28.4, "budget_left": 132}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.70' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 188ms:
+{"ee": [0.06, 0.7, 0.01], "clipped": false, "holding": 0, "sim_t": 28.9, "budget_left": 131}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.70' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 175ms:
+{"ee": [0.06, 0.7, 0.01], "clipped": false, "holding": 0, "sim_t": 29.4, "budget_left": 130}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.70' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 122ms:
+{"ee": [0.06, 0.7, 0.01], "clipped": false, "holding": 0, "sim_t": 29.9, "budget_left": 129}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 90ms:
+{"level": "L1", "seed": 301, "ee": [0.06, 0.7, 0.01], "holding": 0, "budget_left": 129, "sim_t": 29.9, "paths": [[0.061, 0.6999, 0.0079], [0.101, 0.7023, 0.0079], [0.139, 0.69, 0.0079], [0.179, 0.6887, 0.0079], [0.2131, 0.6678, 0.0079], [0.253, 0.6717, 0.0079], [0.2886, 0.6534, 0.0079], [0.328, 0.6602, 0.0079], [0.3638, 0.6424, 0.0079]], "nodes_xy": [[0.061, 0.6999], [0.101, 0.7023], [0.139, 0.69], [0.179, 0.6887], [0.2131, 0.6678], [0.253, 0.6717], [0.2886, 0.6534], [0.328, 0.6602], [0.3638, 0.6424]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.20' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 179ms:
+{"ee": [0.06, 0.65, 0.01], "clipped": true, "holding": 0, "sim_t": 30.4, "budget_left": 128}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.20' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 221ms:
+{"ee": [0.06, 0.6, 0.01], "clipped": true, "holding": 0, "sim_t": 30.9, "budget_left": 127}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.20' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 199ms:
+{"ee": [0.06, 0.55, 0.01], "clipped": true, "holding": 0, "sim_t": 31.4, "budget_left": 126}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.20' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 249ms:
+{"ee": [0.06, 0.5, 0.01], "clipped": true, "holding": 0, "sim_t": 31.9, "budget_left": 125}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.20' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 164ms:
+{"ee": [0.06, 0.45, 0.01], "clipped": true, "holding": 0, "sim_t": 32.4, "budget_left": 124}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.20' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 152ms:
+{"ee": [0.06, 0.4, 0.01], "clipped": true, "holding": 0, "sim_t": 32.9, "budget_left": 123}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.20' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 130ms:
+{"ee": [0.06, 0.35, 0.01], "clipped": true, "holding": 0, "sim_t": 33.4, "budget_left": 122}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.20' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 168ms:
+{"ee": [0.06, 0.3, 0.01], "clipped": true, "holding": 0, "sim_t": 33.9, "budget_left": 121}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.20' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 162ms:
+{"ee": [0.06, 0.25, 0.01], "clipped": true, "holding": 0, "sim_t": 34.4, "budget_left": 120}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.06 0.20' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 166ms:
+{"ee": [0.06, 0.2, 0.01], "clipped": false, "holding": 0, "sim_t": 34.9, "budget_left": 119}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 86ms:
+{"level": "L1", "seed": 301, "ee": [0.06, 0.2, 0.01], "holding": 0, "budget_left": 119, "sim_t": 34.9, "paths": [[0.0605, 0.2002, 0.0079], [0.0908, 0.2263, 0.0079], [0.12, 0.2536, 0.0079], [0.1292, 0.2926, 0.0079], [0.15, 0.3267, 0.0079], [0.1422, 0.3659, 0.0079], [0.155, 0.4038, 0.008], [0.1428, 0.4419, 0.0079], [0.1554, 0.4799, 0.0079]], "nodes_xy": [[0.0605, 0.2002], [0.0908, 0.2263], [0.12, 0.2536], [0.1292, 0.2926], [0.15, 0.3267], [0.1422, 0.3659], [0.155, 0.4038], [0.1428, 0.4419], [0.1554, 0.4799]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+codex
+The chain still has a zigzag after small adjustments. I’m making a longer sweep to draw the trailing segments into alignment.
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 232ms:
+{"ee": [0.11, 0.2, 0.01], "clipped": true, "holding": 0, "sim_t": 35.4, "budget_left": 118}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 164ms:
+{"ee": [0.16, 0.2, 0.01], "clipped": true, "holding": 0, "sim_t": 35.9, "budget_left": 117}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 143ms:
+{"ee": [0.21, 0.2, 0.01], "clipped": true, "holding": 0, "sim_t": 36.4, "budget_left": 116}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 148ms:
+{"ee": [0.26, 0.2, 0.01], "clipped": true, "holding": 0, "sim_t": 36.9, "budget_left": 115}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 117ms:
+{"ee": [0.31, 0.2, 0.01], "clipped": true, "holding": 0, "sim_t": 37.4, "budget_left": 114}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 160ms:
+{"ee": [0.36, 0.2, 0.01], "clipped": true, "holding": 0, "sim_t": 37.9, "budget_left": 113}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 146ms:
+{"ee": [0.41, 0.2, 0.01], "clipped": true, "holding": 0, "sim_t": 38.4, "budget_left": 112}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 136ms:
+{"ee": [0.46, 0.2, 0.01], "clipped": true, "holding": 0, "sim_t": 38.9, "budget_left": 111}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 151ms:
+{"ee": [0.51, 0.2, 0.01], "clipped": true, "holding": 0, "sim_t": 39.4, "budget_left": 110}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 156ms:
+{"ee": [0.56, 0.2, 0.01], "clipped": true, "holding": 0, "sim_t": 39.9, "budget_left": 109}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 158ms:
+{"ee": [0.61, 0.2, 0.01], "clipped": true, "holding": 0, "sim_t": 40.4, "budget_left": 108}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 154ms:
+{"ee": [0.66, 0.2, 0.01], "clipped": true, "holding": 0, "sim_t": 40.9, "budget_left": 107}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 182ms:
+{"ee": [0.71, 0.2, 0.01], "clipped": true, "holding": 0, "sim_t": 41.4, "budget_left": 106}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 148ms:
+{"ee": [0.76, 0.2, 0.01], "clipped": true, "holding": 0, "sim_t": 41.9, "budget_left": 105}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 158ms:
+{"ee": [0.81, 0.2, 0.01], "clipped": true, "holding": 0, "sim_t": 42.4, "budget_left": 104}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 151ms:
+{"ee": [0.86, 0.2, 0.01], "clipped": true, "holding": 0, "sim_t": 42.9, "budget_left": 103}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 188ms:
+{"ee": [0.9, 0.2, 0.01], "clipped": false, "holding": 0, "sim_t": 43.4, "budget_left": 102}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 154ms:
+{"ee": [0.9, 0.2, 0.01], "clipped": false, "holding": 0, "sim_t": 43.9, "budget_left": 101}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 160ms:
+{"ee": [0.9, 0.2, 0.01], "clipped": false, "holding": 0, "sim_t": 44.4, "budget_left": 100}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 191ms:
+{"ee": [0.9, 0.2, 0.01], "clipped": false, "holding": 0, "sim_t": 44.9, "budget_left": 99}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 79ms:
+{"level": "L1", "seed": 301, "ee": [0.9, 0.2, 0.01], "holding": 0, "budget_left": 99, "sim_t": 44.9, "paths": [[0.9001, 0.1998, 0.0079], [0.8847, 0.2368, 0.0079], [0.8489, 0.2545, 0.0079], [0.8098, 0.2463, 0.0079], [0.7703, 0.253, 0.0079], [0.7329, 0.239, 0.0079], [0.6939, 0.2479, 0.0079], [0.6558, 0.2356, 0.0079], [0.6179, 0.2482, 0.0079]], "nodes_xy": [[0.9001, 0.1998], [0.8847, 0.2368], [0.8489, 0.2545], [0.8098, 0.2463], [0.7703, 0.253], [0.7329, 0.239], [0.6939, 0.2479], [0.6558, 0.2356], [0.6179, 0.2482]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.902 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 135ms:
+{"ee": [0.902, 0.2, 0.01], "clipped": false, "holding": 0, "sim_t": 45.4, "budget_left": 98}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.904 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 136ms:
+{"ee": [0.904, 0.2, 0.01], "clipped": false, "holding": 0, "sim_t": 45.9, "budget_left": 97}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.906 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 167ms:
+{"ee": [0.906, 0.2, 0.01], "clipped": false, "holding": 0, "sim_t": 46.4, "budget_left": 96}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.908 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 198ms:
+{"ee": [0.908, 0.2, 0.01], "clipped": false, "holding": 0, "sim_t": 46.9, "budget_left": 95}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.91 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 166ms:
+{"ee": [0.91, 0.2, 0.01], "clipped": false, "holding": 0, "sim_t": 47.4, "budget_left": 94}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.912 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 123ms:
+{"ee": [0.912, 0.2, 0.01], "clipped": false, "holding": 0, "sim_t": 47.9, "budget_left": 93}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.914 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 165ms:
+{"ee": [0.914, 0.2, 0.01], "clipped": false, "holding": 0, "sim_t": 48.4, "budget_left": 92}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.916 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 140ms:
+{"ee": [0.916, 0.2, 0.01], "clipped": false, "holding": 0, "sim_t": 48.9, "budget_left": 91}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.918 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 180ms:
+{"ee": [0.918, 0.2, 0.01], "clipped": false, "holding": 0, "sim_t": 49.4, "budget_left": 90}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.92 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 226ms:
+{"ee": [0.92, 0.2, 0.01], "clipped": false, "holding": 0, "sim_t": 49.9, "budget_left": 89}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.922 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 200ms:
+{"ee": [0.922, 0.2, 0.01], "clipped": false, "holding": 0, "sim_t": 50.4, "budget_left": 88}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.924 0.2' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 149ms:
+{"ee": [0.924, 0.2, 0.01], "clipped": false, "holding": 0, "sim_t": 50.9, "budget_left": 87}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 120ms:
+{"level": "L1", "seed": 301, "ee": [0.924, 0.2, 0.01], "holding": 0, "budget_left": 87, "sim_t": 50.9, "paths": [[0.9215, 0.2012, 0.0079], [0.8921, 0.2284, 0.0079], [0.8543, 0.2414, 0.0079], [0.8143, 0.242, 0.0079], [0.775, 0.2496, 0.0079], [0.7363, 0.2395, 0.0079], [0.6971, 0.2473, 0.0079], [0.6588, 0.2359, 0.0079], [0.6207, 0.2481, 0.0079]], "nodes_xy": [[0.9215, 0.2012], [0.8921, 0.2284], [0.8543, 0.2414], [0.8143, 0.242], [0.775, 0.2496], [0.7363, 0.2395], [0.6971, 0.2473], [0.6588, 0.2359], [0.6207, 0.2481]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.928 0.194' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 157ms:
+{"ee": [0.928, 0.194, 0.01], "clipped": false, "holding": 0, "sim_t": 51.4, "budget_left": 86}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.932 0.194' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 100ms:
+{"ee": [0.932, 0.194, 0.01], "clipped": false, "holding": 0, "sim_t": 51.9, "budget_left": 85}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.936 0.194' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 150ms:
+{"ee": [0.936, 0.194, 0.01], "clipped": false, "holding": 0, "sim_t": 52.4, "budget_left": 84}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9400000000000001 0.194' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 147ms:
+{"ee": [0.94, 0.194, 0.01], "clipped": false, "holding": 0, "sim_t": 52.9, "budget_left": 83}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9440000000000001 0.194' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 146ms:
+{"ee": [0.944, 0.194, 0.01], "clipped": false, "holding": 0, "sim_t": 53.4, "budget_left": 82}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9480000000000001 0.194' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 141ms:
+{"ee": [0.948, 0.194, 0.01], "clipped": false, "holding": 0, "sim_t": 53.9, "budget_left": 81}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9520000000000001 0.194' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 142ms:
+{"ee": [0.952, 0.194, 0.01], "clipped": false, "holding": 0, "sim_t": 54.4, "budget_left": 80}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9560000000000001 0.194' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 130ms:
+{"ee": [0.956, 0.194, 0.01], "clipped": false, "holding": 0, "sim_t": 54.9, "budget_left": 79}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9600000000000001 0.194' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 147ms:
+{"ee": [0.96, 0.194, 0.01], "clipped": false, "holding": 0, "sim_t": 55.4, "budget_left": 78}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9640000000000001 0.194' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 179ms:
+{"ee": [0.964, 0.194, 0.01], "clipped": false, "holding": 0, "sim_t": 55.9, "budget_left": 77}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 144ms:
+{"level": "L1", "seed": 301, "ee": [0.964, 0.194, 0.01], "holding": 0, "budget_left": 77, "sim_t": 55.9, "paths": [[0.9617, 0.1947, 0.0079], [0.9263, 0.2132, 0.0079], [0.8873, 0.2219, 0.0079], [0.8474, 0.2253, 0.0079], [0.8085, 0.2346, 0.0079], [0.7687, 0.231, 0.0079], [0.7302, 0.2419, 0.0079], [0.6907, 0.2354, 0.0079], [0.6538, 0.2508, 0.0079]], "nodes_xy": [[0.9617, 0.1947], [0.9263, 0.2132], [0.8873, 0.2219], [0.8474, 0.2253], [0.8085, 0.2346], [0.7687, 0.231], [0.7302, 0.2419], [0.6907, 0.2354], [0.6538, 0.2508]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.97 0.1928' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 175ms:
+{"ee": [0.97, 0.1928, 0.01], "clipped": false, "holding": 0, "sim_t": 56.4, "budget_left": 76}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.976 0.1916' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 145ms:
+{"ee": [0.976, 0.1916, 0.01], "clipped": false, "holding": 0, "sim_t": 56.9, "budget_left": 75}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.982 0.1904' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 128ms:
+{"ee": [0.982, 0.1904, 0.01], "clipped": false, "holding": 0, "sim_t": 57.4, "budget_left": 74}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.988 0.1892' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 128ms:
+{"ee": [0.988, 0.1892, 0.01], "clipped": false, "holding": 0, "sim_t": 57.9, "budget_left": 73}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.994 0.188' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 93ms:
+{"ee": [0.994, 0.188, 0.01], "clipped": false, "holding": 0, "sim_t": 58.4, "budget_left": 72}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1 0.1868' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 123ms:
+{"ee": [1.0, 0.1868, 0.01], "clipped": false, "holding": 0, "sim_t": 58.9, "budget_left": 71}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.006 0.18560000000000001' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 126ms:
+{"ee": [1.006, 0.1856, 0.01], "clipped": false, "holding": 0, "sim_t": 59.4, "budget_left": 70}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.012 0.1844' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 128ms:
+{"ee": [1.012, 0.1844, 0.01], "clipped": false, "holding": 0, "sim_t": 59.9, "budget_left": 69}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.018 0.1832' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 118ms:
+{"ee": [1.018, 0.1832, 0.01], "clipped": false, "holding": 0, "sim_t": 60.4, "budget_left": 68}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.024 0.182' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 122ms:
+{"ee": [1.024, 0.182, 0.01], "clipped": false, "holding": 0, "sim_t": 60.9, "budget_left": 67}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.03 0.18080000000000002' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 127ms:
+{"ee": [1.03, 0.1808, 0.01], "clipped": false, "holding": 0, "sim_t": 61.4, "budget_left": 66}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.036 0.1796' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 132ms:
+{"ee": [1.036, 0.1796, 0.01], "clipped": false, "holding": 0, "sim_t": 61.9, "budget_left": 65}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.042 0.1784' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 128ms:
+{"ee": [1.042, 0.1784, 0.01], "clipped": false, "holding": 0, "sim_t": 62.4, "budget_left": 64}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.048 0.1772' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 127ms:
+{"ee": [1.048, 0.1772, 0.01], "clipped": false, "holding": 0, "sim_t": 62.9, "budget_left": 63}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.054 0.17600000000000002' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 168ms:
+{"ee": [1.054, 0.176, 0.01], "clipped": false, "holding": 0, "sim_t": 63.4, "budget_left": 62}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 116ms:
+{"level": "L1", "seed": 301, "ee": [1.054, 0.176, 0.01], "holding": 0, "budget_left": 62, "sim_t": 63.4, "paths": [[1.053, 0.1762, 0.0079], [1.0151, 0.1888, 0.0079], [0.9757, 0.196, 0.0079], [0.9361, 0.2017, 0.0079], [0.8974, 0.2117, 0.0079], [0.8574, 0.2136, 0.0079], [0.8195, 0.2263, 0.0079], [0.7796, 0.2242, 0.0079], [0.7437, 0.242, 0.0079]], "nodes_xy": [[1.053, 0.1762], [1.0151, 0.1888], [0.9757, 0.196], [0.9361, 0.2017], [0.8974, 0.2117], [0.8574, 0.2136], [0.8195, 0.2263], [0.7796, 0.2242], [0.7437, 0.242]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.062 0.1744' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 129ms:
+{"ee": [1.062, 0.1744, 0.01], "clipped": false, "holding": 0, "sim_t": 63.9, "budget_left": 61}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.07 0.17279999999999998' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 134ms:
+{"ee": [1.07, 0.1728, 0.01], "clipped": false, "holding": 0, "sim_t": 64.4, "budget_left": 60}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.078 0.1712' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 103ms:
+{"ee": [1.078, 0.1712, 0.01], "clipped": false, "holding": 0, "sim_t": 64.9, "budget_left": 59}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.086 0.1696' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 113ms:
+{"ee": [1.086, 0.1696, 0.01], "clipped": false, "holding": 0, "sim_t": 65.4, "budget_left": 58}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.094 0.16799999999999998' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 126ms:
+{"ee": [1.094, 0.168, 0.01], "clipped": false, "holding": 0, "sim_t": 65.9, "budget_left": 57}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.102 0.1664' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 132ms:
+{"ee": [1.102, 0.1664, 0.01], "clipped": false, "holding": 0, "sim_t": 66.4, "budget_left": 56}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.11 0.1648' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 128ms:
+{"ee": [1.11, 0.1648, 0.01], "clipped": false, "holding": 0, "sim_t": 66.9, "budget_left": 55}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.118 0.16319999999999998' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 129ms:
+{"ee": [1.118, 0.1632, 0.01], "clipped": false, "holding": 0, "sim_t": 67.4, "budget_left": 54}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.1260000000000001 0.1616' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 89ms:
+{"ee": [1.126, 0.1616, 0.01], "clipped": false, "holding": 0, "sim_t": 67.9, "budget_left": 53}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.1340000000000001 0.15999999999999998' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 139ms:
+{"ee": [1.134, 0.16, 0.01], "clipped": false, "holding": 0, "sim_t": 68.4, "budget_left": 52}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.1420000000000001 0.15839999999999999' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 141ms:
+{"ee": [1.142, 0.1584, 0.01], "clipped": false, "holding": 0, "sim_t": 68.9, "budget_left": 51}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.1500000000000001 0.1568' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 128ms:
+{"ee": [1.15, 0.1568, 0.01], "clipped": false, "holding": 0, "sim_t": 69.4, "budget_left": 50}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.1580000000000001 0.15519999999999998' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 101ms:
+{"ee": [1.158, 0.1552, 0.01], "clipped": false, "holding": 0, "sim_t": 69.9, "budget_left": 49}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.1660000000000001 0.1536' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 109ms:
+{"ee": [1.166, 0.1536, 0.01], "clipped": false, "holding": 0, "sim_t": 70.4, "budget_left": 48}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.174 0.152' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 136ms:
+{"ee": [1.174, 0.152, 0.01], "clipped": false, "holding": 0, "sim_t": 70.9, "budget_left": 47}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.182 0.15039999999999998' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 158ms:
+{"ee": [1.182, 0.1504, 0.01], "clipped": false, "holding": 0, "sim_t": 71.4, "budget_left": 46}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.19 0.1488' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 130ms:
+{"ee": [1.19, 0.1488, 0.01], "clipped": false, "holding": 0, "sim_t": 71.9, "budget_left": 45}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.198 0.1472' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 133ms:
+{"ee": [1.198, 0.1472, 0.01], "clipped": false, "holding": 0, "sim_t": 72.4, "budget_left": 44}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.206 0.14559999999999998' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 126ms:
+{"ee": [1.206, 0.1456, 0.01], "clipped": false, "holding": 0, "sim_t": 72.9, "budget_left": 43}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.214 0.144' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 150ms:
+{"ee": [1.214, 0.144, 0.01], "clipped": false, "holding": 0, "sim_t": 73.4, "budget_left": 42}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.222 0.14239999999999997' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 126ms:
+{"ee": [1.222, 0.1424, 0.01], "clipped": false, "holding": 0, "sim_t": 73.9, "budget_left": 41}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.23 0.14079999999999998' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 132ms:
+{"ee": [1.23, 0.1408, 0.01], "clipped": false, "holding": 0, "sim_t": 74.4, "budget_left": 40}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.238 0.1392' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 130ms:
+{"ee": [1.238, 0.1392, 0.01], "clipped": false, "holding": 0, "sim_t": 74.9, "budget_left": 39}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.246 0.1376' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 129ms:
+{"ee": [1.246, 0.1376, 0.01], "clipped": false, "holding": 0, "sim_t": 75.4, "budget_left": 38}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.254 0.13599999999999998' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 131ms:
+{"ee": [1.254, 0.136, 0.01], "clipped": false, "holding": 0, "sim_t": 75.9, "budget_left": 37}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 92ms:
+{"level": "L1", "seed": 301, "ee": [1.254, 0.136, 0.01], "holding": 0, "budget_left": 37, "sim_t": 75.9, "paths": [[1.254, 0.136, 0.0079], [1.2152, 0.1459, 0.0079], [1.1759, 0.1532, 0.0079], [1.1365, 0.1602, 0.0079], [1.0977, 0.1699, 0.0079], [1.058, 0.1746, 0.0079], [1.02, 0.1871, 0.0079], [0.98, 0.1878, 0.0079], [0.9444, 0.206, 0.0079]], "nodes_xy": [[1.254, 0.136], [1.2152, 0.1459], [1.1759, 0.1532], [1.1365, 0.1602], [1.0977, 0.1699], [1.058, 0.1746], [1.02, 0.1871], [0.98, 0.1878], [0.9444, 0.206]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.254 0.136' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 121ms:
+{"ee": [1.254, 0.136, 0.01], "clipped": false, "holding": 0, "sim_t": 76.4, "budget_left": 36}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.254 0.136' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 112ms:
+{"ee": [1.254, 0.136, 0.01], "clipped": false, "holding": 0, "sim_t": 76.9, "budget_left": 35}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 1.254 0.136' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 110ms:
+{"ee": [1.254, 0.136, 0.01], "clipped": false, "holding": 0, "sim_t": 77.4, "budget_left": 34}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py release' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 92ms:
+{"holding": null, "budget_left": 33}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9444 0.206' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 101ms:
+{"ee": [1.2052, 0.147, 0.01], "clipped": true, "holding": null, "sim_t": 78.1, "budget_left": 32}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9444 0.206' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 100ms:
+{"ee": [1.1565, 0.1581, 0.01], "clipped": true, "holding": null, "sim_t": 78.6, "budget_left": 31}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9444 0.206' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 101ms:
+{"ee": [1.1077, 0.1691, 0.01], "clipped": true, "holding": null, "sim_t": 79.1, "budget_left": 30}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9444 0.206' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 95ms:
+{"ee": [1.0589, 0.1801, 0.01], "clipped": true, "holding": null, "sim_t": 79.6, "budget_left": 29}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9444 0.206' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 101ms:
+{"ee": [1.0102, 0.1911, 0.01], "clipped": true, "holding": null, "sim_t": 80.1, "budget_left": 28}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9444 0.206' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 98ms:
+{"ee": [0.9614, 0.2022, 0.01], "clipped": true, "holding": null, "sim_t": 80.6, "budget_left": 27}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9444 0.206' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 135ms:
+{"ee": [0.9444, 0.206, 0.01], "clipped": false, "holding": null, "sim_t": 81.1, "budget_left": 26}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py grab' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 101ms:
+{"holding": 8, "dist": 0.0, "budget_left": 25}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 111ms:
+{"level": "L1", "seed": 301, "ee": [0.9444, 0.206, 0.01], "holding": 8, "budget_left": 25, "sim_t": 81.1, "paths": [[1.254, 0.136, 0.0079], [1.2152, 0.1459, 0.0079], [1.1759, 0.1532, 0.0079], [1.1365, 0.1602, 0.0079], [1.0977, 0.1699, 0.0079], [1.058, 0.1746, 0.0079], [1.02, 0.1871, 0.0079], [0.98, 0.1878, 0.0079], [0.9444, 0.206, 0.0079]], "nodes_xy": [[1.254, 0.136], [1.2152, 0.1459], [1.1759, 0.1532], [1.1365, 0.1602], [1.0977, 0.1699], [1.058, 0.1746], [1.02, 0.1871], [0.98, 0.1878], [0.9444, 0.206]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+codex
+The chain is now nearly straight. I’ll use a slow pull from the other end to reduce the remaining kink, then submit it for scoring.
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9394 0.207' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 160ms:
+{"ee": [0.9394, 0.207, 0.01], "clipped": false, "holding": 8, "sim_t": 81.6, "budget_left": 24}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9344 0.208' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 148ms:
+{"ee": [0.9344, 0.208, 0.01], "clipped": false, "holding": 8, "sim_t": 82.1, "budget_left": 23}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9294 0.209' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 138ms:
+{"ee": [0.9294, 0.209, 0.01], "clipped": false, "holding": 8, "sim_t": 82.6, "budget_left": 22}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9244 0.21' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 147ms:
+{"ee": [0.9244, 0.21, 0.01], "clipped": false, "holding": 8, "sim_t": 83.1, "budget_left": 21}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9194 0.211' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 143ms:
+{"ee": [0.9194, 0.211, 0.01], "clipped": false, "holding": 8, "sim_t": 83.6, "budget_left": 20}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9144 0.212' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 148ms:
+{"ee": [0.9144, 0.212, 0.01], "clipped": false, "holding": 8, "sim_t": 84.1, "budget_left": 19}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9094 0.213' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 142ms:
+{"ee": [0.9094, 0.213, 0.01], "clipped": false, "holding": 8, "sim_t": 84.6, "budget_left": 18}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.9044 0.214' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 150ms:
+{"ee": [0.9044, 0.214, 0.01], "clipped": false, "holding": 8, "sim_t": 85.1, "budget_left": 17}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.8994 0.215' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 145ms:
+{"ee": [0.8994, 0.215, 0.01], "clipped": false, "holding": 8, "sim_t": 85.6, "budget_left": 16}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.8944 0.216' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 127ms:
+{"ee": [0.8944, 0.216, 0.01], "clipped": false, "holding": 8, "sim_t": 86.1, "budget_left": 15}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.8894 0.217' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 149ms:
+{"ee": [0.8894, 0.217, 0.01], "clipped": false, "holding": 8, "sim_t": 86.6, "budget_left": 14}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.8844000000000001 0.218' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 142ms:
+{"ee": [0.8844, 0.218, 0.01], "clipped": false, "holding": 8, "sim_t": 87.1, "budget_left": 13}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.8794 0.219' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 131ms:
+{"ee": [0.8794, 0.219, 0.01], "clipped": false, "holding": 8, "sim_t": 87.6, "budget_left": 12}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.8744000000000001 0.22' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 149ms:
+{"ee": [0.8744, 0.22, 0.01], "clipped": false, "holding": 8, "sim_t": 88.1, "budget_left": 11}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.8694000000000001 0.22099999999999997' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 152ms:
+{"ee": [0.8694, 0.221, 0.01], "clipped": false, "holding": 8, "sim_t": 88.6, "budget_left": 10}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.8644000000000001 0.22199999999999998' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 188ms:
+{"ee": [0.8644, 0.222, 0.01], "clipped": false, "holding": 8, "sim_t": 89.1, "budget_left": 9}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.8594 0.22299999999999998' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 133ms:
+{"ee": [0.8594, 0.223, 0.01], "clipped": false, "holding": 8, "sim_t": 89.6, "budget_left": 8}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.8544 0.22399999999999998' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 134ms:
+{"ee": [0.8544, 0.224, 0.01], "clipped": false, "holding": 8, "sim_t": 90.1, "budget_left": 7}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.8494 0.22499999999999998' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 179ms:
+{"ee": [0.8494, 0.225, 0.01], "clipped": false, "holding": 8, "sim_t": 90.6, "budget_left": 6}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.8444 0.22599999999999998' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 176ms:
+{"ee": [0.8444, 0.226, 0.01], "clipped": false, "holding": 8, "sim_t": 91.1, "budget_left": 5}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.8444 0.226' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 147ms:
+{"ee": [0.8444, 0.226, 0.01], "clipped": false, "holding": 8, "sim_t": 91.6, "budget_left": 4}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.8444 0.226' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 152ms:
+{"ee": [0.8444, 0.226, 0.01], "clipped": false, "holding": 8, "sim_t": 92.1, "budget_left": 3}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py move 0.8444 0.226' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 180ms:
+{"ee": [0.8444, 0.226, 0.01], "clipped": false, "holding": 8, "sim_t": 92.6, "budget_left": 2}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py release' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 138ms:
+{"holding": null, "budget_left": 1}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py state' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 130ms:
+{"level": "L1", "seed": 301, "ee": [0.8444, 0.226, 0.01], "holding": null, "budget_left": 1, "sim_t": 92.8, "paths": [[1.1574, 0.1567, 0.0079], [1.1187, 0.1668, 0.0079], [1.0795, 0.1749, 0.0079], [1.0404, 0.1829, 0.0079], [1.0016, 0.1926, 0.0079], [0.9622, 0.1997, 0.0079], [0.9236, 0.2103, 0.0079], [0.8841, 0.2163, 0.0079], [0.8452, 0.2258, 0.0079]], "nodes_xy": [[1.1574, 0.1567], [1.1187, 0.1668], [1.0795, 0.1749], [1.0404, 0.1829], [1.0016, 0.1926], [0.9622, 0.1997], [0.9236, 0.2103], [0.8841, 0.2163], [0.8452, 0.2258]], "n_segments": 8, "goal": {"a": [0.7549422557726821, 0.5579856280006985], "b": [0.44171843287749124, 0.6234901070149009]}}
+
+exec
+/bin/bash -lc '.venv/bin/python robot_rope.py done' in /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+ succeeded in 130ms:
+{"FINAL": {"success": false, "max_dist": 0.3094, "mean_dist": 0.3079, "score": 0.0, "FINISHED": true}}
+
+codex
+The chain became nearly straight, but `done` reported `success=false` with score 0. The final placement appears to have missed the required target line.
+tokens used
+44,672
+The chain became nearly straight, but `done` reported `success=false` with score 0. The final placement appears to have missed the required target line.

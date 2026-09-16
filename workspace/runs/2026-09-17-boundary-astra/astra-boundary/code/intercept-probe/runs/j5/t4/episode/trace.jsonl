@@ -1,0 +1,19 @@
+{"t_wall": 1789576663.8440826, "sim_t": 0.5, "kind": "state", "payload": {}, "budget_left": 249}
+{"t_wall": 1789576666.8800864, "sim_t": 1.0, "kind": "act", "payload": {"unit": "MV_LEFT", "ee": [0.48, 0.5]}, "budget_left": 248}
+{"t_wall": 1789576670.8254602, "sim_t": 1.5, "kind": "act", "payload": {"unit": "MV_LEFT", "ee": [0.46, 0.5]}, "budget_left": 247}
+{"t_wall": 1789576674.2054265, "sim_t": 2.0, "kind": "act", "payload": {"unit": "MV_BACK", "ee": [0.46, 0.48]}, "budget_left": 246}
+{"t_wall": 1789576676.9434202, "sim_t": 2.5, "kind": "act", "payload": {"unit": "MV_LEFT", "ee": [0.44, 0.48]}, "budget_left": 245}
+{"t_wall": 1789576680.3924778, "sim_t": 3.0, "kind": "act", "payload": {"unit": "MV_BACK", "ee": [0.44, 0.46]}, "budget_left": 244}
+{"t_wall": 1789576683.0356567, "sim_t": 3.5, "kind": "state", "payload": {}, "budget_left": 243}
+{"t_wall": 1789576687.8176723, "sim_t": 4.0, "kind": "act", "payload": {"unit": "MV_LEFT", "ee": [0.42, 0.46]}, "budget_left": 242}
+{"t_wall": 1789576691.974183, "sim_t": 4.5, "kind": "act", "payload": {"unit": "MV_BACK", "ee": [0.42, 0.44]}, "budget_left": 241}
+{"t_wall": 1789576694.7620559, "sim_t": 5.0, "kind": "act", "payload": {"unit": "MV_LEFT", "ee": [0.4, 0.44]}, "budget_left": 240}
+{"t_wall": 1789576697.152608, "sim_t": 5.5, "kind": "act", "payload": {"unit": "MV_BACK", "ee": [0.4, 0.42]}, "budget_left": 239}
+{"t_wall": 1789576700.1632044, "sim_t": 6.0, "kind": "state", "payload": {}, "budget_left": 238}
+{"t_wall": 1789576703.0181274, "sim_t": 6.5, "kind": "act", "payload": {"unit": "MV_LEFT", "ee": [0.38, 0.42]}, "budget_left": 237}
+{"t_wall": 1789576706.1447406, "sim_t": 7.0, "kind": "act", "payload": {"unit": "MV_BACK", "ee": [0.38, 0.4]}, "budget_left": 236}
+{"t_wall": 1789576709.6144762, "sim_t": 7.5, "kind": "act", "payload": {"unit": "MV_LEFT", "ee": [0.36, 0.4]}, "budget_left": 235}
+{"t_wall": 1789576713.6932487, "sim_t": 8.0, "kind": "act", "payload": {"unit": "MV_BACK", "ee": [0.36, 0.38]}, "budget_left": 234}
+{"t_wall": 1789576716.3130348, "sim_t": 8.5, "kind": "act", "payload": {"unit": "GRAB", "grab": "ok", "dist": 0.0031}, "budget_left": 233}
+{"kind": "done", "payload": {"success": true, "escaped": false, "speed": 0.04, "sim_t": 8.5}}
+{"kind": "done", "payload": {"success": true, "escaped": false, "speed": 0.04, "sim_t": 8.5}}
