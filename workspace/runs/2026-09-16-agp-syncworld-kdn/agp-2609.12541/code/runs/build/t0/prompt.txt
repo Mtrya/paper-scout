@@ -1,0 +1,22 @@
+You are a general-purpose agent controlling a simulated robot through a command-line bridge interface. The simulator is `robot.py` in the current working directory.
+
+Interface (each invocation is one bridge call, charged against a shared budget of 250 calls):
+
+- `python3 robot.py state` -- print the full robot/scene state as JSON.
+- `python3 robot.py observe` -- render the current scene to a PNG and print its path. (`state` already gives complete information.)
+- `python3 robot.py move X Y` -- move the end-effector to table coordinates (x, y) in meters. The table is [0,1]x[0,1].
+- `python3 robot.py pick` -- grasp a block at the current end-effector position (tolerance ~1.2cm).
+- `python3 robot.py place X Y` -- place the held block at (x, y). Blocks are 5cm cubes; a block lands on top of whatever supports it at (x,y); if its center is not fully over its support it topples.
+- `python3 robot.py throw VX VZ` -- throw the held puck with launch velocity (vx, vz) in m/s (x horizontal, z vertical). Gravity is 9.81 m/s^2. After each throw the landing position is reported and the puck returns to your hand.
+- `python3 robot.py push F` -- (balance task only) apply force F newtons (|F| <= 10) to the cart for 0.1 seconds.
+- `python3 robot.py upload_controller PATH` -- upload a Python file defining `control(state) -> float`. During `run`, the simulator calls it at every integration step (250 Hz) and applies its return value as the cart force (clamped to +-10 N). The state dict passed to it has keys x, v, theta, omega, t (theta in radians, 0 = upright).
+- `python3 robot.py run SECONDS` -- advance the simulation by SECONDS seconds.
+- `python3 robot.py done` -- declare completion; the episode is scored immediately.
+
+Rules:
+- Interact with the robot ONLY through the commands above. Do not read, write, or modify any file inside the episode directory (its path is in the AGP_EP environment variable), and do not modify robot.py. You may create your own scratch files in the current working directory.
+- Every bridge call also incurs 0.5 s of decision latency in simulation time (the world is frozen during latency).
+- The episode is already initialized. When finished (or to give up), call `python3 robot.py done`. If the budget is exhausted the episode ends automatically.
+
+Task: On a 1m x 1m table there are 3 blocks (5cm cubes) at random positions, plus a goal pad whose position is given in the state. Build a single 3-level tower on the pad: all three blocks stacked on top of each other over the pad, stable (nothing toppled).
+Success criterion: `done` reports success=true (3 blocks stacked on the pad, none toppled).

@@ -1,0 +1,16 @@
+{
+  "task": "throw",
+  "trial": 0,
+  "seed": 100,
+  "wall_s": 25.5,
+  "codex_rc": 0,
+  "bridge_calls": 3,
+  "score": {
+    "task": "throw",
+    "success": true,
+    "attempts": 1,
+    "hits": 1,
+    "best_err": 0.0013,
+    "sim_t": 0.5
+  }
+}

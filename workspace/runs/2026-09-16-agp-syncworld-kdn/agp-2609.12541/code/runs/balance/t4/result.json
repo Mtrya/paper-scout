@@ -1,0 +1,16 @@
+{
+  "task": "balance",
+  "trial": 4,
+  "seed": 104,
+  "wall_s": 34.9,
+  "codex_rc": 0,
+  "bridge_calls": 5,
+  "score": {
+    "task": "balance",
+    "success": true,
+    "upright_time": 11.0,
+    "used_controller": true,
+    "fell": false,
+    "sim_t": 11.503999999999177
+  }
+}

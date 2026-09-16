@@ -1,0 +1,11 @@
+{"t_wall": 1789494149.889365, "sim_t": 0.5, "kind": "move", "payload": {"x": 0.73, "y": 0.368}, "budget_left": 249}
+{"t_wall": 1789494149.9826546, "sim_t": 1.0, "kind": "pick", "payload": {"block": 0}, "budget_left": 248}
+{"t_wall": 1789494150.0903966, "sim_t": 1.5, "kind": "place", "payload": {"x": 0.7, "y": 0.75, "z": 0.0, "toppled": false}, "budget_left": 247}
+{"t_wall": 1789494158.4855442, "sim_t": 2.0, "kind": "move", "payload": {"x": 0.616, "y": 0.207}, "budget_left": 246}
+{"t_wall": 1789494158.5894735, "sim_t": 2.5, "kind": "pick", "payload": {"block": 1}, "budget_left": 245}
+{"t_wall": 1789494158.694669, "sim_t": 3.0, "kind": "place", "payload": {"x": 0.7, "y": 0.75, "z": 0.05, "toppled": false}, "budget_left": 244}
+{"t_wall": 1789494167.522536, "sim_t": 3.5, "kind": "move", "payload": {"x": 0.415, "y": 0.328}, "budget_left": 243}
+{"t_wall": 1789494167.6320374, "sim_t": 4.0, "kind": "pick", "payload": {"block": 2}, "budget_left": 242}
+{"t_wall": 1789494167.7426968, "sim_t": 4.5, "kind": "place", "payload": {"x": 0.7, "y": 0.75, "z": 0.1, "toppled": false}, "budget_left": 241}
+{"t_wall": 1789494173.3202546, "sim_t": 4.5, "kind": "done", "payload": {"task": "build", "success": true, "blocks_on_pad": 3, "levels": 2, "sim_t": 4.5}, "budget_left": 241}
+{"t_wall": 1789494183.7820916, "sim_t": 4.5, "kind": "done", "payload": {"task": "build", "success": true, "blocks_on_pad": 3, "levels": 2, "sim_t": 4.5}, "budget_left": 241}

@@ -1,0 +1,5 @@
+{"t_wall": 1789494768.1298573, "sim_t": 0.5, "kind": "upload_controller", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/agp-probe/balance_controller.py"}, "budget_left": 249}
+{"t_wall": 1789494768.2434962, "sim_t": 2.5, "kind": "run", "payload": {"seconds": 2.0}, "budget_left": 248}
+{"t_wall": 1789494773.1191256, "sim_t": 11.504, "kind": "run", "payload": {"seconds": 9.0}, "budget_left": 247}
+{"t_wall": 1789494773.2363172, "sim_t": 11.504, "kind": "done", "payload": {"task": "balance", "success": true, "upright_time": 11.0, "used_controller": true, "fell": false, "sim_t": 11.503999999999177}, "budget_left": 247}
+{"t_wall": 1789494781.3428373, "sim_t": 11.504, "kind": "done", "payload": {"task": "balance", "success": true, "upright_time": 11.0, "used_controller": true, "fell": false, "sim_t": 11.503999999999177}, "budget_left": 247}
