@@ -1,0 +1,16 @@
+{
+  "task": "windx",
+  "trial": 0,
+  "seed": 100,
+  "wall_s": 43.6,
+  "codex_rc": 0,
+  "bridge_calls": 4,
+  "score": {
+    "task": "windx",
+    "success": true,
+    "attempts": 2,
+    "hits": 1,
+    "best_err": 0.0006,
+    "sim_t": 1.0
+  }
+}

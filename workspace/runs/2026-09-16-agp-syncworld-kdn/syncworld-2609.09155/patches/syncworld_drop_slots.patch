@@ -1,0 +1,24 @@
+--- a/examples/eval_gripperhead_fdm_rollout.py
++++ b/examples/eval_gripperhead_fdm_rollout.py
+@@ -566,6 +566,11 @@
+         # stays forced because the slots remain and encode_exact_durations still includes calib_seg_len.
+         vids = [torch.zeros_like(x) for x in vids]
+         acts = [torch.zeros_like(a) for a in acts]
++    drop = getattr(args, "calib_drop_slots", "")
++    if drop:
++        idxs = {int(x) for x in str(drop).split(",") if x.strip() != ""}
++        vids = [torch.zeros_like(x) if i in idxs else x for i, x in enumerate(vids)]
++        acts = [torch.zeros_like(a) if i in idxs else a for i, a in enumerate(acts)]
+     return vids, acts
+ 
+ 
+@@ -899,6 +904,9 @@
+                         "matching training's p_include_calibration<1 path. Differs from "
+                         "--no-use-calibration, which drops the slots entirely. Also lets an eval set with "
+                         "no calibration clips run against a calibration-trained checkpoint.")
++    g.add_argument("--calib-drop-slots", type=str, default="",
++                   help="comma-separated calib slot indices to zero in-distribution "
++                        "(6-seg canonical order: 0,1,2=x,y,z; 3,4,5=yaw,pitch,roll)")
+     g.add_argument("--calib-segments", type=int, default=6, choices=[6, 12],
+                    help="K: 6 => per-DoF (uses move_range signs), 12 => both signs. "
+                         "Matches [gripperhead].calib_segments")

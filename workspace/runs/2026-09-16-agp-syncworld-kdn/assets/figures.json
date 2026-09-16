@@ -1,0 +1,10 @@
+{
+  "agp:fig1": {"file": "assets/agp_fig1.jpg", "caption": "AGP 架构:通用 coding agent 经 7 命令桥直接当机器人策略,准静态由经典控制(Mink 逆运动学+关节控制器)兜底"},
+  "agp:towel": {"file": "assets/agp_towel.jpg", "caption": "论文真机叠毛巾:人类 22 秒 vs agent 18 分 47 秒——AGP 的代价在墙钟与 token,不在成功率"},
+  "agp:overview": {"file": "assets/agp_overview.png", "caption": "我们的 2D 沙盒主批次四任务(build/throw/wind/balance):astra 全部 5/5,balance 无一尝试稀疏推挡、全部直接合成 PD 控制器上传"},
+  "agp:balance": {"file": "assets/agp_balance_family.png", "caption": "balance 五 trial 的增益族:θ:ω 恒在 4:1 附近,与我们数值求出的 LQR 参考结构一致"},
+  "agp:throw": {"file": "assets/agp_throw_family.png", "caption": "windx 边界探针:第一投用无风解析解被吹偏 6.7cm(充当系统辨识),第二投 vx=4.081 落点偏差 0.6mm"},
+  "kdn:contrast": {"file": "assets/kdn_v3v4_contrast_zh.png", "caption": "v3→v4 对照:制度内池化置信度是优点;跨制度各向同性被可靠多数锚定后饿死噪声方向(崩溃 0.41,比固定 β 还差),逐方向不确定度唯一全制度近最优"},
+  "sw:teaser": {"file": "assets/sw_teaser.jpg", "caption": "SyncWorld:标定交互(逐自由度一小段配对帧+动作)作为 prompt 前缀,单 checkpoint 零样本适配新 setup——映射不进权重,进上下文"},
+  "sw:probe": {"file": "assets/sw_probe_result.png", "caption": "左:发布权重逐段模拟质量(论文口径,无累积漂移,抓放接触段下探后回锚);右:抹旋转三槽在三条件对照中与完整标定无差(27.4 vs 27.5、29.6 vs 29.4),全零标定一致变差——逐自由度协议被证伪"}
+}

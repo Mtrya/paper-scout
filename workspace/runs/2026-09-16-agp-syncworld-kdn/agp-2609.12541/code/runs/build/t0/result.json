@@ -1,0 +1,15 @@
+{
+  "task": "build",
+  "trial": 0,
+  "seed": 100,
+  "wall_s": 37.0,
+  "codex_rc": 0,
+  "bridge_calls": 10,
+  "score": {
+    "task": "build",
+    "success": true,
+    "blocks_on_pad": 3,
+    "levels": 2,
+    "sim_t": 4.5
+  }
+}

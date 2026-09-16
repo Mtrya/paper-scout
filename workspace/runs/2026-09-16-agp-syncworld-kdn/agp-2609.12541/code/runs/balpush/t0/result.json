@@ -1,0 +1,16 @@
+{
+  "task": "balpush",
+  "trial": 0,
+  "seed": 100,
+  "wall_s": 76.4,
+  "codex_rc": 0,
+  "bridge_calls": 100,
+  "score": {
+    "task": "balpush",
+    "success": true,
+    "upright_time": 10.06,
+    "used_controller": false,
+    "fell": false,
+    "sim_t": 59.059999999998084
+  }
+}

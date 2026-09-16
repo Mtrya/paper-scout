@@ -1,0 +1,427 @@
+{
+ "tags": [
+  "pilot_full",
+  "full",
+  "null",
+  "droprot"
+ ],
+ "t_med": 1.0496025234969906,
+ "r_med": 1.105231645829437,
+ "episodes": [
+  {
+   "episode": 0,
+   "leaf": "KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it/episode_0/camera_poses_0/expert",
+   "trans_motion": 1.4082362742939964,
+   "rot_motion": 2.49937145379985,
+   "rot_share": 0.6276288287937254
+  },
+  {
+   "episode": 1,
+   "leaf": "KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it/episode_1/camera_poses_0/expert",
+   "trans_motion": 1.5295861255363845,
+   "rot_motion": 3.079743914037073,
+   "rot_share": 0.6566060417788231
+  },
+  {
+   "episode": 2,
+   "leaf": "KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it/episode_2/camera_poses_0/expert",
+   "trans_motion": 1.4915456655872326,
+   "rot_motion": 3.125009710437742,
+   "rot_share": 0.6655176497713637
+  },
+  {
+   "episode": 3,
+   "leaf": "KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it/episode_3/camera_poses_0/expert",
+   "trans_motion": 1.4670742305445692,
+   "rot_motion": 3.2626296747355994,
+   "rot_share": 0.6786598917991752
+  },
+  {
+   "episode": 4,
+   "leaf": "KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it/episode_4/camera_poses_0/expert",
+   "trans_motion": 1.3676294577318442,
+   "rot_motion": 2.9878497731576497,
+   "rot_share": 0.6747683320263153
+  },
+  {
+   "episode": 5,
+   "leaf": "KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it/episode_5/camera_poses_0/expert",
+   "trans_motion": 1.5166391982472027,
+   "rot_motion": 2.9994536099338793,
+   "rot_share": 0.6525551944081519
+  },
+  {
+   "episode": 6,
+   "leaf": "KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it/episode_6/camera_poses_0/expert",
+   "trans_motion": 1.7112192747317512,
+   "rot_motion": 3.3399719637193375,
+   "rot_share": 0.6495616306806721
+  },
+  {
+   "episode": 7,
+   "leaf": "KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it/episode_7/camera_poses_0/expert",
+   "trans_motion": 1.6046694121182252,
+   "rot_motion": 2.6743426010316744,
+   "rot_share": 0.6128107165482543
+  },
+  {
+   "episode": 8,
+   "leaf": "KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it/episode_8/camera_poses_0/expert",
+   "trans_motion": 1.5657355475590815,
+   "rot_motion": 2.7827421264029146,
+   "rot_share": 0.6279512640559481
+  },
+  {
+   "episode": 9,
+   "leaf": "KITCHEN_SCENE3_turn_on_the_stove_and_put_the_moka_pot_on_it/episode_9/camera_poses_0/expert",
+   "trans_motion": 1.586059009326661,
+   "rot_motion": 3.065382495664995,
+   "rot_share": 0.6473193130897029
+  },
+  {
+   "episode": 10,
+   "leaf": "open_the_middle_drawer_of_the_cabinet/episode_0/camera_poses_0/expert",
+   "trans_motion": 0.6534146505701119,
+   "rot_motion": 2.650712339699754,
+   "rot_share": 0.7939216537675047
+  },
+  {
+   "episode": 11,
+   "leaf": "open_the_middle_drawer_of_the_cabinet/episode_1/camera_poses_0/expert",
+   "trans_motion": 0.6839234578290636,
+   "rot_motion": 2.4645566935461436,
+   "rot_share": 0.7738671953182492
+  },
+  {
+   "episode": 12,
+   "leaf": "open_the_middle_drawer_of_the_cabinet/episode_2/camera_poses_0/expert",
+   "trans_motion": 0.7183233574072212,
+   "rot_motion": 2.8707873399697688,
+   "rot_share": 0.7914649356328005
+  },
+  {
+   "episode": 13,
+   "leaf": "open_the_middle_drawer_of_the_cabinet/episode_3/camera_poses_0/expert",
+   "trans_motion": 0.6195217527152896,
+   "rot_motion": 2.3924923704054244,
+   "rot_share": 0.7857507741560495
+  },
+  {
+   "episode": 14,
+   "leaf": "open_the_middle_drawer_of_the_cabinet/episode_4/camera_poses_0/expert",
+   "trans_motion": 0.6081035283930484,
+   "rot_motion": 2.576087812089624,
+   "rot_share": 0.8009174989060693,
+   "pilot_full:agentview_rgb": {
+    "psnr": 27.783977436829222,
+    "ssim": 0.9541730123195207,
+    "lpips": 0.0221345465631953
+   },
+   "full:agentview_rgb": {
+    "psnr": 27.509593260290355,
+    "ssim": 0.9449897137555209,
+    "lpips": 0.028319452415762926
+   },
+   "null:agentview_rgb": {
+    "psnr": 27.156032200263333,
+    "ssim": 0.9443863481784911,
+    "lpips": 0.03135676706611157
+   },
+   "droprot:agentview_rgb": {
+    "psnr": 27.410508915726847,
+    "ssim": 0.9444400076111559,
+    "lpips": 0.028804648691092175
+   },
+   "full:side_rgb": {
+    "psnr": 29.37528985334562,
+    "ssim": 0.9535459960349882,
+    "lpips": 0.023853825394264876
+   },
+   "null:side_rgb": {
+    "psnr": 29.026559465696188,
+    "ssim": 0.9508330362413066,
+    "lpips": 0.026909641716127544
+   },
+   "droprot:side_rgb": {
+    "psnr": 29.45318129421375,
+    "ssim": 0.9534885188947222,
+    "lpips": 0.024101964941229483
+   }
+  },
+  {
+   "episode": 15,
+   "leaf": "open_the_middle_drawer_of_the_cabinet/episode_5/camera_poses_0/expert",
+   "trans_motion": 0.5755286631876037,
+   "rot_motion": 2.4350296263239057,
+   "rot_share": 0.8007170182951585
+  },
+  {
+   "episode": 16,
+   "leaf": "open_the_middle_drawer_of_the_cabinet/episode_6/camera_poses_0/expert",
+   "trans_motion": 0.662741529923664,
+   "rot_motion": 2.577625345398107,
+   "rot_share": 0.7869428815175753
+  },
+  {
+   "episode": 17,
+   "leaf": "open_the_middle_drawer_of_the_cabinet/episode_7/camera_poses_0/expert",
+   "trans_motion": 0.5750850356480921,
+   "rot_motion": 2.3552579844557657,
+   "rot_share": 0.7954741902928619
+  },
+  {
+   "episode": 18,
+   "leaf": "open_the_middle_drawer_of_the_cabinet/episode_8/camera_poses_0/expert",
+   "trans_motion": 0.6865164713048414,
+   "rot_motion": 2.344643771074795,
+   "rot_share": 0.7643386507618776
+  },
+  {
+   "episode": 19,
+   "leaf": "open_the_middle_drawer_of_the_cabinet/episode_9/camera_poses_0/expert",
+   "trans_motion": 0.734975279563063,
+   "rot_motion": 2.4964320218584364,
+   "rot_share": 0.7633505682526274
+  },
+  {
+   "episode": 20,
+   "leaf": "pick_up_the_alphabet_soup_and_place_it_in_the_basket/episode_0/camera_poses_0/expert",
+   "trans_motion": 1.282955826933882,
+   "rot_motion": 0.9496552318353841,
+   "rot_share": 0.412784469694151
+  },
+  {
+   "episode": 21,
+   "leaf": "pick_up_the_alphabet_soup_and_place_it_in_the_basket/episode_1/camera_poses_0/expert",
+   "trans_motion": 1.5344837779566047,
+   "rot_motion": 0.9337937999241943,
+   "rot_share": 0.3662503089938517
+  },
+  {
+   "episode": 22,
+   "leaf": "pick_up_the_alphabet_soup_and_place_it_in_the_basket/episode_2/camera_poses_0/expert",
+   "trans_motion": 1.2437844135384142,
+   "rot_motion": 1.3560195168912637,
+   "rot_share": 0.5086870008510643
+  },
+  {
+   "episode": 23,
+   "leaf": "pick_up_the_alphabet_soup_and_place_it_in_the_basket/episode_3/camera_poses_0/expert",
+   "trans_motion": 1.1399829635839616,
+   "rot_motion": 1.1091747093745554,
+   "rot_share": 0.4802501589904167
+  },
+  {
+   "episode": 24,
+   "leaf": "pick_up_the_alphabet_soup_and_place_it_in_the_basket/episode_4/camera_poses_0/expert",
+   "trans_motion": 1.2219006992709545,
+   "rot_motion": 0.7132264933078724,
+   "rot_share": 0.3566331915105118
+  },
+  {
+   "episode": 25,
+   "leaf": "pick_up_the_alphabet_soup_and_place_it_in_the_basket/episode_5/camera_poses_0/expert",
+   "trans_motion": 1.2193322001551965,
+   "rot_motion": 0.697066190933205,
+   "rot_share": 0.3518717928335418
+  },
+  {
+   "episode": 26,
+   "leaf": "pick_up_the_alphabet_soup_and_place_it_in_the_basket/episode_6/camera_poses_0/expert",
+   "trans_motion": 1.3129086939067032,
+   "rot_motion": 0.6955157439376257,
+   "rot_share": 0.3347029773812116,
+   "full:agentview_rgb": {
+    "psnr": 29.370849228849675,
+    "ssim": 0.9487656009919716,
+    "lpips": 0.020844468731207377
+   },
+   "null:agentview_rgb": {
+    "psnr": 28.437392690777546,
+    "ssim": 0.9428260535904855,
+    "lpips": 0.027285804531790993
+   },
+   "droprot:agentview_rgb": {
+    "psnr": 29.585664699419482,
+    "ssim": 0.9493024795344381,
+    "lpips": 0.02060451657991066
+   },
+   "full:side_rgb": {
+    "psnr": 27.275180638824555,
+    "ssim": 0.9361781389424295,
+    "lpips": 0.03269461150648016
+   },
+   "null:side_rgb": {
+    "psnr": 26.732238162779787,
+    "ssim": 0.9340614042498848,
+    "lpips": 0.03472822037327922
+   },
+   "droprot:side_rgb": {
+    "psnr": 27.361829786689718,
+    "ssim": 0.9368207517898444,
+    "lpips": 0.03141682172532786
+   }
+  },
+  {
+   "episode": 27,
+   "leaf": "pick_up_the_alphabet_soup_and_place_it_in_the_basket/episode_7/camera_poses_0/expert",
+   "trans_motion": 1.2458541639636984,
+   "rot_motion": 0.7638106264903672,
+   "rot_share": 0.3679782056705142
+  },
+  {
+   "episode": 28,
+   "leaf": "pick_up_the_alphabet_soup_and_place_it_in_the_basket/episode_8/camera_poses_0/expert",
+   "trans_motion": 1.3637572352102356,
+   "rot_motion": 1.5855751197263184,
+   "rot_share": 0.5247448248169089
+  },
+  {
+   "episode": 29,
+   "leaf": "pick_up_the_alphabet_soup_and_place_it_in_the_basket/episode_9/camera_poses_0/expert",
+   "trans_motion": 1.1748221187248777,
+   "rot_motion": 1.069632942809572,
+   "rot_share": 0.4637028122273796
+  },
+  {
+   "episode": 30,
+   "leaf": "pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate/episode_0/camera_poses_0/expert",
+   "trans_motion": 1.0746394492699634,
+   "rot_motion": 1.0277854851569375,
+   "rot_share": 0.4759630081192145
+  },
+  {
+   "episode": 31,
+   "leaf": "pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate/episode_1/camera_poses_0/expert",
+   "trans_motion": 0.9250763899099042,
+   "rot_motion": 0.7762036207661829,
+   "rot_share": 0.44346656546954355
+  },
+  {
+   "episode": 32,
+   "leaf": "pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate/episode_2/camera_poses_0/expert",
+   "trans_motion": 1.029522685983552,
+   "rot_motion": 0.6585928866023353,
+   "rot_share": 0.37791947620260047
+  },
+  {
+   "episode": 33,
+   "leaf": "pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate/episode_3/camera_poses_0/expert",
+   "trans_motion": 1.270595904780175,
+   "rot_motion": 2.0573924971581286,
+   "rot_share": 0.6059476893199626
+  },
+  {
+   "episode": 34,
+   "leaf": "pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate/episode_4/camera_poses_0/expert",
+   "trans_motion": 1.0616384134984072,
+   "rot_motion": 0.8658198087228801,
+   "rot_share": 0.43646155595838865
+  },
+  {
+   "episode": 35,
+   "leaf": "pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate/episode_5/camera_poses_0/expert",
+   "trans_motion": 1.066401017908311,
+   "rot_motion": 0.9815400246696815,
+   "rot_share": 0.4664093387377868
+  },
+  {
+   "episode": 36,
+   "leaf": "pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate/episode_6/camera_poses_0/expert",
+   "trans_motion": 1.0482439837269408,
+   "rot_motion": 0.8723443205266006,
+   "rot_share": 0.4414373102553548
+  },
+  {
+   "episode": 37,
+   "leaf": "pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate/episode_7/camera_poses_0/expert",
+   "trans_motion": 1.0509610632670403,
+   "rot_motion": 1.1012885822843184,
+   "rot_share": 0.4987831236460753
+  },
+  {
+   "episode": 38,
+   "leaf": "pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate/episode_8/camera_poses_0/expert",
+   "trans_motion": 0.9505520277024857,
+   "rot_motion": 1.027935025303703,
+   "rot_share": 0.5066548414082734
+  },
+  {
+   "episode": 39,
+   "leaf": "pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate/episode_9/camera_poses_0/expert",
+   "trans_motion": 0.9851130501394421,
+   "rot_motion": 1.164987820203259,
+   "rot_share": 0.5289839948076607
+  },
+  {
+   "episode": 40,
+   "leaf": "put_the_bowl_on_the_plate/episode_0/camera_poses_0/expert",
+   "trans_motion": 0.7470463549034576,
+   "rot_motion": 0.599207534460314,
+   "rot_share": 0.4323762484222115
+  },
+  {
+   "episode": 41,
+   "leaf": "put_the_bowl_on_the_plate/episode_1/camera_poses_0/expert",
+   "trans_motion": 0.7423045994339564,
+   "rot_motion": 0.4361819568458546,
+   "rot_share": 0.35816359809759035
+  },
+  {
+   "episode": 42,
+   "leaf": "put_the_bowl_on_the_plate/episode_2/camera_poses_0/expert",
+   "trans_motion": 0.758078252807324,
+   "rot_motion": 0.5939904826890001,
+   "rot_share": 0.4266415905647573
+  },
+  {
+   "episode": 43,
+   "leaf": "put_the_bowl_on_the_plate/episode_3/camera_poses_0/expert",
+   "trans_motion": 0.7764272179675774,
+   "rot_motion": 0.5756515242125579,
+   "rot_share": 0.4131778104026984
+  },
+  {
+   "episode": 44,
+   "leaf": "put_the_bowl_on_the_plate/episode_4/camera_poses_0/expert",
+   "trans_motion": 0.6932149716014496,
+   "rot_motion": 0.40696931005072695,
+   "rot_share": 0.35795622556391177
+  },
+  {
+   "episode": 45,
+   "leaf": "put_the_bowl_on_the_plate/episode_5/camera_poses_0/expert",
+   "trans_motion": 0.7907203180008422,
+   "rot_motion": 0.6400758352698837,
+   "rot_share": 0.43462612313174537
+  },
+  {
+   "episode": 46,
+   "leaf": "put_the_bowl_on_the_plate/episode_6/camera_poses_0/expert",
+   "trans_motion": 0.8297281864606759,
+   "rot_motion": 0.9945878652921647,
+   "rot_share": 0.5323514603579858
+  },
+  {
+   "episode": 47,
+   "leaf": "put_the_bowl_on_the_plate/episode_7/camera_poses_0/expert",
+   "trans_motion": 0.7306276020416737,
+   "rot_motion": 0.5609951110421366,
+   "rot_share": 0.4216910982619856
+  },
+  {
+   "episode": 48,
+   "leaf": "put_the_bowl_on_the_plate/episode_8/camera_poses_0/expert",
+   "trans_motion": 0.6745967951937221,
+   "rot_motion": 0.4497302574964367,
+   "rot_share": 0.3876714931657372
+  },
+  {
+   "episode": 49,
+   "leaf": "put_the_bowl_on_the_plate/episode_9/camera_poses_0/expert",
+   "trans_motion": 0.7439300325177983,
+   "rot_motion": 0.5527663296996224,
+   "rot_share": 0.41370861077272864
+  }
+ ]
+}

@@ -1,0 +1,4 @@
+{"t_wall": 1789494827.849181, "sim_t": 0.5, "kind": "throw", "payload": {"vx": 4.55239, "vz": 0.0, "land_x": 0.8673, "err": 0.0673, "hit": false}, "budget_left": 249}
+{"t_wall": 1789494830.6397426, "sim_t": 1.0, "kind": "throw", "payload": {"vx": 4.08105, "vz": 0.0, "land_x": 0.7994, "err": 0.0006, "hit": true}, "budget_left": 248}
+{"t_wall": 1789494835.4208932, "sim_t": 1.0, "kind": "done", "payload": {"task": "windx", "success": true, "attempts": 2, "hits": 1, "best_err": 0.0006, "sim_t": 1.0}, "budget_left": 248}
+{"t_wall": 1789494842.0867157, "sim_t": 1.0, "kind": "done", "payload": {"task": "windx", "success": true, "attempts": 2, "hits": 1, "best_err": 0.0006, "sim_t": 1.0}, "budget_left": 248}
