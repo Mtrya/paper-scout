@@ -4,7 +4,7 @@
 - 运行 id: 2026-09-17-boundary-astra
 - 覆盖时段: 2026-09-17(自 09-16 巡航以来)
 - 报告: runs/2026-09-17-boundary-astra/report.docxxml
-- 飞书文档: https://fudan-nlp.feishu.cn/docx/J9uDdAakXo12g7x0zkEccX6SnUd
+- 飞书文档: https://fudan-nlp.feishu.cn/docx/KapIdF0h6o8JGJx4bwScnJ3WnVg(通俗重写版;旧版术语密度过高被替代)
 
 ## 研究契约
 - [x] 报告前置的是从论文加外部信号中赢得的洞见,而不是论文内容的重组。
