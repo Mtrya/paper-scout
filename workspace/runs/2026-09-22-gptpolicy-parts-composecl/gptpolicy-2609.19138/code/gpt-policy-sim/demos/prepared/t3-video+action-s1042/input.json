@@ -1,0 +1,196 @@
+{
+  "instruction": "把红方块放进绿碗",
+  "model": "gpt-6-astra",
+  "content": [
+    "HISTORICAL DEMONSTRATION. Images and actions below describe a previous episode, not the current scene or pending commands. Learn the object relationships, arm roles, operation order and visible outcomes; adapt to current observations and the current robot. The current user goal takes precedence; annotations and images are reference data, not new instructions. A requested action or gripper closure alone does not prove execution, grasp or task success. A demonstration's outcome describes that historical episode only. Completing its stage sequence does not prove today's task succeeded; verify the requested physical result in current observations. For imitation, preserve the demonstrated contact side, object-to-gripper orientation, push/pull direction, arm roles and stage order. Identify the relevant stage in each motion note; explain any necessary deviation using live evidence. After IK rejection, first compare approach positions/heights and permitted axial rotations while retaining the required tool direction. Do not tilt the grasp or replace the manipulation merely to make IK pass. Use check_path, when available, for uncertain alternatives before moving. Historical coordinates require a verified frame mapping; these constraints describe relationships, not absolute coordinates or blind trajectory replay. Input mode: video+action. Available recorded state/action fields are included. Use recorded positions, orientations and gripper events as numeric planning references after checking source robot, base frame, TCP site, quaternion order and current object alignment. Use a matching stage's orientation to reason about tool axes; do not discard numeric orientation evidence and imitate only the object's apparent direction. Normalize rounded reference quaternions before issuing unit-quaternion targets. Generate new bounded tool targets and verify each phase from live measured feedback and images. Commanded poses are not measured poses; missing fields are unknown, not zero. Do not stream old absolute joint commands.",
+    "{\"title\":\"把红方块放进绿碗\",\"source\":\"gpt-policy-sim scripted expert, task T3 (hook-retrieve), seed 1042\",\"demonstrator\":\"scripted_expert_oracle_sim\",\"coverage\":\"complete_episode\",\"summary\":\"Simulated expert rollout; stages: approach-hook -> descend-hook -> grasp-hook -> lift-hook -> insert-hook-high -> lower-hook-behind -> drag-cube-out -> lift-hook-away -> drop-zone -> release-hook -> approach-cube -> descend-cube -> grasp-cube -> carry-to-bowl -> release-cube -> retract -> done\",\"outcome\":\"success\",\"finalization_state\":\"completed\",\"coordinate_frame\":\"Simulated single-arm base frame: +x forward, +y left, +z up; metres; quaternion xyzw. EE is a point TCP; measured orientation tracks the commanded one. Gripper normalized: 0 closed, 1 open. Samples are exact simulated measurements.\",\"source_robot\":{\"model\":\"SIM-X5\",\"machine\":\"gpt-policy-sim\",\"interfaces\":[\"sim0\",null]},\"action_sample_encoding\":{\"columns\":[[\"t_s\"],[\"left\",\"joint_measured_rad\"],[\"left\",\"eef_measured_xyz_xyzw\"],[\"left\",\"gripper_measured\"],[\"left\",\"gripper_command\"]],\"description\":\"Each action.sample_rows row follows these nested field paths. Null means absent or null, never zero. Joint/pose arrays retain their original order. In joint/pose/gripper columns only, '=' repeats that column's value from the preceding row in this action segment; the first row is always explicit. Historical joint/pose/gripper samples are rounded to 3 decimal places (metres/radians/normalized opening); other context numbers, including t_s, use 6 decimal places. Keyframe alignment is included; Actions use endpoints, 1 Hz samples and gripper-command transitions, not a full trajectory. compression.time_field names the sampling clock: legacy samples may share video t_s but have distinct, ordered recording_t_s. Both timestamps remain unchanged. Measured arm geometry is shown at keyframes; action rows prefer commanded geometry when present. per-sample source_times_s diagnostics remain in actions.jsonl. Saved source data retains full precision.\"}}",
+    "{\"t_s\":0.0,\"stage\":\"approach-hook\",\"observation\":\"移到钩子上方\",\"image_times\":{\"top\":0.0,\"front\":0.0},\"state\":{\"left\":{\"joint_measured_rad\":[0.0,-0.421564,-1.364333,0.2151,0.0,0.0],\"eef_measured_xyz_xyzw\":[0.5,0.0,0.3,1.0,0.0,0.0,0.0],\"gripper_measured\":1.0,\"gripper_command\":1.0}},\"alignment\":{\"method\":\"sim_synchronous_capture\",\"captured_at_s\":0.0,\"state_observed_at_s\":0.0,\"delta_s\":0.0,\"max_delta_s\":0.1,\"exposure_synchronized\":true},\"action\":{\"kind\":\"measured_single_arm_segment\",\"time_basis\":\"sim_elapsed_s\",\"requested_tools\":[{\"at_s\":0.0,\"step\":0,\"name\":\"move_to\",\"arguments\":{\"target\":{\"pose_xyzquat\":[0.287221,0.3076,0.1,1.0,0.0,0.0,0.0]},\"note\":\"移到钩子上方\"},\"reported_result\":\"execution_result\"}],\"max_sample_gap_s\":0.1,\"compression\":{\"method\":\"periodic_and_gripper_events\",\"sample_period_s\":1.0,\"time_field\":\"t_s\",\"input_samples\":43,\"output_samples\":6},\"sample_rows\":[[0.0,[0.0,-0.422,-1.364,0.215,0.0,0.0],[0.5,0.0,0.3,1.0,0.0,0.0,0.0],1.0,1.0],[1.0,[0.159,-0.36,-1.501,0.29,0.079,0.0],[0.45,0.072,0.253,1.0,0.0,0.0,0.0],\"=\",\"=\"],[2.0,[0.346,-0.249,-1.534,0.212,0.17,0.0],[0.4,0.144,0.206,1.0,0.0,0.0,0.0],\"=\",\"=\"],[3.0,[0.554,-0.108,-1.466,0.003,0.263,0.0],[0.35,0.217,0.159,1.0,0.0,0.0,0.0],\"=\",\"=\"],[4.0,[0.766,0.051,-1.294,-0.328,0.347,0.0],[0.3,0.289,0.112,1.0,0.0,0.0,0.0],\"=\",\"=\"],[4.2,[0.807,0.086,-1.247,-0.41,0.361,0.0],[0.29,0.303,0.103,1.0,0.0,0.0,0.0],\"=\",\"=\"]]},\"image_ids\":{\"top\":\"image_0\",\"front\":\"image_1\"}}",
+    {
+      "image": "keyframes/0000-00.jpg",
+      "label": "image_0: Historical top, t=0.000s; approach-hook",
+      "detail": "high"
+    },
+    {
+      "image": "keyframes/0000-01.jpg",
+      "label": "image_1: Historical front, t=0.000s; approach-hook",
+      "detail": "high"
+    },
+    "{\"t_s\":4.26,\"stage\":\"descend-hook\",\"observation\":\"下降对钩子\",\"image_times\":{\"top\":4.26,\"front\":4.26},\"state\":{\"left\":{\"joint_measured_rad\":[0.819646,0.096238,-1.231378,-0.435656,0.365452,0.0],\"eef_measured_xyz_xyzw\":[0.287221,0.3076,0.1,1.0,0.0,0.0,0.0],\"gripper_measured\":1.0,\"gripper_command\":1.0}},\"alignment\":{\"method\":\"sim_synchronous_capture\",\"captured_at_s\":4.26,\"state_observed_at_s\":4.26,\"delta_s\":0.0,\"max_delta_s\":0.1,\"exposure_synchronized\":true},\"action\":{\"kind\":\"measured_single_arm_segment\",\"time_basis\":\"sim_elapsed_s\",\"requested_tools\":[{\"at_s\":4.26,\"step\":1,\"name\":\"move_to\",\"arguments\":{\"target\":{\"pose_xyzquat\":[0.287221,0.3076,0.015,1.0,0.0,0.0,0.0]},\"note\":\"下降对钩子\"},\"reported_result\":\"execution_result\"}],\"max_sample_gap_s\":0.1,\"compression\":{\"method\":\"periodic_and_gripper_events\",\"sample_period_s\":1.0,\"time_field\":\"t_s\",\"input_samples\":9,\"output_samples\":2},\"sample_rows\":[[4.26,[0.82,0.096,-1.231,-0.436,0.365,0.0],[0.287,0.308,0.1,1.0,0.0,0.0,0.0],1.0,1.0],[5.06,[0.82,0.39,-0.865,-1.096,0.365,0.0],[0.287,0.308,0.021,1.0,0.0,0.0,0.0],\"=\",\"=\"]]},\"image_ids\":{\"top\":\"image_2\",\"front\":\"image_3\"}}",
+    {
+      "image": "keyframes/0001-00.jpg",
+      "label": "image_2: Historical top, t=4.260s; descend-hook",
+      "detail": "high"
+    },
+    {
+      "image": "keyframes/0001-01.jpg",
+      "label": "image_3: Historical front, t=4.260s; descend-hook",
+      "detail": "high"
+    },
+    "{\"t_s\":5.12,\"stage\":\"grasp-hook\",\"observation\":\"闭合夹爪抓钩子\",\"image_times\":{\"top\":5.12,\"front\":5.12},\"state\":{\"left\":{\"joint_measured_rad\":[0.819646,0.414675,-0.829426,-1.156045,0.365452,0.0],\"eef_measured_xyz_xyzw\":[0.287221,0.3076,0.015,1.0,0.0,0.0,0.0],\"gripper_measured\":1.0,\"gripper_command\":1.0}},\"alignment\":{\"method\":\"sim_synchronous_capture\",\"captured_at_s\":5.12,\"state_observed_at_s\":5.12,\"delta_s\":0.0,\"max_delta_s\":0.1,\"exposure_synchronized\":true},\"action\":{\"kind\":\"measured_single_arm_segment\",\"time_basis\":\"sim_elapsed_s\",\"requested_tools\":[{\"at_s\":5.12,\"step\":2,\"name\":\"set_gripper\",\"arguments\":{\"gripper\":0.0,\"note\":\"闭合夹爪抓钩子\"},\"reported_result\":\"execution_result\"}],\"max_sample_gap_s\":0.0,\"compression\":{\"method\":\"periodic_and_gripper_events\",\"sample_period_s\":1.0,\"time_field\":\"t_s\",\"input_samples\":1,\"output_samples\":1},\"sample_rows\":[[5.12,[0.82,0.415,-0.829,-1.156,0.365,0.0],[0.287,0.308,0.015,1.0,0.0,0.0,0.0],1.0,1.0]]},\"image_ids\":{\"top\":\"image_4\",\"front\":\"image_5\"}}",
+    {
+      "image": "keyframes/0002-00.jpg",
+      "label": "image_4: Historical top, t=5.120s; grasp-hook",
+      "detail": "high"
+    },
+    {
+      "image": "keyframes/0002-01.jpg",
+      "label": "image_5: Historical front, t=5.120s; grasp-hook",
+      "detail": "high"
+    },
+    "{\"t_s\":6.12,\"stage\":\"lift-hook\",\"observation\":\"抬起钩子\",\"image_times\":{\"top\":6.12,\"front\":6.12},\"state\":{\"left\":{\"joint_measured_rad\":[0.819646,0.414675,-0.829426,-1.156045,0.365452,0.0],\"eef_measured_xyz_xyzw\":[0.287221,0.3076,0.015,1.0,0.0,0.0,0.0],\"gripper_measured\":1.0,\"gripper_command\":0.0}},\"alignment\":{\"method\":\"sim_synchronous_capture\",\"captured_at_s\":6.12,\"state_observed_at_s\":6.12,\"delta_s\":0.0,\"max_delta_s\":0.1,\"exposure_synchronized\":true},\"action\":{\"kind\":\"measured_single_arm_segment\",\"time_basis\":\"sim_elapsed_s\",\"requested_tools\":[{\"at_s\":6.12,\"step\":3,\"name\":\"move_to\",\"arguments\":{\"target\":{\"pose_xyzquat\":[0.287221,0.3076,0.14,1.0,0.0,0.0,0.0]},\"note\":\"抬起钩子\"},\"reported_result\":\"execution_result\"}],\"max_sample_gap_s\":0.1,\"compression\":{\"method\":\"periodic_and_gripper_events\",\"sample_period_s\":1.0,\"time_field\":\"t_s\",\"input_samples\":13,\"output_samples\":3},\"sample_rows\":[[6.12,[0.82,0.415,-0.829,-1.156,0.365,0.0],[0.287,0.308,0.015,1.0,0.0,0.0,0.0],1.0,0.0],[7.12,[0.82,0.048,-1.283,-0.335,0.365,0.0],[0.287,0.308,0.114,1.0,0.0,0.0,0.0],\"=\",\"=\"],[7.32,[0.82,-0.018,-1.351,-0.202,0.365,0.0],[0.287,0.308,0.134,1.0,0.0,0.0,0.0],\"=\",\"=\"]]},\"image_ids\":{\"top\":\"image_6\",\"front\":\"image_7\"}}",
+    {
+      "image": "keyframes/0003-00.jpg",
+      "label": "image_6: Historical top, t=6.120s; lift-hook",
+      "detail": "high"
+    },
+    {
+      "image": "keyframes/0003-01.jpg",
+      "label": "image_7: Historical front, t=6.120s; lift-hook",
+      "detail": "high"
+    },
+    "{\"t_s\":7.38,\"stage\":\"insert-hook-high\",\"observation\":\"钩尖从上方伸入管内越过方块\",\"image_times\":{\"top\":7.38,\"front\":7.38},\"state\":{\"left\":{\"joint_measured_rad\":[0.819646,-0.038212,-1.369841,-0.162743,0.365452,0.0],\"eef_measured_xyz_xyzw\":[0.287221,0.3076,0.14,1.0,0.0,0.0,0.0],\"gripper_measured\":1.0,\"gripper_command\":0.0}},\"alignment\":{\"method\":\"sim_synchronous_capture\",\"captured_at_s\":7.38,\"state_observed_at_s\":7.38,\"delta_s\":0.0,\"max_delta_s\":0.1,\"exposure_synchronized\":true},\"action\":{\"kind\":\"measured_single_arm_segment\",\"time_basis\":\"sim_elapsed_s\",\"requested_tools\":[{\"at_s\":7.38,\"step\":4,\"name\":\"move_to\",\"arguments\":{\"target\":{\"pose_xyzquat\":[0.571445,0.55,0.13,1.0,0.0,0.0,0.0]},\"note\":\"钩尖从上方伸入管内越过方块\"},\"reported_result\":\"execution_result\"}],\"max_sample_gap_s\":0.1,\"compression\":{\"method\":\"periodic_and_gripper_events\",\"sample_period_s\":1.0,\"time_field\":\"t_s\",\"input_samples\":38,\"output_samples\":5},\"sample_rows\":[[7.38,[0.82,-0.038,-1.37,-0.163,0.365,0.0],[0.287,0.308,0.14,1.0,0.0,0.0,0.0],1.0,0.0],[8.38,[0.798,0.124,-0.834,-0.862,0.358,0.0],[0.363,0.372,0.137,1.0,0.0,0.0,0.0],\"=\",\"=\"],[9.38,[0.783,0.464,-0.0,-2.035,0.353,0.0],[0.439,0.437,0.135,1.0,0.0,0.0,0.0],\"=\",\"=\"],[10.38,[0.772,0.406,-0.0,-1.977,0.349,0.0],[0.515,0.502,0.132,1.0,0.0,0.0,0.0],\"=\",\"=\"],[11.08,[0.767,0.374,-0.0,-1.945,0.347,0.0],[0.568,0.547,0.13,1.0,0.0,0.0,0.0],\"=\",\"=\"]]},\"image_ids\":{\"top\":\"image_8\",\"front\":\"image_9\"}}",
+    {
+      "image": "keyframes/0004-00.jpg",
+      "label": "image_8: Historical top, t=7.380s; insert-hook-high",
+      "detail": "high"
+    },
+    {
+      "image": "keyframes/0004-01.jpg",
+      "label": "image_9: Historical front, t=7.380s; insert-hook-high",
+      "detail": "high"
+    },
+    "{\"t_s\":11.12,\"stage\":\"lower-hook-behind\",\"observation\":\"钩尖落到方块后方\",\"image_times\":{\"top\":11.12,\"front\":11.12},\"state\":{\"left\":{\"joint_measured_rad\":[0.766278,0.372067,-0.0,-1.942864,0.346729,0.0],\"eef_measured_xyz_xyzw\":[0.571445,0.55,0.13,1.0,0.0,0.0,0.0],\"gripper_measured\":1.0,\"gripper_command\":0.0}},\"alignment\":{\"method\":\"sim_synchronous_capture\",\"captured_at_s\":11.12,\"state_observed_at_s\":11.12,\"delta_s\":0.0,\"max_delta_s\":0.1,\"exposure_synchronized\":true},\"action\":{\"kind\":\"measured_single_arm_segment\",\"time_basis\":\"sim_elapsed_s\",\"requested_tools\":[{\"at_s\":11.12,\"step\":5,\"name\":\"move_to\",\"arguments\":{\"target\":{\"pose_xyzquat\":[0.571445,0.55,0.1,1.0,0.0,0.0,0.0]},\"note\":\"钩尖落到方块后方\"},\"reported_result\":\"execution_result\"}],\"max_sample_gap_s\":0.1,\"compression\":{\"method\":\"periodic_and_gripper_events\",\"sample_period_s\":1.0,\"time_field\":\"t_s\",\"input_samples\":3,\"output_samples\":2},\"sample_rows\":[[11.12,[0.766,0.372,-0.0,-1.943,0.347,0.0],[0.571,0.55,0.13,1.0,0.0,0.0,0.0],1.0,0.0],[11.32,[0.766,0.395,-0.0,-1.966,0.347,0.0],[0.571,0.55,0.11,1.0,0.0,0.0,0.0],\"=\",\"=\"]]},\"image_ids\":{\"top\":\"image_10\",\"front\":\"image_11\"}}",
+    {
+      "image": "keyframes/0005-00.jpg",
+      "label": "image_10: Historical top, t=11.120s; lower-hook-behind",
+      "detail": "high"
+    },
+    {
+      "image": "keyframes/0005-01.jpg",
+      "label": "image_11: Historical front, t=11.120s; lower-hook-behind",
+      "detail": "high"
+    },
+    "{\"t_s\":11.42,\"stage\":\"drag-cube-out\",\"observation\":\"回拖钩子带出方块\",\"image_times\":{\"top\":11.42,\"front\":11.42},\"state\":{\"left\":{\"joint_measured_rad\":[0.766278,0.406616,-0.0,-1.977412,0.346729,0.0],\"eef_measured_xyz_xyzw\":[0.571445,0.55,0.1,1.0,0.0,0.0,0.0],\"gripper_measured\":1.0,\"gripper_command\":0.0}},\"alignment\":{\"method\":\"sim_synchronous_capture\",\"captured_at_s\":11.42,\"state_observed_at_s\":11.42,\"delta_s\":0.0,\"max_delta_s\":0.1,\"exposure_synchronized\":true},\"action\":{\"kind\":\"measured_single_arm_segment\",\"time_basis\":\"sim_elapsed_s\",\"requested_tools\":[{\"at_s\":11.42,\"step\":6,\"name\":\"move_to\",\"arguments\":{\"target\":{\"pose_xyzquat\":[0.191445,0.55,0.1,1.0,0.0,0.0,0.0]},\"note\":\"回拖钩子带出方块\"},\"reported_result\":\"execution_result\"}],\"max_sample_gap_s\":0.1,\"compression\":{\"method\":\"periodic_and_gripper_events\",\"sample_period_s\":1.0,\"time_field\":\"t_s\",\"input_samples\":38,\"output_samples\":5},\"sample_rows\":[[11.42,[0.766,0.407,-0.0,-1.977,0.347,0.0],[0.571,0.55,0.1,1.0,0.0,0.0,0.0],1.0,0.0],[12.42,[0.862,0.443,-0.0,-2.014,0.38,0.0],[0.471,0.55,0.1,1.0,0.0,0.0,0.0],\"=\",\"=\"],[13.42,[0.977,0.481,-0.0,-2.051,0.414,0.0],[0.371,0.55,0.1,1.0,0.0,0.0,0.0],\"=\",\"=\"],[14.42,[1.112,0.517,-0.0,-2.087,0.448,0.0],[0.271,0.55,0.1,1.0,0.0,0.0,0.0],\"=\",\"=\"],[15.12,[1.22,0.538,-0.0,-2.109,0.469,0.0],[0.201,0.55,0.1,1.0,0.0,0.0,0.0],\"=\",\"=\"]]},\"image_ids\":{\"top\":\"image_12\",\"front\":\"image_13\"}}",
+    {
+      "image": "keyframes/0006-00.jpg",
+      "label": "image_12: Historical top, t=11.420s; drag-cube-out",
+      "detail": "high"
+    },
+    {
+      "image": "keyframes/0006-01.jpg",
+      "label": "image_13: Historical front, t=11.420s; drag-cube-out",
+      "detail": "high"
+    },
+    "{\"t_s\":15.22,\"stage\":\"lift-hook-away\",\"observation\":\"抬起钩子\",\"image_times\":{\"top\":15.22,\"front\":15.22},\"state\":{\"left\":{\"joint_measured_rad\":[1.235832,0.54122,-0.0,-2.112016,0.472211,0.0],\"eef_measured_xyz_xyzw\":[0.191445,0.55,0.1,1.0,0.0,0.0,0.0],\"gripper_measured\":1.0,\"gripper_command\":0.0}},\"alignment\":{\"method\":\"sim_synchronous_capture\",\"captured_at_s\":15.22,\"state_observed_at_s\":15.22,\"delta_s\":0.0,\"max_delta_s\":0.1,\"exposure_synchronized\":true},\"action\":{\"kind\":\"measured_single_arm_segment\",\"time_basis\":\"sim_elapsed_s\",\"requested_tools\":[{\"at_s\":15.22,\"step\":7,\"name\":\"move_to\",\"arguments\":{\"target\":{\"pose_xyzquat\":[0.191445,0.55,0.16,1.0,0.0,0.0,0.0]},\"note\":\"抬起钩子\"},\"reported_result\":\"execution_result\"}],\"max_sample_gap_s\":0.1,\"compression\":{\"method\":\"periodic_and_gripper_events\",\"sample_period_s\":1.0,\"time_field\":\"t_s\",\"input_samples\":6,\"output_samples\":2},\"sample_rows\":[[15.22,[1.236,0.541,-0.0,-2.112,0.472,0.0],[0.191,0.55,0.1,1.0,0.0,0.0,0.0],1.0,0.0],[15.72,[1.236,0.368,-0.203,-1.736,0.472,0.0],[0.191,0.55,0.15,1.0,0.0,0.0,0.0],\"=\",\"=\"]]},\"image_ids\":{\"top\":\"image_14\",\"front\":\"image_15\"}}",
+    {
+      "image": "keyframes/0007-00.jpg",
+      "label": "image_14: Historical top, t=15.220s; lift-hook-away",
+      "detail": "high"
+    },
+    {
+      "image": "keyframes/0007-01.jpg",
+      "label": "image_15: Historical front, t=15.220s; lift-hook-away",
+      "detail": "high"
+    },
+    "{\"t_s\":15.82,\"stage\":\"drop-zone\",\"observation\":\"移开放下钩子\",\"image_times\":{\"top\":15.82,\"front\":15.82},\"state\":{\"left\":{\"joint_measured_rad\":[1.235832,0.29566,-0.317305,-1.549151,0.472211,0.0],\"eef_measured_xyz_xyzw\":[0.191445,0.55,0.16,1.0,0.0,0.0,0.0],\"gripper_measured\":1.0,\"gripper_command\":0.0}},\"alignment\":{\"method\":\"sim_synchronous_capture\",\"captured_at_s\":15.82,\"state_observed_at_s\":15.82,\"delta_s\":0.0,\"max_delta_s\":0.1,\"exposure_synchronized\":true},\"action\":{\"kind\":\"measured_single_arm_segment\",\"time_basis\":\"sim_elapsed_s\",\"requested_tools\":[{\"at_s\":15.82,\"step\":8,\"name\":\"move_to\",\"arguments\":{\"target\":{\"pose_xyzquat\":[0.3,0.42,0.16,1.0,0.0,0.0,0.0]},\"note\":\"移开放下钩子\"},\"reported_result\":\"execution_result\"}],\"max_sample_gap_s\":0.1,\"compression\":{\"method\":\"periodic_and_gripper_events\",\"sample_period_s\":1.0,\"time_field\":\"t_s\",\"input_samples\":17,\"output_samples\":3},\"sample_rows\":[[15.82,[1.236,0.296,-0.317,-1.549,0.472,0.0],[0.191,0.55,0.16,1.0,0.0,0.0,0.0],1.0,0.0],[16.82,[1.076,0.091,-0.798,-0.864,0.44,0.0],[0.255,0.474,0.16,1.0,0.0,0.0,0.0],\"=\",\"=\"],[17.42,[0.969,0.04,-0.932,-0.679,0.412,0.0],[0.294,0.428,0.16,1.0,0.0,0.0,0.0],\"=\",\"=\"]]},\"image_ids\":{\"top\":\"image_16\",\"front\":\"image_17\"}}",
+    {
+      "image": "keyframes/0008-00.jpg",
+      "label": "image_16: Historical top, t=15.820s; drop-zone",
+      "detail": "high"
+    },
+    {
+      "image": "keyframes/0008-01.jpg",
+      "label": "image_17: Historical front, t=15.820s; drop-zone",
+      "detail": "high"
+    },
+    "{\"t_s\":17.52,\"stage\":\"release-hook\",\"observation\":\"放下钩子\",\"image_times\":{\"top\":17.52,\"front\":17.52},\"state\":{\"left\":{\"joint_measured_rad\":[0.950547,0.034417,-0.948749,-0.656464,0.406867,0.0],\"eef_measured_xyz_xyzw\":[0.3,0.42,0.16,1.0,0.0,0.0,0.0],\"gripper_measured\":1.0,\"gripper_command\":0.0}},\"alignment\":{\"method\":\"sim_synchronous_capture\",\"captured_at_s\":17.52,\"state_observed_at_s\":17.52,\"delta_s\":0.0,\"max_delta_s\":0.1,\"exposure_synchronized\":true},\"action\":{\"kind\":\"measured_single_arm_segment\",\"time_basis\":\"sim_elapsed_s\",\"requested_tools\":[{\"at_s\":17.52,\"step\":9,\"name\":\"set_gripper\",\"arguments\":{\"gripper\":1.0,\"note\":\"放下钩子\"},\"reported_result\":\"execution_result\"}],\"max_sample_gap_s\":0.0,\"compression\":{\"method\":\"periodic_and_gripper_events\",\"sample_period_s\":1.0,\"time_field\":\"t_s\",\"input_samples\":1,\"output_samples\":1},\"sample_rows\":[[17.52,[0.951,0.034,-0.949,-0.656,0.407,0.0],[0.3,0.42,0.16,1.0,0.0,0.0,0.0],1.0,0.0]]},\"image_ids\":{\"top\":\"image_18\",\"front\":\"image_19\"}}",
+    {
+      "image": "keyframes/0009-00.jpg",
+      "label": "image_18: Historical top, t=17.520s; release-hook",
+      "detail": "high"
+    },
+    {
+      "image": "keyframes/0009-01.jpg",
+      "label": "image_19: Historical front, t=17.520s; release-hook",
+      "detail": "high"
+    },
+    "{\"t_s\":18.52,\"stage\":\"approach-cube\",\"observation\":\"移到方块上方\",\"image_times\":{\"top\":18.52,\"front\":18.52},\"state\":{\"left\":{\"joint_measured_rad\":[0.950547,0.034417,-0.948749,-0.656464,0.406867,0.0],\"eef_measured_xyz_xyzw\":[0.3,0.42,0.16,1.0,0.0,0.0,0.0],\"gripper_measured\":1.0,\"gripper_command\":1.0}},\"alignment\":{\"method\":\"sim_synchronous_capture\",\"captured_at_s\":18.52,\"state_observed_at_s\":18.52,\"delta_s\":0.0,\"max_delta_s\":0.1,\"exposure_synchronized\":true},\"action\":{\"kind\":\"measured_single_arm_segment\",\"time_basis\":\"sim_elapsed_s\",\"requested_tools\":[{\"at_s\":18.52,\"step\":10,\"name\":\"move_to\",\"arguments\":{\"target\":{\"pose_xyzquat\":[0.389445,0.55,0.12,1.0,0.0,0.0,0.0]},\"note\":\"移到方块上方\"},\"reported_result\":\"execution_result\"}],\"max_sample_gap_s\":0.1,\"compression\":{\"method\":\"periodic_and_gripper_events\",\"sample_period_s\":1.0,\"time_field\":\"t_s\",\"input_samples\":17,\"output_samples\":3},\"sample_rows\":[[18.52,[0.951,0.034,-0.949,-0.656,0.407,0.0],[0.3,0.42,0.16,1.0,0.0,0.0,0.0],1.0,1.0],[19.52,[0.953,0.468,-0.0,-2.039,0.408,0.0],[0.355,0.499,0.136,1.0,0.0,0.0,0.0],\"=\",\"=\"],[20.12,[0.955,0.449,-0.0,-2.02,0.408,0.0],[0.387,0.547,0.121,1.0,0.0,0.0,0.0],\"=\",\"=\"]]},\"image_ids\":{\"top\":\"image_20\",\"front\":\"image_21\"}}",
+    {
+      "image": "keyframes/0010-00.jpg",
+      "label": "image_20: Historical top, t=18.520s; approach-cube",
+      "detail": "high"
+    },
+    {
+      "image": "keyframes/0010-01.jpg",
+      "label": "image_21: Historical front, t=18.520s; approach-cube",
+      "detail": "high"
+    },
+    "{\"t_s\":20.16,\"stage\":\"descend-cube\",\"observation\":\"下降对方块\",\"image_times\":{\"top\":20.16,\"front\":20.16},\"state\":{\"left\":{\"joint_measured_rad\":[0.954667,0.448196,-0.0,-2.018992,0.408061,0.0],\"eef_measured_xyz_xyzw\":[0.389445,0.55,0.12,1.0,0.0,0.0,0.0],\"gripper_measured\":1.0,\"gripper_command\":1.0}},\"alignment\":{\"method\":\"sim_synchronous_capture\",\"captured_at_s\":20.16,\"state_observed_at_s\":20.16,\"delta_s\":0.0,\"max_delta_s\":0.1,\"exposure_synchronized\":true},\"action\":{\"kind\":\"measured_single_arm_segment\",\"time_basis\":\"sim_elapsed_s\",\"requested_tools\":[{\"at_s\":20.16,\"step\":11,\"name\":\"move_to\",\"arguments\":{\"target\":{\"pose_xyzquat\":[0.389445,0.55,0.026,1.0,0.0,0.0,0.0]},\"note\":\"下降对方块\"},\"reported_result\":\"execution_result\"}],\"max_sample_gap_s\":0.1,\"compression\":{\"method\":\"periodic_and_gripper_events\",\"sample_period_s\":1.0,\"time_field\":\"t_s\",\"input_samples\":10,\"output_samples\":2},\"sample_rows\":[[20.16,[0.955,0.448,-0.0,-2.019,0.408,0.0],[0.389,0.55,0.12,1.0,0.0,0.0,0.0],1.0,1.0],[21.06,[0.955,0.559,-0.0,-2.129,0.408,0.0],[0.389,0.55,0.03,1.0,0.0,0.0,0.0],\"=\",\"=\"]]},\"image_ids\":{\"top\":\"image_22\",\"front\":\"image_23\"}}",
+    {
+      "image": "keyframes/0011-00.jpg",
+      "label": "image_22: Historical top, t=20.160s; descend-cube",
+      "detail": "high"
+    },
+    {
+      "image": "keyframes/0011-01.jpg",
+      "label": "image_23: Historical front, t=20.160s; descend-cube",
+      "detail": "high"
+    },
+    "{\"t_s\":21.1,\"stage\":\"grasp-cube\",\"observation\":\"闭合夹爪抓方块\",\"image_times\":{\"top\":21.1,\"front\":21.1},\"state\":{\"left\":{\"joint_measured_rad\":[0.954667,0.563254,-0.0,-2.13405,0.408061,0.0],\"eef_measured_xyz_xyzw\":[0.389445,0.55,0.026,1.0,0.0,0.0,0.0],\"gripper_measured\":1.0,\"gripper_command\":1.0}},\"alignment\":{\"method\":\"sim_synchronous_capture\",\"captured_at_s\":21.1,\"state_observed_at_s\":21.1,\"delta_s\":0.0,\"max_delta_s\":0.1,\"exposure_synchronized\":true},\"action\":{\"kind\":\"measured_single_arm_segment\",\"time_basis\":\"sim_elapsed_s\",\"requested_tools\":[{\"at_s\":21.1,\"step\":12,\"name\":\"set_gripper\",\"arguments\":{\"gripper\":0.0,\"note\":\"闭合夹爪抓方块\"},\"reported_result\":\"execution_result\"}],\"max_sample_gap_s\":0.0,\"compression\":{\"method\":\"periodic_and_gripper_events\",\"sample_period_s\":1.0,\"time_field\":\"t_s\",\"input_samples\":1,\"output_samples\":1},\"sample_rows\":[[21.1,[0.955,0.563,-0.0,-2.134,0.408,0.0],[0.389,0.55,0.026,1.0,0.0,0.0,0.0],1.0,1.0]]},\"image_ids\":{\"top\":\"image_24\",\"front\":\"image_25\"}}",
+    {
+      "image": "keyframes/0012-00.jpg",
+      "label": "image_24: Historical top, t=21.100s; grasp-cube",
+      "detail": "high"
+    },
+    {
+      "image": "keyframes/0012-01.jpg",
+      "label": "image_25: Historical front, t=21.100s; grasp-cube",
+      "detail": "high"
+    },
+    "{\"t_s\":22.1,\"stage\":\"carry-to-bowl\",\"observation\":\"抓起并移到碗上方\",\"image_times\":{\"top\":22.1,\"front\":22.1},\"state\":{\"left\":{\"joint_measured_rad\":[0.954667,0.563254,-0.0,-2.13405,0.408061,0.0],\"eef_measured_xyz_xyzw\":[0.389445,0.55,0.026,1.0,0.0,0.0,0.0],\"gripper_measured\":0.454545,\"gripper_command\":0.0}},\"alignment\":{\"method\":\"sim_synchronous_capture\",\"captured_at_s\":22.1,\"state_observed_at_s\":22.1,\"delta_s\":0.0,\"max_delta_s\":0.1,\"exposure_synchronized\":true},\"action\":{\"kind\":\"measured_single_arm_segment\",\"time_basis\":\"sim_elapsed_s\",\"requested_tools\":[{\"at_s\":22.1,\"step\":13,\"name\":\"move_eef_chunk\",\"arguments\":{\"poses\":[{\"pose_xyzquat\":[0.389445,0.55,0.22,1.0,0.0,0.0,0.0]},{\"pose_xyzquat\":[0.339767,0.754769,0.22,1.0,0.0,0.0,0.0]},{\"pose_xyzquat\":[0.339767,0.754769,0.1,1.0,0.0,0.0,0.0]}],\"note\":\"抓起并移到碗上方\"},\"reported_result\":\"execution_result\"}],\"max_sample_gap_s\":0.1,\"compression\":{\"method\":\"periodic_and_gripper_events\",\"sample_period_s\":1.0,\"time_field\":\"t_s\",\"input_samples\":53,\"output_samples\":7},\"sample_rows\":[[22.1,[0.955,0.563,-0.0,-2.134,0.408,0.0],[0.389,0.55,0.026,1.0,0.0,0.0,0.0],0.455,0.0],[23.1,[0.955,0.44,-0.0,-2.011,0.408,0.0],[0.389,0.55,0.126,1.0,0.0,0.0,0.0],\"=\",\"=\"],[24.1,[0.961,0.308,-0.0,-1.879,0.41,0.0],[0.388,0.556,0.22,1.0,0.0,0.0,0.0],\"=\",\"=\"],[25.1,[1.061,0.279,-0.0,-1.85,0.436,0.0],[0.365,0.652,0.22,1.0,0.0,0.0,0.0],\"=\",\"=\"],[26.1,[1.143,0.253,-0.0,-1.824,0.455,0.0],[0.341,0.749,0.22,1.0,0.0,0.0,0.0],\"=\",\"=\"],[27.1,[1.148,0.361,-0.0,-1.932,0.456,0.0],[0.34,0.755,0.126,1.0,0.0,0.0,0.0],\"=\",\"=\"],[27.3,[1.148,0.384,-0.0,-1.955,0.456,0.0],[0.34,0.755,0.106,1.0,0.0,0.0,0.0],\"=\",\"=\"]]},\"image_ids\":{\"top\":\"image_26\",\"front\":\"image_27\"}}",
+    {
+      "image": "keyframes/0013-00.jpg",
+      "label": "image_26: Historical top, t=22.100s; carry-to-bowl",
+      "detail": "high"
+    },
+    {
+      "image": "keyframes/0013-01.jpg",
+      "label": "image_27: Historical front, t=22.100s; carry-to-bowl",
+      "detail": "high"
+    },
+    "{\"t_s\":27.36,\"stage\":\"release-cube\",\"observation\":\"松开方块入碗\",\"image_times\":{\"top\":27.36,\"front\":27.36},\"state\":{\"left\":{\"joint_measured_rad\":[1.147809,0.390347,-0.0,-1.961143,0.455933,0.0],\"eef_measured_xyz_xyzw\":[0.339767,0.754769,0.1,1.0,0.0,0.0,0.0],\"gripper_measured\":0.454545,\"gripper_command\":0.0}},\"alignment\":{\"method\":\"sim_synchronous_capture\",\"captured_at_s\":27.36,\"state_observed_at_s\":27.36,\"delta_s\":0.0,\"max_delta_s\":0.1,\"exposure_synchronized\":true},\"action\":{\"kind\":\"measured_single_arm_segment\",\"time_basis\":\"sim_elapsed_s\",\"requested_tools\":[{\"at_s\":27.36,\"step\":14,\"name\":\"set_gripper\",\"arguments\":{\"gripper\":1.0,\"note\":\"松开方块入碗\"},\"reported_result\":\"execution_result\"}],\"max_sample_gap_s\":0.0,\"compression\":{\"method\":\"periodic_and_gripper_events\",\"sample_period_s\":1.0,\"time_field\":\"t_s\",\"input_samples\":1,\"output_samples\":1},\"sample_rows\":[[27.36,[1.148,0.39,-0.0,-1.961,0.456,0.0],[0.34,0.755,0.1,1.0,0.0,0.0,0.0],0.455,0.0]]},\"image_ids\":{\"top\":\"image_28\",\"front\":\"image_29\"}}",
+    {
+      "image": "keyframes/0014-00.jpg",
+      "label": "image_28: Historical top, t=27.360s; release-cube",
+      "detail": "high"
+    },
+    {
+      "image": "keyframes/0014-01.jpg",
+      "label": "image_29: Historical front, t=27.360s; release-cube",
+      "detail": "high"
+    },
+    "{\"t_s\":28.36,\"stage\":\"retract\",\"observation\":\"抬升离开\",\"image_times\":{\"top\":28.36,\"front\":28.36},\"state\":{\"left\":{\"joint_measured_rad\":[1.147809,0.390347,-0.0,-1.961143,0.455933,0.0],\"eef_measured_xyz_xyzw\":[0.339767,0.754769,0.1,1.0,0.0,0.0,0.0],\"gripper_measured\":1.0,\"gripper_command\":1.0}},\"alignment\":{\"method\":\"sim_synchronous_capture\",\"captured_at_s\":28.36,\"state_observed_at_s\":28.36,\"delta_s\":0.0,\"max_delta_s\":0.1,\"exposure_synchronized\":true},\"action\":{\"kind\":\"measured_single_arm_segment\",\"time_basis\":\"sim_elapsed_s\",\"requested_tools\":[{\"at_s\":28.36,\"step\":15,\"name\":\"move_to\",\"arguments\":{\"target\":{\"pose_xyzquat\":[0.339767,0.754769,0.2,1.0,0.0,0.0,0.0]},\"note\":\"抬升离开\"},\"reported_result\":\"execution_result\"}],\"max_sample_gap_s\":0.1,\"compression\":{\"method\":\"periodic_and_gripper_events\",\"sample_period_s\":1.0,\"time_field\":\"t_s\",\"input_samples\":10,\"output_samples\":2},\"sample_rows\":[[28.36,[1.148,0.39,-0.0,-1.961,0.456,0.0],[0.34,0.755,0.1,1.0,0.0,0.0,0.0],1.0,1.0],[29.26,[1.148,0.288,-0.0,-1.858,0.456,0.0],[0.34,0.755,0.19,1.0,0.0,0.0,0.0],\"=\",\"=\"]]},\"image_ids\":{\"top\":\"image_30\",\"front\":\"image_31\"}}",
+    {
+      "image": "keyframes/0015-00.jpg",
+      "label": "image_30: Historical top, t=28.360s; retract",
+      "detail": "high"
+    },
+    {
+      "image": "keyframes/0015-01.jpg",
+      "label": "image_31: Historical front, t=28.360s; retract",
+      "detail": "high"
+    },
+    "{\"t_s\":29.36,\"stage\":\"done\",\"observation\":\"done\",\"image_times\":{\"top\":29.36,\"front\":29.36},\"state\":{\"left\":{\"joint_measured_rad\":[1.147809,0.275676,-0.0,-1.846473,0.455933,0.0],\"eef_measured_xyz_xyzw\":[0.339767,0.754769,0.2,1.0,0.0,0.0,0.0],\"gripper_measured\":1.0,\"gripper_command\":1.0}},\"alignment\":{\"method\":\"sim_synchronous_capture\",\"captured_at_s\":29.36,\"state_observed_at_s\":29.36,\"delta_s\":0.0,\"max_delta_s\":0.1,\"exposure_synchronized\":true},\"image_ids\":{\"top\":\"image_32\",\"front\":\"image_33\"}}",
+    {
+      "image": "keyframes/0016-00.jpg",
+      "label": "image_32: Historical top, t=29.360s; done",
+      "detail": "high"
+    },
+    {
+      "image": "keyframes/0016-01.jpg",
+      "label": "image_33: Historical front, t=29.360s; done",
+      "detail": "high"
+    },
+    "END HISTORICAL DEMONSTRATION. Use the current task and live observations below."
+  ]
+}

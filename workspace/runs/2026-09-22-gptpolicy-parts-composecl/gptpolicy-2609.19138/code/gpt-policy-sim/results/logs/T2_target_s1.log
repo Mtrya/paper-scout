@@ -1,0 +1,579 @@
+# cell T2 target seed=1 started 19:13:52
+Waiting for model decision 1 / 60 (step 0)...
+
+STEP 000 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    插头位于夹指正下方，当前姿态稳定，闭合夹爪以建立可靠抓持。                  
+STEP 000 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 2 / 60 (step 1)...
+
+STEP 001 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.57  y=0.5  z=0.12                               
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 2                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.57  y=0.5  z=0.03                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    夹爪已闭合但尚未到插头，先安全靠近再下降到抓取高度。                        
+STEP 001 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 3 / 60 (step 2)...
+
+STEP 002 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.15                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    夹爪已在插头位置闭合，先抬升验证插头是否被可靠夹持，再转移到盒口。          
+STEP 002 · MOVE TO · RESULT RECORDED
+Waiting for model decision 4 / 60 (step 3)...
+
+STEP 003 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    抬升后插头仍留在桌面，确认此前未抓住；先张开夹爪并重新准备低位抓取。        
+STEP 003 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 5 / 60 (step 4)...
+
+STEP 004 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.018                                  
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    夹爪已张开并对准插头中心，下降到略高于桌面的夹持高度。                      
+STEP 004 · MOVE TO · RESULT RECORDED
+Waiting for model decision 6 / 60 (step 5)...
+
+STEP 005 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    末端已降至插头中心高度且插头仍在夹口下方，闭合夹爪并观察夹持扭矩与随动。    
+STEP 005 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 7 / 60 (step 6)...
+
+STEP 006 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.15                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    夹爪已在插头处闭合，抬升检查插头是否随末端离桌；若成功再转运至盒口。        
+STEP 006 · MOVE TO · RESULT RECORDED
+Waiting for model decision 8 / 60 (step 7)...
+
+STEP 007 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.57  y=0.5  z=0.05                               
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 2                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.57  y=0.5  z=0.035                              
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    插头未随抬升移动，重新以更高夹持中心靠近，避免夹指压到桌面。                
+STEP 007 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 9 / 60 (step 8)...
+
+STEP 008 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    当前夹爪闭合但扭矩低且柱子未随动，先张开以解除压桌并准备重新对准。          
+STEP 008 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 10 / 60 (step 9)...
+
+STEP 009 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.06                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    夹爪已张开且柱子仍在原位，抬高到柱体中部以避免夹指触桌并重新对准。          
+STEP 009 · MOVE TO · RESULT RECORDED
+Waiting for model decision 11 / 60 (step 10)...
+
+STEP 010 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    末端已升至柱体中部且夹爪张开，执行闭合并检查夹持扭矩与随动。                
+STEP 010 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 12 / 60 (step 11)...
+
+STEP 011 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.57  y=0.5  z=0.045                              
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 2                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.57  y=0.5  z=0.03                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    当前闭合仍无扭矩，柱子未被夹住；先降到柱体高度附近，随后再重新闭合。        
+STEP 011 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 13 / 60 (step 12)...
+
+STEP 012 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    低位闭合仍未产生夹持反馈，先张开夹爪以重新调整接近高度。                    
+STEP 012 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 14 / 60 (step 13)...
+
+STEP 013 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.018                                  
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    夹爪已打开，下降到柱子实际高度，准备从两侧夹紧而不再压住桌面。              
+STEP 013 · MOVE TO · RESULT RECORDED
+Waiting for model decision 15 / 60 (step 14)...
+
+STEP 014 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    夹爪已降至柱体中心高度并保持对准，闭合后检查是否产生阻力及随动。            
+STEP 014 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 16 / 60 (step 15)...
+
+STEP 015 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.12                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    夹爪已闭合但扭矩仍低，先小幅抬升验证柱子是否被可靠夹持。                    
+STEP 015 · MOVE TO · RESULT RECORDED
+Waiting for model decision 17 / 60 (step 16)...
+
+STEP 016 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    抬升后柱子仍留在桌面，确认未被夹持；先张开并重新定位夹持高度。              
+STEP 016 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 18 / 60 (step 17)...
+
+STEP 017 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.04                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    夹爪已张开，向柱子中心下移到约四厘米高度，避免再次压住桌面。                
+STEP 017 · MOVE TO · RESULT RECORDED
+Waiting for model decision 19 / 60 (step 18)...
+
+STEP 018 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    末端已对准柱体中心并位于桌面上方，闭合夹爪后检查是否产生夹持阻力。          
+STEP 018 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 20 / 60 (step 19)...
+
+STEP 019 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.56  y=0.5  z=0.04                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    闭合后仍无夹持反馈，沿柱体横向微调末端以重新对准其中心。                    
+STEP 019 · MOVE TO · RESULT RECORDED
+Waiting for model decision 21 / 60 (step 20)...
+
+STEP 020 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    横向微调后先张开夹爪，准备在新对准位置重新夹取柱子。                        
+STEP 020 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 22 / 60 (step 21)...
+
+STEP 021 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    夹爪已张开且位于柱体附近，重新闭合以确认是否建立夹持。                      
+STEP 021 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 23 / 60 (step 22)...
+
+STEP 022 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.5  y=0.5  z=0.14                                    
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    再次执行小幅抬升，核验夹持是否可靠并避免直接转运未确认状态。                
+STEP 022 · MOVE TO · RESULT RECORDED
+Waiting for model decision 24 / 60 (step 23)...
+
+STEP 023 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    抬升后插头仍在桌面，确认未夹住；张开夹爪并回到插头正上方重新尝试。          
+STEP 023 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 25 / 60 (step 24)...
+
+STEP 024 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.06                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    夹爪已张开，移动到橙色插头中心上方并保持安全高度，准备精确夹取。            
+STEP 024 · MOVE TO · RESULT RECORDED
+Waiting for model decision 26 / 60 (step 25)...
+
+STEP 025 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    末端已精确位于插头中心上方，闭合夹爪并检查是否出现阻力。                    
+STEP 025 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 27 / 60 (step 26)...
+
+STEP 026 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.14                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    闭合后抬升检查插头是否随动；只有确认离桌后才转运到盒口。                    
+STEP 026 · MOVE TO · RESULT RECORDED
+Waiting for model decision 28 / 60 (step 27)...
+
+STEP 027 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    插头仍留在桌面，当前夹持位置未形成随动；张开后降至插头中心高度重新对准。    
+STEP 027 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 29 / 60 (step 28)...
+
+STEP 028 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.02                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    夹爪已张开，下降到插头实际高度并保持中心对准，准备闭合夹取。                
+STEP 028 · MOVE TO · RESULT RECORDED
+Waiting for model decision 30 / 60 (step 29)...
+
+STEP 029 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    夹爪已降到柱子高度且中心对准，先闭合建立抓持并观察扭矩反馈。                
+STEP 029 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 31 / 60 (step 30)...
+
+STEP 030 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.14                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    夹爪已闭合，抬升检查柱子是否随末端离开桌面；确认抓持后再转运。              
+STEP 030 · MOVE TO · RESULT RECORDED
+Waiting for model decision 32 / 60 (step 31)...
+
+STEP 031 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    抬升后柱子仍在桌面，确认未抓住；先张开夹爪并改用侧向中部接近。              
+STEP 031 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 33 / 60 (step 32)...
+
+STEP 032 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.08                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    夹爪已张开，调整到柱体中部高度，准备从侧面夹持而非压住桌面。                
+STEP 032 · MOVE TO · RESULT RECORDED
+Waiting for model decision 34 / 60 (step 33)...
+
+STEP 033 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    末端已位于柱体中部高度并保持对准，闭合夹爪后检查阻力与随动。                
+STEP 033 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 35 / 60 (step 34)...
+
+STEP 034 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.04                                   
+      └── Quaternion (xyzw)  qx=0.7071  qy=0  qz=0  qw=0.7071                   
+  Note                                                                          
+    当前闭合未形成抓持，改用允许的末端轴向旋转并降至柱体高度重新对准。          
+STEP 034 · MOVE TO · RESULT RECORDED
+Waiting for model decision 36 / 60 (step 35)...
+
+STEP 035 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    轴向旋转后仍无扭矩反馈，先张开释放，再在同一高度重新闭合确认。              
+STEP 035 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 37 / 60 (step 36)...
+
+STEP 036 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.08                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    夹爪已张开且插头仍在原位，恢复竖直姿态并移至插头上方，准备重新夹取。        
+STEP 036 · MOVE TO · RESULT RECORDED
+Waiting for model decision 38 / 60 (step 37)...
+
+STEP 037 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.04                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    已在插头正上方且夹爪张开，下降到柱体中部高度，随后闭合夹取。                
+STEP 037 · MOVE TO · RESULT RECORDED
+Waiting for model decision 39 / 60 (step 38)...
+
+STEP 038 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    末端已降至插头中部且夹爪张开，闭合夹取并观察夹爪反馈与随动。                
+STEP 038 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 40 / 60 (step 39)...
+
+STEP 039 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    竖直夹持仍无扭矩反馈，先张开夹爪，改用横向开合方向重新接近插头。            
+STEP 039 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 41 / 60 (step 40)...
+
+STEP 040 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.04                                   
+      └── Quaternion (xyzw)  qx=0.707107  qy=0  qz=0  qw=0.707107               
+  Note                                                                          
+    夹爪已张开，改为横向开合并保持插头中心对准，准备再次闭合抓取。              
+STEP 040 · MOVE TO · RESULT RECORDED
+Waiting for model decision 42 / 60 (step 41)...
+
+STEP 041 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    横向开合已对准插头中心，闭合夹爪并检查是否产生夹持反馈。                    
+STEP 041 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 43 / 60 (step 42)...
+
+STEP 042 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.14                                   
+      └── Quaternion (xyzw)  qx=0.707107  qy=0  qz=0  qw=0.707107               
+  Note                                                                          
+    闭合后先抬升验证插头是否随末端离桌；若仍静止再调整策略。                    
+STEP 042 · MOVE TO · RESULT RECORDED
+Waiting for model decision 44 / 60 (step 43)...
+
+STEP 043 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    抬升后插头仍在桌面，确认未形成抓持；先张开夹爪以便重新定位。                
+STEP 043 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 45 / 60 (step 44)...
+
+STEP 044 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.04                                   
+      └── Quaternion (xyzw)  qx=0.707107  qy=0  qz=0  qw=0.707107               
+  Note                                                                          
+    夹爪已张开并保持横向开合姿态，下降到插头中部高度重新对准。                  
+STEP 044 · MOVE TO · RESULT RECORDED
+Waiting for model decision 46 / 60 (step 45)...
+
+STEP 045 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    末端已到插头中部并保持横向夹持姿态，闭合夹爪检查阻力与抓持反馈。            
+STEP 045 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 47 / 60 (step 46)...
+
+STEP 046 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    当前闭合仍无阻力，先张开夹爪并准备从侧向重新对准插头。                      
+STEP 046 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 48 / 60 (step 47)...
+
+STEP 047 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.485  z=0.04                                 
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    夹爪张开，沿夹爪开合方向做小幅侧向偏置，重新对准插头中心。                  
+STEP 047 · MOVE TO · RESULT RECORDED
+Waiting for model decision 49 / 60 (step 48)...
+
+STEP 048 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    末端已从侧向靠近插头，夹爪与其有重叠，闭合确认是否产生抓持。                
+STEP 048 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 50 / 60 (step 49)...
+
+STEP 049 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    侧向闭合仍无抓持反馈，先张开并改用更低的接触高度重新尝试。                  
+STEP 049 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 51 / 60 (step 50)...
+
+STEP 050 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.012                                  
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    当前夹爪已张开但横向偏离插头中心，先回到中心并降至接触高度。                
+STEP 050 · MOVE TO · RESULT RECORDED
+Waiting for model decision 52 / 60 (step 51)...
+
+STEP 051 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    末端已回到插头中心并降至接触高度，闭合夹爪后立即抬升验证是否形成抓持。      
+STEP 051 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 53 / 60 (step 52)...
+
+STEP 052 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.57  y=0.5  z=0.12                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    夹爪已闭合但扭矩仍低，先抬升观察插头是否随末端离桌。                        
+STEP 052 · MOVE TO · RESULT RECORDED
+Waiting for model decision 54 / 60 (step 53)...
+
+STEP 053 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    抬升确认插头仍在桌面，当前抓持失败；张开夹爪改用侧向水平接近。              
+STEP 053 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 55 / 60 (step 54)...
+
+STEP 054 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.53  y=0.5  z=0.04                               
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 2                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.57  y=0.5  z=0.04                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    夹爪已张开，先从柱体侧方水平接近，再回到中心形成包夹。                      
+STEP 054 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 56 / 60 (step 55)...
+
+STEP 055 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    水平侧向回到柱体中心，当前夹爪张开且高度合适，闭合后再次验证夹持。          
+STEP 055 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 57 / 60 (step 56)...
+
+STEP 056 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.42  y=0.42  z=0.04                              
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 2                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.3  y=0.33  z=0.04                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    虽未检测到夹持扭矩，尝试保持闭合沿桌面推送柱子至盒口，随后观察是否进入插    
+    座。                                                                        
+STEP 056 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 58 / 60 (step 57)...
+
+STEP 057 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.57  y=0.5  z=0.015                              
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 2                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.3  y=0.33  z=0.015                              
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    夹爪闭合但柱子仍在原桌面位置，先精确贴近柱子底部，再沿桌面推向盒中插座。    
+STEP 057 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 59 / 60 (step 58)...
+
+STEP 058 · GIVE UP · REQUESTED ─────────────────────────────────────────────────
+  Reason                                                                        
+    已多次从正上方、侧向、轴向旋转及桌面推送尝试，夹爪始终无扭矩且柱子未移动    
+    ；当前剩余步数不足以完成新的安全抓取与插入验证。                            
+  Hindsight                                                                     
+    应先用侧向水平工具轴、张开夹爪贴近柱体中部，再单独闭合确认抓持后转运。      
+Returning home...
+
+RETURN HOME · FEEDBACK ─────────────────────────────────────────────────────────
+  Joint positions rad  [-0.005610921028733514, -0.42088819092410207,            
+  -1.3612846207614537, 0.2163088594815924, 0.0014130444350019214,               
+  -0.0015745668680764307]                                                       
+  Joint velocities rad s  [0.00043487346463152966, 0.0025284086554829134,       
+  -0.0029262580622682406, -0.000515830821198087, -0.0020097389390231354,        
+  0.0032095484534060263]                                                        
+  Joint torques nm  [0.4, 0.9, 0.6, 0.2, 0.1, 0.05]                             
+  Joint command positions rad  [0.0, -0.4215639180196111, -1.364332619533904,   
+  0.21510021075861863, 0.0, 0.0]                                                
+  Tcp xyzrpy  [0.5003289127392754, 4.5082782697336976e-05, 0.2996180498247719,  
+  3.1416048944840815, -7.130006561731505e-05, -0.0003877639708395312]           
+  Tcp xyzquat  [0.5003289127392754, 4.5082782697336976e-05,                     
+  0.2996180498247719, 1.0, 0.0, 0.0, 0.0]                                       
+  Gripper position m  0.088                                                     
+  Gripper normalized  1.0                                                       
+  Gripper command normalized  1.0                                               
+  Gripper velocity m s  0.0                                                     
+  Gripper torque nm  0.25                                                       
+  Gravity compensation  true                                                    
+  Timestamp s  1790076658.4209936                                               
+  Sim time s  71.96000000000075                                                 
+  Home                                                                          
+  ├── Source  gpt_policy_sim.return_home                                        
+  ├── Time scale  1.0                                                           
+  ├── Segment durations s  [3.3499999999999996, 3.8910152916687437]             
+  ├── Target joint positions rad  [0.0, -0.4215639180196111,                    
+  │   -1.364332619533904, 0.21510021075861863, 0.0, 0.0]                        
+  ├── Max joint residual rad  0.001                                             
+  ├── Gripper target normalized  1.0                                            
+  └── Settle                                                                    
+      ├── Settled  true                                                         
+      ├── Method  simulated_synchronous                                         
+      └── Window s  0.2                                                         
+Home complete.
+
+TASK · FAILED ──────────────────────────────────────────────────────────────────
+Recording saved: 
+/home/deneb/Projects/paper-scout/workspace/code/gpt-policy-sim/runs/T2_target_s1
+_20260922-191353_failed
+[sim] ground-truth success=False (plug_in_box=False dist_xy=0.358 plug_z=0.008 grasped=None)
+[sim] recording: /home/deneb/Projects/paper-scout/workspace/code/gpt-policy-sim/runs/T2_target_s1_20260922-191353_failed
+
+# cell finished rc=0 timeout=False wall=1026s

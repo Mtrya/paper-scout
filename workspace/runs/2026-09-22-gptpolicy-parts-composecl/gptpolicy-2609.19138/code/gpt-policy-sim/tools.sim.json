@@ -1,0 +1,174 @@
+{
+  "version": 1,
+  "selection_description": "One GPT-Policy-shaped tool selection for a robot arm with {dof} joints. Movement is absolute calibrated TCP control; the host performs frame conversion, IK, and SDK trajectory execution.",
+  "schemas": {
+    "pose": {
+      "type": "object",
+      "properties": {
+        "pose_xyzquat": {
+          "type": "array",
+          "items": {"type": "number"},
+          "minItems": 7,
+          "maxItems": 7,
+          "description": "Absolute [x,y,z,qx,qy,qz,qw] in the arm base frame."
+        }
+      },
+      "required": ["pose_xyzquat"],
+      "additionalProperties": false
+    },
+    "nullable_number": {
+      "anyOf": [{"type": "number"}, {"type": "null"}]
+    },
+    "pixel": {
+      "type": "array",
+      "items": {"type": "number"},
+      "minItems": 2,
+      "maxItems": 2
+    }
+  },
+  "tools": [
+    {
+      "name": "move_to",
+      "handler": "robot.move_to",
+      "enabled": true,
+      "modes": ["single", "bimanual"],
+      "description": "Move to one absolute calibrated TCP pose; host preserves the target and only densifies and retimes the direct TCP path.",
+      "prompt": "One absolute TCP target. For one arm, arguments.target is a pose; for two arms, target.left/right are poses or null. pose_xyzquat is [x,y,z,qx,qy,qz,qw], in metres with a unit quaternion. The host samples the direct straight-line/SLERP path from the current TCP, applies calibrated frame conversion and per-sample IK, then smooths timing only. Only configured IK residuals are allowed. Gripper targets remain unchanged throughout the move.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "target": {"$template": "target_pose"},
+          "note": {"type": "string"}
+        },
+        "required": ["target", "note"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "move_eef_chunk",
+      "handler": "robot.move_eef_chunk",
+      "enabled": true,
+      "modes": ["single", "bimanual"],
+      "description": "Move through one or more absolute calibrated TCP poses for a {dof}-joint arm; host preserves every pose and their order, densifies the same path, and changes timing only.",
+      "prompt": "An absolute TCP path. arguments.poses contains one or more ordered waypoints with no schema-imposed waypoint limit; each bimanual waypoint contains left/right. The host preserves every target and its order, adding samples only along the original straight-line/SLERP segments and adjusting timing. IK may differ within configured execution tolerances. Speed, acceleration and jerk are handled by retiming, not by asking you to rewrite the path. Gripper targets remain unchanged throughout the chunk.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "poses": {
+            "type": "array",
+            "items": {"$template": "target_pose"},
+            "minItems": 1
+          },
+          "note": {"type": "string"}
+        },
+        "required": ["poses", "note"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "set_gripper",
+      "handler": "robot.set_gripper",
+      "enabled": true,
+      "modes": ["single", "bimanual"],
+      "description": "Stream a normalized gripper opening from encoder feedback while retaining the last submitted arm target.",
+      "prompt": "Use gripper for one arm or positions.left/right for two arms. Normalized opening is 0 fully closed, 1 fully open. The host advances a gripper reference trajectory; after SDK-reported obstruction, it brings the reference near measured position to avoid accumulating large error. Results distinguish requested, submitted and measured values. Arms retain their last submitted targets; an unselected side holds.",
+      "parameters_by_mode": {
+        "single": {
+          "type": "object",
+          "properties": {
+            "gripper": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "description": "Normalized opening: 0 closed, 1 open."
+            },
+            "note": {"type": "string"}
+          },
+          "required": ["gripper", "note"],
+          "additionalProperties": false
+        },
+        "bimanual": {
+          "type": "object",
+          "properties": {
+            "positions": {"$template": "gripper_positions"},
+            "note": {"type": "string"}
+          },
+          "required": ["positions", "note"],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "name": "check_path",
+      "handler": "robot.check_path",
+      "modes": ["single", "bimanual"],
+      "description": "Check absolute TCP poses using the same IK and timing planner as move_eef_chunk, without sending commands. Does not check collisions or prove physical tracking.",
+      "prompt": "Same parameters as move_eef_chunk. Read-only checks of full-path IK, joint limits and timing; sends no arm or gripper commands. Compare alternative approach heights, positions or permitted axial rotations after IK rejection while preserving required contact direction. Do not change the grasp merely to make IK pass. Acceptance proves neither collision clearance nor physical arrival; execution replans from fresh feedback.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "poses": {"type": "array", "items": {"$template": "target_pose"}, "minItems": 1},
+          "note": {"type": "string"}
+        },
+        "required": ["poses", "note"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "locate_point",
+      "handler": "vision.locate_point",
+      "enabled": true,
+      "modes": ["single", "bimanual"],
+      "description": "Convert a visible pixel into a camera ray. With two observations and a verified wrist extrinsic, the host also returns a metric base-frame estimate. For the top camera it returns rays in both arm base frames. RGB only.",
+      "prompt": "pixel_xy uses image coordinates [x,y] with origin at the top left. Returns a distortion-corrected camera ray. Two wrist observations with parallax can triangulate metric base-frame coordinates. Use a metric result only when metric_position_available=true; triangulation_candidate_base_xyz from degenerate geometry is diagnostic only. The top camera returns rays in both arm base_link frames. A single RGB image still has no depth.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "camera": {"$template": "camera_name"},
+          "pixel_xy": {"$schema": "pixel"},
+          "reference_step": {"type": "integer", "minimum": 0},
+          "reference_pixel_xy": {"$schema": "pixel"},
+          "note": {"type": "string"}
+        },
+        "required": ["camera", "pixel_xy", "note"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "done",
+      "handler": "terminal.done",
+      "enabled": true,
+      "terminal": true,
+      "modes": ["single", "bimanual"],
+      "description": "Request task completion only when fresh observations establish the physical outcome. This is the model's conclusion; a human assigns the final success/failure label after execution ends.",
+      "prompt": "Request completion only when fresh observations establish the physical goal. A human assigns final success/failure; done itself is not a success label. In summary, give direct evidence distinguishing completion from an unfinished state, plus remaining uncertainty. For insertion tasks: confirm actual mating and seating, not merely resting on the socket. Do not declare completion after withdrawing due to load while the result remains unconfirmed. For all tasks, continue safe verification or recovery while the outcome is uncertain; do not stop early merely to hand the decision to a human.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "summary": {"type": "string", "description": "Direct current evidence of the requested physical outcome, resolution of prior obstruction or misalignment, and any remaining uncertainty. A human assigns the final label."},
+          "hindsight": {"type": "string"}
+        },
+        "required": ["summary", "hindsight"],
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "give_up",
+      "handler": "terminal.give_up",
+      "enabled": true,
+      "terminal": true,
+      "modes": ["single", "bimanual"],
+      "description": "End the task when it cannot be completed.",
+      "prompt": "End when evidence shows the task cannot be completed within safety constraints. In reason, report attempted strategies and why no reasonable safe continuation remains; hindsight records lessons from this attempt.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "reason": {"type": "string"},
+          "hindsight": {"type": "string"}
+        },
+        "required": ["reason", "hindsight"],
+        "additionalProperties": false
+      }
+    }
+  ]
+}

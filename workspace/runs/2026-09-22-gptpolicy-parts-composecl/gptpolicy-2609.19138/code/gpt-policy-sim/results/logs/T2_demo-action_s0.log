@@ -1,0 +1,314 @@
+# cell T2 demo-action seed=0 started 19:36:02
+Waiting for model decision 1 / 60 (step 0)...
+
+STEP 000 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    当前夹爪已张开且柱子在桌面，先闭合夹爪准备后续推拨。                        
+STEP 000 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 2 / 60 (step 1)...
+
+STEP 001 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.575  y=0.5  z=0.1                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    夹爪已闭合且柱子位于前方，先从上方对准柱子再下降接触。                      
+STEP 001 · MOVE TO · RESULT RECORDED
+Waiting for model decision 3 / 60 (step 2)...
+
+STEP 002 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.575  y=0.5  z=0.02                              
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 2                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.52  y=0.5  z=0.02                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    已稳定悬停在柱子上方，先下降到槽内再沿标记方向推至对齐。                    
+STEP 002 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 4 / 60 (step 3)...
+
+STEP 003 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    柱子已推到标记位置且末端稳定，张开夹爪释放柱子。                            
+STEP 003 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 5 / 60 (step 4)...
+
+STEP 004 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.52  y=0.5  z=0.1                                    
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    柱子已释放且夹爪测得全开，先抬升离开槽面以安全重新对准。                    
+STEP 004 · MOVE TO · RESULT RECORDED
+Waiting for model decision 6 / 60 (step 5)...
+
+STEP 005 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.5  y=0.5  z=0.06                                
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 2                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.5  y=0.5  z=0.012                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    已抬升并确认柱子仍在标记处，下降到柱子顶部准备抓取。                        
+STEP 005 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 7 / 60 (step 6)...
+
+STEP 006 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    末端已下降并对准柱子，闭合夹爪抓取后再搬运到盒口。                          
+STEP 006 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 8 / 60 (step 7)...
+
+STEP 007 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.5  y=0.5  z=0.15                                
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  ├── Waypoint 2                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.267  y=0.25  z=0.15                             
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 3                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.267  y=0.25  z=0.055                            
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    夹爪已闭合且柱子被稳定夹持，抬高绕行至当前盒口中心后下降插入。              
+STEP 007 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 9 / 60 (step 8)...
+
+STEP 008 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    末端已在盒口下方并稳定，先张开夹爪释放柱子，随后观察是否落入盒内。          
+STEP 008 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 10 / 60 (step 9)...
+
+STEP 009 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.267  y=0.25  z=0.15                             
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  ├── Waypoint 2                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.5  y=0.5  z=0.15                                
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 3                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.5  y=0.5  z=0.012                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    盒内未见柱子且前视仍在原桌面位置，先抬高返回柱子上方并下降准备重新抓取。    
+STEP 009 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 11 / 60 (step 10)...
+
+STEP 010 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    末端已重新对准桌面柱子，夹爪张开且位置稳定，闭合以确认抓持。                
+STEP 010 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 12 / 60 (step 11)...
+
+STEP 011 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.5  y=0.5  z=0.15                                
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  ├── Waypoint 2                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.267  y=0.25  z=0.15                             
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 3                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.267  y=0.25  z=0.055                            
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    柱子已闭合夹持且前视仍在夹爪下方，抬高绕行至盒口中心并下降插入。            
+STEP 011 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 13 / 60 (step 12)...
+
+STEP 012 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.5  y=0.5  z=0.15                                
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 2                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.5  y=0.5  z=0.025                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    盒口仍未见柱子且源点保持橙色柱体，返回源点并以稍高接触高度重新尝试抓取。    
+STEP 012 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 14 / 60 (step 13)...
+
+STEP 013 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    已在柱体上方约2.5厘米并稳定，闭合夹爪重新建立抓持后再搬运。                 
+STEP 013 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 15 / 60 (step 14)...
+
+STEP 014 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.5  y=0.5  z=0.012                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    闭合后再下探到柱体接触高度，尝试触发稳定夹持并观察抓取状态。                
+STEP 014 · MOVE TO · RESULT RECORDED
+Waiting for model decision 16 / 60 (step 15)...
+
+STEP 015 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.575  y=0.5  z=0.1                               
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  ├── Waypoint 2                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.575  y=0.5  z=0.02                              
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 3                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.52  y=0.5  z=0.02                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    夹爪已闭合但尚未形成稳定夹持，先从柱子后方下降并沿标记方向推正位置。        
+STEP 015 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 17 / 60 (step 16)...
+
+STEP 016 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    柱子已被推到标记附近且末端稳定，先张开夹爪确认是否脱离并观察柱子位置。      
+STEP 016 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 18 / 60 (step 17)...
+
+STEP 017 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.52  y=0.5  z=0.08                               
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 2                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.52  y=0.5  z=0.012                              
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    柱子仍在标记附近，夹爪已张开，改在柱子实际位置正上方下降准备抓取。          
+STEP 017 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 19 / 60 (step 18)...
+
+STEP 018 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    末端已对准柱子并下降到接触高度，闭合夹爪建立抓持后再搬运。                  
+STEP 018 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 20 / 60 (step 19)...
+
+STEP 019 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.52  y=0.5  z=0.15                               
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  ├── Waypoint 2                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.267  y=0.25  z=0.15                             
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 3                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.267  y=0.25  z=0.055                            
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    夹爪扭矩升至1.1且开度受阻，已确认抓住柱子；抬高绕行至盒口并下降插入。       
+STEP 019 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 21 / 60 (step 20)...
+
+STEP 020 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    末端已稳定位于盒口且仍保持抓持，张开夹爪释放柱子并观察其是否落入盒内。      
+STEP 020 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 22 / 60 (step 21)...
+
+STEP 021 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.267  y=0.25  z=0.18                                 
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    释放后前视显示柱子留在盒内、夹爪已完全张开，抬升末端确认柱子未被带起。      
+STEP 021 · MOVE TO · RESULT RECORDED
+Waiting for model decision 23 / 60 (step 22)...
+
+STEP 022 · DONE · REQUESTED ────────────────────────────────────────────────────
+  Summary                                                                       
+    柱子已释放并稳定留在盒内；夹爪完全张开后抬升至                              
+    z≈0.18，前视确认柱子未被带起，插入完成。                                    
+  Hindsight                                                                     
+    释放后观察并抬升复核，确认柱子与夹爪分离且位于盒中。                        
+Returning home...
+
+RETURN HOME · FEEDBACK ─────────────────────────────────────────────────────────
+  Joint positions rad  [-0.00015308029800495032, -0.4218001161155718,           
+  -1.3637738074555223, 0.2169862086645321, 0.00017372132647380112,              
+  0.0009295844405093195]                                                        
+  Joint velocities rad s  [-0.0036120818647136814, -0.0005368429676853022,      
+  0.0015853188072879835, -0.00046271251071126733, -0.0021860593822005214,       
+  -0.0016249515644384254]                                                       
+  Joint torques nm  [0.4, 0.9, 0.6, 0.2, 0.1, 0.05]                             
+  Joint command positions rad  [0.0, -0.4215639180196111, -1.364332619533904,   
+  0.21510021075861863, 0.0, 0.0]                                                
+  Tcp xyzrpy  [0.5001785693138006, 0.00031272033281106994,                      
+  0.30019074954272634, 3.141592224944793, 0.00015725523547008361,               
+  -0.00022372551367826142]                                                      
+  Tcp xyzquat  [0.5001785693138006, 0.00031272033281106994,                     
+  0.30019074954272634, 1.0, 0.0, 0.0, 0.0]                                      
+  Gripper position m  0.088                                                     
+  Gripper normalized  1.0                                                       
+  Gripper command normalized  1.0                                               
+  Gripper velocity m s  0.0                                                     
+  Gripper torque nm  0.25                                                       
+  Gravity compensation  true                                                    
+  Timestamp s  1790077345.301773                                                
+  Sim time s  55.9000000000026                                                  
+  Home                                                                          
+  ├── Source  gpt_policy_sim.return_home                                        
+  ├── Time scale  1.0                                                           
+  ├── Segment durations s  [1.6999999999999997, 3.453823967720416]              
+  ├── Target joint positions rad  [0.0, -0.4215639180196111,                    
+  │   -1.364332619533904, 0.21510021075861863, 0.0, 0.0]                        
+  ├── Max joint residual rad  0.001                                             
+  ├── Gripper target normalized  1.0                                            
+  └── Settle                                                                    
+      ├── Settled  true                                                         
+      ├── Method  simulated_synchronous                                         
+      └── Window s  0.2                                                         
+Home complete.
+
+TASK · SUCCESS ─────────────────────────────────────────────────────────────────
+Recording saved: 
+/home/deneb/Projects/paper-scout/workspace/code/gpt-policy-sim/runs/T2_demo-acti
+on_s0_20260922-193602_success
+[sim] ground-truth success=True (plug_in_box=True dist_xy=0.011 plug_z=0.013 grasped=None)
+[sim] recording: /home/deneb/Projects/paper-scout/workspace/code/gpt-policy-sim/runs/T2_demo-action_s0_20260922-193602_success
+
+# cell finished rc=0 timeout=False wall=383s

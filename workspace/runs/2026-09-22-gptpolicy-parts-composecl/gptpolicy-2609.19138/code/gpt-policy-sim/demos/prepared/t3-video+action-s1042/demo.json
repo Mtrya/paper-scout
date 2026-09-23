@@ -1,0 +1,2502 @@
+{
+  "title": "把红方块放进绿碗",
+  "source": "gpt-policy-sim scripted expert, task T3 (hook-retrieve), seed 1042",
+  "demonstrator": "scripted_expert_oracle_sim",
+  "coverage": "complete_episode",
+  "summary": "Simulated expert rollout; stages: approach-hook -> descend-hook -> grasp-hook -> lift-hook -> insert-hook-high -> lower-hook-behind -> drag-cube-out -> lift-hook-away -> drop-zone -> release-hook -> approach-cube -> descend-cube -> grasp-cube -> carry-to-bowl -> release-cube -> retract -> done",
+  "outcome": "success",
+  "finalization_state": "completed",
+  "coordinate_frame": "Simulated single-arm base frame: +x forward, +y left, +z up; metres; quaternion xyzw. EE is a point TCP; measured orientation tracks the commanded one. Gripper normalized: 0 closed, 1 open. Samples are exact simulated measurements.",
+  "source_robot": {
+    "model": "SIM-X5",
+    "machine": "gpt-policy-sim",
+    "interfaces": [
+      "sim0",
+      null
+    ]
+  },
+  "schema_version": 1,
+  "mode": "video+action",
+  "keyframes": [
+    {
+      "t_s": 0.0,
+      "stage": "approach-hook",
+      "observation": "移到钩子上方",
+      "images": {
+        "top": "keyframes/0000-00.jpg",
+        "front": "keyframes/0000-01.jpg"
+      },
+      "image_times": {
+        "top": 0.0,
+        "front": 0.0
+      },
+      "state": {
+        "left": {
+          "joint_measured_rad": [
+            0.0,
+            -0.421564,
+            -1.364333,
+            0.2151,
+            0.0,
+            0.0
+          ],
+          "eef_measured_xyz_xyzw": [
+            0.5,
+            0.0,
+            0.3,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gripper_measured": 1.0,
+          "gripper_command": 1.0
+        }
+      },
+      "alignment": {
+        "method": "sim_synchronous_capture",
+        "captured_at_s": 0.0,
+        "state_observed_at_s": 0.0,
+        "delta_s": 0.0,
+        "max_delta_s": 0.1,
+        "exposure_synchronized": true
+      },
+      "action": {
+        "kind": "measured_single_arm_segment",
+        "time_basis": "sim_elapsed_s",
+        "samples": [
+          {
+            "t_s": 0.0,
+            "left": {
+              "joint_measured_rad": [
+                0.0,
+                -0.421564,
+                -1.364333,
+                0.2151,
+                0.0,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.5,
+                0.0,
+                0.3,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 1.0
+            }
+          },
+          {
+            "t_s": 1.0,
+            "left": {
+              "joint_measured_rad": [
+                0.159085,
+                -0.360211,
+                -1.501009,
+                0.290424,
+                0.079207,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.450052,
+                0.072207,
+                0.253052,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 1.0
+            }
+          },
+          {
+            "t_s": 2.0,
+            "left": {
+              "joint_measured_rad": [
+                0.346387,
+                -0.248972,
+                -1.533826,
+                0.212001,
+                0.169751,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.400104,
+                0.144413,
+                0.206103,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 1.0
+            }
+          },
+          {
+            "t_s": 3.0,
+            "left": {
+              "joint_measured_rad": [
+                0.554012,
+                -0.108073,
+                -1.465609,
+                0.002885,
+                0.263052,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.350156,
+                0.21662,
+                0.159155,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 1.0
+            }
+          },
+          {
+            "t_s": 4.0,
+            "left": {
+              "joint_measured_rad": [
+                0.76608,
+                0.051244,
+                -1.294383,
+                -0.327658,
+                0.346658,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.300207,
+                0.288827,
+                0.112207,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 1.0
+            }
+          },
+          {
+            "t_s": 4.2,
+            "left": {
+              "joint_measured_rad": [
+                0.807384,
+                0.085677,
+                -1.246667,
+                -0.409806,
+                0.36124,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.290218,
+                0.303268,
+                0.102817,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 1.0
+            }
+          }
+        ],
+        "requested_tools": [
+          {
+            "at_s": 0.0,
+            "step": 0,
+            "name": "move_to",
+            "arguments": {
+              "target": {
+                "pose_xyzquat": [
+                  0.2872208658840271,
+                  0.30760036623419534,
+                  0.1,
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "note": "移到钩子上方"
+            },
+            "reported_result": "execution_result"
+          }
+        ],
+        "max_sample_gap_s": 0.1,
+        "compression": {
+          "method": "periodic_and_gripper_events",
+          "sample_period_s": 1.0,
+          "time_field": "t_s",
+          "input_samples": 43,
+          "output_samples": 6
+        }
+      },
+      "image_ids": {
+        "top": "image_0",
+        "front": "image_1"
+      }
+    },
+    {
+      "t_s": 4.26,
+      "stage": "descend-hook",
+      "observation": "下降对钩子",
+      "images": {
+        "top": "keyframes/0001-00.jpg",
+        "front": "keyframes/0001-01.jpg"
+      },
+      "image_times": {
+        "top": 4.26,
+        "front": 4.26
+      },
+      "state": {
+        "left": {
+          "joint_measured_rad": [
+            0.819646,
+            0.096238,
+            -1.231378,
+            -0.435656,
+            0.365452,
+            0.0
+          ],
+          "eef_measured_xyz_xyzw": [
+            0.287221,
+            0.3076,
+            0.1,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gripper_measured": 1.0,
+          "gripper_command": 1.0
+        }
+      },
+      "alignment": {
+        "method": "sim_synchronous_capture",
+        "captured_at_s": 4.26,
+        "state_observed_at_s": 4.26,
+        "delta_s": 0.0,
+        "max_delta_s": 0.1,
+        "exposure_synchronized": true
+      },
+      "action": {
+        "kind": "measured_single_arm_segment",
+        "time_basis": "sim_elapsed_s",
+        "samples": [
+          {
+            "t_s": 4.26,
+            "left": {
+              "joint_measured_rad": [
+                0.819646,
+                0.096238,
+                -1.231378,
+                -0.435656,
+                0.365452,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.287221,
+                0.3076,
+                0.1,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 1.0
+            }
+          },
+          {
+            "t_s": 5.06,
+            "left": {
+              "joint_measured_rad": [
+                0.819646,
+                0.389647,
+                -0.864778,
+                -1.095665,
+                0.365452,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.287221,
+                0.3076,
+                0.02093,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 1.0
+            }
+          }
+        ],
+        "requested_tools": [
+          {
+            "at_s": 4.26,
+            "step": 1,
+            "name": "move_to",
+            "arguments": {
+              "target": {
+                "pose_xyzquat": [
+                  0.2872208658840271,
+                  0.30760036623419534,
+                  0.015,
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "note": "下降对钩子"
+            },
+            "reported_result": "execution_result"
+          }
+        ],
+        "max_sample_gap_s": 0.1,
+        "compression": {
+          "method": "periodic_and_gripper_events",
+          "sample_period_s": 1.0,
+          "time_field": "t_s",
+          "input_samples": 9,
+          "output_samples": 2
+        }
+      },
+      "image_ids": {
+        "top": "image_2",
+        "front": "image_3"
+      }
+    },
+    {
+      "t_s": 5.12,
+      "stage": "grasp-hook",
+      "observation": "闭合夹爪抓钩子",
+      "images": {
+        "top": "keyframes/0002-00.jpg",
+        "front": "keyframes/0002-01.jpg"
+      },
+      "image_times": {
+        "top": 5.12,
+        "front": 5.12
+      },
+      "state": {
+        "left": {
+          "joint_measured_rad": [
+            0.819646,
+            0.414675,
+            -0.829426,
+            -1.156045,
+            0.365452,
+            0.0
+          ],
+          "eef_measured_xyz_xyzw": [
+            0.287221,
+            0.3076,
+            0.015,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gripper_measured": 1.0,
+          "gripper_command": 1.0
+        }
+      },
+      "alignment": {
+        "method": "sim_synchronous_capture",
+        "captured_at_s": 5.12,
+        "state_observed_at_s": 5.12,
+        "delta_s": 0.0,
+        "max_delta_s": 0.1,
+        "exposure_synchronized": true
+      },
+      "action": {
+        "kind": "measured_single_arm_segment",
+        "time_basis": "sim_elapsed_s",
+        "samples": [
+          {
+            "t_s": 5.12,
+            "left": {
+              "joint_measured_rad": [
+                0.819646,
+                0.414675,
+                -0.829426,
+                -1.156045,
+                0.365452,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.287221,
+                0.3076,
+                0.015,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 1.0
+            }
+          }
+        ],
+        "requested_tools": [
+          {
+            "at_s": 5.12,
+            "step": 2,
+            "name": "set_gripper",
+            "arguments": {
+              "gripper": 0.0,
+              "note": "闭合夹爪抓钩子"
+            },
+            "reported_result": "execution_result"
+          }
+        ],
+        "max_sample_gap_s": 0.0,
+        "compression": {
+          "method": "periodic_and_gripper_events",
+          "sample_period_s": 1.0,
+          "time_field": "t_s",
+          "input_samples": 1,
+          "output_samples": 1
+        }
+      },
+      "image_ids": {
+        "top": "image_4",
+        "front": "image_5"
+      }
+    },
+    {
+      "t_s": 6.12,
+      "stage": "lift-hook",
+      "observation": "抬起钩子",
+      "images": {
+        "top": "keyframes/0003-00.jpg",
+        "front": "keyframes/0003-01.jpg"
+      },
+      "image_times": {
+        "top": 6.12,
+        "front": 6.12
+      },
+      "state": {
+        "left": {
+          "joint_measured_rad": [
+            0.819646,
+            0.414675,
+            -0.829426,
+            -1.156045,
+            0.365452,
+            0.0
+          ],
+          "eef_measured_xyz_xyzw": [
+            0.287221,
+            0.3076,
+            0.015,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gripper_measured": 1.0,
+          "gripper_command": 0.0
+        }
+      },
+      "alignment": {
+        "method": "sim_synchronous_capture",
+        "captured_at_s": 6.12,
+        "state_observed_at_s": 6.12,
+        "delta_s": 0.0,
+        "max_delta_s": 0.1,
+        "exposure_synchronized": true
+      },
+      "action": {
+        "kind": "measured_single_arm_segment",
+        "time_basis": "sim_elapsed_s",
+        "samples": [
+          {
+            "t_s": 6.12,
+            "left": {
+              "joint_measured_rad": [
+                0.819646,
+                0.414675,
+                -0.829426,
+                -1.156045,
+                0.365452,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.287221,
+                0.3076,
+                0.015,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 7.12,
+            "left": {
+              "joint_measured_rad": [
+                0.819646,
+                0.047896,
+                -1.283304,
+                -0.335389,
+                0.365452,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.287221,
+                0.3076,
+                0.114206,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 7.32,
+            "left": {
+              "joint_measured_rad": [
+                0.819646,
+                -0.018498,
+                -1.350703,
+                -0.201595,
+                0.365452,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.287221,
+                0.3076,
+                0.134048,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          }
+        ],
+        "requested_tools": [
+          {
+            "at_s": 6.12,
+            "step": 3,
+            "name": "move_to",
+            "arguments": {
+              "target": {
+                "pose_xyzquat": [
+                  0.2872208658840271,
+                  0.30760036623419534,
+                  0.14,
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "note": "抬起钩子"
+            },
+            "reported_result": "execution_result"
+          }
+        ],
+        "max_sample_gap_s": 0.1,
+        "compression": {
+          "method": "periodic_and_gripper_events",
+          "sample_period_s": 1.0,
+          "time_field": "t_s",
+          "input_samples": 13,
+          "output_samples": 3
+        }
+      },
+      "image_ids": {
+        "top": "image_6",
+        "front": "image_7"
+      }
+    },
+    {
+      "t_s": 7.38,
+      "stage": "insert-hook-high",
+      "observation": "钩尖从上方伸入管内越过方块",
+      "images": {
+        "top": "keyframes/0004-00.jpg",
+        "front": "keyframes/0004-01.jpg"
+      },
+      "image_times": {
+        "top": 7.38,
+        "front": 7.38
+      },
+      "state": {
+        "left": {
+          "joint_measured_rad": [
+            0.819646,
+            -0.038212,
+            -1.369841,
+            -0.162743,
+            0.365452,
+            0.0
+          ],
+          "eef_measured_xyz_xyzw": [
+            0.287221,
+            0.3076,
+            0.14,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gripper_measured": 1.0,
+          "gripper_command": 0.0
+        }
+      },
+      "alignment": {
+        "method": "sim_synchronous_capture",
+        "captured_at_s": 7.38,
+        "state_observed_at_s": 7.38,
+        "delta_s": 0.0,
+        "max_delta_s": 0.1,
+        "exposure_synchronized": true
+      },
+      "action": {
+        "kind": "measured_single_arm_segment",
+        "time_basis": "sim_elapsed_s",
+        "samples": [
+          {
+            "t_s": 7.38,
+            "left": {
+              "joint_measured_rad": [
+                0.819646,
+                -0.038212,
+                -1.369841,
+                -0.162743,
+                0.365452,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.287221,
+                0.3076,
+                0.14,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 8.38,
+            "left": {
+              "joint_measured_rad": [
+                0.797899,
+                0.124486,
+                -0.83358,
+                -0.861702,
+                0.357945,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.363216,
+                0.372413,
+                0.137326,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 9.38,
+            "left": {
+              "joint_measured_rad": [
+                0.783132,
+                0.46432,
+                -0.0,
+                -2.035117,
+                0.352751,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.439212,
+                0.437226,
+                0.134652,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 10.38,
+            "left": {
+              "joint_measured_rad": [
+                0.772453,
+                0.406345,
+                -0.0,
+                -1.977141,
+                0.348947,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.515208,
+                0.502039,
+                0.131979,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 11.08,
+            "left": {
+              "joint_measured_rad": [
+                0.766583,
+                0.373768,
+                -0.0,
+                -1.944564,
+                0.346839,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.568405,
+                0.547407,
+                0.130107,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          }
+        ],
+        "requested_tools": [
+          {
+            "at_s": 7.38,
+            "step": 4,
+            "name": "move_to",
+            "arguments": {
+              "target": {
+                "pose_xyzquat": [
+                  0.5714445089095287,
+                  0.55,
+                  0.13,
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "note": "钩尖从上方伸入管内越过方块"
+            },
+            "reported_result": "execution_result"
+          }
+        ],
+        "max_sample_gap_s": 0.1,
+        "compression": {
+          "method": "periodic_and_gripper_events",
+          "sample_period_s": 1.0,
+          "time_field": "t_s",
+          "input_samples": 38,
+          "output_samples": 5
+        }
+      },
+      "image_ids": {
+        "top": "image_8",
+        "front": "image_9"
+      }
+    },
+    {
+      "t_s": 11.12,
+      "stage": "lower-hook-behind",
+      "observation": "钩尖落到方块后方",
+      "images": {
+        "top": "keyframes/0005-00.jpg",
+        "front": "keyframes/0005-01.jpg"
+      },
+      "image_times": {
+        "top": 11.12,
+        "front": 11.12
+      },
+      "state": {
+        "left": {
+          "joint_measured_rad": [
+            0.766278,
+            0.372067,
+            -0.0,
+            -1.942864,
+            0.346729,
+            0.0
+          ],
+          "eef_measured_xyz_xyzw": [
+            0.571445,
+            0.55,
+            0.13,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gripper_measured": 1.0,
+          "gripper_command": 0.0
+        }
+      },
+      "alignment": {
+        "method": "sim_synchronous_capture",
+        "captured_at_s": 11.12,
+        "state_observed_at_s": 11.12,
+        "delta_s": 0.0,
+        "max_delta_s": 0.1,
+        "exposure_synchronized": true
+      },
+      "action": {
+        "kind": "measured_single_arm_segment",
+        "time_basis": "sim_elapsed_s",
+        "samples": [
+          {
+            "t_s": 11.12,
+            "left": {
+              "joint_measured_rad": [
+                0.766278,
+                0.372067,
+                -0.0,
+                -1.942864,
+                0.346729,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.571445,
+                0.55,
+                0.13,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 11.32,
+            "left": {
+              "joint_measured_rad": [
+                0.766278,
+                0.395209,
+                -0.0,
+                -1.966005,
+                0.346729,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.571445,
+                0.55,
+                0.11,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          }
+        ],
+        "requested_tools": [
+          {
+            "at_s": 11.12,
+            "step": 5,
+            "name": "move_to",
+            "arguments": {
+              "target": {
+                "pose_xyzquat": [
+                  0.5714445089095287,
+                  0.55,
+                  0.1,
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "note": "钩尖落到方块后方"
+            },
+            "reported_result": "execution_result"
+          }
+        ],
+        "max_sample_gap_s": 0.1,
+        "compression": {
+          "method": "periodic_and_gripper_events",
+          "sample_period_s": 1.0,
+          "time_field": "t_s",
+          "input_samples": 3,
+          "output_samples": 2
+        }
+      },
+      "image_ids": {
+        "top": "image_10",
+        "front": "image_11"
+      }
+    },
+    {
+      "t_s": 11.42,
+      "stage": "drag-cube-out",
+      "observation": "回拖钩子带出方块",
+      "images": {
+        "top": "keyframes/0006-00.jpg",
+        "front": "keyframes/0006-01.jpg"
+      },
+      "image_times": {
+        "top": 11.42,
+        "front": 11.42
+      },
+      "state": {
+        "left": {
+          "joint_measured_rad": [
+            0.766278,
+            0.406616,
+            -0.0,
+            -1.977412,
+            0.346729,
+            0.0
+          ],
+          "eef_measured_xyz_xyzw": [
+            0.571445,
+            0.55,
+            0.1,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gripper_measured": 1.0,
+          "gripper_command": 0.0
+        }
+      },
+      "alignment": {
+        "method": "sim_synchronous_capture",
+        "captured_at_s": 11.42,
+        "state_observed_at_s": 11.42,
+        "delta_s": 0.0,
+        "max_delta_s": 0.1,
+        "exposure_synchronized": true
+      },
+      "action": {
+        "kind": "measured_single_arm_segment",
+        "time_basis": "sim_elapsed_s",
+        "samples": [
+          {
+            "t_s": 11.42,
+            "left": {
+              "joint_measured_rad": [
+                0.766278,
+                0.406616,
+                -0.0,
+                -1.977412,
+                0.346729,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.571445,
+                0.55,
+                0.1,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 12.42,
+            "left": {
+              "joint_measured_rad": [
+                0.862153,
+                0.443035,
+                -0.0,
+                -2.013831,
+                0.379623,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.471445,
+                0.55,
+                0.1,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 13.42,
+            "left": {
+              "joint_measured_rad": [
+                0.976804,
+                0.480656,
+                -0.0,
+                -2.051452,
+                0.414356,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.371445,
+                0.55,
+                0.1,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 14.42,
+            "left": {
+              "joint_measured_rad": [
+                1.112334,
+                0.516591,
+                -0.0,
+                -2.087387,
+                0.448367,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.271445,
+                0.55,
+                0.1,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 15.12,
+            "left": {
+              "joint_measured_rad": [
+                1.219708,
+                0.538443,
+                -0.0,
+                -2.10924,
+                0.469499,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.201445,
+                0.55,
+                0.1,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          }
+        ],
+        "requested_tools": [
+          {
+            "at_s": 11.42,
+            "step": 6,
+            "name": "move_to",
+            "arguments": {
+              "target": {
+                "pose_xyzquat": [
+                  0.1914445089095287,
+                  0.55,
+                  0.1,
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "note": "回拖钩子带出方块"
+            },
+            "reported_result": "execution_result"
+          }
+        ],
+        "max_sample_gap_s": 0.1,
+        "compression": {
+          "method": "periodic_and_gripper_events",
+          "sample_period_s": 1.0,
+          "time_field": "t_s",
+          "input_samples": 38,
+          "output_samples": 5
+        }
+      },
+      "image_ids": {
+        "top": "image_12",
+        "front": "image_13"
+      }
+    },
+    {
+      "t_s": 15.22,
+      "stage": "lift-hook-away",
+      "observation": "抬起钩子",
+      "images": {
+        "top": "keyframes/0007-00.jpg",
+        "front": "keyframes/0007-01.jpg"
+      },
+      "image_times": {
+        "top": 15.22,
+        "front": 15.22
+      },
+      "state": {
+        "left": {
+          "joint_measured_rad": [
+            1.235832,
+            0.54122,
+            -0.0,
+            -2.112016,
+            0.472211,
+            0.0
+          ],
+          "eef_measured_xyz_xyzw": [
+            0.191445,
+            0.55,
+            0.1,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gripper_measured": 1.0,
+          "gripper_command": 0.0
+        }
+      },
+      "alignment": {
+        "method": "sim_synchronous_capture",
+        "captured_at_s": 15.22,
+        "state_observed_at_s": 15.22,
+        "delta_s": 0.0,
+        "max_delta_s": 0.1,
+        "exposure_synchronized": true
+      },
+      "action": {
+        "kind": "measured_single_arm_segment",
+        "time_basis": "sim_elapsed_s",
+        "samples": [
+          {
+            "t_s": 15.22,
+            "left": {
+              "joint_measured_rad": [
+                1.235832,
+                0.54122,
+                -0.0,
+                -2.112016,
+                0.472211,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.191445,
+                0.55,
+                0.1,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 15.72,
+            "left": {
+              "joint_measured_rad": [
+                1.235832,
+                0.36801,
+                -0.202713,
+                -1.736094,
+                0.472211,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.191445,
+                0.55,
+                0.15,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          }
+        ],
+        "requested_tools": [
+          {
+            "at_s": 15.22,
+            "step": 7,
+            "name": "move_to",
+            "arguments": {
+              "target": {
+                "pose_xyzquat": [
+                  0.1914445089095287,
+                  0.55,
+                  0.16,
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "note": "抬起钩子"
+            },
+            "reported_result": "execution_result"
+          }
+        ],
+        "max_sample_gap_s": 0.1,
+        "compression": {
+          "method": "periodic_and_gripper_events",
+          "sample_period_s": 1.0,
+          "time_field": "t_s",
+          "input_samples": 6,
+          "output_samples": 2
+        }
+      },
+      "image_ids": {
+        "top": "image_14",
+        "front": "image_15"
+      }
+    },
+    {
+      "t_s": 15.82,
+      "stage": "drop-zone",
+      "observation": "移开放下钩子",
+      "images": {
+        "top": "keyframes/0008-00.jpg",
+        "front": "keyframes/0008-01.jpg"
+      },
+      "image_times": {
+        "top": 15.82,
+        "front": 15.82
+      },
+      "state": {
+        "left": {
+          "joint_measured_rad": [
+            1.235832,
+            0.29566,
+            -0.317305,
+            -1.549151,
+            0.472211,
+            0.0
+          ],
+          "eef_measured_xyz_xyzw": [
+            0.191445,
+            0.55,
+            0.16,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gripper_measured": 1.0,
+          "gripper_command": 0.0
+        }
+      },
+      "alignment": {
+        "method": "sim_synchronous_capture",
+        "captured_at_s": 15.82,
+        "state_observed_at_s": 15.82,
+        "delta_s": 0.0,
+        "max_delta_s": 0.1,
+        "exposure_synchronized": true
+      },
+      "action": {
+        "kind": "measured_single_arm_segment",
+        "time_basis": "sim_elapsed_s",
+        "samples": [
+          {
+            "t_s": 15.82,
+            "left": {
+              "joint_measured_rad": [
+                1.235832,
+                0.29566,
+                -0.317305,
+                -1.549151,
+                0.472211,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.191445,
+                0.55,
+                0.16,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 16.82,
+            "left": {
+              "joint_measured_rad": [
+                1.076326,
+                0.090741,
+                -0.797638,
+                -0.863899,
+                0.44011,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.255301,
+                0.473529,
+                0.16,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 17.42,
+            "left": {
+              "joint_measured_rad": [
+                0.969133,
+                0.040414,
+                -0.932027,
+                -0.679183,
+                0.412198,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.293614,
+                0.427647,
+                0.16,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          }
+        ],
+        "requested_tools": [
+          {
+            "at_s": 15.82,
+            "step": 8,
+            "name": "move_to",
+            "arguments": {
+              "target": {
+                "pose_xyzquat": [
+                  0.3,
+                  0.42,
+                  0.16,
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "note": "移开放下钩子"
+            },
+            "reported_result": "execution_result"
+          }
+        ],
+        "max_sample_gap_s": 0.1,
+        "compression": {
+          "method": "periodic_and_gripper_events",
+          "sample_period_s": 1.0,
+          "time_field": "t_s",
+          "input_samples": 17,
+          "output_samples": 3
+        }
+      },
+      "image_ids": {
+        "top": "image_16",
+        "front": "image_17"
+      }
+    },
+    {
+      "t_s": 17.52,
+      "stage": "release-hook",
+      "observation": "放下钩子",
+      "images": {
+        "top": "keyframes/0009-00.jpg",
+        "front": "keyframes/0009-01.jpg"
+      },
+      "image_times": {
+        "top": 17.52,
+        "front": 17.52
+      },
+      "state": {
+        "left": {
+          "joint_measured_rad": [
+            0.950547,
+            0.034417,
+            -0.948749,
+            -0.656464,
+            0.406867,
+            0.0
+          ],
+          "eef_measured_xyz_xyzw": [
+            0.3,
+            0.42,
+            0.16,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gripper_measured": 1.0,
+          "gripper_command": 0.0
+        }
+      },
+      "alignment": {
+        "method": "sim_synchronous_capture",
+        "captured_at_s": 17.52,
+        "state_observed_at_s": 17.52,
+        "delta_s": 0.0,
+        "max_delta_s": 0.1,
+        "exposure_synchronized": true
+      },
+      "action": {
+        "kind": "measured_single_arm_segment",
+        "time_basis": "sim_elapsed_s",
+        "samples": [
+          {
+            "t_s": 17.52,
+            "left": {
+              "joint_measured_rad": [
+                0.950547,
+                0.034417,
+                -0.948749,
+                -0.656464,
+                0.406867,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.3,
+                0.42,
+                0.16,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 0.0
+            }
+          }
+        ],
+        "requested_tools": [
+          {
+            "at_s": 17.52,
+            "step": 9,
+            "name": "set_gripper",
+            "arguments": {
+              "gripper": 1.0,
+              "note": "放下钩子"
+            },
+            "reported_result": "execution_result"
+          }
+        ],
+        "max_sample_gap_s": 0.0,
+        "compression": {
+          "method": "periodic_and_gripper_events",
+          "sample_period_s": 1.0,
+          "time_field": "t_s",
+          "input_samples": 1,
+          "output_samples": 1
+        }
+      },
+      "image_ids": {
+        "top": "image_18",
+        "front": "image_19"
+      }
+    },
+    {
+      "t_s": 18.52,
+      "stage": "approach-cube",
+      "observation": "移到方块上方",
+      "images": {
+        "top": "keyframes/0010-00.jpg",
+        "front": "keyframes/0010-01.jpg"
+      },
+      "image_times": {
+        "top": 18.52,
+        "front": 18.52
+      },
+      "state": {
+        "left": {
+          "joint_measured_rad": [
+            0.950547,
+            0.034417,
+            -0.948749,
+            -0.656464,
+            0.406867,
+            0.0
+          ],
+          "eef_measured_xyz_xyzw": [
+            0.3,
+            0.42,
+            0.16,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gripper_measured": 1.0,
+          "gripper_command": 1.0
+        }
+      },
+      "alignment": {
+        "method": "sim_synchronous_capture",
+        "captured_at_s": 18.52,
+        "state_observed_at_s": 18.52,
+        "delta_s": 0.0,
+        "max_delta_s": 0.1,
+        "exposure_synchronized": true
+      },
+      "action": {
+        "kind": "measured_single_arm_segment",
+        "time_basis": "sim_elapsed_s",
+        "samples": [
+          {
+            "t_s": 18.52,
+            "left": {
+              "joint_measured_rad": [
+                0.950547,
+                0.034417,
+                -0.948749,
+                -0.656464,
+                0.406867,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.3,
+                0.42,
+                0.16,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 1.0
+            }
+          },
+          {
+            "t_s": 19.52,
+            "left": {
+              "joint_measured_rad": [
+                0.953312,
+                0.468214,
+                -0.0,
+                -2.039011,
+                0.407669,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.354539,
+                0.499268,
+                0.13561,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 1.0
+            }
+          },
+          {
+            "t_s": 20.12,
+            "left": {
+              "joint_measured_rad": [
+                0.95459,
+                0.449341,
+                -0.0,
+                -2.020137,
+                0.408038,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.387263,
+                0.546829,
+                0.120976,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 1.0
+            }
+          }
+        ],
+        "requested_tools": [
+          {
+            "at_s": 18.52,
+            "step": 10,
+            "name": "move_to",
+            "arguments": {
+              "target": {
+                "pose_xyzquat": [
+                  0.3894445089095287,
+                  0.55,
+                  0.12,
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "note": "移到方块上方"
+            },
+            "reported_result": "execution_result"
+          }
+        ],
+        "max_sample_gap_s": 0.1,
+        "compression": {
+          "method": "periodic_and_gripper_events",
+          "sample_period_s": 1.0,
+          "time_field": "t_s",
+          "input_samples": 17,
+          "output_samples": 3
+        }
+      },
+      "image_ids": {
+        "top": "image_20",
+        "front": "image_21"
+      }
+    },
+    {
+      "t_s": 20.16,
+      "stage": "descend-cube",
+      "observation": "下降对方块",
+      "images": {
+        "top": "keyframes/0011-00.jpg",
+        "front": "keyframes/0011-01.jpg"
+      },
+      "image_times": {
+        "top": 20.16,
+        "front": 20.16
+      },
+      "state": {
+        "left": {
+          "joint_measured_rad": [
+            0.954667,
+            0.448196,
+            -0.0,
+            -2.018992,
+            0.408061,
+            0.0
+          ],
+          "eef_measured_xyz_xyzw": [
+            0.389445,
+            0.55,
+            0.12,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gripper_measured": 1.0,
+          "gripper_command": 1.0
+        }
+      },
+      "alignment": {
+        "method": "sim_synchronous_capture",
+        "captured_at_s": 20.16,
+        "state_observed_at_s": 20.16,
+        "delta_s": 0.0,
+        "max_delta_s": 0.1,
+        "exposure_synchronized": true
+      },
+      "action": {
+        "kind": "measured_single_arm_segment",
+        "time_basis": "sim_elapsed_s",
+        "samples": [
+          {
+            "t_s": 20.16,
+            "left": {
+              "joint_measured_rad": [
+                0.954667,
+                0.448196,
+                -0.0,
+                -2.018992,
+                0.408061,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.389445,
+                0.55,
+                0.12,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 1.0
+            }
+          },
+          {
+            "t_s": 21.06,
+            "left": {
+              "joint_measured_rad": [
+                0.954667,
+                0.558658,
+                -0.0,
+                -2.129454,
+                0.408061,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.389445,
+                0.55,
+                0.03,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 1.0
+            }
+          }
+        ],
+        "requested_tools": [
+          {
+            "at_s": 20.16,
+            "step": 11,
+            "name": "move_to",
+            "arguments": {
+              "target": {
+                "pose_xyzquat": [
+                  0.3894445089095287,
+                  0.55,
+                  0.026,
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "note": "下降对方块"
+            },
+            "reported_result": "execution_result"
+          }
+        ],
+        "max_sample_gap_s": 0.1,
+        "compression": {
+          "method": "periodic_and_gripper_events",
+          "sample_period_s": 1.0,
+          "time_field": "t_s",
+          "input_samples": 10,
+          "output_samples": 2
+        }
+      },
+      "image_ids": {
+        "top": "image_22",
+        "front": "image_23"
+      }
+    },
+    {
+      "t_s": 21.1,
+      "stage": "grasp-cube",
+      "observation": "闭合夹爪抓方块",
+      "images": {
+        "top": "keyframes/0012-00.jpg",
+        "front": "keyframes/0012-01.jpg"
+      },
+      "image_times": {
+        "top": 21.1,
+        "front": 21.1
+      },
+      "state": {
+        "left": {
+          "joint_measured_rad": [
+            0.954667,
+            0.563254,
+            -0.0,
+            -2.13405,
+            0.408061,
+            0.0
+          ],
+          "eef_measured_xyz_xyzw": [
+            0.389445,
+            0.55,
+            0.026,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gripper_measured": 1.0,
+          "gripper_command": 1.0
+        }
+      },
+      "alignment": {
+        "method": "sim_synchronous_capture",
+        "captured_at_s": 21.1,
+        "state_observed_at_s": 21.1,
+        "delta_s": 0.0,
+        "max_delta_s": 0.1,
+        "exposure_synchronized": true
+      },
+      "action": {
+        "kind": "measured_single_arm_segment",
+        "time_basis": "sim_elapsed_s",
+        "samples": [
+          {
+            "t_s": 21.1,
+            "left": {
+              "joint_measured_rad": [
+                0.954667,
+                0.563254,
+                -0.0,
+                -2.13405,
+                0.408061,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.389445,
+                0.55,
+                0.026,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 1.0
+            }
+          }
+        ],
+        "requested_tools": [
+          {
+            "at_s": 21.1,
+            "step": 12,
+            "name": "set_gripper",
+            "arguments": {
+              "gripper": 0.0,
+              "note": "闭合夹爪抓方块"
+            },
+            "reported_result": "execution_result"
+          }
+        ],
+        "max_sample_gap_s": 0.0,
+        "compression": {
+          "method": "periodic_and_gripper_events",
+          "sample_period_s": 1.0,
+          "time_field": "t_s",
+          "input_samples": 1,
+          "output_samples": 1
+        }
+      },
+      "image_ids": {
+        "top": "image_24",
+        "front": "image_25"
+      }
+    },
+    {
+      "t_s": 22.1,
+      "stage": "carry-to-bowl",
+      "observation": "抓起并移到碗上方",
+      "images": {
+        "top": "keyframes/0013-00.jpg",
+        "front": "keyframes/0013-01.jpg"
+      },
+      "image_times": {
+        "top": 22.1,
+        "front": 22.1
+      },
+      "state": {
+        "left": {
+          "joint_measured_rad": [
+            0.954667,
+            0.563254,
+            -0.0,
+            -2.13405,
+            0.408061,
+            0.0
+          ],
+          "eef_measured_xyz_xyzw": [
+            0.389445,
+            0.55,
+            0.026,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gripper_measured": 0.454545,
+          "gripper_command": 0.0
+        }
+      },
+      "alignment": {
+        "method": "sim_synchronous_capture",
+        "captured_at_s": 22.1,
+        "state_observed_at_s": 22.1,
+        "delta_s": 0.0,
+        "max_delta_s": 0.1,
+        "exposure_synchronized": true
+      },
+      "action": {
+        "kind": "measured_single_arm_segment",
+        "time_basis": "sim_elapsed_s",
+        "samples": [
+          {
+            "t_s": 22.1,
+            "left": {
+              "joint_measured_rad": [
+                0.954667,
+                0.563254,
+                -0.0,
+                -2.13405,
+                0.408061,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.389445,
+                0.55,
+                0.026,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 0.454545,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 23.1,
+            "left": {
+              "joint_measured_rad": [
+                0.954667,
+                0.440356,
+                -0.0,
+                -2.011152,
+                0.408061,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.389445,
+                0.55,
+                0.126,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 0.454545,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 24.1,
+            "left": {
+              "joint_measured_rad": [
+                0.961301,
+                0.308384,
+                -0.0,
+                -1.87918,
+                0.409968,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.388039,
+                0.555795,
+                0.22,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 0.454545,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 25.1,
+            "left": {
+              "joint_measured_rad": [
+                1.061159,
+                0.2793,
+                -0.0,
+                -1.850097,
+                0.436461,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.364606,
+                0.652384,
+                0.22,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 0.454545,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 26.1,
+            "left": {
+              "joint_measured_rad": [
+                1.14336,
+                0.253174,
+                -0.0,
+                -1.823971,
+                0.455016,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.341173,
+                0.748973,
+                0.22,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 0.454545,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 27.1,
+            "left": {
+              "joint_measured_rad": [
+                1.147809,
+                0.361424,
+                -0.0,
+                -1.93222,
+                0.455933,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.339767,
+                0.754769,
+                0.126,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 0.454545,
+              "gripper_command": 0.0
+            }
+          },
+          {
+            "t_s": 27.3,
+            "left": {
+              "joint_measured_rad": [
+                1.147809,
+                0.383731,
+                -0.0,
+                -1.954527,
+                0.455933,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.339767,
+                0.754769,
+                0.106,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 0.454545,
+              "gripper_command": 0.0
+            }
+          }
+        ],
+        "requested_tools": [
+          {
+            "at_s": 22.1,
+            "step": 13,
+            "name": "move_eef_chunk",
+            "arguments": {
+              "poses": [
+                {
+                  "pose_xyzquat": [
+                    0.3894445089095287,
+                    0.55,
+                    0.22,
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "pose_xyzquat": [
+                    0.3397673513827176,
+                    0.7547685881053973,
+                    0.22,
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ]
+                },
+                {
+                  "pose_xyzquat": [
+                    0.3397673513827176,
+                    0.7547685881053973,
+                    0.1,
+                    1.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ]
+                }
+              ],
+              "note": "抓起并移到碗上方"
+            },
+            "reported_result": "execution_result"
+          }
+        ],
+        "max_sample_gap_s": 0.1,
+        "compression": {
+          "method": "periodic_and_gripper_events",
+          "sample_period_s": 1.0,
+          "time_field": "t_s",
+          "input_samples": 53,
+          "output_samples": 7
+        }
+      },
+      "image_ids": {
+        "top": "image_26",
+        "front": "image_27"
+      }
+    },
+    {
+      "t_s": 27.36,
+      "stage": "release-cube",
+      "observation": "松开方块入碗",
+      "images": {
+        "top": "keyframes/0014-00.jpg",
+        "front": "keyframes/0014-01.jpg"
+      },
+      "image_times": {
+        "top": 27.36,
+        "front": 27.36
+      },
+      "state": {
+        "left": {
+          "joint_measured_rad": [
+            1.147809,
+            0.390347,
+            -0.0,
+            -1.961143,
+            0.455933,
+            0.0
+          ],
+          "eef_measured_xyz_xyzw": [
+            0.339767,
+            0.754769,
+            0.1,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gripper_measured": 0.454545,
+          "gripper_command": 0.0
+        }
+      },
+      "alignment": {
+        "method": "sim_synchronous_capture",
+        "captured_at_s": 27.36,
+        "state_observed_at_s": 27.36,
+        "delta_s": 0.0,
+        "max_delta_s": 0.1,
+        "exposure_synchronized": true
+      },
+      "action": {
+        "kind": "measured_single_arm_segment",
+        "time_basis": "sim_elapsed_s",
+        "samples": [
+          {
+            "t_s": 27.36,
+            "left": {
+              "joint_measured_rad": [
+                1.147809,
+                0.390347,
+                -0.0,
+                -1.961143,
+                0.455933,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.339767,
+                0.754769,
+                0.1,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 0.454545,
+              "gripper_command": 0.0
+            }
+          }
+        ],
+        "requested_tools": [
+          {
+            "at_s": 27.36,
+            "step": 14,
+            "name": "set_gripper",
+            "arguments": {
+              "gripper": 1.0,
+              "note": "松开方块入碗"
+            },
+            "reported_result": "execution_result"
+          }
+        ],
+        "max_sample_gap_s": 0.0,
+        "compression": {
+          "method": "periodic_and_gripper_events",
+          "sample_period_s": 1.0,
+          "time_field": "t_s",
+          "input_samples": 1,
+          "output_samples": 1
+        }
+      },
+      "image_ids": {
+        "top": "image_28",
+        "front": "image_29"
+      }
+    },
+    {
+      "t_s": 28.36,
+      "stage": "retract",
+      "observation": "抬升离开",
+      "images": {
+        "top": "keyframes/0015-00.jpg",
+        "front": "keyframes/0015-01.jpg"
+      },
+      "image_times": {
+        "top": 28.36,
+        "front": 28.36
+      },
+      "state": {
+        "left": {
+          "joint_measured_rad": [
+            1.147809,
+            0.390347,
+            -0.0,
+            -1.961143,
+            0.455933,
+            0.0
+          ],
+          "eef_measured_xyz_xyzw": [
+            0.339767,
+            0.754769,
+            0.1,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gripper_measured": 1.0,
+          "gripper_command": 1.0
+        }
+      },
+      "alignment": {
+        "method": "sim_synchronous_capture",
+        "captured_at_s": 28.36,
+        "state_observed_at_s": 28.36,
+        "delta_s": 0.0,
+        "max_delta_s": 0.1,
+        "exposure_synchronized": true
+      },
+      "action": {
+        "kind": "measured_single_arm_segment",
+        "time_basis": "sim_elapsed_s",
+        "samples": [
+          {
+            "t_s": 28.36,
+            "left": {
+              "joint_measured_rad": [
+                1.147809,
+                0.390347,
+                -0.0,
+                -1.961143,
+                0.455933,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.339767,
+                0.754769,
+                0.1,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 1.0
+            }
+          },
+          {
+            "t_s": 29.26,
+            "left": {
+              "joint_measured_rad": [
+                1.147809,
+                0.287541,
+                -0.0,
+                -1.858337,
+                0.455933,
+                0.0
+              ],
+              "eef_measured_xyz_xyzw": [
+                0.339767,
+                0.754769,
+                0.19,
+                1.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "gripper_measured": 1.0,
+              "gripper_command": 1.0
+            }
+          }
+        ],
+        "requested_tools": [
+          {
+            "at_s": 28.36,
+            "step": 15,
+            "name": "move_to",
+            "arguments": {
+              "target": {
+                "pose_xyzquat": [
+                  0.3397673513827176,
+                  0.7547685881053973,
+                  0.2,
+                  1.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ]
+              },
+              "note": "抬升离开"
+            },
+            "reported_result": "execution_result"
+          }
+        ],
+        "max_sample_gap_s": 0.1,
+        "compression": {
+          "method": "periodic_and_gripper_events",
+          "sample_period_s": 1.0,
+          "time_field": "t_s",
+          "input_samples": 10,
+          "output_samples": 2
+        }
+      },
+      "image_ids": {
+        "top": "image_30",
+        "front": "image_31"
+      }
+    },
+    {
+      "t_s": 29.36,
+      "stage": "done",
+      "observation": "done",
+      "images": {
+        "top": "keyframes/0016-00.jpg",
+        "front": "keyframes/0016-01.jpg"
+      },
+      "image_times": {
+        "top": 29.36,
+        "front": 29.36
+      },
+      "state": {
+        "left": {
+          "joint_measured_rad": [
+            1.147809,
+            0.275676,
+            -0.0,
+            -1.846473,
+            0.455933,
+            0.0
+          ],
+          "eef_measured_xyz_xyzw": [
+            0.339767,
+            0.754769,
+            0.2,
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "gripper_measured": 1.0,
+          "gripper_command": 1.0
+        }
+      },
+      "alignment": {
+        "method": "sim_synchronous_capture",
+        "captured_at_s": 29.36,
+        "state_observed_at_s": 29.36,
+        "delta_s": 0.0,
+        "max_delta_s": 0.1,
+        "exposure_synchronized": true
+      },
+      "image_ids": {
+        "top": "image_32",
+        "front": "image_33"
+      }
+    }
+  ]
+}

@@ -1,0 +1,424 @@
+# cell T1 demo-video seed=1 started 18:57:34
+Waiting for model decision 1 / 60 (step 0)...
+
+STEP 000 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.72  y=0.28  z=0.3                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    当前夹爪在门前上方且张开；先到按钮正上方，保持竖直姿态准备下压。            
+STEP 000 · MOVE TO · RESULT RECORDED
+Waiting for model decision 2 / 60 (step 1)...
+
+STEP 001 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.72  y=0.28  z=0.08                                  
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    已到按钮正上方且轨迹无阻；下压到按钮高度以触发开门。                        
+STEP 001 · MOVE TO · RESULT RECORDED
+Waiting for model decision 3 / 60 (step 2)...
+
+STEP 002 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.72  y=0.28  z=0.3                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    按钮已压到位但门暂未显示开启；抬升复查门状态并保持夹爪张开。                
+STEP 002 · MOVE TO · RESULT RECORDED
+Waiting for model decision 4 / 60 (step 3)...
+
+STEP 003 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.28  y=0.72  z=0.3                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    复核顶视图后确认按钮在前向0.28、左向0.72；移到其上方准备下压。              
+STEP 003 · MOVE TO · RESULT RECORDED
+Waiting for model decision 5 / 60 (step 4)...
+
+STEP 004 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.56  y=0.84  z=0.3                               
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  ├── Waypoint 2                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.28  y=0.84  z=0.3                               
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 3                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.28  y=0.72  z=0.3                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    直达路径在门处受阻；沿工作区上边绕过门端，再到按钮上方，保持竖直张开。      
+STEP 004 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 6 / 60 (step 5)...
+
+STEP 005 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.5616  y=0.6426  z=0.44                          
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  ├── Waypoint 2                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.28  y=0.72  z=0.44                              
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 3                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.28  y=0.72  z=0.3                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    门横跨工作区且侧向绕行受阻；升至工作空间顶部越过门，再降到按钮上方。        
+STEP 005 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 7 / 60 (step 6)...
+
+STEP 006 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.54  y=0.64  z=0.3                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    顶部越门也被挡，当前贴近门右侧；尝试短距离退到门前侧以恢复按钮操作。        
+STEP 006 · MOVE TO · RESULT RECORDED
+Waiting for model decision 8 / 60 (step 7)...
+
+STEP 007 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.56  y=0.16  z=0.3                               
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  ├── Waypoint 2                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.28  y=0.16  z=0.3                               
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 3                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.28  y=0.72  z=0.3                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    沿门右侧下边缘寻找可通行端点；若越过门则回到按钮上方继续开门。              
+STEP 007 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 9 / 60 (step 8)...
+
+STEP 008 · CHECK PATH · REQUESTED ──────────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.16  y=0.53  z=0.3                               
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  ├── Waypoint 2                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.16  y=0.72  z=0.3                               
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 3                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.28  y=0.72  z=0.3                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    当前在门上方受阻，先沿左侧端点绕行并检查到按钮上方的安全路径。              
+STEP 008 · CHECK PATH · RESULT RECORDED
+Waiting for model decision 10 / 60 (step 9)...
+
+STEP 009 · CHECK PATH · REQUESTED ──────────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.56  y=0.53  z=0.05                              
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  ├── Waypoint 2                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.15  y=0.53  z=0.05                              
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  ├── Waypoint 3                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.15  y=0.72  z=0.05                              
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 4                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.28  y=0.72  z=0.3                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    当前夹爪贴近门体，改走低位并贴左端绕行；先检查是否能从门下及端部到达按钮    
+    。                                                                          
+STEP 009 · CHECK PATH · RESULT RECORDED
+Waiting for model decision 11 / 60 (step 10)...
+
+STEP 010 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.72  y=0.28  z=0.3                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    按钮位于门下侧，之前坐标轴误换导致撞门；现从当前门下方直接回到按钮上方。    
+STEP 010 · MOVE TO · RESULT RECORDED
+Waiting for model decision 12 / 60 (step 11)...
+
+STEP 011 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.72  y=0.28  z=0.08                                  
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    已稳定到按钮正上方且门仍关闭；下压按钮触发开门。                            
+STEP 011 · MOVE TO · RESULT RECORDED
+Waiting for model decision 13 / 60 (step 12)...
+
+STEP 012 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.72  y=0.28  z=0.03                                  
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    门仍显示关闭，继续轻压按钮到底并观察门状态。                                
+STEP 012 · MOVE TO · RESULT RECORDED
+Waiting for model decision 14 / 60 (step 13)...
+
+STEP 013 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.72  y=0.28  z=0.3                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    按钮已压到最低，抬升确认门是否被触发，再继续后续搬运。                      
+STEP 013 · MOVE TO · RESULT RECORDED
+Waiting for model decision 15 / 60 (step 14)...
+
+STEP 014 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.72  y=0.28  z=0.0                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    门仍关闭，尝试更深按压按钮底部；若触发将立即抬升确认。                      
+STEP 014 · MOVE TO · RESULT RECORDED
+Waiting for model decision 16 / 60 (step 15)...
+
+STEP 015 · CHECK PATH · REQUESTED ──────────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.72  y=0.15  z=0.44                              
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  ├── Waypoint 2                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.28  y=0.15  z=0.44                              
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 3                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.28  y=0.72  z=0.3                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    按钮仍未触发且门保持关闭；沿工作区左端最高处绕门，先检查到按钮上方的无碰    
+    路径。                                                                      
+STEP 015 · CHECK PATH · RESULT RECORDED
+Waiting for model decision 17 / 60 (step 16)...
+
+STEP 016 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.7  y=0.28  z=0.08                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    门仍关闭，按钮中心可能略偏；先小幅校准到按钮上方，保持竖直准备再次按压。    
+STEP 016 · MOVE TO · RESULT RECORDED
+Waiting for model decision 18 / 60 (step 17)...
+
+STEP 017 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.7  y=0.28  z=0.0                                    
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    已对准按钮中心上方且门仍关闭；继续到底按压并立即观察门状态。                
+STEP 017 · MOVE TO · RESULT RECORDED
+Waiting for model decision 19 / 60 (step 18)...
+
+STEP 018 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  0                                                      
+  Note                                                                          
+    按钮多次下压仍未开门；尝试闭合夹爪增加按压力，随后复查门状态。              
+STEP 018 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 20 / 60 (step 19)...
+
+STEP 019 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.72  y=0.28  z=0.05                              
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 2                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.72  y=0.28  z=0.0                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    夹爪已闭合但门仍关闭；回到按钮标称中心，分两级下压以触发开关并观察。        
+STEP 019 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 21 / 60 (step 20)...
+
+STEP 020 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.28  y=0.72  z=0.08                                  
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    当前按钮疑似位于门另一侧；尝试到其上方验证真实按钮坐标，若受门阻挡将据此    
+    恢复。                                                                      
+STEP 020 · MOVE TO · RESULT RECORDED
+Waiting for model decision 22 / 60 (step 21)...
+
+STEP 021 · SET GRIPPER · REQUESTED ─────────────────────────────────────────────
+  Gripper opening (0–1)  1                                                      
+  Note                                                                          
+    已确认按钮在当前门侧，之前闭合未触发；重新张开夹爪以按压按钮。              
+STEP 021 · SET GRIPPER · RESULT RECORDED
+Waiting for model decision 23 / 60 (step 22)...
+
+STEP 022 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.72  y=0.28  z=0.3                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    当前夹爪在门边且已张开；按钮位于门前侧，先沿同侧移至按钮上方，避免横穿门    
+    体。                                                                        
+STEP 022 · MOVE TO · RESULT RECORDED
+Waiting for model decision 24 / 60 (step 23)...
+
+STEP 023 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.72  y=0.28  z=0.03                                  
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    已稳定到按钮正上方，门仍关闭；下压到按钮高度触发开门并随后复查。            
+STEP 023 · MOVE TO · RESULT RECORDED
+Waiting for model decision 25 / 60 (step 24)...
+
+STEP 024 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.72  y=0.28  z=0.3                                   
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    按钮已压下，抬升检查门状态；若门开启再转移方块。                            
+STEP 024 · MOVE TO · RESULT RECORDED
+Waiting for model decision 26 / 60 (step 25)...
+
+STEP 025 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.72  y=0.16  z=0.3                               
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  ├── Waypoint 2                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.28  y=0.16  z=0.3                               
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 3                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.28  y=0.72  z=0.3                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    门仍关闭且按钮实际在前侧左方；先沿门端下移，再横向绕过门到按钮上方。        
+STEP 025 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 27 / 60 (step 26)...
+
+STEP 026 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.562  y=0.16  z=0.45                             
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  ├── Waypoint 2                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.28  y=0.16  z=0.45                              
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 3                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.28  y=0.72  z=0.3                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    门贯穿低位路径，当前贴近端部；升至工作空间上限尝试越过门顶，再到按钮侧。    
+STEP 026 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 28 / 60 (step 27)...
+
+STEP 027 · CHECK PATH · REQUESTED ──────────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.56  y=0.16  z=0.45                              
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  ├── Waypoint 2                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.56  y=0.84  z=0.45                              
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 3                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.28  y=0.84  z=0.45                              
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    门关闭且低位与门顶均阻挡横穿；检查工作区另一端最高处是否存在可行绕行。      
+STEP 027 · CHECK PATH · RESULT RECORDED
+Waiting for model decision 29 / 60 (step 28)...
+
+STEP 028 · GIVE UP · REQUESTED ─────────────────────────────────────────────────
+  Reason                                                                        
+    已尝试按钮两侧多次下压、张闭夹爪及低位/高位/两端绕行；门在全工作区横贯且    
+    所有跨越路径均被门阻挡，按钮位于不可达的另一侧，无法安全取放方块。          
+  Hindsight                                                                     
+    应先确认按钮与门的相对侧；若按钮在封闭门后而无可通行边界，任务在当前场景    
+    不可完成。                                                                  
+Returning home...
+
+RETURN HOME · FEEDBACK ─────────────────────────────────────────────────────────
+  Joint positions rad  [0.27564462454534167, -0.5271033432987496,               
+  -0.9448097705343241, -0.09673449995381639, 0.13695209013185541,               
+  0.0004223112009791675]                                                        
+  Joint velocities rad s  [0.00021857256102627892, 0.0031509841249329398,       
+  0.00159687065938459, -0.00095198363582227, -0.0009514967918357278,            
+  -0.0012432888197489629]                                                       
+  Joint torques nm  [0.4, 0.9, 0.6, 0.2, 0.1, 0.05]                             
+  Joint command positions rad  [0.27530091953758085, -0.5264537508090451,       
+  -0.9454638707447636, -0.09887870524108777, 0.13591826860126613, 0.0]          
+  Tcp xyzrpy  [0.5614402821610518, 0.15835038412574562, 0.4488297733147086,     
+  3.141647571663382, -0.0004227118540992425, 0.00017407473659472727]            
+  Tcp xyzquat  [0.5614402821610518, 0.15835038412574562, 0.4488297733147086,    
+  1.0, 0.0, 0.0, 0.0]                                                           
+  Gripper position m  0.088                                                     
+  Gripper normalized  1.0                                                       
+  Gripper command normalized  1.0                                               
+  Gripper velocity m s  0.0                                                     
+  Gripper torque nm  0.25                                                       
+  Gravity compensation  true                                                    
+  Timestamp s  1790075385.7988226                                               
+  Sim time s  46.700000000001566                                                
+  Home                                                                          
+  ├── Source  gpt_policy_sim.return_home                                        
+  ├── Time scale  1.0                                                           
+  ├── Segment durations s  [0.0, 2.2791226382097127]                            
+  ├── Target joint positions rad  [0.0, -0.4215639180196111,                    
+  │   -1.364332619533904, 0.21510021075861863, 0.0, 0.0]                        
+  ├── Max joint residual rad  0.001                                             
+  ├── Gripper target normalized  1.0                                            
+  └── Settle                                                                    
+      ├── Settled  true                                                         
+      ├── Method  simulated_synchronous                                         
+      └── Window s  0.2                                                         
+Home complete.
+
+TASK · FAILED ──────────────────────────────────────────────────────────────────
+Recording saved: 
+/home/deneb/Projects/paper-scout/workspace/code/gpt-policy-sim/runs/T1_demo-vide
+o_s1_20260922-185734_failed
+[sim] ground-truth success=False (cube_in_bowl=False dist_xy=0.436 cube_z=0.020 grasped=None)
+[sim] recording: /home/deneb/Projects/paper-scout/workspace/code/gpt-policy-sim/runs/T1_demo-video_s1_20260922-185734_failed
+
+# cell finished rc=0 timeout=False wall=732s

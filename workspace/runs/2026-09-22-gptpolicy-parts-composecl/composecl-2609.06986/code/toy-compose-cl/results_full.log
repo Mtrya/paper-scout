@@ -1,0 +1,276 @@
+data: 20 tasks x 100 examples, seq len 26, vocab 42
+[seed 0] pretraining base (2000 steps)
+    pretrain step 500/2000 loss 1.405
+    pretrain step 1000/2000 loss 0.920
+    pretrain step 1500/2000 loss 0.875
+    pretrain step 2000/2000 loss 0.722
+[seed 0] arm A_vanilla
+    [A_vanilla s0] task  1/20 acq 1.000 retain-so-far 1.000
+    [A_vanilla s0] task  2/20 acq 1.000 retain-so-far 0.500
+    [A_vanilla s0] task  3/20 acq 1.000 retain-so-far 0.333
+    [A_vanilla s0] task  4/20 acq 1.000 retain-so-far 0.250
+    [A_vanilla s0] task  5/20 acq 1.000 retain-so-far 0.200
+    [A_vanilla s0] task  6/20 acq 1.000 retain-so-far 0.167
+    [A_vanilla s0] task  7/20 acq 1.000 retain-so-far 0.143
+    [A_vanilla s0] task  8/20 acq 1.000 retain-so-far 0.125
+    [A_vanilla s0] task  9/20 acq 1.000 retain-so-far 0.111
+    [A_vanilla s0] task 10/20 acq 1.000 retain-so-far 0.100
+    [A_vanilla s0] task 11/20 acq 1.000 retain-so-far 0.091
+    [A_vanilla s0] task 12/20 acq 1.000 retain-so-far 0.083
+    [A_vanilla s0] task 13/20 acq 1.000 retain-so-far 0.077
+    [A_vanilla s0] task 14/20 acq 1.000 retain-so-far 0.071
+    [A_vanilla s0] task 15/20 acq 1.000 retain-so-far 0.067
+    [A_vanilla s0] task 16/20 acq 1.000 retain-so-far 0.062
+    [A_vanilla s0] task 17/20 acq 1.000 retain-so-far 0.059
+    [A_vanilla s0] task 18/20 acq 1.000 retain-so-far 0.056
+    [A_vanilla s0] task 19/20 acq 1.000 retain-so-far 0.053
+    [A_vanilla s0] task 20/20 acq 1.000 retain-so-far 0.050
+  [A_vanilla s0] FINAL 0.0500 acq 1.0000 forget 1.0000 -> results/run_A_vanilla_seed0.json
+[seed 0] arm B_merge
+    [B_merge s1] task  1/20 acq 1.000 retain-so-far 1.000
+    [B_merge s1] task  2/20 acq 1.000 retain-so-far 0.500
+    [B_merge s1] task  3/20 acq 1.000 retain-so-far 0.333
+    [B_merge s1] task  4/20 acq 1.000 retain-so-far 0.250
+    [B_merge s1] task  5/20 acq 1.000 retain-so-far 0.200
+    [B_merge s1] task  6/20 acq 1.000 retain-so-far 0.167
+    [B_merge s1] task  7/20 acq 1.000 retain-so-far 0.143
+    [B_merge s1] task  8/20 acq 1.000 retain-so-far 0.125
+    [B_merge s1] task  9/20 acq 1.000 retain-so-far 0.111
+    [B_merge s1] task 10/20 acq 1.000 retain-so-far 0.100
+    [B_merge s1] task 11/20 acq 1.000 retain-so-far 0.091
+    [B_merge s1] task 12/20 acq 1.000 retain-so-far 0.083
+    [B_merge s1] task 13/20 acq 1.000 retain-so-far 0.077
+    [B_merge s1] task 14/20 acq 1.000 retain-so-far 0.071
+    [B_merge s1] task 15/20 acq 1.000 retain-so-far 0.067
+    [B_merge s1] task 16/20 acq 1.000 retain-so-far 0.062
+    [B_merge s1] task 17/20 acq 1.000 retain-so-far 0.059
+    [B_merge s1] task 18/20 acq 0.280 retain-so-far 0.016
+    [B_merge s1] task 19/20 acq 1.000 retain-so-far 0.053
+    [B_merge s1] task 20/20 acq 1.000 retain-so-far 0.050
+  [B_merge s1] FINAL 0.0500 acq 0.9640 forget 0.9621 -> results/run_B_merge_seed1.json
+[seed 0] arm C_replay
+    [C_replay s2] task  1/20 acq 1.000 retain-so-far 1.000
+    [C_replay s2] task  2/20 acq 1.000 retain-so-far 0.950
+    [C_replay s2] task  3/20 acq 1.000 retain-so-far 0.653
+    [C_replay s2] task  4/20 acq 1.000 retain-so-far 0.460
+    [C_replay s2] task  5/20 acq 1.000 retain-so-far 0.376
+    [C_replay s2] task  6/20 acq 1.000 retain-so-far 0.317
+    [C_replay s2] task  7/20 acq 1.000 retain-so-far 0.240
+    [C_replay s2] task  8/20 acq 1.000 retain-so-far 0.198
+    [C_replay s2] task  9/20 acq 1.000 retain-so-far 0.133
+    [C_replay s2] task 10/20 acq 1.000 retain-so-far 0.138
+    [C_replay s2] task 11/20 acq 1.000 retain-so-far 0.125
+    [C_replay s2] task 12/20 acq 1.000 retain-so-far 0.103
+    [C_replay s2] task 13/20 acq 0.980 retain-so-far 0.089
+    [C_replay s2] task 14/20 acq 1.000 retain-so-far 0.080
+    [C_replay s2] task 15/20 acq 1.000 retain-so-far 0.076
+    [C_replay s2] task 16/20 acq 1.000 retain-so-far 0.076
+    [C_replay s2] task 17/20 acq 1.000 retain-so-far 0.069
+    [C_replay s2] task 18/20 acq 1.000 retain-so-far 0.062
+    [C_replay s2] task 19/20 acq 1.000 retain-so-far 0.060
+    [C_replay s2] task 20/20 acq 1.000 retain-so-far 0.059
+  [C_replay s2] FINAL 0.0590 acq 0.9990 forget 0.9895 -> results/run_C_replay_seed2.json
+[seed 0] arm D_replay_merge
+    [D_replay_merge s3] task  1/20 acq 1.000 retain-so-far 1.000
+    [D_replay_merge s3] task  2/20 acq 1.000 retain-so-far 0.930
+    [D_replay_merge s3] task  3/20 acq 1.000 retain-so-far 0.693
+    [D_replay_merge s3] task  4/20 acq 1.000 retain-so-far 0.515
+    [D_replay_merge s3] task  5/20 acq 1.000 retain-so-far 0.420
+    [D_replay_merge s3] task  6/20 acq 1.000 retain-so-far 0.383
+    [D_replay_merge s3] task  7/20 acq 1.000 retain-so-far 0.343
+    [D_replay_merge s3] task  8/20 acq 1.000 retain-so-far 0.275
+    [D_replay_merge s3] task  9/20 acq 1.000 retain-so-far 0.218
+    [D_replay_merge s3] task 10/20 acq 1.000 retain-so-far 0.200
+    [D_replay_merge s3] task 11/20 acq 1.000 retain-so-far 0.171
+    [D_replay_merge s3] task 12/20 acq 1.000 retain-so-far 0.155
+    [D_replay_merge s3] task 13/20 acq 1.000 retain-so-far 0.143
+    [D_replay_merge s3] task 14/20 acq 1.000 retain-so-far 0.143
+    [D_replay_merge s3] task 15/20 acq 1.000 retain-so-far 0.111
+    [D_replay_merge s3] task 16/20 acq 1.000 retain-so-far 0.119
+    [D_replay_merge s3] task 17/20 acq 1.000 retain-so-far 0.116
+    [D_replay_merge s3] task 18/20 acq 1.000 retain-so-far 0.097
+    [D_replay_merge s3] task 19/20 acq 1.000 retain-so-far 0.092
+    [D_replay_merge s3] task 20/20 acq 1.000 retain-so-far 0.092
+  [D_replay_merge s3] FINAL 0.0920 acq 1.0000 forget 0.9558 -> results/run_D_replay_merge_seed3.json
+[seed 0] arm E_si_merge
+    [E_si_merge s4] task  1/20 acq 1.000 retain-so-far 1.000
+    [E_si_merge s4] task  2/20 acq 1.000 retain-so-far 0.500
+    [E_si_merge s4] task  3/20 acq 1.000 retain-so-far 0.333
+    [E_si_merge s4] task  4/20 acq 1.000 retain-so-far 0.250
+    [E_si_merge s4] task  5/20 acq 1.000 retain-so-far 0.200
+    [E_si_merge s4] task  6/20 acq 1.000 retain-so-far 0.167
+    [E_si_merge s4] task  7/20 acq 0.980 retain-so-far 0.140
+    [E_si_merge s4] task  8/20 acq 0.920 retain-so-far 0.115
+    [E_si_merge s4] task  9/20 acq 0.980 retain-so-far 0.109
+    [E_si_merge s4] task 10/20 acq 1.000 retain-so-far 0.100
+    [E_si_merge s4] task 11/20 acq 0.740 retain-so-far 0.067
+    [E_si_merge s4] task 12/20 acq 1.000 retain-so-far 0.083
+    [E_si_merge s4] task 13/20 acq 0.980 retain-so-far 0.075
+    [E_si_merge s4] task 14/20 acq 0.940 retain-so-far 0.067
+    [E_si_merge s4] task 15/20 acq 0.820 retain-so-far 0.055
+    [E_si_merge s4] task 16/20 acq 0.820 retain-so-far 0.051
+    [E_si_merge s4] task 17/20 acq 0.880 retain-so-far 0.052
+    [E_si_merge s4] task 18/20 acq 0.920 retain-so-far 0.051
+    [E_si_merge s4] task 19/20 acq 0.560 retain-so-far 0.029
+    [E_si_merge s4] task 20/20 acq 0.380 retain-so-far 0.019
+  [E_si_merge s4] FINAL 0.0190 acq 0.8960 forget 0.9232 -> results/run_E_si_merge_seed4.json
+[seed 0] arm F_si_replay_merge
+    [F_si_replay_merge s5] task  1/20 acq 1.000 retain-so-far 1.000
+    [F_si_replay_merge s5] task  2/20 acq 1.000 retain-so-far 0.910
+    [F_si_replay_merge s5] task  3/20 acq 1.000 retain-so-far 0.653
+    [F_si_replay_merge s5] task  4/20 acq 1.000 retain-so-far 0.535
+    [F_si_replay_merge s5] task  5/20 acq 1.000 retain-so-far 0.420
+    [F_si_replay_merge s5] task  6/20 acq 1.000 retain-so-far 0.330
+    [F_si_replay_merge s5] task  7/20 acq 1.000 retain-so-far 0.277
+    [F_si_replay_merge s5] task  8/20 acq 0.980 retain-so-far 0.217
+    [F_si_replay_merge s5] task  9/20 acq 1.000 retain-so-far 0.164
+    [F_si_replay_merge s5] task 10/20 acq 1.000 retain-so-far 0.138
+    [F_si_replay_merge s5] task 11/20 acq 0.980 retain-so-far 0.124
+    [F_si_replay_merge s5] task 12/20 acq 0.940 retain-so-far 0.135
+    [F_si_replay_merge s5] task 13/20 acq 0.980 retain-so-far 0.114
+    [F_si_replay_merge s5] task 14/20 acq 0.980 retain-so-far 0.107
+    [F_si_replay_merge s5] task 15/20 acq 0.940 retain-so-far 0.096
+    [F_si_replay_merge s5] task 16/20 acq 0.960 retain-so-far 0.071
+    [F_si_replay_merge s5] task 17/20 acq 0.900 retain-so-far 0.073
+    [F_si_replay_merge s5] task 18/20 acq 0.940 retain-so-far 0.066
+    [F_si_replay_merge s5] task 19/20 acq 0.960 retain-so-far 0.062
+    [F_si_replay_merge s5] task 20/20 acq 0.920 retain-so-far 0.062
+  [F_si_replay_merge s5] FINAL 0.0620 acq 0.9740 forget 0.9600 -> results/run_F_si_replay_merge_seed5.json
+[seed 1] pretraining base (2000 steps)
+    pretrain step 500/2000 loss 1.440
+    pretrain step 1000/2000 loss 1.000
+    pretrain step 1500/2000 loss 0.916
+    pretrain step 2000/2000 loss 0.681
+[seed 1] arm A_vanilla
+    [A_vanilla s1000] task  1/20 acq 1.000 retain-so-far 1.000
+    [A_vanilla s1000] task  2/20 acq 1.000 retain-so-far 0.500
+    [A_vanilla s1000] task  3/20 acq 1.000 retain-so-far 0.333
+    [A_vanilla s1000] task  4/20 acq 1.000 retain-so-far 0.250
+    [A_vanilla s1000] task  5/20 acq 1.000 retain-so-far 0.200
+    [A_vanilla s1000] task  6/20 acq 1.000 retain-so-far 0.167
+    [A_vanilla s1000] task  7/20 acq 1.000 retain-so-far 0.143
+    [A_vanilla s1000] task  8/20 acq 1.000 retain-so-far 0.125
+    [A_vanilla s1000] task  9/20 acq 0.980 retain-so-far 0.109
+    [A_vanilla s1000] task 10/20 acq 1.000 retain-so-far 0.100
+    [A_vanilla s1000] task 11/20 acq 0.920 retain-so-far 0.084
+    [A_vanilla s1000] task 12/20 acq 1.000 retain-so-far 0.083
+    [A_vanilla s1000] task 13/20 acq 1.000 retain-so-far 0.077
+    [A_vanilla s1000] task 14/20 acq 1.000 retain-so-far 0.071
+    [A_vanilla s1000] task 15/20 acq 1.000 retain-so-far 0.067
+    [A_vanilla s1000] task 16/20 acq 1.000 retain-so-far 0.062
+    [A_vanilla s1000] task 17/20 acq 1.000 retain-so-far 0.059
+    [A_vanilla s1000] task 18/20 acq 0.940 retain-so-far 0.052
+    [A_vanilla s1000] task 19/20 acq 1.000 retain-so-far 0.053
+    [A_vanilla s1000] task 20/20 acq 0.940 retain-so-far 0.047
+  [A_vanilla s1000] FINAL 0.0470 acq 0.9890 forget 0.9916 -> results/run_A_vanilla_seed1000.json
+[seed 1] arm B_merge
+    [B_merge s1001] task  1/20 acq 1.000 retain-so-far 1.000
+    [B_merge s1001] task  2/20 acq 1.000 retain-so-far 0.500
+    [B_merge s1001] task  3/20 acq 1.000 retain-so-far 0.333
+    [B_merge s1001] task  4/20 acq 1.000 retain-so-far 0.250
+    [B_merge s1001] task  5/20 acq 1.000 retain-so-far 0.200
+    [B_merge s1001] task  6/20 acq 1.000 retain-so-far 0.167
+    [B_merge s1001] task  7/20 acq 1.000 retain-so-far 0.143
+    [B_merge s1001] task  8/20 acq 1.000 retain-so-far 0.125
+    [B_merge s1001] task  9/20 acq 1.000 retain-so-far 0.111
+    [B_merge s1001] task 10/20 acq 1.000 retain-so-far 0.100
+    [B_merge s1001] task 11/20 acq 1.000 retain-so-far 0.091
+    [B_merge s1001] task 12/20 acq 1.000 retain-so-far 0.083
+    [B_merge s1001] task 13/20 acq 1.000 retain-so-far 0.077
+    [B_merge s1001] task 14/20 acq 1.000 retain-so-far 0.071
+    [B_merge s1001] task 15/20 acq 1.000 retain-so-far 0.067
+    [B_merge s1001] task 16/20 acq 1.000 retain-so-far 0.062
+    [B_merge s1001] task 17/20 acq 1.000 retain-so-far 0.059
+    [B_merge s1001] task 18/20 acq 1.000 retain-so-far 0.056
+    [B_merge s1001] task 19/20 acq 1.000 retain-so-far 0.053
+    [B_merge s1001] task 20/20 acq 1.000 retain-so-far 0.050
+  [B_merge s1001] FINAL 0.0500 acq 1.0000 forget 1.0000 -> results/run_B_merge_seed1001.json
+[seed 1] arm C_replay
+    [C_replay s1002] task  1/20 acq 1.000 retain-so-far 1.000
+    [C_replay s1002] task  2/20 acq 1.000 retain-so-far 0.930
+    [C_replay s1002] task  3/20 acq 1.000 retain-so-far 0.667
+    [C_replay s1002] task  4/20 acq 1.000 retain-so-far 0.510
+    [C_replay s1002] task  5/20 acq 1.000 retain-so-far 0.388
+    [C_replay s1002] task  6/20 acq 1.000 retain-so-far 0.330
+    [C_replay s1002] task  7/20 acq 1.000 retain-so-far 0.263
+    [C_replay s1002] task  8/20 acq 1.000 retain-so-far 0.203
+    [C_replay s1002] task  9/20 acq 0.980 retain-so-far 0.171
+    [C_replay s1002] task 10/20 acq 1.000 retain-so-far 0.138
+    [C_replay s1002] task 11/20 acq 1.000 retain-so-far 0.116
+    [C_replay s1002] task 12/20 acq 1.000 retain-so-far 0.112
+    [C_replay s1002] task 13/20 acq 1.000 retain-so-far 0.091
+    [C_replay s1002] task 14/20 acq 1.000 retain-so-far 0.083
+    [C_replay s1002] task 15/20 acq 1.000 retain-so-far 0.080
+    [C_replay s1002] task 16/20 acq 1.000 retain-so-far 0.081
+    [C_replay s1002] task 17/20 acq 1.000 retain-so-far 0.068
+    [C_replay s1002] task 18/20 acq 0.980 retain-so-far 0.066
+    [C_replay s1002] task 19/20 acq 1.000 retain-so-far 0.062
+    [C_replay s1002] task 20/20 acq 1.000 retain-so-far 0.060
+  [C_replay s1002] FINAL 0.0600 acq 0.9980 forget 0.9874 -> results/run_C_replay_seed1002.json
+[seed 1] arm D_replay_merge
+    [D_replay_merge s1003] task  1/20 acq 1.000 retain-so-far 1.000
+    [D_replay_merge s1003] task  2/20 acq 1.000 retain-so-far 0.960
+    [D_replay_merge s1003] task  3/20 acq 1.000 retain-so-far 0.680
+    [D_replay_merge s1003] task  4/20 acq 1.000 retain-so-far 0.565
+    [D_replay_merge s1003] task  5/20 acq 1.000 retain-so-far 0.488
+    [D_replay_merge s1003] task  6/20 acq 1.000 retain-so-far 0.407
+    [D_replay_merge s1003] task  7/20 acq 1.000 retain-so-far 0.334
+    [D_replay_merge s1003] task  8/20 acq 1.000 retain-so-far 0.280
+    [D_replay_merge s1003] task  9/20 acq 1.000 retain-so-far 0.236
+    [D_replay_merge s1003] task 10/20 acq 1.000 retain-so-far 0.210
+    [D_replay_merge s1003] task 11/20 acq 1.000 retain-so-far 0.182
+    [D_replay_merge s1003] task 12/20 acq 1.000 retain-so-far 0.177
+    [D_replay_merge s1003] task 13/20 acq 1.000 retain-so-far 0.143
+    [D_replay_merge s1003] task 14/20 acq 1.000 retain-so-far 0.127
+    [D_replay_merge s1003] task 15/20 acq 1.000 retain-so-far 0.116
+    [D_replay_merge s1003] task 16/20 acq 1.000 retain-so-far 0.120
+    [D_replay_merge s1003] task 17/20 acq 1.000 retain-so-far 0.108
+    [D_replay_merge s1003] task 18/20 acq 1.000 retain-so-far 0.102
+    [D_replay_merge s1003] task 19/20 acq 1.000 retain-so-far 0.093
+    [D_replay_merge s1003] task 20/20 acq 1.000 retain-so-far 0.093
+  [D_replay_merge s1003] FINAL 0.0930 acq 1.0000 forget 0.9547 -> results/run_D_replay_merge_seed1003.json
+[seed 1] arm E_si_merge
+    [E_si_merge s1004] task  1/20 acq 1.000 retain-so-far 1.000
+    [E_si_merge s1004] task  2/20 acq 1.000 retain-so-far 0.500
+    [E_si_merge s1004] task  3/20 acq 1.000 retain-so-far 0.333
+    [E_si_merge s1004] task  4/20 acq 0.940 retain-so-far 0.235
+    [E_si_merge s1004] task  5/20 acq 1.000 retain-so-far 0.200
+    [E_si_merge s1004] task  6/20 acq 0.560 retain-so-far 0.093
+    [E_si_merge s1004] task  7/20 acq 0.980 retain-so-far 0.140
+    [E_si_merge s1004] task  8/20 acq 1.000 retain-so-far 0.125
+    [E_si_merge s1004] task  9/20 acq 1.000 retain-so-far 0.111
+    [E_si_merge s1004] task 10/20 acq 1.000 retain-so-far 0.100
+    [E_si_merge s1004] task 11/20 acq 0.980 retain-so-far 0.089
+    [E_si_merge s1004] task 12/20 acq 1.000 retain-so-far 0.083
+    [E_si_merge s1004] task 13/20 acq 0.820 retain-so-far 0.063
+    [E_si_merge s1004] task 14/20 acq 0.720 retain-so-far 0.051
+    [E_si_merge s1004] task 15/20 acq 0.860 retain-so-far 0.057
+    [E_si_merge s1004] task 16/20 acq 0.780 retain-so-far 0.049
+    [E_si_merge s1004] task 17/20 acq 0.980 retain-so-far 0.058
+    [E_si_merge s1004] task 18/20 acq 0.960 retain-so-far 0.053
+    [E_si_merge s1004] task 19/20 acq 0.800 retain-so-far 0.042
+    [E_si_merge s1004] task 20/20 acq 0.940 retain-so-far 0.047
+  [E_si_merge s1004] FINAL 0.0470 acq 0.9160 forget 0.9147 -> results/run_E_si_merge_seed1004.json
+[seed 1] arm F_si_replay_merge
+    [F_si_replay_merge s1005] task  1/20 acq 1.000 retain-so-far 1.000
+    [F_si_replay_merge s1005] task  2/20 acq 1.000 retain-so-far 0.930
+    [F_si_replay_merge s1005] task  3/20 acq 1.000 retain-so-far 0.673
+    [F_si_replay_merge s1005] task  4/20 acq 1.000 retain-so-far 0.535
+    [F_si_replay_merge s1005] task  5/20 acq 1.000 retain-so-far 0.420
+    [F_si_replay_merge s1005] task  6/20 acq 1.000 retain-so-far 0.360
+    [F_si_replay_merge s1005] task  7/20 acq 1.000 retain-so-far 0.306
+    [F_si_replay_merge s1005] task  8/20 acq 1.000 retain-so-far 0.250
+    [F_si_replay_merge s1005] task  9/20 acq 1.000 retain-so-far 0.189
+    [F_si_replay_merge s1005] task 10/20 acq 1.000 retain-so-far 0.158
+    [F_si_replay_merge s1005] task 11/20 acq 0.960 retain-so-far 0.122
+    [F_si_replay_merge s1005] task 12/20 acq 1.000 retain-so-far 0.128
+    [F_si_replay_merge s1005] task 13/20 acq 0.980 retain-so-far 0.106
+    [F_si_replay_merge s1005] task 14/20 acq 1.000 retain-so-far 0.097
+    [F_si_replay_merge s1005] task 15/20 acq 1.000 retain-so-far 0.101
+    [F_si_replay_merge s1005] task 16/20 acq 0.980 retain-so-far 0.086
+    [F_si_replay_merge s1005] task 17/20 acq 0.960 retain-so-far 0.076
+    [F_si_replay_merge s1005] task 18/20 acq 0.960 retain-so-far 0.066
+    [F_si_replay_merge s1005] task 19/20 acq 0.940 retain-so-far 0.068
+    [F_si_replay_merge s1005] task 20/20 acq 0.820 retain-so-far 0.054
+  [F_si_replay_merge s1005] FINAL 0.0540 acq 0.9800 forget 0.9747 -> results/run_F_si_replay_merge_seed1005.json
+total wall time 5361s
