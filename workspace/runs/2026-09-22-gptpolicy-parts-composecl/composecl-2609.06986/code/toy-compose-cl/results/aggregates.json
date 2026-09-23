@@ -1,0 +1,103 @@
+{
+  "A_vanilla": {
+    "finals": [
+      0.05,
+      0.047
+    ],
+    "mean": 0.0485,
+    "std": 0.0015000000000000013,
+    "diag_acc": 0.9945,
+    "forget": 0.9957894736842106,
+    "half_life": 0.5,
+    "decay_slope": -0.025831168831168844
+  },
+  "B_merge": {
+    "finals": [
+      0.05,
+      0.05
+    ],
+    "mean": 0.05,
+    "std": 0.0,
+    "diag_acc": 0.982,
+    "forget": 0.9810526315789474,
+    "half_life": 0.5,
+    "decay_slope": -0.025506493506493505
+  },
+  "C_replay": {
+    "finals": [
+      0.06,
+      0.059
+    ],
+    "mean": 0.0595,
+    "std": 0.0005000000000000004,
+    "diag_acc": 0.9984999999999999,
+    "forget": 0.9884210526315791,
+    "half_life": 0.6458738636416408,
+    "decay_slope": -0.03290293916609706
+  },
+  "D_replay_merge": {
+    "finals": [
+      0.093,
+      0.092
+    ],
+    "mean": 0.0925,
+    "std": 0.0005000000000000004,
+    "diag_acc": 1.0,
+    "forget": 0.955263157894737,
+    "half_life": 0.9812252964426879,
+    "decay_slope": -0.041886534518113465
+  },
+  "E_si_merge": {
+    "finals": [
+      0.047,
+      0.019
+    ],
+    "mean": 0.033,
+    "std": 0.014,
+    "diag_acc": 0.9060000000000001,
+    "forget": 0.9189473684210527,
+    "half_life": 0.5,
+    "decay_slope": -0.023532467532467516,
+    "si_penalty_at_start_mean": 0.9199130071425125,
+    "si_omega_corr_mean": 0.7820855159508554
+  },
+  "F_si_replay_merge": {
+    "finals": [
+      0.054000000000000006,
+      0.062
+    ],
+    "mean": 0.058,
+    "std": 0.003999999999999997,
+    "diag_acc": 0.9770000000000002,
+    "forget": 0.9673684210526317,
+    "half_life": 0.7824947147018193,
+    "decay_slope": -0.03568010936431987,
+    "si_penalty_at_start_mean": 0.2345422393593349,
+    "si_omega_corr_mean": 0.8755823860042974
+  },
+  "grad_probe": {
+    "n": 100,
+    "cos_mean": -0.05654310018988326,
+    "cos_std": 0.047219889770670966,
+    "cos_neg_frac": 0.92,
+    "rep_selfcos_mean": 0.17108973927263701,
+    "sft_selfcos_mean": 0.03537657655233859,
+    "rep_norm_mean": 0.6485854846020558,
+    "sft_norm_mean": 2.2911958479881287,
+    "norm_ratio": 0.28307727825692897
+  },
+  "_interactions": {
+    "R_x_M": {
+      "gain_replay": 0.010999999999999996,
+      "gain_merge": 0.0015000000000000013,
+      "gain_sum": 0.012499999999999997,
+      "gain_combined": 0.044,
+      "interaction": 0.0315,
+      "super_additive": true
+    },
+    "SI_x_M": {
+      "si_added_to_merge": -0.017,
+      "si_added_to_replay_merge": -0.034499999999999996
+    }
+  }
+}

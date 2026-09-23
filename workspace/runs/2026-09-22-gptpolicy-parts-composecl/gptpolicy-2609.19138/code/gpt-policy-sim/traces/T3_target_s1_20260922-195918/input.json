@@ -1,0 +1,10 @@
+{
+  "instruction": "把红方块放进绿碗",
+  "model": "gpt-6-astra",
+  "content": [
+    {
+      "image": "target-top.jpg",
+      "label": "目标状态参考图：当前场景下任务完成时的俯视布局（模拟渲染）。其余条件不变。"
+    }
+  ]
+}

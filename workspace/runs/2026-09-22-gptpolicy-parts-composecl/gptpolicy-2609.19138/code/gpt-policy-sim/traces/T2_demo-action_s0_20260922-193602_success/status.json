@@ -1,0 +1,43 @@
+{
+  "state": "completed",
+  "error": null,
+  "elapsed_s": 382.8025772571564,
+  "recording": {
+    "state": "stopped",
+    "codec": "per-step JPEG frames in frames/ (sim backend writes no mp4)",
+    "views": [
+      "top",
+      "front"
+    ],
+    "snapshots": 23,
+    "started_at_s": 1790076962.5371792
+  },
+  "instruction": "把柱子插到盒子里",
+  "task_name": "sim-t2-align-insert",
+  "max_decisions": 60,
+  "model": "gpt-6-astra",
+  "agent": {
+    "profile": "codex",
+    "type": "codex",
+    "model": "gpt-6-astra"
+  },
+  "input": {
+    "context": "demo-action",
+    "seed": 0,
+    "demo_seed": 1042
+  },
+  "robot_model": "SIM-X5",
+  "interface": "sim0",
+  "right_interface": null,
+  "sim_backend": {
+    "world_seed": 0,
+    "task": "T2",
+    "context": "demo-action"
+  },
+  "task_status": "completed",
+  "outcome": "success",
+  "model_outcome": "success",
+  "human_outcome": null,
+  "outcome_source": "runtime",
+  "usage": null
+}

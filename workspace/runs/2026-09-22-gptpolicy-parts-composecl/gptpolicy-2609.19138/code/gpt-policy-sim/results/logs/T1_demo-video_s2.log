@@ -1,0 +1,55 @@
+# cell T1 demo-video seed=2 started 18:57:51
+Waiting for model decision 1 / 60 (step 0)...
+
+STEP 000 · DONE · REQUESTED ────────────────────────────────────────────────────
+  Summary                                                                       
+    已按下按钮打开门，红方块被夹取后放入绿碗并在释放后撤回；当前夹爪已离开碗    
+    口。                                                                        
+  Hindsight                                                                     
+    沿用示范的垂直按压、夹取、抬升转运、低位释放和撤回顺序。                    
+Returning home...
+
+RETURN HOME · FEEDBACK ─────────────────────────────────────────────────────────
+  Joint positions rad  [0.0030529360014828737, -0.42066792425484995,            
+  -1.3642513441456448, 0.21448908017612983, -0.0005039394164018176,             
+  -0.001250451679431847]                                                        
+  Joint velocities rad s  [-0.0018237528075598542, -0.0008871352052923782,      
+  0.0010147958104807836, 0.0020026890448375414, 0.001606130090435562,           
+  -0.001461960427952141]                                                        
+  Joint torques nm  [0.4, 0.9, 0.6, 0.2, 0.1, 0.05]                             
+  Joint command positions rad  [0.0, -0.4215639180196111, -1.364332619533904,   
+  0.21510021075861863, 0.0, 0.0]                                                
+  Tcp xyzrpy  [0.5000755111675732, 0.0001860758979299607, 0.3002502746783094,   
+  3.141430914321325, -4.582754492473907e-05, 0.00021040483568336122]            
+  Tcp xyzquat  [0.5000755111675732, 0.0001860758979299607, 0.3002502746783094,  
+  1.0, 0.0, 0.0, 0.0]                                                           
+  Gripper position m  0.088                                                     
+  Gripper normalized  1.0                                                       
+  Gripper command normalized  1.0                                               
+  Gripper velocity m s  0.0                                                     
+  Gripper torque nm  0.25                                                       
+  Gravity compensation  true                                                    
+  Timestamp s  1790074796.1640673                                               
+  Sim time s  1.0000000000000004                                                
+  Home                                                                          
+  ├── Source  gpt_policy_sim.return_home                                        
+  ├── Time scale  1.0                                                           
+  ├── Segment durations s  [0.4999999999999999, 0.4999999999999999]             
+  ├── Target joint positions rad  [0.0, -0.4215639180196111,                    
+  │   -1.364332619533904, 0.21510021075861863, 0.0, 0.0]                        
+  ├── Max joint residual rad  0.001                                             
+  ├── Gripper target normalized  1.0                                            
+  └── Settle                                                                    
+      ├── Settled  true                                                         
+      ├── Method  simulated_synchronous                                         
+      └── Window s  0.2                                                         
+Home complete.
+
+TASK · FAILED ──────────────────────────────────────────────────────────────────
+Recording saved: 
+/home/deneb/Projects/paper-scout/workspace/code/gpt-policy-sim/runs/T1_demo-vide
+o_s2_20260922-185752_failed
+[sim] ground-truth success=False (cube_in_bowl=False dist_xy=0.368 cube_z=0.020 grasped=None)
+[sim] recording: /home/deneb/Projects/paper-scout/workspace/code/gpt-policy-sim/runs/T1_demo-video_s2_20260922-185752_failed
+
+# cell finished rc=0 timeout=False wall=125s

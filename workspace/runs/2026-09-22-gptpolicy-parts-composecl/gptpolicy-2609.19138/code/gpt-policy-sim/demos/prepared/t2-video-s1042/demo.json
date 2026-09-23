@@ -1,0 +1,234 @@
+{
+  "title": "把柱子插到盒子里",
+  "source": "gpt-policy-sim scripted expert, task T2 (align-insert), seed 1042",
+  "demonstrator": "scripted_expert_oracle_sim",
+  "coverage": "complete_episode",
+  "summary": "Simulated expert rollout; stages: close-gripper -> approach-plug -> lower-behind-plug -> push-to-mark -> open-gripper -> lift -> above-plug -> descend-plug -> grasp-plug -> carry-to-box -> release-plug -> retract -> done",
+  "outcome": "success",
+  "finalization_state": "completed",
+  "schema_version": 1,
+  "mode": "video",
+  "keyframes": [
+    {
+      "t_s": 0.0,
+      "stage": "close-gripper",
+      "observation": "闭合夹爪准备推拨",
+      "images": {
+        "top": "keyframes/0000-00.jpg",
+        "front": "keyframes/0000-01.jpg"
+      },
+      "image_times": {
+        "top": 0.0,
+        "front": 0.0
+      },
+      "image_ids": {
+        "top": "image_0",
+        "front": "image_1"
+      }
+    },
+    {
+      "t_s": 1.0,
+      "stage": "approach-plug",
+      "observation": "移到柱子上方",
+      "images": {
+        "top": "keyframes/0001-00.jpg",
+        "front": "keyframes/0001-01.jpg"
+      },
+      "image_times": {
+        "top": 1.0,
+        "front": 1.0
+      },
+      "image_ids": {
+        "top": "image_2",
+        "front": "image_3"
+      }
+    },
+    {
+      "t_s": 6.44,
+      "stage": "lower-behind-plug",
+      "observation": "降到槽内柱子后方",
+      "images": {
+        "top": "keyframes/0002-00.jpg",
+        "front": "keyframes/0002-01.jpg"
+      },
+      "image_times": {
+        "top": 6.44,
+        "front": 6.44
+      },
+      "image_ids": {
+        "top": "image_4",
+        "front": "image_5"
+      }
+    },
+    {
+      "t_s": 7.24,
+      "stage": "push-to-mark",
+      "observation": "沿槽推柱子到对齐标记",
+      "images": {
+        "top": "keyframes/0003-00.jpg",
+        "front": "keyframes/0003-01.jpg"
+      },
+      "image_times": {
+        "top": 7.24,
+        "front": 7.24
+      },
+      "image_ids": {
+        "top": "image_6",
+        "front": "image_7"
+      }
+    },
+    {
+      "t_s": 7.8,
+      "stage": "open-gripper",
+      "observation": "张开夹爪",
+      "images": {
+        "top": "keyframes/0004-00.jpg",
+        "front": "keyframes/0004-01.jpg"
+      },
+      "image_times": {
+        "top": 7.8,
+        "front": 7.8
+      },
+      "image_ids": {
+        "top": "image_8",
+        "front": "image_9"
+      }
+    },
+    {
+      "t_s": 8.8,
+      "stage": "lift",
+      "observation": "抬起",
+      "images": {
+        "top": "keyframes/0005-00.jpg",
+        "front": "keyframes/0005-01.jpg"
+      },
+      "image_times": {
+        "top": 8.8,
+        "front": 8.8
+      },
+      "image_ids": {
+        "top": "image_10",
+        "front": "image_11"
+      }
+    },
+    {
+      "t_s": 9.6,
+      "stage": "above-plug",
+      "observation": "对准柱子",
+      "images": {
+        "top": "keyframes/0006-00.jpg",
+        "front": "keyframes/0006-01.jpg"
+      },
+      "image_times": {
+        "top": 9.6,
+        "front": 9.6
+      },
+      "image_ids": {
+        "top": "image_12",
+        "front": "image_13"
+      }
+    },
+    {
+      "t_s": 10.06,
+      "stage": "descend-plug",
+      "observation": "下降对柱子",
+      "images": {
+        "top": "keyframes/0007-00.jpg",
+        "front": "keyframes/0007-01.jpg"
+      },
+      "image_times": {
+        "top": 10.06,
+        "front": 10.06
+      },
+      "image_ids": {
+        "top": "image_14",
+        "front": "image_15"
+      }
+    },
+    {
+      "t_s": 10.54,
+      "stage": "grasp-plug",
+      "observation": "闭合夹爪抓柱子",
+      "images": {
+        "top": "keyframes/0008-00.jpg",
+        "front": "keyframes/0008-01.jpg"
+      },
+      "image_times": {
+        "top": 10.54,
+        "front": 10.54
+      },
+      "image_ids": {
+        "top": "image_16",
+        "front": "image_17"
+      }
+    },
+    {
+      "t_s": 11.54,
+      "stage": "carry-to-box",
+      "observation": "抓起柱子移到盒子",
+      "images": {
+        "top": "keyframes/0009-00.jpg",
+        "front": "keyframes/0009-01.jpg"
+      },
+      "image_times": {
+        "top": 11.54,
+        "front": 11.54
+      },
+      "image_ids": {
+        "top": "image_18",
+        "front": "image_19"
+      }
+    },
+    {
+      "t_s": 16.9,
+      "stage": "release-plug",
+      "observation": "松开柱子入盒",
+      "images": {
+        "top": "keyframes/0010-00.jpg",
+        "front": "keyframes/0010-01.jpg"
+      },
+      "image_times": {
+        "top": 16.9,
+        "front": 16.9
+      },
+      "image_ids": {
+        "top": "image_20",
+        "front": "image_21"
+      }
+    },
+    {
+      "t_s": 17.9,
+      "stage": "retract",
+      "observation": "抬升离开",
+      "images": {
+        "top": "keyframes/0011-00.jpg",
+        "front": "keyframes/0011-01.jpg"
+      },
+      "image_times": {
+        "top": 17.9,
+        "front": 17.9
+      },
+      "image_ids": {
+        "top": "image_22",
+        "front": "image_23"
+      }
+    },
+    {
+      "t_s": 19.16,
+      "stage": "done",
+      "observation": "done",
+      "images": {
+        "top": "keyframes/0012-00.jpg",
+        "front": "keyframes/0012-01.jpg"
+      },
+      "image_times": {
+        "top": 19.16,
+        "front": 19.16
+      },
+      "image_ids": {
+        "top": "image_24",
+        "front": "image_25"
+      }
+    }
+  ]
+}

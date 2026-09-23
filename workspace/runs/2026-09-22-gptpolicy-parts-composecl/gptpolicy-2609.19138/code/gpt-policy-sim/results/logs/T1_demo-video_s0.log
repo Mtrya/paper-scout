@@ -1,0 +1,146 @@
+# cell T1 demo-video seed=0 started 18:55:29
+Waiting for model decision 1 / 60 (step 0)...
+
+STEP 000 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.74  y=0.1  z=0.3                                
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 2                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.74  y=0.33  z=0.3                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    当前门关闭且夹爪张开，先绕门端部到按钮上方，保持高位避免碰撞。              
+
+STEP 000 · MOVE EEF CHUNK · NOT EXECUTED ───────────────────────────────────────
+  Tool  move_eef_chunk                                                          
+  Error  motion_not_executed                                                    
+  Requested motion                                                              
+  ├── Waypoints                                                                 
+  │   ├── Waypoint 1                                                            
+  │   │   └── TCP pose                                                          
+  │   │       ├── Position (m)  x=0.74  y=0.1  z=0.3                            
+  │   │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                     
+  │   └── Waypoint 2                                                            
+  │       └── TCP pose                                                          
+  │           ├── Position (m)  x=0.74  y=0.33  z=0.3                           
+  │           └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                     
+  └── Note  当前门关闭且夹爪张开，先绕门端部到按钮上方，保持高位避免碰撞。      
+  Segment  0                                                                    
+  Sample  0                                                                     
+  SDK status  -9                                                                
+  SDK status name  SIM_WORKSPACE_LIMIT                                          
+  Best translation error (m)  0.0                                               
+  Best rotation error (rad)  0.0                                                
+  Reason                                                                        
+    sim_workspace_limit: y=0.1000 outside [0.15, 0.85]                          
+Waiting for model decision 2 / 60 (step 1)...
+
+STEP 001 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.5  y=0.84  z=0.3                                
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  ├── Waypoint 2                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.74  y=0.84  z=0.3                               
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 3                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.74  y=0.33  z=0.3                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    上次路径越过工作区边界被拒，现沿门上端内侧绕行到按钮上方，保持高位避障。    
+STEP 001 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 3 / 60 (step 2)...
+
+STEP 002 · MOVE EEF CHUNK · REQUESTED ──────────────────────────────────────────
+  Waypoints                                                                     
+  ├── Waypoint 1                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.538  y=0.84  z=0.44                             
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  ├── Waypoint 2                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.74  y=0.84  z=0.44                              
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  ├── Waypoint 3                                                                
+  │   └── TCP pose                                                              
+  │       ├── Position (m)  x=0.74  y=0.33  z=0.44                              
+  │       └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  └── Waypoint 4                                                                
+      └── TCP pose                                                              
+          ├── Position (m)  x=0.74  y=0.33  z=0.3                               
+          └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                         
+  Note                                                                          
+    门横跨工作区边界，沿端部仍被挡；先升到门顶上方越过，再下降到按钮上方。      
+STEP 002 · MOVE EEF CHUNK · RESULT RECORDED
+Waiting for model decision 4 / 60 (step 3)...
+
+STEP 003 · MOVE TO · REQUESTED ─────────────────────────────────────────────────
+  Target                                                                        
+  └── TCP pose                                                                  
+      ├── Position (m)  x=0.74  y=0.84  z=0.45                                  
+      └── Quaternion (xyzw)  qx=1  qy=0  qz=0  qw=0                             
+  Note                                                                          
+    门顶高度可能恰达工作区上限，尝试先越过门顶；若仍阻挡再改走按钮侧操作。      
+STEP 003 · MOVE TO · RESULT RECORDED
+Waiting for model decision 5 / 60 (step 4)...
+
+STEP 004 · GIVE UP · REQUESTED ─────────────────────────────────────────────────
+  Reason                                                                        
+    多次尝试沿门端部及门顶绕行，均在门处发生实体阻挡；工作区边界与门覆盖重合    
+    ，无法安全到达按钮侧，因而无法继续完成搬运。                                
+  Hindsight                                                                     
+    应先确认门的可通行边界或按钮所在侧；当前观测显示门横贯整个可达截面且高度    
+    达到上限。                                                                  
+Returning home...
+
+RETURN HOME · FEEDBACK ─────────────────────────────────────────────────────────
+  Joint positions rad  [0.0009410153084036759, -0.42031105482814907,            
+  -1.3657323350857902, 0.21556053305367376, -0.0012685034293025282,             
+  -0.001784377407579851]                                                        
+  Joint velocities rad s  [0.002320012786194502, 0.00019332630694957707,        
+  -0.0003297567305117708, -0.0031443406849306437, -0.00303094511889893,         
+  -0.0028125244549970746]                                                       
+  Joint torques nm  [0.4, 0.9, 0.6, 0.2, 0.1, 0.05]                             
+  Joint command positions rad  [0.0, -0.4215639180196111, -1.364332619533904,   
+  0.21510021075861863, 0.0, 0.0]                                                
+  Tcp xyzrpy  [0.5005426566442435, -0.0005682734222603051,                      
+  0.29965388268905213, 3.1417894140950287, 0.0007819538715646059,               
+  -0.00019637407174308484]                                                      
+  Tcp xyzquat  [0.5005426566442435, -0.0005682734222603051,                     
+  0.29965388268905213, 1.0, 0.0, 0.0, 0.0]                                      
+  Gripper position m  0.088                                                     
+  Gripper normalized  1.0                                                       
+  Gripper command normalized  1.0                                               
+  Gripper velocity m s  0.0                                                     
+  Gripper torque nm  0.25                                                       
+  Gravity compensation  true                                                    
+  Timestamp s  1790074653.1689692                                               
+  Sim time s  18.73999999999969                                                 
+  Home                                                                          
+  ├── Source  gpt_policy_sim.return_home                                        
+  ├── Time scale  1.0                                                           
+  ├── Segment durations s  [0.0, 8.52434161680537]                              
+  ├── Target joint positions rad  [0.0, -0.4215639180196111,                    
+  │   -1.364332619533904, 0.21510021075861863, 0.0, 0.0]                        
+  ├── Max joint residual rad  0.001                                             
+  ├── Gripper target normalized  1.0                                            
+  └── Settle                                                                    
+      ├── Settled  true                                                         
+      ├── Method  simulated_synchronous                                         
+      └── Window s  0.2                                                         
+Home complete.
+
+TASK · FAILED ──────────────────────────────────────────────────────────────────
+Recording saved: 
+/home/deneb/Projects/paper-scout/workspace/code/gpt-policy-sim/runs/T1_demo-vide
+o_s0_20260922-185530_failed
+[sim] ground-truth success=False (cube_in_bowl=False dist_xy=0.467 cube_z=0.020 grasped=None)
+[sim] recording: /home/deneb/Projects/paper-scout/workspace/code/gpt-policy-sim/runs/T1_demo-video_s0_20260922-185530_failed
+
+# cell finished rc=0 timeout=False wall=124s
