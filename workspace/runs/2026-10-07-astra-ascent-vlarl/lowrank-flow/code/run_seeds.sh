@@ -1,7 +1,7 @@
 #!/bin/bash
 # Full C1-C5 pipeline for one or more seeds. Usage: bash run_seeds.sh "0 1 2 3 4"
 set -u
-PY=/home/deneb/Projects/paper-scout/workspace/code/scout-exp/bin/python
+PY="${PY:-python3}"  # scout-exp venv python if rebuilt; override via $PY
 cd "$(dirname "$0")"
 SEEDS="${1:-0 1 2 3 4}"
 JOBS="${2:-3}"

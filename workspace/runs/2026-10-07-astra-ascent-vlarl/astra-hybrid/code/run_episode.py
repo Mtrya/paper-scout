@@ -41,7 +41,7 @@ from tasks import TASKS
 
 HERE = Path(__file__).resolve().parent
 MODEL = "gpt-6-astra"
-CODEX_BIN = shutil.which("codex") or "/home/deneb/.local/bin/codex"
+CODEX_BIN = shutil.which("codex") or "codex"
 
 SIM_NOTES = """
 SIMULATION BACKEND NOTES (this run uses a simulated robot; where these lines conflict with hardware-specific lines above, these win):
