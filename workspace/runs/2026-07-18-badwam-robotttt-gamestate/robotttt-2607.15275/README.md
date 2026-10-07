@@ -137,4 +137,4 @@ python eval_long.py    # 2x-horizon extrapolation (uses saved .pt checkpoints)
 python plot_results.py <out_dir>   # writes robotttt-probe-scaling.png / -latency.png / -ttt-inner.png
 ```
 
-Hardware used: CPU only (16-core x86, torch 2.13.0+cpu). Full suite ≈ 2–3 h wall-clock if run sequentially; parallelize at will.
+Hardware used: CPU only (16-core x86, torch 2.13.0+cpu). Full suite ≈ 2–3 h wall-clock if run sequentially; parallelize at will. The `.pt` checkpoints these commands produce are not preserved in the packet (repo size policy); all metrics live in `results/*.json`.

@@ -1,3 +1,9 @@
+# BLOCKER — Agents' Last Exam (2606.05405)
+
+Pure close-reading thread: the paper shipped no code to probe and the investigation produced no preservable code or patches, so there is no evidence directory. The full analysis is archived below (SUMMARY.md was a condensation of the same text and was dropped in the 2026-10 consolidation).
+
+---
+
 # Agents' Last Exam (ALE) — Deep-Dive Analysis
 
 **Paper:** Agents' Last Exam (arXiv:2606.05405)  

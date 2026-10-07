@@ -6,8 +6,8 @@
 - 官方仓通读记录:`code/gpt-policy/`(工作区,零改动;真机回路完整,README 承诺的 RoboDojo 仿真评测未发布)
 - 仿真实现:`code/gpt-policy-sim/`(sim_world/sim_render/tasks/demo_record/run_episode/ablate/summarize;`.venv` 未入库,重建:`uv venv && uv pip install matplotlib numpy pillow`,决策后端用本机 codex CLI 的 gpt-6-astra)
 - 结果:`code/gpt-policy-sim/results/`(cells.jsonl 36 格权威数据 + summary.md + failure_modes.md 逐格归因 + ablation_grid.png + logs/ 36 份 stdout)
-- 演示包:`code/gpt-policy-sim/demos/prepared/`(t1/t2/t3 × video/video+action,种子 1042)
-- 抽样 traces:`code/gpt-policy-sim/traces/`(13 个 episode:8 个成功 + 5 个代表失败——轴交换自陷 T1_demo-video_s1、首步幻觉 T2_none_s0、钩子策略对但精度败 T3_demo-video_s0、超时 T3_target_s1、假阳性完成 T1_demo-action_s2;已剥 frames/images,完整 45 包在工作区 `code/gpt-policy-sim/runs/`)
+- 演示包:不入库(体积策略);用 `demo_record.py --task <T1|T2|T3> --seed 1042 --mode video|video+action` 重建
+- 抽样 traces:不入库(体积策略);逐格归因与权威数据在 `results/`(failure_modes.md、cells.jsonl、logs/)
 
 核心结果(3 任务 × 4 档上下文 × 3 种子,1800s/60 决策上限,编排 124.9 min):
 

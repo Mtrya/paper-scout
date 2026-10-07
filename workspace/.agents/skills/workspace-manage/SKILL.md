@@ -87,6 +87,17 @@ git check-ignore -v <path>
 - `drafts/` 回到只剩 `README.md`
 - 其他被忽略的暂存,仅在持久证据已晋升之后清理
 
+## 体积预算
+
+运行包只装精选证据,不装原料。校验器在 prepublish 与 final 两种模式下强制:
+
+- 单文件 ≤ 2MB,运行包总量 ≤ 20MB(常态应远低于上限;逼近上限说明有原料误入)。
+- 权重与 checkpoint(`.npz`/`.pt`/`.pth`/`.ckpt`/`.safetensors`)永不进运行包,`runs/` 下由 gitignore 拦截。
+
+原始产物一律不进包:评测帧条、关键帧抽取、逐 episode trace、原始模型输出大文件、录制的演示包、下载的数据集。它们要么留在被忽略的工作区 `code/`(本轮内可用),要么由入库脚本确定性重建——README 写明重建命令即可。入库的是脚本、补丁、汇总指标、小尺寸结果图,以及报告引用的精选图。
+
+报告图入库前压缩:最长边 ≤1600px;PNG 经 `optimize=True` 保存后仍超 2MB 的,量化到 256 色。原始分辨率已在飞书文档里,仓库留的是可读档案,不是像素级原件。
+
 ## 校验器
 
 把校验器当作运行契约中可机器检查的子集。清单仍然是更广的人工契约。
@@ -111,6 +122,7 @@ python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mod
 - 每个非保留的运行级目录都是合法线程。
 - 线程要么是 `BLOCKER.md`,要么是 `README.md` 加 `code/`、`patches/` 或两者兼有。
 - 存在的 `code/` 或 `patches/` 目录内至少有一个非空文件。
+- 体积预算:单文件 ≤ 2MB、运行包总量 ≤ 20MB、无权重/checkpoint 扩展名。
 - final 模式下 `code/` 和 `drafts/` 只剩各自的 README 标记。
 - final 模式要求 `runs/INDEX.md` 提到该运行 id。
 

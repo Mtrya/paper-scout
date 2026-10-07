@@ -127,6 +127,7 @@ Behavioral invariants:
 - The reading-agent contract is stable. Regenerating `prompt.txt` should not require changing `workspace/AGENTS.md`, and vice versa.
 - The prompt stays thin — run-scoped parameters only.
 - One run produces one Feishu doc. Delivery is append-new, not update-existing.
+- Run packets stay light: `verify_run.py` enforces per-file (2 MB) and per-run (20 MB) caps and bans weights/checkpoints. Raw outputs live in the ignored workspace `code/` or are regenerable from preserved scripts.
 - The reading agent's investigation permissions are governed by its contract. The skill defines a read-only baseline; the contract may expand it.
 
 If you change the `runs/INDEX.md` format, keep it readable by both the reading agent and the user, and append-only (newest first when practical).

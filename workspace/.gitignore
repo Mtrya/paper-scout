@@ -40,8 +40,10 @@ code/*
 # Python bytecode caches
 __pycache__/
 
-# Toy-experiment datasets & weights are regenerable; keep them local (GitHub rejects >100MB, 2026-08-24)
-# Patterns are relative to this file's directory (workspace/) — the workspace/ prefix silently
-# disabled them until 2026-08-27.
-runs/*/exp-*/code/checkpoints/*.npz
-runs/*/exp-*/code/checkpoints/*.pt
+# Weights and checkpoints never enter run packets (size policy in workspace-manage);
+# regenerable raw outputs stay in the ignored workspace code/ instead.
+runs/**/*.npz
+runs/**/*.pt
+runs/**/*.pth
+runs/**/*.ckpt
+runs/**/*.safetensors
