@@ -5,8 +5,8 @@
 1. 按顶层块边界(每元素一行)切成 ≤5.8KB 的段,首段创建文档,其余
    `docs +update --command append` 逐段追加(长文档单次写入会被静默截断)。
 2. 若存在 `runs/<run-id>/assets/figures.json`,按锚点插图:
-   锚点 `[[figure-anchor:<name>]]` 独占段落在导入时**不**会被飞书丢弃(历史上
-   曾假设会丢弃,导致锚点文本残留在文档里),因此插图采用块位置法——从源文件
+   锚点 `[[figure-anchor:<name>]]` 独占段落在导入时**不**会被飞书丢弃,
+   因此插图采用块位置法——从源文件
    取锚点的前一个段落文本,在带块 id 的抓取结果里定位该段落,
    `docs +media-insert` 插图到末尾,再 `block_move_after` 移到位;
    同一锚点多张图按清单顺序链式移动。全部插完后,显式抓取锚点段落块 id
@@ -14,10 +14,8 @@
 3. 插图前对每张图跑白边机械检查(check_image_whitespace):单边空白占比
    >8% 时自动裁剪到临时副本再上传(不动运行包原件),整图 >60% 空白直接失败。
    插图时显式传 --width 与 --height(横图 min(自然宽,740)、竖图 min(自然宽,500),
-   高度按素材实际纵横比算出,不再依赖 CLI 自动计算)——不传时 media-insert
-   默认尺寸不稳定,实测出现过 scale=7.28 与 width=height=100 的小框事故
-   (2026-08-21);只传 --width 时也出过高度算错、图被压小且框内大片留白
-   的事故(2026-08-24 组会文档,事后由用户手动拉大修复)。每张插入后立即
+   高度按素材实际纵横比算出)——不传或只传 --width 时 media-insert
+   的尺寸计算不稳定,图会被压成小框或框内大片留白。每张插入后立即
    回读块 width/height 校验(容差 ±3px),不符则删除重插一次,仍不符即中止。
 4. 重新抓取核对 img 数量与渲染宽度(显示宽 ≈ 自然宽/scale,显示宽 <200px
    或 scale>4 视为可疑,告警;img 块可能只有 scale 没有 width 属性)。
@@ -102,8 +100,8 @@ def run_cli(cli: str, args: list[str], cwd: Path) -> dict:
 def chunk_docxxml(text: str) -> list[str]:
     """按非空行(每个顶层块一行)切 ≤CHUNK_LIMIT 字节的段,不跨块。
 
-    table/pre/callout 等多行元素整体视为不可分单元:历史上一张表格恰好
-    跨段边界时,后半段 tbody 会被飞书导入器压成表格外的裸段落。
+    table/pre/callout 等多行元素整体视为不可分单元:一张表格若恰好
+    跨段边界,后半段 tbody 会被飞书导入器压成表格外的裸段落。
     """
     lines = [l for l in text.split("\n") if l.strip()]
     units: list[str] = []
@@ -327,7 +325,7 @@ def main() -> None:
                 inserted += 1
                 print(f"插图 {anchor}: {entry['file']} -> {img_id}")
         ws_tmp.cleanup()
-        # 3. 显式删除锚点段落(飞书导入不会丢弃它们,历史上曾假设会丢弃)
+        # 3. 显式删除锚点段落(飞书导入不会丢弃它们)
         content = fetch_content(args.cli, doc, cwd, ident)
         anchor_ids = re.findall(r'<p id="([^"]+)">(?:\[\[figure-anchor:[^\]]+\]\])+</p>', content)
         if anchor_ids:
