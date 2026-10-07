@@ -1,16 +1,16 @@
-{"t_wall": 1789576128.1597586, "sim_t": 0.0, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t0/episode/obs/obs_000.png"}, "budget_left": 249}
+{"t_wall": 1789576128.1597586, "sim_t": 0.0, "kind": "observe", "payload": {"path": "<home>/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t0/episode/obs/obs_000.png"}, "budget_left": 249}
 {"t_wall": 1789576137.3422408, "sim_t": 0.5, "kind": "act", "payload": {"unit": "A", "ee": [0.748, 0.525]}, "budget_left": 248}
-{"t_wall": 1789576137.477171, "sim_t": 0.5, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t0/episode/obs/obs_001.png"}, "budget_left": 247}
+{"t_wall": 1789576137.477171, "sim_t": 0.5, "kind": "observe", "payload": {"path": "<home>/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t0/episode/obs/obs_001.png"}, "budget_left": 247}
 {"t_wall": 1789576148.0670261, "sim_t": 1.0, "kind": "act", "payload": {"unit": "B", "place": "fail"}, "budget_left": 246}
-{"t_wall": 1789576148.2045772, "sim_t": 1.0, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t0/episode/obs/obs_002.png"}, "budget_left": 245}
+{"t_wall": 1789576148.2045772, "sim_t": 1.0, "kind": "observe", "payload": {"path": "<home>/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t0/episode/obs/obs_002.png"}, "budget_left": 245}
 {"t_wall": 1789576152.519343, "sim_t": 1.5, "kind": "act", "payload": {"unit": "C", "pick": "fail"}, "budget_left": 244}
-{"t_wall": 1789576152.6300044, "sim_t": 1.5, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t0/episode/obs/obs_003.png"}, "budget_left": 243}
+{"t_wall": 1789576152.6300044, "sim_t": 1.5, "kind": "observe", "payload": {"path": "<home>/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t0/episode/obs/obs_003.png"}, "budget_left": 243}
 {"t_wall": 1789576156.655897, "sim_t": 2.0, "kind": "act", "payload": {"unit": "D", "ee": [0.748, 0.545]}, "budget_left": 242}
-{"t_wall": 1789576156.7670352, "sim_t": 2.0, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t0/episode/obs/obs_004.png"}, "budget_left": 241}
+{"t_wall": 1789576156.7670352, "sim_t": 2.0, "kind": "observe", "payload": {"path": "<home>/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t0/episode/obs/obs_004.png"}, "budget_left": 241}
 {"t_wall": 1789576165.7987633, "sim_t": 2.5, "kind": "act", "payload": {"unit": "E", "ee": [0.728, 0.545]}, "budget_left": 240}
-{"t_wall": 1789576165.9461317, "sim_t": 2.5, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t0/episode/obs/obs_005.png"}, "budget_left": 239}
+{"t_wall": 1789576165.9461317, "sim_t": 2.5, "kind": "observe", "payload": {"path": "<home>/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t0/episode/obs/obs_005.png"}, "budget_left": 239}
 {"t_wall": 1789576177.9326243, "sim_t": 3.0, "kind": "act", "payload": {"unit": "F", "ee": [0.728, 0.525]}, "budget_left": 238}
-{"t_wall": 1789576178.0450623, "sim_t": 3.0, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t0/episode/obs/obs_006.png"}, "budget_left": 237}
+{"t_wall": 1789576178.0450623, "sim_t": 3.0, "kind": "observe", "payload": {"path": "<home>/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t0/episode/obs/obs_006.png"}, "budget_left": 237}
 {"t_wall": 1789576186.60921, "sim_t": 3.5, "kind": "act", "payload": {"unit": "E", "ee": [0.708, 0.525]}, "budget_left": 236}
 {"t_wall": 1789576186.690836, "sim_t": 4.0, "kind": "act", "payload": {"unit": "E", "ee": [0.688, 0.525]}, "budget_left": 235}
 {"t_wall": 1789576186.7948506, "sim_t": 4.5, "kind": "act", "payload": {"unit": "E", "ee": [0.668, 0.525]}, "budget_left": 234}
@@ -41,7 +41,7 @@
 {"t_wall": 1789576189.3021946, "sim_t": 17.0, "kind": "act", "payload": {"unit": "F", "ee": [0.188, 0.505]}, "budget_left": 209}
 {"t_wall": 1789576189.387947, "sim_t": 17.5, "kind": "act", "payload": {"unit": "F", "ee": [0.188, 0.485]}, "budget_left": 208}
 {"t_wall": 1789576189.4990356, "sim_t": 18.0, "kind": "act", "payload": {"unit": "F", "ee": [0.188, 0.465]}, "budget_left": 207}
-{"t_wall": 1789576189.646676, "sim_t": 18.0, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t0/episode/obs/obs_007.png"}, "budget_left": 206}
+{"t_wall": 1789576189.646676, "sim_t": 18.0, "kind": "observe", "payload": {"path": "<home>/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t0/episode/obs/obs_007.png"}, "budget_left": 206}
 {"t_wall": 1789576195.1940682, "sim_t": 18.5, "kind": "act", "payload": {"unit": "C", "pick": "ok"}, "budget_left": 205}
 {"t_wall": 1789576202.7663417, "sim_t": 19.0, "kind": "act", "payload": {"unit": "E", "ee": [0.168, 0.465]}, "budget_left": 204}
 {"t_wall": 1789576202.8803315, "sim_t": 19.5, "kind": "act", "payload": {"unit": "E", "ee": [0.148, 0.465]}, "budget_left": 203}
@@ -64,6 +64,6 @@
 {"t_wall": 1789576204.7024598, "sim_t": 28.0, "kind": "act", "payload": {"unit": "D", "ee": [0.148, 0.805]}, "budget_left": 186}
 {"t_wall": 1789576204.7926884, "sim_t": 28.5, "kind": "act", "payload": {"unit": "D", "ee": [0.148, 0.825]}, "budget_left": 185}
 {"t_wall": 1789576204.8894825, "sim_t": 29.0, "kind": "act", "payload": {"unit": "B", "place_err": 0.0089}, "budget_left": 184}
-{"t_wall": 1789576205.0278563, "sim_t": 29.0, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t0/episode/obs/obs_008.png"}, "budget_left": 183}
+{"t_wall": 1789576205.0278563, "sim_t": 29.0, "kind": "observe", "payload": {"path": "<home>/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t0/episode/obs/obs_008.png"}, "budget_left": 183}
 {"t_wall": 1789576209.412515, "sim_t": 29.0, "kind": "done", "payload": {"cond": "E", "success": true, "final_err": 0.0089, "sim_t": 29.0}, "budget_left": 183}
 {"t_wall": 1789576214.5886343, "sim_t": 29.0, "kind": "done", "payload": {"cond": "E", "success": true, "final_err": 0.0089, "sim_t": 29.0}, "budget_left": 183}

@@ -20,82 +20,82 @@
   [base_pose] ep 5/15 mse=0.000072
   [base_pose] ep 10/15 mse=0.000064
   [base_pose] ep 15/15 mse=0.000058
-[base_pose] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/t1_base_pose.pt
+[base_pose] saved <home>/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/t1_base_pose.pt
 [cam] train 43039 samples x 15 epochs
   [cam] ep 5/15 mse=0.000079
   [cam] ep 10/15 mse=0.000063
   [cam] ep 15/15 mse=0.000064
-[cam] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/t1_cam.pt
+[cam] saved <home>/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/t1_cam.pt
 [base] train 38180 samples x 15 epochs
   [base] ep 5/15 mse=0.000088
   [base] ep 10/15 mse=0.000075
   [base] ep 15/15 mse=0.000069
-[base] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/t2_base.pt
+[base] saved <home>/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/t2_base.pt
 [base_pose] train 38180 samples x 15 epochs
   [base_pose] ep 5/15 mse=0.000083
   [base_pose] ep 10/15 mse=0.000075
   [base_pose] ep 15/15 mse=0.000072
-[base_pose] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/t2_base_pose.pt
+[base_pose] saved <home>/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/t2_base_pose.pt
 [cam] train 38180 samples x 15 epochs
   [cam] ep 5/15 mse=0.000076
   [cam] ep 10/15 mse=0.000065
   [cam] ep 15/15 mse=0.000066
-[cam] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/t2_cam.pt
+[cam] saved <home>/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/t2_cam.pt
 [base] train 38191 samples x 15 epochs
   [base] ep 5/15 mse=0.000100
   [base] ep 10/15 mse=0.000087
   [base] ep 15/15 mse=0.000083
-[base] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/dense_base.pt
+[base] saved <home>/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/dense_base.pt
 [base_pose] train 38191 samples x 15 epochs
   [base_pose] ep 5/15 mse=0.000097
   [base_pose] ep 10/15 mse=0.000080
   [base_pose] ep 15/15 mse=0.000073
-[base_pose] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/dense_base_pose.pt
+[base_pose] saved <home>/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/dense_base_pose.pt
 [cam] train 38191 samples x 15 epochs
   [cam] ep 5/15 mse=0.000083
   [cam] ep 10/15 mse=0.000071
   [cam] ep 15/15 mse=0.000063
-[cam] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/dense_cam.pt
+[cam] saved <home>/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/dense_cam.pt
 [base_pose] train 8503 samples x 15 epochs
   [base_pose] ep 5/15 mse=0.000236
   [base_pose] ep 10/15 mse=0.000111
   [base_pose] ep 15/15 mse=0.000085
-[base_pose] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/scan1000_base_pose.pt
+[base_pose] saved <home>/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/scan1000_base_pose.pt
 [cam] train 8503 samples x 15 epochs
   [cam] ep 5/15 mse=0.000128
   [cam] ep 10/15 mse=0.000094
   [cam] ep 15/15 mse=0.000073
-[cam] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/scan1000_cam.pt
+[cam] saved <home>/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/scan1000_cam.pt
 [base_pose] train 33988 samples x 15 epochs
   [base_pose] ep 5/15 mse=0.000097
   [base_pose] ep 10/15 mse=0.000072
   [base_pose] ep 15/15 mse=0.000073
-[base_pose] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/scan4000_base_pose.pt
+[base_pose] saved <home>/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/scan4000_base_pose.pt
 [cam] train 33988 samples x 15 epochs
   [cam] ep 5/15 mse=0.000086
   [cam] ep 10/15 mse=0.000067
   [cam] ep 15/15 mse=0.000065
-[cam] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/scan4000_cam.pt
+[cam] saved <home>/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/scan4000_cam.pt
 [cam] train 42844 samples x 15 epochs
   [cam] ep 5/15 mse=0.000074
   [cam] ep 10/15 mse=0.000062
   [cam] ep 15/15 mse=0.000061
-[cam] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/b2b_cam.pt
+[cam] saved <home>/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/b2b_cam.pt
 [base_pose] train 42844 samples x 15 epochs
   [base_pose] ep 5/15 mse=0.000079
   [base_pose] ep 10/15 mse=0.000063
   [base_pose] ep 15/15 mse=0.000061
-[base_pose] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/b2b_base_pose.pt
+[base_pose] saved <home>/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/b2b_base_pose.pt
 [base_pose_label] train 42844 samples x 15 epochs
   [base_pose_label] ep 5/15 mse=0.000082
   [base_pose_label] ep 10/15 mse=0.000064
   [base_pose_label] ep 15/15 mse=0.000063
-[base_pose_label] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/b2b_base_pose_label.pt
+[base_pose_label] saved <home>/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/b2b_base_pose_label.pt
 [base] train 42844 samples x 15 epochs
   [base] ep 5/15 mse=0.000078
   [base] ep 10/15 mse=0.000070
   [base] ep 15/15 mse=0.000068
-[base] saved /home/deneb/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/b2b_base.pt
+[base] saved <home>/Projects/paper-scout/workspace/runs/2026-08-21-camvla-calibration/exp-frame-rep/code/checkpoints/b2b_base.pt
 [par] training done in 4953s
 [par] evaluating 25 groups x 19 yaws x 50 eps...
 

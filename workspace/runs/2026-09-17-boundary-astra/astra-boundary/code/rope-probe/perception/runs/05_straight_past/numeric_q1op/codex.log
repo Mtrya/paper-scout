@@ -1,7 +1,7 @@
 Reading additional input from stdin...
 OpenAI Codex v0.154.0
 --------
-workdir: /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+workdir: <home>/Projects/paper-scout/workspace/code/rope-probe
 model: gpt-6-astra
 provider: openai
 approval: on-request

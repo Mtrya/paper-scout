@@ -37,7 +37,7 @@
 The scripts are self-contained and run out of the box using analytic formulas:
 
 ```bash
-cd /home/betelgeuse/Documents/paper-scout/workspace
+cd <repo>/workspace
 
 # Parameter-count and split-layer analysis
 python3 runs/2026-06-16-gam-apt-dreamx/geometric-action-model-2606.17046/code/inspect_da3_architecture.py
@@ -50,7 +50,7 @@ To cross-check against the real DA3 model and run the live forward skeleton,
 clone DA3 and install the minimal dependencies:
 
 ```bash
-cd /home/betelgeuse/Documents/paper-scout/workspace
+cd <repo>/workspace
 git clone https://github.com/ByteDance-Seed/Depth-Anything-3.git code/Depth-Anything-3
 uv venv --python python3.10 runs/2026-06-16-gam-apt-dreamx/geometric-action-model-2606.17046/code/venv
 source runs/2026-06-16-gam-apt-dreamx/geometric-action-model-2606.17046/code/venv/bin/activate

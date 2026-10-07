@@ -25,7 +25,7 @@
 ## 远端环境搭建记录(可复用经验)
 
 - 平台:下载用可上网区 4090(evoke-downloader),推理用分布式训练空间 H200(evoke-probe);两 workspace 共享同一 GPFS workroot,权重/venv 传一次两边可见。
-- 分布式训练空间的 notebook 网关域名 ai-notebook-inspire.sii.edu.cn 公网/校内 DNS 均不解析;SNI 扫描定位 10.252.252.20,本机 127.0.0.1:7899 起 CONNECT 转发代理 + HTTPS_PROXY 环境变量打通 CLI(详见 INSPIRE.md 本次更新)。
+- 分布式训练空间的 notebook 网关域名 ai-notebook-inspire.sii.edu.cn 公网/校内 DNS 均不解析;SNI 扫描定位到网关内网地址,本机起 CONNECT 转发代理 + HTTPS_PROXY 环境变量打通 CLI(地址与做法见 INSPIRE.md)。
 - 权重下载:hf-mirror 单连接 0.6MB/s,16 线程 range 下载 12-16MB/s;requests 线程会挂死(慢读无超时),必须 socket.setdefaulttimeout + 每文件 wall-clock 预算(600s)+ daemon 线程,超时弃文件断点续传。
 - NGC 镜像 pip 有来源不明的 ngc extra-index(改完所有 pip.conf 仍出现),每个包解析先对 pypi.ngc.nvidia.com 重试 5 次;不阻塞但拖慢。装依赖要用 PIP_CONFIG_FILE 显式最小配置;第二条 install 会把 torch 升级到 2.13(cpu)——装完必须 `--force-reinstall --no-deps` 重装本地 cu124 wheel。
 - flash-attn 2.8.3 在 4090 下载器编译需 TORCH_CUDA_ARCH_LIST="8.9;9.0"(否则 H200 sm90 无 kernel)。

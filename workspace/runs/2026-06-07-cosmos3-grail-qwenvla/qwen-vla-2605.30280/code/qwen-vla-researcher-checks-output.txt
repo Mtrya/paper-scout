@@ -1,5 +1,5 @@
-<frozen site>:101: RuntimeWarning: Unexpected value in sys.prefix, expected /home/betelgeuse/Documents/paper-scout/workspace/.venv, got /home/betelgeuse/Documents/paper-scout/workspace/runs/vla/../../.venv
-<frozen site>:101: RuntimeWarning: Unexpected value in sys.exec_prefix, expected /home/betelgeuse/Documents/paper-scout/workspace/.venv, got /home/betelgeuse/Documents/paper-scout/workspace/runs/vla/../../.venv
+<frozen site>:101: RuntimeWarning: Unexpected value in sys.prefix, expected <home>/Documents/paper-scout/workspace/.venv, got <home>/Documents/paper-scout/workspace/runs/vla/../../.venv
+<frozen site>:101: RuntimeWarning: Unexpected value in sys.exec_prefix, expected <home>/Documents/paper-scout/workspace/.venv, got <home>/Documents/paper-scout/workspace/runs/vla/../../.venv
 [warning] sentence-transformers/HF download failed (We couldn't connect to 'https://hf-mirror.com' to load the files, and couldn't find them in the cached files.
 Check your internet connection or see how to run the library in offline mode at 'https://huggingface.co/docs/transformers/installation#offline-mode'.); using sklearn CountVectorizer fallback.
 ======================================================================

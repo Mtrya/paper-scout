@@ -1,7 +1,7 @@
 Reading additional input from stdin...
 OpenAI Codex v0.154.0
 --------
-workdir: /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+workdir: <home>/Projects/paper-scout/workspace/code/agp-probe
 model: gpt-6-astra
 provider: openai
 approval: on-request
@@ -38,7 +38,7 @@ codex
 I’ll check the initial state, then upload a feedback controller and run the balance test.
 
 exec
-/bin/bash -lc 'python3 robot.py state' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py state' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"task": "balance", "sim_t": 0.0, "budget": 250, "ee": [0.15, 0.15], "holding": null, "blocks": [], "puck": null, "score": null, "cart_x": 0.0, "cart_v": 0.0, "theta": 0.12, "omega": 0.0, "pole_L": 0.6, "pole_m": 0.2, "cart_m": 1.0, "no_controller": false, "upright_time": 0.0, "force_limit": 10.0}
 
@@ -47,25 +47,25 @@ exec
 def control(state):
     return (60.0 * state['theta'] + 15.0 * state['omega']
             + 4.0 * state['x'] + 7.0 * state['v'])
-PY" in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+PY" in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 exec
-/bin/bash -lc 'python3 robot.py upload_controller balance_controller.py' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py upload_controller balance_controller.py' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"ok": true, "note": "controller active during run"}
 
 exec
-/bin/bash -lc 'python3 robot.py run 2' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py run 2' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"sim_t": 2.5, "theta_deg": -0.14, "cart_x": 0.153, "upright_time": 2.0, "fell": false}
 
 exec
-/bin/bash -lc 'python3 robot.py run 9' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py run 9' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"sim_t": 11.504, "theta_deg": 0.0, "cart_x": 0.0, "upright_time": 11.0, "fell": false}
 
 exec
-/bin/bash -lc 'python3 robot.py done' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py done' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"FINAL": {"task": "balance", "success": true, "upright_time": 11.0, "used_controller": true, "fell": false, "sim_t": 11.503999999999177}}
 

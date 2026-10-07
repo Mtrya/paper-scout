@@ -1,6 +1,6 @@
 # Hierarchical Memory & Relative RoPE Probe
 
-Config: `/home/alpheratz/Projects/paper-scout/workspace/runs/2026-07-11-gigaworld-vla-corrector-physis/gigaworld-1-2607.02642/code/official_snippets/stage_1_post_functrl_wan21.yaml`
+Config: `<home>/Projects/paper-scout/workspace/runs/2026-07-11-gigaworld-vla-corrector-physis/gigaworld-1-2607.02642/code/official_snippets/stage_1_post_functrl_wan21.yaml`
 
 ## Token budget estimate
 

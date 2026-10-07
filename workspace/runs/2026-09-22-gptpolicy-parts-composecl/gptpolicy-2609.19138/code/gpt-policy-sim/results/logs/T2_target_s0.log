@@ -625,9 +625,9 @@ Home complete.
 
 TASK · FAILED ──────────────────────────────────────────────────────────────────
 Recording saved: 
-/home/deneb/Projects/paper-scout/workspace/code/gpt-policy-sim/runs/T2_target_s0
+<home>/Projects/paper-scout/workspace/code/gpt-policy-sim/runs/T2_target_s0
 _20260922-191006_failed
 [sim] ground-truth success=False (plug_in_box=False dist_xy=0.403 plug_z=0.008 grasped=None)
-[sim] recording: /home/deneb/Projects/paper-scout/workspace/code/gpt-policy-sim/runs/T2_target_s0_20260922-191006_failed
+[sim] recording: <home>/Projects/paper-scout/workspace/code/gpt-policy-sim/runs/T2_target_s0_20260922-191006_failed
 
 # cell finished rc=0 timeout=False wall=1215s

@@ -4,9 +4,10 @@ from __future__ import annotations
 
 import ast
 import json
+import os
 from pathlib import Path
 
-REPO = Path("/home/betelgeuse/Documents/paper-scout/workspace/code/learning-beyond-gradients")
+REPO = Path(os.environ.get("LBG_REPO", "learning-beyond-gradients"))  # clone of the official repo, e.g. in workspace code/
 OUT = Path(__file__).resolve().parent / "complexity_metrics.json"
 
 POLICIES = [

@@ -1,5 +1,5 @@
---- /home/alpheratz/Projects/paper-scout/workspace/code/FlowWAM/diffsynth/models/wan_video_dit_dual_stream.py	2026-07-16 08:17:53.413084738 +0800
-+++ /home/alpheratz/Projects/paper-scout/workspace/code/FlowWAM_WorldArena/diffsynth/models/wan_video_dit_dual_stream.py	2026-07-16 08:17:56.532674105 +0800
+--- <home>/Projects/paper-scout/workspace/code/FlowWAM/diffsynth/models/wan_video_dit_dual_stream.py	2026-07-16 08:17:53.413084738 +0800
++++ <home>/Projects/paper-scout/workspace/code/FlowWAM_WorldArena/diffsynth/models/wan_video_dit_dual_stream.py	2026-07-16 08:17:56.532674105 +0800
 @@ -19,10 +19,6 @@
  
      Architecture mirrors the pretrained DiT's patch_embedding and head.
@@ -19,8 +19,8 @@
  
      def patchify(self, flow_latent):
          """Apply flow patch embedding.
---- /home/alpheratz/Projects/paper-scout/workspace/code/FlowWAM/diffsynth/pipelines/wan_video_dual_stream.py	2026-07-16 08:17:53.413441062 +0800
-+++ /home/alpheratz/Projects/paper-scout/workspace/code/FlowWAM_WorldArena/diffsynth/pipelines/wan_video_dual_stream.py	2026-07-16 08:17:56.533058411 +0800
+--- <home>/Projects/paper-scout/workspace/code/FlowWAM/diffsynth/pipelines/wan_video_dual_stream.py	2026-07-16 08:17:53.413441062 +0800
++++ <home>/Projects/paper-scout/workspace/code/FlowWAM_WorldArena/diffsynth/pipelines/wan_video_dual_stream.py	2026-07-16 08:17:56.533058411 +0800
 @@ -191,9 +191,6 @@
      f_f, h_f, w_f = flow_5d.shape[2:]
      flow_tokens = rearrange(flow_5d, 'b c f h w -> b (f h w) c').contiguous()
