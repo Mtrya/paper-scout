@@ -1,0 +1,4 @@
+#!/bin/sh
+# Blocks commits that add secrets, credentials, or personal/machine-identifying
+# info. Enabled via: git config core.hooksPath scripts/git-hooks
+exec python3 scripts/scan_secrets.py --staged

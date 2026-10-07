@@ -160,7 +160,7 @@ user-invocable: false
 创建真实文档之前,确保运行清单已完成,并运行:
 
 ```bash
-python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode prepublish
+python3 .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode prepublish
 ```
 
 ### 飞书交付(需要 lark-cli)
@@ -170,7 +170,7 @@ python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mod
 首选方式是运行本技能的推送脚本,它封装了分段、插图与验证的全部细节:
 
 ```bash
-python .agents/skills/report-compose/scripts/push_report.py <run-id> \
+python3 .agents/skills/report-compose/scripts/push_report.py <run-id> \
   --user-id <ou_xxx>            # 不给 --user-id 则只建文档不通知
   # --dry-run 只分段并打印计划  # --cli 覆盖 lark-cli 调用前缀
   # --report/--figures 改报告源与配图清单路径(相对运行包目录)

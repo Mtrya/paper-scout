@@ -32,12 +32,12 @@ figures.json 格式(键为锚点名,与 report.docxxml 中的 [[figure-anchor:<n
 file 相对运行包目录。锚点名必须是顶层独立段落(裸行,不要包 <p>)。
 
 用法(在 workspace/ 下运行):
-  python .agents/skills/report-compose/scripts/push_report.py <run-id> [--dry-run]
-  python .agents/skills/report-compose/scripts/push_report.py <run-id> \\
+  python3 .agents/skills/report-compose/scripts/push_report.py <run-id> [--dry-run]
+  python3 .agents/skills/report-compose/scripts/push_report.py <run-id> \\
       --user-id ou_xxx [--im-text "可选自定义私信文本"]
 
 追加到既有文档(组会版/个人探索文档等场景):
-  python .agents/skills/report-compose/scripts/push_report.py <run-id> \
+  python3 .agents/skills/report-compose/scripts/push_report.py <run-id> \
       --report assets/report_final.docxxml --figures assets/figures_final.json \
       --existing-doc "https://fudan-nlp.feishu.cn/wiki/<token>" --user-id ou_xxx
   --report/--figures 改报告与配图清单路径(仍相对运行包目录);--existing-doc

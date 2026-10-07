@@ -13,7 +13,7 @@
       "message": "Granted the current CLI user full_access (可管理权限) on the new document.",
       "perm": "full_access",
       "status": "granted",
-      "user_open_id": "ou_112f716a1251541d5a80127d81595f9a"
+      "user_open_id": "ou_<redacted>"
     }
   },
   "_notice": {

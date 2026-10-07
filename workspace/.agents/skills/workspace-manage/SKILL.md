@@ -105,13 +105,13 @@ git check-ignore -v <path>
 发布前运行:
 
 ```bash
-python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode prepublish
+python3 .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode prepublish
 ```
 
 交付、清理与索引更新之后运行:
 
 ```bash
-python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode final
+python3 .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode final
 ```
 
 校验器检查:
@@ -200,7 +200,7 @@ python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mod
 3. 运行最终校验:
 
 ```bash
-python .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode final
+python3 .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode final
 ```
 
 4. 检查 `git status --short`。它应该只显示持久的日期记忆、论文缓存、运行包和 `runs/INDEX.md`。
