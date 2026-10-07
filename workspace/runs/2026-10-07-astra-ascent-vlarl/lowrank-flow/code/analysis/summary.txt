@@ -1,0 +1,50 @@
+seeds: 5
+BC success   : 0.888±0.014
+RL success   : 0.969±0.014
+  seed 0: bc 0.895 -> rl 0.980 (expert baseline in bc_metrics)
+  seed 1: bc 0.870 -> rl 0.955 (expert baseline in bc_metrics)
+  seed 2: bc 0.875 -> rl 0.990 (expert baseline in bc_metrics)
+  seed 3: bc 0.890 -> rl 0.955 (expert baseline in bc_metrics)
+  seed 4: bc 0.910 -> rl 0.965 (expert baseline in bc_metrics)
+
+C1/C2 spectra (mean r95 / density / energy share):
+  bc_stage: AdaRMS: r95=29.600±1.879 dens=1.000±0.000 eshare=0.207±0.007 | TimeMLP: r95=50.300±0.400 dens=1.000±0.000 eshare=0.027±0.001 | Rest: r95=36.825±0.579 dens=1.000±0.000 eshare=0.766±0.007 || TS energy share 0.234±0.007
+  rl: AdaRMS: r95=10.467±0.748 dens=0.997±0.000 eshare=0.249±0.014 | TimeMLP: r95=7.900±0.490 dens=0.996±0.001 eshare=0.029±0.004 | Rest: r95=29.025±0.588 dens=0.997±0.000 eshare=0.721±0.018 || TS energy share 0.279±0.018
+  bc_cont: AdaRMS: r95=39.133±1.127 dens=0.997±0.000 eshare=0.303±0.011 | TimeMLP: r95=34.500±0.447 dens=0.998±0.000 eshare=0.054±0.001 | Rest: r95=42.975±0.654 dens=0.998±0.000 eshare=0.642±0.012 || TS energy share 0.358±0.012
+  bc_disc: AdaRMS: r95=31.133±1.002 dens=0.997±0.000 eshare=0.270±0.007 | TimeMLP: r95=16.600±0.200 dens=0.998±0.000 eshare=0.038±0.002 | Rest: r95=42.175±0.769 dens=0.998±0.000 eshare=0.692±0.006 || TS energy share 0.308±0.006
+  bc_cont_mid: AdaRMS: r95=37.533±1.310 dens=0.998±0.000 eshare=0.256±0.010 | TimeMLP: r95=34.900±0.583 dens=0.998±0.000 eshare=0.045±0.001 | Rest: r95=37.725±0.913 dens=0.998±0.000 eshare=0.699±0.010 || TS energy share 0.301±0.010
+  bc_disc_mid: AdaRMS: r95=26.667±0.869 dens=0.998±0.000 eshare=0.230±0.011 | TimeMLP: r95=14.000±0.548 dens=0.998±0.000 eshare=0.031±0.001 | Rest: r95=36.225±1.105 dens=0.998±0.000 eshare=0.739±0.010 || TS energy share 0.261±0.010
+  bc_stage_mid: AdaRMS: r95=27.933±1.756 dens=1.000±0.000 eshare=0.204±0.007 | TimeMLP: r95=46.500±0.548 dens=1.000±0.000 eshare=0.026±0.001 | Rest: r95=30.875±0.481 dens=1.000±0.000 eshare=0.770±0.007 || TS energy share 0.230±0.007
+
+C3 |cos(base, delta)|:
+  ssg_rl_vs_bc: scale=0.485±0.067 shift=0.535±0.040 gate=0.323±0.078
+  ssg_disc_vs_bc: scale=0.451±0.049 shift=0.505±0.077 gate=0.336±0.052
+  ssg_cont_vs_bc: scale=0.374±0.070 shift=0.466±0.069 gate=0.244±0.043
+
+C2 tau-direction localisation (normalised |cos|, near vs between RL steps):
+  rl: at RL steps 0.422±0.239, elsewhere 0.427±0.240, ratio 0.99
+  bc_disc: at RL steps 0.809±0.106, elsewhere 0.802±0.111, ratio 1.01
+  bc_cont: at RL steps 0.778±0.148, elsewhere 0.776±0.150, ratio 1.00
+  bc_disc_mid: at RL steps 0.924±0.050, elsewhere 0.920±0.051, ratio 1.00
+
+C4 module replacement:
+  bc                 0.875±0.012
+  rl                 0.965±0.016
+  ts_only            0.903±0.032
+  nonts_only         0.957±0.015
+  ts_top4            0.907±0.033
+  ts_wo_top4         0.877±0.012
+  bc_plus_ts_top4_bc 0.875±0.016
+
+C5 probe / steering:
+  probe_all_auc            0.918±0.008
+  probe_random_auc_mean    0.497±0.009
+  probe_best_single_auc    0.744±0.028
+  probe_bc_auc             0.890±0.036
+  probe_rl_auc             0.927±0.065
+  rl shift_adaptive  a=0.25:-0.004±0.006  a=0.5:-0.006±0.006  a=1.0:-0.005±0.008  a=2.0:-0.001±0.007
+  rl shift_fixed     a=0.25:-0.003±0.004  a=0.5:-0.005±0.003  a=1.0:-0.009±0.006  a=2.0:-0.003±0.009
+  rl random_fixed    a=0.25:-0.001±0.004  a=0.5:-0.005±0.007  a=1.0:-0.006±0.007  a=2.0:-0.006±0.011
+  bc shift_adaptive  a=0.25:0.001±0.004  a=0.5:0.002±0.007  a=1.0:0.007±0.009  a=2.0:0.001±0.011
+  bc shift_fixed     a=0.25:0.004±0.010  a=0.5:0.003±0.017  a=1.0:0.001±0.016  a=2.0:0.005±0.018
+  bc random_fixed    a=0.25:0.001±0.006  a=0.5:-0.002±0.011  a=1.0:-0.003±0.005  a=2.0:-0.003±0.016

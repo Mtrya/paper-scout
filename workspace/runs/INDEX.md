@@ -13,6 +13,14 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-10-07 — 2026-09-23 至 2026-10-06(astra 时代的小脑进化:混合控制边界 × 自进化稳定性 × RL 增益几何)
+- Doc: https://fudan-nlp.feishu.cn/docx/Aq96db6SmoxASlxDTDrcuhxSnWe
+- Run: runs/2026-10-07-astra-ascent-vlarl/
+- Deep threads: astra 六域评测精读 + 混合控制×先验质量网格(36 格真实 astra 决策;P3"危险中间态"证伪——biased 6/6≈direct 5/6、硬偏置拒 72/76、最长连续接受 ≤2 vs oracle 7;机制=审查落在内容层而非信任层,接触型提案 oracle 4/4 vs 损坏臂 0/136;P1 弱支持/P2 支持/P4 部分支持;介入率 76.5-100% vs 论文 14.4% 系协议差异不可并列)(2609.38537), ASCENT×ouroboros 精读 + 在线 TTT 六臂对照(Qwen3-0.6B+LoRA r=16,240 任务相位漂移流,3.2 GPU·h;核心 B3 反驳且归属相反——门控放大提升 +0.246 vs RFT +0.200、末段 1.29×,30 buffer 只放行 3 个、NLL 三级台阶;hindsight 软目标稳定第一但流内 −0.050 持平;B5 支持 ouroboros 因果主张——冻结生成逐位拉回 base、NLL +0.014→−0.078;B4 反驳:分界线是"目标是否来自学习者当前策略";B1 部分反驳——RFT 未跌破 base 但失稳签名全在)(2610.05303, 2610.05076), 低秩 VLA-RL 精读 + 玩具机制复测(2D 推块 57 万参数 flow 策略,BC 0.888→RL 0.969 × 5 seeds;低秩签名精确复现 r95 卡在 K=10;"增益住在 TS"反向——TS-only 31% vs 非 TS 91%;ssg 分工排序反转;shift 探针 AUC 0.918 被随机方向对照 0.902 推翻;steering 零增益;锋利正结果:TS 行为贡献全压前 4 奇异方向 留 36%/去 3%)(2609.34599)
+- Covered papers: 2609.38537, 2610.05303, 2610.05076, 2609.34599
+- Shortlisted papers: 2609.36012, 2609.34981, 2609.35427, 2610.01939, 2609.38078, 2609.28256, 2609.25053, 2609.38886, 2609.28654
+- 背景: 三线程共同回答"astra 时代小脑以什么方式存在与进化";最重要单点是 B3 归属反转——提升 ↔ 已验证轨迹硬目标+独立真实文本门控,稳定 ↔ 切断自生成反馈(门控/冻结生成/冻结教师同向),"稳定与提升相取舍"不成立;跨线程猜想:可进化性-稳定性矛盾可用更新通道带宽来换,与线性注意力/RNN 小脑同构。执行教训:后台 GPU subagent 要"先落袋再求完"(首轮 2h 墙钟被杀时运行包为空);线程目录是精确 name-set 白名单;旧 lark open_id 失效换新。
+
 ## 2026-09-22 — 2026-09-15 至 2026-09-22(学习通道阶梯:纯上下文 → context 指挥权重 → 权重固化机制)
 - Doc: https://fudan-nlp.feishu.cn/docx/HiUkdvITHoWiGrxt15nczot0nBc
 - Run: runs/2026-09-22-gptpolicy-parts-composecl/
