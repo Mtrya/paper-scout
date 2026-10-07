@@ -176,9 +176,9 @@ Home complete.
 
 TASK · SUCCESS ─────────────────────────────────────────────────────────────────
 Recording saved: 
-/home/deneb/Projects/paper-scout/workspace/code/gpt-policy-sim/runs/T1_target_s2
+<home>/Projects/paper-scout/workspace/code/gpt-policy-sim/runs/T1_target_s2
 _20260922-185141_success
 [sim] ground-truth success=True (cube_in_bowl=True dist_xy=0.002 cube_z=0.025 grasped=None)
-[sim] recording: /home/deneb/Projects/paper-scout/workspace/code/gpt-policy-sim/runs/T1_target_s2_20260922-185141_success
+[sim] recording: <home>/Projects/paper-scout/workspace/code/gpt-policy-sim/runs/T1_target_s2_20260922-185141_success
 
 # cell finished rc=0 timeout=False wall=370s

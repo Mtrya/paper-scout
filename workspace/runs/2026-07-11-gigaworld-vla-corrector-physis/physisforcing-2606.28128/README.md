@@ -103,7 +103,7 @@ We triangulated against two nearby world-model papers in the same run pool:
 ## How to rerun
 
 ```bash
-cd /home/alpheratz/Projects/paper-scout/workspace
+cd <repo>/workspace
 python3 code/physisforcing_probe.py
 ```
 

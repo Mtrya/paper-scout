@@ -60,10 +60,10 @@ python3 run_probe.py mechanism     # Jacobian analysis
 python3 run_probe.py figures       # writes assets/probe_*.png
 ```
 
-Requires numpy + matplotlib only. `models.npz` and `results.json` are preserved, so `figures` can be rerun directly.
+Requires numpy + matplotlib only. `results.json` is preserved, so `mechanism` and `figures` can be rerun directly; `models.npz` is not kept in the packet (size policy) — regenerate with `train_models.py` (~2 min, CPU).
 
 ## Preserved files
 
 - `code/toy_wam.py`, `code/train_models.py`, `code/attacks.py`, `code/run_probe.py`, `code/smoke_train.py`
-- `code/models.npz` (trained toy weights), `code/results.json` (all metrics)
+- `code/results.json` (all metrics)
 - Figures in `../../assets/`: `probe_lambda_frontier.png`, `probe_mechanism.png`, `probe_desync_scatter.png`, `probe_channels.png`, `probe_qualitative.png`, plus paper figures `badwam-paper-fig1-desync-evidence.png`, `badwam-paper-fig5-failure-profile.png`, `badwam-paper-fig12-matched-stealth.png`, `badwam-paper-table1.png`.

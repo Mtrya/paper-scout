@@ -28,8 +28,8 @@ Physics-IQ 真实场景上做失败模式解剖。
 
 ## eval/
 
-8 场景帧条(`*_strip.png`,上真实下生成)与能量曲线(`*_energy.png`)。
-报告精选在 `../../assets/`。
+原始帧条与能量曲线不入库(体积策略);报告精选在 `../../assets/`,全量可在远端
+workroot 用 `eval_probe.py` 重新生成。
 
 ## 结果要点
 

@@ -3,7 +3,7 @@
 # -> probe3 (H=1024, H=4096). Idempotent per stage (skips existing outputs).
 set -u
 cd "$(dirname "$0")"
-PY=/home/alpheratz/Projects/chess-transformer/.venv/bin/python
+PY="${PY:-python3}"  # point at a venv python on the target host, e.g. PY=~/Projects/<proj>/.venv/bin/python
 LOG=results/gpu_pipeline.log
 mkdir -p results
 

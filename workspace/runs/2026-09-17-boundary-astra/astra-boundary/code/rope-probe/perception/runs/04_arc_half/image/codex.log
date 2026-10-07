@@ -1,7 +1,7 @@
 Reading additional input from stdin...
 OpenAI Codex v0.154.0
 --------
-workdir: /home/deneb/Projects/paper-scout/workspace/code/rope-probe
+workdir: <home>/Projects/paper-scout/workspace/code/rope-probe
 model: gpt-6-astra
 provider: openai
 approval: on-request
@@ -11,7 +11,7 @@ reasoning summaries: none
 session id: 01a0ab85-b548-7a51-ae11-eeac9b19a8f4
 --------
 user
-You are given a top-down rendered image of a rope-on-table scene at `/home/deneb/Projects/paper-scout/workspace/code/rope-probe/perception/cases/04_arc_half/render.png` (384x384 px; the rope is blue, the peg is the red dot, the table border is black). Read the image file and inspect it visually.
+You are given a top-down rendered image of a rope-on-table scene at `<home>/Projects/paper-scout/workspace/code/rope-probe/perception/cases/04_arc_half/render.png` (384x384 px; the rope is blue, the peg is the red dot, the table border is black). Read the image file and inspect it visually.
 
 Answer two questions about the rope in the scene:
 Q1: Is the rope wound around the peg (at least one full turn)? ("yes" or "no")

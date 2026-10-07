@@ -205,4 +205,4 @@ Small inspection scripts written during this investigation are preserved in `cod
 
 ## 8. Addendum: Is the ALE-Bench Gap Due to an "Alien" Environment?
 
-See `ADDENDUM_environment.md` for a second-pass investigation. Core finding: the "alien environment" hypothesis is strongly refuted. The Session API is standard Python; prompts are textbook competitive programming; models compile and run successfully on the first try; and the one-shot retry data show ACCEPTED verdicts with poor scores, not repeated environment failures. The gap is in algorithmic invention, not environmental adaptation.
+Second-pass investigation: Core finding: the "alien environment" hypothesis is strongly refuted. The Session API is standard Python; prompts are textbook competitive programming; models compile and run successfully on the first try; and the one-shot retry data show ACCEPTED verdicts with poor scores, not repeated environment failures. The gap is in algorithmic invention, not environmental adaptation.

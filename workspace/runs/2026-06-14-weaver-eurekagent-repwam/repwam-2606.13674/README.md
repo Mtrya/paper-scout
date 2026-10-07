@@ -123,7 +123,7 @@ It exercises:
 **How to rerun:**
 
 ```bash
-cd /home/betelgeuse/Documents/paper-scout/workspace
+cd <repo>/workspace
 python3 -m venv code/.repwam_probe_venv
 ./code/.repwam_probe_venv/bin/pip install torch torchvision matplotlib
 REPWAM_PROBE_OUT=runs/2026-06-14-weaver-eurekagent-repwam/assets \

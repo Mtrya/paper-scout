@@ -1,7 +1,7 @@
 Reading additional input from stdin...
 OpenAI Codex v0.154.0
 --------
-workdir: /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+workdir: <home>/Projects/paper-scout/workspace/code/agp-probe
 model: gpt-6-astra
 provider: openai
 approval: on-request
@@ -38,22 +38,22 @@ codex
 I’ll check the bowl’s position, calculate a throw, and verify where the puck lands.
 
 exec
-/bin/bash -lc 'python3 robot.py state' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py state' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"task": "windx", "sim_t": 0.0, "budget": 250, "ee": [0.15, 0.15], "holding": "puck", "blocks": [], "puck": {"x": 0.15, "y": 0.5, "held": true}, "score": null, "bowl_x": 0.8, "bowl_r": 0.04, "launch_z": 0.1, "attempts": []}
 
 exec
-/bin/bash -lc 'python3 robot.py throw 4.5523 0' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py throw 4.5523 0' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"land_x": 0.8673, "bowl_x": 0.8, "err": 0.0673, "hit": false, "note": "puck retrieved; you may retry"}
 
 exec
-/bin/bash -lc 'python3 robot.py throw 4.081 0' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py throw 4.081 0' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"land_x": 0.7994, "bowl_x": 0.8, "err": 0.0006, "hit": true, "note": "puck retrieved; you may retry"}
 
 exec
-/bin/bash -lc 'python3 robot.py done' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py done' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"FINAL": {"task": "windx", "success": true, "attempts": 2, "hits": 1, "best_err": 0.0006, "sim_t": 1.0}}
 

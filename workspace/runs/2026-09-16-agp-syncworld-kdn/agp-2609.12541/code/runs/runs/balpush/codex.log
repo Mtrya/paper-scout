@@ -1,7 +1,7 @@
 Reading additional input from stdin...
 OpenAI Codex v0.154.0
 --------
-workdir: /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+workdir: <home>/Projects/paper-scout/workspace/code/agp-probe
 model: gpt-6-astra
 provider: openai
 approval: on-request
@@ -38,17 +38,17 @@ codex
 I’ll check the initial state, then use short force pulses to keep the pole upright and the cart within bounds.
 
 exec
-/bin/bash -lc 'python3 robot.py state' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py state' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"task": "balpush", "sim_t": 0.0, "budget": 250, "ee": [0.15, 0.15], "holding": null, "blocks": [], "puck": null, "score": null, "cart_x": 0.0, "cart_v": 0.0, "theta": 0.12, "omega": 0.0, "pole_L": 0.6, "pole_m": 0.2, "cart_m": 1.0, "upright_time": 0.0, "force_limit": 10.0}
 
 exec
-/bin/bash -lc 'python3 robot.py push 3.6' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py push 3.6' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"applied_f": 3.6, "theta_deg": 5.3, "sim_t": 0.6}
 
 exec
-/bin/bash -lc 'python3 robot.py state' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py state' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"task": "balpush", "sim_t": 0.6000000000000001, "budget": 249, "ee": [0.15, 0.15], "holding": null, "blocks": [], "puck": null, "score": null, "cart_x": 0.01696347660137473, "cart_v": 0.3268607442340344, "theta": 0.09257263557576498, "omega": -0.5396412892700431, "pole_L": 0.6, "pole_m": 0.2, "cart_m": 1.0, "upright_time": 0.10000000000000006, "force_limit": 10.0}
 
@@ -63,7 +63,7 @@ D=expm(M*.1);A=D[:4,:4];B=D[:4,4:]
 P=solve_discrete_are(A,B,np.diag([4,4,100,5]),np.array([[.5]]))
 K=np.linalg.solve(.5+B.T@P@B,B.T@P@A)
 print(K)
-PY" in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+PY" in <home>/Projects/paper-scout/workspace/code/agp-probe
  exited 1 in 0ms:
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
@@ -79,7 +79,7 @@ for i in range(10):
  r=subprocess.check_output(['python3','robot.py','push',str(f)],text=True)
  print(r.strip())
 print(subprocess.check_output(['python3','robot.py','state'],text=True))
-PY" in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+PY" in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 350ms:
 {"applied_f": -0.06257888310371751, "theta_deg": 2.9, "sim_t": 1.2}
 {"applied_f": 0.1858468468237081, "theta_deg": 1.24, "sim_t": 1.8}
@@ -110,7 +110,7 @@ for i in range(110):
  subprocess.check_output(['python3','robot.py','push',str(f)],text=True)
  if i%15==0: print(json.dumps({k:s[k] for k in ['cart_x','theta','upright_time','budget']}))
 else: print('Loop limit reached')
-PY" in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+PY" in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 3540ms:
 {"cart_x": 0.2290929099828373, "theta": -0.03166007094662309, "upright_time": 1.1200000000000008, "budget": 239}
 {"cart_x": 0.07487295331939926, "theta": 0.006070658018529896, "upright_time": 2.680000000000002, "budget": 224}
@@ -121,7 +121,7 @@ PY" in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
 {"task": "balpush", "sim_t": 59.059999999998084, "budget": 152, "ee": [0.15, 0.15], "holding": null, "blocks": [], "puck": null, "score": null, "cart_x": 3.570312268710182e-05, "cart_v": -0.00022775205823478552, "theta": 3.123075408184635e-05, "omega": -1.39670158205612e-05, "pole_L": 0.6, "pole_m": 0.2, "cart_m": 1.0, "upright_time": 10.059999999999336, "force_limit": 10.0}
 
 exec
-/bin/bash -lc 'python3 robot.py done' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py done' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"FINAL": {"task": "balpush", "success": true, "upright_time": 10.06, "used_controller": false, "fell": false, "sim_t": 59.059999999998084}}
 

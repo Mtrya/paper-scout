@@ -40,7 +40,7 @@ All evidence lives inside the workspace. No checkpoints were downloaded.
 ## 3. How to rerun
 
 ```bash
-cd /home/betelgeuse/Documents/paper-scout/workspace/code/weaver-2606.13672
+cd <repo>/workspace/code/weaver-2606.13672
 uv sync                                    # already done; ~3 GB of torch/diffusers deps
 uv run python \
   ../../runs/2026-06-14-weaver-eurekagent-repwam/weaver-2606.13672/code/probe_model.py

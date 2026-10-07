@@ -1,7 +1,7 @@
 # Hy-Embodied-0.5-VLA (arXiv 2606.14409) — Code Inspection Notes
 
 Repo: `code/hyvla-0.5` (clone of `github.com/Tencent-Hunyuan/Hy-Embodied-0.5-VLA`, commit `fdf0645`).
-Paper: `/home/betelgeuse/Documents/paper-scout/workspace/papers/vla/hy-embodied-0.5-vla-2606.14409.md`.
+Paper: 仓库内 `papers/vla/hy-embodied-0.5-vla-2606.14409.md`.
 Copied artifacts: `code/` subdirectory in this run directory.
 
 ---

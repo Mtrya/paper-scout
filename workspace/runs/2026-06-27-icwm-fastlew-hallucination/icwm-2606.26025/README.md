@@ -18,7 +18,7 @@ This thread asked three concrete questions:
 - **OpenVLA** (`openvla/openvla`) — open VLA training/inference codebase; shows the one-image-per-sequence input format that ICWM would have to extend.
 - **FAST** action tokenizer (`physical-intelligence/fast`, used via `Physical-Intelligence/openpi`) — DCT+BPE action tokenization, which the paper uses instead of OpenVLA's naive 256-bin discretization.
 
-These repos were cloned into `/home/betelgeuse/Documents/paper-scout/workspace/code/` for inspection (see `libero-icwm-probe` and `openvla-icwm-probe`). The durable probe scripts derived from that inspection live in this thread under `code/`.
+These repos were cloned into `workspace `code/`` for inspection (see `libero-icwm-probe` and `openvla-icwm-probe`). The durable probe scripts derived from that inspection live in this thread under `code/`.
 
 ## Constructive research action
 

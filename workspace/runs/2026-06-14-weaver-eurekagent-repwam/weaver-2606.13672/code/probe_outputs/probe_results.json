@@ -1,6 +1,6 @@
 {
   "released_model": {
-    "config_path": "/home/betelgeuse/Documents/paper-scout/workspace/code/weaver-2606.13672/hf_configs/WEAVER/config.yaml",
+    "config_path": "<home>/Documents/paper-scout/workspace/code/weaver-2606.13672/hf_configs/WEAVER/config.yaml",
     "image_size": [
       192,
       320

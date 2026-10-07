@@ -4,7 +4,7 @@ Run from the repo root with the assets present; counts that do not need sim.
 import json, os, re
 from pathlib import Path
 
-REPO = Path("/home/betelgeuse/Documents/paper-scout/workspace/code/robotwin-repo")
+REPO = Path(os.environ.get("ROBOTWIN_REPO", "robotwin-repo"))  # clone of the official repo, e.g. in workspace code/
 
 # 1. Tasks
 task_dir = REPO / "description" / "task_instruction"

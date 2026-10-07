@@ -1,7 +1,7 @@
 #!/bin/bash
 # Run all analyses on out/seed*/ and produce figures + summary.
 set -eu
-PY=/home/deneb/Projects/paper-scout/workspace/code/scout-exp/bin/python
+PY="${PY:-python3}"  # scout-exp venv python if rebuilt; override via $PY
 cd "$(dirname "$0")"
 DIRS=$(ls -d out/seed* | sort -V)
 echo "analysing: $DIRS"

@@ -18,6 +18,11 @@ THREAD_EVIDENCE_SHAPES = (
     {"README.md", "code", "patches"},
 )
 
+# Size policy (workspace-manage): packets hold curated evidence only.
+MAX_FILE_BYTES = 2 * 1024 * 1024
+MAX_RUN_BYTES = 20 * 1024 * 1024
+BANNED_EXTENSIONS = {".npz", ".pt", ".pth", ".ckpt", ".safetensors"}
+
 
 def workspace_root() -> Path:
     return Path(__file__).resolve().parents[4]
@@ -121,6 +126,23 @@ def verify_run(run_path: Path, mode: str) -> tuple[list[str], int, int]:
 
     if thread_count == 0:
         errors.append(f"{run_path}: expected at least one thread directory")
+
+    total_bytes = 0
+    for file_path in sorted(run_path.rglob("*")):
+        if not file_path.is_file():
+            continue
+        size = file_path.stat().st_size
+        total_bytes += size
+        if file_path.suffix.lower() in BANNED_EXTENSIONS:
+            errors.append(f"{file_path}: weights/checkpoints do not belong in a run packet")
+        if size > MAX_FILE_BYTES:
+            errors.append(
+                f"{file_path}: {size / 1048576:.1f} MB exceeds the {MAX_FILE_BYTES // 1048576} MB per-file cap"
+            )
+    if total_bytes > MAX_RUN_BYTES:
+        errors.append(
+            f"{run_path}: {total_bytes / 1048576:.1f} MB exceeds the {MAX_RUN_BYTES // 1048576} MB per-run cap"
+        )
 
     if mode == "final":
         verify_final_hygiene(root, run_path, errors)

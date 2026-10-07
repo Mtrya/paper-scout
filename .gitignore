@@ -7,3 +7,6 @@
 
 # Kimi-bridge inbox
 .kimi-bridge-inbox
+
+# Python bytecode caches
+__pycache__/

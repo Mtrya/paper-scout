@@ -1,7 +1,7 @@
 Reading additional input from stdin...
 OpenAI Codex v0.154.0
 --------
-workdir: /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+workdir: <home>/Projects/paper-scout/workspace/code/agp-probe
 model: gpt-6-astra
 provider: openai
 approval: on-request
@@ -38,57 +38,57 @@ codex
 I’ll check the block and pad positions, then stack all three blocks at the pad’s center.
 
 exec
-/bin/bash -lc 'python3 robot.py state' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py state' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"task": "build", "sim_t": 0.0, "budget": 250, "ee": [0.15, 0.15], "holding": null, "blocks": [{"x": 0.73, "y": 0.368, "z": 0.0, "size": 0.05, "stacked_on": null}, {"x": 0.616, "y": 0.207, "z": 0.0, "size": 0.05, "stacked_on": null}, {"x": 0.415, "y": 0.328, "z": 0.0, "size": 0.05, "stacked_on": null}], "puck": null, "score": null, "pad": [0.7, 0.75]}
 
 exec
-/bin/bash -lc 'python3 robot.py move 0.73 0.368' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py move 0.73 0.368' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"ee": [0.73, 0.368]}
 
 exec
-/bin/bash -lc 'python3 robot.py pick' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py pick' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"holding": 0}
 
 exec
-/bin/bash -lc 'python3 robot.py place 0.7 0.75' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py place 0.7 0.75' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"placed_z": 0.0, "toppled": false}
 
 exec
-/bin/bash -lc 'python3 robot.py move 0.616 0.207' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py move 0.616 0.207' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"ee": [0.616, 0.207]}
 
 exec
-/bin/bash -lc 'python3 robot.py pick' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py pick' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"holding": 1}
 
 exec
-/bin/bash -lc 'python3 robot.py place 0.7 0.75' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py place 0.7 0.75' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"placed_z": 0.05, "toppled": false}
 
 exec
-/bin/bash -lc 'python3 robot.py move 0.415 0.328' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py move 0.415 0.328' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"ee": [0.415, 0.328]}
 
 exec
-/bin/bash -lc 'python3 robot.py pick' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py pick' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"holding": 2}
 
 exec
-/bin/bash -lc 'python3 robot.py place 0.7 0.75' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py place 0.7 0.75' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"placed_z": 0.1, "toppled": false}
 
 exec
-/bin/bash -lc 'python3 robot.py done' in /home/deneb/Projects/paper-scout/workspace/code/agp-probe
+/bin/bash -lc 'python3 robot.py done' in <home>/Projects/paper-scout/workspace/code/agp-probe
  succeeded in 0ms:
 {"FINAL": {"task": "build", "success": true, "blocks_on_pad": 3, "levels": 2, "sim_t": 4.5}}
 

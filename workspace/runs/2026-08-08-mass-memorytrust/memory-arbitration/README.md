@@ -24,6 +24,6 @@
 
 ## 目录
 
-- `code/`:测试床生成器、prompt、输入构建、推理 runner(含 andromeda/启智两套部署脚本)、分析与案例抽取脚本,README 含复跑说明;`code/data/` 为确定性生成的全部输入(tasks.jsonl、gold.json、渲染图)。
+- `code/`:测试床生成器、prompt、输入构建、推理 runner(含 andromeda/启智两套部署脚本)、分析与案例抽取脚本,README 含复跑说明。`code/data/`(确定性生成的全部输入:tasks.jsonl、gold.json、渲染图)不入库,用 `build_inputs.py` 重建。
 - `code/results/`:`raw/` 原始模型输出(jsonl),`tables/` 分析表。
 - 报告图在 `../assets/memorylies-*.png`。

@@ -1,14 +1,14 @@
-{"t_wall": 1789576129.0171368, "sim_t": 0.0, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t1/episode/obs/obs_000.png"}, "budget_left": 249}
+{"t_wall": 1789576129.0171368, "sim_t": 0.0, "kind": "observe", "payload": {"path": "<home>/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t1/episode/obs/obs_000.png"}, "budget_left": 249}
 {"t_wall": 1789576137.6407783, "sim_t": 0.5, "kind": "act", "payload": {"unit": "A", "ee": [0.542, 0.268]}, "budget_left": 248}
-{"t_wall": 1789576137.7712467, "sim_t": 0.5, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t1/episode/obs/obs_001.png"}, "budget_left": 247}
+{"t_wall": 1789576137.7712467, "sim_t": 0.5, "kind": "observe", "payload": {"path": "<home>/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t1/episode/obs/obs_001.png"}, "budget_left": 247}
 {"t_wall": 1789576145.1493566, "sim_t": 1.0, "kind": "act", "payload": {"unit": "B", "place": "fail"}, "budget_left": 246}
-{"t_wall": 1789576145.3126326, "sim_t": 1.0, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t1/episode/obs/obs_002.png"}, "budget_left": 245}
+{"t_wall": 1789576145.3126326, "sim_t": 1.0, "kind": "observe", "payload": {"path": "<home>/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t1/episode/obs/obs_002.png"}, "budget_left": 245}
 {"t_wall": 1789576149.0154488, "sim_t": 1.5, "kind": "act", "payload": {"unit": "C", "ee": [0.562, 0.268]}, "budget_left": 244}
-{"t_wall": 1789576149.1604714, "sim_t": 1.5, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t1/episode/obs/obs_003.png"}, "budget_left": 243}
+{"t_wall": 1789576149.1604714, "sim_t": 1.5, "kind": "observe", "payload": {"path": "<home>/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t1/episode/obs/obs_003.png"}, "budget_left": 243}
 {"t_wall": 1789576156.844765, "sim_t": 2.0, "kind": "act", "payload": {"unit": "D", "ee": [0.562, 0.288]}, "budget_left": 242}
-{"t_wall": 1789576156.965023, "sim_t": 2.0, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t1/episode/obs/obs_004.png"}, "budget_left": 241}
+{"t_wall": 1789576156.965023, "sim_t": 2.0, "kind": "observe", "payload": {"path": "<home>/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t1/episode/obs/obs_004.png"}, "budget_left": 241}
 {"t_wall": 1789576164.8352876, "sim_t": 2.5, "kind": "act", "payload": {"unit": "E", "pick": "fail"}, "budget_left": 240}
-{"t_wall": 1789576164.9889073, "sim_t": 2.5, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t1/episode/obs/obs_005.png"}, "budget_left": 239}
+{"t_wall": 1789576164.9889073, "sim_t": 2.5, "kind": "observe", "payload": {"path": "<home>/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t1/episode/obs/obs_005.png"}, "budget_left": 239}
 {"t_wall": 1789576172.4760349, "sim_t": 3.0, "kind": "act", "payload": {"unit": "C", "ee": [0.582, 0.288]}, "budget_left": 238}
 {"t_wall": 1789576172.5603254, "sim_t": 3.5, "kind": "act", "payload": {"unit": "C", "ee": [0.602, 0.288]}, "budget_left": 237}
 {"t_wall": 1789576172.6431599, "sim_t": 4.0, "kind": "act", "payload": {"unit": "C", "ee": [0.622, 0.288]}, "budget_left": 236}
@@ -51,10 +51,10 @@
 {"t_wall": 1789576175.7561152, "sim_t": 22.5, "kind": "act", "payload": {"unit": "D", "ee": [0.862, 0.788]}, "budget_left": 199}
 {"t_wall": 1789576175.839368, "sim_t": 23.0, "kind": "act", "payload": {"unit": "D", "ee": [0.862, 0.808]}, "budget_left": 198}
 {"t_wall": 1789576175.922051, "sim_t": 23.5, "kind": "act", "payload": {"unit": "D", "ee": [0.862, 0.828]}, "budget_left": 197}
-{"t_wall": 1789576176.040808, "sim_t": 23.5, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t1/episode/obs/obs_006.png"}, "budget_left": 196}
+{"t_wall": 1789576176.040808, "sim_t": 23.5, "kind": "observe", "payload": {"path": "<home>/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t1/episode/obs/obs_006.png"}, "budget_left": 196}
 {"t_wall": 1789576182.636218, "sim_t": 24.0, "kind": "act", "payload": {"unit": "E", "pick": "ok"}, "budget_left": 195}
 {"t_wall": 1789576182.7263384, "sim_t": 24.5, "kind": "act", "payload": {"unit": "F", "ee": [0.862, 0.808]}, "budget_left": 194}
-{"t_wall": 1789576182.8883204, "sim_t": 24.5, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t1/episode/obs/obs_007.png"}, "budget_left": 193}
+{"t_wall": 1789576182.8883204, "sim_t": 24.5, "kind": "observe", "payload": {"path": "<home>/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t1/episode/obs/obs_007.png"}, "budget_left": 193}
 {"t_wall": 1789576194.2088058, "sim_t": 25.0, "kind": "act", "payload": {"unit": "A", "ee": [0.842, 0.808]}, "budget_left": 192}
 {"t_wall": 1789576194.2952378, "sim_t": 25.5, "kind": "act", "payload": {"unit": "A", "ee": [0.822, 0.808]}, "budget_left": 191}
 {"t_wall": 1789576194.384758, "sim_t": 26.0, "kind": "act", "payload": {"unit": "A", "ee": [0.802, 0.808]}, "budget_left": 190}
@@ -83,7 +83,7 @@
 {"t_wall": 1789576196.4483752, "sim_t": 37.5, "kind": "act", "payload": {"unit": "F", "ee": [0.482, 0.668]}, "budget_left": 167}
 {"t_wall": 1789576196.5364351, "sim_t": 38.0, "kind": "act", "payload": {"unit": "F", "ee": [0.482, 0.648]}, "budget_left": 166}
 {"t_wall": 1789576196.6311157, "sim_t": 38.5, "kind": "act", "payload": {"unit": "F", "ee": [0.482, 0.628]}, "budget_left": 165}
-{"t_wall": 1789576196.753681, "sim_t": 38.5, "kind": "observe", "payload": {"path": "/home/deneb/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t1/episode/obs/obs_008.png"}, "budget_left": 164}
+{"t_wall": 1789576196.753681, "sim_t": 38.5, "kind": "observe", "payload": {"path": "<home>/Projects/paper-scout/workspace/code/showharness-probe/runs/E/t1/episode/obs/obs_008.png"}, "budget_left": 164}
 {"t_wall": 1789576201.9998481, "sim_t": 39.0, "kind": "act", "payload": {"unit": "B", "place_err": 0.0081}, "budget_left": 163}
 {"t_wall": 1789576202.0844193, "sim_t": 39.0, "kind": "done", "payload": {"cond": "E", "success": true, "final_err": 0.0081, "sim_t": 39.0}, "budget_left": 163}
 {"t_wall": 1789576206.9482062, "sim_t": 39.0, "kind": "done", "payload": {"cond": "E", "success": true, "final_err": 0.0081, "sim_t": 39.0}, "budget_left": 163}

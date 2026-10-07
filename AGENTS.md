@@ -23,6 +23,9 @@ What the repo contains:
 - `workspace/code/` — ignored lab bench for cloned repos, probes, patches, experiments, and local environments
 - `workspace/runs/` — delivered reports, durable evidence packets, and `INDEX.md` (the readable record + dedup log)
 - `.github/workflows/verify-run.yml` — CI gate on run PRs: reruns `verify_run.py --mode final` for every run packet touched by the PR
+- `.github/workflows/secret-scan.yml` — CI gate on every PR: runs `scan_secrets.py` over the PR diff
+- `scripts/scan_secrets.py` + `scripts/scan_secrets.allowlist` — zero-dependency scanner for secrets, credentials, and personal/machine-identifying info; masks secret matches in output, exits nonzero on findings
+- `scripts/git-hooks/` — tracked `pre-commit` (staged secret scan) and `pre-push` (range secret scan + run-packet verification, mirroring CI); enable once per clone with `git config core.hooksPath scripts/git-hooks`
 
 ## The Two Agents
 
@@ -87,7 +90,7 @@ Each file has a distinct job. Do not let them bleed into each other.
 
 ## What Not to Add
 
-- Executable application code. The runtime is the reading agent, not a script.
+- Executable application code. The runtime is the reading agent, not a script. Repo guards (`verify_run.py`, `scan_secrets.py`) are verifiers, not application code.
 - Example outputs. They go stale and become de facto templates the reading agent imitates instead of thinking through.
 - A setup/install/distribution layer. That architecture was deliberately removed.
 
@@ -127,6 +130,8 @@ Behavioral invariants:
 - The reading-agent contract is stable. Regenerating `prompt.txt` should not require changing `workspace/AGENTS.md`, and vice versa.
 - The prompt stays thin — run-scoped parameters only.
 - One run produces one Feishu doc. Delivery is append-new, not update-existing.
+- Run packets stay light: `verify_run.py` enforces per-file (2 MB) and per-run (20 MB) caps and bans weights/checkpoints. Raw outputs live in the ignored workspace `code/` or are regenerable from preserved scripts.
+- Tracked content stays free of secrets, credentials, and personal/machine-identifying info: `scan_secrets.py` gates this in CI and in the tracked local hooks. False positives go to `scripts/scan_secrets.allowlist` with a justification comment.
 - The reading agent's investigation permissions are governed by its contract. The skill defines a read-only baseline; the contract may expand it.
 
 If you change the `runs/INDEX.md` format, keep it readable by both the reading agent and the user, and append-only (newest first when practical).

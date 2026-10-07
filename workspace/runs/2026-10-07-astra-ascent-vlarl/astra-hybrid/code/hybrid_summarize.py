@@ -24,7 +24,7 @@ RESULTS = ROOT / "results"
 CELLS = RESULTS / "hybrid_cells.jsonl"
 OUT_MD = RESULTS / "hybrid_summary.md"
 ENRICHED = RESULTS / "hybrid_cells_enriched.json"
-ASSETS = Path("/home/deneb/Projects/paper-scout/workspace/runs/2026-10-07-astra-ascent-vlarl/assets")
+ASSETS = Path(__file__).resolve().parents[2] / "assets"
 
 TASKS = ("T1", "T2")
 ARMS = ("direct", "hybrid-oracle", "hybrid-noisy", "hybrid-biased", "hybrid-biased-soft",
