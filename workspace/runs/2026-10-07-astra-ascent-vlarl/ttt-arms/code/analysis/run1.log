@@ -1,0 +1,247 @@
+########## frozen 10:02:33
+[frozen] 90/240 buf=2 upd=11 rej=0 t=254s
+[frozen] 95/240 buf=7 upd=11 rej=0 t=262s
+[frozen] 100/240 buf=4 upd=12 rej=0 t=270s
+[frozen] EVAL@100 val=0.500 nll=4.4466 fmt=0.900
+[frozen] 105/240 buf=1 upd=13 rej=0 t=309s
+[frozen] 110/240 buf=6 upd=13 rej=0 t=316s
+[frozen] 115/240 buf=3 upd=14 rej=0 t=325s
+[frozen] 120/240 buf=0 upd=15 rej=0 t=333s
+[frozen] EVAL@120 val=0.500 nll=4.4466 fmt=0.900
+[frozen] 125/240 buf=5 upd=15 rej=0 t=374s
+[frozen] 130/240 buf=2 upd=16 rej=0 t=383s
+[frozen] 135/240 buf=7 upd=16 rej=0 t=392s
+[frozen] 140/240 buf=4 upd=17 rej=0 t=402s
+[frozen] EVAL@140 val=0.500 nll=4.4466 fmt=0.900
+[frozen] 145/240 buf=1 upd=18 rej=0 t=442s
+[frozen] 150/240 buf=6 upd=18 rej=0 t=450s
+[frozen] 155/240 buf=3 upd=19 rej=0 t=460s
+[frozen] 160/240 buf=0 upd=20 rej=0 t=469s
+[frozen] EVAL@160 val=0.500 nll=4.4466 fmt=0.900
+[frozen] 165/240 buf=5 upd=20 rej=0 t=510s
+[frozen] 170/240 buf=2 upd=21 rej=0 t=518s
+[frozen] 175/240 buf=7 upd=21 rej=0 t=527s
+[frozen] 180/240 buf=4 upd=22 rej=0 t=536s
+[frozen] EVAL@180 val=0.500 nll=4.4466 fmt=0.900
+[frozen] 185/240 buf=1 upd=23 rej=0 t=577s
+[frozen] 190/240 buf=6 upd=23 rej=0 t=585s
+[frozen] 195/240 buf=3 upd=24 rej=0 t=595s
+[frozen] 200/240 buf=0 upd=25 rej=0 t=604s
+[frozen] EVAL@200 val=0.500 nll=4.4466 fmt=0.900
+[frozen] 205/240 buf=5 upd=25 rej=0 t=643s
+[frozen] 210/240 buf=2 upd=26 rej=0 t=652s
+[frozen] 215/240 buf=7 upd=26 rej=0 t=662s
+[frozen] 220/240 buf=4 upd=27 rej=0 t=671s
+[frozen] EVAL@220 val=0.500 nll=4.4466 fmt=0.900
+[frozen] 225/240 buf=1 upd=28 rej=0 t=711s
+[frozen] 230/240 buf=6 upd=28 rej=0 t=720s
+[frozen] 235/240 buf=3 upd=29 rej=0 t=729s
+[frozen] 240/240 buf=0 upd=30 rej=0 t=738s
+[frozen] EVAL@240 val=0.500 nll=4.4466 fmt=0.900
+[frozen] DONE updates=30 rejected=0 wall=769s
+########## loop-imitate 10:16:07
+[loop-imitate] 90/240 buf=2 upd=11 rej=0 t=363s
+[loop-imitate] 95/240 buf=7 upd=11 rej=0 t=372s
+[loop-imitate] 100/240 buf=4 upd=12 rej=0 t=391s
+[loop-imitate] EVAL@100 val=0.500 nll=4.4639 fmt=0.821
+[loop-imitate] 105/240 buf=1 upd=13 rej=0 t=440s
+[loop-imitate] 110/240 buf=6 upd=13 rej=0 t=447s
+[loop-imitate] 115/240 buf=3 upd=14 rej=0 t=466s
+[loop-imitate] 120/240 buf=0 upd=15 rej=0 t=484s
+[loop-imitate] EVAL@120 val=0.550 nll=4.4645 fmt=0.821
+[loop-imitate] 125/240 buf=5 upd=15 rej=0 t=524s
+[loop-imitate] 130/240 buf=2 upd=16 rej=0 t=544s
+[loop-imitate] 135/240 buf=7 upd=16 rej=0 t=553s
+[loop-imitate] 140/240 buf=4 upd=17 rej=0 t=572s
+[loop-imitate] EVAL@140 val=0.550 nll=4.4696 fmt=0.821
+[loop-imitate] 145/240 buf=1 upd=18 rej=0 t=623s
+[loop-imitate] 150/240 buf=6 upd=18 rej=0 t=632s
+[loop-imitate] 155/240 buf=3 upd=19 rej=0 t=653s
+[loop-imitate] 160/240 buf=0 upd=20 rej=0 t=672s
+[loop-imitate] EVAL@160 val=0.550 nll=4.4841 fmt=0.821
+[loop-imitate] 165/240 buf=5 upd=20 rej=0 t=712s
+[loop-imitate] 170/240 buf=2 upd=21 rej=0 t=732s
+[loop-imitate] 175/240 buf=7 upd=21 rej=0 t=741s
+[loop-imitate] 180/240 buf=4 upd=22 rej=0 t=762s
+[loop-imitate] EVAL@180 val=0.450 nll=4.4892 fmt=0.821
+[loop-imitate] 185/240 buf=1 upd=23 rej=0 t=812s
+[loop-imitate] 190/240 buf=6 upd=23 rej=0 t=820s
+[loop-imitate] 195/240 buf=3 upd=24 rej=0 t=841s
+[loop-imitate] 200/240 buf=0 upd=25 rej=0 t=860s
+[loop-imitate] EVAL@200 val=0.400 nll=4.4826 fmt=0.805
+[loop-imitate] 205/240 buf=5 upd=25 rej=0 t=900s
+[loop-imitate] 210/240 buf=2 upd=26 rej=0 t=918s
+[loop-imitate] 215/240 buf=7 upd=26 rej=0 t=927s
+[loop-imitate] 220/240 buf=4 upd=27 rej=0 t=946s
+[loop-imitate] EVAL@220 val=0.400 nll=4.4843 fmt=0.788
+[loop-imitate] 225/240 buf=1 upd=28 rej=0 t=995s
+[loop-imitate] 230/240 buf=6 upd=28 rej=0 t=1003s
+[loop-imitate] 235/240 buf=3 upd=29 rej=0 t=1022s
+[loop-imitate] 240/240 buf=0 upd=30 rej=0 t=1039s
+[loop-imitate] EVAL@240 val=0.450 nll=4.4608 fmt=0.821
+[loop-imitate] DONE updates=30 rejected=0 wall=1071s
+########## rft 10:34:48
+[rft] 90/240 buf=2 upd=11 rej=0 t=324s
+[rft] 95/240 buf=7 upd=11 rej=0 t=332s
+[rft] 100/240 buf=4 upd=12 rej=0 t=346s
+[rft] EVAL@100 val=0.750 nll=4.4445 fmt=0.875
+[rft] 105/240 buf=1 upd=13 rej=0 t=392s
+[rft] 110/240 buf=6 upd=13 rej=0 t=400s
+[rft] 115/240 buf=3 upd=14 rej=0 t=415s
+[rft] 120/240 buf=0 upd=15 rej=0 t=430s
+[rft] EVAL@120 val=0.750 nll=4.4361 fmt=0.839
+[rft] 125/240 buf=5 upd=15 rej=0 t=472s
+[rft] 130/240 buf=2 upd=16 rej=0 t=488s
+[rft] 135/240 buf=7 upd=16 rej=0 t=497s
+[rft] 140/240 buf=4 upd=17 rej=0 t=512s
+[rft] EVAL@140 val=0.750 nll=4.4387 fmt=0.839
+[rft] 145/240 buf=1 upd=18 rej=0 t=561s
+[rft] 150/240 buf=6 upd=18 rej=0 t=571s
+[rft] 155/240 buf=3 upd=19 rej=0 t=587s
+[rft] 160/240 buf=0 upd=20 rej=0 t=601s
+[rft] EVAL@160 val=0.700 nll=4.4391 fmt=0.846
+[rft] 165/240 buf=5 upd=20 rej=0 t=643s
+[rft] 170/240 buf=2 upd=21 rej=0 t=658s
+[rft] 175/240 buf=7 upd=21 rej=0 t=669s
+[rft] 180/240 buf=4 upd=22 rej=0 t=683s
+[rft] EVAL@180 val=0.800 nll=4.4328 fmt=0.861
+[rft] 185/240 buf=1 upd=23 rej=0 t=729s
+[rft] 190/240 buf=6 upd=23 rej=0 t=738s
+[rft] 195/240 buf=3 upd=24 rej=0 t=753s
+[rft] 200/240 buf=0 upd=25 rej=0 t=769s
+[rft] EVAL@200 val=0.800 nll=4.4320 fmt=0.861
+[rft] 205/240 buf=5 upd=25 rej=0 t=808s
+[rft] 210/240 buf=2 upd=26 rej=0 t=824s
+[rft] 215/240 buf=7 upd=26 rej=0 t=834s
+[rft] 220/240 buf=4 upd=27 rej=0 t=850s
+[rft] EVAL@220 val=0.800 nll=4.4272 fmt=0.866
+[rft] 225/240 buf=1 upd=28 rej=0 t=898s
+[rft] 230/240 buf=6 upd=28 rej=0 t=907s
+[rft] 235/240 buf=3 upd=29 rej=0 t=920s
+[rft] 240/240 buf=0 upd=30 rej=0 t=934s
+[rft] EVAL@240 val=0.500 nll=4.4133 fmt=0.871
+[rft] DONE updates=30 rejected=0 wall=965s
+########## rft-settlement 10:51:37
+[rft-settlement] 90/240 buf=2 upd=11 rej=8 t=388s
+[rft-settlement] 95/240 buf=7 upd=11 rej=8 t=397s
+[rft-settlement] 100/240 buf=4 upd=12 rej=9 t=418s
+[rft-settlement] EVAL@100 val=0.600 nll=4.4384 fmt=0.864
+[rft-settlement] 105/240 buf=1 upd=13 rej=10 t=468s
+[rft-settlement] 110/240 buf=6 upd=13 rej=10 t=477s
+[rft-settlement] 115/240 buf=3 upd=14 rej=11 t=496s
+[rft-settlement] 120/240 buf=0 upd=15 rej=12 t=514s
+[rft-settlement] EVAL@120 val=0.600 nll=4.4384 fmt=0.864
+[rft-settlement] 125/240 buf=5 upd=15 rej=12 t=558s
+[rft-settlement] 130/240 buf=2 upd=16 rej=13 t=575s
+[rft-settlement] 135/240 buf=7 upd=16 rej=13 t=585s
+[rft-settlement] 140/240 buf=4 upd=17 rej=14 t=603s
+[rft-settlement] EVAL@140 val=0.600 nll=4.4384 fmt=0.864
+[rft-settlement] 145/240 buf=1 upd=18 rej=15 t=656s
+[rft-settlement] 150/240 buf=6 upd=18 rej=15 t=666s
+[rft-settlement] 155/240 buf=3 upd=19 rej=16 t=684s
+[rft-settlement] 160/240 buf=0 upd=20 rej=17 t=700s
+[rft-settlement] EVAL@160 val=0.600 nll=4.4384 fmt=0.864
+[rft-settlement] 165/240 buf=5 upd=20 rej=17 t=744s
+[rft-settlement] 170/240 buf=2 upd=21 rej=18 t=764s
+[rft-settlement] 175/240 buf=7 upd=21 rej=18 t=773s
+[rft-settlement] 180/240 buf=4 upd=22 rej=19 t=790s
+[rft-settlement] EVAL@180 val=0.600 nll=4.4384 fmt=0.864
+[rft-settlement] 185/240 buf=1 upd=23 rej=20 t=843s
+[rft-settlement] 190/240 buf=6 upd=23 rej=20 t=853s
+[rft-settlement] 195/240 buf=3 upd=24 rej=21 t=872s
+[rft-settlement] 200/240 buf=0 upd=25 rej=22 t=889s
+[rft-settlement] EVAL@200 val=0.600 nll=4.4384 fmt=0.864
+[rft-settlement] 205/240 buf=5 upd=25 rej=22 t=932s
+[rft-settlement] 210/240 buf=2 upd=26 rej=23 t=951s
+[rft-settlement] 215/240 buf=7 upd=26 rej=23 t=961s
+[rft-settlement] 220/240 buf=4 upd=27 rej=24 t=980s
+[rft-settlement] EVAL@220 val=0.600 nll=4.4384 fmt=0.864
+[rft-settlement] 225/240 buf=1 upd=28 rej=25 t=1032s
+[rft-settlement] 230/240 buf=6 upd=28 rej=25 t=1042s
+[rft-settlement] 235/240 buf=3 upd=29 rej=25 t=1063s
+[rft-settlement] 240/240 buf=0 upd=30 rej=26 t=1082s
+[rft-settlement] EVAL@240 val=0.650 nll=4.4378 fmt=0.871
+[rft-settlement] DONE updates=30 rejected=26 wall=1116s
+########## ascent 11:10:59
+[ascent] 90/240 buf=2 upd=11 rej=0 t=326s
+[ascent] 95/240 buf=7 upd=11 rej=0 t=334s
+[ascent] 100/240 buf=4 upd=12 rej=0 t=348s
+[ascent] EVAL@100 val=0.750 nll=4.3483 fmt=0.977
+[ascent] 105/240 buf=1 upd=13 rej=0 t=394s
+[ascent] 110/240 buf=6 upd=13 rej=0 t=401s
+[ascent] 115/240 buf=3 upd=14 rej=0 t=413s
+[ascent] 120/240 buf=0 upd=15 rej=0 t=422s
+[ascent] EVAL@120 val=0.700 nll=4.3515 fmt=0.962
+[ascent] 125/240 buf=5 upd=15 rej=0 t=465s
+[ascent] 130/240 buf=2 upd=16 rej=0 t=480s
+[ascent] 135/240 buf=7 upd=16 rej=0 t=488s
+[ascent] 140/240 buf=4 upd=17 rej=0 t=499s
+[ascent] EVAL@140 val=0.650 nll=4.3522 fmt=0.962
+[ascent] 145/240 buf=1 upd=18 rej=0 t=543s
+[ascent] 150/240 buf=6 upd=18 rej=0 t=553s
+[ascent] 155/240 buf=3 upd=19 rej=0 t=571s
+[ascent] 160/240 buf=0 upd=20 rej=0 t=587s
+[ascent] EVAL@160 val=0.650 nll=4.3521 fmt=0.955
+[ascent] 165/240 buf=5 upd=20 rej=0 t=626s
+[ascent] 170/240 buf=2 upd=21 rej=0 t=636s
+[ascent] 175/240 buf=7 upd=21 rej=0 t=646s
+[ascent] 180/240 buf=4 upd=22 rej=0 t=660s
+[ascent] EVAL@180 val=0.700 nll=4.3569 fmt=0.944
+[ascent] 185/240 buf=1 upd=23 rej=0 t=705s
+[ascent] 190/240 buf=6 upd=23 rej=0 t=714s
+[ascent] 195/240 buf=3 upd=24 rej=0 t=726s
+[ascent] 200/240 buf=0 upd=25 rej=0 t=742s
+[ascent] EVAL@200 val=0.700 nll=4.3472 fmt=0.951
+[ascent] 205/240 buf=5 upd=25 rej=0 t=781s
+[ascent] 210/240 buf=2 upd=26 rej=0 t=798s
+[ascent] 215/240 buf=7 upd=26 rej=0 t=807s
+[ascent] 220/240 buf=4 upd=27 rej=0 t=821s
+[ascent] EVAL@220 val=0.700 nll=4.3521 fmt=0.953
+[ascent] 225/240 buf=1 upd=28 rej=0 t=866s
+[ascent] 230/240 buf=6 upd=28 rej=0 t=874s
+[ascent] 235/240 buf=3 upd=29 rej=0 t=885s
+[ascent] 240/240 buf=0 upd=30 rej=0 t=896s
+[ascent] EVAL@240 val=0.700 nll=4.3488 fmt=0.955
+[ascent] DONE updates=30 rejected=0 wall=929s
+########## loop-imitate-frozen-gen 11:27:14
+[loop-imitate-frozen-gen] 90/240 buf=2 upd=11 rej=0 t=374s
+[loop-imitate-frozen-gen] 95/240 buf=7 upd=11 rej=0 t=383s
+[loop-imitate-frozen-gen] 100/240 buf=4 upd=12 rej=0 t=403s
+[loop-imitate-frozen-gen] EVAL@100 val=0.550 nll=4.3892 fmt=0.793
+[loop-imitate-frozen-gen] 105/240 buf=1 upd=13 rej=0 t=453s
+[loop-imitate-frozen-gen] 110/240 buf=6 upd=13 rej=0 t=460s
+[loop-imitate-frozen-gen] 115/240 buf=3 upd=14 rej=0 t=479s
+[loop-imitate-frozen-gen] 120/240 buf=0 upd=15 rej=0 t=498s
+[loop-imitate-frozen-gen] EVAL@120 val=0.650 nll=4.3819 fmt=0.900
+[loop-imitate-frozen-gen] 125/240 buf=5 upd=15 rej=0 t=539s
+[loop-imitate-frozen-gen] 130/240 buf=2 upd=16 rej=0 t=561s
+[loop-imitate-frozen-gen] 135/240 buf=7 upd=16 rej=0 t=571s
+[loop-imitate-frozen-gen] 140/240 buf=4 upd=17 rej=0 t=592s
+[loop-imitate-frozen-gen] EVAL@140 val=0.550 nll=4.3592 fmt=0.836
+[loop-imitate-frozen-gen] 145/240 buf=1 upd=18 rej=0 t=646s
+[loop-imitate-frozen-gen] 150/240 buf=6 upd=18 rej=0 t=656s
+[loop-imitate-frozen-gen] 155/240 buf=3 upd=19 rej=0 t=677s
+[loop-imitate-frozen-gen] 160/240 buf=0 upd=20 rej=0 t=697s
+[loop-imitate-frozen-gen] EVAL@160 val=0.600 nll=4.3743 fmt=0.893
+[loop-imitate-frozen-gen] 165/240 buf=5 upd=20 rej=0 t=739s
+[loop-imitate-frozen-gen] 170/240 buf=2 upd=21 rej=0 t=760s
+[loop-imitate-frozen-gen] 175/240 buf=7 upd=21 rej=0 t=769s
+[loop-imitate-frozen-gen] 180/240 buf=4 upd=22 rej=0 t=791s
+[loop-imitate-frozen-gen] EVAL@180 val=0.550 nll=4.3964 fmt=0.871
+[loop-imitate-frozen-gen] 185/240 buf=1 upd=23 rej=0 t=844s
+[loop-imitate-frozen-gen] 190/240 buf=6 upd=23 rej=0 t=853s
+[loop-imitate-frozen-gen] 195/240 buf=3 upd=24 rej=0 t=875s
+[loop-imitate-frozen-gen] 200/240 buf=0 upd=25 rej=0 t=897s
+[loop-imitate-frozen-gen] EVAL@200 val=0.600 nll=4.3885 fmt=0.857
+[loop-imitate-frozen-gen] 205/240 buf=5 upd=25 rej=0 t=938s
+[loop-imitate-frozen-gen] 210/240 buf=2 upd=26 rej=0 t=959s
+[loop-imitate-frozen-gen] 215/240 buf=7 upd=26 rej=0 t=969s
+[loop-imitate-frozen-gen] 220/240 buf=4 upd=27 rej=0 t=991s
+[loop-imitate-frozen-gen] EVAL@220 val=0.400 nll=4.3762 fmt=0.886
+[loop-imitate-frozen-gen] 225/240 buf=1 upd=28 rej=0 t=1046s
+[loop-imitate-frozen-gen] 230/240 buf=6 upd=28 rej=0 t=1055s
+[loop-imitate-frozen-gen] 235/240 buf=3 upd=29 rej=0 t=1076s
+[loop-imitate-frozen-gen] 240/240 buf=0 upd=30 rej=0 t=1097s
+[loop-imitate-frozen-gen] EVAL@240 val=0.500 nll=4.3689 fmt=0.893
+[loop-imitate-frozen-gen] DONE updates=30 rejected=0 wall=1132s
+ALL ARMS DONE 11:46:56

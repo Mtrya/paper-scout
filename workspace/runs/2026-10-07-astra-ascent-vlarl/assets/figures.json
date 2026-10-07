@@ -1,0 +1,78 @@
+{
+ "astra:control-modes": {
+  "file": "assets/astra-control-modes.png",
+  "caption": "astra 论文 Figure 1:两种控制模式。Direct 由 astra 直接生成数值指令交解析控制器;Hybrid 加入学习型小脑(任务策略或全身控制器),astra 审查提案或提供稀疏参考;所有域共享同一个反馈环"
+ },
+ "astra:robodojo-results": {
+  "file": "assets/astra-robodojo-results.png",
+  "caption": "astra 论文 Figure 2:(a,b) RoboDojo 上 Hybrid(Astra+π0.5)Score 62.60、成功率 48%,Direct 仅 37.81/26%;(c) RoboLab 上排名反转,Direct 98% > Hybrid 92% > π0.5 零样本 36%;(d) Hybrid 执行步中 85.6% 沿用策略提案,仅 14.4% 由 astra 介入——选择性介入而非取代"
+ },
+ "ouroboros:failure-story": {
+  "file": "assets/ouroboros-failure-story.png",
+  "caption": "ouroboros 论文 Figure 1:(a) 闭环自写在 128K 流上持续推高真实文本 NLL(红线),冻结生成与关闭写入保持平稳;(b) 周期性插入真实文本可打断反馈环——同样 31% 的真实文本预算,均匀插入几乎消除伤害,成组插入则保留 60%"
+ },
+ "ouroboros:feedback-controls": {
+  "file": "assets/ouroboros-feedback-controls.png",
+  "caption": "ouroboros 论文 Figure 2:因果分解的三个对照。(a) Fixed Generation:冻结 W₀ 生成、学习者更新,消除 98%+ 伤害;(b) Recorded Replay:同一段退化文本只读 vs 读+写,分离注意力内伤害与权重内伤害;(c) Closed Loop:当前模型既生成又学习,闭环闭合"
+ },
+ "ouroboros:settlement": {
+  "file": "assets/ouroboros-settlement.png",
+  "caption": "ouroboros 论文 Figure 5:Settlement(提交前在独立真实文本上验证候选更新)把端点残差压到 ≈0(a:125M 上 3.18→0.07 nats,936 个候选更新只放行 22 个);(b) 标签污染下 Source Masking 失效而 Settlement 保持稳定;(c) WebShop 上用任务奖励做 Settlement 判定同样保住 exact success"
+ },
+ "ascent:instability": {
+  "file": "assets/ascent-instability.png",
+  "caption": "ASCENT 论文 Figure 1:五种朴素在线更新基线在 ALFWorld 任务流上全部失稳——首 token 熵坍缩(a)、对初始模型 KL 持续漂移(b)、非法动作率升高(c);紫色 ASCENT 保持贴近 base 的熵与最低的 KL"
+ },
+ "ascent:method": {
+  "file": "assets/ascent-method.png",
+  "caption": "ASCENT 论文 Figure 2:在线 agentic TTT 流程。学生单次尝试任务;验证通过的轨迹被序列化为特权信息(任务目标+成功声明+有效轮次动作),冻结的初始模型副本作为教师在该条件下给出全词表目标分布,前向 KL 蒸馏进 LoRA 快权重;验证失败则跳过更新"
+ },
+ "ascent:results-4b": {
+  "file": "assets/ascent-results-4b.png",
+  "caption": "ASCENT 论文 Figure 3(a):ALFWorld seen-stream 上 Qwen3.5-4B 的逐任务成功率,ASCENT(紫色)从 base 的 43.3 提升至 62.7-78.6,且提升集中在流的后段"
+ },
+ "lowrank:density-rank": {
+  "file": "assets/lowrank-density-rank.png",
+  "caption": "低秩论文 Figure 2:RL 更新密集但低秩,且集中在 Timestep Modules。左:π0.5 在 LIBERO-Spatial 上,AdaRMS/TimeMLP 的更新密度 BC 94.3%/92.1% vs RL 75.0%/69.7%,而 attention/MLP 不足 5%;右:四个 benchmark 上 RL 的 TS 模块更新有效秩(r95)仅 6-30,比 BC 的 250-650 低一个数量级"
+ },
+ "lowrank:modulation": {
+  "file": "assets/lowrank-modulation.png",
+  "caption": "低秩论文 Figure 3:左,RL 与离散步 BC 的 AdaRMS 更新方向尖峰钉在训练用过的离散去噪步上,标准 BC 则平滑分布——低秩的成因是训练信号的时间稀疏性;右,RL 变化与原方向的 |cos|:scale/gate 接近 1(沿原方向缩放),shift 接近 0(长出新方向)——新信息主要写在 shift 里"
+ },
+ "exp-a:grid": {
+  "file": "assets/hybrid_grid.png",
+  "caption": "实验 A 结果总览(36 格,30 预登记+6 探索):(a) 各臂成功率几乎封顶,差异不在成功率;(b) astra 自写动作占比(紫)与提案接受率(绿)——oracle 臂接受率 24%,三个损坏臂 5-6%,degenerate 为 0;虚线为论文 RoboDojo 的 14.4% 介入率(协议不同,不可直接并列);(c) 每 episode 模型调用数:direct 25.3 次,oracle 臂降至 14.2 次——好先验把审查者自写负担砍掉近半"
+ },
+ "exp-a:deference": {
+  "file": "assets/hybrid_deference.png",
+  "caption": "实验 A 机制:审查落在内容层而非信任层。oracle 先验的接触型提案 4/4 被接受,损坏先验的接触型提案 0/136;而未受污染的夹爪指令在坏先验臂里仍被接受 7/28——astra 逐条拿图像核对提案内容,而不是整体判断先验可信度"
+ },
+ "exp-c:spectrum": {
+  "file": "assets/fig_update_spectrum.png",
+  "caption": "实验 C:C1/C2 的核心证据。分模块组的更新奇异谱(5 seed 均值±std,纵轴对数):RL(红)在 AdaRMS 与 TimeMLP 上的有效秩 r95=10.5/7.9,恰好卡在 K=10 个去噪步上;同预算连续 τ 的 BC 分支(蓝)与初始 BC(绿)在 29-50;非 TS 模块(右)任何情况都满秩——低秩是“离散步训练×TS 模块”的代数签名"
+ },
+ "exp-c:replace": {
+  "file": "assets/fig_replace.png",
+  "caption": "实验 C:C4 模块替换,与论文 Table 1 方向相反。只保留 RL 的 TS 模块只捞回 31% 增益(0.903),只保留非 TS 反而捞回 91%(0.957);但 RL 的 TS 更新只留前 4 个奇异方向仍有 36%、去掉则只剩 3%,阴性对照(离散-BC 分支的前 4 方向)为 0——TS 模块的行为贡献全部压在前 4 个奇异方向上"
+ },
+ "exp-c:probe-steer": {
+  "file": "assets/fig_probe_steer.png",
+  "caption": "实验 C:C5 证伪。左:shift 更新方向探针 AUC 0.918 复现论文量级,但同空间随机方向对照也有 0.902——探针测到的是任务进度被线性编码,不是 shift 方向特有信息;右:沿 shift 方向的 steering 在两种规则×两个策略×四个强度下全部落在 ±1pp 噪声内,与随机方向无差异"
+ },
+ "exp-b:curves": {
+  "file": "assets/ttt-success-curves.png",
+  "caption": "实验 B:同一任务流上六种在线 TTT 更新算子的成功率轨迹。任务难度随相位上升,基线自身从 0.78 掉到 0.26,因此该读的是右侧配对差:只有无门控闭环(红)跌破基线;verified-only 硬模仿(橙)显著高于基线,加上独立真实文本门控后更高(绿,末段 +0.388);ASCENT(蓝)早期下探后追平;冻结生成臂(紫)贴着基线"
+ },
+ "exp-b:family": {
+  "file": "assets/ttt-family-deltas.png",
+  "caption": "实验 B:增益的来源是具体的。末段配对增益集中在算术(RFT +1.00、门控臂 +0.90)与列表操作(+0.45/+0.40)两族——工具使用习惯被写进权重;门控臂在字符串变换族多赚 +0.25;文本世界族在任何臂上都没有末段增益"
+ },
+ "exp-b:stability": {
+  "file": "assets/ttt-stability.png",
+  "caption": "实验 B:稳定性三角(40 任务滑窗)。无门控闭环的响应熵坍缩到基线的约十分之一并持续漂离 base;RFT 同样坍缩、格式合法率下滑最重、KL 漂移最大;加上真实文本门控后(绿)格式与漂移回到基线附近,而成功率反而最高;ASCENT(蓝)格式合法率爬到 0.97、熵不降反升;冻结生成臂(紫)的格式/非法轮率与基线逐位重合"
+ },
+ "exp-b:probes": {
+  "file": "assets/ttt-probes.png",
+  "caption": "实验 B:两个与任务流无关的外部探针。中:50 段独立真实英文文本的 NLL——只有无门控闭环(红)把它推高,冻结生成(紫)与 ASCENT(蓝)改善最大;门控臂(绿)呈三级台阶式下降,每级对应一个被采纳的更新 buffer(第 16/32/184 个,30 个候选只放行这 3 个)。左:固定 20 任务验证集上,门控臂与 ASCENT 从 0.50 升到 0.70,无门控闭环退化到 0.45"
+ }
+}
