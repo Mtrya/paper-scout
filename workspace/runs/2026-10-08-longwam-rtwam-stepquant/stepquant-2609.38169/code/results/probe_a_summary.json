@@ -1,0 +1,16 @@
+{
+  "n_units": 96,
+  "n_segments": 3,
+  "T": 2048,
+  "tau_min": 0.4632109929041403,
+  "tau_median": 2.78791638616151,
+  "tau_max": 1582.4643764495072,
+  "spearman_tau_vs_cumerr": 0.808654367878459,
+  "p_value": 2.214520368761784e-23,
+  "spearman_tau_vs_final_relerr": 0.7238062940857297,
+  "p_value_final": 7.990679738200615e-17,
+  "longest_quarter_error_share": 0.9717710139526563,
+  "shortest_quarter_error_share": 0.0019968800221311705,
+  "paper_rho": 0.8,
+  "paper_longest_quarter_share_qwen": 0.525
+}

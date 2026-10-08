@@ -1,0 +1,16 @@
+{
+  "longwam:teaser": {"file": "assets/longwam-teaser.png", "caption": "Long-WAM 总览:AR 视频预训练 → causal-to-causal 适配 → 上下文扩展曲线(GR-1 +15.4pt)→ 三档端侧部署"},
+  "longwam:async": {"file": "assets/longwam-async.png", "caption": "流式 VAE 与异步 chunk 调度的时序对比:观测编码与上一 chunk 的执行重叠,非流式方案则整窗等待"},
+  "longwam:realrobot": {"file": "assets/longwam-realrobot.png", "caption": "真机动态任务:3-7.5 cm/s 传送带上的叠杯/抓杯成功率与速度消融(上),Long-WAM 成功与 Fast-WAM 失败的序列帧(下)"},
+  "realtimewam:tacd": {"file": "assets/realtimewam-tacd.png", "caption": "TACD 方法图:冻结教师从中间点 a_t 起做 K=10 步 rollout 提供终点锚(L_TA),EMA 目标提供局部一致性锚(L_CD)"},
+  "realtimewam:gap": {"file": "assets/realtimewam-gap.png", "caption": "local-global error gap:纯 CD(绿)的 consistency loss 持续下降(左),但与教师终点速度的距离不降(右);TACD(棕)两者都降"},
+  "stepquant:space": {"file": "assets/stepquant-space.png", "caption": "空间轴:key-row 影响对 PPL 的排序(左)、状态幅度沿行/列双轴的 outlier 结构(中)、outlier 通道在解码全程持续(右)"},
+  "stepquant:lifetime": {"file": "assets/stepquant-lifetime.png", "caption": "时间轴:最长寿 1/4 单元占 Qwen 52.5%/KDA 78.8% 累积误差(上);KDA 半衰期 vs 累积误差散点(左下);同比特行影响 117×/35×(右下)"},
+  "stepquant:stability": {"file": "assets/stepquant-stability.png", "caption": "寿命排名的跨任务稳定性:WikiText 校准的排名与 C4/LiveCodeBench 上重测的排名 Spearman ρ≈0.98——比特分配可以离线做一次后固定"},
+  "exp:rtwam-arms": {"file": "assets/exp-rtwam-arms.png", "caption": "玩具五臂对照:一步成功率(左)与全局终点误差(右)。注意交叉反转——未训练教师误差最大但成功率最高,蒸馏把误差压 15 倍反而掉成功率"},
+  "exp:rtwam-premise": {"file": "assets/exp-rtwam-premise.png", "caption": "前提检查:把教师 10 步 rollout 独立跑 m 次取平均,m=2 即抹平多步劣势(左)——差距是采样方差不是精度上界;同幅度各向同性噪声更伤(右),纯方差解释只成立一半"},
+  "exp:rtwam-gap": {"file": "assets/exp-rtwam-gap.png", "caption": "玩具复现 local-global gap:CD-only 的局部目标压到全臂最低(左上),全局终点误差却走 U 形回弹(右下);学生自一致性诊断反而升高(左下)"},
+  "exp:stepquant-halflife": {"file": "assets/exp-stepquant-halflife.png", "caption": "真实 340M GDN 权重上的复测:门控半衰期 vs INT6 累积误差 ρ=0.809(论文 0.8004),最长寿 1/4 头占误差 97.2%(论文 52.5%)"},
+  "exp:stepquant-oracle": {"file": "assets/exp-stepquant-oracle.png", "caption": "exact-read oracle 复测:拿掉 delta 自纠后读出误差放大 7.5×/7.7×(论文 26.8×/18.7×)——方向复现,量级是模型结构依赖的"},
+  "exp:stepquant-nll": {"file": "assets/exp-stepquant-nll.png", "caption": "阴性结果:短寿模型上均匀 INT6 几乎无损(excess NLL +0.001),寿命感知分配无收益可捞——崩盘是长寿记忆模型的条件性质"}
+}

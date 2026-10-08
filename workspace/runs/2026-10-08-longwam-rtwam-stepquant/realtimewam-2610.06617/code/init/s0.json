@@ -1,0 +1,7 @@
+{
+ "teacher": "out/clean/teacher0/M_bc.pt",
+ "seed": 0,
+ "batch": 4096,
+ "init_loss_cd": 0.0008886553114280105,
+ "init_loss_ta": 0.07803329825401306
+}

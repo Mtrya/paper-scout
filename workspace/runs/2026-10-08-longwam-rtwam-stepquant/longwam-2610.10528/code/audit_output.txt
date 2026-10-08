@@ -1,0 +1,35 @@
+# Long-WAM 发布资产核验输出 (2026-10-08T05:00:02Z)
+# 目标: ../../../../code/LongLive/Long-WAM (HEAD 4ce82ab)
+
+## 1. 已发布 checkpoint(configs/checkpoints.yaml 的 repo_id)
+14
+69:  repo_id: null
+
+## 2. 未发布初始化资产的 TBD 标注
+102:fine-tuned benchmark policy. Their download URLs are TBD; converters are under
+
+## 3. 论文成功率数字在仓库中的命中(带数字边界防误命中)
+(无输出 = 论文数字不入库)
+
+## 4. 107.4ms 延迟的出处与限定
+218-| Hardware | BF16 eager | Shared optimizations | + Device tuning | Speedup |
+219-| --- | ---: | ---: | ---: | ---: |
+220:| RTX 5090 | 356.0 ms | 126.9 ms | **107.4 ms** | **3.3×** |
+221-| DGX Spark | 1342.8 ms | 419.9 ms | **328.2 ms** | **4.1×** |
+222-| Jetson AGX Thor | 1215.2 ms | 468.2 ms | **378.7 ms** | **3.2×** |
+223-
+224-The optimization columns are cumulative. Shared optimizations include compiled
+
+## 5. 双向对照配方的排除声明
+106:balanced replay. No LIBERO-Plus, historical imagination-ablation recipes,
+
+## 6. 流式推理强制因果 mask 的位置
+1393:        # v0b uses `per_frame_causal` (clean frames are block/frame-causal); v0a uses
+1398:        if video_attn_mode not in ("first_frame_causal", "per_frame_causal"):
+1401:                f"('first_frame_causal', 'per_frame_causal'), got '{video_attn_mode}'."
+1564:        """Video-only velocity prediction over `[clean | future]` under per_frame_causal. The leading
+1567:        in the future rollout, and the per_frame_causal self-attention mask governs the future
+
+## 7. FastWAM 继承文件计数(宽口径 = 引用 FastWAM;窄口径 = 带 provenance 标注)
+宽口径: 88
+窄口径: 49

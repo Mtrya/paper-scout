@@ -1,0 +1,22 @@
+{
+  "6": {
+    "ratio_total": 7.545407504944507,
+    "sum_native": 0.0023988680327527165,
+    "sum_oracle": 0.018100436857703812,
+    "ratio_per_layer_min": 1.049101296169809,
+    "ratio_per_layer_max": 21.018970383728664
+  },
+  "8": {
+    "ratio_total": 7.7281986407921535,
+    "sum_native": 0.00014604259194502117,
+    "sum_oracle": 0.0011286461605672757,
+    "ratio_per_layer_min": 1.041284370649751,
+    "ratio_per_layer_max": 21.887008326893966
+  },
+  "inject_step": 256,
+  "n_units": 96,
+  "n_segments": 3,
+  "T": 2048,
+  "paper_ratio_int6": 26.82,
+  "paper_ratio_int8": 18.65
+}
