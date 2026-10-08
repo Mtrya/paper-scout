@@ -1,0 +1,14 @@
+bare        n=3 succ1 0.920±0.014  succ2 nan  succ5 nan  succ10 0.866  global 0.02197±0.00404  global_avg 0.01805  local 0.00104  loss_cd   --     loss_ta   --     TAweighted 0.00808
+                 per-tau err^2 by k=0..9: 0.02197 0.03197 0.02964 0.02626 0.02432 0.01852 0.01149 0.00609 0.00284 0.00739  | top-2 tau share of 1/t^2 avg 0.65
+cd          n=3 succ1 0.838±0.045  succ2 0.818  succ5 0.700  succ10 0.655  global 0.01731±0.00142  global_avg 0.01871  local 0.00271  loss_cd 0.00005  loss_ta   --     TAweighted 0.01243
+                 per-tau err^2 by k=0..9: 0.01731 0.01924 0.02039 0.02158 0.02280 0.02222 0.02007 0.01866 0.01539 0.00939  | top-2 tau share of 1/t^2 avg 0.69
+                 global_best 0.00581 @step 1500  succ@best 0.877
+ta          n=3 succ1 0.850±0.022  succ2 0.795  succ5 0.760  succ10 0.777  global 0.00162±0.00014  global_avg 0.00068  local 0.00105  loss_cd   --     loss_ta 0.00229  TAweighted 0.00018
+                 per-tau err^2 by k=0..9: 0.00162 0.00121 0.00098 0.00081 0.00070 0.00059 0.00043 0.00026 0.00014 0.00009  | top-2 tau share of 1/t^2 avg 0.43
+                 global_best 0.00162 @step 2917  succ@best 0.847
+cdta        n=3 succ1 0.833±0.023  succ2 0.795  succ5 0.753  succ10 0.767  global 0.00149±0.00007  global_avg 0.00073  local 0.00096  loss_cd 0.00038  loss_ta 0.00291  TAweighted 0.00021
+                 per-tau err^2 by k=0..9: 0.00149 0.00120 0.00101 0.00088 0.00085 0.00078 0.00051 0.00034 0.00018 0.00010  | top-2 tau share of 1/t^2 avg 0.43
+                 global_best 0.00149 @step 3000  succ@best 0.833
+cdta1       n=3 succ1 0.838±0.019  succ2 0.790  succ5 0.752  succ10 0.783  global 0.00153±0.00013  global_avg 0.00067  local 0.00102  loss_cd 0.00046  loss_ta 0.00233  TAweighted 0.00018
+                 per-tau err^2 by k=0..9: 0.00153 0.00118 0.00098 0.00081 0.00070 0.00060 0.00042 0.00027 0.00014 0.00009  | top-2 tau share of 1/t^2 avg 0.43
+                 global_best 0.00153 @step 3000  succ@best 0.838
