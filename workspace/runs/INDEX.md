@@ -13,6 +13,14 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-10-12 — 2026-10-09 至 2026-10-12 + 用户点名三篇(构造性消除:循环时钟 × 全连续流 × 漂移-信号分解 × 标定基础设施)
+- Doc: https://fudan-nlp.feishu.cn/docx/IlJNdkts7oIWyfxfjtxcwT9DnFh
+- Run: runs/2026-10-12-cyfa-mmflow-scorecenter-dreamtrue-art/
+- Deep threads: CyFA 精读 + 真实 400M 权重三探针(时钟画像复现:55 近一头 δ̄=0.9964 + 40 输入依赖头 0.5113 对论文 56/40;干预 +0.041/+0.156/+0.136 对论文 +0.045/+0.124/+0.138;新发现:时钟随内容类重调,重复文本 δ̄→0.436;回绕安全性部分证伪——近一头残迹 1.6%β 安全、输入依赖头 64%β 最劣 27.9×β,但混叠不伤 next-token(相关 −0.017/−0.091),召回任务未测;状态有效秩 PR 1.8–10.9 远低于 iid 85,低秩来自数据非时序)(2609.36259), Multimodal Flow 精读 + 官方 text decoder round-trip 探针(T5-small 潜→6 层 decoder 通道 100% 无损(236 样本 7641 token),容忍预算 σ_e=1.0 仍 98.85%,块内联合编码(leave-one-out 93%);瓶颈不在通道在 flow backbone 端点误差;代码-论文出入:标量归一化非逐维)(2609.40362), Score Centering 精读 + 玩具精确验证(漂移=向采样器蒸馏钉成直线:cos(E∇L, ∇KL(q‖p))=+1.000000;SC 期望梯度 1.6e-8 机器零;复现崩溃形态+诊断陷阱——vanilla 崩时 ‖p−q‖ 反缩到 0.004;未复现:有信号档强分离,drift 只占 signal 15–30%,IS 温和区反全面略好)(2609.20807), DiffusionART 精读 + 2D 玩具命题核验(命题 1/2 与引理 1 精确成立 ≤1e-7,q 逐状态偏 1/2 且小 t 残差可翻转总力;温和修正:聚合残差仅 6.8%(相干性 0.22 vs 引导 0.66),4 步粗求解器才 22.9%;恢复力 4.9× 未复现(实测 0.38);新发现:纯在线单更新下 β 是空操作;官方 nft_loss 恢复系数 ∝β 与论文 ∝β² 不符)(2610.12572), DreamTrue 精读 + 标定发布物独立复算(DROID:精标定 ΔT 0.5–6.2cm/ΔR 1.2–6.6° 是小幅系统修正,wrist fx +3.2~6.9%;AgiBot fy/fx=1.323 非方像素=640×480→360 管线缩放;init→精标定 19–70cm/10–43° 印证 32 初始化;发布物内部自洽(哈希链/双份内参/再投影闭环 6e-5px 全对),但 153,666 集全量包未放出、SAM3 掩码缺、IoU 声明无法独立核验、标定优化器未开源)(2610.12468)
+- Covered papers: 2609.36259, 2609.40362, 2609.20807, 2610.12572, 2610.12468
+- Shortlisted papers: 2610.06801, 2610.13205, 2610.06100, 2610.02840, 2610.02054, 2610.03391, 2610.12442, 2610.00864, 2610.12772, 2610.12299, 2610.13021, 2609.38173
+- 背景: 五篇共享同一方法论——找到更新量/递推里"逐点消不掉、靠期望抵消"的项并构造性消掉(SC 的 E[R]·s̄ 与 NFT 的 (2q−1)e 同构;CyFA 换坐标消传输;DreamTrue 在数据侧消失准),为"软损失塑表征、硬约束管记账"判据添三个新实例。WAM 接口战线升温(池内 PointWAM/UniWAM/Native-Action-Prior 三连)。执行教训:push_report.py 需 PIL 且系统 python 无 pip——用带 matplotlib 的 venv 跑;bot 私信 open_id 又轮换(新 ou_4fb6…,auth status 可查);mineru read CLI 直连远程不依赖本地 API;DROID euler 约定与 KarlP README 的 scipy 示例相反(extrinsic xyz);大 tar 块内无序时 HTTP range 二分不可行需稠密扫描。
+
 ## 2026-10-08 — 2026-10-06 至 2026-10-08(WAM 从能跑到能运营:长上下文 × 实时化 × 状态量化)
 - Doc: https://fudan-nlp.feishu.cn/docx/VlhrddNxXo8whzxZ74rcL0OfnWc
 - Run: runs/2026-10-08-longwam-rtwam-stepquant/

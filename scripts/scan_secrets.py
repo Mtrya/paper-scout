@@ -12,9 +12,11 @@ length) so output is safe for CI logs; personal/machine matches are shown
 verbatim because they are ordinary text the fixer must locate.
 
 Allowlist: scripts/scan_secrets.allowlist holds one literal string per line
-(`#` comments); a matching line is skipped. Binary files, .git,
-workspace/papers/ (third-party paper cache), this scanner, and the allowlist
-itself are never scanned.
+(`#` comments); a matching line is skipped. A scoped form `rule@path-prefix`
+(e.g. `personal/cn-mobile@workspace/runs/x/`) skips only that rule's findings
+under that path prefix — use it for machine-generated evidence where one rule
+false-positives at scale. Binary files, .git, workspace/papers/ (third-party
+paper cache), this scanner, and the allowlist itself are never scanned.
 """
 
 import argparse
@@ -72,14 +74,20 @@ RULES = [
 
 def load_allowlist():
     path = os.path.join(REPO_ROOT, ALLOWLIST_PATH)
-    entries = []
+    literals, scoped = [], []
+    rule_names = {name for name, _, _ in RULES}
     if os.path.exists(path):
         with open(path, encoding="utf-8") as f:
             for line in f:
                 line = line.strip()
-                if line and not line.startswith("#"):
-                    entries.append(line)
-    return entries
+                if not line or line.startswith("#"):
+                    continue
+                rule, at, prefix = line.partition("@")
+                if at and rule in rule_names and prefix:
+                    scoped.append((rule, prefix))
+                else:
+                    literals.append(line)
+    return literals, scoped
 
 
 def is_binary(data):
@@ -102,7 +110,7 @@ def mask(text, match, category):
     return text.replace(secret, masked)
 
 
-def scan_line(path, lineno, line, allowlist, findings):
+def scan_line(path, lineno, line, allowlist, scoped, findings):
     if any(lit in line for lit in allowlist):
         return
     for name, category, pattern in RULES:
@@ -111,12 +119,14 @@ def scan_line(path, lineno, line, allowlist, findings):
                 continue
             if name == "personal/email" and EMAIL_IGNORE.search(m.group(0)):
                 continue
+            if any(name == r and path.startswith(p) for r, p in scoped):
+                continue
             text = mask(line.strip()[:200], m, category)
             findings.append((path, lineno, name, text))
             break  # one finding per rule per line is enough
 
 
-def scan_working_tree(allowlist, findings):
+def scan_working_tree(allowlist, scoped, findings):
     files = subprocess.run(
         ["git", "ls-files", "-z"], cwd=REPO_ROOT,
         capture_output=True, check=True,
@@ -133,10 +143,10 @@ def scan_working_tree(allowlist, findings):
         if is_binary(data):
             continue
         for lineno, line in enumerate(data.decode("utf-8", errors="replace").splitlines(), 1):
-            scan_line(path, lineno, line, allowlist, findings)
+            scan_line(path, lineno, line, allowlist, scoped, findings)
 
 
-def scan_diff(diff_text, allowlist, findings):
+def scan_diff(diff_text, allowlist, scoped, findings):
     path = None
     new_lineno = None
     for line in diff_text.splitlines():
@@ -148,7 +158,7 @@ def scan_diff(diff_text, allowlist, findings):
             new_lineno = int(m.group(1)) if m else None
         elif line.startswith("+") and not line.startswith("+++"):
             if path and new_lineno is not None and not excluded(path):
-                scan_line(path, new_lineno, line[1:], allowlist, findings)
+                scan_line(path, new_lineno, line[1:], allowlist, scoped, findings)
             if new_lineno is not None:
                 new_lineno += 1
         elif not line.startswith("-"):
@@ -180,7 +190,7 @@ def main():
                        help="scan full content of every tracked file (default)")
     args = parser.parse_args()
 
-    allowlist = load_allowlist()
+    allowlist, scoped = load_allowlist()
     findings = []
 
     if args.staged:
@@ -188,16 +198,16 @@ def main():
             ["git", "diff", "--cached", "--unified=0", "--diff-filter=ACMR"],
             cwd=REPO_ROOT, capture_output=True, text=True, check=True,
         ).stdout
-        scan_diff(diff, allowlist, findings)
+        scan_diff(diff, allowlist, scoped, findings)
     elif args.range:
         a, b = resolve_range(args.range)
         diff = subprocess.run(
             ["git", "diff", "--unified=0", "--diff-filter=ACMR", a, b],
             cwd=REPO_ROOT, capture_output=True, text=True, check=True,
         ).stdout
-        scan_diff(diff, allowlist, findings)
+        scan_diff(diff, allowlist, scoped, findings)
     else:
-        scan_working_tree(allowlist, findings)
+        scan_working_tree(allowlist, scoped, findings)
 
     for path, lineno, name, text in findings:
         print(f"{path}:{lineno}: [{name}] {text}")

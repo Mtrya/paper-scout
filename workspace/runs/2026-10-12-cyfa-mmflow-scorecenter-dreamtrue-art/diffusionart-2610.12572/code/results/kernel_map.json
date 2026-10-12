@@ -1,0 +1,164 @@
+{
+  "A_nft_force": {
+    "total_grad": [
+      -6.0160040855407715,
+      0.02060532569885254
+    ],
+    "total_force": [
+      6.0160040855407715,
+      -0.02060532569885254
+    ],
+    "reconstruction_max_err": 2.384185791015625e-07,
+    "cos_vs_unnormalised_paper_force": 0.9887374043464661,
+    "cos_vs_rownormalised_paper_force": 1.0000000242968698,
+    "constant_vs_rownormalised": 0.44999998688057774,
+    "mean_abs_h": 1.6027776002883911,
+    "closed_form_residual": [
+      1.1316665410995483,
+      0.16733328998088837
+    ],
+    "empirical_sum_force": [
+      6.789999961853027,
+      1.003999948501587
+    ],
+    "empirical_mean_force": [
+      1.131666660308838,
+      0.16733331978321075
+    ],
+    "closed_form_err": 1.1920928955078125e-07
+  },
+  "B_restoration": [
+    {
+      "beta": 0.25,
+      "direction": [
+        1.0,
+        0.0
+      ],
+      "kernel_hessian": 1.8340975046157837,
+      "predicted_from_kernel_weights": 1.834097345425526,
+      "prediction_err": 1.5919025764254968e-07,
+      "paper_hessian": 0.75,
+      "ratio": 2.4454633394877114
+    },
+    {
+      "beta": 0.25,
+      "direction": [
+        0.3511234521865845,
+        -0.936329185962677
+      ],
+      "kernel_hessian": 1.8340976238250732,
+      "predicted_from_kernel_weights": 1.834097345425526,
+      "prediction_err": 2.7839954719333093e-07,
+      "paper_hessian": 0.75,
+      "ratio": 2.445463498433431
+    },
+    {
+      "beta": 1.0,
+      "direction": [
+        1.0,
+        0.0
+      ],
+      "kernel_hessian": 7.336390018463135,
+      "predicted_from_kernel_weights": 7.336389381702104,
+      "prediction_err": 6.367610305701987e-07,
+      "paper_hessian": 12.0,
+      "ratio": 0.6113658348719279
+    },
+    {
+      "beta": 1.0,
+      "direction": [
+        0.3511234521865845,
+        -0.936329185962677
+      ],
+      "kernel_hessian": 7.336390495300293,
+      "predicted_from_kernel_weights": 7.336389381702104,
+      "prediction_err": 1.1135981887733237e-06,
+      "paper_hessian": 12.0,
+      "ratio": 0.6113658746083578
+    },
+    {
+      "beta": 4.0,
+      "direction": [
+        1.0,
+        0.0
+      ],
+      "kernel_hessian": 29.34556007385254,
+      "predicted_from_kernel_weights": 29.345557526808417,
+      "prediction_err": 2.547044122280795e-06,
+      "paper_hessian": 192.0,
+      "ratio": 0.15284145871798197
+    },
+    {
+      "beta": 4.0,
+      "direction": [
+        0.3511234521865845,
+        -0.936329185962677
+      ],
+      "kernel_hessian": 29.345561981201172,
+      "predicted_from_kernel_weights": 29.345557526808417,
+      "prediction_err": 4.454392755093295e-06,
+      "paper_hessian": 192.0,
+      "ratio": 0.15284146865208945
+    }
+  ],
+  "C_art_force": [
+    {
+      "ensemble": "narrow",
+      "art_force": [
+        0.3664703667163849,
+        -0.21377436816692352
+      ],
+      "art_force_norm": 0.4242640733718872,
+      "art_cos_vs_guidance": 1.0000001192092896,
+      "nft_force_norm": 6.863826274871826,
+      "nft_force": [
+        6.789999961853027,
+        1.003999948501587
+      ],
+      "conditional_e_norm": 1.364790439605713
+    },
+    {
+      "ensemble": "spread",
+      "art_force": [
+        0.3664703667163849,
+        -0.21377436816692352
+      ],
+      "art_force_norm": 0.4242640733718872,
+      "art_cos_vs_guidance": 1.0000001192092896,
+      "nft_force_norm": 1.3653262853622437,
+      "nft_force": [
+        1.3499999046325684,
+        0.20399999618530273
+      ],
+      "conditional_e_norm": 0.24248965084552765
+    },
+    {
+      "ensemble": "shifted",
+      "art_force": [
+        0.3664703667163849,
+        -0.21377436816692352
+      ],
+      "art_force_norm": 0.4242640733718872,
+      "art_cos_vs_guidance": 1.0000001192092896,
+      "nft_force_norm": 6.750800609588623,
+      "nft_force": [
+        6.689999580383301,
+        0.9039998650550842
+      ],
+      "conditional_e_norm": 0.78413987159729
+    }
+  ],
+  "D_covariance": {
+    "kernel_direction": [
+      -1.3375043869018555,
+      -0.4594365358352661
+    ],
+    "paper_G": [
+      -1.3375043869018555,
+      -0.4594365656375885
+    ],
+    "max_err": 2.9802322387695312e-08,
+    "direction_rms": 1.0,
+    "magnitude": 1.0
+  }
+}
