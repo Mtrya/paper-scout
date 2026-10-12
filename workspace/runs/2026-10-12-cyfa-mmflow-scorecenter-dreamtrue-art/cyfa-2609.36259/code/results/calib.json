@@ -1,0 +1,13 @@
+{
+  "checkpoint": "cyxxxxxxxxxx/cyfa-400M-15B@a351d32fe92a5353ba0deacffcbc8d0548c4d78d",
+  "n_chunks": 16,
+  "n_tokens": 32752,
+  "n_words": 23723,
+  "tokens_per_word": 1.3806011044134385,
+  "token_nll": 2.640736157333903,
+  "token_ppl": 14.023523328343886,
+  "word_ppl_nonoverlap": 38.31353604466658,
+  "paper_wiki_ppl": 25.85,
+  "paper_d2_heldout_nll": 2.6105,
+  "time_s": 158.06552720069885
+}

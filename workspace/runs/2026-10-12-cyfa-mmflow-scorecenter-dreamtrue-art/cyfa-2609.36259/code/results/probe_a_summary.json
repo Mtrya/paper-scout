@@ -1,0 +1,199 @@
+{
+  "checkpoint": "cyxxxxxxxxxx/cyfa-400M-15B@a351d32fe92a5353ba0deacffcbc8d0548c4d78d",
+  "n_stat_natural": 16,
+  "n_code": 8,
+  "n_rep": 12,
+  "natural_mean_nll": 2.6407,
+  "code_mean_nll": 1.3555,
+  "repetitive_mean_nll": 0.0342,
+  "head_class": {
+    "n_near_one": 55,
+    "n_input_dep": 40,
+    "n_other": 1,
+    "near_one_mean": 0.9964004755020142,
+    "near_one_std": 0.006181234028190374,
+    "input_dep_mean": 0.5112890005111694,
+    "input_dep_std": 0.16460943222045898,
+    "paper": {
+      "n_near_one": 56,
+      "n_input_dep": 40,
+      "near_one_mean": 0.9961,
+      "near_one_std": 0.0065,
+      "input_dep_mean": 0.5118,
+      "input_dep_std": 0.1627
+    }
+  },
+  "token_identity_var_fraction": {
+    "mean_over_input_dep_heads_excl_layer0": 0.562992919285149,
+    "n_heads": 36,
+    "paper": 0.494
+  },
+  "input_dep_heads": [
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      3
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      5,
+      2
+    ],
+    [
+      6,
+      0
+    ],
+    [
+      6,
+      1
+    ],
+    [
+      6,
+      2
+    ],
+    [
+      6,
+      3
+    ],
+    [
+      7,
+      3
+    ],
+    [
+      9,
+      0
+    ],
+    [
+      11,
+      0
+    ],
+    [
+      11,
+      1
+    ],
+    [
+      12,
+      2
+    ],
+    [
+      12,
+      3
+    ],
+    [
+      13,
+      0
+    ],
+    [
+      13,
+      1
+    ],
+    [
+      13,
+      2
+    ],
+    [
+      14,
+      2
+    ],
+    [
+      15,
+      1
+    ],
+    [
+      15,
+      2
+    ],
+    [
+      15,
+      3
+    ],
+    [
+      16,
+      0
+    ],
+    [
+      16,
+      2
+    ],
+    [
+      17,
+      0
+    ],
+    [
+      17,
+      1
+    ],
+    [
+      17,
+      2
+    ],
+    [
+      17,
+      3
+    ],
+    [
+      19,
+      0
+    ],
+    [
+      20,
+      2
+    ],
+    [
+      21,
+      1
+    ],
+    [
+      22,
+      2
+    ],
+    [
+      23,
+      0
+    ],
+    [
+      23,
+      1
+    ],
+    [
+      23,
+      3
+    ]
+  ],
+  "input_dep_head_delta_mean_by_class": {
+    "natural": 0.5112889401614666,
+    "code": 0.505503891594708,
+    "repetitive": 0.4362348387017846
+  },
+  "interventions": {
+    "baseline_nll": 2.7446781396865845,
+    "mean": 2.7855459451675415,
+    "shift257": 2.9009472131729126,
+    "one": 2.880988597869873,
+    "dnll_mean": 0.04086780548095703,
+    "dnll_shift257": 0.15626907348632812,
+    "dnll_one": 0.13631045818328857,
+    "n_heldout": 8,
+    "paper_table8": {
+      "baseline": 2.6105,
+      "mean": 2.6555,
+      "shift257": 2.7344,
+      "one": 2.7486
+    },
+    "note": "paper intervenes on its 40 input-dependent heads; we intervene on our classified set"
+  }
+}

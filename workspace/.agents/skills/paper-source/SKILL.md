@@ -52,7 +52,7 @@ HF 是默认池,但不是唯一的网。主动检查当前环境里可用的其�
 
 ## 来源 B:arXiv PDF + 本地 MinerU
 
-精读论文用 arXiv PDF + 本地 MinerU,全文与图表抽取更可靠。
+精读论文用 arXiv PDF + 本地 MinerU 4.x,全文与图表抽取更可靠。
 
 端到端脚本:
 
@@ -60,16 +60,31 @@ HF 是默认池,但不是唯一的网。主动检查当前环境里可用的其�
 .agents/skills/paper-source/scripts/arxiv-mineru-parse.sh <paper-id> <area> <slug>
 ```
 
-脚本将 PDF 下载到 `drafts/`,调用本地 `mineru` 解析,把产出的 Markdown 复制到 `papers/<area>/<slug>-<paper-id>.md`,然后清理临时 PDF 与解析输出。依赖 `curl` 和本地 `mineru`(经 `uv tool install 'mineru[all]'` 安装)。首次运行需要模型权重;若自动下载失败,先执行 `mineru-models-download -s modelscope -m pipeline`。
+脚本将 PDF 下载到 `drafts/`,调用本地 `mineru` 解析,把产出的 Markdown 复制到 `papers/<area>/<slug>-<paper-id>.md`,然后清理临时 PDF。依赖 `curl` 和本地 `mineru`(经 `uv tool install 'mineru[all]'` 安装)。
+
+MinerU 4.x 是客户端-服务架构,一次性配置:
+
+```bash
+mineru-models-download --tier basic -s modelscope   # standard/advanced 需要带 CUDA 工具链的 VLM 引擎,本机没有
+mineru config set parse_server.local.mode self_hosted
+mineru config set parse_server.local.self_hosted_url http://127.0.0.1:8000
+```
+
+每次使用前要起两个常驻服务(脚本会检查健康端点,不通则报错并提示):
+
+```bash
+mineru server start
+mineru-api --port 8000 --tier basic --no-advanced --no-flash   # 用后台任务起,不要用 shell 内 &
+```
 
 常用选项:
 
 ```bash
-.agents/skills/paper-source/scripts/arxiv-mineru-parse.sh <paper-id> <area> <slug> --backend pipeline
+.agents/skills/paper-source/scripts/arxiv-mineru-parse.sh <paper-id> <area> <slug> --tier basic
 .agents/skills/paper-source/scripts/arxiv-mineru-parse.sh <paper-id> <area> <slug> --copy-images
 ```
 
-`--copy-images` 会把抽取的图片一并复制到 `drafts/images/<slug>-<paper-id>/`,便于深挖与写作时引用;进入报告的图片再按 `paper-deep-dive` 的证据规则晋升到运行包。
+`--copy-images` 把抽取的图片按 `doc:...` locator 逐张导出到 `drafts/images/<slug>-<paper-id>/`,便于深挖与写作时引用;进入报告的图片再按 `paper-deep-dive` 的证据规则晋升到运行包。
 
 只需要 PDF 审计产物时:
 

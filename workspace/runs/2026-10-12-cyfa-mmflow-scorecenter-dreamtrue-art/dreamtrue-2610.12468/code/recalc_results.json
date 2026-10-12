@@ -1,0 +1,992 @@
+{
+ "n_refined_episodes": {
+  "AgibotWorld": 3,
+  "droid_raw": 3,
+  "robomind_franka": 2
+ },
+ "init_vs_refined": [
+  {
+   "dataset": "AgibotWorld",
+   "calib_key": "AgibotWorld/param/380/665152/optimize",
+   "camera": "head",
+   "mount": "head_link2",
+   "trans_err_m": 0.024511007481093725,
+   "rot_err_deg": 11.490055290996205,
+   "fx_rel_err": -0.04296190666429922,
+   "fy_rel_err": -0.013721720377604218,
+   "dcx_px": -0.85174560546875,
+   "dcy_px": -4.8586578369140625,
+   "distortion_l1": 0.015512193320319057
+  },
+  {
+   "dataset": "AgibotWorld",
+   "calib_key": "AgibotWorld/param/380/665152/optimize",
+   "camera": "hand_right",
+   "mount": "gripper_r_base_link",
+   "trans_err_m": 0.008731916664424732,
+   "rot_err_deg": 1.4279307138357038,
+   "fx_rel_err": 0.07171554565429683,
+   "fy_rel_err": 0.022072219848632724,
+   "dcx_px": -15.093475341796875,
+   "dcy_px": -11.61541748046875,
+   "distortion_l1": 0.002758603004622273
+  },
+  {
+   "dataset": "AgibotWorld",
+   "calib_key": "AgibotWorld/param/380/665152/optimize",
+   "camera": "hand_left",
+   "mount": "gripper_l_base_link",
+   "trans_err_m": 0.006830984658805009,
+   "rot_err_deg": 1.1275885526797351,
+   "fx_rel_err": 0.04647626876831046,
+   "fy_rel_err": 0.04367942810058589,
+   "dcx_px": -15.236236572265625,
+   "dcy_px": 1.2486419677734375,
+   "distortion_l1": 0.00410243391070253
+  },
+  {
+   "dataset": "AgibotWorld",
+   "calib_key": "AgibotWorld/param/410/649000/optimize",
+   "camera": "hand_right",
+   "mount": "gripper_r_base_link",
+   "trans_err_m": 0.003863772150116353,
+   "rot_err_deg": 1.665780192058977,
+   "fx_rel_err": 0.047484397888183594,
+   "fy_rel_err": 0.01062841415405269,
+   "dcx_px": -1.731201171875,
+   "dcy_px": 4.8607177734375,
+   "distortion_l1": 0.0054576296261075186
+  },
+  {
+   "dataset": "AgibotWorld",
+   "calib_key": "AgibotWorld/param/410/649000/optimize",
+   "camera": "hand_left",
+   "mount": "gripper_l_base_link",
+   "trans_err_m": 0.004754395211888524,
+   "rot_err_deg": 2.5896323450445013,
+   "fx_rel_err": 0.04561748504638663,
+   "fy_rel_err": -0.002466106414794944,
+   "dcx_px": -7.275177001953125,
+   "dcy_px": -4.57916259765625,
+   "distortion_l1": 0.0010638973140544294
+  },
+  {
+   "dataset": "AgibotWorld",
+   "calib_key": "AgibotWorld/param/410/649000/optimize",
+   "camera": "head",
+   "mount": "head_link2",
+   "trans_err_m": 0.027434957532692074,
+   "rot_err_deg": 11.380071519593528,
+   "fx_rel_err": -0.06353389855587122,
+   "fy_rel_err": -0.002015824751420481,
+   "dcx_px": -1.97540283203125,
+   "dcy_px": -9.41259765625,
+   "distortion_l1": 0.015136336791329086
+  },
+  {
+   "dataset": "AgibotWorld",
+   "calib_key": "AgibotWorld/param/599/835856/optimize",
+   "camera": "hand_right",
+   "mount": "gripper_r_base_link",
+   "trans_err_m": 0.0019373841012426882,
+   "rot_err_deg": 1.5231984923919388,
+   "fx_rel_err": 0.030662727355956987,
+   "fy_rel_err": 0.016830635070800737,
+   "dcx_px": 7.6773681640625,
+   "dcy_px": -1.2872772216796875,
+   "distortion_l1": 0.010872038481466006
+  },
+  {
+   "dataset": "AgibotWorld",
+   "calib_key": "AgibotWorld/param/599/835856/optimize",
+   "camera": "hand_left",
+   "mount": "gripper_l_base_link",
+   "trans_err_m": 0.0050421741687505,
+   "rot_err_deg": 0.23673885401234152,
+   "fx_rel_err": 0.038039875030517534,
+   "fy_rel_err": 0.027213764190673784,
+   "dcx_px": -15.139801025390625,
+   "dcy_px": 3.0237274169921875,
+   "distortion_l1": 0.008782939286902547
+  },
+  {
+   "dataset": "AgibotWorld",
+   "calib_key": "AgibotWorld/param/599/835856/optimize",
+   "camera": "head",
+   "mount": "head_link2",
+   "trans_err_m": 0.035730716795333725,
+   "rot_err_deg": 12.917041222468352,
+   "fx_rel_err": -0.05510300145004732,
+   "fy_rel_err": -0.033929073449337155,
+   "dcx_px": -5.312591552734375,
+   "dcy_px": -6.398101806640625,
+   "distortion_l1": 0.006212128828337882
+  },
+  {
+   "dataset": "droid_raw",
+   "calib_key": "droid_raw/param/1.0.1/AUTOLab/failure/Sat_Oct_21_19:58:12_2023/optimize",
+   "camera": "wrist",
+   "mount": "flange",
+   "trans_err_m": 0.017045365386419042,
+   "rot_err_deg": 5.652698380651693,
+   "fx_rel_err": 0.08412161690848219,
+   "fy_rel_err": 0.06982308523995528,
+   "dcx_px": -0.98834228515625,
+   "dcy_px": -1.878387451171875,
+   "distortion_l1": 0.005162444489542395
+  },
+  {
+   "dataset": "droid_raw",
+   "calib_key": "droid_raw/param/1.0.1/AUTOLab/failure/Sat_Oct_21_19:58:12_2023/optimize",
+   "camera": "right",
+   "mount": "base_link",
+   "trans_err_m": 0.2625291404311138,
+   "rot_err_deg": 24.292603224641294,
+   "fx_rel_err": 0.013145360406839668,
+   "fy_rel_err": 0.021533433446344397,
+   "dcx_px": -9.4776611328125,
+   "dcy_px": -10.38275146484375,
+   "distortion_l1": 0.003943335672374815
+  },
+  {
+   "dataset": "droid_raw",
+   "calib_key": "droid_raw/param/1.0.1/AUTOLab/failure/Sat_Oct_21_19:58:12_2023/optimize",
+   "camera": "left",
+   "mount": "base_link",
+   "trans_err_m": 0.3293929649350417,
+   "rot_err_deg": 34.19189616343041,
+   "fx_rel_err": -0.01239048220076655,
+   "fy_rel_err": 0.010085656507959895,
+   "dcx_px": -1.65234375,
+   "dcy_px": 15.092742919921875,
+   "distortion_l1": 0.008578457665862516
+  },
+  {
+   "dataset": "droid_raw",
+   "calib_key": "droid_raw/param/1.0.1/ILIAD/failure/Thu_Jun_15_13:56:46_2023/optimize",
+   "camera": "right",
+   "mount": "base_link",
+   "trans_err_m": 0.19442116101071463,
+   "rot_err_deg": 26.277642003082338,
+   "fx_rel_err": 0.01601919498083726,
+   "fy_rel_err": 0.019335131375294745,
+   "dcx_px": 19.7620849609375,
+   "dcy_px": 4.6817626953125,
+   "distortion_l1": 0.0022745949900127016
+  },
+  {
+   "dataset": "droid_raw",
+   "calib_key": "droid_raw/param/1.0.1/ILIAD/failure/Thu_Jun_15_13:56:46_2023/optimize",
+   "camera": "left",
+   "mount": "base_link",
+   "trans_err_m": 0.20599693324984483,
+   "rot_err_deg": 25.2281416728225,
+   "fx_rel_err": 0.02383457399764155,
+   "fy_rel_err": -0.002396723909198095,
+   "dcx_px": 10.6033935546875,
+   "dcy_px": -1.983551025390625,
+   "distortion_l1": 0.0011901530015165918
+  },
+  {
+   "dataset": "droid_raw",
+   "calib_key": "droid_raw/param/1.0.1/ILIAD/failure/Thu_Jun_15_13:56:46_2023/optimize",
+   "camera": "wrist",
+   "mount": "flange",
+   "trans_err_m": 0.022871792567885647,
+   "rot_err_deg": 2.1950536241018406,
+   "fx_rel_err": 0.12022007533482149,
+   "fy_rel_err": 0.1024316406250001,
+   "dcx_px": -26.27630615234375,
+   "dcy_px": 22.411346435546875,
+   "distortion_l1": 0.01561183380545117
+  },
+  {
+   "dataset": "droid_raw",
+   "calib_key": "droid_raw/param/1.0.1/ILIAD/success/Thu_Jul_20_11:48:53_2023/optimize",
+   "camera": "right",
+   "mount": "base_link",
+   "trans_err_m": 0.6967277122003512,
+   "rot_err_deg": 10.4475972956923,
+   "fx_rel_err": 0.0071000009212853765,
+   "fy_rel_err": 0.010157747088738178,
+   "dcx_px": 2.09442138671875,
+   "dcy_px": 5.614837646484375,
+   "distortion_l1": 0.005936650203238969
+  },
+  {
+   "dataset": "droid_raw",
+   "calib_key": "droid_raw/param/1.0.1/ILIAD/success/Thu_Jul_20_11:48:53_2023/optimize",
+   "camera": "left",
+   "mount": "base_link",
+   "trans_err_m": 0.3676386160440561,
+   "rot_err_deg": 43.03709604062042,
+   "fx_rel_err": -0.007183146926591943,
+   "fy_rel_err": -0.011131660893278328,
+   "dcx_px": 7.32830810546875,
+   "dcy_px": -6.943572998046875,
+   "distortion_l1": 0.0037754947607027134
+  },
+  {
+   "dataset": "droid_raw",
+   "calib_key": "droid_raw/param/1.0.1/ILIAD/success/Thu_Jul_20_11:48:53_2023/optimize",
+   "camera": "wrist",
+   "mount": "flange",
+   "trans_err_m": 0.022464190577870247,
+   "rot_err_deg": 1.2977975376049182,
+   "fx_rel_err": 0.08134957449776792,
+   "fy_rel_err": 0.07323277064732148,
+   "dcx_px": -18.17950439453125,
+   "dcy_px": 12.247161865234375,
+   "distortion_l1": 0.004009374039014801
+  },
+  {
+   "dataset": "robomind_franka",
+   "calib_key": "robomind_franka/param/open_drawer_put_red_button_close_with_arms/success/0623_161143/optimize",
+   "camera": "camera_left",
+   "mount": "base_link",
+   "trans_err_m": 0.04983265795168653,
+   "rot_err_deg": 34.18113458431005,
+   "fx_rel_err": null,
+   "fy_rel_err": null,
+   "dcx_px": 3.949127197265625,
+   "dcy_px": 17.558700561523438,
+   "distortion_l1": 0.006364568180288188
+  },
+  {
+   "dataset": "robomind_franka",
+   "calib_key": "robomind_franka/param/open_drawer_put_red_button_close_with_arms/success/0623_161143/optimize",
+   "camera": "camera_wrist_right",
+   "mount": "right_camera_link",
+   "trans_err_m": 0.020163258731295642,
+   "rot_err_deg": 6.909897078219005,
+   "fx_rel_err": null,
+   "fy_rel_err": null,
+   "dcx_px": 13.05078125,
+   "dcy_px": 3.3540191650390625,
+   "distortion_l1": 0.01126336565357633
+  },
+  {
+   "dataset": "robomind_franka",
+   "calib_key": "robomind_franka/param/open_drawer_put_red_button_close_with_arms/success/0623_161143/optimize",
+   "camera": "camera_top",
+   "mount": "base_link",
+   "trans_err_m": 0.057378707740872816,
+   "rot_err_deg": 1.391883628126742,
+   "fx_rel_err": null,
+   "fy_rel_err": null,
+   "dcx_px": 8.04443359375,
+   "dcy_px": -1.0770721435546875,
+   "distortion_l1": 0.002803968200169038
+  },
+  {
+   "dataset": "robomind_franka",
+   "calib_key": "robomind_franka/param/open_drawer_put_red_button_close_with_arms/success/0623_161143/optimize",
+   "camera": "camera_front",
+   "mount": "base_link",
+   "trans_err_m": 0.05748739194151505,
+   "rot_err_deg": 1.5561759515747011,
+   "fx_rel_err": null,
+   "fy_rel_err": null,
+   "dcx_px": 1.570770263671875,
+   "dcy_px": 11.950241088867188,
+   "distortion_l1": 0.004829460074688541
+  },
+  {
+   "dataset": "robomind_franka",
+   "calib_key": "robomind_franka/param/open_drawer_put_red_button_close_with_arms/success/0623_161143/optimize",
+   "camera": "camera_wrist_left",
+   "mount": "left_camera_link",
+   "trans_err_m": 0.01824585611779636,
+   "rot_err_deg": 3.5812608785000197,
+   "fx_rel_err": null,
+   "fy_rel_err": null,
+   "dcx_px": 3.12335205078125,
+   "dcy_px": 15.51654052734375,
+   "distortion_l1": 0.007390514307189733
+  },
+  {
+   "dataset": "robomind_franka",
+   "calib_key": "robomind_franka/param/open_drawer_put_red_button_close_with_arms/success/0623_161143/optimize",
+   "camera": "camera_right",
+   "mount": "base_link",
+   "trans_err_m": 0.05761513589719742,
+   "rot_err_deg": 8.880157777122243,
+   "fx_rel_err": null,
+   "fy_rel_err": null,
+   "dcx_px": -10.304901123046875,
+   "dcy_px": 13.666519165039062,
+   "distortion_l1": 0.006538110610563308
+  },
+  {
+   "dataset": "robomind_franka",
+   "calib_key": "robomind_franka/param/place_blue_block_between_orange_and_purple_blocks/success/0526_161107/optimize",
+   "camera": "camera_top",
+   "mount": "base_link",
+   "trans_err_m": 0.056911177040706494,
+   "rot_err_deg": 4.938846642488836,
+   "fx_rel_err": null,
+   "fy_rel_err": null,
+   "dcx_px": -1.532684326171875,
+   "dcy_px": -2.2296600341796875,
+   "distortion_l1": 0.0071826437779236585
+  },
+  {
+   "dataset": "robomind_franka",
+   "calib_key": "robomind_franka/param/place_blue_block_between_orange_and_purple_blocks/success/0526_161107/optimize",
+   "camera": "camera_right",
+   "mount": "base_link",
+   "trans_err_m": 0.8330666309659219,
+   "rot_err_deg": 82.96188797601495,
+   "fx_rel_err": null,
+   "fy_rel_err": null,
+   "dcx_px": -1.663848876953125,
+   "dcy_px": -6.5076446533203125,
+   "distortion_l1": 0.011261049105087295
+  },
+  {
+   "dataset": "robomind_franka",
+   "calib_key": "robomind_franka/param/place_blue_block_between_orange_and_purple_blocks/success/0526_161107/optimize",
+   "camera": "camera_front",
+   "mount": "base_link",
+   "trans_err_m": 0.01227713035518642,
+   "rot_err_deg": 4.036394057836081,
+   "fx_rel_err": null,
+   "fy_rel_err": null,
+   "dcx_px": 7.682861328125,
+   "dcy_px": 25.203369140625,
+   "distortion_l1": 0.008294575120089576
+  },
+  {
+   "dataset": "robomind_franka",
+   "calib_key": "robomind_franka/param/place_blue_block_between_orange_and_purple_blocks/success/0526_161107/optimize",
+   "camera": "camera_wrist_left",
+   "mount": "left_camera_link",
+   "trans_err_m": 0.013308311211403471,
+   "rot_err_deg": 8.043318852643429,
+   "fx_rel_err": null,
+   "fy_rel_err": null,
+   "dcx_px": 21.67608642578125,
+   "dcy_px": 0.2121429443359375,
+   "distortion_l1": 0.008982704302979982
+  },
+  {
+   "dataset": "robomind_franka",
+   "calib_key": "robomind_franka/param/place_blue_block_between_orange_and_purple_blocks/success/0526_161107/optimize",
+   "camera": "camera_left",
+   "mount": "base_link",
+   "trans_err_m": 0.038732830324539815,
+   "rot_err_deg": 15.035942499258462,
+   "fx_rel_err": null,
+   "fy_rel_err": null,
+   "dcx_px": -6.6884765625,
+   "dcy_px": -5.325439453125,
+   "distortion_l1": 0.007060654494125629
+  },
+  {
+   "dataset": "robomind_franka",
+   "calib_key": "robomind_franka/param/place_blue_block_between_orange_and_purple_blocks/success/0526_161107/optimize",
+   "camera": "camera_wrist_right",
+   "mount": "right_camera_link",
+   "trans_err_m": 0.017658711852410174,
+   "rot_err_deg": 6.520826574446241,
+   "fx_rel_err": null,
+   "fy_rel_err": null,
+   "dcx_px": -0.79681396484375,
+   "dcy_px": -8.289581298828125,
+   "distortion_l1": 0.01375300664221868
+  }
+ ],
+ "droid_original_vs_refined": [
+  {
+   "dataset": "droid_raw",
+   "calib_key": "droid_raw/param/1.0.1/AUTOLab/failure/Sat_Oct_21_19:58:12_2023/optimize",
+   "camera": "left",
+   "euler_conv_chosen": "extrinsic",
+   "trans_err_m": 0.0051306042642840334,
+   "rot_err_deg": 1.2192948167406197,
+   "fx_ref_vs_orig": [
+    523.4330444335938,
+    524.21142578125
+   ],
+   "fy_ref_vs_orig": [
+    535.3453979492188,
+    524.21142578125
+   ],
+   "fx_rel_err": -0.0014848614688171002,
+   "fy_rel_err": 0.02123946869600446,
+   "dcx_px": -1.429931640625,
+   "dcy_px": 4.814910888671875,
+   "orig_distortion": "ZED factory: none provided in intrinsics.json (distCoeffs all zero)"
+  },
+  {
+   "dataset": "droid_raw",
+   "calib_key": "droid_raw/param/1.0.1/AUTOLab/failure/Sat_Oct_21_19:58:12_2023/optimize",
+   "camera": "right",
+   "euler_conv_chosen": "extrinsic",
+   "trans_err_m": 0.016221128875632672,
+   "rot_err_deg": 2.751376766575466,
+   "fx_ref_vs_orig": [
+    536.967041015625,
+    531.8460083007812
+   ],
+   "fy_ref_vs_orig": [
+    541.4127197265625,
+    531.8460083007812
+   ],
+   "fx_rel_err": 0.009628788474327576,
+   "fy_rel_err": 0.017987746972749408,
+   "dcx_px": -5.6292724609375,
+   "dcy_px": 5.60845947265625,
+   "orig_distortion": "ZED factory: none provided in intrinsics.json (distCoeffs all zero)"
+  },
+  {
+   "dataset": "droid_raw",
+   "calib_key": "droid_raw/param/1.0.1/AUTOLab/failure/Sat_Oct_21_19:58:12_2023/optimize",
+   "camera": "wrist",
+   "euler_conv_chosen": "extrinsic (Rz@Ry@Rx; verified: cam2flange constant to 0.000deg over time)",
+   "orig_cam2flange_translation_std_m_per_frame": [
+    1.312511294228739e-08,
+    7.817661363471265e-09,
+    9.360476729865239e-09
+   ],
+   "trans_err_m": 0.019543917190346594,
+   "rot_err_deg": 2.4404702612629774,
+   "fx_ref_vs_orig": [
+    758.8851318359375,
+    732.2020874023438
+   ],
+   "fy_ref_vs_orig": [
+    748.8761596679688,
+    732.2020874023438
+   ],
+   "fx_rel_err": 0.03644218569255653,
+   "fy_rel_err": 0.022772500314469424,
+   "dcx_px": -1.032470703125,
+   "dcy_px": -7.66644287109375
+  },
+  {
+   "dataset": "droid_raw",
+   "calib_key": "droid_raw/param/1.0.1/ILIAD/success/Thu_Jul_20_11:48:53_2023/optimize",
+   "camera": "left",
+   "euler_conv_chosen": "extrinsic",
+   "trans_err_m": 0.024510466828118343,
+   "rot_err_deg": 2.8261907400251842,
+   "fx_ref_vs_orig": [
+    526.1929321289062,
+    520.4090576171875
+   ],
+   "fy_ref_vs_orig": [
+    524.1002197265625,
+    520.4090576171875
+   ],
+   "fx_rel_err": 0.011114092706613343,
+   "fy_rel_err": 0.007092809118803167,
+   "dcx_px": 3.99578857421875,
+   "dcy_px": -0.321441650390625,
+   "orig_distortion": "ZED factory: none provided in intrinsics.json (distCoeffs all zero)"
+  },
+  {
+   "dataset": "droid_raw",
+   "calib_key": "droid_raw/param/1.0.1/ILIAD/success/Thu_Jul_20_11:48:53_2023/optimize",
+   "camera": "right",
+   "euler_conv_chosen": "extrinsic",
+   "trans_err_m": 0.018492614548857436,
+   "rot_err_deg": 2.422005489701041,
+   "fx_ref_vs_orig": [
+    533.7630004882812,
+    531.4241943359375
+   ],
+   "fy_ref_vs_orig": [
+    535.3836059570312,
+    531.4241943359375
+   ],
+   "fx_rel_err": 0.004401015567735422,
+   "fy_rel_err": 0.007450567104949624,
+   "dcx_px": -14.17340087890625,
+   "dcy_px": 5.241180419921875,
+   "orig_distortion": "ZED factory: none provided in intrinsics.json (distCoeffs all zero)"
+  },
+  {
+   "dataset": "droid_raw",
+   "calib_key": "droid_raw/param/1.0.1/ILIAD/success/Thu_Jul_20_11:48:53_2023/optimize",
+   "camera": "wrist",
+   "euler_conv_chosen": "extrinsic (Rz@Ry@Rx; verified: cam2flange constant to 0.000deg over time)",
+   "orig_cam2flange_translation_std_m_per_frame": [
+    9.503948299733322e-09,
+    1.2394644967926383e-08,
+    6.464721941049504e-09
+   ],
+   "trans_err_m": 0.024955335748191625,
+   "rot_err_deg": 1.7849235066988234,
+   "fx_ref_vs_orig": [
+    756.9447021484375,
+    733.3726196289062
+   ],
+   "fy_ref_vs_orig": [
+    751.262939453125,
+    733.3726196289062
+   ],
+   "fx_rel_err": 0.032142026970489956,
+   "fy_rel_err": 0.024394583797349156,
+   "dcx_px": -3.4420166015625,
+   "dcy_px": 10.324371337890625
+  },
+  {
+   "dataset": "droid_raw",
+   "calib_key": "droid_raw/param/1.0.1/ILIAD/failure/Thu_Jun_15_13:56:46_2023/optimize",
+   "camera": "left",
+   "euler_conv_chosen": "extrinsic",
+   "trans_err_m": 0.03825052366565874,
+   "rot_err_deg": 5.173376071447252,
+   "fx_ref_vs_orig": [
+    542.63232421875,
+    520.5841674804688
+   ],
+   "fy_ref_vs_orig": [
+    528.729736328125,
+    520.5841674804688
+   ],
+   "fx_rel_err": 0.04235272241372656,
+   "fy_rel_err": 0.01564697767717238,
+   "dcx_px": 7.27191162109375,
+   "dcy_px": 4.640228271484375,
+   "orig_distortion": "ZED factory: none provided in intrinsics.json (distCoeffs all zero)"
+  },
+  {
+   "dataset": "droid_raw",
+   "calib_key": "droid_raw/param/1.0.1/ILIAD/failure/Thu_Jun_15_13:56:46_2023/optimize",
+   "camera": "right",
+   "euler_conv_chosen": "extrinsic",
+   "trans_err_m": 0.061475882250508075,
+   "rot_err_deg": 6.617408143190399,
+   "fx_ref_vs_orig": [
+    538.4901733398438,
+    531.694091796875
+   ],
+   "fy_ref_vs_orig": [
+    540.2476196289062,
+    531.694091796875
+   ],
+   "fx_rel_err": 0.012781939178600155,
+   "fy_rel_err": 0.01608731028611654,
+   "dcx_px": 3.48699951171875,
+   "dcy_px": 4.323486328125,
+   "orig_distortion": "ZED factory: none provided in intrinsics.json (distCoeffs all zero)"
+  },
+  {
+   "dataset": "droid_raw",
+   "calib_key": "droid_raw/param/1.0.1/ILIAD/failure/Thu_Jun_15_13:56:46_2023/optimize",
+   "camera": "wrist",
+   "euler_conv_chosen": "extrinsic (Rz@Ry@Rx; verified: cam2flange constant to 0.000deg over time)",
+   "orig_cam2flange_translation_std_m_per_frame": [
+    8.079308317149811e-09,
+    6.21612124131722e-09,
+    8.29334511067337e-09
+   ],
+   "trans_err_m": 0.025972522721775138,
+   "rot_err_deg": 1.709551075083322,
+   "fx_ref_vs_orig": [
+    784.154052734375,
+    733.3726196289062
+   ],
+   "fy_ref_vs_orig": [
+    771.7021484375,
+    733.3726196289062
+   ],
+   "fx_rel_err": 0.0692436992414096,
+   "fy_rel_err": 0.052264739346266964,
+   "dcx_px": -11.538818359375,
+   "dcy_px": 20.488555908203125
+  }
+ ],
+ "droid_euler_convention_test": {
+  "left": [
+   [
+    175.14325172651533,
+    1.2192948167406197
+   ],
+   [
+    128.03074325275384,
+    2.8261907400251842
+   ],
+   [
+    160.67012934877434,
+    5.173376071447252
+   ]
+  ],
+  "right": [
+   [
+    98.90882505443314,
+    2.751376766575466
+   ],
+   [
+    77.05695576530397,
+    2.422005489701041
+   ],
+   [
+    93.32226205441363,
+    6.617408143190399
+   ]
+  ]
+ },
+ "h5_consistency": [
+  {
+   "h5": "conditions/agibot/390/682715/condition-agibot_action-sliced_1a28cd0aafec7b80.h5",
+   "calib_key": "380/665152/optimize",
+   "calib_hash_match": true,
+   "hash_files": [
+    "local_pose_best.json",
+    "intrinsic_best.json"
+   ],
+   "intrinsic_attr_vs_json_maxabs": 0.0,
+   "local_pose_attr_vs_json_maxabs": 2.7422741855076538e-08,
+   "render_intrinsic_recompute_maxabs": {
+    "head": 1.3547281753290008e-05,
+    "hand_right": 1.3711215899547824e-05,
+    "hand_left": 4.0281633459926525e-06
+   }
+  },
+  {
+   "h5": "conditions/agibot/410/675040/condition-agibot_action-sliced_95606223853e898a.h5",
+   "calib_key": "410/649000/optimize",
+   "calib_hash_match": true,
+   "hash_files": [
+    "local_pose_best.json",
+    "intrinsic_best.json"
+   ],
+   "intrinsic_attr_vs_json_maxabs": 0.0,
+   "local_pose_attr_vs_json_maxabs": 2.7249408396379238e-08,
+   "render_intrinsic_recompute_maxabs": {
+    "hand_right": 6.676804730432195e-06,
+    "hand_left": 8.897953648556722e-06,
+    "head": 8.561826916775317e-06
+   }
+  },
+  {
+   "h5": "conditions/agibot/764/909599/condition-agibot_action-sliced_e5b11255643d3311.h5",
+   "calib_key": "599/835856/optimize",
+   "calib_hash_match": true,
+   "hash_files": [
+    "local_pose_best.json",
+    "intrinsic_best.json"
+   ],
+   "intrinsic_attr_vs_json_maxabs": 0.0,
+   "local_pose_attr_vs_json_maxabs": 2.0955643775799615e-08,
+   "render_intrinsic_recompute_maxabs": {
+    "hand_right": 1.3830647276336094e-05,
+    "hand_left": 1.2241817728408932e-05,
+    "head": 1.4720340629992279e-05
+   }
+  },
+  {
+   "h5": "conditions/droid/1.0.1/AUTOLab/failure/Sat_Oct_21_20:00:21_2023/condition-droid_action-sliced_bdfe722823c3c96f.h5",
+   "calib_key": "1.0.1/AUTOLab/failure/Sat_Oct_21_19:58:12_2023/optimize",
+   "calib_hash_match": true,
+   "hash_files": [
+    "local_pose_best.json",
+    "intrinsic_best.json"
+   ],
+   "intrinsic_attr_vs_json_maxabs": 0.0,
+   "local_pose_attr_vs_json_maxabs": 2.899522166810442e-08,
+   "render_intrinsic_recompute_maxabs": {
+    "wrist": 2.2733985474587826e-05,
+    "right": 1.6245579558926693e-05,
+    "left": 2.7857276677423215e-05
+   }
+  },
+  {
+   "h5": "conditions/droid/1.0.1/ILIAD/success/Thu_Jul_20_12:43:49_2023/condition-droid_action-sliced_bd7480a55cac31ce.h5",
+   "calib_key": "1.0.1/ILIAD/success/Thu_Jul_20_11:48:53_2023/optimize",
+   "calib_hash_match": true,
+   "hash_files": [
+    "local_pose_best.json",
+    "intrinsic_best.json"
+   ],
+   "intrinsic_attr_vs_json_maxabs": 0.0,
+   "local_pose_attr_vs_json_maxabs": 2.500889073608903e-08,
+   "render_intrinsic_recompute_maxabs": {
+    "right": 2.829340212429088e-05,
+    "left": 8.224592249916896e-06,
+    "wrist": 1.285061455291725e-05
+   }
+  },
+  {
+   "h5": "conditions/droid/1.0.1/ILIAD/success/Thu_Jun_15_13:19:10_2023/condition-droid_action-sliced_95606223853e898a.h5",
+   "calib_key": "1.0.1/ILIAD/failure/Thu_Jun_15_13:56:46_2023/optimize",
+   "calib_hash_match": true,
+   "hash_files": [
+    "local_pose_best.json",
+    "intrinsic_best.json"
+   ],
+   "intrinsic_attr_vs_json_maxabs": 0.0,
+   "local_pose_attr_vs_json_maxabs": 1.599802990082111e-08,
+   "render_intrinsic_recompute_maxabs": {
+    "right": 1.637332309201156e-05,
+    "left": 3.0280531746029737e-05,
+    "wrist": 2.152210765871132e-05
+   }
+  },
+  {
+   "h5": "conditions/robomind/open_drawer_take_yellow_block_close_drawer/success/0612_162103/condition-robomind_action-sliced_08943419146dafe3.h5",
+   "calib_key": "open_drawer_put_red_button_close_with_arms/success/0623_161143/optimize",
+   "calib_hash_match": true,
+   "hash_files": [
+    "local_pose_best.json",
+    "intrinsic_best.json",
+    "offset_joints_best.json"
+   ],
+   "intrinsic_attr_vs_json_maxabs": 0.0,
+   "local_pose_attr_vs_json_maxabs": 2.96443533054358e-08,
+   "render_intrinsic_recompute_maxabs": {
+    "camera_left": 7.4703224299810245e-06,
+    "camera_wrist_right": 8.100050138182269e-06,
+    "camera_top": 8.673724380514614e-06,
+    "camera_front": 8.452634233435674e-06,
+    "camera_wrist_left": 9.298789791500894e-06,
+    "camera_right": 4.893018171969743e-06
+   }
+  },
+  {
+   "h5": "conditions/robomind/place_blue_block_between_orange_and_purple_blocks/success/0526_143306/condition-robomind_action-sliced_ae178d433ae335dd.h5",
+   "calib_key": "place_blue_block_between_orange_and_purple_blocks/success/0526_161107/optimize",
+   "calib_hash_match": true,
+   "hash_files": [
+    "local_pose_best.json",
+    "intrinsic_best.json",
+    "offset_joints_best.json"
+   ],
+   "intrinsic_attr_vs_json_maxabs": 0.0,
+   "local_pose_attr_vs_json_maxabs": 1.847861175185983e-08,
+   "render_intrinsic_recompute_maxabs": {
+    "camera_top": 1.1522549357323442e-05,
+    "camera_right": 6.338893541624202e-06,
+    "camera_front": 1.47577421216738e-05,
+    "camera_wrist_left": 1.4732797922079044e-05,
+    "camera_left": 1.1011343644895533e-05,
+    "camera_wrist_right": 1.250605930636084e-05
+   }
+  }
+ ],
+ "projection_consistency": [
+  {
+   "h5": "conditions/agibot/390/682715/condition-agibot_action-sliced_1a28cd0aafec7b80.h5",
+   "cameras": {
+    "head": {
+     "roundtrip_max_err_px": 2.1733844619120646e-05,
+     "roundtrip_mean_err_px": 1.4457611450592741e-05,
+     "link_origin_inframe": 26,
+     "link_origin_mask_hit_rate": 1.0
+    },
+    "hand_left": {
+     "roundtrip_max_err_px": 2.479430520452297e-05,
+     "roundtrip_mean_err_px": 1.3155975376586109e-05,
+     "link_origin_inframe": 19,
+     "link_origin_mask_hit_rate": 1.0
+    },
+    "hand_right": {
+     "roundtrip_max_err_px": 2.0364061356303864e-05,
+     "roundtrip_mean_err_px": 1.403722495224347e-05,
+     "link_origin_inframe": 4,
+     "link_origin_mask_hit_rate": 1.0
+    }
+   }
+  },
+  {
+   "h5": "conditions/agibot/410/675040/condition-agibot_action-sliced_95606223853e898a.h5",
+   "cameras": {
+    "head": {
+     "roundtrip_max_err_px": 1.8737110622168984e-05,
+     "roundtrip_mean_err_px": 1.1018338942213648e-05,
+     "link_origin_inframe": 102,
+     "link_origin_mask_hit_rate": 1.0
+    },
+    "hand_left": {
+     "roundtrip_max_err_px": 2.26669437779492e-05,
+     "roundtrip_mean_err_px": 1.2802322939292455e-05,
+     "link_origin_inframe": 29,
+     "link_origin_mask_hit_rate": 0.9310344827586207
+    },
+    "hand_right": {
+     "roundtrip_max_err_px": 1.746970178828633e-05,
+     "roundtrip_mean_err_px": 9.160494259955392e-06,
+     "link_origin_inframe": 16,
+     "link_origin_mask_hit_rate": 1.0
+    }
+   }
+  },
+  {
+   "h5": "conditions/agibot/764/909599/condition-agibot_action-sliced_e5b11255643d3311.h5",
+   "cameras": {
+    "head": {
+     "roundtrip_max_err_px": 2.3785860364000655e-05,
+     "roundtrip_mean_err_px": 1.3860451206720293e-05,
+     "link_origin_inframe": 28,
+     "link_origin_mask_hit_rate": 1.0
+    },
+    "hand_left": {
+     "roundtrip_max_err_px": 5.991526080606491e-06,
+     "roundtrip_mean_err_px": 2.0025200863169437e-06,
+     "link_origin_inframe": 4,
+     "link_origin_mask_hit_rate": 1.0
+    },
+    "hand_right": {
+     "roundtrip_max_err_px": 1.8801265809997858e-05,
+     "roundtrip_mean_err_px": 1.39891879138485e-05,
+     "link_origin_inframe": 4,
+     "link_origin_mask_hit_rate": 1.0
+    }
+   }
+  },
+  {
+   "h5": "conditions/droid/1.0.1/AUTOLab/failure/Sat_Oct_21_20:00:21_2023/condition-droid_action-sliced_bdfe722823c3c96f.h5",
+   "cameras": {
+    "wrist": {
+     "roundtrip_max_err_px": 5.740991332459089e-05,
+     "roundtrip_mean_err_px": 1.764238737047049e-05,
+     "link_origin_inframe": 6,
+     "link_origin_mask_hit_rate": 0.6666666666666666
+    },
+    "right": {
+     "roundtrip_max_err_px": 3.8073369864832785e-05,
+     "roundtrip_mean_err_px": 3.189927023184966e-05,
+     "link_origin_inframe": 42,
+     "link_origin_mask_hit_rate": 1.0
+    },
+    "left": {
+     "roundtrip_max_err_px": 2.509261560135201e-05,
+     "roundtrip_mean_err_px": 1.5707277837602426e-05,
+     "link_origin_inframe": 42,
+     "link_origin_mask_hit_rate": 1.0
+    }
+   }
+  },
+  {
+   "h5": "conditions/droid/1.0.1/ILIAD/success/Thu_Jul_20_12:43:49_2023/condition-droid_action-sliced_bd7480a55cac31ce.h5",
+   "cameras": {
+    "wrist": {
+     "roundtrip_max_err_px": 6.040198741175118e-05,
+     "roundtrip_mean_err_px": 1.5877878881054675e-05,
+     "link_origin_inframe": 0,
+     "link_origin_mask_hit_rate": 0.0
+    },
+    "right": {
+     "roundtrip_max_err_px": 1.6973833339761768e-05,
+     "roundtrip_mean_err_px": 6.633478640950073e-06,
+     "link_origin_inframe": 119,
+     "link_origin_mask_hit_rate": 0.9663865546218487
+    },
+    "left": {
+     "roundtrip_max_err_px": 4.671922306442866e-05,
+     "roundtrip_mean_err_px": 2.7107867087911718e-05,
+     "link_origin_inframe": 49,
+     "link_origin_mask_hit_rate": 0.8775510204081632
+    }
+   }
+  },
+  {
+   "h5": "conditions/droid/1.0.1/ILIAD/success/Thu_Jun_15_13:19:10_2023/condition-droid_action-sliced_95606223853e898a.h5",
+   "cameras": {
+    "wrist": {
+     "roundtrip_max_err_px": 4.4103398749939515e-05,
+     "roundtrip_mean_err_px": 1.3709405125351457e-05,
+     "link_origin_inframe": 0,
+     "link_origin_mask_hit_rate": 0.0
+    },
+    "right": {
+     "roundtrip_max_err_px": 1.6106391512948903e-05,
+     "roundtrip_mean_err_px": 9.509225823633163e-06,
+     "link_origin_inframe": 31,
+     "link_origin_mask_hit_rate": 0.967741935483871
+    },
+    "left": {
+     "roundtrip_max_err_px": 2.3105723130356637e-05,
+     "roundtrip_mean_err_px": 1.9276902346667543e-05,
+     "link_origin_inframe": 34,
+     "link_origin_mask_hit_rate": 1.0
+    }
+   }
+  },
+  {
+   "h5": "conditions/robomind/open_drawer_take_yellow_block_close_drawer/success/0612_162103/condition-robomind_action-sliced_08943419146dafe3.h5",
+   "cameras": {
+    "camera_top": {
+     "roundtrip_max_err_px": 3.398265192799954e-06,
+     "roundtrip_mean_err_px": 2.0941641065262732e-06,
+     "link_origin_inframe": 143,
+     "link_origin_mask_hit_rate": 0.916083916083916
+    },
+    "camera_front": {
+     "roundtrip_max_err_px": 1.109013373934431e-05,
+     "roundtrip_mean_err_px": 7.134087878409708e-06,
+     "link_origin_inframe": 110,
+     "link_origin_mask_hit_rate": 0.9090909090909091
+    },
+    "camera_left": {
+     "roundtrip_max_err_px": 1.8483616742059894e-05,
+     "roundtrip_mean_err_px": 8.704680828873415e-06,
+     "link_origin_inframe": 100,
+     "link_origin_mask_hit_rate": 1.0
+    },
+    "camera_right": {
+     "roundtrip_max_err_px": 8.553611650086168e-06,
+     "roundtrip_mean_err_px": 7.271870987031423e-06,
+     "link_origin_inframe": 77,
+     "link_origin_mask_hit_rate": 0.8441558441558441
+    },
+    "camera_wrist_left": {
+     "roundtrip_max_err_px": 2.7812472353616613e-05,
+     "roundtrip_mean_err_px": 9.692532698866212e-06,
+     "link_origin_inframe": 2,
+     "link_origin_mask_hit_rate": 0.5
+    },
+    "camera_wrist_right": {
+     "roundtrip_max_err_px": 2.1414550758436235e-05,
+     "roundtrip_mean_err_px": 1.0084206433886865e-05,
+     "link_origin_inframe": 8,
+     "link_origin_mask_hit_rate": 0.125
+    }
+   }
+  },
+  {
+   "h5": "conditions/robomind/place_blue_block_between_orange_and_purple_blocks/success/0526_143306/condition-robomind_action-sliced_ae178d433ae335dd.h5",
+   "cameras": {
+    "camera_top": {
+     "roundtrip_max_err_px": 9.706817252208566e-06,
+     "roundtrip_mean_err_px": 6.831872073276091e-06,
+     "link_origin_inframe": 147,
+     "link_origin_mask_hit_rate": 0.9047619047619048
+    },
+    "camera_front": {
+     "roundtrip_max_err_px": 6.511198591852008e-06,
+     "roundtrip_mean_err_px": 3.6279597971364824e-06,
+     "link_origin_inframe": 134,
+     "link_origin_mask_hit_rate": 0.9104477611940298
+    },
+    "camera_left": {
+     "roundtrip_max_err_px": 2.0285313667045557e-05,
+     "roundtrip_mean_err_px": 1.7177451342401534e-05,
+     "link_origin_inframe": 188,
+     "link_origin_mask_hit_rate": 0.9414893617021277
+    },
+    "camera_right": {
+     "roundtrip_max_err_px": 1.2449215091692167e-05,
+     "roundtrip_mean_err_px": 9.71785332358668e-06,
+     "link_origin_inframe": 135,
+     "link_origin_mask_hit_rate": 0.9851851851851852
+    },
+    "camera_wrist_left": {
+     "roundtrip_max_err_px": 2.45804029646024e-05,
+     "roundtrip_mean_err_px": 9.202236672138213e-06,
+     "link_origin_inframe": 4,
+     "link_origin_mask_hit_rate": 0.0
+    },
+    "camera_wrist_right": {
+     "roundtrip_max_err_px": 2.6177084293976804e-05,
+     "roundtrip_mean_err_px": 7.61843492598499e-06,
+     "link_origin_inframe": 9,
+     "link_origin_mask_hit_rate": 0.2222222222222222
+    }
+   }
+  }
+ ]
+}

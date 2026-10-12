@@ -1,0 +1,71 @@
+<workspace>/runs/2026-10-12-cyfa-mmflow-scorecenter-dreamtrue-art/diffusionart-2610.12572/code/exp1_prop1.py:188: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:820.)
+  "ratio": float(
+=== Proposition 1: measured vs closed-form force ===
+states=30 max|F - (2g+(2q-1)e)|=1.01e-07  mean=3.41e-08
+mean |F|=0.217
+max branch err=2.86e-07 / 1.89e-07
+max |F+ + F- - F|=0.00e+00
+max Lemma-1 err=4.08e-07
+
+state              q     2q-1   |2g|   (2q-1)|e|  |e|    ratio  cos(F,2g)
+  c0  hi t=0.1  0.622 +0.243 0.007  0.041     0.167  5.797  +0.997
+  c0  lo t=0.1  0.400 -0.200 0.022  0.022     0.109  0.977  +0.495
+  c0 mid t=0.1  0.473 -0.054 0.060  0.018     0.333  0.300  +0.967
+  c0  hi t=0.3  0.608 +0.217 0.004  0.039     0.180  8.871  -0.997
+  c0  lo t=0.3  0.406 -0.189 0.042  0.028     0.146  0.651  +0.997
+  c0 mid t=0.3  0.457 -0.087 0.179  0.043     0.494  0.240  +1.000
+  c0  hi t=0.5  0.594 +0.188 0.068  0.044     0.232  0.644  +0.997
+  c0  lo t=0.5  0.414 -0.173 0.116  0.032     0.185  0.277  +1.000
+  c0 mid t=0.5  0.467 -0.067 0.364  0.031     0.458  0.084  +1.000
+  c0  hi t=0.7  0.542 +0.083 0.352  0.004     0.043  0.010  +1.000
+  c0  lo t=0.7  0.459 -0.082 0.360  0.006     0.070  0.016  +1.000
+  c0 mid t=0.7  0.487 -0.025 0.417  0.001     0.021  0.001  +1.000
+  c0  hi t=0.9  0.503 +0.007 0.379  0.001     0.085  0.002  +1.000
+  c0  lo t=0.9  0.493 -0.014 0.380  0.001     0.059  0.002  +1.000
+  c0 mid t=0.9  0.497 -0.007 0.380  0.000     0.025  0.000  +1.000
+  c1  hi t=0.1  0.618 +0.236 0.004  0.030     0.128  7.210  +0.994
+  c1  lo t=0.1  0.396 -0.208 0.016  0.016     0.076  1.008  +0.430
+  c1 mid t=0.1  0.488 -0.024 0.115  0.012     0.496  0.103  +0.995
+  c1  hi t=0.3  0.607 +0.215 0.005  0.032     0.150  6.327  -0.999
+  c1  lo t=0.3  0.403 -0.195 0.033  0.030     0.152  0.889  +0.908
+  c1 mid t=0.3  0.468 -0.063 0.307  0.030     0.477  0.098  +1.000
+  c1  hi t=0.5  0.599 +0.197 0.034  0.038     0.192  1.118  -0.800
+  c1  lo t=0.5  0.407 -0.186 0.071  0.043     0.232  0.607  +0.993
+  c1 mid t=0.5  0.477 -0.046 0.478  0.031     0.679  0.066  +1.000
+  c1  hi t=0.7  0.556 +0.111 0.350  0.022     0.197  0.063  +1.000
+  c1  lo t=0.7  0.446 -0.108 0.367  0.025     0.233  0.068  +1.000
+  c1 mid t=0.7  0.491 -0.017 0.502  0.001     0.061  0.002  +1.000
+  c1  hi t=0.9  0.507 +0.014 0.454  0.001     0.094  0.003  +1.000
+  c1  lo t=0.9  0.492 -0.016 0.455  0.003     0.160  0.006  +1.000
+  c1 mid t=0.9  0.498 -0.003 0.457  0.000     0.052  0.000  +1.000
+
+=== aggregation over 48 batch-like states ===
+  n_states: 48
+  norm_mean_guidance: 0.1436
+  mean_norm_guidance: 0.2178
+  coherence_guidance: 0.6592
+  norm_mean_residual: 0.0097
+  mean_norm_residual: 0.0440
+  coherence_residual: 0.2205
+  residual_to_guidance_aggregate: 0.0677
+  mean_abs2q1: 0.1058
+  frac_abs2q1_gt_half: 0.0000
+
+=== balanced ensemble (q=1/2 statewise) ===
+{'q': 0.5, 'norm_e': 0.12747550010681152, 'norm_g': 0.5306246280670166, 'F': [0.7250000238418579, 0.7749999761581421], 'F_pred': [0.7250000238418579, 0.7749999761581421], 'residual_norm': 0.0, 'F_err': 0.0}
+
+=== reward scale sweep ===
+  gain=0.2: mean|2q-1|=0.022 mean|g|=0.023 mean per-state ratio=1.181 aggregate ratio=0.0796
+  gain=1.0: mean|2q-1|=0.109 mean|g|=0.113 mean per-state ratio=1.181 aggregate ratio=0.0796
+  gain=5.0: mean|2q-1|=0.495 mean|g|=0.507 mean per-state ratio=3.637 aggregate ratio=0.0810
+
+=== solver gap ===
+  steps=  4: mean|e|=0.3766 mean rel=0.3996 aggregate residual/guidance=0.2285
+  steps=  8: mean|e|=0.2596 mean rel=0.2566 aggregate residual/guidance=0.1237
+  steps= 16: mean|e|=0.1989 mean rel=0.1966 aggregate residual/guidance=0.0758
+  steps= 32: mean|e|=0.1687 mean rel=0.1704 aggregate residual/guidance=0.0489
+  steps= 64: mean|e|=0.1965 mean rel=0.1707 aggregate residual/guidance=0.0313
+
+=== ART force at the same states ===
+  max |F_art - t G| = 1.19e-07
