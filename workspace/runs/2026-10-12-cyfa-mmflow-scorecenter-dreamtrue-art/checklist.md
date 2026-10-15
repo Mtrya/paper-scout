@@ -4,7 +4,7 @@
 - 运行 id: 2026-10-12-cyfa-mmflow-scorecenter-dreamtrue-art
 - 覆盖时段: 2026-10-09 至 2026-10-12(Hugging Face Papers 逐日池 + 周榜;用户点名三篇 9 月论文 CyFA/MMF/SC 并入)
 - 报告: runs/2026-10-12-cyfa-mmflow-scorecenter-dreamtrue-art/report.docxxml
-- 飞书文档: https://fudan-nlp.feishu.cn/docx/IlJNdkts7oIWyfxfjtxcwT9DnFh
+- 飞书文档: https://fudan-nlp.feishu.cn/docx/PxhUdbgFfopV8XxqGM4cAoSenee (2026-10-16 重修版;原版 https://fudan-nlp.feishu.cn/docx/IlJNdkts7oIWyfxfjtxcwT9DnFh 保持不动)
 
 ## 研究契约
 - [x] 报告前置的是从论文加外部信号中赢得的洞见,而不是论文内容的重组。(CyFA 回绕安全性部分证伪+时钟内容自适应+状态低秩;MMF 文本潜 round-trip 通道几乎无损、瓶颈不在 decoder;SC 漂移=向采样器蒸馏的 toy 精确验证与诊断陷阱;DiffusionART 聚合残差 6.8% 的温和修正+β 空操作发现;DreamTrue 标定发布物独立复算)
@@ -15,7 +15,7 @@
 ## 报告契约
 - [x] 报告可扫读:开篇综述、三条主题线、图/表/公式齐全。
 - [x] `report.docxxml` 中至少有两个图锚点。(24 个,与 figures.json 逐键核对一致)
-- [x] 深度线程按"是什么→为什么→怎么样→我们的实验"展开,术语先定义再使用。
+- [x] 深度线程按逻辑链组织(2026-10-16 重修后:"是什么/为什么/怎么样"是叙事原则,不作版面标签),术语先定义再使用。
 - [x] 轻量留意论文与深度线程干净区分。(短名单表 9 篇 + 行文顺带 3 篇)
 
 ## 保存契约
@@ -25,7 +25,7 @@
 
 ## 发布契约
 - [x] 工作区校验器 prepublish 通过。
-- [x] 报告已发布(11 段全 ok,24 锚点 29 图插入,锚点段落 14 个已删,回读验证 29 图)。
-- [x] 用户通知已确认(IM 已发送,om_x100b63fe760a90b4b044d173a343374;注意 bot 私信 open_id 已轮换为 ou_4fb6…,旧 ou_9a0c… 失效)。
-- [x] `runs/INDEX.md` 已更新。
+- [x] 报告已发布(首轮 2026-10-12:11 段全 ok,29 图;重修 2026-10-16:20 段全 ok,24 锚点 24 图——SC 三档与 ART 四格合成横排单图,锚点段落 24 个已删,回读验证 24 图)。
+- [x] 用户通知已确认(首轮 IM om_x100b63fe760a90b4b044d173a343374;重修版 2026-10-16 IM 已由 push_report 发送确认,bot 私信 open_id 为 ou_4fb6…,旧 ou_9a0c… 失效)。
+- [x] `runs/INDEX.md` 已更新(首轮条目 + 2026-10-16 重修记录,append-only)。
 - [x] 记忆已写。(memories/2026-10-12-memory.md + MEMORY.md 标定战线一行)

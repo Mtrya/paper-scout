@@ -63,7 +63,7 @@ DROID 三个发布集都有公开的原始标定:GCS metadata 给外参 `[x,y,z,
 | ILIAD Jul 20 | 2.45 / 2.83 / +1.11% | 1.85 / 2.42 / +0.44% | 2.50 / 1.78 / +3.21% |
 | ILIAD Jun 15 | 3.83 / 5.17 / +4.24% | 6.15 / 6.62 / +1.28% | 2.60 / 1.71 / +6.92% |
 
-结论:精标定是对数据集标定的**小幅修正**——量级与论文 Table 4 的"DROID dataset-provided 已经不错、refined 再进一步"自洽(Sync error 11.78→8.06px)。一个系统性信号:3 集的 wrist fx 都被精标定从工厂值 732–733 拉到 757–784(+3.2/+3.2/+6.9%),方向一致,提示 ZED wrist 相机的工厂内参偏小是真实偏差而非噪声。畸变:数据集侧 distCoeffs 全 0(等于没给),refined 给了小的非零 plumb-bob 系数。
+结论:精标定是对数据集标定的**小幅修正**——量级与论文 Table 4 的"DROID dataset-provided 已经不错、refined 再进一步"自洽(Sync error 11.78→8.06px)。一个系统性信号:3 集的 wrist fx 都被精标定从工厂值 732–733 拉到 757–784(+3.6/+3.2/+6.9%),方向一致,提示 ZED wrist 相机的工厂内参偏小是真实偏差而非噪声。畸变:数据集侧 distCoeffs 全 0(等于没给),refined 给了小的非零 plumb-bob 系数。
 
 ### 3.2 AgiBot:48GB tar 猎取 + 未文档化坐标系解析
 
@@ -93,7 +93,7 @@ AgiBot 的原始相机参数不在 mini 包里,而在 AgiBotWorld-Beta 的 `para
 
 - **AgiBot head 的固定 init 系统性偏高**:ΔR 11.4°/11.4°/12.9°、ΔT 2.5–3.6cm、fx −4.3~−6.4%(3 集方向一致);手部 init 已经很好(ΔT 0.2–0.9cm、ΔR 0.2–2.6°)。
 - **DROID 外参相机:固定 init 完全不靠谱**(ΔT 19–70cm、ΔR 10–43°)——DROID 是众包采集,相机摆设每家不同,这组数字直接解释了论文为什么要给 DROID 准备 32 个初始化;wrist init(fx=700)与 refined(757–784)差 +8~+12%。
-- **RoboMIND 多数相机 init 差 1.4–15° / 1.2–5.8cm**,另有一个 `camera_right`(place_blue_block 集)差 83cm/83° 的硬离群——固定 init 对多工位采集同样不够。
+- **RoboMIND 多数相机 init 差 1.4–15° / 1.2–5.8cm**,另有两处硬离群:`camera_left`(open_drawer 0623 集)差 34°/5.0cm,`camera_right`(place_blue_block 集)差 83cm/83°——固定 init 对多工位采集同样不够。
 - 安装偏置(offset_joints)只在 RoboMIND 两集出现:仅左臂 base,两次精标定分别为 y=0.4548m 与 0.4390m(**相差 15.8mm**,旋转分量是固定的 180° 结构量)——论文"为 RoboMIND 优化臂安装偏置"在发布物中落到了具体数字上。
 
 ### 3.4 发布物内部一致性(8/8 全过)

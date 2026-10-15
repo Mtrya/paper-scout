@@ -39,20 +39,10 @@
     "file": "assets/sc-offline-online.png",
     "caption": "现象:离线训练只在 +1/0 奖励下稳,在线训练在 TIM 下恰好反过来——+1/0 最不稳,组居中(混合正负)最稳。两个机制各管一边,漂移解释在线那一半(论文图 2)"
   },
-  "sc:noise": [
-    {
-      "file": "assets/sc-noise-1.png",
-      "caption": "权重噪声失配三档之一(Δθ~N(0,0.01²)):SC 与 IS 族都能稳住"
-    },
-    {
-      "file": "assets/sc-noise-2.png",
-      "caption": "中档(0.02²):naive IS/TIS 开始崩,SC 及 SC∘TIS/MIS 稳定"
-    },
-    {
-      "file": "assets/sc-noise-3.png",
-      "caption": "最大档(0.05²):只剩 SC 及其组合稳定——失配越大,崩得越早(论文图 3)"
-    }
-  ],
+  "sc:noise": {
+    "file": "assets/sc-noise-composite.png",
+    "caption": "权重噪声失配三档(论文图 3):失配最小档(左)SC 与 IS 族都能稳住;中档(中)naive IS/TIS 开始崩;最大档(右)只剩 SC 及其与 TIS/MIS 的组合稳定——失配越大,崩得越早"
+  },
   "sc:quantstale": {
     "file": "assets/sc-quant-stale.png",
     "caption": "量化与过期两档:INT8 采样器下 SC 独一档;64 步过期下 SC 需与 TIS/MIS 组合(残余协方差在旧采样器侧,单靠 SC 不够)(论文图 4)"
@@ -65,24 +55,10 @@
     "file": "assets/sc-exp-signal.png",
     "caption": "诚实边界:(a) group-centered 奖励下漂移只占信号量的 15–30%,玩具里 SC 与 vanilla 拉不开;(b) IS 比值温和到截断不生效时,IS 族反而略好——漂移之外还有次级效应"
   },
-  "art:evidence": [
-    {
-      "file": "assets/art-insight2-a.png",
-      "caption": "论文证据链(a):纯在线两次更新避免崩溃但慢 15.2×,虚线为梯度范数随奖励崩塌的尖峰"
-    },
-    {
-      "file": "assets/art-insight2-b.png",
-      "caption": "(b) 只用 EMA 数据但去掉 v_old 锚点照样崩——off-policy 数据本身不是稳定剂"
-    },
-    {
-      "file": "assets/art-insight2-c.png",
-      "caption": "(c) 恢复力的输出力比引导小 9.4×,参数梯度却大 4.9×——注意:这一格我们在玩具里未复现(实测 0.38)"
-    },
-    {
-      "file": "assets/art-insight2-d.png",
-      "caption": "(d) 第二次 MSE 更新的梯度分解为引导与恢复两个分量(论文图 3)"
-    }
-  ],
+  "art:evidence": {
+    "file": "assets/art-evidence-composite.png",
+    "caption": "论文的证据链(论文图 3):左上,纯在线两次更新避免崩溃但慢 15.2 倍;右上,只用 EMA 数据但去掉 v_old 锚点照样崩——off-policy 数据本身不是稳定剂;左下,恢复力的输出力比引导小 9.4 倍、参数梯度却大 4.9 倍(注意:这一格我们在玩具里未复现,实测 0.38);右下,第二次 MSE 更新的梯度分解为引导与恢复两个分量"
+  },
   "art:method": {
     "file": "assets/art-guidance.png",
     "caption": "DiffusionART 的构造:左,NFT 正负支的引导被各自的一致性力分量拉扯,而 ART 的引导直接作用于反向速度(与 v_rvs 重合),一致性力不产生;右,把同一 prompt 的 K 个 rollout 端点与奖励聚成归一化引导 G(c)(论文图 4)"
