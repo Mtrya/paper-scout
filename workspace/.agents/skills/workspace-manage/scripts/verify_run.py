@@ -30,6 +30,23 @@ MAX_FILE_BYTES = 2 * 1024 * 1024
 MAX_RUN_BYTES = 20 * 1024 * 1024
 BANNED_EXTENSIONS = {".npz", ".pt", ".pth", ".ckpt", ".safetensors"}
 
+# Style lint (report-compose references/anti-ai-zh.md): level-1 items FAIL;
+# cumulative signals (banned words, dash/bold density) are warnings that must
+# be acknowledged before publishing.
+MARKDOWN_LEAK_RE = re.compile(r"\*\*|`|\#\#")
+MODEL_VOICE_RE = re.compile(r"希望对你有帮助|如有需要请告诉我|截至我的知识|根据已有信息")
+BOILERPLATE_HEADING_RE = re.compile(
+    r"<h[1-6][^>]*>\s*(是什么|为什么|怎么样)\s*[:：]?\s*</h[1-6]>"
+)
+BANNED_WORD_RE = re.compile(
+    r"助力|赋能|彰显|凸显|焕发|抓手|深度剖析|综上所述|不难发现|值得注意的是"
+    r"|奠定了坚实基础|标志着|见证了"
+)
+DASH_RE = re.compile(r"——")
+BOLD_RE = re.compile(r"<b>")
+DASH_DENSITY_LIMIT = 5.0   # per 1000 chars of prose
+BOLD_DENSITY_LIMIT = 12.0  # per 1000 chars of prose
+
 
 def workspace_root() -> Path:
     return Path(__file__).resolve().parents[4]
@@ -83,14 +100,18 @@ def verify_thread(path: Path, errors: list[str]) -> None:
                 errors.append(f"{evidence_path}: must contain at least one non-empty file")
 
 
-def verify_report_prose(report: Path, errors: list[str]) -> None:
-    text = report.read_text(encoding="utf-8")
+def prose_lines(path: Path) -> list[str]:
+    text = path.read_text(encoding="utf-8")
     text = re.sub(r"<latex>.*?</latex>", "", text, flags=re.DOTALL)
     text = re.sub(r"<pre\b.*?</pre>", "", text, flags=re.DOTALL)
     text = re.sub(r"<code>.*?</code>", "", text, flags=re.DOTALL)
     text = re.sub(r'href="[^"]*"', "", text)
+    return text.splitlines()
+
+
+def verify_report_prose(report: Path, errors: list[str]) -> None:
     hits = []
-    for lineno, line in enumerate(text.splitlines(), 1):
+    for lineno, line in enumerate(prose_lines(report), 1):
         if line.strip().startswith("[[figure-anchor:"):
             continue
         if PSEUDO_LATEX_RE.search(line):
@@ -101,6 +122,56 @@ def verify_report_prose(report: Path, errors: list[str]) -> None:
             f"{report}: raw LaTeX syntax outside <latex> on line(s) {shown}; "
             "wrap math in inline or block <latex>"
         )
+
+
+def verify_report_style(report: Path, errors: list[str], warnings: list[str]) -> None:
+    markdown_hits: list[str] = []
+    voice_hits: list[str] = []
+    boilerplate_hits: list[str] = []
+    banned_hits: list[str] = []
+    dash_count = 0
+    bold_count = 0
+    char_count = 0
+    for lineno, line in enumerate(prose_lines(report), 1):
+        if line.strip().startswith("[[figure-anchor:"):
+            continue
+        char_count += len(line.strip())
+        dash_count += len(DASH_RE.findall(line))
+        bold_count += len(BOLD_RE.findall(line))
+        if MARKDOWN_LEAK_RE.search(line):
+            markdown_hits.append(str(lineno))
+        if MODEL_VOICE_RE.search(line):
+            voice_hits.append(str(lineno))
+        if BOILERPLATE_HEADING_RE.search(line):
+            boilerplate_hits.append(str(lineno))
+        for match in BANNED_WORD_RE.finditer(line):
+            banned_hits.append(f"{lineno}:{match.group(0)}")
+
+    for hits, label in (
+        (markdown_hits, "markdown syntax leaked into prose"),
+        (voice_hits, "model-voice phrasing"),
+        (boilerplate_hits, "boilerplate heading (是什么/为什么/怎么样)"),
+    ):
+        if hits:
+            shown = ", ".join(hits[:8]) + (" ..." if len(hits) > 8 else "")
+            errors.append(f"{report}: {label} on line(s) {shown}; see anti-ai-zh.md level 1")
+
+    if banned_hits:
+        shown = ", ".join(banned_hits[:10]) + (" ..." if len(banned_hits) > 10 else "")
+        warnings.append(f"{report}: {len(banned_hits)} banned-word hit(s) (line:word): {shown}")
+    if char_count:
+        dash_density = dash_count * 1000 / char_count
+        if dash_density > DASH_DENSITY_LIMIT:
+            warnings.append(
+                f"{report}: em-dash density {dash_density:.1f}/1000 chars "
+                f"({dash_count} total, limit {DASH_DENSITY_LIMIT:g})"
+            )
+        bold_density = bold_count * 1000 / char_count
+        if bold_density > BOLD_DENSITY_LIMIT:
+            warnings.append(
+                f"{report}: bold density {bold_density:.1f}/1000 chars "
+                f"({bold_count} total, limit {BOLD_DENSITY_LIMIT:g})"
+            )
 
 
 def verify_figure_captions(figures_json: Path, errors: list[str]) -> None:
@@ -131,15 +202,16 @@ def verify_figure_captions(figures_json: Path, errors: list[str]) -> None:
             )
 
 
-def verify_run(run_path: Path, mode: str) -> tuple[list[str], int, int]:
+def verify_run(run_path: Path, mode: str) -> tuple[list[str], list[str], int, int]:
     errors: list[str] = []
+    warnings: list[str] = []
     root = workspace_root()
     runs_root = root / "runs"
 
     if not run_path.exists():
-        return [f"{run_path}: run path does not exist"], 0, 0
+        return [f"{run_path}: run path does not exist"], warnings, 0, 0
     if not run_path.is_dir():
-        return [f"{run_path}: run path must be a directory"], 0, 0
+        return [f"{run_path}: run path must be a directory"], warnings, 0, 0
 
     try:
         run_path.relative_to(runs_root.resolve())
@@ -167,6 +239,7 @@ def verify_run(run_path: Path, mode: str) -> tuple[list[str], int, int]:
         prose = run_path / prose_name
         if prose.is_file():
             verify_report_prose(prose, errors)
+            verify_report_style(prose, errors, warnings)
 
     if not checklist.is_file():
         errors.append(f"{checklist}: required checklist file is missing")
@@ -211,7 +284,7 @@ def verify_run(run_path: Path, mode: str) -> tuple[list[str], int, int]:
     if mode == "final":
         verify_final_hygiene(root, run_path, errors)
 
-    return errors, thread_count, anchor_count
+    return errors, warnings, thread_count, anchor_count
 
 
 def verify_final_hygiene(root: Path, run_path: Path, errors: list[str]) -> None:
@@ -221,9 +294,9 @@ def verify_final_hygiene(root: Path, run_path: Path, errors: list[str]) -> None:
         if not scratch.is_dir():
             errors.append(f"{scratch}: required workspace directory is missing")
             continue
-        leftovers = [entry for entry in visible_entries(scratch) if entry.name not in allowed_marker]
+        leftovers = [entry.name for entry in visible_entries(scratch) if entry.name not in allowed_marker]
         if leftovers:
-            names = ", ".join(str(item.relative_to(root)) for item in leftovers[:10])
+            names = ", ".join(f"{scratch_name}/{item}" for item in leftovers[:10])
             suffix = "" if len(leftovers) <= 10 else f" and {len(leftovers) - 10} more"
             errors.append(f"{scratch}: must contain only README.md in final mode; found {names}{suffix}")
 
@@ -243,19 +316,20 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     run_path = resolve_run_path(args.run_path)
-    errors, thread_count, anchor_count = verify_run(run_path, args.mode)
+    errors, warnings, thread_count, anchor_count = verify_run(run_path, args.mode)
 
     if errors:
         print(f"FAIL {args.mode}: {args.run_path}")
         for error in errors:
             print(f"- {error}")
-        return 1
-
-    print(f"PASS {args.mode}: {args.run_path}")
-    print(f"- threads: {thread_count}")
-    print(f"- figure anchors: {anchor_count}")
-    print("- assets: present")
-    return 0
+    else:
+        print(f"PASS {args.mode}: {args.run_path}")
+        print(f"- threads: {thread_count}")
+        print(f"- figure anchors: {anchor_count}")
+        print("- assets: present")
+    for warning in warnings:
+        print(f"- warn: {warning}")
+    return 1 if errors else 0
 
 
 if __name__ == "__main__":
