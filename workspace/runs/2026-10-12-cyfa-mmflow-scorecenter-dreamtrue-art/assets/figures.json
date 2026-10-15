@@ -1,35 +1,122 @@
 {
-  "cyfa:transport": {"file": "assets/cyfa-transport.png", "caption": "CyFA 的相对时间分区记忆:左为按展开视角的记忆演化(新写入落在 age-0,旧关联沿环老化),右为相对时间槽视角——每步先施加 δ_t 的循环传输,再衰减并写入(论文图 1)"},
-  "cyfa:arch": {"file": "assets/cyfa-arch.png", "caption": "CyFA 层结构:q/k 过 Norm+Conv+Linear,v 过 Conv+Linear;δ(时钟)、α(遗忘门)、β(写入强度)三个门由各自投影产出,δ 带 stop-gradient(论文图 2)"},
-  "cyfa:clock": {"file": "assets/cyfa-exp-clock-dist.png", "caption": "我们的探针 A:三类输入上的时钟步长分布。55 个近一头钉死在 δ≈1(蓝),40 个输入依赖头(红)分布宽且随内容类漂移——重复/周期文本上整体左移(δ 均值降到 0.436)"},
-  "cyfa:intervention": {"file": "assets/cyfa-exp-intervention.png", "caption": "我们的时钟干预复测(蓝,8 段 held-out)对论文 Table 8(灰,16 段):换掉原始时钟全都变差,排序与增量一致——头均值替换 +0.041/+0.045,循环平移 257 步 +0.156/+0.124,钉死 δ≡1 +0.136/+0.138"},
-  "cyfa:wrap": {"file": "assets/cyfa-exp-wrap.png", "caption": "我们的探针 B:写入回绕到 age-0 槽时旧内容的残余强度(每头一根柱,按 p99 降序,虚线为新写入强度 β)。近一头残迹仅为 β 的 1.6%,输入依赖头中位数达 β 的 64%——'衰减兜住回绕'只对近一头成立"},
-  "mmf:paradigm": {"file": "assets/mmf-paradigm.png", "caption": "三种统一建模范式:(a) 全离散要吃视觉量化瓶颈,(b) 混合式目标与采样器分裂,(c) Multimodal Flow 全连续——文本编码器与视觉编码器都输出连续状态,共享同一生成目标与采样过程(论文图 1)"},
-  "mmf:arch": {"file": "assets/mmf-arch.png", "caption": "MF-1 架构:文本(T5-small)与图像(SigLIP2)分别编码为连续 hyperchunk 排入有序序列,共享 chunk-causal flow backbone;文本侧另有一个独立训练的 6 层 text decoder 把连续潜解码回离散 token(论文图 2)"},
-  "mmf:traininfer": {"file": "assets/mmf-traininfer.png", "caption": "训练与推理的不对称:(a) 训练时同一样本的多个目标块在 chunk-causal mask 下并行预测,块内共享流匹配损失;(b) 推理时逐块生成,已完成块进 KV cache(论文图 3)"},
-  "mmf:roundtrip": {"file": "assets/mmf-roundtrip.png", "caption": "我们的 round-trip 探针(官方 text decoder + T5-small,236 样本):(a) 干净潜还原率 100%,按论文加噪规则 λ=0.69 时仍 99.99%;(b) decoder 容忍预算——各向同性噪声 σ_e=1.0 时 98.85%;(c) 压力点 λ=0.40 的逐样本分布;(d) 块首块尾是最弱位置"},
-  "sc:phenomenon": {"file": "assets/sc-offline-online.png", "caption": "现象:离线训练只在 +1/0 奖励下稳,在线训练在 TIM 下恰好反过来——+1/0 最不稳,组居中(混合正负)最稳。两个机制各管一边,漂移解释在线那一半(论文图 2)"},
+  "cyfa:transport": {
+    "file": "assets/cyfa-transport.png",
+    "caption": "CyFA 的相对时间分区记忆:左为按展开视角的记忆演化(新写入落在 age-0,旧关联沿环老化),右为相对时间槽视角——每步先施加 δₜ 的循环传输,再衰减并写入(论文图 1)"
+  },
+  "cyfa:arch": {
+    "file": "assets/cyfa-arch.png",
+    "caption": "CyFA 层结构:q/k 过 Norm+Conv+Linear,v 过 Conv+Linear;δ(时钟)、α(遗忘门)、β(写入强度)三个门由各自投影产出,δ 带 stop-gradient(论文图 2)"
+  },
+  "cyfa:clock": {
+    "file": "assets/cyfa-exp-clock-dist.png",
+    "caption": "我们的探针 A:三类输入上的时钟步长分布。55 个近一头钉死在 δ≈1(蓝),40 个输入依赖头(红)分布宽且随内容类漂移——重复/周期文本上整体左移(δ 均值降到 0.436)"
+  },
+  "cyfa:intervention": {
+    "file": "assets/cyfa-exp-intervention.png",
+    "caption": "我们的时钟干预复测(蓝,8 段 held-out)对论文 Table 8(灰,16 段):换掉原始时钟全都变差,排序与增量一致——头均值替换 +0.041/+0.045,循环平移 257 步 +0.156/+0.124,钉死 δ≡1 +0.136/+0.138"
+  },
+  "cyfa:wrap": {
+    "file": "assets/cyfa-exp-wrap.png",
+    "caption": "我们的探针 B:写入回绕到 age-0 槽时旧内容的残余强度(每头一根柱,按 p99 降序,虚线为新写入强度 β)。近一头残迹仅为 β 的 1.6%,输入依赖头中位数达 β 的 64%——'衰减兜住回绕'只对近一头成立"
+  },
+  "mmf:paradigm": {
+    "file": "assets/mmf-paradigm.png",
+    "caption": "三种统一建模范式:(a) 全离散要吃视觉量化瓶颈,(b) 混合式目标与采样器分裂,(c) Multimodal Flow 全连续——文本编码器与视觉编码器都输出连续状态,共享同一生成目标与采样过程(论文图 1)"
+  },
+  "mmf:arch": {
+    "file": "assets/mmf-arch.png",
+    "caption": "MF-1 架构:文本(T5-small)与图像(SigLIP2)分别编码为连续 hyperchunk 排入有序序列,共享 chunk-causal flow backbone;文本侧另有一个独立训练的 6 层 text decoder 把连续潜解码回离散 token(论文图 2)"
+  },
+  "mmf:traininfer": {
+    "file": "assets/mmf-traininfer.png",
+    "caption": "训练与推理的不对称:(a) 训练时同一样本的多个目标块在 chunk-causal mask 下并行预测,块内共享流匹配损失;(b) 推理时逐块生成,已完成块进 KV cache(论文图 3)"
+  },
+  "mmf:roundtrip": {
+    "file": "assets/mmf-roundtrip.png",
+    "caption": "我们的 round-trip 探针(官方 text decoder + T5-small,236 样本):(a) 干净潜还原率 100%,按论文加噪规则 λ=0.69 时仍 99.99%;(b) decoder 容忍预算——各向同性噪声 σₑ=1.0 时 98.85%;(c) 压力点 λ=0.40 的逐样本分布;(d) 块首块尾是最弱位置"
+  },
+  "sc:phenomenon": {
+    "file": "assets/sc-offline-online.png",
+    "caption": "现象:离线训练只在 +1/0 奖励下稳,在线训练在 TIM 下恰好反过来——+1/0 最不稳,组居中(混合正负)最稳。两个机制各管一边,漂移解释在线那一半(论文图 2)"
+  },
   "sc:noise": [
-    {"file": "assets/sc-noise-1.png", "caption": "权重噪声失配三档之一(Δθ~N(0,0.01²)):SC 与 IS 族都能稳住"},
-    {"file": "assets/sc-noise-2.png", "caption": "中档(0.02²):naive IS/TIS 开始崩,SC 及 SC∘TIS/MIS 稳定"},
-    {"file": "assets/sc-noise-3.png", "caption": "最大档(0.05²):只剩 SC 及其组合稳定——失配越大,崩得越早(论文图 3)"}
+    {
+      "file": "assets/sc-noise-1.png",
+      "caption": "权重噪声失配三档之一(Δθ~N(0,0.01²)):SC 与 IS 族都能稳住"
+    },
+    {
+      "file": "assets/sc-noise-2.png",
+      "caption": "中档(0.02²):naive IS/TIS 开始崩,SC 及 SC∘TIS/MIS 稳定"
+    },
+    {
+      "file": "assets/sc-noise-3.png",
+      "caption": "最大档(0.05²):只剩 SC 及其组合稳定——失配越大,崩得越早(论文图 3)"
+    }
   ],
-  "sc:quantstale": {"file": "assets/sc-quant-stale.png", "caption": "量化与过期两档:INT8 采样器下 SC 独一档;64 步过期下 SC 需与 TIS/MIS 组合(残余协方差在旧采样器侧,单靠 SC 不够)(论文图 4)"},
-  "sc:drift": {"file": "assets/sc-exp-drift.png", "caption": "我们的玩具验证四联:(a) 常数 +1 奖励下 vanilla 根前缀熵 35 步内崩塌,SC 恒稳;(b) 诊断陷阱——崩溃时失配度量 ‖p−q‖ 反而缩到 0.004;(c) SC 权重位移恒为零;(d) 失配越大崩得越早"},
-  "sc:signal": {"file": "assets/sc-exp-signal.png", "caption": "诚实边界:(a) group-centered 奖励下漂移只占信号量的 15–30%,玩具里 SC 与 vanilla 拉不开;(b) IS 比值温和到截断不生效时,IS 族反而略好——漂移之外还有次级效应"},
+  "sc:quantstale": {
+    "file": "assets/sc-quant-stale.png",
+    "caption": "量化与过期两档:INT8 采样器下 SC 独一档;64 步过期下 SC 需与 TIS/MIS 组合(残余协方差在旧采样器侧,单靠 SC 不够)(论文图 4)"
+  },
+  "sc:drift": {
+    "file": "assets/sc-exp-drift.png",
+    "caption": "我们的玩具验证四联:(a) 常数 +1 奖励下 vanilla 根前缀熵 35 步内崩塌,SC 恒稳;(b) 诊断陷阱——崩溃时失配度量 ‖p−q‖ 反而缩到 0.004;(c) SC 权重位移恒为零;(d) 失配越大崩得越早"
+  },
+  "sc:signal": {
+    "file": "assets/sc-exp-signal.png",
+    "caption": "诚实边界:(a) group-centered 奖励下漂移只占信号量的 15–30%,玩具里 SC 与 vanilla 拉不开;(b) IS 比值温和到截断不生效时,IS 族反而略好——漂移之外还有次级效应"
+  },
   "art:evidence": [
-    {"file": "assets/art-insight2-a.png", "caption": "论文证据链(a):纯在线两次更新避免崩溃但慢 15.2×,虚线为梯度范数随奖励崩塌的尖峰"},
-    {"file": "assets/art-insight2-b.png", "caption": "(b) 只用 EMA 数据但去掉 v_old 锚点照样崩——off-policy 数据本身不是稳定剂"},
-    {"file": "assets/art-insight2-c.png", "caption": "(c) 恢复力的输出力比引导小 9.4×,参数梯度却大 4.9×——注意:这一格我们在玩具里未复现(实测 0.38)"},
-    {"file": "assets/art-insight2-d.png", "caption": "(d) 第二次 MSE 更新的梯度分解为引导与恢复两个分量(论文图 3)"}
+    {
+      "file": "assets/art-insight2-a.png",
+      "caption": "论文证据链(a):纯在线两次更新避免崩溃但慢 15.2×,虚线为梯度范数随奖励崩塌的尖峰"
+    },
+    {
+      "file": "assets/art-insight2-b.png",
+      "caption": "(b) 只用 EMA 数据但去掉 v_old 锚点照样崩——off-policy 数据本身不是稳定剂"
+    },
+    {
+      "file": "assets/art-insight2-c.png",
+      "caption": "(c) 恢复力的输出力比引导小 9.4×,参数梯度却大 4.9×——注意:这一格我们在玩具里未复现(实测 0.38)"
+    },
+    {
+      "file": "assets/art-insight2-d.png",
+      "caption": "(d) 第二次 MSE 更新的梯度分解为引导与恢复两个分量(论文图 3)"
+    }
   ],
-  "art:method": {"file": "assets/art-guidance.png", "caption": "DiffusionART 的构造:左,NFT 正负支的引导被各自的一致性力分量拉扯,而 ART 的引导直接作用于反向速度(与 v_rvs 重合),一致性力不产生;右,把同一 prompt 的 K 个 rollout 端点与奖励聚成归一化引导 G(c)(论文图 4)"},
-  "art:identity": {"file": "assets/art-exp-identity.png", "caption": "我们的命题核验:左,命题 1 的力恒等式在 30 个状态上精确成立(误差 1e-7);中,一致性残差恰在引导最弱处最大;右,q 逐状态偏离 1/2 且随噪声水平 t 变化"},
-  "art:aggregation": {"file": "assets/art-aggregation.png", "caption": "我们的温和修正:逐状态残差约为引导的 20%,但方向相干性低(0.22 vs 0.66),48 状态聚合后只剩 6.8%;仅当 rollout 求解器粗到 4 步时聚合残差才达 22.9%——论文的'稀释'机制真实存在但默认配置下不是主导项"},
-  "art:train": {"file": "assets/art-exp-train.png", "caption": "玩具训练层对照:NFT 纯在线单更新(红)峰值后崩;去锚 EMA(棕)学不动;带锚 EMA 与双更新(绿/橙)稳定;ART 各臂分布匹配最好、多样性(spread)不塌,但收敛慢 5–9 倍"},
-  "art:beta": {"file": "assets/art-exp-beta.png", "caption": "左:第二次更新里恢复/引导的梯度比,NFT 双更新为 0.38(论文读数 4.9×,未复现),ART 各臂接近零;右:β 扫描——单更新(虚线)三条曲线重合,β 是纯在线下的空操作"},
-  "dt:overview": {"file": "assets/dt-overview.png", "caption": "DreamTrue 全貌:上排,统一跨本体模型 + 离线几何标定(回放渲染→稠密匹配→内外参联合精化);下排,Stage II 反事实后训练——对初始观测做反事实动作编辑,由三级缺陷的具身视频奖励模型打分(论文图 1)"},
-  "dt:calib": {"file": "assets/dt-calib-mask.png", "caption": "标定效果:(a,b) SAM3 掩码(绿)上原始标定(红)与精标定(蓝)的轮廓对比;(c–e) IoU 散点——精标定在 97.1%(AgiBot)/91.6%(DROID)的集上胜出,对 PointWorld 胜 75.5%(论文图 9)"},
-  "dt:recalc": {"file": "assets/dt-recalc-calib-deltas.png", "caption": "我们的独立复算:精标定相对参照的外参平移/旋转差与焦距变化。实心柱=机器人 YAML 固定 init(差 10–70cm 量级),斜纹柱=数据集自带标定(已是小修正);wrist 相机 fx 系统性 +3.2~6.9%,AgiBot 非方像素异常在 640×480→640×360 假设下消失"},
-  "dt:sankey": {"file": "assets/dt-sankey.png", "caption": "数据策展 Sankey(论文图 10):AgiBot 2653h + RoboTwin 572h + DROID 411h + RoboMIND 548h,经相机位姿拒绝(1283h)与运动完整性拒绝(669h)后,Stage I 联合训练 2232h、Stage II 奖励模型 104.26h、反事实后训练仅 9.86h——后训练很轻,基础设施很重"}
+  "art:method": {
+    "file": "assets/art-guidance.png",
+    "caption": "DiffusionART 的构造:左,NFT 正负支的引导被各自的一致性力分量拉扯,而 ART 的引导直接作用于反向速度(与 v_rvs 重合),一致性力不产生;右,把同一 prompt 的 K 个 rollout 端点与奖励聚成归一化引导 G(c)(论文图 4)"
+  },
+  "art:identity": {
+    "file": "assets/art-exp-identity.png",
+    "caption": "我们的命题核验:左,命题 1 的力恒等式在 30 个状态上精确成立(误差 1e-7);中,一致性残差恰在引导最弱处最大;右,q 逐状态偏离 1/2 且随噪声水平 t 变化"
+  },
+  "art:aggregation": {
+    "file": "assets/art-aggregation.png",
+    "caption": "我们的温和修正:逐状态残差约为引导的 20%,但方向相干性低(0.22 vs 0.66),48 状态聚合后只剩 6.8%;仅当 rollout 求解器粗到 4 步时聚合残差才达 22.9%——论文的'稀释'机制真实存在但默认配置下不是主导项"
+  },
+  "art:train": {
+    "file": "assets/art-exp-train.png",
+    "caption": "玩具训练层对照:NFT 纯在线单更新(红)峰值后崩;去锚 EMA(棕)学不动;带锚 EMA 与双更新(绿/橙)稳定;ART 各臂分布匹配最好、多样性(spread)不塌,但收敛慢 5–9 倍"
+  },
+  "art:beta": {
+    "file": "assets/art-exp-beta.png",
+    "caption": "左:第二次更新里恢复/引导的梯度比,NFT 双更新为 0.38(论文读数 4.9×,未复现),ART 各臂接近零;右:β 扫描——单更新(虚线)三条曲线重合,β 是纯在线下的空操作"
+  },
+  "dt:overview": {
+    "file": "assets/dt-overview.png",
+    "caption": "DreamTrue 全貌:上排,统一跨本体模型 + 离线几何标定(回放渲染→稠密匹配→内外参联合精化);下排,Stage II 反事实后训练——对初始观测做反事实动作编辑,由三级缺陷的具身视频奖励模型打分(论文图 1)"
+  },
+  "dt:calib": {
+    "file": "assets/dt-calib-mask.png",
+    "caption": "标定效果:(a,b) SAM3 掩码(绿)上原始标定(红)与精标定(蓝)的轮廓对比;(c–e) IoU 散点——精标定在 97.1%(AgiBot)/91.6%(DROID)的集上胜出,对 PointWorld 胜 75.5%(论文图 9)"
+  },
+  "dt:recalc": {
+    "file": "assets/dt-recalc-calib-deltas.png",
+    "caption": "我们的独立复算:精标定相对参照的外参平移/旋转差与焦距变化。实心柱=机器人 YAML 固定 init(差 10–70cm 量级),斜纹柱=数据集自带标定(已是小修正);wrist 相机 fx 系统性 +3.2~6.9%,AgiBot 非方像素异常在 640×480→640×360 假设下消失"
+  },
+  "dt:sankey": {
+    "file": "assets/dt-sankey.png",
+    "caption": "数据策展 Sankey(论文图 10):AgiBot 2653h + RoboTwin 572h + DROID 411h + RoboMIND 548h,经相机位姿拒绝(1283h)与运动完整性拒绝(669h)后,Stage I 联合训练 2232h、Stage II 奖励模型 104.26h、反事实后训练仅 9.86h——后训练很轻,基础设施很重"
+  }
 }
