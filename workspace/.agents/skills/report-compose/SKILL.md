@@ -39,7 +39,7 @@ user-invocable: false
 
 ### 审校闸门与装配
 
-六道人工闸 + 一道机器闸,定义与执行者见 `references/review-gates.md`。每道只有过/不过;不过则带整改简报原地重写,每线程每闸最多两轮。全部通过后,主代理把线程片段装配为 `runs/<run-id>/report.docxxml`,跑机器门禁(verify_run prepublish),再进入交付。
+三道人工闸 + 一道机器闸,定义与执行者见 `references/review-gates.md`。每道只有过/不过;不过则带整改简报原地整改,编辑闸只做一轮、整改后不安排复检。全部通过后,主代理把线程片段装配为 `runs/<run-id>/report.docxxml`,跑机器门禁(verify_run prepublish),再进入交付。
 
 ## 结构
 
@@ -89,7 +89,7 @@ user-invocable: false
 
 ## 交付
 
-所有 `docs` 命令都带 `--api-version v2`。以 bot 身份创建和更新。创建真实文档之前,确认审校闸门全部通过(含冷读者重建性校验的复检),且机器门禁通过:
+所有 `docs` 命令都带 `--api-version v2`。以 bot 身份创建和更新。创建真实文档之前,确认审校闸门全部通过,且机器门禁通过:
 
 ```bash
 python3 .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode prepublish
@@ -150,7 +150,7 @@ lark-cli im +messages-send --as bot --user-id <ou_xxx> \
 
 审校:
 
-- [ ] 六道人工闸全部通过(含冷读者重建性复检),整改简报闭环
+- [ ] 三道人工闸全部通过,整改简报闭环
 
 交付:
 
