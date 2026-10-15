@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 from pathlib import Path
@@ -11,10 +12,10 @@ from pathlib import Path
 
 FIGURE_ANCHOR_RE = re.compile(r"\[\[figure-anchor:([^\]]+)\]\]")
 # Raw LaTeX syntax in prose never renders in Feishu: math belongs in <latex>
-# (inline or block). The `_` arm targets single-char subscripts (α_t, K_t)
-# without catching snake_case identifiers (verify_run) or digit runs.
+# (inline or block). The `_` arm targets single-char subscripts (α_t, K_t,
+# p_θ) without catching snake_case identifiers (verify_run) or digit runs.
 PSEUDO_LATEX_RE = re.compile(
-    r"\\[A-Za-z]|\^|[A-Za-z0-9Α-Ωα-ω]_\{|[A-Za-zΑ-Ωα-ω]_[a-z0-9](?![a-z0-9])"
+    r"\\[A-Za-z]|\^|[A-Za-z0-9Α-Ωα-ω∇]_(?:\{|[a-z0-9](?![a-z0-9])|[Α-Ωα-ω])"
 )
 RUN_RESERVED = {"assets", "report.docxxml", "report_group.docxxml", "checklist.md", "README.md"}
 THREAD_BLOCKER_SHAPE = {"BLOCKER.md"}
@@ -102,6 +103,34 @@ def verify_report_prose(report: Path, errors: list[str]) -> None:
         )
 
 
+def verify_figure_captions(figures_json: Path, errors: list[str]) -> None:
+    try:
+        data = json.loads(figures_json.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        errors.append(f"{figures_json}: invalid JSON")
+        return
+    captions: list[str] = []
+
+    def collect(node):
+        if isinstance(node, dict):
+            for key, value in node.items():
+                if key == "caption" and isinstance(value, str):
+                    captions.append(value)
+                else:
+                    collect(value)
+        elif isinstance(node, list):
+            for value in node:
+                collect(value)
+
+    collect(data)
+    for caption in captions:
+        if PSEUDO_LATEX_RE.search(caption):
+            errors.append(
+                f"{figures_json}: caption carries raw LaTeX syntax (captions cannot render "
+                f"<latex>; use flat notation, Unicode subscripts allowed): {caption[:60]}"
+            )
+
+
 def verify_run(run_path: Path, mode: str) -> tuple[list[str], int, int]:
     errors: list[str] = []
     root = workspace_root()
@@ -144,6 +173,10 @@ def verify_run(run_path: Path, mode: str) -> tuple[list[str], int, int]:
 
     if not assets.is_dir():
         errors.append(f"{assets}: required assets directory is missing")
+    else:
+        figures_manifest = assets / "figures.json"
+        if figures_manifest.is_file():
+            verify_figure_captions(figures_manifest, errors)
 
     thread_count = 0
     for entry in visible_entries(run_path):

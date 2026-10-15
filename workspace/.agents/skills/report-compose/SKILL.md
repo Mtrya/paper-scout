@@ -31,6 +31,7 @@ user-invocable: false
 - 本地 `report.docxxml` 中至少包含两个不同的 `[[figure-anchor:...]]` 锚点。交付的飞书文档在媒体插入后不应留下可见的占位锚点。
 - 在 `<latex>` 块内,LaTeX 命令用单个反斜杠(`\pi`、`\mathcal{L}`);双反斜杠(`\\`)是换行命令,会把每个符号渲染到新行。
 - `<latex>` 同样支持行内用法。任何含上下标、分式或 LaTeX 命令的记号一律放进 `<latex>`(行内或块级);纯文本段落只允许平坦记号(如 m=127)。`verify_run.py` 会扫描 `<latex>` 块之外的 LaTeX 语法并拒绝发布。
+- 图注不渲染 `<latex>`:图注里只用平坦记号,允许 Unicode 下标(如 σₑ、δₜ)。verify_run 一并扫描 `figures.json` 的 caption。
 
 ## 结构
 
@@ -252,7 +253,7 @@ lark-cli im +messages-send --as bot --user-id <ou_xxx> \
 - [ ] 在能讲清发现的地方使用了图示产物
 - [ ] 同类多张相关小图已用 `<grid>` 横排
 - [ ] 排版载体按叙事功能选择,无装饰性排版
-- [ ] 行内公式均使用 `<latex>`,正文无伪 LaTeX
+- [ ] 行内公式均使用 `<latex>`,正文与图注无伪 LaTeX
 - [ ] 冷读者校验通过,阻断项已全部修复
 - [ ] 本地报告源文件中至少有两个不同的图锚点
 - [ ] 运行清单已完成
