@@ -10,6 +10,12 @@ from pathlib import Path
 
 
 FIGURE_ANCHOR_RE = re.compile(r"\[\[figure-anchor:([^\]]+)\]\]")
+# Raw LaTeX syntax in prose never renders in Feishu: math belongs in <latex>
+# (inline or block). The `_` arm targets single-char subscripts (α_t, K_t)
+# without catching snake_case identifiers (verify_run) or digit runs.
+PSEUDO_LATEX_RE = re.compile(
+    r"\\[A-Za-z]|\^|[A-Za-z0-9Α-Ωα-ω]_\{|[A-Za-zΑ-Ωα-ω]_[a-z0-9](?![a-z0-9])"
+)
 RUN_RESERVED = {"assets", "report.docxxml", "report_group.docxxml", "checklist.md", "README.md"}
 THREAD_BLOCKER_SHAPE = {"BLOCKER.md"}
 THREAD_EVIDENCE_SHAPES = (
@@ -76,6 +82,26 @@ def verify_thread(path: Path, errors: list[str]) -> None:
                 errors.append(f"{evidence_path}: must contain at least one non-empty file")
 
 
+def verify_report_prose(report: Path, errors: list[str]) -> None:
+    text = report.read_text(encoding="utf-8")
+    text = re.sub(r"<latex>.*?</latex>", "", text, flags=re.DOTALL)
+    text = re.sub(r"<pre\b.*?</pre>", "", text, flags=re.DOTALL)
+    text = re.sub(r"<code>.*?</code>", "", text, flags=re.DOTALL)
+    text = re.sub(r'href="[^"]*"', "", text)
+    hits = []
+    for lineno, line in enumerate(text.splitlines(), 1):
+        if line.strip().startswith("[[figure-anchor:"):
+            continue
+        if PSEUDO_LATEX_RE.search(line):
+            hits.append(str(lineno))
+    if hits:
+        shown = ", ".join(hits[:8]) + (" ..." if len(hits) > 8 else "")
+        errors.append(
+            f"{report}: raw LaTeX syntax outside <latex> on line(s) {shown}; "
+            "wrap math in inline or block <latex>"
+        )
+
+
 def verify_run(run_path: Path, mode: str) -> tuple[list[str], int, int]:
     errors: list[str] = []
     root = workspace_root()
@@ -107,6 +133,11 @@ def verify_run(run_path: Path, mode: str) -> tuple[list[str], int, int]:
         anchor_count = len(anchors)
         if anchor_count < 2:
             errors.append(f"{report}: expected at least 2 unique figure anchors, found {anchor_count}")
+
+    for prose_name in ("report.docxxml", "report_group.docxxml"):
+        prose = run_path / prose_name
+        if prose.is_file():
+            verify_report_prose(prose, errors)
 
     if not checklist.is_file():
         errors.append(f"{checklist}: required checklist file is missing")

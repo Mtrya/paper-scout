@@ -122,6 +122,7 @@ python3 .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mo
 - 每个非保留的运行级目录都是合法线程。
 - 线程要么是 `BLOCKER.md`,要么是 `README.md` 加 `code/`、`patches/` 或两者兼有。
 - 存在的 `code/` 或 `patches/` 目录内至少有一个非空文件。
+- `report.docxxml` 与 `report_group.docxxml` 的正文不含伪 LaTeX:`<latex>`、`<pre>`、`<code>`、链接与锚点之外的 `\命令`、`^`、单字符下标(`α_t`、`K_t` 形)即 FAIL。
 - 体积预算:单文件 ≤ 2MB、运行包总量 ≤ 20MB、无权重/checkpoint 扩展名。
 - final 模式下 `code/` 和 `drafts/` 只剩各自的 README 标记。
 - final 模式要求 `runs/INDEX.md` 提到该运行 id。
