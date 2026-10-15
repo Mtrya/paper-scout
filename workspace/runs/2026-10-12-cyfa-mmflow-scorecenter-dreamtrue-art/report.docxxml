@@ -1,5 +1,5 @@
-<title>Paper Scout 研究报告 - 2026-10-12</title>
-<p>这期巡航的池子比平时放大了一档:2026-10-09 至 10-12 的 Hugging Face Papers 逐日池加周榜,外加你点名精读的三篇(CyFA、Multimodal Flow、Score Centering,均为 9 月中下旬的 arXiv 论文),我们自己又从池里挑了两篇(DreamTrue、DiffusionART)。五条深度线程读完后,一个没预料到的横切结构自己浮了出来:<b>这期最好的三篇方法论文,做的是同一个动作——找到损失/递推里那个"逐点消不掉、只靠期望抵消"的项,然后换一个构造让它恒等于零</b>。CyFA 换到绝对钟坐标,循环传输项就从递推里消失了;Score Centering 把策略梯度拆成漂移加协方差,漂移项被逐前缀精确减除;DiffusionART 把 NFT 的力拆成引导加一致性残余,然后让残余根本不被产生。DreamTrue 把同一个哲学搬到了数据侧:相机失准不靠模型学掉,而是离线标定后从数据里消掉。五篇论文我们都做了真实的研究动作:CyFA 在官方 400M 权重上跑了时钟/回绕/谱三组探针,MMF 用官方发布的 text decoder 做了文本潜变量 round-trip 保真实验,SC 和 DiffusionART 各做了一个机制级玩具验证,DreamTrue 则把发布的第一批标定参数独立复算了一遍。猜想与核验各半,有复现、有新发现、也有两处对论文量化强调的部分证伪。</p>
+<title>Paper Scout 研究报告 - 2026-10-12(重修)</title>
+<p>这期巡航的池子放大了一档:2026-10-09 至 10-12 的 Hugging Face Papers 逐日池加周榜,外加你点名精读的三篇(CyFA、Multimodal Flow、Score Centering),我们自己又从池里挑了两篇(DreamTrue、DiffusionART)。五条线程读完,一个没预料到的横切结构浮了出来:这期最好的三篇方法论文做的是同一个动作,即找到损失或递推里那个逐点消不掉、只靠期望抵消的项,然后换一个构造让它恒等于零。CyFA 换到绝对钟坐标,循环传输项从递推里消失;Score Centering 把策略梯度拆成漂移加协方差,漂移项被逐前缀精确减除;DiffusionART 把 NFT 的更新力拆成引导加一致性残余,然后让残余根本不被产生;DreamTrue 把同一个哲学搬到数据侧,相机失准不靠模型学掉,而是离线标定后从数据里消掉。每条线程都配了真实的研究动作:CyFA 在官方 400M 权重上跑时钟、回绕、谱三组探针,Multimodal Flow 用官方释出的 text decoder 做文本潜变量往返保真实验,SC 和 DiffusionART 各做一个机制级玩具验证,DreamTrue 把发布的第一批标定参数独立复算。有复现、有新发现,也有三处对论文量化强调的温和修正。这份报告是 10-12 报告按新写作规范重修的版本:同一批证据,重新讲一遍。</p>
 <h1>主题一:状态空间的构造性设计——从循环时钟到全连续流</h1>
 <p>两条线程都在重新设计"信息住在哪、怎么被读写"的状态空间:CyFA 给线性 RNN 的定常状态加了一个可变速的循环时钟,Multimodal Flow 则把文本和图像都搬进连续嵌入空间,让同一个 flow 向量场统一生成。主题相关的轻量留意只有一篇,但质量不低:</p>
 <table>
@@ -11,45 +11,218 @@
 </table>
 <h2>CyFA: Linear Sequence Modeling with Relative-Time-Partitioned Memory</h2>
 <p>Yixiao Chen, Shuojin Yang, Shi-Min Hu(清华大学,2026)· <a href="https://huggingface.co/papers/2609.36259">HF</a> · <a href="https://arxiv.org/abs/2609.36259">arXiv</a> · <a href="https://github.com/Chyxx/CyclicFlowAttention">代码</a> · <a href="https://huggingface.co/cyxxxxxxxxxx/cyfa-400M-15B">400M 权重</a></p>
-<p><b>是什么。</b>线性 RNN 的效率来自把历史压缩进一个定常大小的循环状态,但代价是所有历史键值关联都得挤在这一个矩阵里:遗忘门只能整体衰减,delta rule 只能按键选择性擦除,旧关联即使没被擦掉也会越来越难取出。CyFA(Cyclic Flow Attention)给状态加了一个<b>相对时间剖面</b>:把每个头的键状态和值状态都组织成 m=127 个相对时间槽(取奇数是为了实傅里叶基对合,存储上补 1 行 padding 到 128),每个槽位装"距今某个相对年龄写入"的关联。每一步的递推是:先对 K、V 两个状态施加<b>同一个</b>分数阶循环移位(论文叫传输,transport),把已有内容整体向更老的槽位搬 <latex>\delta_t</latex> 格,再整体衰减 <latex>\alpha_t</latex>,最后把当前键值写进 age-0 槽:</p>
-<latex>K_t = \alpha_t\, P(\delta_t)\, K_{t-1} + \beta_t\, e_0 k_t^{\top}, \qquad V_t = \alpha_t\, P(\delta_t)\, V_{t-1} + \beta_t\, e_0 v_t^{\top}</latex>
-<p>其中 e₀ 是 age-0 槽的指示向量,<latex>\alpha_t \in (0,1)</latex> 是遗忘门,<latex>\beta_t</latex> 是写入强度,<latex>k_t</latex>、<latex>v_t</latex> 是当前 token 的键值向量。传输算子用实傅里叶基 <latex>\Phi \in \mathbb{R}^{m \times m}</latex> 构造:<latex>P(\delta) = \Phi U(\delta) \Phi^{\top}</latex>,<latex>U(\delta)</latex> 保持直流分量不变、把第 j 对正余弦平面旋转角度 <latex>2\pi j \delta / m</latex>。这个构造满足群律 <latex>P(\tau_1) P(\tau_2) = P(\tau_1 + \tau_2)</latex> 且周期为 m:整数 δ 就是循环移位,分数 δ 是它在傅里叶域的精确插值——所以叫"分数阶"移位。时钟 <latex>\delta_t = \sigma(W_\delta \cdot \mathrm{sg}(x_t) + b_\delta) \in (0,1)</latex> 是输入相关的,但 sg 是 stop-gradient:附录 D.1 报告时钟投影占了梯度能量的 78%,任其反传进主干会导致训练振荡,这个细节是训练能稳的关键。</p>
-<p>读出是 token 级 softmax 注意力,只是 K、V 换成了状态矩阵:<latex>o_t = (R V_t)^{\top} \cdot \mathrm{softmax}(R K_t \cdot q_t)</latex>,读出矩阵 R 初始化为恒等。真正漂亮的是效率构造:定义绝对时钟 <latex>\lambda_t = \sum_{i \le t} \delta_i</latex> 并换到绝对钟坐标 <latex>\bar{K}_t = U(-\lambda_t) \Phi^{\top} K_t</latex> 之后,传输项利用群律精确相消,递推变成</p>
-<latex>\bar{K}_t = \alpha_t\, \bar{K}_{t-1} + \beta_t\, U(-\lambda_t)\, b\, k_t^{\top}, \qquad b = \Phi^{\top} e_0</latex>
-<p>也就是<b>标量衰减加秩一写入</b>——这正是 ScalarGatedLA 的标准形态,CyFA 直接复用其 chunk kernel 做并行训练,K、V 两个状态各走一遍,中间夹一层 token 级 softmax 读出。传输并没有被近似掉,而是被坐标变换消掉了:慢形式的递推循环和快形式的 chunk 递推是同一个对象的两种坐标。附录 A 的命题 1–6 给了这个坐标变换的完整性质:两次写入的相对时间剖面内积只取决于写入时刻的 λ 之差(与读出时刻无关)、保序性、时钟原点不变性;BLA 是 CyFA 把时钟钉死在 δ≡1/ρ 的特例。</p>
+<p>线性 RNN 用一个定常大小的递归状态压缩整段前缀,换来线性时间的处理与定常内存的解码;代价是所有历史键值关联挤在同一块状态里,写入越多,旧关联越难取回,即使它从没被擦除。CyFA(cyclic flow attention,循环流注意力)把这块状态改造成一条按相对年龄排布的循环传送带:每个头维护 127 个槽位,每来一步,一个学习出来的时钟先把已有内容整体向更老的槽位搬一小步,再衰减,最后把新键值写进最年轻的槽位。在 400M 到 1.4B、递归状态大小逐项对齐的预训练对比中,它把召回型任务的平均分对 KDA 拉高 5.7 到 6.9 个百分点,核心算子前向耗时只有 KDA 的 46.7%。代码与 400M 权重完整开源,我们得以把它的机制主张拿到官方 checkpoint 上逐条检验,本线程后半部分是我们的三个实验。</p>
+<h3>地基:定常状态里的干扰</h3>
+<p>线性注意力把键值前缀压缩成一块定常大小的关联状态。记查询与键 <latex>q_t, k_t \in \mathbb{R}^{d_k}</latex>,值 <latex>v_t \in \mathbb{R}^{d_v}</latex>,状态 <latex>S_t \in \mathbb{R}^{d_k \times d_v}</latex>,递推与读出是</p>
+<latex>S_t = S_{t-1} + k_t v_t^\top, \qquad o_t = S_t^\top q_t = \sum_{i \le t} v_i \, (k_i^\top q_t)</latex>
+<p>展开式说明了一点:直到 t 的所有写入都通过同一块状态被取回,写入不断累积,状态里的关联互相干扰。主流的缓解思路是学会擦除。Mamba-2 给递推加输入相关的标量遗忘门 <latex>\alpha_t</latex>,每步把旧状态整体衰减一遍;delta rule 让擦除按键定向,新键先指认出它要覆盖的旧关联,再把值写进去:</p>
+<latex>S_t = \alpha_t S_{t-1} + \beta_t k_t v_t^\top, \qquad S_t = S_{t-1} + \beta_t k_t \left( v_t - S_{t-1}^\top k_t \right)^\top</latex>
+<p>其中 <latex>\beta_t</latex> 是写入强度。Gated DeltaNet(GDN)与 Kimi Delta Attention(KDA)把按键擦除分别与标量、向量遗忘门组合,是这一线目前最强的两个模型。这些机制回答的都是同一个问题:新写入到来时,该从状态里擦掉什么。痛点在另一面:旧关联即使没被擦,也随着写入增多而越来越难取出,因为它与无数后来的关联共享同一批状态维度。CyFA 把问题掉转过来:在同样的状态预算下,能不能把记忆组织得更有序,让更多关联在必须被遗忘之前保持可区分。</p>
+<h3>槽位:按相对年龄排布的循环记忆</h3>
+<p>CyFA 把每个头的键状态与值状态从一整块矩阵改成 <latex>m = 127</latex> 个槽位。槽位是论文术语 relative-time partition 的译法:状态按行组织,第 r 行是一个槽位,装的是写入距今的相对年龄落在第 r 格的内容,age-0 槽(指示向量 <latex>e_0</latex>)永远装最新写入。m 取奇数是为了后面的构造干净:实值傅里叶基在偶数长度下会多出一个无配对的 Nyquist 分量,奇数长度正好是一个直流分量加 (m−1)/2 对余弦-正弦列。</p>
+<p>每一步递推做三件顺序固定的事:先对键状态 <latex>K_t \in \mathbb{R}^{m \times d_k}</latex> 与值状态 <latex>V_t \in \mathbb{R}^{m \times d_v}</latex> 施加同一个循环移位,把已有内容整体向更老的槽位搬 <latex>\delta_t</latex> 格;再整体乘上标量遗忘门 <latex>\alpha_t \in (0, 1)</latex>;最后把当前键值以强度 <latex>\beta_t</latex> 写进 age-0 槽:</p>
+<latex>K_t = \alpha_t P(\delta_t) K_{t-1} + \beta_t e_0 k_t^\top, \qquad V_t = \alpha_t P(\delta_t) V_{t-1} + \beta_t e_0 v_t^\top</latex>
+<p>两个状态走同一个移位与同一个衰减,键贡献与值贡献的对齐自动保持。一条在 i 时刻写入的关联,它在 t 时刻的模型年龄定义为累计时钟差 <latex>\lambda_t - \lambda_i</latex>,其中 <latex>\lambda_t = \sum_{s \le t} \delta_s</latex> 是逐步时钟增量的累加。槽位是循环的:年龄每涨满 127,这份写入就绕满一圈回到 age-0 槽。这一点后面会回来较真。</p>
+<h3>传输算子:分数阶循环移位与群律</h3>
+<p><latex>P(\delta_t)</latex> 是论文称 transport(传输)的算子,可以理解为滑动窗口注意力里"每步左移一格"的循环闭合版。滑窗把移出边界的键值直接丢弃,CyFA 把最老槽位的内容绕回 age-0 槽,同一份槽位无限复用,没有固定窗口边界。这个闭合是后面一切推导的根:循环移位满足群律</p>
+<latex>P(\tau_1) P(\tau_2) = P(\tau_1 + \tau_2)</latex>
+<p>相继两次传输的合成等于一次传输,传输量可以累加,这正是后面的坐标变换能把传输从递推里精确消掉的原因。</p>
+<p>整数移位不够用:每步搬一整格等于给每个 token 分固定的时间分辨率,信息量小的 token 与必须分清的 token 被一视同仁。CyFA 用傅里叶构造把整数移位插值成分数移位。循环移位矩阵是循环矩阵,被离散傅里叶基对角化;取实值正交傅里叶基 <latex>\Phi \in \mathbb{R}^{m \times m}</latex>,其列是归一化的直流分量加上频率 <latex>j = 1, \ldots, (m-1)/2</latex> 的余弦-正弦对;再令 <latex>\mathcal{U}(\tau)</latex> 为分块对角矩阵,第 j 块是二维旋转 <latex>\mathrm{Rot}(2\pi j \tau / m)</latex>,则</p>
+<latex>P(\tau) = \Phi \, \mathcal{U}(\tau) \, \Phi^\top</latex>
+<p><latex>\tau = 1</latex> 时它就是整数循环移位,分数 <latex>\tau</latex> 给出整数槽位之间的连续周期插值;每个分块都是平面旋转,群律与正交性(保范数、可逆、不丢能量)由旋转直接继承。</p>
+<p>时钟增量 <latex>\delta_t \in (0, 1)</latex> 由层输入经 sigmoid 投影逐 token 预测,让写入之间的相对时间间隔数据相关:<latex>\delta_t</latex> 大,当前写入与既往写入拉开距离;<latex>\delta_t</latex> 小,相邻写入挤在一起。但这条投影对层输入走 stop-gradient,即前向取值不变、导数为零:<latex>\delta_t = \sigma(W_\delta \, \mathrm{sg}(x_t) + b_\delta)</latex>。论文附录 D.1 为这条设计做了定量解剖:在 400M checkpoint 上用四段 2048 token 的训练序列做成对反向探针,每段各做两次反向,一次原样、一次只恢复 <latex>\delta_t</latex> 到层输入的导数,损失与全部前向激活不动;以下梯度范数都是全部参数的梯度拼成的全局范数,与梯度裁剪同口径。带 stop-gradient 时全局梯度范数是 5.653,对照组 KDA(同样有数据相关的递归控制,但没有共享累计时钟)是 2.309,多出的部分高度集中:时钟投影这一个参数占全局平方梯度范数的 78.3%。去掉 stop-gradient 后全局范数升到 12.006,并且非时钟部分随序列变长持续恶化,从 256 token 时 KDA 的 1.14 倍涨到 2048 token 时的 4.58 倍。机制写在累计时钟的对称结构里:前向里 <latex>\lambda_t</latex> 是所有既往 <latex>\delta</latex> 的累加,反向里每个 <latex>\delta_s</latex> 收到来自其后所有位置的梯度,反向累加把局部梯度放大 3.4 到 9.6 倍,逐 token 梯度的同向性再放大 7.4 到 11.8 倍,三条涉时钟的梯度路径(键、值两条状态的时钟写入向量各一条,再加依赖时钟的槽位读出)还常常互相抵消,残差全部灌进这个共享的低维投影。stop-gradient 保留了训练时钟参数所需的梯度,它经写入向量与读出路径照常回流,同时挡住这条随序列长度增长的累计梯度进入骨干网络;论文图 3 的对照显示,去掉它会出现持续的损失振荡与反复的梯度尖峰。</p>
+<p>论文图 1 把这个过程逐圈展开:新写入不断从 age-0 槽进入,旧写入随年龄绕圈,颜色变浅表示衰减。</p>
 [[figure-anchor:cyfa:transport]]
+<h3>读出与坐标变换:传输被精确消掉</h3>
+<p>读出是 token 级的 softmax,只是把逐 token 的键值换成两块状态矩阵:查询先对各槽打分并归一化,再按权重从值状态聚合。一个学习出来的读出矩阵 <latex>R \in \mathbb{R}^{m \times m}</latex>(初值单位阵)作用在两个状态上,只影响检索,不进递推:</p>
+<latex>o_t = (R V_t)^\top \, \mathrm{softmax}(R K_t q_t)</latex>
+<p>到这里为止的形式是慢形式:每步要给两个状态左乘稠密的 m×m 矩阵 <latex>P(\delta_t)</latex>。训练侧的主流并行方式是 chunk 并行,递归状态只在块边界传递,块内输出并行计算;逐 token 的稠密行混合写不成它需要的紧凑矩阵乘形式。CyFA 的解法是换两次坐标。第一次把状态写进傅里叶基,<latex>\widehat{K}_t = \Phi^\top K_t</latex>,递推变成 <latex>\widehat{K}_t = \alpha_t \mathcal{U}(\delta_t) \widehat{K}_{t-1} + \beta_t b k_t^\top</latex>,其中 <latex>b = \Phi^\top e_0</latex> 是 age-0 槽在傅里叶坐标下的样子;稠密混合变成 (m−1)/2 个互不耦合的二维旋转,但 <latex>\mathcal{U}(\delta_t)</latex> 依赖当前 token,仍留在递推转移里。第二次让坐标跟着累计时钟走,定义绝对时钟状态 <latex>\overline{K}_t = \mathcal{U}(-\lambda_t) \widehat{K}_t</latex>。由 <latex>\lambda_t = \lambda_{t-1} + \delta_t</latex> 与群律,<latex>\mathcal{U}(-\lambda_t) \mathcal{U}(\delta_t) = \mathcal{U}(-\lambda_{t-1})</latex>,代入即得</p>
+<latex>\overline{K}_t = \alpha_t \overline{K}_{t-1} + \beta_t \, \mathcal{U}(-\lambda_t) b \, k_t^\top</latex>
+<p>传输项被相消,剩下标量衰减加秩一写入,正是 Mamba-2 那一档 ScalarGatedLA(标量门控线性注意力)递推的标准形态。时钟没有消失,它整体搬进逐 token 的写入向量 <latex>\mathcal{U}(-\lambda_t) b</latex> 与读出端的坐标还原,作用对象从状态矩阵缩成 m 维向量。精确性可以直接核对:用当前时钟重建上一步,<latex>\Phi \mathcal{U}(\lambda_t) \overline{K}_{t-1} = P(\delta_t) K_{t-1}</latex>,正是传输后的旧状态。慢形式与快形式是同一对象在两种坐标下的表示,没有近似。工程回报是直接的:键、值两条递推复用现成的 ScalarGatedLA chunk kernel,中间只隔逐 token 的 softmax 与坐标变换。</p>
+<p>一个特例把这套构造接回已有工作。把时钟钉成常数 <latex>\delta_t \equiv 1/\rho</latex>,CyFA 的相对时间轮廓退化为 Blurry Window Attention(BLA)使用的 Fourier–Dirichlet 窗;BLA 是一种固定分辨率的槽位记忆,槽位位置与 token 距离成仿射关系,每 ρ 步进一格。CyFA 与它的差别正是学习出来的数据相关间距、独立的遗忘门与读出矩阵。</p>
+<h3>一层的数据流</h3>
+<p>一个 CyFA mixer 的完整路径:层输入先经 ShortConv 处理 q、k、v,查询与键过 RMSNorm;每个头独立产生 <latex>q_t, k_t, v_t, \delta_t, \alpha_t, \beta_t</latex>;键通道与值通道两条 ScalarGatedLA 递推由中间的 token 级 softmax 读出连接;各头输出汇合后过头级 RMSNorm 与低秩 sigmoid 输出门。骨干是 pre-norm 的 LLaMA 式结构,mixer 与 SwiGLU 前馈层交替。400M 模型共 24 层 × 4 头 = 96 头,<latex>d_k = d_v = 256</latex>,每头 127 个活跃槽位,另分配 1 行凑成 128 行存储,写入与读出时掩掉。所有参与对比的循环模型,每层主递归状态的标量条目数逐项对齐为 262,144。论文图 2 画的就是这条一层的数据流。</p>
 [[figure-anchor:cyfa:arch]]
-<p><b>为什么。</b>它瞄准的是线性注意力家族的结构性痛点:状态里没有"时间"这个维度,旧信息能不能取出来全凭内容和衰减的运气。把相对时间显式编码进状态之后,"多久以前写的"变成了一个可寻址的坐标——召回密集型任务(从一堆共存的字段-值关联里取目标值)恰好是最吃这个坐标的任务。而且时钟是可学的:模型可以自己决定每个头用多快的速度搅动记忆。输入相关时钟 vs 固定时钟的消融差 +2.93 recall 均值,说明"在哪里慢、在哪里快"本身是学出来的有用结构。</p>
-<p><b>怎么样。</b>三个规模(400M/15B、800M/30B、1.4B/100B token)、所有循环模型状态大小对齐到每层 262,144 个标量的前提下:recall 六项均值 400M 上 33.25 对 KDA 的 26.31(FDA 单项 42.60 对 26.07,几乎翻倍),1.4B 上 43.47 对 37.73,并且超过了同表公开的 1.4B Transformer 参照(41.41)——循环模型在召回上打赢 Transformer 参照,这在我们的记忆里是第一次。效率上,核心算子前向/反向耗时只有 KDA 的 46.7%/48.3%,端到端吞吐 1.37× KDA,仅次于 Mamba-2。消融里最能说明机制分工的三条:去掉遗忘门 α 伤得最重(LAMBADA ppl 48.17→115.89,recall −5.20)——衰减是回绕碰撞的兜底;槽位数 m 从 127 减到 63,recall 掉到 26.68,加到 255 升到 34.83——时间分辨率直接是容量;读出矩阵钉死 R=I 再掉 1.46。诚实边界:1.4B 上 KDA 的 LAMBADA ppl 略优于 CyFA(11.88 对 12.77),CyFA 的强项在召回而不在语言建模困惑度。</p>
+<h3>论文结果:强在召回,快在算子</h3>
+<p>预训练对比在 400M、800M、1.4B 三档进行,分别训练 15B、30B、100B token,同档内各循环模型的状态大小逐项对齐。最能看出机制差异的是召回型评测:六个任务(FDA、SWDE、SQD、NQ、TQA、DROP,指标同为准确率,SQD 即 SQuAD)的答案都藏在上下文里,必须从压缩后的递归状态里取回,其中 FDA 与 SWDE 要从大量共存的字段-值关联里取出目标值,对状态组织方式最敏感。</p>
 <table>
-<colgroup><col width="150"/><col width="110"/><col width="110"/><col width="110"/><col width="130"/><col width="110"/></colgroup>
-<thead><tr><th background-color="light-gray">规模(状态对齐)</th><th background-color="light-gray">CyFA recall 均值</th><th background-color="light-gray">KDA</th><th background-color="light-gray">GDN</th><th background-color="light-gray">Transformer 参照</th><th background-color="light-gray">CyFA Wiki ppl</th></tr></thead>
-<tbody>
-<tr><td>400M / 15B token</td><td><b>33.25</b></td><td>26.31</td><td>24.12</td><td>33.98(同训)</td><td>25.85</td></tr>
-<tr><td>800M / 30B token</td><td><b>37.13</b></td><td>31.18</td><td>30.94</td><td>38.23(同训)</td><td>19.51</td></tr>
-<tr><td>1.4B / 100B token</td><td><b>43.47</b></td><td>37.73</td><td>—</td><td>41.41(公开)</td><td>15.47</td></tr>
-</tbody>
+  <colgroup>
+    <col width="150"/>
+    <col width="70"/>
+    <col width="70"/>
+    <col width="70"/>
+    <col width="70"/>
+    <col width="70"/>
+    <col width="70"/>
+    <col width="80"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">模型</th>
+      <th background-color="light-gray">FDA</th>
+      <th background-color="light-gray">SWDE</th>
+      <th background-color="light-gray">SQD</th>
+      <th background-color="light-gray">NQ</th>
+      <th background-color="light-gray">TQA</th>
+      <th background-color="light-gray">DROP</th>
+      <th background-color="light-gray">召回平均</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td colspan="8" background-color="light-gray"><b>400M,15B token</b></td></tr>
+    <tr><td>Transformer</td><td>53.04</td><td>38.89</td><td>30.70</td><td>16.41</td><td>45.68</td><td>19.17</td><td>33.98</td></tr>
+    <tr><td>Mamba-3</td><td>24.89</td><td>27.84</td><td>29.53</td><td>14.92</td><td>43.84</td><td>17.73</td><td>26.46</td></tr>
+    <tr><td>KDA</td><td>26.07</td><td>25.02</td><td>29.49</td><td>14.82</td><td>45.38</td><td>17.06</td><td>26.31</td></tr>
+    <tr><td><b>CyFA</b></td><td><b>42.60</b></td><td>35.61</td><td>34.63</td><td>17.33</td><td>48.70</td><td>20.65</td><td><b>33.25</b></td></tr>
+    <tr><td colspan="8" background-color="light-gray"><b>800M,30B token</b></td></tr>
+    <tr><td>Transformer</td><td>49.32</td><td>42.92</td><td>39.17</td><td>22.24</td><td>54.44</td><td>21.27</td><td>38.23</td></tr>
+    <tr><td>GDN</td><td>34.15</td><td>28.58</td><td>32.65</td><td>18.37</td><td>52.61</td><td>19.26</td><td>30.94</td></tr>
+    <tr><td>KDA</td><td>28.25</td><td>30.18</td><td>33.93</td><td>21.95</td><td>53.55</td><td>19.21</td><td>31.18</td></tr>
+    <tr><td><b>CyFA</b></td><td><b>43.69</b></td><td>40.58</td><td>39.03</td><td>24.17</td><td>55.21</td><td>20.12</td><td><b>37.13</b></td></tr>
+    <tr><td colspan="8" background-color="light-gray"><b>1.4B,100B token</b></td></tr>
+    <tr><td>Transformer†</td><td>55.31</td><td>44.70</td><td>43.10</td><td>24.58</td><td>59.12</td><td>21.66</td><td>41.41</td></tr>
+    <tr><td>KDA</td><td>42.60</td><td>40.77</td><td>37.79</td><td>24.83</td><td>58.89</td><td>21.47</td><td>37.73</td></tr>
+    <tr><td><b>CyFA</b></td><td><b>57.77</b></td><td>46.58</td><td>42.83</td><td>29.87</td><td>61.49</td><td>22.28</td><td><b>43.47</b></td></tr>
+  </tbody>
 </table>
-<p><b>我们的实验(真实权重,不是玩具)。</b>论文 §4.5 与附录 D.2 已经做过一轮时钟分析,我们在官方释出的 cyfa-400M-15B 权重(fp32,CPU 数值路径逐层对拍:chunk 形式与逐步 naive 形式逐元素差 6e-7,端到端 logits 差 5e-4)上复现并把它往前推了三步。</p>
-<p>探针 A 复现时钟画像:96 个头(24 层 × 4 头)里 55 个是"近一头"(δ̄=0.9964,几乎每步搬满一格)、40 个是"输入依赖头"(δ̄=0.5113),另有 1 个边界头——对论文的 56/40、0.9961/0.5118,分类与均值都对上;token 身份能解释 δ 方差的 56.3%(论文 49.4%)。新发现在内容自适应:同一批输入依赖头在代码、自然文本、重复周期文本上的时钟分布系统性漂移——重复文本上 δ 均值降到 0.436,其中 L13H1 从 0.53 减速到 0.11,而 L15H1 反而加速到 0.96。<b>时钟不是静态性格,而是随内容类别重调的节奏器。</b>干预实验同样复现:换掉原始时钟(头均值替换 +0.041、循环平移 257 步 +0.156、钉死 δ≡1 +0.136 held-out NLL)对论文 Table 8 的 +0.045/+0.124/+0.138,排序与量级一致(绝对 NLL 差 0.13 来自我们用 8 段 held-out 对论文 16 段,属协议差异)。</p>
+<p>† 是公开 checkpoint,不参与状态对齐。这张表该带走三点。召回上,三档规模下 CyFA 在六个任务上全部是最强循环模型,400M 处领先最大:FDA 42.60 对次优循环模型 KDA 的 26.07,差 16.5 个点;到 1.4B,召回平均 43.47 反超了公开 Transformer 的 41.41。语言建模上是打平而非碾压:WikiText-2 困惑度与 KDA 互有胜负(400M 25.85 对 25.76 略逊,800M 与 1.4B 略优),LAMBADA 困惑度在 1.4B 处 12.77 对 KDA 的 11.88 明确落后;论文的强项在召回不在困惑度,常识推理六项平均(论文表 2 同表的 Avg 列,400M/800M/1.4B 分别为 42.47、48.16、53.19)倒是三档都居首。效率是设计出来的:两条递推都落在最便宜的标量衰减档,8K 序列下端到端训练吞吐是 KDA 的 1.37 倍,400M 训练形状下核心算子前向、反向耗时分别为 KDA 的 46.7% 与 48.3%,循环基线里只输给单递推的 Mamba-2。</p>
+<p>消融(400M 档,论文表 4)补上了机制的承重分布。去掉遗忘门代价最大,LAMBADA 困惑度从 48.17 翻倍到 115.89,召回平均掉 5.20 分;把输入相关时钟换成每头一个固定增量掉 2.93 分,是"时钟有用"的消融级证据;固定 R 为单位阵再掉 1.46 分。召回对槽位数最敏感:m 从 127 砍到 63,召回平均从 33.25 跌到 26.68,加到 255 涨到 34.83,相对时间分辨率本身就是容量。长上下文侧,多针检索 MK-NIAH-1 上 GDN 与 KDA 在 1K 到 2K 已大幅掉点,CyFA 衰减平缓、到 4K 仍明显领先,与"按相对时间组织能减少共存干扰"的立论一致。</p>
+<p>以上是论文自己的评测。权重与代码的完整开源让机制主张可以直接在 checkpoint 上检验,下面是我们的三个实验。设置:官方 cyfa-400M-15B 权重,float32,CPU 前向;官方逐步参考算子与自写 chunk 算子在随机输入上最大差 6e-7,端到端 512 token 的 logits 最大差 5e-4;同一 checkpoint 在 WikiText-2 上的 token NLL 为 2.6407,论文附录 D.2 报告 2.6105,两处口径一致,都是非重叠块的 token NLL;论文表头的 word-ppl 25.85 用的是另一套滚动窗协议,不直接可比。输入分三类:WikiText-2 test 自然文本(16 块做统计、另 8 块 held-out 做干预)、CyFA 仓库源码拼接的代码文本(8 块)、三类合成周期文本拼成的重复文本(12 块),全部切成 2048 token 的块。</p>
+<h3>时钟画像:复现与新发现</h3>
+<p>论文的时钟分析(§4.5)统计了 400M 模型全部 96 个头在 64 段 WikiText-2 上的时钟增量分布,按分位数把每个头归类:5% 分位数大于 0.95 的归为 δ 均值几乎钉在 1 的头(下称近一头),95% 与 5% 分位数之差不小于 0.1 的归为输入依赖头。96 个头全部落入这两类:56 个近一头,均值 0.9961±0.0065;40 个输入依赖头,均值 0.5118±0.1627。把输入依赖头的 δ 方差按 token 身份(类型均值)与上下文(类型内残差)分解,token 身份解释 49.4%,第 0 层除外,它的时钟只看到词嵌入。</p>
+<p>我们的复现用 16 段自然文本与同一套判据:55 个近一头(0.9964±0.0062)加 40 个输入依赖头(0.5113±0.1646),另有一个边界头 L7H2 恰好落在判据线外;两组均值与论文在小数点后两位一致,token 身份解释的方差份额为 56.3%。分工是结构性的:输入依赖头散布在 19 层,第 0、6、17 层四个头全是输入依赖,第 4、8、10、18 层清一色近一头。</p>
+<p>新发现在论文没查的方向上:同一批头,换输入内容类。输入依赖头的 δ 均值在代码上是 0.506,与自然文本的 0.511 几乎相同;在重复、周期文本上降到 <b>0.436</b>,分布整体左移,近 1 处的峰消失。逐头看更有戏剧性:L13H1(第 13 层第 1 头)从自然文本的 0.529 降到代码的 0.230、重复文本的 0.107,一路减速;L15H1 反向加速,从 0.576 升到 0.964,在重复文本上几乎变成一个近一头。也就是说时钟不只取决于当前 token 的身份,还随文本的统计结构整体重调:面对周期信号,多数输入依赖头把写入挤得更密,个别头反而拉大间距。存活系数 α 在三类输入上都接近 1,均值 0.93 到 0.94,等效半衰期在 10 token 量级,头间差异大;写入强度 β 在重复文本上略降,从 0.71 到 0.62。这给"时钟是学习出来的输入自适应控制器"补了一条论文之外的证据。</p>
 [[figure-anchor:cyfa:clock]]
+<h3>时钟干预:值与时序都承载信息</h3>
+<p>论文附录 D.2 做了干预实验:在 16 段 held-out 序列上只改动 40 个输入依赖头的时钟,其余不动。三档干预分别是把每头的 δ 换成它自己的均值(保留平均速率,抹掉逐 token 变化)、把 δ 序列循环平移 257 步(值与边际分布不变,与输入的对齐被打乱)、把 δ 恒置 1。基线 NLL 2.6105,三档分别上升 0.045、0.124、0.138,16 段全部变差。</p>
+<p>我们用 8 段 held-out 复测,基线 NLL 2.7447,三档分别上升 0.041、0.156、0.136:三档全部显著劣化,量级与论文一致。平移档略高于论文、恒 1 档略低,次序互换,差异可归因于 held-out 段数(8 对 16)与干预头集不同:论文未公开逐头名单,我们干预自己分类出的 40 个。两条结论都被复核:时钟的取值承载信息,均值化就有损失;取值与输入的时序对齐同样承载信息,平移档的伤害是均值化档的近四倍。</p>
 [[figure-anchor:cyfa:intervention]]
-<p>探针 B 追问一个论文没正面回答的问题:回绕碰撞到底安不安全?δ̄≈1 的头每 127 个 token 就绕满一圈,新写入会落回旧写入的槽位——论文附录 A.3 的说法是同位贡献靠写入强度和衰减区分。我们直接测了 2048 token 序列里每次写入回绕到 age-0 槽时旧内容的残余强度:回绕是常态(每头每条序列 1.2–16.1 个周期),近一头确实安全(残迹 p99 中位数只有新写入强度 β 的 1.6%),但<b>输入依赖头不安全</b>:残迹 p99 中位数达 β 的 64%,最劣的 L12H3 残迹是 β 的 27.9 倍,其遗忘门半衰期约等于半个周期——也就是说衰减按设计根本来不及在回绕前把旧内容送走。这是对"衰减兜住回绕"这一说法的部分证伪:在近一头的工作点上成立,在输入依赖头自己的工作点上不成立。</p>
+<h3>回绕安全:混叠存在,不伤预测</h3>
+<p>循环传送带有一处论文没有证明安全的地方。槽位是循环的,一份写入的年龄每涨满 127 就被传输回 age-0 槽,与当步的新写入叠在一起被读出,这就是回绕混叠。论文附录 A.3 的回应是:年龄相差整数个周期的写入映射到同一循环位置,靠各自的写入强度与累计遗忘衰减来区分。这隐含一个假设:遗忘门会在旧写入回绕之前把它抹得足够干净。</p>
+<p>这个假设可以解析地测。一条在 i 时刻写入的关联首次回绕到 age-0 槽时,残余强度为 <latex>r_i = \beta_i \exp(G_{t^*} - G_i)</latex>,其中 <latex>G_t</latex> 是逐步 log 遗忘门的累计,<latex>t^*</latex> 是它与当前步的时钟差首次累计满 127 的时刻;传输把内容摊到各槽的系数由论文的传输核 <latex>\kappa(x) = \sin(\pi x) / (m \sin(\pi x / m))</latex> 给出。这些量全部由前向时记录的 <latex>(\delta_t, \beta_t, g_t)</latex> 序列推出,不需要额外前向。先看回绕有多频繁:2048 token 内,各头累计时钟在 158 到 2048 之间,即 1.2 到 16.1 个周期,回绕是常态,不是边角。</p>
+<p>结果按头类整齐分裂。55 个近一头的残迹 p99 中位数是 0.0148,只有新写入强度 β 的 <b>1.6%</b>,旧内容比新写入弱约 60 倍,安全;机制上这些头的等效半衰期远小于周期,旧写入回来之前早已衰减干净。40 个输入依赖头的残迹 p99 中位数是 0.308,相对当步 β 的中位数是 64%;最劣的 L12H3 残迹达到 β 的 <b>27.9 倍</b>,它的半衰期是 436 token,约为自身周期 927 token 的一半,旧写入回来时比新写入还强近 28 倍。安全性等于半衰期与周期的匹配:遗忘门兜底对近一头成立,对输入依赖头不成立,论文的隐含假设被我们部分证伪。</p>
 [[figure-anchor:cyfa:wrap]]
-<p>探针 B2 补了另一半:混叠(两个不同年龄的写入挤进同一槽)真实存在,但控制了位置因素之后,混叠程度与 next-token NLL 的相关只有 −0.017/−0.091(自然文本/重复文本)——<b>混叠不伤语言建模</b>。这并不矛盾:next-token 分布主要吃近期上下文,被混叠的是远期关联;真正的代价应该出现在召回型任务上,而那恰是 CyFA 评测最强的地方(FDA 42.60)。留给下一次巡航的合成召回探针因此有了明确靶点。探针 C 顺带量了状态的谱:有效秩极低(参与率 1.8–10.9,而 iid 对照为 85),前 8 个奇异值占 58–97% 能量,且把时钟均值化后谱几乎不动——低秩来自数据,不是时序结构的产物。用我们快权重主线的顺手判据读:CyFA 的状态里住着低秩技能,这意味着"把循环状态固化进深权重"在这类架构上是有门的。</p>
+<p>机制上存在混叠,不等于损失上可见。我们构造活混叠质量:每步每头把所有年龄超过半周期的旧写入按残余强度乘传输核加权求和,度量此刻 age-0 槽上叠着多少来自半周期前的旧内容,对 96 头取平均后与逐 token NLL 算 Spearman 相关。原始相关是自然文本 −0.059、代码 −0.128;但混叠质量随位置单调累积(序列四分位均值从 0.34 涨到 1.17),NLL 本身也有位置趋势,原始相关里混着这条共同趋势。按 token 位置十分位分层控制后,相关降到 −0.017 与 −0.091,符号为负,混叠最重的位置预测并没有变差。一个待验证的解释是读出端与写入端共享同一时钟,读出权重恰在旧写入回绕的相位上衰减,混叠被结构性地调谐掉。边界要写清:这只覆盖 next-token 预测;需要精确召回旧信息的任务,恰是 CyFA 最强的 FDA 一类,混叠在那里是否咬人,是本轮留下的最明确的开放问题。</p>
+<h3>状态谱:低秩来自数据</h3>
+<p>最后一个实验源于顺手一查,结果成了本轮最意外的发现。在 t=2048 处截取每个头的键状态(256×128)与值状态(128×256)做 SVD,用参与率 <latex>\mathrm{PR} = (\sum_i s_i^2)^2 / \sum_i s_i^4</latex> 度量有效秩:全部 24 层的键状态 PR 落在 1.84 到 6.60(均值 3.52),值状态落在 1.95 到 10.89(均值 5.44)。给这两个数字锚点:128 个槽是理论上限,同形状 iid 高斯矩阵的期望 PR 约 85,真实状态只用了不到十二分之一的有效维度;前 8 个奇异值占能量的 58% 到 97%。谱从 t=256 到 t=2048 基本稳定,低秩不是还没写满,是稳态。</p>
+<p>低秩从哪来?对照实验用干预的第一档:同样的数据,把 δ 换成逐头均值再取谱,各层 PR 几乎不动(键状态平均 +0.02,值状态平均 −0.14),而这档干预让 NLL 明显变差(两块数据分别 2.199 到 2.256、2.808 到 2.834)。结论是状态的低秩结构由数据与写入方向决定,不由时钟时序塑造;时钟的价值在别处,干预实验已经证明它影响预测。按我们既有的一条顺手判据,对循环状态做 SVD,谱衰减快说明上下文里住着低秩技能、值得蒸馏成独立的小权重块固化下来,谱平坦说明只是临时绑定、任其随遗忘衰减;CyFA 这类状态因此是低成本固化研究现成的好对象。边界同样写清:谱实验只用 2 条文本与 3 个时刻快照,是首次刻画而非大样本统计;800M 与 1.4B 权重已经放出,结论的尺度外推没做。</p>
+<p>三层证据合起来的判断收进下面的三件事,这里只记两个面向动手者的迁移点。对做线性 RNN 的人,可迁移的是构造本身:任何带群结构的状态传输都能被同样的坐标变换消进写入向量,递推永远停在标量衰减档。对关心状态固化的人,这个极低且稳态的谱是直接的动手信号。</p>
+<callout emoji="📌" background-color="light-blue">
+  <p><b>带走的三件事。</b>CyFA 的时钟画像与时钟干预在我们的复测中全部对上,时钟的值与时序都承载信息,还随输入内容类整体重调。回绕混叠在输入依赖头上真实存在,最劣头旧内容压过新写入近 28 倍,但它不伤 next-token 预测;召回型任务上的代价是开放问题,恰落在 CyFA 最强的任务类型上。递归状态的有效秩不到理论上限的十二分之一,由数据而非时钟决定,值得列为固化候选继续追。</p>
+</callout>
 <hr/>
 <h2>Multimodal Flow: Unified Flow Modeling of Language and Vision in Embedding Spaces</h2>
 <p>Hongyuan Tao, Xinggang Wang 等(华中科技大学 / 北京交通大学 / 地平线,2026)· <a href="https://huggingface.co/papers/2609.40362">HF</a> · <a href="https://arxiv.org/abs/2609.40362">arXiv</a> · <a href="https://github.com/hustvl/Multimodal-Flow">代码</a> · <a href="https://huggingface.co/hustvl/Multimodal-Flow">权重</a></p>
-<p><b>是什么。</b>统一多模态生成此前的两条路都有结构性代价:全离散(Chameleon 式,文本和量化图像都当离散 token)要吞视觉量化瓶颈;混合式(Transfusion 式,文本离散自回归、图像连续扩散)则要维护两套目标、两套采样器。Multimodal Flow(MF)走了第三条:<b>全连续</b>。文本每 8 个 token 切成一块,过冻结的 T5-small encoder 得到 512 维/token 的连续潜向量(除以 0.2 做标量归一化);图像 224×224 过冻结的 SigLIP2-so400m 得到 16×16×1152 的 patch 序列;两者都作为"hyperchunk"排进一条任务定义的有序序列,交给同一个 chunk-causal flow backbone(32 层、宽 1600,注意力投影跨模态共享、FFN 按模态分开)做 flow matching:x-prediction 参数化、线性概率路径 <latex>z_t = t \cdot x + (1-t) \cdot \varepsilon</latex>,每个目标块独立采噪声水平 t(logit-normal 移位采样,图像 α=8、文本 α=6),块内所有位置联合建模。训练时同一样本的多个目标块在 chunk-causal mask 下并行预测(序列打包到 32K),推理时逐块生成、KV cache 照常复用;classifier-free guidance 对文本和图像两个方向都能用(看图说话 γ=3,文生图 γ=5)。生成的连续文本潜最后由一个单独训练的 6 层双向 transformer text decoder(宽 512,35.8M 参数)并行解码回 8 个离散 token;decoder 训练时对输入潜加噪,噪声尺度 λ=σ(0.8+0.8z)、z∼N(0,1),让它对 flow backbone 的端点误差有容忍度。</p>
+<p>一句话:这篇论文把文本和图像都编码成连续向量块,用同一个 flow matching 模型逐块生成,语言建模、看图说话、文生图共享一个训练目标和一套采样过程。这是统一多模态模型的第三条路线,也是本轮我们动手最重的一篇:代码与权重完整放出,我们把它的文本解码器拆出来,在真实权重上做了 round-trip 保真探针,回答这个范式最要命的问题:连续文本通道到底装不装得下离散语言。</p>
+<p>先补地基。Flow matching(领域通行术语)的操作形式:在数据点 x 与标准高斯噪声 ε 之间拉一条直线,</p>
+<latex>\mathbf{z}_t = t\,\mathbf{x} + (1-t)\,\boldsymbol{\epsilon}, \qquad \boldsymbol{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})</latex>
+<p>t 从 0(纯噪声)走到 1(数据)。网络学习在任意中间点 <latex>z_t</latex> 预测干净端点 x(论文采用 x-prediction 参数化),由端点换算出速度场 v = x − ε;采样时从噪声出发,沿这个学到的向量场积分到 t = 1,得到一个样本。图像扩散生成的主流做法就是这么一套,Multimodal Flow(下称 MF)要回答的是:文本能不能也住在同一个连续过程里。</p>
+<p>统一多模态生成此前有两条主路。全离散一路(Chameleon 一系):图像先过视觉 tokenizer 量化成离散码,与文本 token 排进同一条序列做自回归,管线完全复用语言模型,代价是视觉量化瓶颈,tokenizer 丢掉的细节 backbone 永远拿不回来。混合一路(Transfusion 一系):文本保持离散自回归,图像保留连续状态用扩散或 flow 生成,量化瓶颈没了,但一个系统里住着两套目标函数、两套加噪日程、两套采样器。</p>
 [[figure-anchor:mmf:paradigm]]
+<p>MF 走第三条:全连续,一个向量场、一个目标、一套采样器。不过光把连续文本嵌入和连续图像嵌入拼接起来丢给一个 flow,有三个问题没人回答:每种模态的生成单元是什么,这些单元怎么排成有序的条件生成过程,跨模态共享与各自的统计差异怎么兼得。MF 的设计就是对这三问的回答。</p>
+<p>生成单元是论文所说的 hyperchunk(论文术语):一个模态内结构完整、可作为序列原子单位的连续块。文本侧,每 8 个 token 切成一块,独立过一次冻结的 T5-small 编码器(注意力只在块内),得到 8 条 512 维连续潜向量,再除以标量常数 0.2 归一化,块内保留 token 顺序。图像侧,一张 224×224 的图过冻结的 SigLIP2-so400m,得到 16×16 个 patch 各 1152 维,保留空间网格,整张图算一个 hyperchunk。两类块排成一条有序序列,顺序由任务定义:文生图是文本块在前、图像块作生成目标,看图说话反过来,纯文本语言建模则整条都是文本块。论文把这个框架实例化为 MF-1,主模型是 1.6B 参数的 backbone。</p>
 [[figure-anchor:mmf:arch]]
+<p>序列的联合分布按块序分解,论文称 chunk-causal(块间因果、块内联合):</p>
+<latex>p_\theta(\mathcal{C}) = \prod_{k=1}^{K} p_\theta\big(\mathbf{c}_k \mid \mathbf{c}_{<k}\big)</latex>
+<p>预测第 k 块时,前序所有块可见、后续块遮蔽,而块内全部位置一起建模;每个目标块的生成仍是一次标准的 flow matching,对该块的干净表示按上文的直线加噪,backbone 以干净前缀为条件预测端点。backbone 内部,注意力投影跨模态共享(交互发生在这里),FFN 按模态分开(消化两边不同的表示统计)。论文的对照实验支持这个拆法:参数量对齐后,把 FFN 也共享会让看图说话的 CIDEr 从 47.9 掉到 42.0,而共享注意力投影几乎无损。</p>
+<p>训练与推理是不对称的。训练时,chunk-causal mask 让同一样本的多个目标块在一次前向里并行预测,每块独立采样自己的时间步,多个样本再打包进最长 32K 位置的物理序列,靠序列编号隔离;推理时逐块生成,每块从高斯噪声出发积分向量场,完成的块进入 KV cache 供后续块复用,每步只需重算当前块。</p>
 [[figure-anchor:mmf:traininfer]]
-<p><b>为什么。</b>如果连续文本潜能承载语言,统一多模态模型就只剩一个向量场、一个目标、一套采样器——架构税直接清零。这也正是全连续范式最大的悬念:8 个 token 压成 8 条 512 维连续向量,信息真的装得下吗?论文没有直接回答这个问题,而它是整个范式的命门——所以我们自己测了(见下)。</p>
-<p><b>怎么样。</b>从零预训练、只用 150B token 的 1.6B MF-1:GenEval 0.821(SD3-M 0.62、JanusFlow 0.63、D-DiT 0.65 全在下面)、DPG-Bench 83.44;理解侧 VQAv2 72.6 / MMBench 67.2 / POPE 86.1 / SEED-Bench 62.4 / OK-VQA 39.1。同档对比里最说明问题的是训练 token 数:Muddit 用了约 400B、D-DiT 约 4.3T,MF-1 用 150B 打赢或逼平它们,接近 LLM 初始化的同级统一模型。更受控的一笔是同数据同参数同 50B token 的架构对照:MF 0.7134 > Transfusion 式混合 0.6693 > Chameleon 式全离散 0.3744(GenEval)——范式差距在同预算下成立。视觉表征消融里 DINOv2 生成最好、SigLIP2 生成理解最平衡、VAE/原像素明显更差,说明冻结语义编码器替换了 VAE 的位置是这个范式的另一根支柱。局限同样清楚:图像只有 224²,文生图分辨率与细节都还不是生产力级别;理解侧对 OCR 类任务没有展示。</p>
-<p><b>我们的实验:文本潜变量 round-trip 保真度。</b>我们下载了官方释出的 text decoder 权重(EMA 版,sha256 已存档)和 T5-small,不动 6.6GB 的 backbone,直接测"真实文本 → T5 编码 → 归一化 → decoder 解码"这条通道的保真度:236 条真实英文样本(自然段落加短句,5–181 token)、1,082 个 8-token 块、7,641 个内容 token。结论一:<b>干净输入下通道几乎无损</b>——内容 token 逐位置还原率 100.00%,teacher-forced 交叉熵 6.98e-5 nats,字符级编辑距离与"只过 tokenizer 往返"的基线完全相等(所有字符偏差都来自 T5 detokenizer,潜变量通道一点没丢)。结论二:<b>decoder 的容忍预算很大</b>——在归一化空间加各向同性噪声,<latex>\sigma_e = 0.75</latex> 时 token 还原率 99.80%,<latex>\sigma_e = 1.0</latex>(噪声 std 已是潜向量自身 std 的 1.24 倍)仍有 98.85%,<latex>\sigma_e = 2.0</latex> 才掉到 63.71%;按论文训练 decoder 时实际用的噪声分布采样,保真度 99.83%。结论三:机制是<b>块内联合编码</b>而非 8 条独立信道——把某个 token 自己的潜向量整个换成无关块的同位置向量,该 token 仍有 93.01% 被还原(最弱的是块首块尾:89.0%/86.8%),这解释了噪声曲线为什么那么平。也就是说,全连续范式的文本侧瓶颈不在"T5 潜 + decoder"这条通道上,任何文本质量归因都应落在 flow backbone 的端点预测误差上;我们给出的 <latex>\sigma_e</latex>-保真度曲线就是它可用的定量误差预算。两层诚实的边界:我们没有下载 backbone,无法测 flow 的实际端点误差,各向同性噪声也不等于 flow 的结构化误差——这条曲线是"decoder 能容忍多少"的上限,不是"backbone 实际留下多少"。两个代码与论文不一致的细节也已记录:归一化是标量 μ=0、σ=0.2 而非逐维归一化(实测归一化后逐维 std 只有 0.35–1.44,"归一化空间"并非单位方差);负对照(位置滚动 0.84%、换块 1.14%、未归一化输入 79.51%)排除了评测脚本自证的可能。</p>
+<p>生成的连续潜最后要译回离散产物。图像侧用与 SigLIP2 配套的预训练表示解码器(表示自编码器的解码半边,Tong 等 2026,同样冻结);文本侧是本文独立训练的一个组件:6 层双向 transformer 的 text decoder,把一块 8 条潜向量并行译回 8 个 token。它训练时对输入潜向量刻意加噪,</p>
+<latex>\tilde{h} = \lambda h + (1-\lambda)\, s\, \epsilon, \qquad \lambda = \mathrm{sigmoid}(0.8 + 0.8z),\ z \sim \mathcal{N}(0,1)</latex>
+<p>s 是噪声强度系数(代码里为 1.0),λ 越小学生存信号越少。目的明确:backbone 的端点预测不会完全准,decoder 必须习惯吃带误差的输入。CFG(classifier-free guidance)对两个方向可用:论文在 0.6B 的预训练变体(MF-1 的最小容量档,设计研究共用的底座,50B token 预训练、未微调)上只扫引导强度,看图说话在 γ = 3 最好,文生图在 γ = 5 最好、再往上反而掉点。</p>
+<p>读到这里,有三个问题值得追。先问数据形态:天然交错(interleave)的图文混排文档在这个范式里长什么样?机制上是直接的,任意模态交替的 hyperchunk 序列都合法,chunk-causal 不关心相邻块的模态。但论文的训练数据里没有这种形态:预训练是四类任务的混合(70% 纯文本、20% 图像理解、9% 文生图、1% 纯图像),每个样本内部模态最多换一次向,论文自己也把"更长的交错序列、视频"列为未来工作。交错在这个范式里是机制支持、实证空白。</p>
+<p>再问误差累计。逐块自回归生成时,KV cache 里存的是模型自己生成的潜向量,端点误差会作为条件传给后面每一块;decoder 的加噪训练只覆盖块内容忍,不覆盖块间传播。训练时每个目标块的条件是干净前缀,推理时前缀换成了自己的产物,这是经典 exposure bias 在连续域的版本,而且更隐蔽:离散自回归错一个 token 是硬切换,可以被后续计算察觉,连续潜偏一点是无声的,模型无从知道自己已经偏了。论文没有给出任何块间误差机制,没有 scheduled sampling 式的训练扰动,也没有对生成前缀的修正。这是这个范式目前最实在的开放问题,我们下面的实验给出单块容忍预算,块间漂移的累积动力学仍未测。</p>
+<p>最后一个问题最基础:一切连续,模型怎么知道何时停下?答案是借道离散。每条文本记录末尾追加一个 EOS token,终端块用 EOS 填满到 8 的倍数,这些位置同样是 decoder 的监督目标;生成时每译出一个 EOS 即停。终止信号不是连续通道内生的标量阈值,而是词表里的一个普通符号,由 decoder 的 argmax 判出。"学会自己停"在全连续设定下确实做到了,但靠的是这个保留的离散跳板。我们的探针里,干净潜向量下 EOS 与填充位置的还原率同样是 100%,停止条件不会误触发;噪声下的终止可靠性没有单独测量。</p>
+<p>论文自己的证据里,最硬的是受控架构对照:同一数据流、同一优化日程、可训练参数对齐到 0.0016% 以内,三种范式各训一个 1.6B 模型(50B token 预训练加 5B 微调)。</p>
+<table>
+  <colgroup>
+    <col width="170"/>
+    <col width="150"/>
+    <col width="90"/>
+    <col width="80"/>
+    <col width="80"/>
+    <col width="90"/>
+    <col width="80"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">架构</th>
+      <th background-color="light-gray">范式</th>
+      <th background-color="light-gray">GenEval ↑</th>
+      <th background-color="light-gray">GQA ↑</th>
+      <th background-color="light-gray">VQAv2 ↑</th>
+      <th background-color="light-gray">MMBench ↑</th>
+      <th background-color="light-gray">SEEDB ↑</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Multimodal Flow</b></td>
+      <td>全连续</td>
+      <td><b>0.7134</b></td>
+      <td><b>55.60</b></td>
+      <td><b>69.03</b></td>
+      <td><b>46.74</b></td>
+      <td><b>51.85</b></td>
+    </tr>
+    <tr>
+      <td>Transfusion 式</td>
+      <td>离散-连续混合</td>
+      <td>0.6693</td>
+      <td>52.81</td>
+      <td>68.49</td>
+      <td>33.68</td>
+      <td>31.31</td>
+    </tr>
+    <tr>
+      <td>Chameleon 式</td>
+      <td>全离散</td>
+      <td>0.3744</td>
+      <td>45.83</td>
+      <td>56.37</td>
+      <td>38.40</td>
+      <td>42.40</td>
+    </tr>
+  </tbody>
+</table>
+<p>全连续在生成上拉开差距(GenEval 0.7134 对 0.6693 对 0.3744),理解上也不吃亏。主模型的完整成绩:从零预训练 150B token 后,GenEval 0.821、DPG-Bench 83.44,论文报告为统一模型中最好的组合生成与长提示对齐,超过同表的 Transfusion(7B,0.67)与 D-DiT(2B,0.65);理解侧 VQAv2 / MMBench / POPE 均分 75.3,同三个基准的均分对 JanusFlow 是 80.9,仍有差距;但后者从预训练 LLM 出发、继承链上累计预训练约 2T token,是 MF-1 的十几倍。混合预训练的迁移价值也可直接测量:同一个 1.6B backbone,随机初始化直接下游训练对混合预训练初始化,SeedBench 31.6 对 62.4,MMBench 36.0 对 67.2。边界同样清楚:图像输入固定在 224×224,OCR 类细粒度文字能力没有展示,1.6B 与 150B token 是本轮验证的规模上限。</p>
+<p>轮到我们自己的实验。这个范式的命门在文本通道:8 个 token 被压成 8 条 512 维连续向量,离散语言装不装得下?从信息量看似乎宽裕,T5 词表 32,128,一个 token 至多 <latex>\log_2 32128 \approx 15</latex> bit,8 个约 120 bit,通道却是 4096 维连续;真正的疑问在几何:T5 潜空间是否 decoder 可逆,以及 flow backbone 的端点误差会不会落在 decoder 读不出的方向上。论文没有回答这个问题,但发布物里 text decoder 的权重是独立放出的,可以单独拆出来测。</p>
+<p>设置:官方释出的 EMA text decoder(35.8M 参数,pretrain step 160000 快照)配冻结的 google-t5/t5-small;样本是 236 条真实文本,200 条从 6 篇论文正文按长度分层抽取,36 条手工句专门覆盖破折号、百分数、URL、CJK、emoji 这些边角,合计 1,082 个 8-token 块、7,641 个内容 token,CPU fp32 单线程跑完。判读时有一个关键对照:tokenizer-only 基线,即 decode(encode(text)) 与原串的字符距离,它剥掉 T5 detokenizer 自身的往返损失,不让 decoder 替它背锅。</p>
+<p>结果一句话:这条通道几乎无损。干净 round-trip 下 7,641 个内容 token 的位置对齐还原率 <b>100.00%</b>,236 条样本逐条全对,teacher-forced 交叉熵 6.98e-5 nats(困惑度 1.00007);字符级编辑距离 0.91%,与 tokenizer-only 基线完全相等,也就是说所有字符偏差都来自 detokenizer,没有一丝来自潜变量通道。100% 这个数字本身可能意味着评测太粗,所以加做负对照:块内位置整体滚动一位,还原率崩到 0.84%;整块潜向量换成无关块的,1.14%。通道是严格位置对齐的,decoder 输出的是它真正读到的内容,不是先验补齐。</p>
+<p>容忍度按两条曲线测。第一条按论文自己的加噪规则扫 λ:λ = 0.69(z = 0,训练分布的均值点)时还原率仍 99.99%,按训练时的真实抽样分布(z 逐位置取标准正态,平均 λ = 0.668)测三次得 99.83%,说明 decoder 训练时吃的噪声比它实际需要容忍的强得多。第二条是给 flow 的误差预算:在干净归一化潜上加各向同性高斯噪声,std 记为 <latex>\sigma_e</latex>。</p>
+<table>
+  <colgroup>
+    <col width="150"/>
+    <col width="170"/>
+    <col width="130"/>
+    <col width="130"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray"><latex>\sigma_e</latex>(归一化空间)</th>
+      <th background-color="light-gray">折算原始 T5 尺度</th>
+      <th background-color="light-gray">token 还原率</th>
+      <th background-color="light-gray">块 8/8 全对</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>0.00</td><td>0.000</td><td>100.00%</td><td>100.00%</td></tr>
+    <tr><td>0.50</td><td>0.100</td><td>99.97%</td><td>99.82%</td></tr>
+    <tr><td>0.75</td><td>0.150</td><td>99.80%</td><td>98.43%</td></tr>
+    <tr><td>1.00</td><td>0.200</td><td><b>98.85%</b></td><td>91.13%</td></tr>
+    <tr><td>1.50</td><td>0.300</td><td>86.68%</td><td>40.02%</td></tr>
+    <tr><td>2.00</td><td>0.400</td><td>63.71%</td><td>7.67%</td></tr>
+  </tbody>
+</table>
+<p>给这张表一个尺度锚点:归一化潜向量自身的整体 std 是 0.808,所以 <latex>\sigma_e = 1.0</latex> 相当于噪声幅度已是信号的 1.24 倍,token 还原率仍有 98.85%;断崖在 <latex>\sigma_e = 1.5</latex> 之后才出现。曲线为什么这么平?leave-one-out 实验给出机制:把某个位置自己的潜向量整个换成无关块的同位置向量,其余 7 条保持干净,该位置 token 仍有平均 <b>93.01%</b> 被还原,而其他位置毫发无损(99.8%)。8 个位置不是 8 条独立信道,而是一份冗余的联合码,单点信息由兄弟位置补足;最弱的是块首与块尾(89.0% 与 86.8%),中段可达 96–98%。失败案例的形态与此一致:λ = 0.40(还原率 93%)时错误全是语义近邻级别的替换,"multi-sensor systems" 变成 "multi-core systems",句子仍然通顺;λ = 0.31(还原率 63%)时拼写开始崩,人名大面积失真,但句法骨架还保留着。</p>
 [[figure-anchor:mmf:roundtrip]]
+<p>边界必须说清。各向同性高斯噪声不等于 flow 的实际误差结构:flow 的误差通常有偏、低维、贴着数据流形,可能落在 decoder 的判别方向上(更致命),也可能落在它忽略的方向上(更友好),所以这条曲线是 decoder 容忍预算的上限,不是 flow 实际误差的测量。backbone 权重(3.3GB)这轮没有下载,端点误差 <latex>\|\hat{x}_0 - x_0\|</latex> 未测,这是把预算表变成结论所缺的最后一块。leave-one-out 的 93% 里也混着两件事:T5 编码器把 token 的上下文信息写进了兄弟位置,以及英文本身从 8 token 窗口就可预测,用发布的 decoder 无法把二者分开。</p>
+<p>读代码还留下一个值得存档的细节:文本潜的归一化是标量,均值 0、统一除以常数 0.2,与视觉分支的逐位置逐通道归一化不对称。论文附录写了 dimension-shared 这个口径,但没写它的后果:所谓"归一化空间"其实并不是单位方差空间,我们实测归一化后的逐维 std 落在 0.35–1.44,中位 0.70。这不推翻论文的任何结论,但决定了上面 <latex>\sigma_e</latex> 的物理含义,<latex>\sigma_e = 1.0</latex> 的噪声是加在一个逐维尺度普遍不到 1 的量上。另一个配置细节:文本分支 flow 的噪声尺度被设为 2.0(视觉分支 1.0),设计者给文本通道的概率路径噪声预算本来就高于潜向量自身尺度,这和我们测出的 decoder 高容忍度方向一致。</p>
+<callout emoji="✅" background-color="light-green">
+  <p><b>结论:</b>"全连续统一建立在一个有损文本通道上"这个担心,在 decoder 侧被实测否掉:8-token 连续潜通道几乎无损(7,641 token 全对),且能容忍 1.24 倍信号尺度的误差仍还原 98.85%,机制是块内 8 个位置的冗余联合码。文本质量的瓶颈只可能落在 flow backbone 的端点预测精度上;实测这个端点误差,以及追块间误差沿 KV cache 的传播,是这个范式下一轮最值得做的两件事。</p>
+</callout>
 <h1>主题二:训练稳定性的一阶原理——把失配拆成漂移与信号,然后构造性消掉</h1>
-<p>这一主题的两篇论文问的是同一族问题:在线/RL 训练里,模型为什么会在数值失配下崩溃?两篇给出的答案在结构上同构:把更新方向精确分解成一个"逐点消不掉"的漂移项和一个携带信号的项,然后用加性、确定的构造把漂移项消掉,而不是用乘性、随机的校正去压它。Score Centering 处理的是 LLM 强化学习里训练器与采样器的数值失配,DiffusionART 处理的是扩散模型 RL 里前向-反向一致性的残余力。两篇合读,是本轮巡航方法论密度最高的部分。主题相关的轻量留意:</p>
+<p>这一主题的两篇论文问同一族问题:在线或强化学习训练里,模型为什么会在数值失配下崩溃?两篇给出的答案在结构上同构:把更新方向精确分解成一个逐点消不掉的漂移项和一个携带信号的项,然后用加性、确定的构造把漂移项消掉,而不是用乘性、随机的校正去压它。Score Centering 处理的是 LLM 强化学习里训练器与采样器的数值失配,DiffusionART 处理的是扩散模型强化学习里前向与反向不一致产生的残余力。两篇合读,是本轮巡航方法论密度最高的部分。主题相关的轻量留意:</p>
 <table>
 <colgroup><col width="210"/><col width="240"/><col width="220"/><col width="80"/></colgroup>
 <thead><tr><th background-color="light-gray">论文</th><th background-color="light-gray">核心贡献</th><th background-color="light-gray">为什么重要</th><th background-color="light-gray">链接</th></tr></thead>
@@ -60,48 +233,147 @@
 </table>
 <h2>Score Centering Stabilizes Off-policy Reinforcement Learning</h2>
 <p>Martin Marek, Max Ryabinin(Together AI,2026)· <a href="https://huggingface.co/papers/2609.20807">HF</a> · <a href="https://arxiv.org/abs/2609.20807">arXiv</a> · <a href="https://github.com/martin-marek/score-centering">代码</a></p>
-<p><b>是什么。</b>用大采样集群做 RL 时,训练器(算梯度的引擎)和采样器(生成 rollout 的引擎,通常量化、低精度、且权重周期性从训练器回灌)之间总存在数值失配(TIM,training-inference mismatch)。2025 年以来业界的主流应对是重要性采样(IS)一族:用训练器/采样器的概率比逐 token 加权或裁剪。这篇论文先做诊断:设 <latex>p</latex> 是训练器分布、<latex>q</latex> 是采样器分布,位置 <latex>y_t</latex> 处的 score 为 <latex>s_v = \nabla_\theta \log p_\theta(v \mid \mathrm{prefix})</latex>,则采样分布下的期望策略梯度可以精确分解为</p>
-<latex>\mathbb{E}_{y\sim q}\left[ R(y)\, s_{y_t} \right] = \mathbb{E}_q[R]\cdot \bar{s} + \mathrm{Cov}_q(R,\, s_{y_t}), \qquad \bar{s} = \sum_v q_v\, s_v</latex>
-<p>第一项是<b>漂移</b>:只要逐前缀的均值 score s̄≠0(失配时必然如此),它就把参数往"让训练器分布逼近采样器分布"的方向推——常数正奖励下这就是纯粹的向采样器蒸馏。关键在于反馈结构:采样器是训练器的有偏拷贝,且周期性回灌权重——漂移每步把训练器拉向采样器,回灌又把采样器推回训练器的新位置,失配不但不收敛,反而被逐步放大,直到熵崩。这一个分解同时解释了两个此前各自成谜的现象:离线 SFT 在任意大的失配下都稳定(教师不跟随学生,没有反馈环);在线 RL 在很小的失配下就崩溃,且崩溃早晚随失配幅度单调(论文图 2/3)。它也解释了为什么组内优势居中(GRPO 式)治不了本:逐前缀的期望优势不等于零,漂移项活在期望优势与均值 score 的乘积里,居中只归一了奖励的形状。修复因此必须是逐前缀的:SC(score centering)把 score 减去其采样分布均值,s̃_yt=s_yt−s̄,漂移项被<b>精确、确定地</b>清零——加性校正,无超参数,不改变信号项。它与 IS 正交且可组合:IS 也能消漂移,但它是乘性、随机的,比值引入方差,方差逼出截断,截断又把漂移引回来;SC 没有这个循环。实现上有个工程甜点:算 s̄ 只需要采样器存每个前缀的 top-k logprob(k=32/128 足够),尾部概率用训练器分布按尾质量比 ρ 重缩放,论文给了 9 行 JAX 的标量损失实现(带 stop-gradient)。</p>
-<p><b>为什么。</b>这篇的价值不止是一个新校正项,而是把 TIM 失稳的因果链钉死了:敌人不是失配的大小,而是"教师跟随学生"的反馈环。这个视角把 IS 一族方法重新定位成"消漂移的一种随机实现",从而能逐个解释它们的失效模式(naive IS 方差爆炸、TIS 截断引回漂移、MIS 在极端失配下掩码率失控)。§3–4 的分解推导写得很干净,值得直接读原文。</p>
+<p>这篇论文给大模型 RL 的一个老毛病找到了具体的病根:当生成 rollout 的采样器与算梯度的训练器之间存在数值失配时,策略梯度里会多出一个随训练步数累积的漂移项,它机械上等价于把训练器不断向自己的有偏拷贝蒸馏;论文随后提出一个加性校正 <b>score centering</b>(SC),在每个前缀上把这项漂移精确清零。失配在大集群 RL 里无法根除,rollout 吞吐量决定了训练与推理必须解耦,校正方法的优劣直接决定低精度、异步流水线敢开多快,所以这个诊断与修复都值得细看。我们用可解析计算的玩具把这条因果链逐环钉成了数字,也量出了它的边界,放在论文证据之后。</p>
+<h3>同一失配,线上线下两种相反的崩法</h3>
+<p>论文先做了一组对照实验:用 Qwen3-1.7B 在 Countdown 上训练,给采样器的权重加一个固定的小扰动,人为构造可控失配。离线档指采样器从不更新,在线档指采样器每步都从训练器同步权重。结果是个反转:离线训练只在 +1/0(答对得 1、答错得 0)的奖励模式下稳定,在线训练恰好反过来,+1/0 最不稳,组居中(GRPO 的做法,同一提示下的一组 rollout 各自减去组均值,组内正负混合)反而最稳。同一个失配,奖励模式一换,稳定性整个颠倒,说明线上与线下各有一个不同的失效机制。</p>
 [[figure-anchor:sc:phenomenon]]
-<p><b>怎么样。</b>统一在 REINFORCE+组居中的基底上对照全部校正方法。Qwen3-0.6B/Countdown 权重噪声三档:最大档下只有 SC(及 SC∘TIS/MIS 组合)训练稳定;int8 采样器下 SC 独一档最好;64 步过期(staleness)下 SC∘TIS/MIS 最好——因为过期时协方差是在旧采样器上测的,残余失配需要 IS 来补。30B-A3B MoE 在 INTELLECT-2 数学任务上:FP8 采样器下不校正的 policy gradient 都能稳(58%),说明 FP8 失配本身温和;KV cache 量化到 FP4 时 PG 在 200 步内崩溃、MIS 晚崩,SC(52%)与 TIS(51%)稳定;采样器 INT8+KV INT4 的极端档,SC 30%、TIS 12%、其余全部低于 5%。论文自己也划了边界:重度过期必须靠与 IS 组合;头条结果里有一部分靠人为加重失配当长训的代理。种子数交代得诚实(30B 的 FP8 档是单种子,FP4 KV 档 SC 5 种子/TIS 4/MIS 3)。</p>
-<table>
-<colgroup><col width="190"/><col width="110"/><col width="110"/><col width="110"/><col width="150"/></colgroup>
-<thead><tr><th background-color="light-gray">30B-A3B / INTELLECT-2</th><th background-color="light-gray">FP8 采样器</th><th background-color="light-gray">FP4 KV cache</th><th background-color="light-gray">INT8 + INT4 KV</th><th background-color="light-gray">备注</th></tr></thead>
-<tbody>
-<tr><td>不校正(PG)</td><td>58%(稳)</td><td>200 步内崩</td><td>&lt;5%</td><td>FP8 失配本身温和</td></tr>
-<tr><td>TIS</td><td>稳</td><td>51%(稳)</td><td>12%</td><td>截断在重度失配下引回漂移</td></tr>
-<tr><td>MIS</td><td>稳</td><td>晚崩</td><td>&lt;5%</td><td>极端失配下掩码率失控</td></tr>
-<tr><td><b>SC</b></td><td>稳</td><td><b>52%(稳)</b></td><td><b>30%</b></td><td>唯一三档全稳的单方法</td></tr>
-</tbody>
-</table>
+<p>在线那一半的失效还有时间结构。把 0.6B 模型的采样器扰动分成三档,所有方法的崩溃都随失配加大而提前:按分布距离做掩码的基线 DPPO(逐 token 计算训练器与采样器分布的全变差距离,超过 0.2 就掩掉该 token)在三档下分别崩在第 160、80、20 步附近,截断重要性采样(truncated IS,TIS,比值超过 2 就截断)在最轻档稳定,在更大两档崩在第 180、40 步附近。崩溃不是随机事件,失配越大来得越早,像是某个量在随训练步数累积,攒够了就崩。论文接下来的分解,就是冲这个量去的。</p>
+<h3>策略梯度里多出来的那一项</h3>
+<p>先把地基搭好。RL 微调的目标是最大化策略 <latex>p_\theta</latex> 下补全 y 的期望奖励,REINFORCE 把期望回报的梯度写成对采样轨迹的期望:</p>
+<latex>\nabla_\theta \, \mathbb{E}_{y \sim p_\theta}[R] = \mathbb{E}_{y \sim p_\theta}\big[\, R(y) \, s_y \,\big], \qquad s_v = \nabla_\theta \log p_\theta(v)</latex>
+<p>其中 <latex>s_v</latex> 是 score(论文术语,指给定前缀下某个候选 token v 的 log 概率对参数的梯度)。在真实的大集群 RL 里,这个期望由两个引擎合力完成:采样器(推理引擎)生成 rollout,训练器(训练引擎)在生成的轨迹上算梯度。之所以要分开,是因为 rollout 生成占掉 RL 训练的大部分算力,推理引擎靠连续批处理与异步流水线榨 GPU 利用率,而权重只能每隔若干步从训练器回灌一次。两个引擎理论上是同一个模型,实际上输出总有微小差异:量化与低精度 kernel、浮点归约顺序的变化、回灌间隔造成的权重陈旧,都算。这类差异统称训练推理失配(training-inference mismatch,TIM)。</p>
+<p>业界的主流应对是重要性采样(importance sampling,IS):rollout 来自采样器 q,而梯度要的是训练器 p 下的期望,那就给每个 token 的梯度乘上概率比 <latex>p_\theta(y_t) / q_\theta(y_t)</latex>,把分布差精确补回来。代价是比值在稀有 token 上可以任意大,梯度方差随之膨胀,所以实用方法几乎都要对比值截断或掩码,而截断又把偏差引了回来。论文把主流方法整理成一张按截断区域分类的网格;SC 是这个网格之外唯一不用比值的方法。</p>
+<p>现在做分解。固定一个前缀,看下一个 token 位置上的期望策略梯度。用协方差恒等式 <latex>\mathbb{E}[RS] = \mathbb{E}[R] \, \mathbb{E}[S] + \mathrm{Cov}(R, S)</latex>,它拆成两项:</p>
+<latex>\mathbb{E}_q[\, R \, s_{y_t} \,] = \mathbb{E}_q[R] \, \mathbb{E}_q[s_{y_t}] + \mathrm{Cov}_q(R, s_{y_t}) = \underbrace{\mathbb{E}_q[R] \cdot \bar s}_{\mathrm{drift}} + \underbrace{\mathrm{Cov}_q(R, s_{y_t})}_{\mathrm{signal}}, \qquad \bar s = \sum_v q_v \, s_v</latex>
+<p>先看为什么有 TIM 时第一项活着。on-policy,也就是采样器与训练器完全一致时,每个前缀的期望 score 恒为零:<latex>\mathbb{E}_p[s_{y_t}] = \sum_v p_v \, \nabla_\theta \log p_v = \nabla_\theta \sum_v p_v = \nabla_\theta 1 = 0</latex>,概率之和恒为 1,其梯度自然是零。失配时 token 从 q 采、score 却按 p 算,<latex>\bar s = \sum_v q_v s_v</latex> 一般不为零,第一项不再抵消。</p>
+<p>这一项就是<b>漂移</b>。它只通过期望奖励 <latex>\mathbb{E}_q[R]</latex> 接触奖励,完全不知道哪条 rollout 成功、哪个 token 立功;携带那些信息的是协方差项,即信号。漂移做什么由方向 <latex>\bar s</latex> 决定:期望 score 恰好是"以采样器为教师的交叉熵蒸馏损失"的负梯度,所以朴素的策略梯度每一步都在把训练器往采样器蒸馏,蒸馏力度按该前缀的期望奖励加权。常数 +1 奖励是极端情形:信号项精确为零,整个更新就是纯蒸馏。</p>
+<p>向固定教师蒸馏是无害的,收敛到教师的极大似然拟合就结束了。问题在于采样器不是固定教师:它是训练器的有偏拷贝,漂移每步把训练器拉向采样器,周期性的权重回灌又把采样器推到训练器的新位置。教师跟着学生走,失配在这个反馈环里不收敛,反而逐步放大,直到策略熵坍缩、输出退化成近乎确定性为止。</p>
+<p>这个分解一口气解释了现象段的全部观察。离线 SFT 对任意大的失配都稳,因为教师不跟随学生,环不存在。在线 +1/0 奖励最不稳,因为每个前缀都在做正奖励加权的蒸馏。组居中治不了本:它只保证同一提示下整组 rollout 的优势和为零,而漂移发生在单个前缀上,通往正确答案的前缀期望优势为正、已经出错的前缀为负,逐前缀的期望优势并不为零。漂移活在期望优势与 <latex>\bar s</latex> 的乘积里,恰好住在携带信号的那些前缀上;组居中压小了它的幅度,这与它是在线最稳的一档一致,但压小不等于消除。</p>
+<h3>把 score 减去自己的均值</h3>
+<p>修复几乎是分解的直接推论:既然问题是失配下 <latex>\bar s \neq 0</latex>,那就把每个 score 减去它在采样分布下的均值,让期望 score 重新为零。这就是 score centering:</p>
+<latex>\tilde s_{y_t} = s_{y_t} - \bar s</latex>
+<latex>\mathbb{E}_q[\, R \, \tilde s_{y_t} \,] = \mathbb{E}_q[R] \cdot \mathbb{E}_q[\tilde s_{y_t}] + \mathrm{Cov}_q(R, \tilde s_{y_t}) = \mathrm{Cov}_q(R, s_{y_t})</latex>
+<p>第二步成立,因为 <latex>\mathbb{E}_q[\tilde s_{y_t}] = \bar s - \bar s = 0</latex>,而减去一个给定前缀下确定的向量不改变协方差。漂移项精确地、确定地清零,信号项原样保留,唯一的差别是协方差改在采样分布 q 上测量。没有 TIM 时 <latex>p = q</latex>、<latex>\bar s = 0</latex>,SC 自动退化成恒等变换。</p>
+<p>对照 IS 能看清 SC 的结构差异。IS 同样能精确消掉漂移,但它的校正是乘性的、随机的:权重是采样 token 的概率比,稀有 token 的重尾比值逼出截断,截断又放漂移回流。SC 是加性的、给定前缀后确定的,不含比值、不含裁剪、没有超参。两者修正 TIM 的方式互相独立,因此可以叠加;论文后面的陈旧实验里,组合版最强。</p>
+<p>工程上只剩一个问题:精确 centering 要存采样器在每个前缀上的完整词表概率。以 Qwen3 的 152K 词表为例,1024 条 32K 长的 rollout 存全量 logprob 要 20TB,没有集群愿意付这个钱。论文的方案是只存 top-k 的 logprob,尾部用训练器分布补:把训练器的尾部概率乘上尾质量比 <latex>\rho</latex>(采样器尾质量除以训练器尾质量),拼出一个归一的近似分布;再借 <latex>\mathbb{E}_p[s] = 0</latex> 这条恒等式,校正项只需在 k 个头部 token 上求和。论文的消融里,k=128 与 k=32 在所有设定下都与全词表 centering 持平,即便在 30B 最重一档量化下,k=128 的头部仍覆盖 99.45% 的采样器质量。整个方法写成一个标量损失,核心实现九行:</p>
+<pre lang="python" caption="score centering 的最小实现(论文 §4.1):给每个前缀算一个确定的校正项,从采样 token 的 logprob 中扣除"><code>import jax.numpy as jnp
+from jax.lax import stop_gradient
+
+def score_centering_loss(train_logp, samp_logp, topk_ids, sampled_token, advantage):
+    train_head_logp = train_logp[topk_ids]
+    tail_mass_ratio = (1 - jnp.exp(samp_logp).sum()) / (1 - jnp.exp(train_head_logp).sum())
+    head_prob_residual = jnp.exp(samp_logp) - tail_mass_ratio * jnp.exp(train_head_logp)
+    logp_correction = (stop_gradient(head_prob_residual) * train_head_logp).sum()
+    return -advantage * (train_logp[sampled_token] - logp_correction)</code></pre>
+<h3>论文的证据:失配越大,差距越开</h3>
+<p>现在可以读懂三档噪声曲线的形状了。最轻一档,校正与否几乎没有差别,各方法重合,因为漂移要随步数累积,几百步内还攒不出分离;失配越大,分离出现得越早、拉得越开;最重一档只剩 SC 及其与 TIS、掩码重要性采样(masked IS,MIS,比值落在 0.5 到 5 之外就丢弃该 token)的组合稳定训练。现象段看到的崩溃时间随失配提前,正是这个累积机制的直接画面。</p>
 [[figure-anchor:sc:noise]]
+<p>把人工噪声换成两种真实失配源,图景一致。INT8 量化采样器(权重、激活、KV cache 全部量化,训练器保持 bf16)下,SC 单独或叠加 IS 都是最好。采样器每 64 步才刷新一次的陈旧设定下,SC 叠 TIS 或 MIS 最强,单用 SC 反而不如组合,原因就在分解剩下的那一项:SC 把协方差测在采样器侧,陈旧严重时训练器已走远,这一项自身的失配开始主导,TIS 先把采样分布往回拉,SC 再清掉残余漂移,两者各管一段。PPO 与 DAPO 的分布也值得记:它们在陈旧下存活、在量化与噪声下崩溃,因为它们的裁剪是为策略移动产生的比值设计的,数值误差产生的比值不在设计范围内。</p>
 [[figure-anchor:sc:quantstale]]
-<p><b>我们的实验:玩具系统里的精确验证。</b>论文的分解是精确的数学,我们想知道它在受控系统里是否一字不差地成立、以及失败模式的形态。玩具设置:小词表自回归模型,采样器是训练器加了可控数值偏差的拷贝,+1/0 常数奖励,在线 SGD。五个结果。其一,<b>SC 精确清零漂移</b>:官方仓库 losses.py 的 autodiff 与我们解析推的漂移方向最大相对偏差 1.1e-6;SC 校正后的期望梯度 1.6e-8,是机器零;常数奖励、四档失配、2100 步,SC 的权重位移恒为 0.0000。其二,<b>"漂移=向采样器蒸馏"被钉成一条直线</b>:vanilla 期望梯度与 <latex>\nabla_\theta \, \mathrm{KL}(q \| p)</latex> 的夹角余弦是 +1.000000(奖励为正;奖励为负时 −1)——漂移项不多不少就是朝采样器分布的蒸馏方向。其三,论文图 2/3 的形态完整复现:σ=0.6 失配下 vanilla 的根前缀熵约 35 步内从 4.03 nats 崩到 0.07;σ=2.0 时连 TIS/MIS 也崩(解析认证它们的截断分别留下 27%/38% 的漂移);SC 全程钉在 4.034。其四,一个对实践者有直接警示的<b>诊断陷阱</b>:vanilla 崩溃时,失配度量 ‖p−q‖ 反而塌缩到 0.004(SC 一直停在初始的 0.225)——因为漂移的方向恰恰是缩小这个度量;只看"训练器和采样器差多少"的监控面板,会在崩溃前夜读出一片祥和。其五,top-k 实现保真:当头部覆盖超过 99.9% 概率质量时,k=32 的漂移残留只有 0.03%(k=128 为 0.018%),复现附录 A.4。</p>
+<p>最后验证规模不改变结论。用 Qwen3-30B-A3B-Base 在 INTELLECT-2 数学子集上训练,采样器做三档量化,朴素 PG 指不做任何失配校正的策略梯度,表中数字是训练准确度:</p>
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="150"/>
+    <col width="130"/>
+    <col width="150"/>
+    <col width="130"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">采样器档位</th>
+      <th background-color="light-gray">朴素 PG</th>
+      <th background-color="light-gray">TIS</th>
+      <th background-color="light-gray">MIS</th>
+      <th background-color="light-gray">SC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>FP8</td>
+      <td>58%,稳定训练 800 步</td>
+      <td>与 PG 持平</td>
+      <td>与 PG 持平</td>
+      <td>与 PG 持平</td>
+    </tr>
+    <tr>
+      <td>FP8 + FP4 KV cache</td>
+      <td>200 步内崩溃</td>
+      <td>51%</td>
+      <td>训练后期崩溃</td>
+      <td>52%</td>
+    </tr>
+    <tr>
+      <td>INT8 + INT4 KV cache</td>
+      <td>&lt;5%</td>
+      <td>12%</td>
+      <td>&lt;5%</td>
+      <td><b>30%</b></td>
+    </tr>
+  </tbody>
+</table>
+<p>三档连起来,正是漂移累积机制在 30B 上的重演。轻度失配下谁都不需要修,连不校正的策略梯度都能稳定 800 步,说明此时漂移还没攒够;失配加重一档,只剩 SC 与 TIS 稳住,朴素 PG 两百步内崩溃、MIS 死在训练后期;最重一档只剩 SC 站着,30% 对 TIS 的 12%、其余所有方法不足 5%。差距随失配单调拉开,与机制预测一致。两点口径要交代:表内是训练准确度而非留出集评估,作者有意用最严重的失配当作长训练轻失配的代理;30B 是 MoE,采样器与训练器还会在专家路由上分歧,论文没有重放路由索引,这是表内未建模的额外失配源。种子数:0.6B 与 1.7B 的每张图每个方法 3 个种子;30B 成本高,FP8 档全部单种子,FP4 档 SC 5 个、TIS 4 个、MIS 3 个,INT4 档 SC 4 个、TIS 3 个、MIS 3 个,其余方法单种子,整张 30B 图约耗 3750 H100-小时,全论文合计 6180。</p>
+<h3>我们的核验:把漂移钉成数字</h3>
+<p>论文的因果链停在曲线层面,我们把它拆进一个可解析计算的玩具里逐环验证。玩具是一个 64 词表的两步自回归链:4 个上下文,先在根前缀(上下文之后的第一个采样位置)采第一个 token,再在对应的二层前缀采第二个;策略是逐前缀的 softmax 行。这个结构的关键性质是 score 有闭式解,<latex>\nabla \log p_v = e_v - p</latex>,均值 score 恰好等于分布差 <latex>\bar s = q - p</latex>,于是每个前缀上的期望更新都能解析算出,不带一丝采样噪声,"精确"二字由此而来。采样器是训练器加可控偏差的拷贝,覆盖三类失配档:固定高斯 logit 噪声(强度 σ)、b 比特 logit 量化、滞后 k 步的权重;奖励两档,恒 +1(纯漂移)与高斯峰乘积(有信号):64 个 token 等距排在圆周上,每个上下文带一个目标角,有信号档的奖励 <latex>R = \exp(-d_1^2 / 2\sigma_r^2)\,\exp(-d_2^2 / 2\sigma_r^2)</latex>,<latex>d_i</latex> 是第 i 步所采 token 到目标角的圆周距离,宽度 <latex>\sigma_r = 0.35</latex> 弧度;在线 SGD。所有规则同时用论文官方仓库 losses.py 的 autodiff 交叉认证。</p>
+<p>第一环,SC 的清零是精确的。官方损失的 autodiff 期望梯度与我们解析式的最大相对偏差为 1.1e-6,浮点噪声量级,解析与实现互为认证;加上 SC 后,常数奖励下的期望梯度降到 1.6e-8,就是机器零;四个具体失配档位(σ=0.6 与 σ=2.0 的噪声、3 比特量化、滞后 16 步)、两个尺度累计 2100 步,SC 的权重位移恒为 <b>0.0000</b>,同档朴素 PG 的根前缀位移则是 0.95。</p>
+<p>第二环,漂移就是蒸馏,钉成了直线。常数正奖励下,朴素 PG 的期望损失梯度与 <latex>\nabla_\theta \mathrm{KL}(q \| p)</latex> 的夹角余弦是 <b>+1.000000</b>,即 SGD 每一步都精确走在缩小 KL(q‖p) 的方向上;奖励翻负,余弦变 −1。分解里"向采样器蒸馏"这句话,从修辞变成了可测的几何事实。</p>
+<p>第三环,论文的崩溃图景在玩具里完整复现。σ=0.6 档只有朴素 PG 崩:根前缀熵约 35 步内从 4.03 nats 掉到 0.07,起点接近 64 词表均匀分布的 <latex>\ln 64 \approx 4.16</latex>,终点意味着概率几乎全压在一个 token 上;SC 全程钉在 4.034,位移精确为零。σ=2.0 时连 TIS 与 MIS 也崩,根熵分别掉到 0.11 与 1.05,解析残差表认证了原因:这一档截断开始生效,分别留下 27% 与 38% 的漂移,它们只是崩得晚一些。</p>
 [[figure-anchor:sc:drift]]
-<p>诚实的边界也要说清:在有真实学习信号的档位,我们的玩具没有复现出 SC 对 vanilla 的强分离——group-centered 奖励下漂移只占信号量的 15–30% 且随收敛自然衰减,而玩具的逐前缀自由 logit 把漂移关在单行参数里;唯一清晰的分离出现在共享低秩头+陈旧 k=64 的设定(8 种子:vanilla 2/8 崩到零、均值 0.229±0.162,SC 0/8 崩、0.275±0.080)。另一个反直觉发现:在 IS 比值温和到截断不生效的区间,IS 族反而全面略好(stale 档 0.30 对 0.13)——漂移之外还有"温和失配下的探索偏置"这种次级效应,SC 把它也一并消掉了。以及量化漂移在玩具里是自限的(存在不动点),3-bit 下 vanilla 不崩——量化失配与权重噪声失配的动力学不完全同构。这些边界不改变论文的核心论断,但提示:SC 的价值在真实系统里依赖于"漂移经共享权重逐步累积"这一机制,我们的玩具只能用低秩头近似它。</p>
+<p>第四环顺带挖出一个诊断陷阱。朴素 PG 崩溃的同时,失配度量 <latex>\mathrm{TV}(p, q)</latex> 反而塌缩到 0.004,而 SC 的 TV(p,q) 从头到尾停在初始值 0.225。原因不难理解:漂移的方向恰好是把训练器拉向采样器,两个分布一起坍缩成同一个点质量,差值自然消失。一个只监控"训练器与采样器差多少"的面板,会在崩溃前夜读出一片祥和;可靠的崩溃指标是熵与奖励,不是分布距离。</p>
+<p>第五环,top-k 近似的成色由头部覆盖率唯一决定。在 4096 词表上扫分布形态:头部覆盖超过 99.9% 采样器质量时,k=32 的漂移残留只有 0.03%,k=128 为 0.018%,与全词表等价;反过来,分布平坦、头部只覆盖 83% 时,k=128 会漏掉 5% 的漂移。论文在真实模型上的测量落在前一种情形:k=128 的头部覆盖在除最重档外的所有设定下平均超过 99.9%,最重的 30B INT8+INT4 KV 档平均 99.45%、最差 batch 95.8%,而这一档的 k=32 仍与全词表持平;这个判据比"k 该取多大"本身更可移植。</p>
+<h3>边界:漂移不是失配的全部</h3>
+<p>玩具也量出了论文论断的边界,三条都值得带走。先给尺度:奖励上限为 1,无失配时玩具收敛到 0.73 或 0.88,分别对应逐前缀自由 logit 与共享低秩头两种参数化。第一条边界:在有真实学习信号的档位,玩具没有复现出 SC 对朴素 PG 的强分离。有信号奖励配组居中优势(组内减均值)时,漂移只占信号量的 15–30%,且随策略收敛衰减;这组边界实验把失配另加压到 σ=3 噪声与滞后 64 步,σ=3 档的漂移范数从第 1 步的 0.0090 降到第 300 步的 0.0004,信号同步从 0.0275 降到 0.0025,各方法终值差异都在种子噪声内。唯一清晰的分离出现在共享低秩头加采样器滞后 64 步的设定:共享低秩头指所有前缀的 logit 经同一个低秩矩阵产生,是真实网络里共享权重的廉价替身;这一档 8 个种子里朴素 PG 有 2 个崩到 0,均值 0.229±0.162,SC 无一崩溃,0.275±0.080。第二条边界:IS 比值温和到截断不生效时,IS 族反而略好。滞后 64 步档 TIS 终值 0.300,朴素 PG 只有 0.128,SC 叠在 TIS 上只再加 0.007。这与论文自己承认的局限同构:SC 之后剩下的协方差测在 q 而非 p 上,漂移之外还有采样分布失配这个次级效应,IS 修的正是它。第三条边界:量化漂移在玩具里自限。3 比特量化下朴素 PG 不崩,因为量化映射的不动点会把漂移自己关掉,策略漂到"自己量化后的像"上就不再动。</p>
 [[figure-anchor:sc:signal]]
+<p>这三条不推翻论文的核心论断:数学内核逐条确证,常数奖励加严重失配这一档的因果链完整复现。它们说明的是,SC 的价值依赖一个玩具只能近似触及的机制:真实网络里漂移通过共享权重污染表征、逐训练步累积;玩具的逐前缀自由 logit 把漂移关在单行之内,只有共享低秩头那一档露出了真实图景的一角。</p>
+<callout emoji="📖" background-color="light-blue">
+<p><b>推荐打印原文通读。</b>三条标准都满足:写作漂亮,§3–4 从"离线稳、在线崩"的反差现象出发,一步协方差代数推出漂移项,再用一个反馈环收束,落到修复只有九行代码;洞见独到,漂移即蒸馏的分解把 SFT 的稳定性、组居中的局限、IS 族的截断困境统一进同一个框架;且正中 LLM RL 这条兴趣线。附录 A 的 top-k 推导同样干净,别跳过。</p>
+</callout>
 <hr/>
 <h2>DiffusionART: Efficient, Stable and Scalable Reinforcement of Diffusion Models</h2>
 <p>Zhenglin Wan, Jiayu Chen 等(NUS HPC-AI Lab / Kling AI / HKUST,2026)· <a href="https://huggingface.co/papers/2610.12572">HF</a> · <a href="https://arxiv.org/abs/2610.12572">arXiv</a></p>
-<p><b>是什么。</b>扩散模型的在线 RL(DiffusionNFT 一支)用前向过程(给当前模型样本加噪)代替反向采样来算训练目标,效率远高于 Flow-GRPO 的整轨采样,但两个已知的工程痛处一直没被解释清楚:纯在线会崩,必须挂 EMA 参考,且 EMA 强度要逐任务调。这篇论文先把力拆干净。设 <latex>s_t</latex> 为前向加噪后的状态,<latex>q</latex> 是该状态被正样本支训练的概率,<latex>u_t</latex> 为真实前向速度场,则 DiffusionNFT 在该状态上的总更新力精确等于</p>
-<latex>F_{\mathrm{NFT}}(s_t) = 2g + (2q-1)\, e, \qquad g = \mathrm{Cov}(r,\, u_t \mid s_t), \qquad e = v_{\mathrm{fwd}}^{\mathrm{old}} - v_{\mathrm{rvs}}^{\mathrm{old}}</latex>
-<p>这里 g 是理想的奖励引导(引理 1 证明正、负样本支的理想引导严格共线:v⁺−v_old=(1−q)(v_old−v⁻)=g),e 是旧策略上前向与反向速度的一致性差距——一个与奖励无关、纯粹由模型不自洽产生的项。问题在于:正、负支各自带着 q·e 与 −(1−q)·e,只有逐状态 q 恰好等于 1/2 时才抵消,而按 prompt 居中的奖励做不到逐状态 q=1/2;噪声小(t 小)的状态上 |2q−1| 最大,残余的一致性力就在引导最弱的地方稀释甚至盖过引导。第二个命题拆损失的梯度结构:令 <latex>d = v_\theta - v_{\mathrm{old}}</latex>、h 为奖励加权的目标速度差,则</p>
-<latex>\mathcal{L}_{\mathrm{NFT}} = -2\beta(2r-1)\langle d, h\rangle + \beta^2 \|d\|^2</latex>
-<p>线性项携带引导加残余一致性力,二次项把 <latex>v_\theta</latex> 拉回 <latex>v_{\mathrm{old}}</latex>。纯在线时 d=0,恢复项的梯度为零——没有任何东西抵抗残余力,于是崩;EMA 靠滞后参考制造非零 d 来供恢复项抓握,但恢复强度完全由 EMA 的滞后期间接控制,因此逐任务要调(DiffusionNFT 自己的 η 从 0.5 跨到 0.999);每个 rollout 做两次更新也能造出 d,但论文实测慢 15.2 倍,而且恢复力的参数梯度反而比引导大 4.9 倍(逐样本引导跨状态聚合时相互抵消,恢复力不抵消)。诊断到此,修复就是构造性的:<b>聚合优先引导</b>——把 K 个 rollout 的端点与奖励聚成 <latex>G(c) = \widehat{\mathrm{Cov}}(R, x_0 \mid c) / \mathrm{RMS}(\cdot)</latex>(引理 2:指数倾斜分布端点均值的一阶变化等于奖励-端点协方差;RMS 归一化免去强度调参),冻结目标 <latex>v_{\mathrm{tgt}}(s_t) = v_\theta^{(0)}(s_t) + G(c)</latex> 直接作用在反向 rollout 访问到的状态上——引导从反向侧注入,前向-反向一致性力根本不被产生;再做两次 MSE 更新,第二次自动携带指向 <latex>v_\theta^{(0)}</latex> 的 −d 恢复项,恢复强度随实际漂移自适应,EMA 调参被结构性移除。最后补一个信任域:ODE 采样没有 KL,借 Flow-GRPO 的 ODE-to-SDE 构造定义参考高斯转移,用 KL 代理掩码(δ=1e−5)只挡住向外漂移的更新。</p>
+<p>这篇论文给扩散模型在线 RL 里最省算力的一支做了一次力学体检:DiffusionNFT 式的前向过程训练,纯在线为什么必崩、EMA 为什么在救命、EMA 又为什么必须逐任务调,三个问题都拿到了可逐项验证的代数答案;随后按诊断构造出 DiffusionART,让那股致崩的隐藏力根本不被产生,恢复强度随漂移自适应,全程免逐任务调参,并在图像与视频生成上同时拿到效率与稳定性。</p>
+<p>先把地基铺开。扩散模型微调的奖励(画质、偏好分、OCR 准确率)只在完整生成之后才拿得到,而且是黑盒,在线 RL 的任务就是把这一条端点反馈分摊到几十步去噪状态上。现有两条路线。反向过程路线以 Flow-GRPO(2025)为代表:把去噪轨迹当作策略轨迹,把整条轨迹共享的组内优势赋给每一次采样转移,做 PPO 式更新;它直接监督采样真实访问的状态,但确定性的 ODE 采样没有可算的转移概率,必须改造成带噪的 SDE,而且单个状态对端点奖励的贡献只占轨迹优势的一小部分,信用分配粗,训练贵。前向过程路线以 DiffusionNFT(Zheng 等,2025)为代表:完全不碰采样轨迹,拿当前模型生成的干净样本重新加噪,在噪声状态上做奖励加权的速度回归;不需要转移概率,效率高得多。代价是两个一直没被解释的工程装置:必须正、负样本联合训练,只用一支就崩;必须让 rollout 策略挂在当前参数的 EMA 影子上,EMA 保留系数还得逐任务调,DiffusionNFT 自己的有效范围就从默认上限 0.5 跨到 OCR 任务的 0.999。</p>
+<p>下面的分析用这套符号。生成从 t=1(纯噪声)积到 t=0(干净样本)。rollout 策略是冻结的旧模型,其速度场记 <latex>v_{\mathrm{old}}</latex>,它生成的完整样本叫端点 <latex>x_0</latex>,奖励 <latex>R</latex> 按同一 prompt 内居中、裁剪后映射成好度权重 <latex>r \in [0,1]</latex>。给端点前向加噪得到状态 <latex>s_t = (x_t, t, c)</latex>,其中 <latex>x_t = (1-t)x_0 + t\epsilon</latex>,c 是 prompt;单个样本的速度目标是 <latex>u_t = x_0 - \epsilon</latex>。两个关键的速度场:<latex>v_{\mathrm{rvs}}^{\mathrm{old}}</latex> 是采样器实际使用的场,就是 <latex>v_{\mathrm{old}}</latex> 自己;<latex>v_{\mathrm{fwd}}^{\mathrm{old}}(s_t) = \mathbb{E}[u_t \mid s_t]</latex> 是把旧策略自己的端点分布重新前向加噪后,状态 <latex>s_t</latex> 处的理想前向速度。模型完美时两者相等;实践中模型有场误差、求解器步数有限,两者之差记 <latex>e</latex>,即前向-反向一致性缺口。再定义两个状态条件量:<latex>q = \mathbb{E}[r \mid s_t]</latex> 是"能产生这个状态的端点"的平均好度,<latex>g = \mathrm{Cov}(r, u_t \mid s_t)</latex> 是该状态上奖励与速度的协方差,也就是理想的奖励引导方向。</p>
+<p>DiffusionNFT 的损失由正负两支组成,对重新加噪的 rollout 端点状态做奖励加权的速度回归:</p>
+<latex>\mathcal{L}_{\mathrm{NFT}} = \mathbb{E}\big[\, r\,\|v_{\theta,+} - u_t\|_2^2 + (1-r)\,\|v_{\theta,-} - u_t\|_2^2 \,\big], \qquad v_{\theta,\pm} = v_{\mathrm{old}} \pm \beta\,(v_\theta - v_{\mathrm{old}})</latex>
+<p>正支按好度 <latex>r</latex> 加权,把 <latex>v_\theta</latex> 拉向样本的速度目标 <latex>u_t</latex>;负支按 <latex>1-r</latex> 加权,把它推离;<latex>\beta</latex> 是步长系数,在更新点上每个样本的净下降方向正比于 <latex>(2r-1)(u_t - v_{\mathrm{old}})</latex>,高奖励样本拉向自己,低奖励样本推离。这里有一个谜题:论文的引理 1 证明两支的理想引导严格共线、只差步长,<latex>q\,(v_{\mathrm{fwd}}^{+} - v_{\mathrm{fwd}}^{\mathrm{old}}) = (1-q)\,(v_{\mathrm{fwd}}^{\mathrm{old}} - v_{\mathrm{fwd}}^{-}) = g</latex>,式中 <latex>v_{\mathrm{fwd}}^{+}</latex> 与 <latex>v_{\mathrm{fwd}}^{-}</latex> 是把端点分布分别按 <latex>r</latex> 与 <latex>1-r</latex> 倾斜重加权后诱导的理想前向速度,与 <latex>v_{\mathrm{fwd}}^{\mathrm{old}}</latex> 同族,只是端点先按奖励重加权。方向既然相同,单支似乎就够了;可实测只用一支必崩,两支合用才学得动。命题 1 给出了精确的受力账目:在纯在线更新点,把损失对状态 <latex>s_t</latex> 处速度场的负梯度按 <latex>2\beta</latex> 归一,称作该状态的受力,则</p>
+<latex>F_{\mathrm{NFT}}(s_t) = 2g + (2q-1)\,e</latex>
+<p>第一项是理想的奖励引导,第二项是残余的一致性力。按分支看更清楚:正支的力是 <latex>g + qe</latex>,负支是 <latex>g - (1-q)e</latex>,沿引导方向两支互相加强,沿 <latex>e</latex> 方向互相对冲,这解释了为什么两支都得要。但对冲精确归零当且仅当逐状态 <latex>q = 1/2</latex>,而按 prompt 居中的奖励只能保证 <latex>q</latex> 跨状态的平均是 1/2,管不到每个状态,所以联合训练也只是部分抵消。更不巧的是方位:t 越小,状态透露的端点信息越多,<latex>q</latex> 偏得越远,<latex>|2q-1|</latex> 越大,而小 t 处引导本身就弱。残余一致性力恰好在引导最弱的地方相对最强,甚至可以接管方向。</p>
+<p>命题 2 接着拆损失的结构。记漂移 <latex>d = v_\theta - v_{\mathrm{old}}</latex>,即当前模型相对 rollout 参考走了多远;再记单样本训练残差 <latex>h = u_t - v_{\mathrm{old}}</latex>。同一个损失可以配方成</p>
+<latex>\mathcal{L}_{\mathrm{NFT}} = \mathbb{E}\big[\, -2\beta(2r-1)\langle d, h\rangle + \beta^2 \|d\|^2 \,\big] + \mathrm{const}</latex>
+<p>线性项携带引导与残余一致性力;二次项是把 <latex>v_\theta</latex> 拉回 <latex>v_{\mathrm{old}}</latex> 的恢复力,回归目标里保留的这个 <latex>v_{\mathrm{old}}</latex> 项就是论文说的锚点。致命处在 <latex>d = 0</latex>:二次项的梯度在那里恰好是零,而纯在线训练每轮都从 <latex>d = 0</latex> 出发,恢复力不存在,残余一致性力无人抵抗,于是崩。EMA 由此被重新定性:它稳定训练的机制不是"rollout 数据更旧",而是滞后参考维持住非零的 <latex>d</latex>,让恢复力有抓握点。论文的证据很干净:把 rollout 换成 EMA 策略、但把锚点从回归目标里删掉,训练照样崩,离策略数据本身不提供任何稳定性。EMA 的问题则是恢复强度由滞后期间接控制,太弱崩、太强慢,只能逐任务手调。论文还试过一个不用 EMA 的补丁:把每个 rollout 切成两个不相交的 minibatch 各更新一次,第二次更新天然携带指向第一次更新前参数的恢复力。崩是避免了,代价是训练慢 15.2 倍(OCR 上达到 0.9 分从 21 步拖到 320 步);而且出现一笔反直觉的账,恢复力在输出空间比引导小 9.4 倍,聚合后的参数梯度却比引导大 4.9 倍。论文的解释是逐样本引导跨状态互相抵消、恢复力不抵消,于是恢复主导了更新,奖励优化被拖慢。</p>
 [[figure-anchor:art:evidence]]
+<p>诊断把修复方向钉死了:一致性力存在,是因为 NFT 的回归目标用理想前向速度搭建,而它跟反向场差一个 <latex>e</latex>。把引导直接作用在反向 rollout 访问到的状态上,这个力就根本不被产生。DiffusionART 的做法是<b>聚合优先引导</b>(aggregation-first,论文术语):先把同一 prompt 的 <latex>K</latex> 个端点与奖励聚成一个共享方向</p>
+<latex>G(c) = \widehat{\mathrm{Cov}}(R, x_0 \mid c) \,\big/\, \mathrm{RMS}\big(\widehat{\mathrm{Cov}}(R, x_0 \mid c)\big)</latex>
+<p>这个方向有明确的含义:把端点分布按奖励指数倾斜,好端点的密度乘上 <latex>e^{\tau R}</latex>,端点均值相对倾斜强度的一阶变化恰好等于奖励-端点协方差(引理 2),也就是说端点分布往这个方向挪,奖励涨得最快。RMS 归一化把引导强度钉在单位模长,跨 prompt、跨奖励模型不再有强度超参。然后冻结目标 <latex>v_{\mathrm{tgt}}(s_t) = v_\theta^{(0)}(s_t) + G(c)</latex>,<latex>v_\theta^{(0)}</latex> 是 rollout 期间缓存的模型预测,对该 prompt 反向 rollout 经过的每个状态做速度回归。目标里不出现 <latex>u_t</latex>,<latex>e</latex> 无从进入,一致性力被构造性移除,不再依赖跨样本抵消。稳定性由第二次更新提供:批次切成两个不相交的 minibatch 各做一次 MSE 更新,第二次的下降方向是 <latex>G(c) - d(s_t)</latex>,自动携带正比于各状态实际漂移的恢复力,漂移大的地方恢复强、小的地方引导主导,EMA 的调度旋钮被结构性移除。最后加一道保险:ODE 采样的转移是确定性的,没有可用的 KL 来度量策略变化,论文借 Flow-GRPO 的 ODE-to-SDE 构造给当前与旧策略各定义一个参考高斯转移,KL 代理超过阈值 <latex>\delta = 10^{-5}</latex> 且更新方向朝外时,把该状态的第二次更新掩掉,向内修正放行。</p>
 [[figure-anchor:art:method]]
-<p><b>为什么。</b>它把"扩散 RL 为什么要 EMA"从工程 folklore 变成了有名字的力学对象:恢复项抵抗的是残余一致性力,而不是奖励引导本身。这与 SC 对 TIM 做的事在结构上是同一个动作,我们在主题末把两篇并置。</p>
-<p><b>怎么样。</b>效率数字是硬的:SD3.5-M 上达到 Flow-GRPO step-500 奖励所需步数少 10.0×/5.2×/9.6×(GenEval/OCR/PickScore);FLUX.1-dev 12B 上把 NFT 的 GenEval 调参直接迁过来会不稳,DiffusionART 免调参稳定;HunyuanVideo-13B 文生视频全参数训练,达到 VQ=5.5 用 24 步、63.4 GPU 时,而 DiffusionNFT(EMA)要 273 步、1401.4 GPU 时——<b>11.4× 步数、22.1× GPU 时</b>,且 400 步内评估 VQ/MQ 比最强基线高 31.4%/57.4%;Wan2.1-I2V-14B 图生视频达到 MQ=6 少花 4.8× GPU 时;只有成对奖励(K=2)时依然成立(260.8 vs 883.3 GPU 时)。对运营侧最值钱的是"免逐任务调参"这一条跨住了文生图与文生视频。</p>
-<p><b>我们的实验:2D 玩具里的命题核验与两处张力。</b>我们用玩具流模型(2D 混合目标、真 autodiff)把两个命题和训练层论断逐个搬上台面。核验面:命题 1 与引理 1 在 30 个状态上精确成立(恒等式最大误差 1e-7,分支力之和恒为零);q 确实逐状态偏离 1/2(0.40–0.62),且在小 t 的偏好路径上残余力大到可以翻转总力方向(cos(F,2g)=−1)——论文担心的机制真实存在。命题 2 的分解恒等式同样精确(≤1e-7)。ART 的构造性消力被双重验证:同一状态换三组不同的条件分布,ART 受力完全不变而 NFT 受力变化 5 倍;G=Cov/RMS 与论文式(5)一致到 3e-8;用官方仓库的 kernel 复算结论相同。第一处张力:<b>聚合之后残余其实不大</b>——逐状态残差强度约为引导的 20%,但 48 状态聚合后只剩 6.8%(残余方向的相干性 0.22,远低于引导的 0.66,逐样本残余互相抵消);只有把 rollout 求解器砍到 4 步(远低于实际配置)时聚合残差才升到 22.9%。论文"残余稀释引导"的定性方向对,但默认配置下它不是主导项——这是对论文强调力度的温和修正。第二处张力:训练层面我们复现了关键格局(去掉 v_old 锚点后 EMA 数据也学不动,−2.33→−3.13;带锚 EMA 与双更新稳定;纯在线单更新在 −0.16 峰值后崩到 −2.69),但论文图 3(c)"恢复力参数梯度反超引导 4.9×"在我们的玩具里没有出现(实测 0.38,恢复力始终小于引导)——这个比值可能对系统维度/参数化敏感,论文的读数不宜当作普适量级。一个新发现:<b>纯在线单更新下 β 是彻底的空操作</b>——三次运行的曲线偏差 9e-5(Adam),SGD 下 β 只以 β·lr 的乘积出现;β 只有在存在漂移(双更新或 EMA)时才被"接通",这顺带解释了官方代码里恢复系数 ∝β 与论文式(1)∝β² 的出入为何没人被绊倒。ART 在玩具里的形态也与论文一致:分布匹配最好、多样性不塌(端点 spread 0.45–0.57,而 NFT 各臂 0.11–0.15),代价是到达 −0.5 奖励慢 5–9 倍——玩具里没有 EMA 调参负担,论文的效率优势要在真任务的免调参属性里兑现,这一层我们如实标注为"玩具外推受限"。</p>
+<p>结果层面,效率数字都带比较对象(视频实验的 VQ 与 MQ 是 VideoReward 奖励模型的视觉质量与运动质量两个分项,越高越好):</p>
+<table>
+<colgroup><col width="180"/><col width="280"/><col width="300"/></colgroup>
+<thead><tr><th background-color="light-gray">任务与模型</th><th background-color="light-gray">DiffusionART</th><th background-color="light-gray">比较对象</th></tr></thead>
+<tbody>
+<tr><td>SD3.5-M 文生图(LoRA),GenEval / OCR / PickScore</td><td>达到 Flow-GRPO 第 500 步奖励的水平,步数少 10.0× / 5.2× / 9.6×</td><td>Flow-GRPO(反向过程路线);效率持平调好参的 DiffusionNFT(EMA),自身零调参</td></tr>
+<tr><td>FLUX.1-dev 12B 文生图(GenEval)</td><td>第 500 步评估 0.9684,各方法中学得最快</td><td>DiffusionNFT(EMA)0.8490;NFT 照搬 SD3.5-M 调好的 EMA 与 β 则训练不稳</td></tr>
+<tr><td>HunyuanVideo-13B 文生视频(全参数)</td><td>训练 VQ 达 5.5 用 24 步、63.4 GPU 时;终局评估 VQ 8.970、MQ 4.224</td><td>DiffusionNFT(EMA):273 步、1401.4 GPU 时,即 <b>11.4× 步数、22.1× GPU 时</b>;终局比最强基线高 31.4% / 57.4%</td></tr>
+<tr><td>Wan2.1-I2V-14B 图生视频(全参数)</td><td>MQ 达 6 用 45.8 GPU 时</td><td>Flow-GRPO-Fast:220.3 GPU 时(4.8×)</td></tr>
+<tr><td>成对奖励(胜负标签),K=2</td><td>终局 VQ 12.235,260.8 GPU 时</td><td>成对 K=8:12.092、883.3 GPU 时(3.4×);标量奖励 K=8:13.637</td></tr>
+</tbody>
+</table>
+<p>摘要口径的头部数字也一致:等权 VQ:MQ 下,达到 DiffusionNFT(EMA)与 Flow-GRPO-Fast 的末段平均奖励水平,GPU 时分别少 12.02× 与 11.72×,同时末段平均训练奖励还高 28.8% 与 53.0%。对工程最值钱的一条是免调参跨任务成立:NFT 在 SD3.5-M 的 GenEval 上调好的 EMA 与 <latex>\beta</latex>,原样搬到 FLUX 就不稳,而 DiffusionART 用同一套默认设置覆盖文生图、文生视频、图生视频。成对奖励一行的含义也值得展开:K=2 时协方差退化成"赢家端点减输家端点"的方向,终局质量不低于 K=8,意味着每个 prompt 只采一对样本、用偏好模型的胜负标签就能训练,不需要逐样本的标量分数。</p>
+<p>论文的力学叙事到此自洽,但全部证据来自论文自己的实验。我们把两个命题搬进一个 2D 解析可控的环境逐项核验。玩具能核验命题,是因为两个命题都是关于"状态上的受力"的代数论断,与环境维度、图像质量无关:环境里 <latex>q</latex>、<latex>g</latex>、<latex>e</latex> 都能用核回归从解析分布估出来,损失对速度场的受力可以直接 autodiff,两边对照就是判定。具体设置:两个 prompt,各自的"预训练"端点分布是等权双高斯混合,奖励是端点到偏好簇中心的负距离;速度场用 3 层 128 宽的 MLP,先对解析分布做 flow matching 得到一个刻意不完美的预训练模型,相对场误差约 5%,这正是 <latex>e \neq 0</latex> 的现实来源;奖励到好度的映射逐字照抄官方实现。</p>
+<p>核验结果,论文的核心代数精确成立。在 30 个设计状态(覆盖两个 prompt、朝向偏好与非偏好簇的路径、中性点和五种噪声水平)上,命题 1 的受力恒等式最大误差 1e-7,引理 1 的共线恒等式 4.1e-7,是浮点精度级的相等;<latex>q</latex> 确实逐状态偏离 1/2,范围 0.396 到 0.622,即最多偏离中位水平 0.12;手工构造一个 <latex>q</latex> 恰好为 1/2 的条件集合,残余力精确归零,与"只有逐状态 <latex>q = 1/2</latex> 才能抵消"的字面含义一致。最锐利的一幕在小 t 的偏好路径上:有状态引导几乎为零,<latex>\|2g\| = 0.004</latex>,残余一致性力是它的近 9 倍,总受力方向被整个翻转,与引导方向的夹角余弦 −0.997。论文担心的机制真实存在,而且形态正是它描述的那种:残余在引导最弱处接管方向。</p>
 [[figure-anchor:art:identity]]
+<p>ART 的构造性消力过了双重验证。固定同一个状态,把条件分布整体换成三组完全不同的形态(窄、展宽、平移),ART 的受力逐位相同,模长 0.7071、与 <latex>G</latex> 的夹角余弦 1.000000,因为损失里没有 <latex>e</latex> 的入口;同一状态下 NFT 的受力在三组间从 1.37 变到 6.86,差 5 倍。<latex>G</latex> 的估计与论文式 (5) 的协方差归一化写法一致到 3e-8;直接调用官方仓库发布的损失核复算,结论相同。这一步没有疑问:聚合优先引导是把一致性力从构造上移除,而不是更好的抵消。</p>
+<p>但有两处量化论断没有复现,第一处是对论文强调力度的温和修正。逐状态看,残余一致性力平均约为引导的 20%;然而残余的方向在状态间几乎不相干,相干性(向量总和的模长与模长总和之比,完全一致时为 1)0.22 对引导的 0.66,另按真实 rollout 批次的形态随机抽 48 个状态(随机 prompt、随机噪声水平、随机噪声点,等权聚合),残余只剩引导的 6.8%。要把这个比重推上去,得把采样求解器砍到 4 步,此时聚合残余占比 22.9%。论文"残余稀释引导"的定性方向是对的,但在默认配置下它不是主导项。有一个呼应值得记住:论文自己的图生视频实验用的就是 4 步采样,恰好处在残余最强的区间;真实模型里 <latex>e</latex> 的量级本轮没测,玩具的比重不能平移过去,这是一个开放问题。</p>
 [[figure-anchor:art:aggregation]]
+<p>命题 2 的恒等式同样精确,三种等价写法相对误差不超过 1e-7,<latex>d = 0</latex> 处恢复力精确为零。训练层面的对照复现了论文的关键格局:七个变体、同一初始模型、120 次迭代。纯在线单更新在第 28 次迭代附近冲到奖励峰值 −0.16,随后崩塌到谷底 −2.69,末段部分回升(训练最后评估 −0.93、独立终测 −1.60),净结论仍是不稳:端点分布与偏好簇的能量距离(越小越接近目标分布)在崩塌期冲到 4.4,最终 2.32,比没训练的起点 1.49 还差。把 rollout 换成 EMA 策略但删掉锚点,奖励从第一步起就学不动,−2.33 到 −3.13,端点展宽始终停在 2.5 附近、完全没有向偏好簇收缩,说明稳定来自恢复力而不是数据陈旧。带锚点的 EMA 与两次更新都稳定收敛。ART 各变体的形态与论文一致:分布匹配最好,能量距离 0.12 到 0.16 对 NFT 各变体的 0.24 到 0.46;多样性不塌,端点展宽 0.26 到 0.55 对目标值 0.707,NFT 各变体只有 0.11 到 0.15。这里需要一个口径提醒:奖励的理论参照点 −0.627 对应"端点分布完美等于偏好簇",带锚 EMA 末段 −0.12 已经越过这个点,意味着端点比偏好簇本身更挤向簇心,奖励口径的高分有一部分是坍缩,分布口径才是 ART 的强项。代价是 ART 的奖励爬升慢 5 到 9 倍,达到 −0.5 所需迭代 72 到 112 次,而 NFT 各变体是 12 到 24 次。</p>
 [[figure-anchor:art:train]]
+<p>第二处没有复现的是那笔"恢复反超引导"的账:论文报告第二次更新中恢复力的参数梯度是引导的 4.9 倍,玩具里 NFT 两次更新的实测是输出力比 0.273、参数梯度比 0.380,两个空间同号同量级,反超没有出现。原因可以从结构里找到:玩具的引导相干性有 0.70,"异质引导跨状态抵消、只剩恢复"这个前提不成立,所以 4.9× 这个比值对系统维度与参数化敏感,不宜当作普适量级。实验还附带一个比论文更锋利的发现:<b>纯在线单更新下,β 是彻底的空操作</b>。Adam 下 <latex>\beta</latex> 取 0.25、1、4 的三条训练曲线最大偏差 9e-5,远小于奖励本身的量级;SGD 下 <latex>\beta</latex> 只以与学习率的乘积出现。道理就藏在命题 1 里:更新点的受力与 <latex>\beta</latex> 无关,纯在线每轮又从 <latex>d = 0</latex> 出发,<latex>\beta</latex> 只在存在漂移时才被接通,两次更新下 <latex>\beta</latex> 取 0.25、1、4 的末段奖励分别是 −1.20、−1.32、−0.70,固定位移下恢复力与引导力之比精确正比于 <latex>\beta</latex>,实测 0.101、0.404、1.615。这顺带解释了一处文献出入为何没人被绊倒:官方代码的恢复系数正比于 <latex>\beta</latex>,论文式 (1) 是 <latex>\beta^2</latex>,差别只在绝对标度,而单更新时那一项根本不在电路里,Adam 又把整体标度吸收掉。信任域掩码在玩具里触发率约 51%,不是"很少触发的保险";开关它对终局影响很小,−0.49 对 −0.41,贡献无法分离。论文自己的消融也只给了有限支持:HunyuanVideo 上无掩码在第 200 步附近掉落再恢复、有掩码稳步上升,图像任务上无掩码反而略快;论文也只称它为稳定技巧。合起来看,它更像一道针对视频任务的保险。置信度边界如实交代:七个训练变体各只有单种子,崩与不崩的差距巨大,不像种子噪声,但具体数值应视为单次观测,方法间的定量排序需要多种子重复;<latex>e</latex> 的模长测量有约 0.08 的估计器噪声底,趋势可靠、单点读数只算上限;玩具里没有 EMA 调参负担,论文的效率优势要在真实任务的免调参属性里兑现,玩具层的外推到此为止。</p>
 [[figure-anchor:art:beta]]
-<p><b>并置:SC 与 DiffusionART 是同一个数学动作的两个实例。</b>把两篇并排放:SC 里的 <latex>\mathbb{E}_q[R] \cdot \bar{s}</latex> 和 NFT 里的 <latex>(2q-1)e</latex> 扮演完全相同的角色——都是一个"逐点消不掉、靠期望/聚合才抵消"的项;它们污染的都是信号项(协方差引导),且在信号最弱的地方相对最强。两篇的修复也同构:不做乘性随机校正(IS 引入方差→截断→漂移回流的循环;prompt 级居中只做得到期望意义),而是找到加性确定的构造——SC 逐前缀减均值,ART 把引导的作用点从前向状态搬到反向状态。两者也各自留了"兜底":SC 在重度过期时与 IS 组合,ART 用信任域掩码挡外漂。这个家族值得记住名字:<b>先把更新量分解成漂移与信号,再用构造把漂移精确清零,最后给残余风险加确定性护栏</b>。对照组是"软惩罚压漂移"——那正是我们长期判据里"软损失塑表征、硬约束管记账"的反面教材形态:能被优化器交易掉的约束,终究会被交易掉。</p>
+<p>收个尾。这篇论文的价值不在于多一个 RL 配方,而在于把"扩散 RL 为什么要 EMA"从工程经验变成有名字的力学对象:恢复力抵抗的是残余一致性力,不是奖励引导本身。修复动作本身也值得记住,先把更新量分解成信号项与一个只在聚合下抵消的项,再用构造把后者逐状态清零,而不是指望跨样本抵消或软惩罚压住。变得可做之事很具体:黑盒奖励、每 prompt 一对样本、免逐任务调参的扩散后训练,在图像与视频上都跑通了。还不确定的也同样具体:真实模型里一致性缺口的量级未知,"恢复反超引导 4.9 倍"的账在玩具里没出现、待论文自己承诺的后续分析,信任域掩码的独立贡献尚未分离。</p>
+<p>把 Score Centering 与 DiffusionART 并排放,会看到同一个数学动作的两个实例。SC 里的 <latex>\mathbb{E}_q[R] \cdot \bar{s}</latex> 和 NFT 里的 <latex>(2q-1)\,e</latex> 扮演完全相同的角色:一个逐点消不掉、只靠期望或聚合才抵消的项。它们污染的都是信号项(奖励与 score 的协方差、奖励与速度的协方差),而且在信号最弱的地方相对最强。两篇的修复也同构:都不做乘性随机校正。IS 引入方差,方差逼出截断,截断又把漂移引回来;prompt 级居中只能做到期望意义上的抵消。SC 逐前缀减去均值,ART 把引导的作用点从前向状态搬到反向状态,两者都是加性、确定、不带超参数的构造。它们也各自留了护栏:SC 在重度过期时与 IS 组合,ART 用信任域掩码挡住向外的漂移。这个家族值得记住名字:先把更新量分解成漂移与信号,再用构造把漂移精确清零,最后给残余风险加确定性护栏。对照组是软惩罚压漂移,那正是我们长期判据"软损失塑表征、硬约束管记账"的反面形态:能被优化器交易掉的约束,终究会被交易掉。</p>
 <h1>主题三:世界模型的相机接口工程——标定作为数据基础设施</h1>
-<p>这条线程正中我们的第三条战线(相机外参自标定 × 相机中心动作表示)。DreamTrue 把一个跨本体机器人世界模型拆成三件可独立检查的事:离线几何标定、渲染式动作表示、反事实后训练——并且把第一件做成了数据基础设施级别的发布物。池子里同一战线的轻量留意不少,说明"动作/相机接口"这周明显在升温:</p>
+<p>这条线程正中相机外参自标定 × 相机中心动作表示这条战线。DreamTrue 把一个跨本体机器人世界模型拆成三件可独立检查的事:离线几何标定、渲染式动作表示、反事实后训练,并且把第一件做成了数据基础设施级别的发布物。池子里同一方向的轻量留意不少,说明动作与相机接口这周明显在升温:</p>
 <table>
 <colgroup><col width="210"/><col width="240"/><col width="220"/><col width="80"/></colgroup>
 <thead><tr><th background-color="light-gray">论文</th><th background-color="light-gray">核心贡献</th><th background-color="light-gray">为什么重要</th><th background-color="light-gray">链接</th></tr></thead>
@@ -117,17 +389,24 @@
 <p>另有三篇顺带一提:Multi-Agent Egocentric World Model(<a href="https://huggingface.co/papers/2610.12299">HF</a>)把自我中心世界模型推到多智能体细粒度交互;EmbodiedCLBench(<a href="https://huggingface.co/papers/2610.13021">HF</a>)给具身持续学习立了第一个仿真基准;In-context Robot Learning Made Simple(<a href="https://huggingface.co/papers/2609.38173">HF</a>)系统拆解了"视觉演示到底传递了什么信息"这个此前定义不清的问题。</p>
 <h2>DreamTrue: Action-Faithful Robot World Model with Counterfactual Post-Training</h2>
 <p>Junyan Li, Ruizhi Li, Yu Liu 等(中科院自动化所 NLPR / 阿里巴巴高德,2026)· <a href="https://huggingface.co/papers/2610.12468">HF</a> · <a href="https://arxiv.org/abs/2610.12468">arXiv</a> · <a href="https://github.com/brave-eai/DreamTrue">代码</a> · <a href="https://modelscope.cn/models/huoxingdawang/DreamTrue">ModelScope 资产</a></p>
-<p><b>是什么。</b>用世界模型给 VLA 策略做离线评估,前提是模型的"想象"在动作维度上忠实:给定候选动作,生成的未来视频必须精确执行这个动作,否则成功率估计就是编的。DreamTrue 把动作忠实拆成三个工程问题逐一解决。第一,<b>离线几何标定</b>:动作条件用 URDF 按动作轨迹渲染成图像注入视频模型(这是 GeniWorld 开创的接口形态),而渲染要和实拍对齐就必须知道每个数据源的相机内外参、畸变、甚至机械臂相对相机的安装偏移 ξ——主流数据集(DROID、AgiBot、RoboMIND)的出厂标定根本不靠谱。它的标定不需要专用标定序列或深度,从现有 RGB 演示里恢复全部参数:三类对应关系联合优化——P_align 是 URDF 渲染图与观测图之间的稠密匹配(SAM3 掩码限定机械臂区域,RoMaV2 提对应点);P_time 是跨帧静态背景对应;P_view 是同步多视角间对应;目标函数是重投影误差加射线共面约束 <latex>|(r_a \times r_b)^{\top} (o_a - o_b)|</latex>(<latex>r_a</latex>、<latex>r_b</latex> 为两视角对应点的射线方向,<latex>o_a</latex>、<latex>o_b</latex> 为光心,共面则混合积为零)。按 collector/相机/机器人元数据分组,每组先标 1 集、质量差的再补标(DROID 用了 32 个初始化)。论文宣布的发布物是 153,666 集/1,660.31 小时的标定参数。第二,<b>动作表示</b>:URDF 渲染出 RGB+深度+amodal 掩码三路,夹爪开度编码进背景像素的 R/G 通道,相机射线以 Plücker 图给出,经 VACE 分支注入以 Wan2.1-VACE-14B 初始化的视频 DiT(LoRA rank 128,约 0.7B 可训参数;三视角 240×320×101 帧)。第三,<b>反事实后训练</b>:对演示的末端位姿做 SE(3) 扰动、IK 解出反事实动作(没有配对真值视频),用人工标注的三维缺陷体系(L1 本体/L2 物体/L3 交互;44.9K 视频、30.4K 标签,含自家和 7 个外部世界模型的预测)微调 Qwen3.5-9B 得到视频奖励模型,以"奖励=−缺陷概率"走 DiffusionNFT+GDPO 后训练。</p>
+<p>用世界模型给 VLA 策略做离线评估,账能不能算清取决于一件事:模型的"想象"必须在动作维度上忠实。给定一个候选动作,生成的未来视频得精确执行这个动作;如果夹爪没抓住、画面里的物体却跟着升起来,成功率估计就是编的,评估器会系统性地比真实世界乐观。DreamTrue 把动作忠实拆成三个可以各自验收的工程问题逐一解决:渲染出来的动作条件要与实拍画面像素级对齐,不同本体的动作要统一成同一种表示,模型还要见过"动作不一样会怎样"。对应的三个组件是<b>离线几何标定</b>、<b>渲染式动作表示</b>、<b>反事实后训练</b>,其中第一件被做成了数据基础设施级别的发布物。</p>
 [[figure-anchor:dt:overview]]
-<p><b>为什么。</b>先说它与我们已经钉实的战线结论如何互相咬合。我们此前判定的"内参真实但温和(同型号个体差 0.5–3%),主流数据管线内有效焦距离散 2–3.4 倍,预处理沉默地重写几何"——DreamTrue 的复算给了这条结论新的独立证据(见下)。方法论上它属于离线批处理标定(我们谱系里的第二代)做到极致并基础设施化,与在线滤波(第三代)、学习式回归(第四代)互补而不冲突。它还给 GeniWorld 的先例("渲染接口的增益主要来自空间对齐而非运动信号")送上同向新证据:仅推理时换用精标定就全面改善指标,训练也用精标定再进一步——PSNR +1.28/+1.30dB,同步位置误差 7.73→4.60px(AgiBot)。反事实后训练一支回答的是另一个真问题:演示数据里只有"成功动作"的视频,模型从没见过"动作不一样会怎样",反事实扰动把这个问题从数据层面补上——这正是我们"配对不可替代正则"猜想的一个产业级实现。</p>
-<p><b>怎么样。</b>动作忠实:反事实条件下物体缺陷率 31.88%→3.12%、交互缺陷率 48.12%→6.25%(160 个条件 × 6 个模型 × 3 名标注,Fleiss κ=0.78);动作轨迹一致性 nDTW 0.8772/0.8831 为对照中最高。标定质量:精标定的渲染 mask IoU 在 97.1%(AgiBot)/91.6%(DROID)的集上优于原始标定,75.5% 优于 PointWorld(纯 RGB 打深度的方案)。最终落到策略评估:用世界模型 rollout 估计 4 个 VLA × 60 场景的成功率,MAE 从 12.92 个百分点降到 7.08,Spearman ρ=0.937,且在低成功率区间不再幻觉式地预测完成——这正是"世界模型当评估器"能不能用的那条生死线。该模型拿了 AgiBot World Challenge 2026 世界模型赛道第一。作者自己声明的局限:一切在图像空间,遮挡下可能"看着对、物理错"。</p>
+<p>标定排在第一位,因为渲染式条件对几何误差零容忍。条件沿用世界模型 GeniWorld 开创的接口形态:拿机器人的 URDF 模型按动作轨迹逐帧渲染成图像,注入视频模型当条件;URDF 是领域通用的机器人结构描述文件,记录连杆几何与关节关系,渲染出的臂要想与实拍臂在画面里重合,就必须知道每个数据源的相机内外参、畸变系数,以及机械臂相对相机安装位的偏移 ξ。而我们在标定战线上已反复确认,主流数据集的出厂标定靠不住。DreamTrue 的标定从现有 RGB 演示里恢复全部参数,不需要专用标定序列,也不需要深度,约束来自三类对应关系的联合优化,论文记为 <latex>\mathcal{P}_{\mathrm{align}}</latex>、<latex>\mathcal{P}_{\mathrm{time}}</latex>、<latex>\mathcal{P}_{\mathrm{view}}</latex>。第一类是渲染图与观测图之间机械臂区域的稠密像素对应:概念分割模型 SAM3 经机器人分割数据微调后给出臂掩码、限定匹配区域,稠密匹配模型 RoMaV2 提取对应点;渲染图上的匹配点落在已知的机器人表面上,其三维位置由记录的关节状态与 ξ 唯一确定。第二类是同一相机跨帧的静态背景对应,第三类是同步多视角之间的对应。目标函数有两项:对第一类最小化重投影误差,即表面点按当前参数投回观测画面后与匹配像素的距离;对后两类施加射线共面约束,观测同一空间点的两条射线应与两光心连线共面,写成混合积 <latex>|(r_a \times r_b)^{\top}(o_a - o_b)|</latex>,其中 <latex>r_a, r_b</latex> 是两视角下对应点的射线方向,<latex>o_a, o_b</latex> 是两个光心,共面时该式为零。标定按采集者、相机、机器人等元数据分组,每组先标 1 集、对齐质量差的组再补标;DROID 是众包采集、各家相机摆设都不同,给了 32 个初始化。论文宣布的发布物是 AgiBot、DROID、RoboMIND 三个数据集共 153,666 集、1,660.31 小时的逐集标定参数。</p>
+<p>第二个组件是动作表示。不同本体的动作空间定义各不相同,没法共用一个动作编码器,DreamTrue 把动作统一翻译成图像:用精标定参数按动作轨迹渲染机器人,每个时间步、每个视角产出 RGB、深度与 amodal 掩码三路,amodal 指被遮挡部分也补全的完整轮廓。夹爪开度线性映射到 RGB 渲染路背景像素的 R/G 通道(深度与掩码两路不动),左右夹爪各占一个;相机射线以 Plücker 图给出,每个像素记录穿过它的射线的方向与矩,相当于把相机几何摊平成一张与画面同尺寸的图。RGB 与深度由预训练视频 VAE 编码,掩码与 Plücker 图由一个 3D 卷积几何编码器处理,拼接后经 VACE 分支注入视频主干;VACE 是阿里的统一视频条件框架,把控制特征以残差形式加进 DiT 各层。主干以 Wan2.1-VACE-14B 初始化,LoRA rank 128,可训参数约 0.7B,是 14B 主干的二十分之一;生成规格为三视角、每视角 240×320、101 帧。这是论文的 Stage I,监督训练阶段。</p>
+<p>第三个组件,即论文的 Stage II,回答数据的结构性盲区:演示数据里只有成功动作的视频,模型从没见过动作不一样会怎样,反事实条件下自然倾向于把失败也想成成功。Stage II 对演示轨迹的末端位姿做 SE(3) 扰动,即三维旋转加平移的刚体变换,从固定初始位姿插值到扰动后的终点,用逆运动学解出反事实动作序列,只保留运动学可行的,再渲染成同形态的条件;初始观测不动,同一场景换不同动作问"会怎样"。这类生成没有配对真值视频,逐像素损失无从谈起,但有一类错误不需要真值也看得见:夹爪没合拢物体却跟着升起、失去支撑的物体悬空不动。于是他们让人工标注了一套三级缺陷体系:L1 本体缺陷,机器人复制、消失、结构或材质错误;L2 物体缺陷,物体的外观、形变、消失、材质问题;L3 交互缺陷,接触与运动不匹配等物理上讲不通的交互。语料共 44.9K 视频、30.4K 标签,覆盖自家模型与 DreamDojo、Ctrl-World 等 7 个外部世界模型的预测。用这批标注把 Qwen3.5-9B 全量微调成视频奖励模型,奖励定义为负的缺陷概率;有真值的录制动作样本额外加一路 PSNR 奖励保住保真度。后训练走 DiffusionNFT 加 GDPO 的扩散 RL,前者是前向加噪式的扩散 RL,本报告另一线程有完整推导;后者把多路奖励在采样组内各自归一化再加权合并,防止量纲大的奖励吃掉小的。</p>
+<p>这条线程与这条战线全方位咬合。我们此前钉实的"内参真实但温和(同型号个体差 0.5–3%)、预处理沉默重写几何",在它的发布物里拿到新的独立证据,具体数字见下面的复算。谱系上它属于离线批处理标定路线做到极致的形态,与在线滤波、学习式回归互补而不冲突。它还给 GeniWorld 的先例送上同向证据:那边的消融显示渲染接口的增益主要来自空间对齐而非运动信号;这边的标定消融重演同一结论,仅推理时换用精标定就全面改善指标,训练也换用后再进一步,PSNR 在推理侧已换精标定的基础上再提升 1.28dB(AgiBot)与 1.30dB(DROID),同步位置误差从 7.73 压到 4.60 像素,这是 240×320 画面上预测与真值末端位置的逐帧距离。反事实后训练一支,则是我们"配对不可替代正则"猜想的产业级实现:拿不到配对真值,就用人工标注训出的缺陷模型当正则。</p>
+<p>结果分三层读。标定质量:精标定渲染与 SAM3 掩码的面积加权 IoU 在 130,182 个 AgiBot 集上均值提升 0.228、97.1% 的集改善,在 63,061 个 DROID 集上提升 0.212、91.6% 改善;与依赖双目深度的 PointWorld 相比,纯 RGB 的方案在 75.5% 的 DROID 集上胜出。动作忠实与物理可信:反事实条件下物体缺陷率从 <b>31.88% 降到 3.12%</b>,交互缺陷率从 <b>48.12% 降到 6.25%</b>,口径是 160 个反事实条件、6 个模型、3 名独立标注人多数表决,标注一致性 Fleiss κ=0.78,0.6 以上通常视为实质一致;动作轨迹一致性指标 nDTW,即归一化动态时间规整,衡量预测与真值末端轨迹的吻合程度,录得 0.8772,全部对照中最高(论文该表分录播动作与反事实动作两组列,各有一列 nDTW,这是录播列)。如实说一句,缺陷率上最强对照 GE-Sim 2.0(动作条件仿真路线的世界模型)的 3.75%/7.50% 与之基本打平,差距在动作一致性,对方在反事实列的 nDTW 只有 0.7817(DreamTrue 同列 0.8831)。最后落到策略评估这条生死线:用世界模型 rollout 给 4 个 VLA 策略在 60 个场景的成功率打分,24 个任务-策略-设置组合与仿真真值逐组对比,成功率的平均绝对误差从 Ctrl-World 的 <b>12.92 个百分点降到 7.08</b>,排序相关 Spearman ρ=0.937,1 为完全同序;决定性的差别在低成功率区间,对照模型会把失败抓取渲染成完成,DreamTrue 不再幻觉式预测成功,系统偏差从 +5.42 个百分点压到 +0.42。该模型拿下 AgiBot World Challenge 2026 世界模型赛道第一。作者自声明的局限同样如实:表示、生成器、奖励模型全部工作在图像空间,遮挡或视角不足时可能生成甚至奖励"看着对、物理错"的交互。</p>
 [[figure-anchor:dt:calib]]
-<p><b>我们的实验:标定发布物的独立复算。</b>论文最重的承诺是那 153,666 集标定参数,我们从 ModelScope 把已放出的 condition-mini 包(268MB,内含 8 集的精标定参数与渲染条件)拿下来,又想办法猎到了对应的原始标定做对照(AgiBot 的原始参数埋在一个 48GB tar 里,我们用 HTTP range 请求做了稠密扫描,约 8.7GB 流量取回 3 集)。四个结论。其一,<b>对数据集自带标定,精标定是小幅但系统性的修正</b>:DROID 上 ΔT 0.5–6.2cm、ΔR 1.2–6.6°,外参相机 fx 六分之五在 ±1.3% 内,但 wrist 相机 fx 系统性上调 +3.2/+3.2/+6.9%(ZED 工厂值 732–733 → 757–784,方向一致,提示工厂内参真实偏小);AgiBot 上原始外参的父坐标系无文档,我们用 3 集联立解出固定旋转后,原始与精标定的残差落到噪声底(头 1.97°、左右手 1.43°/1.07°),每集修正约 0.6–2.0°/3–16mm;AgiBot 原始内参 fy/fx=1.323 的"非方像素"异常,在"原始帧 640×480 被管线缩放成 640×360(×0.75)"的假设下完全消失——主流数据管线沉默重写几何,我们又抓到一例实证。其二,<b>机器人侧的固定初始化离真值很远</b>:AgiBot 头部相机的机器人 YAML 固定初值系统性偏 11.4–12.9°/2.5–3.6cm;DROID 外参相机固定 init 差 19–70cm/10–43°(直接印证论文"DROID 需要 32 个初始化"的动机);RoboMIND 有一个 camera_right 离群到 83cm/83°;RoboMIND 的安装偏置参数落到实处——同一型号两台机器人左臂基座 y 向偏置分别为 0.4548m 与 0.4390m,个体差 15.8mm,与战线结论"同型号个体差真实存在"完全同向。其三,<b>发布物内部完全自洽</b>:8/8 个 h5 的标定哈希链(sha256)我们重算全对,attrs 与 JSON 双份内参零差异,mask+深度反投影再重投影的闭环误差最大 6.0e-5 像素——作者方的数据工程是认真的。其四,<b>障碍与保留</b>:论文的 IoU 类声明(97.1%/91.6%/75.5%)需要 SAM3 掩码与真实视频帧,mini 包里都没有(SAM3 checkpoint 还标着 coming soon);153,666 集完整标定包目前并未出现在 ModelScope 上;标定优化器本体未开源(calibration 子包只有消费侧代码:条件渲染器与数据集读取器,对应关系提取、联合优化、共面约束均无实现,只有配置级痕迹)。也就是说,"标定参数发布"这个存在性声明目前只兑现了样本级——8 集的自洽性满分,全量待放。我们把复算脚本写成了可直接对全量包重跑的形式,等完整包放出即可变成全量审计。</p>
-[[figure-anchor:dt:recalc]]
+<p>数据漏斗与成本结构也值得一看。四个数据集的原始演示池共 4,184 小时,AgiBot 2,653、RoboTwin 572、DROID 411、RoboMIND 548;经相机位姿质量拒掉 1,283 小时、运动完整性拒掉 669 小时后,Stage I 联合训练用 2,232 小时,覆盖 5 种机械臂;奖励模型训练用 104.26 小时,反事实后训练只用 9.86 小时,不到 Stage I 时长的半个百分点:基础设施很重,后训练很轻。训练侧,Stage I 训练 LoRA 分支与几何编码器,Stage II 冻结主干、几何编码器与奖励模型,只更新 LoRA 分支,学习率 <latex>5 \times 10^{-6}</latex>。宣布发布的标定参数覆盖过滤后真实数据池的全部:AgiBot 1,225.60 小时、DROID 239.73 小时、RoboMIND 194.98 小时,合计正好 1,660.31 小时。</p>
 [[figure-anchor:dt:sankey]]
+<p>论文最重的承诺是那 153,666 集标定参数,我们把已放出的部分拿下来独立复算了一遍。素材是 ModelScope 的 condition-mini 包,268MB,含 8 集的精标定参数与渲染条件;包里只有精标定、没有原始参数对,对照组要自己去猎。DROID 的原始外参与 ZED 工厂内参来自公开存储桶与社区维护的 KarlP/droid 标定仓库;AgiBot 的原始参数埋在每个约 48GB 的参数 tar 里,块内无序、不能二分,我们用 HTTP range 请求按 1MB 窗口、2MB 步长稠密扫描(每集的参数块长 3.3–16MB,大于窗口加步长的 3MB,必被至少一个窗口完整罩住,命中后再向两侧扩展提取),约 8.7GB 流量取回 3 集的全套参数。</p>
+<p>四个结论。其一,<b>对数据集自带标定,精标定是小幅但系统性的修正</b>。DROID 三集逐相机对齐:外参差 0.5–6.2cm、1.2–6.6°;两台外参相机三集共 6 组焦距,5 组差在 ±1.3% 内,唯一例外 +4.2%;腕部相机焦距则被系统性上调 +3.6%/+3.2%/+6.9%,从 ZED 工厂值 732–733 像素拉到 757–784,三集方向一致,提示工厂内参真实偏小而非噪声。AgiBot 的原始外参父坐标系没有任何文档,我们用 3 集联立解出一个固定旋转差异后,原始与精标定的残差落到噪声底,头部相机 1.97°、左右手 1.43°/1.07°,与各自跨集波动同量级;折合每集修正约 0.6–2.0°、3–16mm。口径要说明:这个固定旋转是用同 3 集拟合的,所以是除掉坐标系约定后的残差,但跨集一致性本身说明两者吻合在 1–2°、厘米级以内。内参更有故事性:AgiBot 原始参数 fy/fx=1.323,对正常相机这是异常的非方像素;但若原始内参对应 640×480 的原始帧,管线实际工作在 640×360、高度被乘了 0.75,异常完全消失,3 集 9 组内参在该假设下全部自洽。这是从数值反推的假设,未被数据方文档确认;若成立,它就是"预处理沉默重写几何"的又一实证。其二,<b>机器人侧的固定初始化离真值很远</b>。AgiBot 头部相机的机器人 YAML 初值系统性偏 11.4–12.9°、2.5–3.6cm,手部初值已经很好;DROID 外参相机固定初值差 19–70cm、10–43°,直接印证论文给 DROID 备 32 个初始化的动机;RoboMIND 多数相机差 1.4–15°,另有两处离群(一集左相机 34°,一集右侧相机 83cm、83°)。安装偏置也落到了具体数字:两个 RoboMIND 标定组的左臂基座 y 向偏置分别是 0.4548m 与 0.4390m,相差 15.8mm;机械臂制造公差在厘米以下量级,这个量级的安装偏置差异真实影响渲染对齐。</p>
+[[figure-anchor:dt:recalc]]
+<p>其三,<b>发布物内部完全自洽</b>。8 个条件文件的标定哈希链,即对参数文件算 sha256,我们重算 8/8 全对;文件属性里存的内参与 JSON 双份零差异;掩码像素加深度反投影到世界、再按发布参数投回像素,闭环误差最大 6.0e-5 像素,已在 float32 量化的噪声底。作者方的数据工程是认真的。其四,<b>障碍与保留要如实交代</b>。论文主打的 IoU 类声明需要 SAM3 掩码与真实视频帧才能独立复算,mini 包两者都没有,SAM3 微调 checkpoint 还标着 coming soon;153,666 集完整包目前并未出现在 ModelScope;标定优化器本体没有开源,calibration 子包只有消费侧的条件渲染器与数据集读取器,对应提取、联合优化、共面约束均无实现,只留下配置级痕迹。换句话说,"标定参数发布"这个存在性声明目前只兑现了样本级:8 集自洽性满分,全量待放;我们的复算脚本已写成可对全量包直接重跑的形式,完整包出现即可变成全量审计。</p>
+<p>顺手留一处数据勘误:DROID 外参的欧拉角约定实为 extrinsic xyz,即 <latex>R = R_z R_y R_x</latex>,而社区仓库 KarlP/droid 的 README 里 scipy 示例写法与数据实际相反。判据很硬:按错约定解,腕部相机相对法兰盘的旋转逐帧方差达 73–173°;按对约定解,方差是 0.000°,即机器精度。照抄示例会把外参解错 77–175°,约定错误是灾难级的,不是噪声。</p>
 <h1>跨主题观察:这一期的方法论口味</h1>
-<p>五条线程在内容上半点不相干——线性注意力、多模态生成、RL 数值失配、扩散 RL、机器人世界模型——但方法论的口味出奇地一致,而且恰好是我们读者偏好被反复验证过的那一类:<b>优雅的构造性消除优于任何矫正性惩罚</b>。CyFA 不动递推,换一个坐标系让传输项消失;SC 不改奖励不加惩罚,逐前缀减去均值让漂移项恒等于零;DiffusionART 不调 EMA,把引导的作用点搬到反向状态让一致性力不产生;DreamTrue 不让模型学着容忍失准,把相机标定在数据侧做掉。连 MMF 都是同一个语法:不调和"离散文本 vs 连续图像"的目标差异,而是把文本搬进连续空间,让差异不存在。反面的对照组这期也在场:IS 一族用乘性随机校正压漂移,方差-截断-漂移回流;EMA 用软锚点供恢复项抓握,代价是逐任务调参。凡是"靠优化过程去抵消"的设计,都有被交易掉的那一天;凡是"换个构造让它恒等于零"的设计,都一劳永逸。这个判据在我们记忆里的旧形态是"软损失塑表征,硬约束管记账",这一期给它添了三个可复用的新实例。</p>
-<p>第二个观察关于证据质量。这期五篇的声明强度差异很大,而我们的五个研究动作恰好覆盖了证据链的不同生态位:真实权重探针(CyFA)、官方组件的独立实验(MMF text decoder)、机制级玩具精确验证(SC、DiffusionART)、发布资产的独立复算(DreamTrue)。两处对论文的部分修正都出自玩具这一层(SC 的有信号档分离、ART 的 4.9× 与残余稀释强调)——玩具复现的价值不在致敬,恰恰在它能说出"这条在受控尺度上不成立,请谨慎外推";两处"声明未能核验"(DreamTrue 的 IoU 与全量标定包)则提醒我们,发布物的存在性声明也要按样本级/全量级分开验收。</p>
+<p>五条线程在内容上半点不相干,分别属于线性注意力、多模态生成、RL 数值失配、扩散 RL、机器人世界模型,但方法论的口味出奇地一致,而且恰好是我们读者偏好被反复验证过的那一类:优雅的构造性消除优于任何矫正性惩罚。CyFA 不动递推,换一个坐标系让传输项消失;SC 不改奖励不加惩罚,逐前缀减去均值让漂移项恒等于零;DiffusionART 不调 EMA,把引导的作用点搬到反向状态让一致性力不产生;DreamTrue 不让模型学着容忍失准,把相机标定在数据侧做掉。连 Multimodal Flow 都是同一个语法:不调和"离散文本对连续图像"的目标差异,而是把文本搬进连续空间,让差异不存在。反面的对照组这期也在场:IS 一族用乘性随机校正压漂移,换来方差、截断、漂移回流;EMA 用软锚点供恢复项抓握,代价是逐任务调参。凡是靠优化过程去抵消的设计,都有被交易掉的那一天;凡是换个构造让它恒等于零的设计,都一劳永逸。这个判据在我们记忆里的旧形态是"软损失塑表征,硬约束管记账",这一期给它添了五个可复用的新实例。</p>
+<p>第二个观察关于证据质量。这期五篇的声明强度差异很大,而我们的五个研究动作恰好覆盖了证据链的不同生态位:真实权重探针(CyFA)、官方组件的独立实验(MF 的 text decoder)、机制级玩具精确验证(SC、DiffusionART)、发布资产的独立复算(DreamTrue)。三处对论文的部分修正都出自玩具这一层(SC 的有信号档分离、ART 的 4.9 倍与残余稀释强调)。玩具复现的价值不在致敬,恰恰在它能说出"这条在受控尺度上不成立,请谨慎外推";两处声明未能核验(DreamTrue 的 IoU 与全量标定包)则提醒我们,发布物的存在性声明也要按样本级与全量级分开验收。</p>
 <h1>可建造的问题</h1>
-<p>一,<b>CyFA 的回绕混叠在召回任务上的代价</b>。我们证明了混叠存在、近一头安全、输入依赖头不安全、且混叠不伤 next-token;剩下的关键空格是召回型任务——构造一个"回绕若干周期后取出早期写入"的合成召回任务,直接测混叠代价,结果会同时告诉我们 FDA 42.60 里有多少是时间寻址的真功劳、m=127 的槽位数离饱和还有多远。二,<b>SC×ART 的统一参数化</b>:两者都是"选定一个逐点量、减去它在某个分布下的均值"的加性校正,一个在 token 分布上、一个在 rollout 端点上;是否存在一族统一的"加性精确校正",把 IS、EMA、prompt 居中全部降为特例,是值得推导一页纸的问题。三,<b>MMF 的误差预算闭环</b>:我们量了 decoder 能容忍多少(<latex>\sigma_e \le 1.0</latex> 几乎无损),下一步是下载 backbone 测 flow 端点误差实际有多大——两者的差值就是 8-token 连续文本块这个范式的真实上限,也决定它能否扩到更长的块。四,<b>DreamTrue 全量标定包放出后的审计管线</b>:我们的复算脚本已就绪,等 153,666 集完整包出现,可以直接跑成全量误差分布审计,并与出厂标定、PointWorld 做三方对照——这会是"标定作为数据基础设施"的第一个独立质量基准。</p>
-<p>收尾一句:这期池子放大之后,信噪比没有掉。五篇精读没有一篇让我们觉得白读;两个玩具实验各推翻或修正了论文的一处量化强调,这比全盘复现更让我们对剩下的结论放心。如果只能带走一句话:下次在训练或递推里看到一个"理论上靠期望抵消"的项,先别急着调权重——问一句它能不能被构造性消掉。</p>
+<p>一,CyFA 的回绕混叠在召回任务上的代价。我们证明了混叠存在、近一头安全、输入依赖头不安全、且混叠不伤 next-token;剩下的关键空格是召回型任务。构造一个"回绕若干周期后取出早期写入"的合成召回任务,直接测混叠代价,结果会同时告诉我们 FDA 42.60 里有多少是时间寻址的真功劳、m=127 的槽位数离饱和还有多远。二,SC 与 ART 的统一参数化:两者都是"选定一个逐点量、减去它在某个分布下的均值"的加性校正,一个在 token 分布上、一个在 rollout 端点上;是否存在一族统一的加性精确校正,把 IS、EMA、prompt 居中全部降为特例,是值得推导一页纸的问题。三,MF 的误差预算闭环:我们量了 decoder 能容忍多少(<latex>\sigma_e \le 1.0</latex> 几乎无损),下一步是下载 backbone 测 flow 端点误差实际有多大;两者的差值就是 8-token 连续文本块这个范式的真实上限,也决定它能否扩到更长的块。四,DreamTrue 全量标定包放出后的审计管线:我们的复算脚本已就绪,等 153,666 集完整包出现,可以直接跑成全量误差分布审计,并与出厂标定、PointWorld 做三方对照。这会是"标定作为数据基础设施"的第一个独立质量基准。</p>
+<p>收尾一句:这期池子放大之后,信噪比没有掉。五篇精读没有一篇让我们觉得白读;两个玩具实验合计修正了论文的三处量化强调,这比全盘复现更让我们对剩下的结论放心。如果只能带走一句话:下次在训练或递推里看到一个理论上靠期望抵消的项,先别急着调权重,先问一句它能不能被构造性消掉。</p>

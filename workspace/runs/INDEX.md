@@ -13,6 +13,14 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-10-16 — 2026-10-12 报告重修(同一批证据按新写作规范重写)
+- Doc: https://fudan-nlp.feishu.cn/docx/PxhUdbgFfopV8XxqGM4cAoSenee (重修版;原版 IlJNdkts7oIWyfxfjtxcwT9DnFh 保持不动)
+- Run: runs/2026-10-12-cyfa-mmflow-scorecenter-dreamtrue-art/(与 2026-10-12 同一运行包,report.docxxml 已替换为重修稿,原稿在 git 历史)
+- Deep threads: 同 2026-10-12,不新增覆盖
+- Covered papers: 不新增(2609.36259, 2609.40362, 2609.20807, 2610.12572, 2610.12468)
+- Shortlisted papers: 不新增
+- 背景: 触发是 10-12 报告的 13 条读者反馈(三段式版面标签、承重术语无定义、伪 LaTeX、数字无锚点、小图竖排、地基缺失等)。流水线:写作简报→五写手子代理→编辑闸(密度/衔接/证据)+独立冷读者(报出 19 处卡点,全修)→首尾+机器门禁。随重修落地的事实级修正:MF 对 JanusFlow 换同口径(三基准均分 75.3 对 80.9,原"相当"不成立);ART 补末段回升(谷底 −2.69 后回升至 −0.93/终测 −1.60)、能量峰值 4.5→4.4、spread 0.45–0.57→0.26–0.55、命题 1 网格 9 档→5 档;DT 腕部焦距 +3.2→+3.6/+3.2/+6.9、RoboMIND 补报 camera_left 34° 离群、nDTW 列口径分清录播/反事实;SC 头部覆盖 99.9% 与 99.45% 两口径各归其位。执行教训:非交互 bash 不加载 nvm,lark-cli 前需 export ~/.nvm/versions/node/v24.21.0/bin;PAPER_SCOUT_USER_ID 不在 .bashrc,收件 open_id 从 auth status 或 ~/.local/share/lark-cli 凭据文件名查。同日审校闸门重构(六闸→三闸+机器门禁,冷读者降为读者模型原则),见 report-compose calibration。
+
 ## 2026-10-12 — 2026-10-09 至 2026-10-12 + 用户点名三篇(构造性消除:循环时钟 × 全连续流 × 漂移-信号分解 × 标定基础设施)
 - Doc: https://fudan-nlp.feishu.cn/docx/IlJNdkts7oIWyfxfjtxcwT9DnFh
 - Run: runs/2026-10-12-cyfa-mmflow-scorecenter-dreamtrue-art/
