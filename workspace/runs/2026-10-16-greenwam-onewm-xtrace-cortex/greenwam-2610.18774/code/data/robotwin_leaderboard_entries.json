@@ -1,0 +1,182 @@
+{
+ "source": "https://robotwin-platform.github.io/leaderboard",
+ "fetched": "2026-10-16",
+ "note": "Average(c2c+c2r) descending; GreenWAM(67.54) is not submitted to the board",
+ "entries": [
+  {
+   "name": "PatchWAM",
+   "setting": "cotrain",
+   "clean": 91.56,
+   "randomized": 66.72,
+   "average": 79.14
+  },
+  {
+   "name": "ME-Dex-1.0",
+   "setting": "cotrain",
+   "clean": 89.58,
+   "randomized": 68.12,
+   "average": 78.85
+  },
+  {
+   "name": "ViGAR",
+   "setting": "cotrain",
+   "clean": 82.0,
+   "randomized": 67.02,
+   "average": 74.51
+  },
+  {
+   "name": "UniWAM",
+   "setting": "cotrain",
+   "clean": 75.12,
+   "randomized": 67.56,
+   "average": 71.34
+  },
+  {
+   "name": "GigaBrain-0.7",
+   "setting": "cotrain",
+   "clean": 66.8,
+   "randomized": 67.9,
+   "average": 67.35
+  },
+  {
+   "name": "WorldScape Policy 2.0",
+   "setting": "cotrain",
+   "clean": 84.92,
+   "randomized": 38.5,
+   "average": 61.71
+  },
+  {
+   "name": "4D-WAM",
+   "setting": "cotrain",
+   "clean": 81.5,
+   "randomized": 41.8,
+   "average": 61.65
+  },
+  {
+   "name": "π0.5",
+   "setting": "cotrain",
+   "clean": 70.7,
+   "randomized": 46.0,
+   "average": 58.35
+  },
+  {
+   "name": "OLA-Geo",
+   "setting": "cotrain",
+   "clean": 82.96,
+   "randomized": 33.64,
+   "average": 58.3
+  },
+  {
+   "name": "Spatial Forcing",
+   "setting": "cotrain",
+   "clean": 77.2,
+   "randomized": 26.74,
+   "average": 51.97
+  },
+  {
+   "name": "X-WAM",
+   "setting": "cotrain",
+   "clean": 70.0,
+   "randomized": 25.8,
+   "average": 47.9
+  },
+  {
+   "name": "X-VLA",
+   "setting": "cotrain",
+   "clean": 68.0,
+   "randomized": 20.9,
+   "average": 44.45
+  },
+  {
+   "name": "Abot-M0",
+   "setting": "cotrain",
+   "clean": 57.4,
+   "randomized": 30.36,
+   "average": 43.88
+  },
+  {
+   "name": "EventVLA",
+   "setting": "cotrain",
+   "clean": 65.6,
+   "randomized": 15.7,
+   "average": 40.65
+  },
+  {
+   "name": "Xiaomi Robotics-0",
+   "setting": "cotrain",
+   "clean": 62.9,
+   "randomized": 18.2,
+   "average": 40.55
+  },
+  {
+   "name": "FastWAM",
+   "setting": "cotrain",
+   "clean": 77.8,
+   "randomized": 1.9,
+   "average": 39.85
+  },
+  {
+   "name": "GalaxeaVLA",
+   "setting": "cotrain",
+   "clean": 62.7,
+   "randomized": 12.72,
+   "average": 37.71
+  },
+  {
+   "name": "Discrete Forcing",
+   "setting": "cotrain",
+   "clean": 59.32,
+   "randomized": 11.2,
+   "average": 35.26
+  },
+  {
+   "name": "AHA-WAM",
+   "setting": "cotrain",
+   "clean": 64.3,
+   "randomized": 3.2,
+   "average": 33.75
+  },
+  {
+   "name": "π0",
+   "setting": "sft",
+   "clean": 46.42,
+   "randomized": 16.34,
+   "average": 31.38
+  },
+  {
+   "name": "DP3",
+   "setting": "sft",
+   "clean": 55.24,
+   "randomized": 4.96,
+   "average": 30.1
+  },
+  {
+   "name": "starVLA",
+   "setting": "cotrain",
+   "clean": 46.52,
+   "randomized": 3.16,
+   "average": 24.84
+  },
+  {
+   "name": "RDT",
+   "setting": "sft",
+   "clean": 34.5,
+   "randomized": 13.72,
+   "average": 24.11
+  },
+  {
+   "name": "ACT",
+   "setting": "sft",
+   "clean": 29.74,
+   "randomized": 1.74,
+   "average": 15.74
+  },
+  {
+   "name": "DP",
+   "setting": "sft",
+   "clean": 28.04,
+   "randomized": 0.64,
+   "average": 14.34
+  }
+ ]
+}

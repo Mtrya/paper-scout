@@ -1,0 +1,16 @@
+25 leaderboard entries extracted (20 co-train, 5 single-task SFT)
+board updated: 2026-10-11 Add ViGAR co-train results (82.00 / 67.02%).; 2026-10-10 Rename OLA-Sem to UniWAM. Add Discrete Forcing co-train results (59.32 / 11.20%).; 2026-10-02 Add PatchWAM co-train results (91.56 / 66.72%).
+PASS  GreenWAM clean/randomized/mean match the board formula  mean 67.54
+      GreenWAM 67.54 would rank #5 of 20 co-train entries, #5 of all 25
+        #1  PatchWAM                 clean  91.56  rand  66.72  avg  79.14
+        #2  ME-Dex-1.0               clean  89.58  rand  68.12  avg  78.85
+        #3  ViGAR                    clean  82.00  rand  67.02  avg  74.51
+        #4  UniWAM                   clean  75.12  rand  67.56  avg  71.34
+        #5  GigaBrain-0.7            clean  66.80  rand  67.90  avg  67.35
+        #6  WorldScape Policy 2.0    clean  84.92  rand  38.50  avg  61.71
+        #7  4D-WAM                   clean  81.50  rand  41.80  avg  61.65
+        #8  π0.5                     clean  70.70  rand  46.00  avg  58.35
+PASS  entries above GreenWAM that the paper's Table 3 does not list  PatchWAM avg 79.14 (clean 91.56, rand 66.72); ViGAR avg 74.51 (clean 82.00, rand 67.02)
+PASS  every table-3 name except OLA-Sem (renamed UniWAM) is on the board  ['OLA-Sem']
+
+FAILURES: none

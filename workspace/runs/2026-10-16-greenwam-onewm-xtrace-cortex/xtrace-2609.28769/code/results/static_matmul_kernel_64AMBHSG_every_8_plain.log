@@ -1,0 +1,132 @@
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+{
+  "kernel": "matmul_kernel",
+  "spliced": true,
+  "origin_instructions": 360,
+  "origin_registers": 80,
+  "traced_instructions_after_splice": 996,
+  "traced_registers": 80,
+  "register_class": "uniform_general",
+  "pointer_registers": [
+    60,
+    58
+  ],
+  "sites_requested": 45,
+  "site_instruction_indices": [
+    1,
+    9,
+    17,
+    25,
+    33,
+    41,
+    49,
+    57,
+    65,
+    73,
+    81,
+    89,
+    97,
+    105,
+    113,
+    121,
+    129,
+    137,
+    145,
+    153,
+    161,
+    169,
+    177,
+    185,
+    193,
+    201,
+    209,
+    217,
+    225,
+    233,
+    241,
+    249,
+    257,
+    265,
+    273,
+    281,
+    289,
+    297,
+    305,
+    313,
+    321,
+    329,
+    337,
+    345,
+    353
+  ],
+  "sites_spliced": 41,
+  "sites_failed": 4,
+  "failed_site_indices": [
+    217,
+    201,
+    193,
+    185
+  ],
+  "probe_instructions_total": 636,
+  "probe_instruction_counts": [
+    15,
+    21
+  ],
+  "similarity": {
+    "origin_instructions": 360,
+    "traced_instructions": 996,
+    "preserved_instructions": 357,
+    "changed_instructions": 3,
+    "inserted_instructions": 639,
+    "binary_similarity": 0.9916666666666667,
+    "changed_by_opcode": {
+      "BRA": 3
+    },
+    "inserted_by_opcode": {
+      "ULDC": 47,
+      "S2R": 47,
+      "IMAD": 128,
+      "SHF": 1,
+      "R2UR": 1,
+      "UIMAD": 1,
+      "UMOV": 42,
+      "MOV": 82,
+      "UIADD3": 82,
+      "UISETP": 41,
+      "CS2R": 41,
+      "STG": 123,
+      "BRA": 3
+    },
+    "origin_blocks": 10,
+    "intact_blocks": 6,
+    "changed_blocks": 4,
+    "blocks_with_probe_inside": 4,
+    "unchanged_fraction": 0.6,
+    "traced_registers": 80,
+    "traced_basic_blocks": 10
+  },
+  "serialized_bytes": 32960,
+  "serialization_error": null,
+  "spliced_cubin": "/tmp/xt_splice_matmul_kernel_64AMBHSG_every_8_plain.cubin",
+  "search_ns": {
+    "median": 379038.0,
+    "n": 42
+  },
+  "analysis_ns": {
+    "median": 13377666.0,
+    "n": 42
+  },
+  "effective_makespan_cycles": {
+    "median": 23.0,
+    "max": 44
+  },
+  "site_spec": "every:8",
+  "splice_mode": "plain",
+  "schedule_mode": "first_feasible",
+  "arch": "86",
+  "nb_instructions": 360,
+  "nb_basic_blocks_before": 10
+}

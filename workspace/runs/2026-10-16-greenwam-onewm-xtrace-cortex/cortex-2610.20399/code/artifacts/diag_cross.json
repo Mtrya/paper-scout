@@ -1,0 +1,18 @@
+{
+  "vanilla/Rqs_teacherctx/R": -0.7241424930667608,
+  "vanilla/Rqs_nocx/R": -2.097640358118492,
+  "vanilla/Rqs_teacherctx/P": -0.6015389827070868,
+  "vanilla/Rqs_nocx/P": -1.9274213248339302,
+  "vanilla/Pqs_teacherctx/R": -0.7241424930667608,
+  "vanilla/Pqs_nocx/R": -2.097640358118492,
+  "vanilla/Pqs_teacherctx/P": -0.6015389827070868,
+  "vanilla/Pqs_nocx/P": -1.9274213248339302,
+  "R/Rqs_nocx/R": -0.7224353043686752,
+  "R/recovery_on_R": 1.0012429496554196,
+  "R/Rqs_nocx/P": -1.1191279300397796,
+  "R/recovery_on_P": 0.6096267889785529,
+  "P/Pqs_nocx/R": -1.4266860640296415,
+  "P/recovery_on_R": 0.4885004273840497,
+  "P/Pqs_nocx/P": -0.5993929401887165,
+  "P/recovery_on_P": 1.001618576890411
+}

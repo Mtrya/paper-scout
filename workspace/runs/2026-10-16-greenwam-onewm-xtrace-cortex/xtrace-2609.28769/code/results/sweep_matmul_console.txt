@@ -1,0 +1,5 @@
+=== matmul_kernel every:8 ===
+  matmul_kernel: sites 41/45 spliced, regs 80->80, similarity 0.9917, blocks intact 6/10, inserted 639, changed 3 {'BRA': 3}
+=== matmul_kernel mem ===
+  matmul_kernel: sites 43/52 spliced, regs 80->80, similarity 0.9944, blocks intact 7/10, inserted 668, changed 2 {'BRA': 2}
+static sweep done

@@ -1,0 +1,111 @@
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+{
+  "kernel": "_forward_kernel",
+  "spliced": true,
+  "origin_instructions": 224,
+  "origin_registers": 34,
+  "traced_instructions_after_splice": 635,
+  "traced_registers": 34,
+  "register_class": "uniform_general",
+  "pointer_registers": [
+    60,
+    58
+  ],
+  "sites_requested": 28,
+  "site_instruction_indices": [
+    1,
+    9,
+    17,
+    25,
+    33,
+    41,
+    49,
+    57,
+    65,
+    73,
+    81,
+    89,
+    97,
+    105,
+    113,
+    121,
+    129,
+    137,
+    145,
+    153,
+    161,
+    169,
+    177,
+    185,
+    193,
+    201,
+    209,
+    217
+  ],
+  "sites_spliced": 26,
+  "sites_failed": 2,
+  "failed_site_indices": [
+    105,
+    97
+  ],
+  "probe_instructions_total": 411,
+  "probe_instruction_counts": [
+    15,
+    21
+  ],
+  "similarity": {
+    "origin_instructions": 224,
+    "traced_instructions": 635,
+    "preserved_instructions": 222,
+    "changed_instructions": 2,
+    "inserted_instructions": 413,
+    "binary_similarity": 0.9910714285714286,
+    "changed_by_opcode": {
+      "BRA": 2
+    },
+    "inserted_by_opcode": {
+      "ULDC": 32,
+      "S2R": 32,
+      "IMAD": 83,
+      "SHF": 1,
+      "R2UR": 1,
+      "UIMAD": 1,
+      "UMOV": 27,
+      "MOV": 52,
+      "UIADD3": 52,
+      "UISETP": 26,
+      "CS2R": 26,
+      "STG": 78,
+      "BRA": 2
+    },
+    "origin_blocks": 11,
+    "intact_blocks": 8,
+    "changed_blocks": 3,
+    "blocks_with_probe_inside": 4,
+    "unchanged_fraction": 0.7272727272727273,
+    "traced_registers": 34,
+    "traced_basic_blocks": 11
+  },
+  "serialized_bytes": 20232,
+  "serialization_error": null,
+  "spliced_cubin": "/tmp/xt_splice__forward_kernel_7EERADNB_every_8_plain.cubin",
+  "search_ns": {
+    "median": 463589,
+    "n": 27
+  },
+  "analysis_ns": {
+    "median": 8501016,
+    "n": 27
+  },
+  "effective_makespan_cycles": {
+    "median": 23,
+    "max": 44
+  },
+  "site_spec": "every:8",
+  "splice_mode": "plain",
+  "schedule_mode": "first_feasible",
+  "arch": "86",
+  "nb_instructions": 224,
+  "nb_basic_blocks_before": 11
+}

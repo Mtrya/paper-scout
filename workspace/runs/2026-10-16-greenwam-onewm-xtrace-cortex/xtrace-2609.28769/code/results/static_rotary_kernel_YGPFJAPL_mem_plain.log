@@ -1,0 +1,81 @@
+{
+  "kernel": "rotary_kernel",
+  "spliced": true,
+  "origin_instructions": 120,
+  "origin_registers": 25,
+  "traced_instructions_after_splice": 231,
+  "traced_registers": 25,
+  "register_class": "uniform_general",
+  "pointer_registers": [
+    60,
+    58
+  ],
+  "sites_requested": 6,
+  "site_instruction_indices": [
+    44,
+    46,
+    47,
+    48,
+    104,
+    109
+  ],
+  "sites_spliced": 6,
+  "sites_failed": 0,
+  "failed_site_indices": [],
+  "probe_instructions_total": 111,
+  "probe_instruction_counts": [
+    15,
+    21
+  ],
+  "similarity": {
+    "origin_instructions": 120,
+    "traced_instructions": 231,
+    "preserved_instructions": 120,
+    "changed_instructions": 0,
+    "inserted_instructions": 111,
+    "binary_similarity": 1.0,
+    "changed_by_opcode": {},
+    "inserted_by_opcode": {
+      "ULDC": 12,
+      "S2R": 12,
+      "IMAD": 23,
+      "SHF": 1,
+      "R2UR": 1,
+      "UIMAD": 1,
+      "UMOV": 7,
+      "MOV": 12,
+      "UIADD3": 12,
+      "UISETP": 6,
+      "CS2R": 6,
+      "STG": 18
+    },
+    "origin_blocks": 6,
+    "intact_blocks": 5,
+    "changed_blocks": 1,
+    "blocks_with_probe_inside": 2,
+    "unchanged_fraction": 0.8333333333333334,
+    "traced_registers": 25,
+    "traced_basic_blocks": 6
+  },
+  "serialized_bytes": 10544,
+  "serialization_error": null,
+  "spliced_cubin": "/tmp/xt_splice_rotary_kernel_YGPFJAPL_mem_plain.cubin",
+  "search_ns": {
+    "median": 145781,
+    "n": 7
+  },
+  "analysis_ns": {
+    "median": 1795228,
+    "n": 7
+  },
+  "effective_makespan_cycles": {
+    "median": 24,
+    "max": 44
+  },
+  "site_spec": "mem",
+  "splice_mode": "plain",
+  "schedule_mode": "first_feasible",
+  "arch": "86",
+  "nb_instructions": 120,
+  "nb_basic_blocks_before": 6
+}

@@ -1,0 +1,16 @@
+board entries with metrics: 127 (127 files downloaded)
+PASS  127 board entries  n=127
+      GreenWAM EWMScore 63.31 capped would rank #35 of 127 on this recomputed board
+      GreenWAM EWMScore 63.35 uncapped would rank #75 of 127 (raw board leader 73.64+)
+      JEPA Similarity: GreenWAM 98.41 -> rank #2; above it: BLM 98.49(open)
+PASS  JEPA: second of 127, only BLM above 98.41
+      Trajectory Accuracy: GreenWAM 55.97 -> rank #12; above it: WorldScape v0.2 69.38, FAW 64.61, EonWorld 62.93, GentleWM 62.19, Z-WM 61.69, BLM 59.79(open), GenieEnvisioner-Sim2.0-2B 58.63, AngryBird 57.88, InWorld 57.79, DBXWAM 57.53, rootflow 57.49
+      Depth Accuracy: GreenWAM 98.16 -> rank #12; above it: EonWorld 99.11, FAW 99.00, AngryBird 98.96, DBXWAM 98.53, Z-WM 98.50, rootflow 98.45, GigaWorld-1 98.44, GigaWorld 98.44, Pelican-Unify 98.38, GentleWM 98.36, InWorld 98.35
+PASS  UNIS: board means reproduce the paper  board 73.64 -> capped 63.65 (paper quotes 73.64/63.65)
+PASS  BWM-Fast: board means reproduce the paper  board 72.71 -> capped 63.80 (paper quotes 72.71/63.8)
+PASS  MotuBrain: board means reproduce the paper  board 69.06 -> capped 63.16 (paper quotes 69.06/63.16)
+PASS  FlowWAM-FiveAges: board means reproduce the paper  board 72.00 -> capped 62.99 (paper quotes 72.0/62.99)
+PASS  112 of 127 exceed the recorded-video reference in Dynamic Degree  n=112, largest AccioWM 86.14 = 3.7x the reference
+PASS  113 of 127 exceed the recorded-video reference in Flow Score  n=113, largest SisyphusWorld 99.82 = 8.0x the reference
+
+FAILURES: none

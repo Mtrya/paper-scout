@@ -1,0 +1,326 @@
+{
+  "R": [
+    {
+      "q": "What is the required version of Python for installation?",
+      "gen_answer": "Python 3.11 or newer",
+      "teacher_answer": "The required version of Python for installation is **Python 3.11 or newer**."
+    },
+    {
+      "q": "What is the command for installation?",
+      "gen_answer": "pip install meridian-pipeline==3.4.1",
+      "teacher_answer": "The command for installing the `meridian` library is:\n\n```bash\npip install meridian-pipeline==3.4.1\n```"
+    },
+    {
+      "q": "Which configuration file does meridian read?",
+      "gen_answer": "meridian.toml",
+      "teacher_answer": "meridian reads the configuration file `meridian.toml` from the working directory."
+    },
+    {
+      "q": "How many keys are specified for meridian's configuration?",
+      "gen_answer": "exactly one",
+      "teacher_answer": "Meridian's configuration file contains **exactly one key** for the job queue. The configuration is specified in the `meridian.toml` file, and"
+    },
+    {
+      "q": "Which keyword has a default value of 'alpha'?",
+      "gen_answer": "queue",
+      "teacher_answer": "The keyword that has a default value of 'alpha' is `queue`."
+    },
+    {
+      "q": "What is the allowed range for the 'retries' configuration key?",
+      "gen_answer": "0 to 9",
+      "teacher_answer": "The allowed range for the 'retries' configuration key is **0 to 9**."
+    },
+    {
+      "q": "What is the default value for 'timeout_s'?",
+      "gen_answer": "900",
+      "teacher_answer": "The default value for `timeout_s` (per-job timeout in seconds) is **900**."
+    },
+    {
+      "q": "What is the default behavior when the queue is full?",
+      "gen_answer": "block",
+      "teacher_answer": "When the queue is full, the default behavior is to set the `backpressure` parameter to `\"block\"`. This means that any new jobs will be queued"
+    },
+    {
+      "q": "What action is taken for overflow jobs if backpressure is set to 'spill'?",
+      "gen_answer": "written to /var/meridian/overflow and resumed on the next scheduler start",
+      "teacher_answer": "When **backpressure is set to \"spill\"**, overflow jobs are written to the file `/var/meridian/overflow` and **resumed on"
+    },
+    {
+      "q": "What happens if the 'retries' key is set to 0?",
+      "gen_answer": "the automatic retry logic is disabled entirely",
+      "teacher_answer": "If the `retries` key is set to 0, the **automatic retry logic is disabled**. This means that any job submitted to the scheduler will"
+    },
+    {
+      "q": "How does the scheduler handle configuration changes?",
+      "gen_answer": "only after a restart",
+      "teacher_answer": "The scheduler does **not** apply configuration changes **on the fly**. Instead, it **only applies configuration changes after a restart**. This means that any"
+    },
+    {
+      "q": "What code is given if a job is missing its resources field?",
+      "gen_answer": "M412",
+      "teacher_answer": "If a job is missing its resources field, the system will reject it at submission with an error code **M412**."
+    },
+    {
+      "q": "At which path are metrics exposed?",
+      "gen_answer": "/metrics",
+      "teacher_answer": "The metrics are exposed at `/metrics` on port 9633."
+    },
+    {
+      "q": "What does meridian require?",
+      "gen_answer": "Python 3.11 or newer.",
+      "teacher_answer": "Meridian requires the following:\n\n1. **Python 3.11 or newer** (since it's an internal Python library).\n2. **A configuration"
+    },
+    {
+      "q": "What package is imported as meridian?",
+      "gen_answer": "`import meridian`.",
+      "teacher_answer": "The package imported as `meridian` is `meridian-pipeline==3.4.1`."
+    },
+    {
+      "q": "How many keys are there in the meridian configuration?",
+      "gen_answer": "exactly one key.",
+      "teacher_answer": "The meridian configuration file contains the following keys:\n\n- `queue`: the name of the job queue. Default is \"alpha\".\n- `retries`: the"
+    },
+    {
+      "q": "What is the default value of the 'queue' key?",
+      "gen_answer": "\"alpha\".",
+      "teacher_answer": "The default value of the 'queue' key is \"alpha\"."
+    },
+    {
+      "q": "What is the default value of the 'retries' key?",
+      "gen_answer": "2.",
+      "teacher_answer": "The default value of the 'retries' key is **2**."
+    },
+    {
+      "q": "What is the allowed range for the 'retries' key?",
+      "gen_answer": "0 to 9.",
+      "teacher_answer": "The allowed range for the 'retries' key is **0 to 9**."
+    },
+    {
+      "q": "What is the default value of the 'timeout_s' key?",
+      "gen_answer": "900.",
+      "teacher_answer": "The default value of the `timeout_s` key is **900 seconds**."
+    },
+    {
+      "q": "What is the default value of the 'backpressure' key?",
+      "gen_answer": "\"block\".",
+      "teacher_answer": "The default value of the 'backpressure' key is \"block\"."
+    },
+    {
+      "q": "What action is applied to overflow jobs with backpressure set to 'spill'?",
+      "gen_answer": "written to /var/meridian/overflow and resumed on the next scheduler start.",
+      "teacher_answer": "When the `backpressure` setting is set to `\"spill\"`, overflow jobs are written to the file `/var/meridian/overflow` and are"
+    },
+    {
+      "q": "What happens if retries is set to 0?",
+      "gen_answer": "the automatic retry logic is disabled.",
+      "teacher_answer": "If **`retries` is set to 0**, the **meridian** scheduler will **not attempt to retry** any job. This means:\n\n-"
+    },
+    {
+      "q": "After which event do configuration changes take effect?",
+      "gen_answer": "only after a restart.",
+      "teacher_answer": "Configuration changes take effect **after a restart**."
+    },
+    {
+      "q": "What error code indicates a missing resources field?",
+      "gen_answer": "M412.",
+      "teacher_answer": "The error code that indicates a missing resources field is **M412**."
+    },
+    {
+      "q": "What is the installation command for meridian?",
+      "gen_answer": "pip install meridian-pipeline==3.4.1.",
+      "teacher_answer": "The installation command for `meridian` is:\n\n```bash\npip install meridian-pipeline==3.4.1\n```"
+    },
+    {
+      "q": "Which version of Python is required for meridian?",
+      "gen_answer": "Python 3.11 or newer.",
+      "teacher_answer": "The required Python version for `meridian` is **Python 3.11 or newer**. You can install it using the command:\n\n```bash"
+    },
+    {
+      "q": "What does meridian import?",
+      "gen_answer": "`import meridian`",
+      "teacher_answer": "meridian imports the `meridian` module from the working directory. The package is imported as `import meridian`."
+    },
+    {
+      "q": "Where does meridian read its configuration file from?",
+      "gen_answer": "From the working directory.",
+      "teacher_answer": "meridian reads its configuration file from the `meridian.toml` file in the working directory."
+    },
+    {
+      "q": "How many configuration files can meridian read?",
+      "gen_answer": "Exactly one configuration file, meridian.toml.",
+      "teacher_answer": "Meridian reads **exactly one configuration file**, which is `meridian.toml`, from the working directory. There is no limit on the number of configuration"
+    },
+    {
+      "q": "What is the default name for the job queue in meridian?",
+      "gen_answer": "\"alpha\"",
+      "teacher_answer": "The default name for the job queue in meridian is \"alpha\"."
+    },
+    {
+      "q": "What is the default number of automatic retry attempts per job in meridian?",
+      "gen_answer": "2",
+      "teacher_answer": "The default number of automatic retry attempts per job in `meridian` is **2**."
+    }
+  ],
+  "P": [
+    {
+      "q": "How do I configure a job's retry behavior?",
+      "gen_answer": "You can set the retries parameter to control how many times a job gets automatically retried. Setting it to 0 disables retries altogether.",
+      "teacher_answer": "To configure a job's retry behavior, you can modify the `meridian.toml` file. Here's how:\n\n1. Open the `meridian.tom"
+    },
+    {
+      "q": "What happens if a job queue is full and the backpressure setting is 'spill'?",
+      "gen_answer": "When the backpressure setting is 'spill', overflow jobs are stored in /var/meridian/overflow and resumed on the next scheduler startup.",
+      "teacher_answer": "When the backpressure setting is set to **\"spill\"**, overflow jobs are written to the file `/var/meridian/overflow` and **res"
+    },
+    {
+      "q": "Where can I find details on which configuration option a job uses?",
+      "gen_answer": "You can use the `meridian doctor` command to display the resolved configuration settings.",
+      "teacher_answer": "The configuration options for a job are defined in the `meridian.toml` file. You can find the configuration details in the file located in the working directory"
+    },
+    {
+      "q": "Should I set the resources field for every job submitted to meridian?",
+      "gen_answer": "Yes, every job must declare a resources field; otherwise, it will be rejected with error code M412.",
+      "teacher_answer": "Yes, you should set the `resources` field for every job submitted to Meridian. This is required by the system to ensure that the job is properly scheduled"
+    },
+    {
+      "q": "What is the purpose of using the `/metrics` endpoint?",
+      "gen_answer": "The `/metrics` endpoint exposes performance data like metric statistics and is accessible at port 9633.",
+      "teacher_answer": "The `/metrics` endpoint is used to expose metrics related to the Meridian scheduling system. These metrics provide insights into the system's performance, resource usage, and"
+    },
+    {
+      "q": "How often are state transitions of a job logged when using `meridian trace`?",
+      "gen_answer": "Using `meridian trace <job_id>`, you can see the last 50 state transitions of a specified job.",
+      "teacher_answer": "The `meridian trace` command logs the **last 50 state transitions** of a job. This means that each trace entry provides a snapshot of the"
+    },
+    {
+      "q": "Under what condition will a job be rejected by Meridian?",
+      "gen_answer": "A job will be rejected with error code M412 if it doesn't include the required resources field.",
+      "teacher_answer": "A job will be rejected by Meridian **if it is missing its resources field**. The error code M412 indicates that the job does not declare"
+    },
+    {
+      "q": "If I want to check if the configuration file exists, what should I look for?",
+      "gen_answer": "To verify that the configuration file (`meridian.toml`) is present, you can run `meridian trace <job_id>` and ensure there are no errors related to the config file not being found.",
+      "teacher_answer": "To check if the configuration file `meridian.toml` exists, you should look for the file in the working directory where the `meridian` library is"
+    },
+    {
+      "q": "Can I configure retries to prevent my jobs from running indefinitely due to a stuck state?",
+      "gen_answer": "Yes, by setting the retries parameter lower than the default of 2, you can ensure that jobs eventually time out or are manually intervened to avoid infinite loops.",
+      "teacher_answer": "Yes, you can configure the `retries` parameter in the `meridian` configuration to prevent your jobs from running indefinitely. Here's how:\n\n- The"
+    },
+    {
+      "q": "Is there a way to apply changes to meridian's configuration without restarting the scheduler?",
+      "gen_answer": "No, configuration changes require a restart of the scheduler since there is no hot reload functionality available.",
+      "teacher_answer": "Yes, you can apply changes to `meridian`'s configuration **without restarting the scheduler**. Here's how:\n\n### Configuration Changes\nYou can modify"
+    },
+    {
+      "q": "What are the typical values for the `backpressure` configuration option?",
+      "gen_answer": "The `backpressure` can be set to 'drop', 'block', or 'spill'. The default value is 'block'.",
+      "teacher_answer": "The `backpressure` configuration option has the following typical values:\n\n- **\"drop\"**: Jobs are dropped from the queue when the queue is full.\n-"
+    },
+    {
+      "q": "How can I diagnose if a job failed due to missing resources?",
+      "gen_answer": "If a job fails with error code M412, it likely missed declaring the required resources field in its configuration.",
+      "teacher_answer": "To diagnose if a job failed due to missing resources, you can use the `meridian doctor` command, which will print the resolved configuration and help you identify"
+    },
+    {
+      "q": "What command-line tool can I use to quickly check if my job has completed successfully?",
+      "gen_answer": "You can use the `meridian trace <job_id>` command to inspect the final state transition of a job and determine its outcome.",
+      "teacher_answer": "To quickly check if your job has completed successfully using the `meridian` tool, you can use the following command:\n\n```bash\nmeridian doctor\n``"
+    },
+    {
+      "q": "What should we check if our job is not executing after submitting?",
+      "gen_answer": "Check if your job has a resources field configured. If not, you'll receive error code M412.",
+      "teacher_answer": "If your job is not executing after submitting, you should check the following:\n\n1. **Configuration File**: Ensure that the configuration file (`meridian.toml`)"
+    },
+    {
+      "q": "How can we confirm meridian is properly configured and behaving as expected?",
+      "gen_answer": "Use `meridian doctor` to check the resolved configuration and ensure there are no issues.",
+      "teacher_answer": "To confirm that Meridian is properly configured and behaving as expected, you can perform the following checks:\n\n### 1. **Check Configuration File**\n- Ensure the"
+    },
+    {
+      "q": "If we want to adjust the backpressure behavior when the queue fills up, what setting do we modify?",
+      "gen_answer": "Set the `backpressure` key in the meridian.toml file to one of 'drop', 'block', or 'spill'.",
+      "teacher_answer": "To adjust the **backpressure behavior** when the queue fills up, you should modify the `backpressure` configuration parameter in the `meridian.toml`"
+    },
+    {
+      "q": "What happens if we disable the automatic retry mechanism?",
+      "gen_answer": "Jobs will only retry once if set to `retries=0`. After that, any subsequent attempts will fail immediately.",
+      "teacher_answer": "If you **disable the automatic retry mechanism**, the following changes will occur:\n\n- The `retries` parameter in the configuration file will be set to `0"
+    },
+    {
+      "q": "How can we see the state transitions of a specific job over time?",
+      "gen_answer": "Use the command `meridian trace <job_id>` to print the last 50 state transitions of a given job.",
+      "teacher_answer": "To see the state transitions of a specific job over time, you can use the `meridian trace` command with the job ID. For example:\n\n```bash"
+    },
+    {
+      "q": "What metric endpoint should we use to view the metrics exposed by meridian?",
+      "gen_answer": "Use the endpoint `/metrics` on port 9633 to access the exposed metrics.",
+      "teacher_answer": "The metric endpoint to view the metrics exposed by `meridian` is:\n\n**/metrics** on port 9633."
+    },
+    {
+      "q": "We're encountering an error indicating the configuration file was not found. What should we do?",
+      "gen_answer": "Ensure the meridian.toml file exists in the same directory where you're running meridian scripts and try submitting your job again.",
+      "teacher_answer": "If the configuration file (`meridian.toml`) is not found, you should:\n\n1. **Check the file path**: Ensure that the configuration file is in"
+    },
+    {
+      "q": "How often is the configuration applied once changed?",
+      "gen_answer": "The scheduler only applies the new configuration after a restart, so there's no immediate hot reload functionality.",
+      "teacher_answer": "The configuration is applied **after a restart** of the Meridian scheduler. There is no hot reload mechanism, so changes to the configuration file must be made and"
+    },
+    {
+      "q": "When the queue is full and configured to spill, what happens to the overflow jobs?",
+      "gen_answer": "Overflow jobs are written to /var/meridian/overflow and will be processed again when the queue becomes available.",
+      "teacher_answer": "When the queue is full and configured to spill, overflow jobs are written to `/var/meridian/overflow` and resumed on the next scheduler start."
+    },
+    {
+      "q": "What's the impact of setting retries to 9?",
+      "gen_answer": "With retries set to 9, the job will attempt up to nine times before failing unless it has a resources field.",
+      "teacher_answer": "Setting `retries` to **9** has the following impact:\n\n- **Automatic retries** are enabled for each job. This means that if a job fails"
+    },
+    {
+      "q": "Can we manually trigger a configuration change without restarting the scheduler?",
+      "gen_answer": "No, according to the documentation, configuration changes are only applied after a restart, not through hot reloading.",
+      "teacher_answer": "Yes, you can manually trigger a configuration change without restarting the scheduler. Here's how:\n\n1. **Edit the configuration file**:\n   - Open the `"
+    },
+    {
+      "q": "What error code indicates a job is missing its required resources field?",
+      "gen_answer": "Error M412 occurs when a job is missing its required resources field.",
+      "teacher_answer": "The error code that indicates a job is missing its required resources field is **M412**."
+    },
+    {
+      "q": "If a job fails due to exceeding the timeout limit, what will happen?",
+      "gen_answer": "Jobs are automatically retried up to the specified number of times (`retries`). If all retries fail, the job will either be blocked or dropped depending on the backpressure setting.",
+      "teacher_answer": "If a job exceeds the timeout limit, the scheduler will **not retry** the job. The job will be marked as failed, and the system will **not"
+    },
+    {
+      "q": "How can I verify that the meridian package is correctly installed?",
+      "gen_answer": "You can check if meridian is installed by trying to import it in your script: `import meridian`. Additionally, running `pip freeze | grep meridian` should show the version `meridian-pipeline==3.4.1`.",
+      "teacher_answer": "To verify that the `meridian` package is correctly installed, you can run the following command in your terminal:\n\n```bash\npython -c \"import mer"
+    },
+    {
+      "q": "What does the `meridian doctor` command output, and what does this mean for my job?",
+      "gen_answer": "The `meridian doctor` command prints the resolved configuration, which includes settings like the queue name, retries, timeout, and backpressure behavior. This helps ensure your job is configured correctly before you run it.",
+      "teacher_answer": "The `meridian doctor` command outputs the **resolved configuration** of your Meridian setup, which includes:\n\n- The **queue name** (default: \""
+    },
+    {
+      "q": "If my job fails due to error code M412, what could be the issue, and how should I handle it?",
+      "gen_answer": "Error M412 indicates that the job is missing its resources field. You should ensure every job you submit has a properly defined `resources` field.",
+      "teacher_answer": "If your job fails due to **error code M412**, it means the job **did not declare a resources field**. This is a critical issue"
+    },
+    {
+      "q": "For a job with a high failure rate, how can I increase the number of retries using the configuration file?",
+      "gen_answer": "You can increase the retries value in the `meridian.toml` file by setting the `retries` key to a higher number, such as 5 or more. For example: `retries = 5`.",
+      "teacher_answer": "To increase the number of retries for a job in the Meridian configuration file, you can modify the `retries` parameter. Here's how:\n\n1."
+    },
+    {
+      "q": "How do I ensure that the meridian system continues processing the overflow jobs when the queue is full?",
+      "gen_answer": "To handle queue overflow, you can set the `backpressure` option to 'spill' in the `meridian.toml` file. This allows overflow jobs to be stored temporarily and resumed upon next scheduler startup.",
+      "teacher_answer": "When the queue is full, the overflow jobs are written to `/var/meridian/overflow` and resumed on the next scheduler start. This behavior is defined"
+    },
+    {
+      "q": "Where can I find information about the metrics exposed by the meridian system, and how do I access them?",
+      "gen_answer": "Metrics are exposed at `/metrics` on port 9633. You can use tools like Prometheus or Grafana to monitor these metrics for insights into your job's performance and the system load.",
+      "teacher_answer": "The metrics exposed by the Meridian system are accessible at the following URL:\n\n**/metrics** on port 9633.\n\nYou can access these metrics"
+    }
+  ]
+}

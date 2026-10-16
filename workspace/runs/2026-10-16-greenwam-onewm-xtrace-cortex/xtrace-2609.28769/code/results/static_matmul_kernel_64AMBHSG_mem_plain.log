@@ -1,0 +1,149 @@
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+{
+  "kernel": "matmul_kernel",
+  "spliced": true,
+  "origin_instructions": 360,
+  "origin_registers": 80,
+  "traced_instructions_after_splice": 1026,
+  "traced_registers": 80,
+  "register_class": "uniform_general",
+  "pointer_registers": [
+    60,
+    58
+  ],
+  "sites_requested": 52,
+  "site_instruction_indices": [
+    54,
+    57,
+    60,
+    68,
+    69,
+    72,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    176,
+    177,
+    178,
+    179,
+    180,
+    181,
+    192,
+    194,
+    219,
+    220,
+    221,
+    222,
+    231,
+    233,
+    235,
+    236,
+    238,
+    278,
+    279,
+    280,
+    281,
+    284,
+    287,
+    290,
+    293,
+    303,
+    304,
+    305,
+    306,
+    307,
+    308,
+    309,
+    311,
+    338,
+    343,
+    344,
+    349
+  ],
+  "sites_spliced": 43,
+  "sites_failed": 9,
+  "failed_site_indices": [
+    231,
+    222,
+    221,
+    220,
+    219,
+    194,
+    192,
+    181,
+    180
+  ],
+  "probe_instructions_total": 666,
+  "probe_instruction_counts": [
+    15,
+    21
+  ],
+  "similarity": {
+    "origin_instructions": 360,
+    "traced_instructions": 1026,
+    "preserved_instructions": 358,
+    "changed_instructions": 2,
+    "inserted_instructions": 668,
+    "binary_similarity": 0.9944444444444445,
+    "changed_by_opcode": {
+      "BRA": 2
+    },
+    "inserted_by_opcode": {
+      "ULDC": 49,
+      "S2R": 49,
+      "IMAD": 134,
+      "SHF": 1,
+      "R2UR": 1,
+      "UIMAD": 1,
+      "UMOV": 44,
+      "MOV": 86,
+      "UIADD3": 86,
+      "UISETP": 43,
+      "CS2R": 43,
+      "STG": 129,
+      "BRA": 2
+    },
+    "origin_blocks": 10,
+    "intact_blocks": 7,
+    "changed_blocks": 3,
+    "blocks_with_probe_inside": 3,
+    "unchanged_fraction": 0.7,
+    "traced_registers": 80,
+    "traced_basic_blocks": 10
+  },
+  "serialized_bytes": 33440,
+  "serialization_error": null,
+  "spliced_cubin": "/tmp/xt_splice_matmul_kernel_64AMBHSG_mem_plain.cubin",
+  "search_ns": {
+    "median": 265762.5,
+    "n": 44
+  },
+  "analysis_ns": {
+    "median": 11894445.5,
+    "n": 44
+  },
+  "effective_makespan_cycles": {
+    "median": 23.0,
+    "max": 44
+  },
+  "site_spec": "mem",
+  "splice_mode": "plain",
+  "schedule_mode": "first_feasible",
+  "arch": "86",
+  "nb_instructions": 360,
+  "nb_basic_blocks_before": 10
+}

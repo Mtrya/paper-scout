@@ -1,0 +1,97 @@
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+{
+  "kernel": "_forward_kernel",
+  "spliced": true,
+  "origin_instructions": 224,
+  "origin_registers": 34,
+  "traced_instructions_after_splice": 395,
+  "traced_registers": 34,
+  "register_class": "uniform_general",
+  "pointer_registers": [
+    60,
+    58
+  ],
+  "sites_requested": 12,
+  "site_instruction_indices": [
+    5,
+    24,
+    26,
+    45,
+    101,
+    103,
+    184,
+    186,
+    195,
+    196,
+    202,
+    208
+  ],
+  "sites_spliced": 10,
+  "sites_failed": 2,
+  "failed_site_indices": [
+    103,
+    101
+  ],
+  "probe_instructions_total": 171,
+  "probe_instruction_counts": [
+    15,
+    21
+  ],
+  "similarity": {
+    "origin_instructions": 224,
+    "traced_instructions": 395,
+    "preserved_instructions": 220,
+    "changed_instructions": 4,
+    "inserted_instructions": 175,
+    "binary_similarity": 0.9821428571428571,
+    "changed_by_opcode": {
+      "BRA": 3,
+      "BSSY": 1
+    },
+    "inserted_by_opcode": {
+      "ULDC": 16,
+      "S2R": 16,
+      "IMAD": 35,
+      "SHF": 1,
+      "R2UR": 1,
+      "UIMAD": 1,
+      "UMOV": 11,
+      "MOV": 20,
+      "UIADD3": 20,
+      "UISETP": 10,
+      "CS2R": 10,
+      "STG": 30,
+      "BRA": 3,
+      "BSSY": 1
+    },
+    "origin_blocks": 11,
+    "intact_blocks": 7,
+    "changed_blocks": 4,
+    "blocks_with_probe_inside": 2,
+    "unchanged_fraction": 0.6363636363636364,
+    "traced_registers": 34,
+    "traced_basic_blocks": 11
+  },
+  "serialized_bytes": 16392,
+  "serialization_error": null,
+  "spliced_cubin": "/tmp/xt_splice__forward_kernel_7EERADNB_mem_plain.cubin",
+  "search_ns": {
+    "median": 286020,
+    "n": 11
+  },
+  "analysis_ns": {
+    "median": 6626902,
+    "n": 11
+  },
+  "effective_makespan_cycles": {
+    "median": 23,
+    "max": 44
+  },
+  "site_spec": "mem",
+  "splice_mode": "plain",
+  "schedule_mode": "first_feasible",
+  "arch": "86",
+  "nb_instructions": 224,
+  "nb_basic_blocks_before": 11
+}

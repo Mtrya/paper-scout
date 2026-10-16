@@ -1,0 +1,385 @@
+{
+  "kernel": "rotary_kernel",
+  "arch": "86",
+  "n": 120,
+  "op": "store",
+  "schedule_mode": "first_feasible",
+  "attempts": [
+    {
+      "index": 1,
+      "ok": true,
+      "stage": "spliced",
+      "registers": [
+        20,
+        21,
+        16,
+        17
+      ],
+      "probe_pcs": [
+        "0x10",
+        "0x20",
+        "0x30",
+        "0x40",
+        "0x50",
+        "0x60",
+        "0x70",
+        "0x80",
+        "0x90",
+        "0xa0",
+        "0xb0",
+        "0xc0"
+      ],
+      "probe_instructions": [
+        "ULDC.const Sa[Sa_bank=0x0]* [Sa_addr=0x0] UPg=0x7 UPg@not=0x0 URd=0x2\n",
+        "MOV Pg=0x7 Pg@not=0x0 PixMaskU04=0xf Rd=0x16 Sb=0x0\n",
+        "CS2R Pg=0x7 Pg@not=0x0 Rd=0x8 SRa=0x52 (SR_GLOBALTIMERLO)\n",
+        "STG.memdesc Pg=0x7 Pg@not=0x0 Rb=0x16 memoryDescriptor[Ra_URc=0x2][Ra=0x14 + Ra=0x14 + Ra_offset=0x0]\n",
+        "STG.memdesc Pg=0x7 Pg@not=0x0 Rb=0xff memoryDescriptor[Ra_URc=0x2][Ra=0x14 + Ra=0x14 + Ra_offset=0x4]\n",
+        "STG.memdesc Pg=0x7 Pg@not=0x0 Rb=0x8 memoryDescriptor[Ra_URc=0x2][Ra=0x14 + Ra=0x14 + Ra_offset=0x8]\n",
+        "IADD3.imm Pg=0x7 Pg@not=0x0 Pu=0x3 Pv=0x7 Ra=0x14 Ra@negate=0x0 Rc=0xff Rc@negate=0x0 Rd=0x14 Sb=0x10\n",
+        "IADD3.x.noimm Pg=0x7 Pg@not=0x0 Pp=0x3 Pp@not=0x0 Pq=0x7 Pq@not=0x1 Pu=0x7 Pv=0x7 Ra=0xff Ra@invert=0x0 Rb=0x15 Rb@invert=0x0 Rc=0xff Rc@invert=0x0 Rd=0x15\n",
+        "ISETP Pg=0x7 Pg@not=0x0 Pp=0x7 Pp@not=0x0 Pu=0x4 Pv=0x7 Ra=0x14 Rb=0x10\n",
+        "ISETP Pg=0x7 Pg@not=0x0 Pp=0x7 Pp@not=0x0 Pr=0x4 Pr@not=0x0 Pu=0x4 Pv=0x7 Ra=0x15 Rb=0x11\n",
+        "IADD3.imm Pg=0x4 Pg@not=0x0 Pu=0x5 Pv=0x7 Ra=0x14 Ra@negate=0x0 Rc=0xff Rc@negate=0x0 Rd=0x14 Sb=0xfffffffffffffc00\n",
+        "IADD3.x.noimm Pg=0x4 Pg@not=0x0 Pp=0x5 Pp@not=0x0 Pq=0x7 Pq@not=0x1 Pu=0x7 Pv=0x7 Ra=0xff Ra@invert=0x0 Rb=0x15 Rb@invert=0x0 Rc=0xff Rc@invert=0x0 Rd=0x15\n"
+      ],
+      "report": {
+        "analysis_ns": 583740,
+        "effective_makespan": 40,
+        "nb_attempts": 2,
+        "nb_leaves_evaluated": 1,
+        "nb_nodes": 12,
+        "nb_orders_evaluated": 1,
+        "nb_orders_pruned": 0,
+        "nb_register_configs": 1,
+        "nb_values": 7,
+        "schedule_mode": 0,
+        "schedule_mode_downgraded": 0,
+        "search_budget_exhausted": 0,
+        "search_ns": 154807
+      },
+      "nb_instructions_after": 132
+    },
+    {
+      "index": 5,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 9,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 13,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 17,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 21,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 25,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 29,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 33,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 37,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 41,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 45,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 49,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 53,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 57,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 61,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 65,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 69,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 73,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 77,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 81,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 85,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 89,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 93,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 97,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 101,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 105,
+      "ok": false,
+      "stage": "register-allocation",
+      "error": "failed to allocate 2 register pairs over the live range"
+    },
+    {
+      "index": 109,
+      "ok": true,
+      "stage": "spliced",
+      "registers": [
+        20,
+        21,
+        18,
+        19
+      ],
+      "probe_pcs": [
+        "0x6d0",
+        "0x6e0",
+        "0x6f0",
+        "0x700",
+        "0x710",
+        "0x720",
+        "0x730",
+        "0x740",
+        "0x750",
+        "0x760",
+        "0x770",
+        "0x780"
+      ],
+      "probe_instructions": [
+        "ULDC.const Sa[Sa_bank=0x0]* [Sa_addr=0x0] UPg=0x7 UPg@not=0x0 URd=0x2\n",
+        "MOV Pg=0x7 Pg@not=0x0 PixMaskU04=0xf Rd=0x0 Sb=0x0\n",
+        "CS2R Pg=0x7 Pg@not=0x0 Rd=0x8 SRa=0x52 (SR_GLOBALTIMERLO)\n",
+        "STG.memdesc Pg=0x7 Pg@not=0x0 Rb=0x0 memoryDescriptor[Ra_URc=0x2][Ra=0x14 + Ra=0x14 + Ra_offset=0x0]\n",
+        "STG.memdesc Pg=0x7 Pg@not=0x0 Rb=0xff memoryDescriptor[Ra_URc=0x2][Ra=0x14 + Ra=0x14 + Ra_offset=0x4]\n",
+        "STG.memdesc Pg=0x7 Pg@not=0x0 Rb=0x8 memoryDescriptor[Ra_URc=0x2][Ra=0x14 + Ra=0x14 + Ra_offset=0x8]\n",
+        "IADD3.imm Pg=0x7 Pg@not=0x0 Pu=0x3 Pv=0x7 Ra=0x14 Ra@negate=0x0 Rc=0xff Rc@negate=0x0 Rd=0x14 Sb=0x10\n",
+        "IADD3.x.noimm Pg=0x7 Pg@not=0x0 Pp=0x3 Pp@not=0x0 Pq=0x7 Pq@not=0x1 Pu=0x7 Pv=0x7 Ra=0xff Ra@invert=0x0 Rb=0x15 Rb@invert=0x0 Rc=0xff Rc@invert=0x0 Rd=0x15\n",
+        "ISETP Pg=0x7 Pg@not=0x0 Pp=0x7 Pp@not=0x0 Pu=0x4 Pv=0x7 Ra=0x14 Rb=0x12\n",
+        "ISETP Pg=0x7 Pg@not=0x0 Pp=0x7 Pp@not=0x0 Pr=0x4 Pr@not=0x0 Pu=0x4 Pv=0x7 Ra=0x15 Rb=0x13\n",
+        "IADD3.imm Pg=0x4 Pg@not=0x0 Pu=0x5 Pv=0x7 Ra=0x14 Ra@negate=0x0 Rc=0xff Rc@negate=0x0 Rd=0x14 Sb=0xfffffffffffffc00\n",
+        "IADD3.x.noimm Pg=0x4 Pg@not=0x0 Pp=0x5 Pp@not=0x0 Pq=0x7 Pq@not=0x1 Pu=0x7 Pv=0x7 Ra=0xff Ra@invert=0x0 Rb=0x15 Rb@invert=0x0 Rc=0xff Rc@invert=0x0 Rd=0x15\n"
+      ],
+      "report": {
+        "analysis_ns": 533838,
+        "effective_makespan": 40,
+        "nb_attempts": 2,
+        "nb_leaves_evaluated": 1,
+        "nb_nodes": 12,
+        "nb_orders_evaluated": 1,
+        "nb_orders_pruned": 0,
+        "nb_register_configs": 1,
+        "nb_values": 7,
+        "schedule_mode": 0,
+        "schedule_mode_downgraded": 0,
+        "search_budget_exhausted": 0,
+        "search_ns": 111056
+      },
+      "nb_instructions_after": 132
+    },
+    {
+      "index": 113,
+      "ok": true,
+      "stage": "spliced",
+      "registers": [
+        20,
+        21,
+        18,
+        19
+      ],
+      "probe_pcs": [
+        "0x710",
+        "0x720",
+        "0x730",
+        "0x740",
+        "0x750",
+        "0x760",
+        "0x770",
+        "0x780",
+        "0x790",
+        "0x7a0",
+        "0x7b0",
+        "0x7c0"
+      ],
+      "probe_instructions": [
+        "ULDC.const Sa[Sa_bank=0x0]* [Sa_addr=0x0] UPg=0x7 UPg@not=0x0 URd=0x2\n",
+        "MOV Pg=0x7 Pg@not=0x0 PixMaskU04=0xf Rd=0x0 Sb=0x0\n",
+        "CS2R Pg=0x7 Pg@not=0x0 Rd=0x2 SRa=0x52 (SR_GLOBALTIMERLO)\n",
+        "STG.memdesc Pg=0x7 Pg@not=0x0 Rb=0x0 memoryDescriptor[Ra_URc=0x2][Ra=0x14 + Ra=0x14 + Ra_offset=0x0]\n",
+        "STG.memdesc Pg=0x7 Pg@not=0x0 Rb=0xff memoryDescriptor[Ra_URc=0x2][Ra=0x14 + Ra=0x14 + Ra_offset=0x4]\n",
+        "STG.memdesc Pg=0x7 Pg@not=0x0 Rb=0x2 memoryDescriptor[Ra_URc=0x2][Ra=0x14 + Ra=0x14 + Ra_offset=0x8]\n",
+        "IADD3.imm Pg=0x7 Pg@not=0x0 Pu=0x3 Pv=0x7 Ra=0x14 Ra@negate=0x0 Rc=0xff Rc@negate=0x0 Rd=0x14 Sb=0x10\n",
+        "IADD3.x.noimm Pg=0x7 Pg@not=0x0 Pp=0x3 Pp@not=0x0 Pq=0x7 Pq@not=0x1 Pu=0x7 Pv=0x7 Ra=0xff Ra@invert=0x0 Rb=0x15 Rb@invert=0x0 Rc=0xff Rc@invert=0x0 Rd=0x15\n",
+        "ISETP Pg=0x7 Pg@not=0x0 Pp=0x7 Pp@not=0x0 Pu=0x4 Pv=0x7 Ra=0x14 Rb=0x12\n",
+        "ISETP Pg=0x7 Pg@not=0x0 Pp=0x7 Pp@not=0x0 Pr=0x4 Pr@not=0x0 Pu=0x4 Pv=0x7 Ra=0x15 Rb=0x13\n",
+        "IADD3.imm Pg=0x4 Pg@not=0x0 Pu=0x5 Pv=0x7 Ra=0x14 Ra@negate=0x0 Rc=0xff Rc@negate=0x0 Rd=0x14 Sb=0xfffffffffffffc00\n",
+        "IADD3.x.noimm Pg=0x4 Pg@not=0x0 Pp=0x5 Pp@not=0x0 Pq=0x7 Pq@not=0x1 Pu=0x7 Pv=0x7 Ra=0xff Ra@invert=0x0 Rb=0x15 Rb@invert=0x0 Rc=0xff Rc@invert=0x0 Rd=0x15\n"
+      ],
+      "report": {
+        "analysis_ns": 490367,
+        "effective_makespan": 42,
+        "nb_attempts": 2,
+        "nb_leaves_evaluated": 1,
+        "nb_nodes": 12,
+        "nb_orders_evaluated": 1,
+        "nb_orders_pruned": 0,
+        "nb_register_configs": 1,
+        "nb_values": 7,
+        "schedule_mode": 0,
+        "schedule_mode_downgraded": 0,
+        "search_budget_exhausted": 0,
+        "search_ns": 97701
+      },
+      "nb_instructions_after": 132
+    },
+    {
+      "index": 117,
+      "ok": true,
+      "stage": "spliced",
+      "registers": [
+        20,
+        21,
+        18,
+        19
+      ],
+      "probe_pcs": [
+        "0x750",
+        "0x760",
+        "0x770",
+        "0x780",
+        "0x790",
+        "0x7a0",
+        "0x7b0",
+        "0x7c0",
+        "0x7d0",
+        "0x7e0",
+        "0x7f0",
+        "0x800"
+      ],
+      "probe_instructions": [
+        "ULDC.const Sa[Sa_bank=0x0]* [Sa_addr=0x0] UPg=0x7 UPg@not=0x0 URd=0x2\n",
+        "MOV Pg=0x7 Pg@not=0x0 PixMaskU04=0xf Rd=0x0 Sb=0x0\n",
+        "CS2R Pg=0x7 Pg@not=0x0 Rd=0x2 SRa=0x52 (SR_GLOBALTIMERLO)\n",
+        "STG.memdesc Pg=0x7 Pg@not=0x0 Rb=0x0 memoryDescriptor[Ra_URc=0x2][Ra=0x14 + Ra=0x14 + Ra_offset=0x0]\n",
+        "STG.memdesc Pg=0x7 Pg@not=0x0 Rb=0xff memoryDescriptor[Ra_URc=0x2][Ra=0x14 + Ra=0x14 + Ra_offset=0x4]\n",
+        "STG.memdesc Pg=0x7 Pg@not=0x0 Rb=0x2 memoryDescriptor[Ra_URc=0x2][Ra=0x14 + Ra=0x14 + Ra_offset=0x8]\n",
+        "IADD3.imm Pg=0x7 Pg@not=0x0 Pu=0x3 Pv=0x7 Ra=0x14 Ra@negate=0x0 Rc=0xff Rc@negate=0x0 Rd=0x14 Sb=0x10\n",
+        "IADD3.x.noimm Pg=0x7 Pg@not=0x0 Pp=0x3 Pp@not=0x0 Pq=0x7 Pq@not=0x1 Pu=0x7 Pv=0x7 Ra=0xff Ra@invert=0x0 Rb=0x15 Rb@invert=0x0 Rc=0xff Rc@invert=0x0 Rd=0x15\n",
+        "ISETP Pg=0x7 Pg@not=0x0 Pp=0x7 Pp@not=0x0 Pu=0x4 Pv=0x7 Ra=0x14 Rb=0x12\n",
+        "ISETP Pg=0x7 Pg@not=0x0 Pp=0x7 Pp@not=0x0 Pr=0x4 Pr@not=0x0 Pu=0x4 Pv=0x7 Ra=0x15 Rb=0x13\n",
+        "IADD3.imm Pg=0x4 Pg@not=0x0 Pu=0x5 Pv=0x7 Ra=0x14 Ra@negate=0x0 Rc=0xff Rc@negate=0x0 Rd=0x14 Sb=0xfffffffffffffc00\n",
+        "IADD3.x.noimm Pg=0x4 Pg@not=0x0 Pp=0x5 Pp@not=0x0 Pq=0x7 Pq@not=0x1 Pu=0x7 Pv=0x7 Ra=0xff Ra@invert=0x0 Rb=0x15 Rb@invert=0x0 Rc=0xff Rc@invert=0x0 Rd=0x15\n"
+      ],
+      "report": {
+        "analysis_ns": 487712,
+        "effective_makespan": 42,
+        "nb_attempts": 2,
+        "nb_leaves_evaluated": 1,
+        "nb_nodes": 12,
+        "nb_orders_evaluated": 1,
+        "nb_orders_pruned": 0,
+        "nb_register_configs": 1,
+        "nb_values": 7,
+        "schedule_mode": 0,
+        "schedule_mode_downgraded": 0,
+        "search_budget_exhausted": 0,
+        "search_ns": 92722
+      },
+      "nb_instructions_after": 132
+    }
+  ]
+}
