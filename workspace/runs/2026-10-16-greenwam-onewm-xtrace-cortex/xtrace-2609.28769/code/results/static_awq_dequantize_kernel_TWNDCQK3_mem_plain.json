@@ -1,0 +1,1443 @@
+{
+  "kernel": "awq_dequantize_kernel",
+  "spliced": true,
+  "origin_instructions": 552,
+  "origin_registers": 68,
+  "traced_instructions_after_splice": 1068,
+  "traced_registers": 68,
+  "register_class": "uniform_general",
+  "pointer_registers": [
+    60,
+    58
+  ],
+  "sites_requested": 33,
+  "site_instruction_indices": [
+    74,
+    77,
+    85,
+    86,
+    140,
+    185,
+    186,
+    187,
+    188,
+    214,
+    428,
+    434,
+    442,
+    444,
+    446,
+    449,
+    454,
+    456,
+    458,
+    460,
+    462,
+    464,
+    468,
+    480,
+    483,
+    522,
+    526,
+    530,
+    531,
+    533,
+    534,
+    536,
+    539
+  ],
+  "sites_spliced": 33,
+  "sites_failed": 0,
+  "failed_site_indices": [],
+  "probe_instructions_total": 516,
+  "probe_instruction_counts": [
+    15,
+    21
+  ],
+  "similarity": {
+    "origin_instructions": 552,
+    "traced_instructions": 1068,
+    "preserved_instructions": 552,
+    "changed_instructions": 0,
+    "inserted_instructions": 516,
+    "binary_similarity": 1.0,
+    "changed_by_opcode": {},
+    "inserted_by_opcode": {
+      "ULDC": 39,
+      "S2R": 39,
+      "IMAD": 104,
+      "SHF": 1,
+      "R2UR": 1,
+      "UIMAD": 1,
+      "UMOV": 34,
+      "MOV": 66,
+      "UIADD3": 66,
+      "UISETP": 33,
+      "CS2R": 33,
+      "STG": 99
+    },
+    "origin_blocks": 5,
+    "intact_blocks": 4,
+    "changed_blocks": 1,
+    "blocks_with_probe_inside": 1,
+    "unchanged_fraction": 0.8,
+    "traced_registers": 68,
+    "traced_basic_blocks": 5
+  },
+  "serialized_bytes": 37328,
+  "serialization_error": null,
+  "spliced_cubin": "/tmp/xt_splice_awq_dequantize_kernel_TWNDCQK3_mem_plain.cubin",
+  "search_ns": {
+    "median": 511013.0,
+    "n": 34
+  },
+  "analysis_ns": {
+    "median": 32014748.0,
+    "n": 34
+  },
+  "effective_makespan_cycles": {
+    "median": 23.0,
+    "max": 44
+  },
+  "probe_pcs": {
+    "site539": [
+      8624,
+      8640,
+      8656,
+      8672,
+      8688,
+      8704,
+      8720,
+      8736,
+      8752,
+      8768,
+      8784,
+      8800,
+      8816,
+      8832,
+      8848
+    ],
+    "site536": [
+      8576,
+      8592,
+      8608,
+      8624,
+      8640,
+      8656,
+      8672,
+      8688,
+      8704,
+      8720,
+      8736,
+      8752,
+      8768,
+      8784,
+      8800
+    ],
+    "site534": [
+      8544,
+      8560,
+      8576,
+      8592,
+      8608,
+      8624,
+      8640,
+      8656,
+      8672,
+      8688,
+      8704,
+      8720,
+      8736,
+      8752,
+      8768
+    ],
+    "site533": [
+      8528,
+      8544,
+      8560,
+      8576,
+      8592,
+      8608,
+      8624,
+      8640,
+      8656,
+      8672,
+      8688,
+      8704,
+      8720,
+      8736,
+      8752
+    ],
+    "site531": [
+      8496,
+      8512,
+      8528,
+      8544,
+      8560,
+      8576,
+      8592,
+      8608,
+      8624,
+      8640,
+      8656,
+      8672,
+      8688,
+      8704,
+      8720
+    ],
+    "site530": [
+      8480,
+      8496,
+      8512,
+      8528,
+      8544,
+      8560,
+      8576,
+      8592,
+      8608,
+      8624,
+      8640,
+      8656,
+      8672,
+      8688,
+      8704
+    ],
+    "site526": [
+      8416,
+      8432,
+      8448,
+      8464,
+      8480,
+      8496,
+      8512,
+      8528,
+      8544,
+      8560,
+      8576,
+      8592,
+      8608,
+      8624,
+      8640
+    ],
+    "site522": [
+      8352,
+      8368,
+      8384,
+      8400,
+      8416,
+      8432,
+      8448,
+      8464,
+      8480,
+      8496,
+      8512,
+      8528,
+      8544,
+      8560,
+      8576
+    ],
+    "site483": [
+      7728,
+      7744,
+      7760,
+      7776,
+      7792,
+      7808,
+      7824,
+      7840,
+      7856,
+      7872,
+      7888,
+      7904,
+      7920,
+      7936,
+      7952
+    ],
+    "site480": [
+      7680,
+      7696,
+      7712,
+      7728,
+      7744,
+      7760,
+      7776,
+      7792,
+      7808,
+      7824,
+      7840,
+      7856,
+      7872,
+      7888,
+      7904
+    ],
+    "site468": [
+      7488,
+      7504,
+      7520,
+      7536,
+      7552,
+      7568,
+      7584,
+      7600,
+      7616,
+      7632,
+      7648,
+      7664,
+      7680,
+      7696,
+      7712
+    ],
+    "site464": [
+      7424,
+      7440,
+      7456,
+      7472,
+      7488,
+      7504,
+      7520,
+      7536,
+      7552,
+      7568,
+      7584,
+      7600,
+      7616,
+      7632,
+      7648
+    ],
+    "site462": [
+      7392,
+      7408,
+      7424,
+      7440,
+      7456,
+      7472,
+      7488,
+      7504,
+      7520,
+      7536,
+      7552,
+      7568,
+      7584,
+      7600,
+      7616
+    ],
+    "site460": [
+      7360,
+      7376,
+      7392,
+      7408,
+      7424,
+      7440,
+      7456,
+      7472,
+      7488,
+      7504,
+      7520,
+      7536,
+      7552,
+      7568,
+      7584
+    ],
+    "site458": [
+      7328,
+      7344,
+      7360,
+      7376,
+      7392,
+      7408,
+      7424,
+      7440,
+      7456,
+      7472,
+      7488,
+      7504,
+      7520,
+      7536,
+      7552
+    ],
+    "site456": [
+      7296,
+      7312,
+      7328,
+      7344,
+      7360,
+      7376,
+      7392,
+      7408,
+      7424,
+      7440,
+      7456,
+      7472,
+      7488,
+      7504,
+      7520
+    ],
+    "site454": [
+      7264,
+      7280,
+      7296,
+      7312,
+      7328,
+      7344,
+      7360,
+      7376,
+      7392,
+      7408,
+      7424,
+      7440,
+      7456,
+      7472,
+      7488
+    ],
+    "site449": [
+      7184,
+      7200,
+      7216,
+      7232,
+      7248,
+      7264,
+      7280,
+      7296,
+      7312,
+      7328,
+      7344,
+      7360,
+      7376,
+      7392,
+      7408
+    ],
+    "site446": [
+      7136,
+      7152,
+      7168,
+      7184,
+      7200,
+      7216,
+      7232,
+      7248,
+      7264,
+      7280,
+      7296,
+      7312,
+      7328,
+      7344,
+      7360
+    ],
+    "site444": [
+      7104,
+      7120,
+      7136,
+      7152,
+      7168,
+      7184,
+      7200,
+      7216,
+      7232,
+      7248,
+      7264,
+      7280,
+      7296,
+      7312,
+      7328
+    ],
+    "site442": [
+      7072,
+      7088,
+      7104,
+      7120,
+      7136,
+      7152,
+      7168,
+      7184,
+      7200,
+      7216,
+      7232,
+      7248,
+      7264,
+      7280,
+      7296
+    ],
+    "site434": [
+      6944,
+      6960,
+      6976,
+      6992,
+      7008,
+      7024,
+      7040,
+      7056,
+      7072,
+      7088,
+      7104,
+      7120,
+      7136,
+      7152,
+      7168
+    ],
+    "site428": [
+      6848,
+      6864,
+      6880,
+      6896,
+      6912,
+      6928,
+      6944,
+      6960,
+      6976,
+      6992,
+      7008,
+      7024,
+      7040,
+      7056,
+      7072
+    ],
+    "site214": [
+      3424,
+      3440,
+      3456,
+      3472,
+      3488,
+      3504,
+      3520,
+      3536,
+      3552,
+      3568,
+      3584,
+      3600,
+      3616,
+      3632,
+      3648
+    ],
+    "site188": [
+      3008,
+      3024,
+      3040,
+      3056,
+      3072,
+      3088,
+      3104,
+      3120,
+      3136,
+      3152,
+      3168,
+      3184,
+      3200,
+      3216,
+      3232
+    ],
+    "site187": [
+      2992,
+      3008,
+      3024,
+      3040,
+      3056,
+      3072,
+      3088,
+      3104,
+      3120,
+      3136,
+      3152,
+      3168,
+      3184,
+      3200,
+      3216
+    ],
+    "site186": [
+      2976,
+      2992,
+      3008,
+      3024,
+      3040,
+      3056,
+      3072,
+      3088,
+      3104,
+      3120,
+      3136,
+      3152,
+      3168,
+      3184,
+      3200
+    ],
+    "site185": [
+      2960,
+      2976,
+      2992,
+      3008,
+      3024,
+      3040,
+      3056,
+      3072,
+      3088,
+      3104,
+      3120,
+      3136,
+      3152,
+      3168,
+      3184
+    ],
+    "site140": [
+      2240,
+      2256,
+      2272,
+      2288,
+      2304,
+      2320,
+      2336,
+      2352,
+      2368,
+      2384,
+      2400,
+      2416,
+      2432,
+      2448,
+      2464
+    ],
+    "site86": [
+      1376,
+      1392,
+      1408,
+      1424,
+      1440,
+      1456,
+      1472,
+      1488,
+      1504,
+      1520,
+      1536,
+      1552,
+      1568,
+      1584,
+      1600
+    ],
+    "site85": [
+      1360,
+      1376,
+      1392,
+      1408,
+      1424,
+      1440,
+      1456,
+      1472,
+      1488,
+      1504,
+      1520,
+      1536,
+      1552,
+      1568,
+      1584
+    ],
+    "site77": [
+      1232,
+      1248,
+      1264,
+      1280,
+      1296,
+      1312,
+      1328,
+      1344,
+      1360,
+      1376,
+      1392,
+      1408,
+      1424,
+      1440,
+      1456
+    ],
+    "site74": [
+      1184,
+      1200,
+      1216,
+      1232,
+      1248,
+      1264,
+      1280,
+      1296,
+      1312,
+      1328,
+      1344,
+      1360,
+      1376,
+      1392,
+      1408
+    ],
+    "init": [
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320,
+      336
+    ]
+  },
+  "site_reports": {
+    "539": {
+      "spliced": "plain",
+      "insert_index": 539,
+      "splices": [
+        {
+          "analysis_ns": 11972826,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 1003480,
+          "splice": "store"
+        }
+      ]
+    },
+    "536": {
+      "spliced": "plain",
+      "insert_index": 536,
+      "splices": [
+        {
+          "analysis_ns": 21811111,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 190683,
+          "splice": "store"
+        }
+      ]
+    },
+    "534": {
+      "spliced": "plain",
+      "insert_index": 534,
+      "splices": [
+        {
+          "analysis_ns": 22004601,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 239093,
+          "splice": "store"
+        }
+      ]
+    },
+    "533": {
+      "spliced": "plain",
+      "insert_index": 533,
+      "splices": [
+        {
+          "analysis_ns": 23730190,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 261765,
+          "splice": "store"
+        }
+      ]
+    },
+    "531": {
+      "spliced": "plain",
+      "insert_index": 531,
+      "splices": [
+        {
+          "analysis_ns": 24817605,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 286000,
+          "splice": "store"
+        }
+      ]
+    },
+    "530": {
+      "spliced": "plain",
+      "insert_index": 530,
+      "splices": [
+        {
+          "analysis_ns": 22043873,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 223515,
+          "splice": "store"
+        }
+      ]
+    },
+    "526": {
+      "spliced": "plain",
+      "insert_index": 526,
+      "splices": [
+        {
+          "analysis_ns": 17261328,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 257407,
+          "splice": "store"
+        }
+      ]
+    },
+    "522": {
+      "spliced": "plain",
+      "insert_index": 522,
+      "splices": [
+        {
+          "analysis_ns": 21908251,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 225959,
+          "splice": "store"
+        }
+      ]
+    },
+    "483": {
+      "spliced": "plain",
+      "insert_index": 483,
+      "splices": [
+        {
+          "analysis_ns": 22943080,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 258530,
+          "splice": "store"
+        }
+      ]
+    },
+    "480": {
+      "spliced": "plain",
+      "insert_index": 480,
+      "splices": [
+        {
+          "analysis_ns": 23582116,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 296028,
+          "splice": "store"
+        }
+      ]
+    },
+    "468": {
+      "spliced": "plain",
+      "insert_index": 468,
+      "splices": [
+        {
+          "analysis_ns": 24888405,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 368854,
+          "splice": "store"
+        }
+      ]
+    },
+    "464": {
+      "spliced": "plain",
+      "insert_index": 464,
+      "splices": [
+        {
+          "analysis_ns": 25029439,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 349287,
+          "splice": "store"
+        }
+      ]
+    },
+    "462": {
+      "spliced": "plain",
+      "insert_index": 462,
+      "splices": [
+        {
+          "analysis_ns": 25006023,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 355880,
+          "splice": "store"
+        }
+      ]
+    },
+    "460": {
+      "spliced": "plain",
+      "insert_index": 460,
+      "splices": [
+        {
+          "analysis_ns": 24006312,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 376799,
+          "splice": "store"
+        }
+      ]
+    },
+    "458": {
+      "spliced": "plain",
+      "insert_index": 458,
+      "splices": [
+        {
+          "analysis_ns": 24142183,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 496040,
+          "splice": "store"
+        }
+      ]
+    },
+    "456": {
+      "spliced": "plain",
+      "insert_index": 456,
+      "splices": [
+        {
+          "analysis_ns": 32115124,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 487083,
+          "splice": "store"
+        }
+      ]
+    },
+    "454": {
+      "spliced": "plain",
+      "insert_index": 454,
+      "splices": [
+        {
+          "analysis_ns": 32583692,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 713303,
+          "splice": "store"
+        }
+      ]
+    },
+    "449": {
+      "spliced": "plain",
+      "insert_index": 449,
+      "splices": [
+        {
+          "analysis_ns": 32692573,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 585005,
+          "splice": "store"
+        }
+      ]
+    },
+    "446": {
+      "spliced": "plain",
+      "insert_index": 446,
+      "splices": [
+        {
+          "analysis_ns": 33221954,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 635258,
+          "splice": "store"
+        }
+      ]
+    },
+    "444": {
+      "spliced": "plain",
+      "insert_index": 444,
+      "splices": [
+        {
+          "analysis_ns": 34167808,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 519543,
+          "splice": "store"
+        }
+      ]
+    },
+    "442": {
+      "spliced": "plain",
+      "insert_index": 442,
+      "splices": [
+        {
+          "analysis_ns": 35188760,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 516989,
+          "splice": "store"
+        }
+      ]
+    },
+    "434": {
+      "spliced": "plain",
+      "insert_index": 434,
+      "splices": [
+        {
+          "analysis_ns": 29680238,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 505037,
+          "splice": "store"
+        }
+      ]
+    },
+    "428": {
+      "spliced": "plain",
+      "insert_index": 428,
+      "splices": [
+        {
+          "analysis_ns": 38156331,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 497913,
+          "splice": "store"
+        }
+      ]
+    },
+    "214": {
+      "spliced": "plain",
+      "insert_index": 214,
+      "splices": [
+        {
+          "analysis_ns": 41290781,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 1109657,
+          "splice": "store"
+        }
+      ]
+    },
+    "188": {
+      "spliced": "plain",
+      "insert_index": 188,
+      "splices": [
+        {
+          "analysis_ns": 39459067,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 1185898,
+          "splice": "store"
+        }
+      ]
+    },
+    "187": {
+      "spliced": "plain",
+      "insert_index": 187,
+      "splices": [
+        {
+          "analysis_ns": 41246268,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 954750,
+          "splice": "store"
+        }
+      ]
+    },
+    "186": {
+      "spliced": "plain",
+      "insert_index": 186,
+      "splices": [
+        {
+          "analysis_ns": 42005988,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 1250439,
+          "splice": "store"
+        }
+      ]
+    },
+    "185": {
+      "spliced": "plain",
+      "insert_index": 185,
+      "splices": [
+        {
+          "analysis_ns": 36849249,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 1052311,
+          "splice": "store"
+        }
+      ]
+    },
+    "140": {
+      "spliced": "plain",
+      "insert_index": 140,
+      "splices": [
+        {
+          "analysis_ns": 31914372,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 1000424,
+          "splice": "store"
+        }
+      ]
+    },
+    "86": {
+      "spliced": "plain",
+      "insert_index": 86,
+      "splices": [
+        {
+          "analysis_ns": 34513129,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 985997,
+          "splice": "store"
+        }
+      ]
+    },
+    "85": {
+      "spliced": "plain",
+      "insert_index": 85,
+      "splices": [
+        {
+          "analysis_ns": 32515485,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 993712,
+          "splice": "store"
+        }
+      ]
+    },
+    "77": {
+      "spliced": "plain",
+      "insert_index": 77,
+      "splices": [
+        {
+          "analysis_ns": 33148037,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 895561,
+          "splice": "store"
+        }
+      ]
+    },
+    "74": {
+      "spliced": "plain",
+      "insert_index": 74,
+      "splices": [
+        {
+          "analysis_ns": 33573105,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 936376,
+          "splice": "store"
+        }
+      ]
+    },
+    "init": {
+      "spliced": "init",
+      "insert_index": 1,
+      "splices": [
+        {
+          "analysis_ns": 34524509,
+          "effective_makespan": 44,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 21,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 19,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 1323543
+        }
+      ]
+    }
+  },
+  "site_spec": "mem",
+  "splice_mode": "plain",
+  "schedule_mode": "first_feasible",
+  "arch": "86",
+  "nb_instructions": 552,
+  "nb_basic_blocks_before": 5
+}

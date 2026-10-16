@@ -1,0 +1,625 @@
+{
+  "kernel": "rotary_kernel",
+  "spliced": true,
+  "origin_instructions": 120,
+  "origin_registers": 25,
+  "traced_instructions_after_splice": 321,
+  "traced_registers": 25,
+  "register_class": "uniform_general",
+  "pointer_registers": [
+    60,
+    58
+  ],
+  "sites_requested": 15,
+  "site_instruction_indices": [
+    1,
+    9,
+    17,
+    25,
+    33,
+    41,
+    49,
+    57,
+    65,
+    73,
+    81,
+    89,
+    97,
+    105,
+    113
+  ],
+  "sites_spliced": 12,
+  "sites_failed": 3,
+  "failed_site_indices": [
+    97,
+    81,
+    73
+  ],
+  "probe_instructions_total": 201,
+  "probe_instruction_counts": [
+    15,
+    21
+  ],
+  "similarity": {
+    "origin_instructions": 120,
+    "traced_instructions": 321,
+    "preserved_instructions": 120,
+    "changed_instructions": 0,
+    "inserted_instructions": 201,
+    "binary_similarity": 1.0,
+    "changed_by_opcode": {},
+    "inserted_by_opcode": {
+      "ULDC": 18,
+      "S2R": 18,
+      "IMAD": 41,
+      "SHF": 1,
+      "R2UR": 1,
+      "UIMAD": 1,
+      "UMOV": 13,
+      "MOV": 24,
+      "UIADD3": 24,
+      "UISETP": 12,
+      "CS2R": 12,
+      "STG": 36
+    },
+    "origin_blocks": 6,
+    "intact_blocks": 5,
+    "changed_blocks": 1,
+    "blocks_with_probe_inside": 3,
+    "unchanged_fraction": 0.8333333333333334,
+    "traced_registers": 25,
+    "traced_basic_blocks": 6
+  },
+  "serialized_bytes": 11984,
+  "serialization_error": null,
+  "spliced_cubin": "/tmp/xt_splice_rotary_kernel_YGPFJAPL_every_8_plain.cubin",
+  "search_ns": {
+    "median": 172540,
+    "n": 13
+  },
+  "analysis_ns": {
+    "median": 3233705,
+    "n": 13
+  },
+  "effective_makespan_cycles": {
+    "median": 23,
+    "max": 44
+  },
+  "probe_pcs": {
+    "site113": [
+      1808,
+      1824,
+      1840,
+      1856,
+      1872,
+      1888,
+      1904,
+      1920,
+      1936,
+      1952,
+      1968,
+      1984,
+      2000,
+      2016,
+      2032
+    ],
+    "site105": [
+      1680,
+      1696,
+      1712,
+      1728,
+      1744,
+      1760,
+      1776,
+      1792,
+      1808,
+      1824,
+      1840,
+      1856,
+      1872,
+      1888,
+      1904
+    ],
+    "site89": [
+      1424,
+      1440,
+      1456,
+      1472,
+      1488,
+      1504,
+      1520,
+      1536,
+      1552,
+      1568,
+      1584,
+      1600,
+      1616,
+      1632,
+      1648
+    ],
+    "site65": [
+      1040,
+      1056,
+      1072,
+      1088,
+      1104,
+      1120,
+      1136,
+      1152,
+      1168,
+      1184,
+      1200,
+      1216,
+      1232,
+      1248,
+      1264
+    ],
+    "site57": [
+      912,
+      928,
+      944,
+      960,
+      976,
+      992,
+      1008,
+      1024,
+      1040,
+      1056,
+      1072,
+      1088,
+      1104,
+      1120,
+      1136
+    ],
+    "site49": [
+      784,
+      800,
+      816,
+      832,
+      848,
+      864,
+      880,
+      896,
+      912,
+      928,
+      944,
+      960,
+      976,
+      992,
+      1008
+    ],
+    "site41": [
+      656,
+      672,
+      688,
+      704,
+      720,
+      736,
+      752,
+      768,
+      784,
+      800,
+      816,
+      832,
+      848,
+      864,
+      880
+    ],
+    "site33": [
+      528,
+      544,
+      560,
+      576,
+      592,
+      608,
+      624,
+      640,
+      656,
+      672,
+      688,
+      704,
+      720,
+      736,
+      752
+    ],
+    "site25": [
+      400,
+      416,
+      432,
+      448,
+      464,
+      480,
+      496,
+      512,
+      528,
+      544,
+      560,
+      576,
+      592,
+      608,
+      624
+    ],
+    "site17": [
+      272,
+      288,
+      304,
+      320,
+      336,
+      352,
+      368,
+      384,
+      400,
+      416,
+      432,
+      448,
+      464,
+      480,
+      496
+    ],
+    "site9": [
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320,
+      336,
+      352,
+      368
+    ],
+    "site1": [
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240
+    ],
+    "init": [
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320,
+      336
+    ]
+  },
+  "site_reports": {
+    "113": {
+      "spliced": "plain",
+      "insert_index": 113,
+      "splices": [
+        {
+          "analysis_ns": 770268,
+          "effective_makespan": 24,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 176938,
+          "splice": "store"
+        }
+      ]
+    },
+    "105": {
+      "spliced": "plain",
+      "insert_index": 105,
+      "splices": [
+        {
+          "analysis_ns": 1789167,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 129229,
+          "splice": "store"
+        }
+      ]
+    },
+    "97": {
+      "spliced": false,
+      "insert_index": 97,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "89": {
+      "spliced": "plain",
+      "insert_index": 89,
+      "splices": [
+        {
+          "analysis_ns": 7734747,
+          "effective_makespan": 24,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 234835,
+          "splice": "store"
+        }
+      ]
+    },
+    "81": {
+      "spliced": false,
+      "insert_index": 81,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "73": {
+      "spliced": false,
+      "insert_index": 73,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "65": {
+      "spliced": "plain",
+      "insert_index": 65,
+      "splices": [
+        {
+          "analysis_ns": 2761419,
+          "effective_makespan": 23,
+          "nb_attempts": 5,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 4,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 600884,
+          "splice": "store"
+        }
+      ]
+    },
+    "57": {
+      "spliced": "plain",
+      "insert_index": 57,
+      "splices": [
+        {
+          "analysis_ns": 17743302,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 230437,
+          "splice": "store"
+        }
+      ]
+    },
+    "49": {
+      "spliced": "plain",
+      "insert_index": 49,
+      "splices": [
+        {
+          "analysis_ns": 2773842,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 172289,
+          "splice": "store"
+        }
+      ]
+    },
+    "41": {
+      "spliced": "plain",
+      "insert_index": 41,
+      "splices": [
+        {
+          "analysis_ns": 3009048,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 145189,
+          "splice": "store"
+        }
+      ]
+    },
+    "33": {
+      "spliced": "plain",
+      "insert_index": 33,
+      "splices": [
+        {
+          "analysis_ns": 3319895,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 155638,
+          "splice": "store"
+        }
+      ]
+    },
+    "25": {
+      "spliced": "plain",
+      "insert_index": 25,
+      "splices": [
+        {
+          "analysis_ns": 3233705,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 312059,
+          "splice": "store"
+        }
+      ]
+    },
+    "17": {
+      "spliced": "plain",
+      "insert_index": 17,
+      "splices": [
+        {
+          "analysis_ns": 2982910,
+          "effective_makespan": 24,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 164415,
+          "splice": "store"
+        }
+      ]
+    },
+    "9": {
+      "spliced": "plain",
+      "insert_index": 9,
+      "splices": [
+        {
+          "analysis_ns": 3453412,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 168973,
+          "splice": "store"
+        }
+      ]
+    },
+    "1": {
+      "spliced": "plain",
+      "insert_index": 1,
+      "splices": [
+        {
+          "analysis_ns": 3496091,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 172540,
+          "splice": "store"
+        }
+      ]
+    },
+    "init": {
+      "spliced": "init",
+      "insert_index": 1,
+      "splices": [
+        {
+          "analysis_ns": 3707713,
+          "effective_makespan": 44,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 21,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 19,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 353285
+        }
+      ]
+    }
+  },
+  "site_spec": "every:8",
+  "splice_mode": "plain",
+  "schedule_mode": "first_feasible",
+  "arch": "86",
+  "nb_instructions": 120,
+  "nb_basic_blocks_before": 6
+}

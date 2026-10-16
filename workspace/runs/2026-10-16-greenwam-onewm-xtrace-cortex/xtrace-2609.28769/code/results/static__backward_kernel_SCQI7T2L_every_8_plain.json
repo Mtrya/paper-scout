@@ -1,0 +1,790 @@
+{
+  "kernel": "_backward_kernel",
+  "spliced": true,
+  "origin_instructions": 192,
+  "origin_registers": 28,
+  "traced_instructions_after_splice": 438,
+  "traced_registers": 28,
+  "register_class": "uniform_general",
+  "pointer_registers": [
+    60,
+    58
+  ],
+  "sites_requested": 24,
+  "site_instruction_indices": [
+    1,
+    9,
+    17,
+    25,
+    33,
+    41,
+    49,
+    57,
+    65,
+    73,
+    81,
+    89,
+    97,
+    105,
+    113,
+    121,
+    129,
+    137,
+    145,
+    153,
+    161,
+    169,
+    177,
+    185
+  ],
+  "sites_spliced": 15,
+  "sites_failed": 9,
+  "failed_site_indices": [
+    129,
+    121,
+    113,
+    105,
+    97,
+    89,
+    81,
+    57,
+    49
+  ],
+  "probe_instructions_total": 246,
+  "probe_instruction_counts": [
+    15,
+    21
+  ],
+  "similarity": {
+    "origin_instructions": 192,
+    "traced_instructions": 438,
+    "preserved_instructions": 191,
+    "changed_instructions": 1,
+    "inserted_instructions": 247,
+    "binary_similarity": 0.9947916666666666,
+    "changed_by_opcode": {
+      "BRA": 1
+    },
+    "inserted_by_opcode": {
+      "ULDC": 21,
+      "S2R": 21,
+      "IMAD": 50,
+      "SHF": 1,
+      "R2UR": 1,
+      "UIMAD": 1,
+      "UMOV": 16,
+      "MOV": 30,
+      "UIADD3": 30,
+      "UISETP": 15,
+      "CS2R": 15,
+      "STG": 45,
+      "BRA": 1
+    },
+    "origin_blocks": 5,
+    "intact_blocks": 3,
+    "changed_blocks": 2,
+    "blocks_with_probe_inside": 2,
+    "unchanged_fraction": 0.6,
+    "traced_registers": 28,
+    "traced_basic_blocks": 5
+  },
+  "serialized_bytes": 14904,
+  "serialization_error": null,
+  "spliced_cubin": "/tmp/xt_splice__backward_kernel_SCQI7T2L_every_8_plain.cubin",
+  "search_ns": {
+    "median": 353225.0,
+    "n": 16
+  },
+  "analysis_ns": {
+    "median": 4547409.5,
+    "n": 16
+  },
+  "effective_makespan_cycles": {
+    "median": 23.0,
+    "max": 44
+  },
+  "probe_pcs": {
+    "site185": [
+      2960,
+      2976,
+      2992,
+      3008,
+      3024,
+      3040,
+      3056,
+      3072,
+      3088,
+      3104,
+      3120,
+      3136,
+      3152,
+      3168,
+      3184
+    ],
+    "site177": [
+      2832,
+      2848,
+      2864,
+      2880,
+      2896,
+      2912,
+      2928,
+      2944,
+      2960,
+      2976,
+      2992,
+      3008,
+      3024,
+      3040,
+      3056
+    ],
+    "site169": [
+      2704,
+      2720,
+      2736,
+      2752,
+      2768,
+      2784,
+      2800,
+      2816,
+      2832,
+      2848,
+      2864,
+      2880,
+      2896,
+      2912,
+      2928
+    ],
+    "site161": [
+      2576,
+      2592,
+      2608,
+      2624,
+      2640,
+      2656,
+      2672,
+      2688,
+      2704,
+      2720,
+      2736,
+      2752,
+      2768,
+      2784,
+      2800
+    ],
+    "site153": [
+      2448,
+      2464,
+      2480,
+      2496,
+      2512,
+      2528,
+      2544,
+      2560,
+      2576,
+      2592,
+      2608,
+      2624,
+      2640,
+      2656,
+      2672
+    ],
+    "site145": [
+      2320,
+      2336,
+      2352,
+      2368,
+      2384,
+      2400,
+      2416,
+      2432,
+      2448,
+      2464,
+      2480,
+      2496,
+      2512,
+      2528,
+      2544
+    ],
+    "site137": [
+      2192,
+      2208,
+      2224,
+      2240,
+      2256,
+      2272,
+      2288,
+      2304,
+      2320,
+      2336,
+      2352,
+      2368,
+      2384,
+      2400,
+      2416
+    ],
+    "site73": [
+      1168,
+      1184,
+      1200,
+      1216,
+      1232,
+      1248,
+      1264,
+      1280,
+      1296,
+      1312,
+      1328,
+      1344,
+      1360,
+      1376,
+      1392
+    ],
+    "site65": [
+      1040,
+      1056,
+      1072,
+      1088,
+      1104,
+      1120,
+      1136,
+      1152,
+      1168,
+      1184,
+      1200,
+      1216,
+      1232,
+      1248,
+      1264
+    ],
+    "site41": [
+      656,
+      672,
+      688,
+      704,
+      720,
+      736,
+      752,
+      768,
+      784,
+      800,
+      816,
+      832,
+      848,
+      864,
+      880
+    ],
+    "site33": [
+      528,
+      544,
+      560,
+      576,
+      592,
+      608,
+      624,
+      640,
+      656,
+      672,
+      688,
+      704,
+      720,
+      736,
+      752
+    ],
+    "site25": [
+      400,
+      416,
+      432,
+      448,
+      464,
+      480,
+      496,
+      512,
+      528,
+      544,
+      560,
+      576,
+      592,
+      608,
+      624
+    ],
+    "site17": [
+      272,
+      288,
+      304,
+      320,
+      336,
+      352,
+      368,
+      384,
+      400,
+      416,
+      432,
+      448,
+      464,
+      480,
+      496
+    ],
+    "site9": [
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320,
+      336,
+      352,
+      368
+    ],
+    "site1": [
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240
+    ],
+    "init": [
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320,
+      336
+    ]
+  },
+  "site_reports": {
+    "185": {
+      "spliced": "plain",
+      "insert_index": 185,
+      "splices": [
+        {
+          "analysis_ns": 2167758,
+          "effective_makespan": 24,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 185885,
+          "splice": "store"
+        }
+      ]
+    },
+    "177": {
+      "spliced": "plain",
+      "insert_index": 177,
+      "splices": [
+        {
+          "analysis_ns": 3250807,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 205250,
+          "splice": "store"
+        }
+      ]
+    },
+    "169": {
+      "spliced": "plain",
+      "insert_index": 169,
+      "splices": [
+        {
+          "analysis_ns": 3391876,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 258389,
+          "splice": "store"
+        }
+      ]
+    },
+    "161": {
+      "spliced": "plain",
+      "insert_index": 161,
+      "splices": [
+        {
+          "analysis_ns": 3768376,
+          "effective_makespan": 24,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 215610,
+          "splice": "store"
+        }
+      ]
+    },
+    "153": {
+      "spliced": "plain",
+      "insert_index": 153,
+      "splices": [
+        {
+          "analysis_ns": 3183020,
+          "effective_makespan": 24,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 219187,
+          "splice": "store"
+        }
+      ]
+    },
+    "145": {
+      "spliced": "plain",
+      "insert_index": 145,
+      "splices": [
+        {
+          "analysis_ns": 4910812,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 346603,
+          "splice": "store"
+        }
+      ]
+    },
+    "137": {
+      "spliced": "plain",
+      "insert_index": 137,
+      "splices": [
+        {
+          "analysis_ns": 4597852,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 255243,
+          "splice": "store"
+        }
+      ]
+    },
+    "129": {
+      "spliced": false,
+      "insert_index": 129,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "121": {
+      "spliced": false,
+      "insert_index": 121,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "113": {
+      "spliced": false,
+      "insert_index": 113,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "105": {
+      "spliced": false,
+      "insert_index": 105,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "97": {
+      "spliced": false,
+      "insert_index": 97,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "89": {
+      "spliced": false,
+      "insert_index": 89,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "81": {
+      "spliced": false,
+      "insert_index": 81,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "73": {
+      "spliced": "plain",
+      "insert_index": 73,
+      "splices": [
+        {
+          "analysis_ns": 1957269,
+          "effective_makespan": 27,
+          "nb_attempts": 75,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 25,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 74,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 2323296,
+          "splice": "store"
+        }
+      ]
+    },
+    "65": {
+      "spliced": "plain",
+      "insert_index": 65,
+      "splices": [
+        {
+          "analysis_ns": 24443000,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 276362,
+          "splice": "store"
+        }
+      ]
+    },
+    "57": {
+      "spliced": false,
+      "insert_index": 57,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "49": {
+      "spliced": false,
+      "insert_index": 49,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "41": {
+      "spliced": "plain",
+      "insert_index": 41,
+      "splices": [
+        {
+          "analysis_ns": 4085264,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 426130,
+          "splice": "store"
+        }
+      ]
+    },
+    "33": {
+      "spliced": "plain",
+      "insert_index": 33,
+      "splices": [
+        {
+          "analysis_ns": 5161016,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 397046,
+          "splice": "store"
+        }
+      ]
+    },
+    "25": {
+      "spliced": "plain",
+      "insert_index": 25,
+      "splices": [
+        {
+          "analysis_ns": 4800018,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 359847,
+          "splice": "store"
+        }
+      ]
+    },
+    "17": {
+      "spliced": "plain",
+      "insert_index": 17,
+      "splices": [
+        {
+          "analysis_ns": 4496967,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 571399,
+          "splice": "store"
+        }
+      ]
+    },
+    "9": {
+      "spliced": "plain",
+      "insert_index": 9,
+      "splices": [
+        {
+          "analysis_ns": 5757824,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 448231,
+          "splice": "store"
+        }
+      ]
+    },
+    "1": {
+      "spliced": "plain",
+      "insert_index": 1,
+      "splices": [
+        {
+          "analysis_ns": 4696817,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 512330,
+          "splice": "store"
+        }
+      ]
+    },
+    "init": {
+      "spliced": "init",
+      "insert_index": 1,
+      "splices": [
+        {
+          "analysis_ns": 6821536,
+          "effective_makespan": 44,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 21,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 19,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 1076626
+        }
+      ]
+    }
+  },
+  "site_spec": "every:8",
+  "splice_mode": "plain",
+  "schedule_mode": "first_feasible",
+  "arch": "86",
+  "nb_instructions": 192,
+  "nb_basic_blocks_before": 5
+}

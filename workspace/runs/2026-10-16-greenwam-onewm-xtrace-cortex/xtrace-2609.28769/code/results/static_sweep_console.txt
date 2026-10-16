@@ -1,0 +1,27 @@
+=== awq_gemm_kernel every:8 ===
+  awq_gemm_kernel: sites 69/82 spliced, regs 56->56, similarity 0.9710, blocks intact 15/28, inserted 1075, changed 19 {'BRA': 11, 'BSSY': 8}
+=== awq_gemm_kernel mem ===
+  awq_gemm_kernel: sites 77/88 spliced, regs 56->56, similarity 0.9710, blocks intact 16/28, inserted 1195, changed 19 {'BRA': 11, 'BSSY': 8}
+=== _forward_kernel every:8 ===
+  _forward_kernel: sites 26/28 spliced, regs 34->34, similarity 0.9911, blocks intact 8/11, inserted 413, changed 2 {'BRA': 2}
+=== _forward_kernel mem ===
+  _forward_kernel: sites 10/12 spliced, regs 34->34, similarity 0.9821, blocks intact 7/11, inserted 175, changed 4 {'BRA': 3, 'BSSY': 1}
+=== awq_gemm_kernel every:8 ===
+  awq_gemm_kernel: sites 70/83 spliced, regs 56->56, similarity 0.9714, blocks intact 15/28, inserted 1090, changed 19 {'BRA': 11, 'BSSY': 8}
+=== awq_gemm_kernel mem ===
+  awq_gemm_kernel: sites 77/88 spliced, regs 56->56, similarity 0.9714, blocks intact 16/28, inserted 1195, changed 19 {'BRA': 11, 'BSSY': 8}
+=== _backward_kernel every:8 ===
+  _backward_kernel: sites 15/24 spliced, regs 28->28, similarity 0.9948, blocks intact 3/5, inserted 247, changed 1 {'BRA': 1}
+=== _backward_kernel mem ===
+  _backward_kernel: sites 5/5 spliced, regs 28->28, similarity 1.0000, blocks intact 4/5, inserted 96, changed 0 {}
+=== awq_dequantize_kernel every:8 ===
+  awq_dequantize_kernel: sites 69/69 spliced, regs 68->68, similarity 1.0000, blocks intact 4/5, inserted 1056, changed 0 {}
+=== awq_dequantize_kernel mem ===
+  awq_dequantize_kernel: sites 33/33 spliced, regs 68->68, similarity 1.0000, blocks intact 4/5, inserted 516, changed 0 {}
+=== _forward_kernel mem ===
+  _forward_kernel: sites 7/16 spliced, regs 38->38, similarity 0.9853, blocks intact 7/11, inserted 130, changed 4 {'BRA': 3, 'BSSY': 1}
+=== rotary_kernel every:8 ===
+  rotary_kernel: sites 12/15 spliced, regs 25->25, similarity 1.0000, blocks intact 5/6, inserted 201, changed 0 {}
+=== rotary_kernel mem ===
+  rotary_kernel: sites 6/6 spliced, regs 25->25, similarity 1.0000, blocks intact 5/6, inserted 111, changed 0 {}
+static sweep done

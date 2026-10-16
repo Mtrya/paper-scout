@@ -1,0 +1,1910 @@
+{
+  "kernel": "matmul_kernel",
+  "spliced": true,
+  "origin_instructions": 360,
+  "origin_registers": 80,
+  "traced_instructions_after_splice": 1026,
+  "traced_registers": 80,
+  "register_class": "uniform_general",
+  "pointer_registers": [
+    60,
+    58
+  ],
+  "sites_requested": 52,
+  "site_instruction_indices": [
+    54,
+    57,
+    60,
+    68,
+    69,
+    72,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    176,
+    177,
+    178,
+    179,
+    180,
+    181,
+    192,
+    194,
+    219,
+    220,
+    221,
+    222,
+    231,
+    233,
+    235,
+    236,
+    238,
+    278,
+    279,
+    280,
+    281,
+    284,
+    287,
+    290,
+    293,
+    303,
+    304,
+    305,
+    306,
+    307,
+    308,
+    309,
+    311,
+    338,
+    343,
+    344,
+    349
+  ],
+  "sites_spliced": 43,
+  "sites_failed": 9,
+  "failed_site_indices": [
+    231,
+    222,
+    221,
+    220,
+    219,
+    194,
+    192,
+    181,
+    180
+  ],
+  "probe_instructions_total": 666,
+  "probe_instruction_counts": [
+    15,
+    21
+  ],
+  "similarity": {
+    "origin_instructions": 360,
+    "traced_instructions": 1026,
+    "preserved_instructions": 358,
+    "changed_instructions": 2,
+    "inserted_instructions": 668,
+    "binary_similarity": 0.9944444444444445,
+    "changed_by_opcode": {
+      "BRA": 2
+    },
+    "inserted_by_opcode": {
+      "ULDC": 49,
+      "S2R": 49,
+      "IMAD": 134,
+      "SHF": 1,
+      "R2UR": 1,
+      "UIMAD": 1,
+      "UMOV": 44,
+      "MOV": 86,
+      "UIADD3": 86,
+      "UISETP": 43,
+      "CS2R": 43,
+      "STG": 129,
+      "BRA": 2
+    },
+    "origin_blocks": 10,
+    "intact_blocks": 7,
+    "changed_blocks": 3,
+    "blocks_with_probe_inside": 3,
+    "unchanged_fraction": 0.7,
+    "traced_registers": 80,
+    "traced_basic_blocks": 10
+  },
+  "serialized_bytes": 33440,
+  "serialization_error": null,
+  "spliced_cubin": "/tmp/xt_splice_matmul_kernel_64AMBHSG_mem_plain.cubin",
+  "search_ns": {
+    "median": 265762.5,
+    "n": 44
+  },
+  "analysis_ns": {
+    "median": 11894445.5,
+    "n": 44
+  },
+  "effective_makespan_cycles": {
+    "median": 23.0,
+    "max": 44
+  },
+  "probe_pcs": {
+    "site349": [
+      5584,
+      5600,
+      5616,
+      5632,
+      5648,
+      5664,
+      5680,
+      5696,
+      5712,
+      5728,
+      5744,
+      5760,
+      5776,
+      5792,
+      5808
+    ],
+    "site344": [
+      5504,
+      5520,
+      5536,
+      5552,
+      5568,
+      5584,
+      5600,
+      5616,
+      5632,
+      5648,
+      5664,
+      5680,
+      5696,
+      5712,
+      5728
+    ],
+    "site343": [
+      5488,
+      5504,
+      5520,
+      5536,
+      5552,
+      5568,
+      5584,
+      5600,
+      5616,
+      5632,
+      5648,
+      5664,
+      5680,
+      5696,
+      5712
+    ],
+    "site338": [
+      5408,
+      5424,
+      5440,
+      5456,
+      5472,
+      5488,
+      5504,
+      5520,
+      5536,
+      5552,
+      5568,
+      5584,
+      5600,
+      5616,
+      5632
+    ],
+    "site311": [
+      4976,
+      4992,
+      5008,
+      5024,
+      5040,
+      5056,
+      5072,
+      5088,
+      5104,
+      5120,
+      5136,
+      5152,
+      5168,
+      5184,
+      5200
+    ],
+    "site309": [
+      4944,
+      4960,
+      4976,
+      4992,
+      5008,
+      5024,
+      5040,
+      5056,
+      5072,
+      5088,
+      5104,
+      5120,
+      5136,
+      5152,
+      5168
+    ],
+    "site308": [
+      4928,
+      4944,
+      4960,
+      4976,
+      4992,
+      5008,
+      5024,
+      5040,
+      5056,
+      5072,
+      5088,
+      5104,
+      5120,
+      5136,
+      5152
+    ],
+    "site307": [
+      4912,
+      4928,
+      4944,
+      4960,
+      4976,
+      4992,
+      5008,
+      5024,
+      5040,
+      5056,
+      5072,
+      5088,
+      5104,
+      5120,
+      5136
+    ],
+    "site306": [
+      4896,
+      4912,
+      4928,
+      4944,
+      4960,
+      4976,
+      4992,
+      5008,
+      5024,
+      5040,
+      5056,
+      5072,
+      5088,
+      5104,
+      5120
+    ],
+    "site305": [
+      4880,
+      4896,
+      4912,
+      4928,
+      4944,
+      4960,
+      4976,
+      4992,
+      5008,
+      5024,
+      5040,
+      5056,
+      5072,
+      5088,
+      5104
+    ],
+    "site304": [
+      4864,
+      4880,
+      4896,
+      4912,
+      4928,
+      4944,
+      4960,
+      4976,
+      4992,
+      5008,
+      5024,
+      5040,
+      5056,
+      5072,
+      5088
+    ],
+    "site303": [
+      4848,
+      4864,
+      4880,
+      4896,
+      4912,
+      4928,
+      4944,
+      4960,
+      4976,
+      4992,
+      5008,
+      5024,
+      5040,
+      5056,
+      5072
+    ],
+    "site293": [
+      4688,
+      4704,
+      4720,
+      4736,
+      4752,
+      4768,
+      4784,
+      4800,
+      4816,
+      4832,
+      4848,
+      4864,
+      4880,
+      4896,
+      4912
+    ],
+    "site290": [
+      4640,
+      4656,
+      4672,
+      4688,
+      4704,
+      4720,
+      4736,
+      4752,
+      4768,
+      4784,
+      4800,
+      4816,
+      4832,
+      4848,
+      4864
+    ],
+    "site287": [
+      4592,
+      4608,
+      4624,
+      4640,
+      4656,
+      4672,
+      4688,
+      4704,
+      4720,
+      4736,
+      4752,
+      4768,
+      4784,
+      4800,
+      4816
+    ],
+    "site284": [
+      4544,
+      4560,
+      4576,
+      4592,
+      4608,
+      4624,
+      4640,
+      4656,
+      4672,
+      4688,
+      4704,
+      4720,
+      4736,
+      4752,
+      4768
+    ],
+    "site281": [
+      4496,
+      4512,
+      4528,
+      4544,
+      4560,
+      4576,
+      4592,
+      4608,
+      4624,
+      4640,
+      4656,
+      4672,
+      4688,
+      4704,
+      4720
+    ],
+    "site280": [
+      4480,
+      4496,
+      4512,
+      4528,
+      4544,
+      4560,
+      4576,
+      4592,
+      4608,
+      4624,
+      4640,
+      4656,
+      4672,
+      4688,
+      4704
+    ],
+    "site279": [
+      4464,
+      4480,
+      4496,
+      4512,
+      4528,
+      4544,
+      4560,
+      4576,
+      4592,
+      4608,
+      4624,
+      4640,
+      4656,
+      4672,
+      4688
+    ],
+    "site278": [
+      4448,
+      4464,
+      4480,
+      4496,
+      4512,
+      4528,
+      4544,
+      4560,
+      4576,
+      4592,
+      4608,
+      4624,
+      4640,
+      4656,
+      4672
+    ],
+    "site238": [
+      3808,
+      3824,
+      3840,
+      3856,
+      3872,
+      3888,
+      3904,
+      3920,
+      3936,
+      3952,
+      3968,
+      3984,
+      4000,
+      4016,
+      4032
+    ],
+    "site236": [
+      3776,
+      3792,
+      3808,
+      3824,
+      3840,
+      3856,
+      3872,
+      3888,
+      3904,
+      3920,
+      3936,
+      3952,
+      3968,
+      3984,
+      4000
+    ],
+    "site235": [
+      3760,
+      3776,
+      3792,
+      3808,
+      3824,
+      3840,
+      3856,
+      3872,
+      3888,
+      3904,
+      3920,
+      3936,
+      3952,
+      3968,
+      3984
+    ],
+    "site233": [
+      3728,
+      3744,
+      3760,
+      3776,
+      3792,
+      3808,
+      3824,
+      3840,
+      3856,
+      3872,
+      3888,
+      3904,
+      3920,
+      3936,
+      3952
+    ],
+    "site179": [
+      2864,
+      2880,
+      2896,
+      2912,
+      2928,
+      2944,
+      2960,
+      2976,
+      2992,
+      3008,
+      3024,
+      3040,
+      3056,
+      3072,
+      3088
+    ],
+    "site178": [
+      2848,
+      2864,
+      2880,
+      2896,
+      2912,
+      2928,
+      2944,
+      2960,
+      2976,
+      2992,
+      3008,
+      3024,
+      3040,
+      3056,
+      3072
+    ],
+    "site177": [
+      2832,
+      2848,
+      2864,
+      2880,
+      2896,
+      2912,
+      2928,
+      2944,
+      2960,
+      2976,
+      2992,
+      3008,
+      3024,
+      3040,
+      3056
+    ],
+    "site176": [
+      2816,
+      2832,
+      2848,
+      2864,
+      2880,
+      2896,
+      2912,
+      2928,
+      2944,
+      2960,
+      2976,
+      2992,
+      3008,
+      3024,
+      3040
+    ],
+    "site84": [
+      1344,
+      1360,
+      1376,
+      1392,
+      1408,
+      1424,
+      1440,
+      1456,
+      1472,
+      1488,
+      1504,
+      1520,
+      1536,
+      1552,
+      1568
+    ],
+    "site83": [
+      1328,
+      1344,
+      1360,
+      1376,
+      1392,
+      1408,
+      1424,
+      1440,
+      1456,
+      1472,
+      1488,
+      1504,
+      1520,
+      1536,
+      1552
+    ],
+    "site82": [
+      1312,
+      1328,
+      1344,
+      1360,
+      1376,
+      1392,
+      1408,
+      1424,
+      1440,
+      1456,
+      1472,
+      1488,
+      1504,
+      1520,
+      1536
+    ],
+    "site81": [
+      1296,
+      1312,
+      1328,
+      1344,
+      1360,
+      1376,
+      1392,
+      1408,
+      1424,
+      1440,
+      1456,
+      1472,
+      1488,
+      1504,
+      1520
+    ],
+    "site80": [
+      1280,
+      1296,
+      1312,
+      1328,
+      1344,
+      1360,
+      1376,
+      1392,
+      1408,
+      1424,
+      1440,
+      1456,
+      1472,
+      1488,
+      1504
+    ],
+    "site79": [
+      1264,
+      1280,
+      1296,
+      1312,
+      1328,
+      1344,
+      1360,
+      1376,
+      1392,
+      1408,
+      1424,
+      1440,
+      1456,
+      1472,
+      1488
+    ],
+    "site78": [
+      1248,
+      1264,
+      1280,
+      1296,
+      1312,
+      1328,
+      1344,
+      1360,
+      1376,
+      1392,
+      1408,
+      1424,
+      1440,
+      1456,
+      1472
+    ],
+    "site77": [
+      1232,
+      1248,
+      1264,
+      1280,
+      1296,
+      1312,
+      1328,
+      1344,
+      1360,
+      1376,
+      1392,
+      1408,
+      1424,
+      1440,
+      1456
+    ],
+    "site76": [
+      1216,
+      1232,
+      1248,
+      1264,
+      1280,
+      1296,
+      1312,
+      1328,
+      1344,
+      1360,
+      1376,
+      1392,
+      1408,
+      1424,
+      1440
+    ],
+    "site72": [
+      1152,
+      1168,
+      1184,
+      1200,
+      1216,
+      1232,
+      1248,
+      1264,
+      1280,
+      1296,
+      1312,
+      1328,
+      1344,
+      1360,
+      1376
+    ],
+    "site69": [
+      1104,
+      1120,
+      1136,
+      1152,
+      1168,
+      1184,
+      1200,
+      1216,
+      1232,
+      1248,
+      1264,
+      1280,
+      1296,
+      1312,
+      1328
+    ],
+    "site68": [
+      1088,
+      1104,
+      1120,
+      1136,
+      1152,
+      1168,
+      1184,
+      1200,
+      1216,
+      1232,
+      1248,
+      1264,
+      1280,
+      1296,
+      1312
+    ],
+    "site60": [
+      960,
+      976,
+      992,
+      1008,
+      1024,
+      1040,
+      1056,
+      1072,
+      1088,
+      1104,
+      1120,
+      1136,
+      1152,
+      1168,
+      1184
+    ],
+    "site57": [
+      912,
+      928,
+      944,
+      960,
+      976,
+      992,
+      1008,
+      1024,
+      1040,
+      1056,
+      1072,
+      1088,
+      1104,
+      1120,
+      1136
+    ],
+    "site54": [
+      864,
+      880,
+      896,
+      912,
+      928,
+      944,
+      960,
+      976,
+      992,
+      1008,
+      1024,
+      1040,
+      1056,
+      1072,
+      1088
+    ],
+    "init": [
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320,
+      336
+    ]
+  },
+  "site_reports": {
+    "349": {
+      "spliced": "plain",
+      "insert_index": 349,
+      "splices": [
+        {
+          "analysis_ns": 4138262,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 149457,
+          "splice": "store"
+        }
+      ]
+    },
+    "344": {
+      "spliced": "plain",
+      "insert_index": 344,
+      "splices": [
+        {
+          "analysis_ns": 7356027,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 142094,
+          "splice": "store"
+        }
+      ]
+    },
+    "343": {
+      "spliced": "plain",
+      "insert_index": 343,
+      "splices": [
+        {
+          "analysis_ns": 7349745,
+          "effective_makespan": 24,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 149968,
+          "splice": "store"
+        }
+      ]
+    },
+    "338": {
+      "spliced": "plain",
+      "insert_index": 338,
+      "splices": [
+        {
+          "analysis_ns": 7521775,
+          "effective_makespan": 24,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 167560,
+          "splice": "store"
+        }
+      ]
+    },
+    "311": {
+      "spliced": "plain",
+      "insert_index": 311,
+      "splices": [
+        {
+          "analysis_ns": 8057247,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 158143,
+          "splice": "store"
+        }
+      ]
+    },
+    "309": {
+      "spliced": "plain",
+      "insert_index": 309,
+      "splices": [
+        {
+          "analysis_ns": 8000564,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 157301,
+          "splice": "store"
+        }
+      ]
+    },
+    "308": {
+      "spliced": "plain",
+      "insert_index": 308,
+      "splices": [
+        {
+          "analysis_ns": 8398740,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 185283,
+          "splice": "store"
+        }
+      ]
+    },
+    "307": {
+      "spliced": "plain",
+      "insert_index": 307,
+      "splices": [
+        {
+          "analysis_ns": 8712622,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 192016,
+          "splice": "store"
+        }
+      ]
+    },
+    "306": {
+      "spliced": "plain",
+      "insert_index": 306,
+      "splices": [
+        {
+          "analysis_ns": 8484308,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 202646,
+          "splice": "store"
+        }
+      ]
+    },
+    "305": {
+      "spliced": "plain",
+      "insert_index": 305,
+      "splices": [
+        {
+          "analysis_ns": 8815665,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 207024,
+          "splice": "store"
+        }
+      ]
+    },
+    "304": {
+      "spliced": "plain",
+      "insert_index": 304,
+      "splices": [
+        {
+          "analysis_ns": 8753237,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 191725,
+          "splice": "store"
+        }
+      ]
+    },
+    "303": {
+      "spliced": "plain",
+      "insert_index": 303,
+      "splices": [
+        {
+          "analysis_ns": 9183344,
+          "effective_makespan": 24,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 228684,
+          "splice": "store"
+        }
+      ]
+    },
+    "293": {
+      "spliced": "plain",
+      "insert_index": 293,
+      "splices": [
+        {
+          "analysis_ns": 9028368,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 185794,
+          "splice": "store"
+        }
+      ]
+    },
+    "290": {
+      "spliced": "plain",
+      "insert_index": 290,
+      "splices": [
+        {
+          "analysis_ns": 9725381,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 195833,
+          "splice": "store"
+        }
+      ]
+    },
+    "287": {
+      "spliced": "plain",
+      "insert_index": 287,
+      "splices": [
+        {
+          "analysis_ns": 9634341,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 213636,
+          "splice": "store"
+        }
+      ]
+    },
+    "284": {
+      "spliced": "plain",
+      "insert_index": 284,
+      "splices": [
+        {
+          "analysis_ns": 10364324,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 249783,
+          "splice": "store"
+        }
+      ]
+    },
+    "281": {
+      "spliced": "plain",
+      "insert_index": 281,
+      "splices": [
+        {
+          "analysis_ns": 10374084,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 240716,
+          "splice": "store"
+        }
+      ]
+    },
+    "280": {
+      "spliced": "plain",
+      "insert_index": 280,
+      "splices": [
+        {
+          "analysis_ns": 10833373,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 258900,
+          "splice": "store"
+        }
+      ]
+    },
+    "279": {
+      "spliced": "plain",
+      "insert_index": 279,
+      "splices": [
+        {
+          "analysis_ns": 10551421,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 240826,
+          "splice": "store"
+        }
+      ]
+    },
+    "278": {
+      "spliced": "plain",
+      "insert_index": 278,
+      "splices": [
+        {
+          "analysis_ns": 11915950,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 252879,
+          "splice": "store"
+        }
+      ]
+    },
+    "238": {
+      "spliced": "plain",
+      "insert_index": 238,
+      "splices": [
+        {
+          "analysis_ns": 12608846,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 247649,
+          "splice": "store"
+        }
+      ]
+    },
+    "236": {
+      "spliced": "plain",
+      "insert_index": 236,
+      "splices": [
+        {
+          "analysis_ns": 11395516,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 252949,
+          "splice": "store"
+        }
+      ]
+    },
+    "235": {
+      "spliced": "plain",
+      "insert_index": 235,
+      "splices": [
+        {
+          "analysis_ns": 11872941,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 272625,
+          "splice": "store"
+        }
+      ]
+    },
+    "233": {
+      "spliced": "plain",
+      "insert_index": 233,
+      "splices": [
+        {
+          "analysis_ns": 11960505,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 277194,
+          "splice": "store"
+        }
+      ]
+    },
+    "231": {
+      "spliced": false,
+      "insert_index": 231,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "222": {
+      "spliced": false,
+      "insert_index": 222,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "221": {
+      "spliced": false,
+      "insert_index": 221,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "220": {
+      "spliced": false,
+      "insert_index": 220,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "219": {
+      "spliced": false,
+      "insert_index": 219,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "194": {
+      "spliced": false,
+      "insert_index": 194,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "192": {
+      "spliced": false,
+      "insert_index": 192,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "181": {
+      "spliced": false,
+      "insert_index": 181,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "180": {
+      "spliced": false,
+      "insert_index": 180,
+      "error": "failed to finalize instrument context (no feasible schedule?)"
+    },
+    "179": {
+      "spliced": "plain",
+      "insert_index": 179,
+      "splices": [
+        {
+          "analysis_ns": 8735103,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 8510127,
+          "splice": "store"
+        }
+      ]
+    },
+    "178": {
+      "spliced": "plain",
+      "insert_index": 178,
+      "splices": [
+        {
+          "analysis_ns": 19205976,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 310866,
+          "splice": "store"
+        }
+      ]
+    },
+    "177": {
+      "spliced": "plain",
+      "insert_index": 177,
+      "splices": [
+        {
+          "analysis_ns": 12779623,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 507441,
+          "splice": "store"
+        }
+      ]
+    },
+    "176": {
+      "spliced": "plain",
+      "insert_index": 176,
+      "splices": [
+        {
+          "analysis_ns": 13273156,
+          "effective_makespan": 24,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 313291,
+          "splice": "store"
+        }
+      ]
+    },
+    "84": {
+      "spliced": "plain",
+      "insert_index": 84,
+      "splices": [
+        {
+          "analysis_ns": 14361705,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 390204,
+          "splice": "store"
+        }
+      ]
+    },
+    "83": {
+      "spliced": "plain",
+      "insert_index": 83,
+      "splices": [
+        {
+          "analysis_ns": 13863651,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 378572,
+          "splice": "store"
+        }
+      ]
+    },
+    "82": {
+      "spliced": "plain",
+      "insert_index": 82,
+      "splices": [
+        {
+          "analysis_ns": 16916410,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 610542,
+          "splice": "store"
+        }
+      ]
+    },
+    "81": {
+      "spliced": "plain",
+      "insert_index": 81,
+      "splices": [
+        {
+          "analysis_ns": 15494917,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 518621,
+          "splice": "store"
+        }
+      ]
+    },
+    "80": {
+      "spliced": "plain",
+      "insert_index": 80,
+      "splices": [
+        {
+          "analysis_ns": 15014405,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 471515,
+          "splice": "store"
+        }
+      ]
+    },
+    "79": {
+      "spliced": "plain",
+      "insert_index": 79,
+      "splices": [
+        {
+          "analysis_ns": 16529514,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 471304,
+          "splice": "store"
+        }
+      ]
+    },
+    "78": {
+      "spliced": "plain",
+      "insert_index": 78,
+      "splices": [
+        {
+          "analysis_ns": 15234083,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 482024,
+          "splice": "store"
+        }
+      ]
+    },
+    "77": {
+      "spliced": "plain",
+      "insert_index": 77,
+      "splices": [
+        {
+          "analysis_ns": 15588989,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 477475,
+          "splice": "store"
+        }
+      ]
+    },
+    "76": {
+      "spliced": "plain",
+      "insert_index": 76,
+      "splices": [
+        {
+          "analysis_ns": 17839744,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 807236,
+          "splice": "store"
+        }
+      ]
+    },
+    "72": {
+      "spliced": "plain",
+      "insert_index": 72,
+      "splices": [
+        {
+          "analysis_ns": 17163388,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 491020,
+          "splice": "store"
+        }
+      ]
+    },
+    "69": {
+      "spliced": "plain",
+      "insert_index": 69,
+      "splices": [
+        {
+          "analysis_ns": 16611367,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 462287,
+          "splice": "store"
+        }
+      ]
+    },
+    "68": {
+      "spliced": "plain",
+      "insert_index": 68,
+      "splices": [
+        {
+          "analysis_ns": 16967855,
+          "effective_makespan": 24,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 495699,
+          "splice": "store"
+        }
+      ]
+    },
+    "60": {
+      "spliced": "plain",
+      "insert_index": 60,
+      "splices": [
+        {
+          "analysis_ns": 17429894,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 530894,
+          "splice": "store"
+        }
+      ]
+    },
+    "57": {
+      "spliced": "plain",
+      "insert_index": 57,
+      "splices": [
+        {
+          "analysis_ns": 18991848,
+          "effective_makespan": 24,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 529111,
+          "splice": "store"
+        }
+      ]
+    },
+    "54": {
+      "spliced": "plain",
+      "insert_index": 54,
+      "splices": [
+        {
+          "analysis_ns": 19322702,
+          "effective_makespan": 24,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 587139,
+          "splice": "store"
+        }
+      ]
+    },
+    "init": {
+      "spliced": "init",
+      "insert_index": 1,
+      "splices": [
+        {
+          "analysis_ns": 18551463,
+          "effective_makespan": 44,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 21,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 19,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 874381
+        }
+      ]
+    }
+  },
+  "site_spec": "mem",
+  "splice_mode": "plain",
+  "schedule_mode": "first_feasible",
+  "arch": "86",
+  "nb_instructions": 360,
+  "nb_basic_blocks_before": 10
+}

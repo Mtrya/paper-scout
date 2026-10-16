@@ -1,0 +1,115 @@
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+[103m[97m GWATCH Warn [0m failed to call self.finalize_instrument_context(reinterpret_cast<void*>(ctx)): retval(1)
+{
+  "kernel": "_forward_kernel",
+  "spliced": true,
+  "origin_instructions": 272,
+  "origin_registers": 38,
+  "traced_instructions_after_splice": 398,
+  "traced_registers": 38,
+  "register_class": "uniform_general",
+  "pointer_registers": [
+    60,
+    58
+  ],
+  "sites_requested": 16,
+  "site_instruction_indices": [
+    5,
+    19,
+    20,
+    31,
+    47,
+    105,
+    107,
+    216,
+    222,
+    225,
+    228,
+    247,
+    248,
+    250,
+    255,
+    261
+  ],
+  "sites_spliced": 7,
+  "sites_failed": 9,
+  "failed_site_indices": [
+    228,
+    222,
+    216,
+    107,
+    105,
+    47,
+    31,
+    20,
+    19
+  ],
+  "probe_instructions_total": 126,
+  "probe_instruction_counts": [
+    15,
+    21
+  ],
+  "similarity": {
+    "origin_instructions": 272,
+    "traced_instructions": 398,
+    "preserved_instructions": 268,
+    "changed_instructions": 4,
+    "inserted_instructions": 130,
+    "binary_similarity": 0.9852941176470589,
+    "changed_by_opcode": {
+      "BRA": 3,
+      "BSSY": 1
+    },
+    "inserted_by_opcode": {
+      "ULDC": 13,
+      "S2R": 13,
+      "IMAD": 26,
+      "SHF": 1,
+      "R2UR": 1,
+      "UIMAD": 1,
+      "UMOV": 8,
+      "MOV": 14,
+      "UIADD3": 14,
+      "UISETP": 7,
+      "CS2R": 7,
+      "STG": 21,
+      "BRA": 3,
+      "BSSY": 1
+    },
+    "origin_blocks": 11,
+    "intact_blocks": 7,
+    "changed_blocks": 4,
+    "blocks_with_probe_inside": 3,
+    "unchanged_fraction": 0.6363636363636364,
+    "traced_registers": 38,
+    "traced_basic_blocks": 11
+  },
+  "serialized_bytes": 18512,
+  "serialization_error": null,
+  "spliced_cubin": "/tmp/xt_splice__forward_kernel_XSBNYIWO_mem_plain.cubin",
+  "search_ns": {
+    "median": 359431.5,
+    "n": 8
+  },
+  "analysis_ns": {
+    "median": 8547039.5,
+    "n": 8
+  },
+  "effective_makespan_cycles": {
+    "median": 23.0,
+    "max": 44
+  },
+  "site_spec": "mem",
+  "splice_mode": "plain",
+  "schedule_mode": "first_feasible",
+  "arch": "86",
+  "nb_instructions": 272,
+  "nb_basic_blocks_before": 11
+}

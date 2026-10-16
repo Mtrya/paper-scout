@@ -1,0 +1,363 @@
+{
+  "kernel": "rotary_kernel",
+  "spliced": true,
+  "origin_instructions": 120,
+  "origin_registers": 25,
+  "traced_instructions_after_splice": 231,
+  "traced_registers": 25,
+  "register_class": "uniform_general",
+  "pointer_registers": [
+    60,
+    58
+  ],
+  "sites_requested": 6,
+  "site_instruction_indices": [
+    44,
+    46,
+    47,
+    48,
+    104,
+    109
+  ],
+  "sites_spliced": 6,
+  "sites_failed": 0,
+  "failed_site_indices": [],
+  "probe_instructions_total": 111,
+  "probe_instruction_counts": [
+    15,
+    21
+  ],
+  "similarity": {
+    "origin_instructions": 120,
+    "traced_instructions": 231,
+    "preserved_instructions": 120,
+    "changed_instructions": 0,
+    "inserted_instructions": 111,
+    "binary_similarity": 1.0,
+    "changed_by_opcode": {},
+    "inserted_by_opcode": {
+      "ULDC": 12,
+      "S2R": 12,
+      "IMAD": 23,
+      "SHF": 1,
+      "R2UR": 1,
+      "UIMAD": 1,
+      "UMOV": 7,
+      "MOV": 12,
+      "UIADD3": 12,
+      "UISETP": 6,
+      "CS2R": 6,
+      "STG": 18
+    },
+    "origin_blocks": 6,
+    "intact_blocks": 5,
+    "changed_blocks": 1,
+    "blocks_with_probe_inside": 2,
+    "unchanged_fraction": 0.8333333333333334,
+    "traced_registers": 25,
+    "traced_basic_blocks": 6
+  },
+  "serialized_bytes": 10544,
+  "serialization_error": null,
+  "spliced_cubin": "/tmp/xt_splice_rotary_kernel_YGPFJAPL_mem_plain.cubin",
+  "search_ns": {
+    "median": 145781,
+    "n": 7
+  },
+  "analysis_ns": {
+    "median": 1795228,
+    "n": 7
+  },
+  "effective_makespan_cycles": {
+    "median": 24,
+    "max": 44
+  },
+  "probe_pcs": {
+    "site109": [
+      1744,
+      1760,
+      1776,
+      1792,
+      1808,
+      1824,
+      1840,
+      1856,
+      1872,
+      1888,
+      1904,
+      1920,
+      1936,
+      1952,
+      1968
+    ],
+    "site104": [
+      1664,
+      1680,
+      1696,
+      1712,
+      1728,
+      1744,
+      1760,
+      1776,
+      1792,
+      1808,
+      1824,
+      1840,
+      1856,
+      1872,
+      1888
+    ],
+    "site48": [
+      768,
+      784,
+      800,
+      816,
+      832,
+      848,
+      864,
+      880,
+      896,
+      912,
+      928,
+      944,
+      960,
+      976,
+      992
+    ],
+    "site47": [
+      752,
+      768,
+      784,
+      800,
+      816,
+      832,
+      848,
+      864,
+      880,
+      896,
+      912,
+      928,
+      944,
+      960,
+      976
+    ],
+    "site46": [
+      736,
+      752,
+      768,
+      784,
+      800,
+      816,
+      832,
+      848,
+      864,
+      880,
+      896,
+      912,
+      928,
+      944,
+      960
+    ],
+    "site44": [
+      704,
+      720,
+      736,
+      752,
+      768,
+      784,
+      800,
+      816,
+      832,
+      848,
+      864,
+      880,
+      896,
+      912,
+      928
+    ],
+    "init": [
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320,
+      336
+    ]
+  },
+  "site_reports": {
+    "109": {
+      "spliced": "plain",
+      "insert_index": 109,
+      "splices": [
+        {
+          "analysis_ns": 838715,
+          "effective_makespan": 24,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 120072,
+          "splice": "store"
+        }
+      ]
+    },
+    "104": {
+      "spliced": "plain",
+      "insert_index": 104,
+      "splices": [
+        {
+          "analysis_ns": 1604314,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 121234,
+          "splice": "store"
+        }
+      ]
+    },
+    "48": {
+      "spliced": "plain",
+      "insert_index": 48,
+      "splices": [
+        {
+          "analysis_ns": 1586470,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 145781,
+          "splice": "store"
+        }
+      ]
+    },
+    "47": {
+      "spliced": "plain",
+      "insert_index": 47,
+      "splices": [
+        {
+          "analysis_ns": 1795228,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 162151,
+          "splice": "store"
+        }
+      ]
+    },
+    "46": {
+      "spliced": "plain",
+      "insert_index": 46,
+      "splices": [
+        {
+          "analysis_ns": 1841664,
+          "effective_makespan": 24,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 152022,
+          "splice": "store"
+        }
+      ]
+    },
+    "44": {
+      "spliced": "plain",
+      "insert_index": 44,
+      "splices": [
+        {
+          "analysis_ns": 1909400,
+          "effective_makespan": 24,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 144277,
+          "splice": "store"
+        }
+      ]
+    },
+    "init": {
+      "spliced": "init",
+      "insert_index": 1,
+      "splices": [
+        {
+          "analysis_ns": 1970744,
+          "effective_makespan": 44,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 21,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 19,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 171147
+        }
+      ]
+    }
+  },
+  "site_spec": "mem",
+  "splice_mode": "plain",
+  "schedule_mode": "first_feasible",
+  "arch": "86",
+  "nb_instructions": 120,
+  "nb_basic_blocks_before": 6
+}

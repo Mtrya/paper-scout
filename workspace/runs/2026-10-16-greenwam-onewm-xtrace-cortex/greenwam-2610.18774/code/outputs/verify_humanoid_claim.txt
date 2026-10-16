@@ -1,0 +1,16 @@
+policy                           ID        OOD
+GreenWAM (teacher)        43/45  95.6%  21/25  84.0%
+Cosmos 3 Edge policy      40/45  88.9%  20/25  80.0%
+pi0.5                     38/45  84.4%  19/25  76.0%
+GreenWAM (distilled)      41/45  91.1%  20/25  80.0%
+
+GreenWAM vs Cosmos 3 Edge policy
+  ID : 43/45 vs 40/45  diff +6.7 pp, 95% CI [-4.3, +17.6], Fisher p = 0.434
+  OOD: 21/25 vs 20/25  diff +4.0 pp, 95% CI [-17.3, +25.3], Fisher p = 1.000
+GreenWAM vs pi0.5
+  ID : 43/45 vs 38/45  diff +11.1 pp, 95% CI [-1.1, +23.3], Fisher p = 0.157
+  OOD: 21/25 vs 19/25  diff +8.0 pp, 95% CI [-14.1, +30.1], Fisher p = 0.725
+
+Reading: with 45 ID and 25 OOD instructions the ID gap to pi0.5 is 5 instructions and the Fisher
+test does not separate the policies at 95% (the CI includes 0). The ordering is consistent across
+both splits and the distilled student keeps it, but the headline rests on a small instruction set.

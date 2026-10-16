@@ -13,6 +13,14 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-10-16 — 2026-10-13 至 2026-10-16(合流周:WAM×策略两篇深挖 + XTrace 实测 + Cortex 固化探针)
+- Doc: https://fudan-nlp.feishu.cn/docx/KlBmdNghjonODmxJl6WcQ6T3n6e
+- Run: runs/2026-10-16-greenwam-onewm-xtrace-cortex/
+- Deep threads: GreenWAM (2610.18774), OneWM (2610.21095), XTrace (2609.28769, 用户预约), Cortex (2610.20399)
+- Covered papers: 2610.18774, 2610.21095, 2609.28769, 2610.20399
+- Shortlisted papers: 2610.12818 (LeWAM), 2610.18568 (WAVE-0), 2610.12099 (UNITAS), 2610.14351 (WATCH), 2610.06598 (SimForcing), 2610.21306 (VLA-Δ), 2610.20524 (TFP), 2610.15715 (NoteBank), 2610.22070 (MaLoW)
+- 背景: 本周池内至少八篇论文同问"世界模型与动作模型是否一个模型"(上列全部 WAM×action 论文),四种接口答案(身体轴 79 槽/时间轴干净前缀/隐空间 JEPA/3D 度量)。归因缺口是最大空地:互益来自目标还是 5B 视频先验,GreenWAM 打包接口与数据、OneWM 锁死同一先验,均无正面回答。实测修正:GreenWAM 的 WorldArena 63.31 实为截帽榜 #35/127、RoboTwin 67.54=#5/20 且论文 Table 3 漏 PatchWAM/ViGAR;XTrace 字节级失真的 86% 是控制位重排(论文解释只覆盖文本级)、逐地址可行性小内核 50–73%、运行期被 CUPTI/Triton 3.6 library API/ILLEGAL_ADDRESS 三层挡住(开销声称未验证);Cortex"预期查询更优"玩具探针未显著(+10pp,CI 跨 0)而"rehearsal 内容决定恢复范围"锐利成立。执行教训:编辑闸(agent-66)抓到 6 处必须改,最狠的是 OneWM 配比顺序颠倒(60/25/15 实为全噪/部分/全净)——写手片段过 lint 不等于机制正确;open_id 仍 ou_4fb6(auth status 可查)。
+
 ## 2026-10-16 — 2026-10-12 报告重修(同一批证据按新写作规范重写)
 - Doc: https://fudan-nlp.feishu.cn/docx/PxhUdbgFfopV8XxqGM4cAoSenee (重修版;原版 IlJNdkts7oIWyfxfjtxcwT9DnFh 保持不动)
 - Run: runs/2026-10-12-cyfa-mmflow-scorecenter-dreamtrue-art/(与 2026-10-12 同一运行包,report.docxxml 已替换为重修稿,原稿在 git 历史)

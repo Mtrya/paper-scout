@@ -1,0 +1,31 @@
+PASS  semantic_dim == 79  semantic_dim=79
+PASS  blocks legs 12 / body 23 / arms 18 / hands 26  {'arms': 18, 'body': 23, 'hands': 26, 'legs': 12}
+PASS  slot names unique and 79 long
+      transport_dim=128 (model input width), space_contract=typed_bodyparts79_v2
+      legs   : ['legs.left.hip_pitch', 'legs.left.hip_roll', 'legs.left.hip_yaw'] ...
+      body   : ['body.base_pose.x', 'body.base_pose.y'] ... ['body.base_twist.vy', 'body.base_twist.vz', 'body.base_twist.wx']
+      arms   : ['arms.left.shoulder_pitch', 'arms.left.shoulder_roll', 'arms.left.shoulder_yaw'] ... ['arms.right.shoulder_pitch', 'arms.right.shoulder_roll', 'arms.right.shoulder_yaw']
+      hands  : ['hands.left.thumb_flexion', 'hands.left.thumb_opposition', 'hands.left.thumb_2'] ... ['hands.right.aux', 'hands.right.gripper']
+PASS  43 layouts  n=43
+PASS  21 family clusters  ['C01', 'C02', 'C03', 'C04', 'C05', 'C06', 'C07', 'C08', 'C09', 'C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16', 'C17', 'C18', 'C19', 'C20', 'C21']
+PASS  1217 roots  roots=1217
+      note: the paper says '20 robot families' (Fig. 26 / Table 8 lists 21 rows incl. OpenArm); the registry bank is 21 clusters.
+PASS  per-layout scale/offset cover every mapped channel
+      sign flips (scale<0): 114 of 1178 entries, in 26 of 43 layouts
+      non-zero zero-offsets: 4 of 1178 entries [('agibotworld2026__g2a__162__162', 14, 1.0989010989010988, 1.0), ('agibotworld2026__g2a__162__162', 15, 1.0989010989010988, 1.0), ('maniparena__ex001_6r__28__28', 12, -0.2222222222222222, 1.0), ('maniparena__ex001_6r__28__28', 13, -0.2222222222222222, 1.0)]
+PASS  Equation (1) is implemented as scale*x + offset
+PASS  zero offsets are rare but real (sign/zero are codec, not registry, responsibilities)  registry provenance keeps sign/zero in the source codec; the recipe carries the fitted values
+PASS  every layout has at least one available target slot  []
+      codec provenance limitations (top):
+        n=630: Role from URDF zero-pose kinematics or producer schema; units, sign, zero and calibration remain source-codec dependent.
+        n=365: Named source joint; units, sign, zero and calibration remain source-codec dependent.
+PASS  registry states units/sign/zero stay in the source codec
+      semantic shared_mask suppresses 42 mapped coordinates from shared supervision
+ROBOTWIN target_dim 14 available slots 14
+adapted slots of arm joints [0.0, 0.30000001192092896, -0.20000000298023224, 0.8999999761581421, -0.10000000149011612, 0.4000000059604645]
+valid mask len 14 of 14
+round-trip max abs error 0.0
+semantic layout id 42 semantic_dim 79 transport_dim 128
+PASS  released codec round-trips a native RoboTwin state
+
+FAILURES: none

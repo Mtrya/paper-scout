@@ -1,0 +1,19 @@
+repo SberRoboticsCenter/GreenWAM: 31 files
+PASS  robotwin: config + index + SHA256SUMS present  7 files, missing []
+PASS  libero: config + index + SHA256SUMS present  7 files, missing []
+PASS  calvin: config + index + SHA256SUMS present  7 files, missing []
+PASS  worldarena: config + index + SHA256SUMS present  7 files, missing []
+PASS  action statistics released with the policy checkpoints
+PASS  robotwin policy checkpoint has action_expert: true  {'action_expert': 'true', 'action_gen': 'true', 'max_action_dim': '128', 'native_action_dim': '64', 'num_action_contracts': '90', 'semantic_projectors': 'true', 'action_loss_weight': '10.0', 'loss_scale': '10.0'}
+PASS  libero policy checkpoint has action_expert: true  {'action_expert': 'true', 'action_gen': 'true', 'max_action_dim': '128', 'native_action_dim': 'null', 'num_action_contracts': '45', 'semantic_projectors': 'true', 'action_loss_weight': '10.0', 'loss_scale': '10.0'}
+PASS  calvin policy checkpoint has action_expert: true  {'action_expert': 'true', 'action_gen': 'true', 'max_action_dim': '128', 'native_action_dim': 'null', 'num_action_contracts': '45', 'semantic_projectors': 'true', 'action_loss_weight': '10.0', 'loss_scale': '10.0'}
+PASS  worldarena checkpoint has no action expert
+PASS  all checkpoints share the 128-wide semantic transport space
+PASS  all checkpoints use the shared semantic projectors
+
+      robotwin: 4.780 B parameters, 1.409 B in *_action_expert* tensors
+      worldarena: 3.370 B parameters, 0.000 B in *_action_expert* tensors
+PASS  policy checkpoint = world-model checkpoint + the action expert  delta 1.409 B
+PASS  the action expert is about as large as the generation tower it twins  expert 1.409 B vs generator 3.370 B
+
+FAILURES: none

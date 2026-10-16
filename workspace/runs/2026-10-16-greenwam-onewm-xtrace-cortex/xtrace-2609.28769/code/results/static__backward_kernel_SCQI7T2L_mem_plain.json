@@ -1,0 +1,323 @@
+{
+  "kernel": "_backward_kernel",
+  "spliced": true,
+  "origin_instructions": 192,
+  "origin_registers": 28,
+  "traced_instructions_after_splice": 288,
+  "traced_registers": 28,
+  "register_class": "uniform_general",
+  "pointer_registers": [
+    60,
+    58
+  ],
+  "sites_requested": 5,
+  "site_instruction_indices": [
+    17,
+    25,
+    26,
+    28,
+    175
+  ],
+  "sites_spliced": 5,
+  "sites_failed": 0,
+  "failed_site_indices": [],
+  "probe_instructions_total": 96,
+  "probe_instruction_counts": [
+    15,
+    21
+  ],
+  "similarity": {
+    "origin_instructions": 192,
+    "traced_instructions": 288,
+    "preserved_instructions": 192,
+    "changed_instructions": 0,
+    "inserted_instructions": 96,
+    "binary_similarity": 1.0,
+    "changed_by_opcode": {},
+    "inserted_by_opcode": {
+      "ULDC": 11,
+      "S2R": 11,
+      "IMAD": 20,
+      "SHF": 1,
+      "R2UR": 1,
+      "UIMAD": 1,
+      "UMOV": 6,
+      "MOV": 10,
+      "UIADD3": 10,
+      "UISETP": 5,
+      "CS2R": 5,
+      "STG": 15
+    },
+    "origin_blocks": 5,
+    "intact_blocks": 4,
+    "changed_blocks": 1,
+    "blocks_with_probe_inside": 1,
+    "unchanged_fraction": 0.8,
+    "traced_registers": 28,
+    "traced_basic_blocks": 5
+  },
+  "serialized_bytes": 12504,
+  "serialization_error": null,
+  "spliced_cubin": "/tmp/xt_splice__backward_kernel_SCQI7T2L_mem_plain.cubin",
+  "search_ns": {
+    "median": 409740.0,
+    "n": 6
+  },
+  "analysis_ns": {
+    "median": 3475242.0,
+    "n": 6
+  },
+  "effective_makespan_cycles": {
+    "median": 23.0,
+    "max": 44
+  },
+  "probe_pcs": {
+    "site175": [
+      2800,
+      2816,
+      2832,
+      2848,
+      2864,
+      2880,
+      2896,
+      2912,
+      2928,
+      2944,
+      2960,
+      2976,
+      2992,
+      3008,
+      3024
+    ],
+    "site28": [
+      448,
+      464,
+      480,
+      496,
+      512,
+      528,
+      544,
+      560,
+      576,
+      592,
+      608,
+      624,
+      640,
+      656,
+      672
+    ],
+    "site26": [
+      416,
+      432,
+      448,
+      464,
+      480,
+      496,
+      512,
+      528,
+      544,
+      560,
+      576,
+      592,
+      608,
+      624,
+      640
+    ],
+    "site25": [
+      400,
+      416,
+      432,
+      448,
+      464,
+      480,
+      496,
+      512,
+      528,
+      544,
+      560,
+      576,
+      592,
+      608,
+      624
+    ],
+    "site17": [
+      272,
+      288,
+      304,
+      320,
+      336,
+      352,
+      368,
+      384,
+      400,
+      416,
+      432,
+      448,
+      464,
+      480,
+      496
+    ],
+    "init": [
+      16,
+      32,
+      48,
+      64,
+      80,
+      96,
+      112,
+      128,
+      144,
+      160,
+      176,
+      192,
+      208,
+      224,
+      240,
+      256,
+      272,
+      288,
+      304,
+      320,
+      336
+    ]
+  },
+  "site_reports": {
+    "175": {
+      "spliced": "plain",
+      "insert_index": 175,
+      "splices": [
+        {
+          "analysis_ns": 1486645,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 218004,
+          "splice": "store"
+        }
+      ]
+    },
+    "28": {
+      "spliced": "plain",
+      "insert_index": 28,
+      "splices": [
+        {
+          "analysis_ns": 3656368,
+          "effective_makespan": 23,
+          "nb_attempts": 3,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 2,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 510617,
+          "splice": "store"
+        }
+      ]
+    },
+    "26": {
+      "spliced": "plain",
+      "insert_index": 26,
+      "splices": [
+        {
+          "analysis_ns": 3808460,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 338879,
+          "splice": "store"
+        }
+      ]
+    },
+    "25": {
+      "spliced": "plain",
+      "insert_index": 25,
+      "splices": [
+        {
+          "analysis_ns": 3294116,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 398399,
+          "splice": "store"
+        }
+      ]
+    },
+    "17": {
+      "spliced": "plain",
+      "insert_index": 17,
+      "splices": [
+        {
+          "analysis_ns": 4985672,
+          "effective_makespan": 23,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 15,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 10,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 449153,
+          "splice": "store"
+        }
+      ]
+    },
+    "init": {
+      "spliced": "init",
+      "insert_index": 1,
+      "splices": [
+        {
+          "analysis_ns": 3288857,
+          "effective_makespan": 44,
+          "nb_attempts": 2,
+          "nb_leaves_evaluated": 1,
+          "nb_nodes": 21,
+          "nb_orders_evaluated": 1,
+          "nb_orders_pruned": 0,
+          "nb_register_configs": 1,
+          "nb_values": 19,
+          "schedule_mode": 0,
+          "schedule_mode_downgraded": 0,
+          "search_budget_exhausted": 0,
+          "search_ns": 421081
+        }
+      ]
+    }
+  },
+  "site_spec": "mem",
+  "splice_mode": "plain",
+  "schedule_mode": "first_feasible",
+  "arch": "86",
+  "nb_instructions": 192,
+  "nb_basic_blocks_before": 5
+}
