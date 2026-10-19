@@ -1,0 +1,8 @@
+{
+ "self_swap_L11H2": 0.0,
+ "self_swap_L20H2": 0.0,
+ "self_swap_L17H3": 0.0,
+ "self_write_L11H2_logit_maxdiff": 0.0,
+ "self_write_L11H2_state_maxdiff": 0.07064224779605865,
+ "self_write_L11H2_state_maxdiff_vs_prefix": 0.0
+}

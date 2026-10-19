@@ -1,0 +1,8 @@
+{
+ "clean_recipient_margin": 0.07553362846374512,
+ "clean_donor_margin": 0.07786405086517334,
+ "donor_minus_recipient": 0.0023304224014282227,
+ "full_state_swap_margin": 0.07786095142364502,
+ "full_swap_minus_recipient": 0.0023273229598999023,
+ "mean_abs_candidate_logit_diff": 0.009548984467983246
+}
