@@ -1,0 +1,9 @@
+{
+  "protocol": "official probing.py (generate + prefill hook) vs forward-only extraction",
+  "subset": "2 questions per category (12 pairs), seed 42, same pairs",
+  "official_preprocessing": {"max_pixels": 12845056, "min_pixels": 3136},
+  "ours_preprocessing": {"max_pixels": 12845056, "min_pixels": 3136},
+  "delta_cosine_by_layer": {"L24": 0.9963, "L28": 0.9982, "L35": 0.9939},
+  "delta_relative_l2_by_layer": {"L24": 0.084, "L28": 0.058, "L35": 0.105},
+  "note": "L0 cosine is 0.73; early-layer deltas differ because generate and a single forward take slightly different early-layer paths. All reported WFLU metrics use the L24-L28 plateau."
+}

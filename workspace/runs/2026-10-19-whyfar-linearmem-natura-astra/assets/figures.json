@@ -1,0 +1,21 @@
+{
+  "whyfar:teaser": {"file": "assets/whyfar_wflu_teaser.png", "caption": "WFLU 的对照设计:上排自然图像里桌子在画面下方、离相机更近;下排 SpatialTunnel 里蓝色立方体更靠上却更近。弱空间模型按“更靠上”答“更远”,在反透视样本上答错;中间散点显示弱模型的 above 与 far 方向几乎重叠"},
+  "whyfar:sspace": {"file": "assets/whyfar_sspace_formulation.png", "caption": "S-Space 的构造:左格是物理三维坐标,中格是 d 维激活空间里三条方向张成的三维子空间,右格是物体 token 激活在三条轴上的投影坐标。读出只需前向,坐标差的符号给出关系"},
+  "whyfar:heatmap": {"file": "assets/whyfar_wflu_heatmap_L28.png", "caption": "第 28 层六类问题均值位移的两两余弦:left/right 与 above/below 两对都到 −0.99,far/close 只到 −0.81;above-far +0.45、below-close +0.44、above-close −0.42、below-far −0.45,水平与另两轴的八格都在 ±0.27 以内。透视耦合与水平正交性在同一张图里"},
+  "whyfar:axis-cosines": {"file": "assets/whyfar_delta_axis_cosines.png", "caption": "第 24 层四个均值位移与 S-Space 两轴的余弦:Δfar 在距离轴上 +0.14、在垂直轴上 −0.11;Δclose 在距离轴上 −0.14、在垂直轴上 +0.11;误差棒是 1000 次样本 bootstrap 的 95% 置信区间。距离分量可辨但小,且总与同量级的垂直分量同时出现"},
+  "whyfar:coexistence": {"file": "assets/whyfar_coexistence.png", "caption": "四格总览。左上:WFLU 逐层 Coh 与 VD-EI,VD-EI 在第 24 层跌到 0.143、第 26–28 层回到 0.45 左右。右上:S-Space 逐层读出,第 24 层三轴总体 0.842。左下:Δ 在距离轴上的投影与 S-Space 距离坐标差,斜率对应 r=0.81。右下:第 24 层均值位移与两条轴的余弦"},
+  "whyfar:axis-corr": {"file": "assets/whyfar_sspace_axis_correlations.png", "caption": "S-Space 论文 Fig. 3 的逐轴相关(Molmo2-ER 第 21 层,COCO):上排是单物体绝对坐标读出,水平、垂直、距离的 Spearman 分别是 0.789、0.774、0.521;下排是成对坐标差,0.871、0.872、0.688。两排里距离都是最弱的一轴,但散点沿对角线仍有明确斜率"},
+  "hlar:baseline": {"file": "assets/hlar_baseline.png", "caption": "native 四选一准确率:本 checkpoint 在 dev 与 test 上都是 25.0%,与 chance 齐平;论文报告 GDN-340M 的 46.9%。两者之间不是几个点的差距,而是读出是否存在"},
+  "hlar:j-heatmap": {"file": "assets/hlar_j_heatmap.png", "caption": "96 个头的 J 热图,dev 与 test 两栏:dev 最大 +0.0013(L7H2),test 最大 +0.0038(L11H2),色标 ±0.004 logit;论文选的 L20H2 用方框标出,值是负的。均值层面没有集中 hub"},
+  "hlar:paper-screen": {"file": "assets/hlar_paper_headscreen.png", "caption": "论文 Fig 2 的开发集头筛选作对照:GLA-340M、GDN-340M、GDN-1.3B 的热点分别是 L21H3(J=8.41)、L20H2(J=6.07)、L20H3(J=4.52),方框是论文冻结的头,色标是 donor-margin 位移(logit)。与我们重建口径下 96 头全部落在 ±0.004 形成三个数量级的反差"},
+  "hlar:write": {"file": "assets/hlar_write.png", "caption": "L11H2 的写干预。左:clean、置零、换 donor 写、等范数随机写下,状态到 recipient(蓝)与 donor(橙)的 Frobenius 距离——换 donor 写把状态拉到 donor 附近(0.056 对 0.209),置零停在中间。右:四种条件的 native 四选一全是 25.0%,donor 答案率全是 43.8%,即 donor 恰为“green”的基准率"},
+  "hlar:retention": {"file": "assets/hlar_retention_distance.png", "caption": "五个代表头的相对状态差随 filler 距离衰减:L11H2(τ 排名 1)在 512 与 1024 仍最高,L7H2(第 2)次之,L14H2(第 4)在 64 token 还有 0.119、到 512 掉到 0.021,L17H3(第 6)快速衰减,L20H2(论文 hub,第 22)全程最低。纵轴是 donor−recipient 状态差除以 recipient 状态范数"},
+  "hlar:tau-cross": {"file": "assets/hlar_tau_cross.png", "caption": "96 个头的门控半衰期 τ 与相对状态差,d=0 与 d=512 两栏,秩相关分别 +0.84 与 +0.61。L11H2 在右上,L20H2 落在中下游:慢头在长延迟上把事实留得更久,但论文选的 L20H2 不在那条线上"},
+  "natura-astra:natura-12dims": {"file": "assets/natura_12dims.png", "caption": "Natura-1 的 12 维分数与两个夹爪基线:蓝、绿是 Natura-1 Base/Agentic,橙、灰是 GPT-6-Astra 与 π0.5;前两者来自 20 自由度灵巧手平台,后两者来自 ARX AC One 夹爪平台。Astra 最高的一维是 Recovery 75.0,高于 Natura-1 Base 的 68.6"},
+  "natura-astra:astra-12bench": {"file": "assets/astra_12benchmarks.png", "caption": "12 个 benchmark 在标准预算与 10× 预算下的成功率:灰点是已发表 SOTA,深灰点是已发表 agentic SOTA,紫色是 1×,青色是 10×。10× 把多数点推到 80 以上;RoboDojo 从 27.6 到 81.9、Bench2Dex 从 25.6 到 61.5 的跳变最陡"},
+  "natura-astra:natura-videos": {"file": "assets/natura_videos_grid.jpg", "caption": "从上到下:Natura-1 用杆子把高台上的篮子拉下来(9.2 秒,2× 播放,片段从右手已经握住杆开始);卡片被推到盒子边缘后从下方重抓(9.1 秒,2×);包馄饨(72.6 秒,1×,单镜头三路视角,† 表示六个长程任务之一的额外任务微调)。三段都是双臂灵巧手,动作连续,四段视频的最大 ffmpeg scene 分数均低于 0.04"},
+  "natura-astra:lemon": {"file": "assets/natura_lemon_sheet.png", "caption": "柠檬跟踪的 6 帧拼图(0–40 秒,每 8 秒一帧):画面里是人手直接移动柠檬,32 秒时把柠檬放进机器人张开的手掌,40 秒机器人握住。博客文字说的“长杆”没有出现在这些帧里"},
+  "natura-astra:harness-cost": {"file": "assets/astra_harness_cost.png", "caption": "RoboDojo 上不同 harness 配置的成功率与 token 成本:横轴是百万 token 的对数坐标,纵轴是成功率。开环 5.83 低于 S2 单独 15.56,闭环 L=1 到 23.61,ICL + 闭环到 54.17、代价 19.3M token;L=4 用 2.8M token 拿到 25.83,比 L=1 少 63.5% 的 token 还略高"},
+  "natura-astra:tianji": {"file": "assets/astra_tianji_grasp.png", "caption": "Tianji M6S 与 Wuji Gen-1 手:(a) GPT-6-Astra 自己写 grasp code,3 次都没把玩具抓起来;(b) 同一任务改用人类写的 grasp script,3/3 成功;(c) 瓶子任务用人类脚本,1/3 成功。差别不在手指,在抓法从哪来"},
+  "natura-astra:household": {"file": "assets/astra_household_pipeline.png", "caption": "Isaac Sim 里的一居室从公开资产与户型图搭起,物品按真实尺度摆放并绑定铰接、液体、布料与接触;任务只给一句需求(做早餐),评分同时看 Intent(早餐上桌)与 Duty(冰箱关好);agent 只能通过本体相机观察,思考时间照常推进世界时钟"}
+}

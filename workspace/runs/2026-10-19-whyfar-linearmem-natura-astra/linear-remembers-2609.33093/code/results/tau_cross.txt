@@ -1,0 +1,86 @@
+=== validation ===
+d=   0: rho(tau,rel)=+0.840 (p=1.1e-26), rho(tau_eff,rel)=+0.884
+    L20H2 (paper hub)      rel=0.0350 (rank 40) tau=6.17 (rank 22) tau_eff=302.0
+    L11H2                  rel=0.1828 (rank  1) tau=1582.46 (rank  1) tau_eff=38078.6
+    L17H3                  rel=0.1757 (rank  3) tau=44.40 (rank  6) tau_eff=930.9
+    L7H2                   rel=0.1287 (rank  7) tau=989.42 (rank  2) tau_eff=25249.3
+    L14H2                  rel=0.1770 (rank  2) tau=94.76 (rank  4) tau_eff=3572.8
+    top: L11H2=0.183(tau#1), L14H2=0.177(tau#4), L17H3=0.176(tau#6), L21H3=0.161(tau#8), L3H1=0.155(tau#3)
+d=  64: rho(tau,rel)=+0.684 (p=1.7e-14), rho(tau_eff,rel)=+0.710
+    L20H2 (paper hub)      rel=0.0176 (rank 57) tau=6.17 (rank 22) tau_eff=175.6
+    L11H2                  rel=0.1461 (rank  1) tau=1582.46 (rank  1) tau_eff=44067.3
+    L17H3                  rel=0.0664 (rank  5) tau=44.40 (rank  6) tau_eff=1012.7
+    L7H2                   rel=0.1016 (rank  3) tau=989.42 (rank  2) tau_eff=25258.4
+    L14H2                  rel=0.1194 (rank  2) tau=94.76 (rank  4) tau_eff=3184.7
+    top: L11H2=0.146(tau#1), L14H2=0.119(tau#4), L7H2=0.102(tau#2), L3H1=0.091(tau#3), L17H3=0.066(tau#6)
+d= 128: rho(tau,rel)=+0.650 (p=8.1e-13), rho(tau_eff,rel)=+0.676
+    L20H2 (paper hub)      rel=0.0165 (rank 56) tau=6.17 (rank 22) tau_eff=159.1
+    L11H2                  rel=0.1236 (rank  1) tau=1582.46 (rank  1) tau_eff=48004.7
+    L17H3                  rel=0.0372 (rank  6) tau=44.40 (rank  6) tau_eff=1044.8
+    L7H2                   rel=0.0834 (rank  2) tau=989.42 (rank  2) tau_eff=25591.3
+    L14H2                  rel=0.0805 (rank  3) tau=94.76 (rank  4) tau_eff=3101.8
+    top: L11H2=0.124(tau#1), L7H2=0.083(tau#2), L14H2=0.080(tau#4), L3H1=0.060(tau#3), L14H0=0.039(tau#5)
+d= 256: rho(tau,rel)=+0.635 (p=3.7e-12), rho(tau_eff,rel)=+0.648
+    L20H2 (paper hub)      rel=0.0108 (rank 66) tau=6.17 (rank 22) tau_eff=153.7
+    L11H2                  rel=0.0961 (rank  1) tau=1582.46 (rank  1) tau_eff=49407.6
+    L17H3                  rel=0.0246 (rank  6) tau=44.40 (rank  6) tau_eff=1063.8
+    L7H2                   rel=0.0628 (rank  2) tau=989.42 (rank  2) tau_eff=25318.3
+    L14H2                  rel=0.0425 (rank  3) tau=94.76 (rank  4) tau_eff=3003.8
+    top: L11H2=0.096(tau#1), L7H2=0.063(tau#2), L14H2=0.043(tau#4), L3H1=0.028(tau#3), L14H0=0.026(tau#5)
+d= 512: rho(tau,rel)=+0.606 (p=6.3e-11), rho(tau_eff,rel)=+0.610
+    L20H2 (paper hub)      rel=0.0111 (rank 49) tau=6.17 (rank 22) tau_eff=146.8
+    L11H2                  rel=0.0683 (rank  1) tau=1582.46 (rank  1) tau_eff=50882.9
+    L17H3                  rel=0.0183 (rank  5) tau=44.40 (rank  6) tau_eff=1061.3
+    L7H2                   rel=0.0423 (rank  2) tau=989.42 (rank  2) tau_eff=25219.9
+    L14H2                  rel=0.0210 (rank  3) tau=94.76 (rank  4) tau_eff=2933.7
+    top: L11H2=0.068(tau#1), L7H2=0.042(tau#2), L14H2=0.021(tau#4), L14H0=0.018(tau#5), L17H3=0.018(tau#6)
+d=1024: rho(tau,rel)=+0.615 (p=2.6e-11), rho(tau_eff,rel)=+0.623
+    L20H2 (paper hub)      rel=0.0056 (rank 57) tau=6.17 (rank 22) tau_eff=139.8
+    L11H2                  rel=0.0426 (rank  1) tau=1582.46 (rank  1) tau_eff=49796.8
+    L17H3                  rel=0.0112 (rank  5) tau=44.40 (rank  6) tau_eff=1036.7
+    L7H2                   rel=0.0231 (rank  2) tau=989.42 (rank  2) tau_eff=24706.8
+    L14H2                  rel=0.0125 (rank  3) tau=94.76 (rank  4) tau_eff=2877.8
+    top: L11H2=0.043(tau#1), L7H2=0.023(tau#2), L14H2=0.013(tau#4), L14H0=0.011(tau#5), L17H3=0.011(tau#6)
+=== test ===
+d=   0: rho(tau,rel)=+0.844 (p=3.3e-27), rho(tau_eff,rel)=+0.888
+    L20H2 (paper hub)      rel=0.0381 (rank 31) tau=6.17 (rank 22) tau_eff=324.2
+    L11H2                  rel=0.1859 (rank  1) tau=1582.46 (rank  1) tau_eff=38498.4
+    L17H3                  rel=0.1750 (rank  3) tau=44.40 (rank  6) tau_eff=917.1
+    L7H2                   rel=0.1311 (rank  7) tau=989.42 (rank  2) tau_eff=25602.4
+    L14H2                  rel=0.1781 (rank  2) tau=94.76 (rank  4) tau_eff=3553.4
+    top: L11H2=0.186(tau#1), L14H2=0.178(tau#4), L17H3=0.175(tau#6), L3H1=0.162(tau#3), L21H3=0.160(tau#8)
+d=  64: rho(tau,rel)=+0.630 (p=6.4e-12), rho(tau_eff,rel)=+0.638
+    L20H2 (paper hub)      rel=0.0127 (rank 64) tau=6.17 (rank 22) tau_eff=159.7
+    L11H2                  rel=0.1488 (rank  1) tau=1582.46 (rank  1) tau_eff=41137.3
+    L17H3                  rel=0.0613 (rank  5) tau=44.40 (rank  6) tau_eff=899.3
+    L7H2                   rel=0.1047 (rank  3) tau=989.42 (rank  2) tau_eff=25757.3
+    L14H2                  rel=0.1172 (rank  2) tau=94.76 (rank  4) tau_eff=2986.5
+    top: L11H2=0.149(tau#1), L14H2=0.117(tau#4), L7H2=0.105(tau#2), L3H1=0.091(tau#3), L17H3=0.061(tau#6)
+d= 128: rho(tau,rel)=+0.654 (p=4.8e-13), rho(tau_eff,rel)=+0.663
+    L20H2 (paper hub)      rel=0.0153 (rank 59) tau=6.17 (rank 22) tau_eff=151.2
+    L11H2                  rel=0.1246 (rank  1) tau=1582.46 (rank  1) tau_eff=43642.3
+    L17H3                  rel=0.0355 (rank  6) tau=44.40 (rank  6) tau_eff=974.8
+    L7H2                   rel=0.0865 (rank  2) tau=989.42 (rank  2) tau_eff=25832.9
+    L14H2                  rel=0.0759 (rank  3) tau=94.76 (rank  4) tau_eff=2874.2
+    top: L11H2=0.125(tau#1), L7H2=0.086(tau#2), L14H2=0.076(tau#4), L3H1=0.056(tau#3), L14H0=0.036(tau#5)
+d= 256: rho(tau,rel)=+0.637 (p=2.9e-12), rho(tau_eff,rel)=+0.647
+    L20H2 (paper hub)      rel=0.0129 (rank 54) tau=6.17 (rank 22) tau_eff=149.6
+    L11H2                  rel=0.0969 (rank  1) tau=1582.46 (rank  1) tau_eff=47170.0
+    L17H3                  rel=0.0246 (rank  6) tau=44.40 (rank  6) tau_eff=1036.2
+    L7H2                   rel=0.0655 (rank  2) tau=989.42 (rank  2) tau_eff=25775.8
+    L14H2                  rel=0.0391 (rank  3) tau=94.76 (rank  4) tau_eff=2810.6
+    top: L11H2=0.097(tau#1), L7H2=0.066(tau#2), L14H2=0.039(tau#4), L3H1=0.027(tau#3), L14H0=0.025(tau#5)
+d= 512: rho(tau,rel)=+0.631 (p=5.8e-12), rho(tau_eff,rel)=+0.633
+    L20H2 (paper hub)      rel=0.0099 (rank 53) tau=6.17 (rank 22) tau_eff=138.7
+    L11H2                  rel=0.0686 (rank  1) tau=1582.46 (rank  1) tau_eff=50164.4
+    L17H3                  rel=0.0185 (rank  5) tau=44.40 (rank  6) tau_eff=1007.0
+    L7H2                   rel=0.0440 (rank  2) tau=989.42 (rank  2) tau_eff=26303.0
+    L14H2                  rel=0.0197 (rank  4) tau=94.76 (rank  4) tau_eff=2853.5
+    top: L11H2=0.069(tau#1), L7H2=0.044(tau#2), L14H0=0.020(tau#5), L14H2=0.020(tau#4), L17H3=0.019(tau#6)
+d=1024: rho(tau,rel)=+0.602 (p=9.0e-11), rho(tau_eff,rel)=+0.606
+    L20H2 (paper hub)      rel=0.0057 (rank 57) tau=6.17 (rank 22) tau_eff=134.2
+    L11H2                  rel=0.0429 (rank  1) tau=1582.46 (rank  1) tau_eff=51250.9
+    L17H3                  rel=0.0099 (rank  7) tau=44.40 (rank  6) tau_eff=995.1
+    L7H2                   rel=0.0248 (rank  2) tau=989.42 (rank  2) tau_eff=26265.1
+    L14H2                  rel=0.0116 (rank  3) tau=94.76 (rank  4) tau_eff=2843.0
+    top: L11H2=0.043(tau#1), L7H2=0.025(tau#2), L14H2=0.012(tau#4), L14H0=0.011(tau#5), L18H3=0.011(tau#12)

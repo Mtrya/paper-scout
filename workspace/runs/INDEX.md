@@ -13,6 +13,14 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-10-19 — 用户点名五篇(WFLU×S-Space 空间表征 × HLAR 记忆复现 × Natura/Astra 协议对质)
+- Doc: https://fudan-nlp.feishu.cn/docx/TqavdJunyo7nEOxbqkUcRaNVnzd
+- Run: runs/2026-10-19-whyfar-linearmem-natura-astra/
+- Deep threads: WFLU×S-Space 同权重对撞(同一 Qwen2.5-VL-3B、同批 EmbSpatial 题;WFLU 复现 CohD 0.0436 对论文 0.043 几乎逐位,抓到官方仓 VD-EI 实现≠论文 Eq.3——0.463 vs 0.439;S-Space 梯度轴移植后第 24 层距离坐标读出 0.665 与同层 CohD 0.032 共存:距离是低信噪比(d′ 0.74 vs 水平 1.75、范数 6.0 vs 32.2)不是不存在;层级时序:绝对坐标 L24 峰、垂直化纠缠 L26–28 才跳到 VD-EI 0.45)(2605.30161, 2610.13527), HLAR 独立复现 + τ 交叉(纯 torch GDN-340M 栈与 fla 对拍 1.1e-5;write→retain 复现(donor 写 ratio 0.795、512 filler 后 L11H2 留 6.8% 相对状态差),read 断裂:native 四选一 25.0% 恒猜 "green"、整状态置换 margin 只移 0.0023,论文 46.9% 与 L20H2 hub 不可复现;新增 τ 交叉:慢头承载长延迟记忆 ρ=+0.84@0/+0.61@512,但载体是 L11H2(τ=1582)不是论文的 L20H2(τ=6.17,512 保留排 49/96)——"hub=最慢头"半证伪)(2609.33093), Natura-1×SenseNova 协议对质(16.7 与 81.9 是协议光谱两端非矛盾;16.7 不可复算(11 维简单均值 30.3,聚合权重未公开);交集一致:Wuji 灵巧手无人类先验 0 分、有人类 grasp script 3/3;bimanual 与 recovery 两标签两边构念不同;两点 scaling 等效指数真机 MSE 每翻倍 −22.2%、方向同 Dyna-2(6.85×)但非 law;四段演示视频逐帧审计无硬切,柠檬段"长杆"文字与画面(人手)不符;RoboRSI 只放出 LIBERO 家族,27B 权重预计 2026-10-20)(natura-1-blog, 2610.22471)
+- Covered papers: 2605.30161, 2610.13527, 2609.33093, 2610.22471, natura-1-blog
+- Shortlisted papers: 无(点名制,五篇全深挖)
+- 背景: 三线程收敛同一形状——"在"与"用"之间隔着读出层:坐标在表征里但关系读出弱、事实写进状态但 LM head 读不出、能力在模型里但协议决定测到哪端(15.56→81.9 由 ICL/闭环/10× 预算叠出)。跨轮衔接:τ 分布来自 2026-10-08 STEPQuant;world-clock 接上 2026-07-31 πR² 的观测陈旧度解释与 2026-09-16 AGP 的大脑-小脑接口。执行教训:verify_run 线程目录只许 README+code(+patches),results 挪 code/results/ 即合规;push_report.py 需 PIL,用 code/.venv/bin/python 跑;编辑闸抓到 DexJoCo 55 episode(非 60)等 10 处;论文式(6)文字差分/字面乘积两口径都要算。
+
 ## 2026-10-16 — 2026-10-13 至 2026-10-16(合流周:WAM×策略两篇深挖 + XTrace 实测 + Cortex 固化探针)
 - Doc: https://fudan-nlp.feishu.cn/docx/KlBmdNghjonODmxJl6WcQ6T3n6e
 - Run: runs/2026-10-16-greenwam-onewm-xtrace-cortex/

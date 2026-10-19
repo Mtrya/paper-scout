@@ -1,0 +1,40 @@
+data ratio D1/D0 = 22.727  (ln = 3.1236)
+
+Natura-1: two-point exponents (exact fit, zero residual dof)
+metric                   change     alpha    per 2x
+human Action MSE         -47.7%   -0.2075    -13.4%
+human Action MAE         -37.3%   -0.1494     -9.8%
+robot Action MSE         -67.7%   -0.3618    -22.2%
+robot Action MAE         -49.3%   -0.2175    -14.0%
+
+Dyna-2: published power-law exponents (D in hours)
+metric                           alpha    per 2x
+human acc@0.5                  +0.0203     +1.4%
+human acc@0.1                  +0.0606     +4.3%
+zero-shot robot acc@0.5        +0.1390    +10.1%
+
+Natura robot/human MSE exponent ratio: 1.74x
+Dyna-2 robot/human acc@0.5 ratio:      6.85x
+
+Dyna-2's laws evaluated over the same 44k -> 1M span:
+  human acc@0.5                relative change = +6.5%
+  human acc@0.1                relative change = +20.8%
+  zero-shot robot acc@0.5      relative change = +54.4%
+
+Illustrative extrapolation of Natura's two-point fit to 10M hours
+(NOT evidence; shown only to make the weakness of two points concrete):
+  human Action MSE       additional change = -38.0%
+  human Action MAE       additional change = -29.1%
+  robot Action MSE       additional change = -56.5%
+  robot Action MAE       additional change = -39.4%
+
+Caveats:
+  - Natura's curve is 'as training advances', not a data-only ladder;
+    compute and checkpoint schedule co-vary with hours.
+  - Metrics are teacher-forced action errors, not closed-loop success.
+  - MSE and MAE give different exponents (-0.21 vs -0.15 human;
+    -0.36 vs -0.22 robot), so even Natura's two points do not lie on
+    one scale factor: the error distribution changes shape.
+  - No absolute values, error bars, task breakdown, or R^2 are published.
+  - Dyna-2 uses 4 rungs (1k/10k/100k/1M), 4 metrics, R^2 0.865-0.926,
+    and a controlled data-only ladder; still self-reported, no code/weights.
