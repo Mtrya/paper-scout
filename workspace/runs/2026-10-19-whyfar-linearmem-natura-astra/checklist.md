@@ -27,5 +27,5 @@
 - [x] 工作区校验器 prepublish 通过。
 - [x] 报告已发布(分段追加、插图、锚点消除、回读验证)。(15 段全 ok,19 图插入,回读验证 19 图、无锚点残留)
 - [x] 用户通知已确认(IM 已发送)。
-- [ ] `runs/INDEX.md` 已更新。
-- [ ] 记忆已写。(memories/2026-10-19-memory.md)
+- [x] `runs/INDEX.md` 已更新。
+- [x] 记忆已写。(memories/2026-10-19-memory.md)
