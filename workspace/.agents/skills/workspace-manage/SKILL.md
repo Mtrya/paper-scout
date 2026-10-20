@@ -123,7 +123,7 @@ python3 .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mo
 - 线程要么是 `BLOCKER.md`,要么是 `README.md` 加 `code/`、`patches/` 或两者兼有。
 - 存在的 `code/` 或 `patches/` 目录内至少有一个非空文件。
 - `report.docxxml` 与 `report_group.docxxml` 的正文不含伪 LaTeX(`<latex>`、`<pre>`、`<code>`、链接与锚点之外的 `\命令`、`^`、单字符下标——含希腊字母下标——即 FAIL);`assets/figures.json` 的图注同理(图注不渲染 `<latex>`,允许 Unicode 下标)。
-- style lint(报告散文的反 AI 腔机械子集):一级项(模型口吻、Markdown 泄漏、三段式版面标签)FAIL;禁用词、破折号与加粗密度 WARNING,不阻断但必须在发布前逐条确认。
+- style lint(报告散文的反 AI 腔机械子集):一级项(模型口吻、Markdown 泄漏、三段式版面标签)FAIL;禁用词、破折号与加粗密度 WARNING,不阻断但必须在发布前逐条确认。两条冷读者兜底:论文内部坐标(式号、附录号、snake_case 标识符)进正文 FAIL——内容复述进散文(docxxml 无行内 code 标签,块级代码进 `<pre><code>`);非通用全大写缩写 WARNING,逐个确认是专名或首现已给全称。图注是纯文本无标记逃生口:式号/附录号 FAIL,snake_case 标签与缩写 WARNING。
 - 体积预算:单文件 ≤ 2MB、运行包总量 ≤ 20MB、无权重/checkpoint 扩展名。
 - final 模式下 `code/` 和 `drafts/` 只剩各自的 README 标记。
 - final 模式要求 `runs/INDEX.md` 提到该运行 id。

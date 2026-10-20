@@ -47,6 +47,25 @@ BOLD_RE = re.compile(r"<b>")
 DASH_DENSITY_LIMIT = 5.0   # per 1000 chars of prose
 BOLD_DENSITY_LIMIT = 12.0  # per 1000 chars of prose
 
+# Cold-reader backstops (report-compose references/review-gates.md gate 4,
+# mechanical subset): paper-internal coordinates (Eq. N, §N, 附录X, snake_case
+# identifiers) carry no information to a reader who has not read the paper —
+# restate content in prose; block-level code lives in <pre><code>, which
+# prose_lines strips before linting (the docxxml dialect has no inline code
+# span). Captions are plain text with no markup escape: the coordinate arm
+# fails there, snake_case labels only warn.
+# All-caps abbreviations outside the universal set must earn their full name
+# at first use; the whitelist is that universal set.
+CAPTION_COORD_RE = re.compile(r"(?<![A-Za-z0-9])Eq\.?\s*\d+|§\s*\d+|附录\s*[A-ZＡ-Ｚ]")
+SNAKE_CASE_RE = re.compile(r"(?<![A-Za-z0-9_])[a-z][a-z0-9]*(?:_[a-z0-9]+)+(?![A-Za-z0-9_])")
+INTERNAL_COORD_RE = re.compile(CAPTION_COORD_RE.pattern + "|" + SNAKE_CASE_RE.pattern)
+ALLCAPS_RE = re.compile(r"(?<![A-Za-z0-9-])[A-Z]{3,}(?![A-Za-z0-9-])")
+ALLCAPS_WHITELIST = {
+    "API", "CI", "CPU", "CUDA", "EMA", "GPT", "GPU", "HTML", "JSON", "LLM",
+    "MAE", "MSE", "PCA", "PDF", "PPL", "RGB", "RMS", "RMSE", "RTX", "SOTA",
+    "URL", "VLA", "VLM",
+}
+
 
 def workspace_root() -> Path:
     return Path(__file__).resolve().parents[4]
@@ -129,6 +148,8 @@ def verify_report_style(report: Path, errors: list[str], warnings: list[str]) ->
     voice_hits: list[str] = []
     boilerplate_hits: list[str] = []
     banned_hits: list[str] = []
+    coord_hits: list[str] = []
+    allcaps: dict[str, int] = {}
     dash_count = 0
     bold_count = 0
     char_count = 0
@@ -146,6 +167,11 @@ def verify_report_style(report: Path, errors: list[str], warnings: list[str]) ->
             boilerplate_hits.append(str(lineno))
         for match in BANNED_WORD_RE.finditer(line):
             banned_hits.append(f"{lineno}:{match.group(0)}")
+        for match in INTERNAL_COORD_RE.finditer(line):
+            coord_hits.append(f"{lineno}:{match.group(0)}")
+        for token in ALLCAPS_RE.findall(line):
+            if token not in ALLCAPS_WHITELIST:
+                allcaps[token] = allcaps.get(token, 0) + 1
 
     for hits, label in (
         (markdown_hits, "markdown syntax leaked into prose"),
@@ -156,9 +182,24 @@ def verify_report_style(report: Path, errors: list[str], warnings: list[str]) ->
             shown = ", ".join(hits[:8]) + (" ..." if len(hits) > 8 else "")
             errors.append(f"{report}: {label} on line(s) {shown}; see anti-ai-zh.md level 1")
 
+    if coord_hits:
+        shown = ", ".join(coord_hits[:10]) + (" ..." if len(coord_hits) > 10 else "")
+        errors.append(
+            f"{report}: paper-internal coordinate(s) in prose (line:token): {shown}; "
+            "restate the content in prose (block-level code belongs in <pre><code>)"
+        )
     if banned_hits:
         shown = ", ".join(banned_hits[:10]) + (" ..." if len(banned_hits) > 10 else "")
         warnings.append(f"{report}: {len(banned_hits)} banned-word hit(s) (line:word): {shown}")
+    if allcaps:
+        shown = ", ".join(
+            f"{token}×{count}"
+            for token, count in sorted(allcaps.items(), key=lambda item: -item[1])[:12]
+        )
+        warnings.append(
+            f"{report}: {sum(allcaps.values())} non-universal all-caps occurrence(s): {shown}; "
+            "confirm each is a proper name or earns its full name at first use"
+        )
     if char_count:
         dash_density = dash_count * 1000 / char_count
         if dash_density > DASH_DENSITY_LIMIT:
@@ -174,7 +215,7 @@ def verify_report_style(report: Path, errors: list[str], warnings: list[str]) ->
             )
 
 
-def verify_figure_captions(figures_json: Path, errors: list[str]) -> None:
+def verify_figure_captions(figures_json: Path, errors: list[str], warnings: list[str]) -> None:
     try:
         data = json.loads(figures_json.read_text(encoding="utf-8"))
     except (json.JSONDecodeError, UnicodeDecodeError):
@@ -194,12 +235,25 @@ def verify_figure_captions(figures_json: Path, errors: list[str]) -> None:
                 collect(value)
 
     collect(data)
+    caption_tokens: set[str] = set()
     for caption in captions:
         if PSEUDO_LATEX_RE.search(caption):
             errors.append(
                 f"{figures_json}: caption carries raw LaTeX syntax (captions cannot render "
                 f"<latex>; use flat notation, Unicode subscripts allowed): {caption[:60]}"
             )
+        if CAPTION_COORD_RE.search(caption):
+            errors.append(
+                f"{figures_json}: caption carries a paper-internal coordinate "
+                f"(restate in prose): {caption[:60]}"
+            )
+        caption_tokens.update(SNAKE_CASE_RE.findall(caption))
+        caption_tokens.update(t for t in ALLCAPS_RE.findall(caption) if t not in ALLCAPS_WHITELIST)
+    if caption_tokens:
+        warnings.append(
+            f"{figures_json}: caption all-caps/label token(s) to confirm: "
+            f"{', '.join(sorted(caption_tokens))}"
+        )
 
 
 def verify_run(run_path: Path, mode: str) -> tuple[list[str], list[str], int, int]:
@@ -249,7 +303,7 @@ def verify_run(run_path: Path, mode: str) -> tuple[list[str], list[str], int, in
     else:
         figures_manifest = assets / "figures.json"
         if figures_manifest.is_file():
-            verify_figure_captions(figures_manifest, errors)
+            verify_figure_captions(figures_manifest, errors, warnings)
 
     thread_count = 0
     for entry in visible_entries(run_path):
