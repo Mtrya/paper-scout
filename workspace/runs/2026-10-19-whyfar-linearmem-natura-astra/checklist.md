@@ -4,7 +4,7 @@
 - 运行 id: 2026-10-19-whyfar-linearmem-natura-astra
 - 覆盖对象: 用户点名制,无论文池筛选——WFLU(arXiv 2605.30161)、S-Space(2610.13527)、HLAR(2609.33093)、Natura-1 博客(2026-10-13)、SenseNova Astra 具身评测(2610.22471)
 - 报告: runs/2026-10-19-whyfar-linearmem-natura-astra/report.docxxml
-- 飞书文档: https://fudan-nlp.feishu.cn/docx/TqavdJunyo7nEOxbqkUcRaNVnzd
+- 飞书文档: https://fudan-nlp.feishu.cn/docx/Jxhkddm2CoQPlYx81bcc7Ty9nRg (v2 修订版,2026-10-20 交付,当前有效;v1 原版 https://fudan-nlp.feishu.cn/docx/TqavdJunyo7nEOxbqkUcRaNVnzd 保持不动)
 
 ## 研究契约
 - [x] 报告前置的是从论文加外部信号中赢得的洞见,而不是论文内容的重组。(线程A:同一权重同批题上两探针对撞,L24 的 0.665 与 0.032 共存、VD-EI 官方实现≠论文式;线程B:独立复现发现 write→retain 成立、read 断裂,新增 τ 交叉证伪"hub=最慢头";线程C:协议光谱对质 + 12 维总分不可复算 + 视频逐帧审计)
@@ -24,8 +24,8 @@
 - [x] `code/` 和 `drafts/` 不持有持久工作的唯一副本。(脚本快照已入线程包)
 
 ## 发布契约
-- [x] 工作区校验器 prepublish 通过。
-- [x] 报告已发布(分段追加、插图、锚点消除、回读验证)。(15 段全 ok,19 图插入,回读验证 19 图、无锚点残留)
-- [x] 用户通知已确认(IM 已发送)。
-- [x] `runs/INDEX.md` 已更新。
+- [x] 工作区校验器 prepublish 通过。(v2 重修后重跑仍 PASS)
+- [x] 报告已发布(分段追加、插图、锚点消除、回读验证)。(v1: 15 段;v2: 17 段全 ok,19 图插入,回读验证 19 图、无锚点残留)
+- [x] 用户通知已确认(IM 已发送)。(v2: 默认通知 + 修订说明 IM,messages-search 回读确认)
+- [x] `runs/INDEX.md` 已更新。(v2: 2026-10-20 重修条目,沿用 10-12 重修先例)
 - [x] 记忆已写。(memories/2026-10-19-memory.md)

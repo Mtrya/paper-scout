@@ -13,6 +13,14 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-10-20 — 2026-10-19 报告重修(读者反馈驱动的可读性重修 + 六条规则落地)
+- Doc: https://fudan-nlp.feishu.cn/docx/Jxhkddm2CoQPlYx81bcc7Ty9nRg (修订版;原版 TqavdJunyo7nEOxbqkUcRaNVnzd 保持不动)
+- Run: runs/2026-10-19-whyfar-linearmem-natura-astra/(report.docxxml 已替换为修订稿,原稿在 git 历史)
+- Deep threads: 同 2026-10-19,不新增覆盖
+- Covered papers: 不新增(2605.30161, 2610.13527, 2609.33093, 2610.22471, natura-1-blog)
+- Shortlisted papers: 不新增
+- 背景: 触发是用户对"探针之下"章的成批反馈(未定义缩写 WFLU/HLAR、数字无锚点、悬空引用"官方仓公式/论文 Eq.3"、J 热图未定义、具名直接前作 J-Space 未先于 S-Space 登场)。两轮修订(重写工单 + 冷读者闸 34 卡点)逐条修复,另修正 SpinBench 模型归属一处事实错误。乘积口径段经 CPU 探针裁决后重写:J_mult 平台值 2.005–2.007/2.477–2.480 是逐 source margin 方差决定的头无关常数(mean(m₀²)=2.006/2.479,与 GPU 原值差 <2e-6,带头信息的分解残差 ≤0.002),探针 probe_margins.py 与逐 source 数据已入运行包。规则侧六条经用户逐条批准落盘:读者模型根句("作者自己检查恒为真、信息量恒为零,可读性只能由无上下文的读者测量")、闸门 4 恢复为独立冷读者闸(全新子代理只读报告全文)、闸门 1 加具名直接前作先读先登场、verify_run 新机器检查(正文坐标 FAIL、图注坐标 FAIL、snake_case/全大写 WARNING)、paper-deep-dive 同步具名前作句、harness 级规则 H。执行教训:lark-cli 无 messages-delete 子命令,误发的测试消息无法撤回——验证 IM 通路不要实发 ping;uv 建 CPU torch venv 复算 96 头 J_mult 约 11 分钟;lark-cli 走 ~/.nvm node v24.21.0,用户凭据自动续期正常。
+
 ## 2026-10-19 — 用户点名五篇(WFLU×S-Space 空间表征 × HLAR 记忆复现 × Natura/Astra 协议对质)
 - Doc: https://fudan-nlp.feishu.cn/docx/TqavdJunyo7nEOxbqkUcRaNVnzd
 - Run: runs/2026-10-19-whyfar-linearmem-natura-astra/

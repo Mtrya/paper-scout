@@ -81,7 +81,7 @@ J(l,h) = mean_i [ (z_d − z_r)_after_swap − (z_d − z_r)_clean ]
 
 dev 上 96 个头的 J 全部落在 ±0.0013 内(std 0.0003),test 上最大也只有 +0.0038(L11H2)。作为参照,干净 margin 的绝对值是 0.0755,单头 swap 能改变的量不到它的 5%。论文的 L20H2 在 dev 上 J = −0.0012(排在中下),test 上 −0.0005,不是 hub。
 
-论文式(6)字面上是一个**乘积**,而不是差分。我们照字面也算了一遍:`mean[(z_d−z_r)_after × (z_d−z_r)_clean]`。这个量被干净 margin 的绝对值支配,96 个头全部落在 2.005–2.007(dev)/2.477–2.480(test),头部之间的差异约 0.1%,不构成有意义的排序(JSON 里的 `J_mult` 字段)。因此正文采用差分口径,并在 `code/results/screen_*.json` 里保留两种口径。
+论文式(6)字面上是一个**乘积**,而不是差分。我们照字面也算了一遍:`mean[(z_d−z_r)_after × (z_d−z_r)_clean]`。96 个头全部落在 2.005–2.007(dev)/2.477–2.480(test),头部之间的差异约 0.1%,不构成有意义的排序(JSON 里的 `J_mult` 字段)。这个 ≈2 的常数可由逐 source 统计完全解释(`probe_margins.py`,CPU 复算,与 GPU 原始结果差 <2e-6;逐 source 值在 `code/results/probe_{validation,test}.json`):干净 margin 逐 source 散布在 −2.6~+1.8(dev:均值 0.076、标准差 1.41),其平方均值恰为 2.006(test:0.147/1.57/2.479);分解 mean(m·m₀)=mean(m₀²)+mean((m−m₀)·m₀) 里,唯一带头信息的第二项 ≤0.002。乘积口径量到的是逐 source margin 的能量而非头效应,因此正文采用差分口径,并在 `code/results/screen_*.json` 里保留两种口径。
 
 ### 2.3 写干预:状态层面是干净的,行为层面是零
 
@@ -140,7 +140,7 @@ dev 上 96 个头的 J 全部落在 ±0.0013 内(std 0.0003),test 上最大也�
 
 1. **Checkpoint 本身是弱 LM,且 native 读出在 chance。** 这是最大的偏差。WikiText-2 PPL ~990,16/16 预测同一个词,简单 induction 提示不复制;四选一 25.0%,donor−recipient logit 差 0.0023。论文的 46.9% 无法用公开 commit 复现。任何依赖 LM head 的行为指标(J、block/donor 转移率、load/distance 准确率)在本 checkpoint 上都退化为 null。另一个可能的解释:如果论文的 target value 在 source 间不是均匀的、而是偏向模型先验(本模型是 "green"),一个常数预测器就能拿到接近 46.9% 而不需要 recall。论文说候选值是 balanced,但没有说正确值在 source 间 balanced;附录没有给出这一点,我们无法验证。
 2. **任务格式未被论文完全指定。** 绑定模板、value 词表、query 位置、512 filler 与绑定的先后顺序都需要重建。我们试了 5 种模板 + 3 种查询位置,模型都给出常数预测,所以 native 失败不是单一模板的锅;但换一个模板/词表可能改变绝对准确率。colon 模板是论文 D.2 明确用过的。
-3. **式(6)的乘积口径。** 按字面算是乘积,值被干净 margin 支配(全头 2.005–2.007),不能当排序分数;正文用差分。两种口径都保存在 `code/results/screen_*.json`。
+3. **式(6)的乘积口径。** 按字面算是乘积,值是由逐 source 干净 margin 的平方均值决定的头无关常数(全头 2.005–2.007;mean(m₀²)=2.006,逐 source 标准差 1.41 远大于均值 0.076,见 `probe_margins.py` 与 `code/results/probe_*.json`),不能当排序分数;正文用差分。两种口径都保存在 `code/results/screen_*.json`。
 4. **状态层面指标是本线程的适配,不是论文的行为读出。** `rel`、`d_recipient/d_donor`、`ratio` 测的是"事实在不在状态里",不能证明"模型能不能答对"。论文的 write→retain→read 链条里,我们只复现了前两段。
 5. **只测了 GDN-340M。** 没有 GLA-340M、GDN-1.3B、hybrid 或 Qwen3.5;跨模型泛化未验证。
 6. **seed 与 offset。** 用 20260910 + i(逐 source 加 i)而不是单一 20260910;offset 2000+1100i 与论文一致。target value 按 source 轮换,避免标签泄漏;其余 value 的排列由 seed 决定。
@@ -197,6 +197,8 @@ cd code/hlar-probe
 .venv/bin/python make_figures.py
 ```
 
+`probe_margins.py` 是事后补的裁决探针(CPU 即可,两个 split 约 11 分钟):复算 screen 的逐 source 干净 margin 与两种口径,验证乘积口径的平台值等于 mean(m₀²)。
+
 所有实验都是确定性的;单卡 3060 上整套约 20 分钟。`code/results/` 里的 JSON/CSV/NPY 是脚本直接产物;图与运行级 `assets/hlar_*.png` 是同一批,线程目录不再另存。
 
 ### 5.3 读结果
@@ -206,6 +208,7 @@ cd code/hlar-probe
 - `code/results/readout_gain.json`:clean/donor/全状态置换的 margin 与四候选 logit 差。
 - `code/results/state_retention_{validation,test}.json`:逐距离的 24×4 rel 与 τ_eff。
 - `code/results/write_validation_L11H2.json` / `..._L20H2.json`:写干预的状态与行为指标。
+- `code/results/probe_{validation,test}.json`:逐 source 干净 margin(16 浮点)与 96 头 J/J_mult 的 CPU 复算,含与 GPU 原始结果的最大绝对差。
 
 ---
 
@@ -216,7 +219,7 @@ runs/2026-10-19-whyfar-linearmem-natura-astra/
 ├── linear-remembers-2609.33093/
 │   ├── README.md
 │   ├── code/            # model.py, task.py, run_experiments.py, tau_cross.py,
-│   │                    # make_summary.py, make_figures.py; data/ 放 parquet
+│   │                    # probe_margins.py, make_summary.py, make_figures.py; data/ 放 parquet
 │   │                    # results/ 在 code/ 下:JSON / CSV / NPY(含 probe_a_tau.npy)
 └── assets/
     ├── hlar_baseline.png

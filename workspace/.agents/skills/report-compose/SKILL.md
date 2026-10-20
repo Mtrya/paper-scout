@@ -39,7 +39,7 @@ user-invocable: false
 
 ### 审校闸门与装配
 
-三道人工闸 + 一道机器闸,定义与执行者见 `references/review-gates.md`。每道只有过/不过;不过则带整改简报原地整改,编辑闸只做一轮、整改后不安排复检。全部通过后,主代理把线程片段装配为 `runs/<run-id>/report.docxxml`,跑机器门禁(verify_run prepublish),再进入交付。
+四道人工闸 + 一道机器闸,定义与执行者见 `references/review-gates.md`。每道只有过/不过;不过则带整改简报原地整改,编辑闸只做一轮、整改后不安排复检,冷读者闸有一轮复核。全部通过后,主代理把线程片段装配为 `runs/<run-id>/report.docxxml`,跑机器门禁(verify_run prepublish),再进入交付。
 
 ## 结构
 
@@ -150,7 +150,7 @@ lark-cli im +messages-send --as bot --user-id <ou_xxx> \
 
 审校:
 
-- [ ] 三道人工闸全部通过,整改简报闭环
+- [ ] 四道人工闸全部通过,整改简报闭环;冷读者闸的卡点清单逐条有下落
 
 交付:
 
