@@ -1,0 +1,1 @@
+{"name": "smoke_rice9", "clip": "examples/agibot_rice_cooker", "prompt": "Press the left arm on the rice cooker.", "seed": 0, "cfg": 3.0, "steps": 8, "num_frames": 9, "height": 256, "width": 320, "camera": true, "skeleton": true, "scene_scale": 1.0, "seconds": 1095.6, "camera_source": "on", "skeleton_source": "on", "first_frame": null}

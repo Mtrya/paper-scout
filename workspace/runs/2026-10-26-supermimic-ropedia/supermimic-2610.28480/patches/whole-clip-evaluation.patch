@@ -1,0 +1,224 @@
+diff --git a/scripts/diag_drift.py b/scripts/diag_drift.py
+index c3a8a72..141c0db 100644
+--- a/scripts/diag_drift.py
++++ b/scripts/diag_drift.py
+@@ -6,8 +6,9 @@ and how much of the world-frame velocity error is just that drift (yaw misalignm
+ Same deterministic protocol as eval_benchmark (first frame start, no noise/DR). Each clip plays once in
+ its own env. Reports per-clip and aggregate:
+   * mean / final anchor xy error [m] and |yaw error| [deg], time until xy error > 0.3 m and |yaw| > 15 deg
+-  * body linear-velocity error: world frame (what the reward sees) vs after rotating the robot's velocities
+-    by the yaw error (drift removed) -> the residual is the genuine velocity-tracking error.
++  * first root-height / tilt termination and the signed physical errors at that point
++  * body linear-velocity error: world frame vs after removing yaw drift. The stored
++    exponentials transform mean squared error, not the mean of per-step rewards.
+ """
+
+ from __future__ import annotations
+@@ -22,7 +23,8 @@ from mjlab.utils.lab_api.math import quat_apply, quat_inv, quat_mul, wrap_to_pi,
+
+ from supermimic.envs import SuperMimicEnvCfgArgs, make_env
+ from supermimic.envs.mdp.motion_library import discover_npz
+-from supermimic.eval.benchmark import load_policy_from_checkpoint
++from supermimic.eval.benchmark import load_policy_from_checkpoint, reset_at_forced_frame
++from supermimic.envs.mdp.terminations import bad_root_height, bad_root_tilt
+
+
+ def _yaw(q: torch.Tensor) -> torch.Tensor:
+@@ -41,12 +43,13 @@ def main(ckpt: Path, npz_dir: Path = Path("data/npz/lafan1"), clips: list[str] |
+         sampling_mode="start", record_transitions=False, seed=0, anchor_obs=cfg["env"].get("anchor_obs", False),
+     )
+     env = make_env(args, device=device)
++    env.cfg.auto_reset = False
+     try:
+         cmd = env.command_manager.get_term("motion")
+         lib = cmd.library
+         cmd.forced_frame[:] = lib.clip_start[torch.arange(n, device=device)]
+-        obs, _ = env.reset()
+-        cmd.forced_frame[:] = -1
++        obs = reset_at_forced_frame(env, torch.arange(n, device=device))
++        cmd.forced_frame[:] = lib.clip_start
+         dt = env.step_dt
+         active = torch.ones(n, dtype=torch.bool, device=device)
+         steps = torch.zeros(n, device=device)
+@@ -61,6 +64,10 @@ def main(ckpt: Path, npz_dir: Path = Path("data/npz/lafan1"), clips: list[str] |
+         sum_w_world = torch.zeros(n, device=device)
+         sum_w_aligned = torch.zeros(n, device=device)
+         failed = torch.zeros(n, dtype=torch.bool, device=device)
++        failed_height = torch.zeros(n, dtype=torch.bool, device=device)
++        failed_tilt = torch.zeros(n, dtype=torch.bool, device=device)
++        height_failure = torch.zeros(n, device=device)
++        tilt_failure = torch.zeros(n, device=device)
+         while active.any():
+             # measure before stepping: reference target frame vs current robot state
+             xy = (cmd.anchor_pos_w[:, :2] - cmd.robot_anchor_pos_w[:, :2]).norm(dim=-1)
+@@ -91,14 +98,31 @@ def main(ckpt: Path, npz_dir: Path = Path("data/npz/lafan1"), clips: list[str] |
+             steps += a
+             act = policy(obs["policy"], obs["goal"])
+             obs, _, term, tout, _ = env.step(act)
+-            done = (term | tout) & active
+-            failed |= term & active
++            done = env.reset_buf | (cmd.frame >= lib.clip_last)
++            new_failed = term & active
++            if new_failed.any():
++                failed_height |= bad_root_height(env, "motion") & new_failed
++                failed_tilt |= bad_root_tilt(env, "motion") & new_failed
++                height_error = cmd.root_pos_w[:, 2] - cmd.robot_root_pos_w[:, 2]
++                gravity = cmd.robot.data.gravity_vec_w
++                tilt_error = (quat_apply(quat_inv(cmd.root_quat_w), gravity)[:, 2]
++                              - quat_apply(quat_inv(cmd.robot_root_quat_w), gravity)[:, 2])
++                height_failure[new_failed] = height_error[new_failed]
++                tilt_failure[new_failed] = tilt_error[new_failed]
++            failed |= new_failed
+             active &= ~done
++            if done.any():
++                ids = done.nonzero().squeeze(-1)
++                cmd.forced_frame[ids] = lib.clip_start[ids]
++                obs = reset_at_forced_frame(env, ids)
+         st = steps.clamp(min=1)
+         rows = []
+         for i in range(n):
+             rows.append(dict(
+                 name=lib.clips[i].name, steps=int(steps[i]), failed=bool(failed[i]),
++                root_height_termination=bool(failed_height[i]), root_tilt_termination=bool(failed_tilt[i]),
++                root_height_error_m=float(height_failure[i]) if failed[i] else None,
++                gravity_z_error=float(tilt_failure[i]) if failed[i] else None,
+                 mean_xy=float(sum_xy[i] / st[i]), final_xy=float(last_xy[i]),
+                 mean_yaw_deg=math.degrees(float(sum_yaw[i] / st[i])), final_yaw_deg=math.degrees(float(last_yaw[i])),
+                 t_xy_gt_0p3=float(t_xy[i]), t_yaw_gt_15=float(t_yaw[i]),
+@@ -108,6 +132,7 @@ def main(ckpt: Path, npz_dir: Path = Path("data/npz/lafan1"), clips: list[str] |
+         tot = steps.sum()
+         agg = dict(
+             clips=n, failed=int(failed.sum()),
++            root_height_failures=int(failed_height.sum()), root_tilt_failures=int(failed_tilt.sum()),
+             mean_xy=float((sum_xy).sum() / tot), mean_yaw_deg=math.degrees(float(sum_yaw.sum() / tot)),
+             median_t_xy_gt_0p3=float(torch.median(t_xy[t_xy >= 0])) if (t_xy >= 0).any() else -1,
+             median_t_yaw_gt_15=float(torch.median(t_yaw[t_yaw >= 0])) if (t_yaw >= 0).any() else -1,
+diff --git a/scripts/eval_benchmark.py b/scripts/eval_benchmark.py
+index 182e105..b7471d2 100644
+--- a/scripts/eval_benchmark.py
++++ b/scripts/eval_benchmark.py
+@@ -19,8 +19,9 @@ def main(ckpt: Path, npz_dir: Path = Path("data/npz/lafan1"), clips: list[str] |
+     files = [str(f) for f in discover_npz(npz_dir, names=clips, manifest=manifest)]
+     policy, cfg = load_policy_from_checkpoint(ckpt, device)
+     results = run_benchmark(policy, files, device=device, num_envs=num_envs, future_frames=cfg["env"]["future_frames"], anchor_obs=cfg["env"].get("anchor_obs", False))
++    assert all(r.steps == r.frames - 1 for r in results if not r.failed), "successful clips must stop after L-1 transitions"
+     s = summarize(results)
+-    print(f"\n{s['clips']} clips | failed {s['failed']} | mean norm return {s['mean_norm_return']:.4f} | step-weighted {s['step_weighted_norm_return']:.4f}")
++    print(f"\n{s['clips']} clips | failed {s['failed']} | whole-clip return {s['mean_norm_return_full_clip']:.4f} | per-step return {s['mean_norm_return']:.4f} | step-weighted {s['step_weighted_norm_return']:.4f}")
+     if "terms" in s:
+         print("per-step term means (max 0.02 each for the 1.0-weight terms, 0.01 for root terms):")
+         for k, v in s["terms"].items():
+diff --git a/src/supermimic/eval/benchmark.py b/src/supermimic/eval/benchmark.py
+index 7d6f3a9..8850fc2 100644
+--- a/src/supermimic/eval/benchmark.py
++++ b/src/supermimic/eval/benchmark.py
+@@ -3,8 +3,9 @@
+ Every clip is played once from its first frame with the deterministic policy:
+ no observation/action noise, no reset noise, no domain randomization (foot friction 1.0),
+ deterministic physics. A clip *fails* if the training termination (pelvis height /
+-tilt vs reference) fires before the clip ends. Normalised return = sum of per-step
+-rewards / (max step reward * number of steps).
++tilt vs reference) fires before the clip ends. Each result records the mean per-step
++return and the whole-clip return. The latter divides by the maximum possible sum over
++L-1 transitions, so an early failure cannot hide unearned future rewards.
+ """
+
+ from __future__ import annotations
+@@ -25,11 +26,25 @@ class ClipResult:
+     frames: int
+     steps: int
+     norm_return: float
++    norm_return_full_clip: float
+     failed: bool
+     fail_step: int  # -1 if not failed
+     terms: dict | None = None  # per-term mean reward per step (dt-scaled)
+
+
++def reset_at_forced_frame(env, env_ids):
++    cmd = env.command_manager.get_term("motion")
++    if bool((cmd.forced_frame[env_ids] < 0).any()):
++        raise ValueError("evaluation resets require a nonnegative reference frame")
++    obs, _ = env.reset(env_ids=env_ids)
++    cmd.frame[env_ids] = cmd.forced_frame[env_ids]
++    cmd.clip_end[env_ids] = False
++    cmd._refresh_ref()
++    cmd.update_relative_body_poses()
++    env.obs_buf = env.observation_manager.compute(update_history=True, env_ids=env_ids)
++    return env.obs_buf
++
++
+ def load_policy_from_checkpoint(path: str | Path, device: str) -> tuple[Policy, dict]:
+     ck = torch.load(path, map_location=device, weights_only=False)
+     pc = ck["config"]["policy"]
+@@ -58,6 +73,7 @@ def run_benchmark(policy: Policy, npz_files: list[str], device: str = "cuda:0",
+         anchor_obs=anchor_obs,
+     )
+     env = make_env(args, device=device)
++    env.cfg.auto_reset = False
+     try:
+         cmd = env.command_manager.get_term("motion")
+         lib = cmd.library
+@@ -68,7 +84,7 @@ def run_benchmark(policy: Policy, npz_files: list[str], device: str = "cuda:0",
+         current = torch.arange(num_envs, device=device)
+         nxt = current + num_envs
+         cmd.forced_frame[:] = lib.clip_start[current]
+-        obs, _ = env.reset()
++        obs = reset_at_forced_frame(env, torch.arange(num_envs, device=device))
+         cmd.forced_frame[:] = lib.clip_start[torch.clamp(nxt, max=n_clips - 1)]
+         active = torch.ones(num_envs, dtype=torch.bool, device=device)
+         ret_sum = torch.zeros(num_envs, device=device)
+@@ -83,18 +99,20 @@ def run_benchmark(policy: Policy, npz_files: list[str], device: str = "cuda:0",
+             ret_sum += rew
+             term_sum += env.reward_manager.term_rewards
+             steps += 1
+-            done = (term | tout) & active
++            reached_last_frame = cmd.frame >= lib.clip_last[current]
++            done = term | tout | reached_last_frame
+             if done.any():
+                 ids = done.nonzero().squeeze(-1)
+                 for e in ids.tolist():
+                     ci = int(current[e])
+-                    if ci < n_clips and ci not in results:
++                    if active[e] and ci < n_clips and ci not in results:
+                         st = int(steps[e])
+                         results[ci] = ClipResult(
+                             name=lib.clips[ci].name,
+                             frames=lib.clips[ci].length,
+                             steps=st,
+                             norm_return=float(ret_sum[e]) / (max_r * max(st, 1)),
++                            norm_return_full_clip=float(ret_sum[e]) / (max_r * max(lib.clips[ci].length - 1, 1)),
+                             failed=bool(term[e]),
+                             fail_step=st if bool(term[e]) else -1,
+                             terms={n: float(term_sum[e, i]) / max(st, 1) for i, n in enumerate(term_names)},
+@@ -102,12 +120,14 @@ def run_benchmark(policy: Policy, npz_files: list[str], device: str = "cuda:0",
+                         remaining -= 1
+                         if verbose and (len(results) % 50 == 0 or len(results) == n_clips):
+                             print(f"  evaluated {len(results)}/{n_clips}")
+-                # advance the queue for these envs (the auto-reset already used forced_frame)
+-                current[ids] = nxt[ids]
+-                nxt[ids] = nxt[ids] + num_envs
+-                finished = current[ids] >= n_clips
+-                active[ids[finished]] = False
+-                cmd.forced_frame[ids] = lib.clip_start[torch.clamp(nxt[ids], max=n_clips - 1)]
++                advance = ids[active[ids]]
++                current[advance] = nxt[advance]
++                nxt[advance] = nxt[advance] + num_envs
++                finished = current[advance] >= n_clips
++                active[advance[finished]] = False
++                current[advance[finished]] = n_clips - 1
++                cmd.forced_frame[advance] = lib.clip_start[torch.clamp(nxt[advance], max=n_clips - 1)]
++                obs = reset_at_forced_frame(env, ids)
+                 ret_sum[ids] = 0.0
+                 term_sum[ids] = 0.0
+                 steps[ids] = 0
+@@ -123,7 +143,9 @@ def summarize(results: list[ClipResult]) -> dict:
+     # Length-weighted return (paper Fig. 3a uses the benchmark aggregate; weighting by steps).
+     tot_steps = sum(r.steps for r in results)
+     w_ret = sum(r.norm_return * r.steps for r in results) / max(tot_steps, 1)
+-    out = {"clips": n, "failed": failed, "mean_norm_return": mean_ret, "step_weighted_norm_return": w_ret}
++    out = {"clips": n, "failed": failed, "mean_norm_return": mean_ret,
++           "mean_norm_return_full_clip": sum(r.norm_return_full_clip for r in results) / max(n, 1),
++           "step_weighted_norm_return": w_ret}
+     if results and results[0].terms:
+         out["terms"] = {k: sum(r.terms[k] * r.steps for r in results) / max(tot_steps, 1) for k in results[0].terms}
+     return out

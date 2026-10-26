@@ -1,0 +1,29 @@
+{
+ "ckpt": "logs/train30_1024/ckpt_0004000.pt",
+ "window": 8,
+ "rows": [
+  {
+   "clip": "dance1_subject1",
+   "steps": 5339,
+   "windows": 667,
+   "nse1": 0.006063391918128334,
+   "nse8": 0.014787899252415441,
+   "rms1": {
+    "root_pos_m": 0.0006150564877316356,
+    "root_ori_rad": 0.0025910979602485895,
+    "root_lin_vel_mps": 0.0291921254247427,
+    "root_ang_vel_radps": 0.16851022839546204,
+    "joint_pos_rad": 0.01767466776072979,
+    "joint_vel_radps": 1.2009512186050415
+   },
+   "rms8": {
+    "root_pos_m": 0.006039267405867577,
+    "root_ori_rad": 0.025584092363715172,
+    "root_lin_vel_mps": 0.059741146862506866,
+    "root_ang_vel_radps": 0.2921902537345886,
+    "joint_pos_rad": 0.06667489558458328,
+    "joint_vel_radps": 1.2820357084274292
+   }
+  }
+ ]
+}

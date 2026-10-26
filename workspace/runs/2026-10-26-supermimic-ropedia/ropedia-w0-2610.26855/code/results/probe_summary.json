@@ -1,0 +1,22 @@
+{
+  "n_example_clips": 18,
+  "camera_path_below_2cm": 5,
+  "camera_rotation_below_1deg": 6,
+  "camera_path_median_m": 0.091,
+  "camera_rotation_median_deg": 3.4,
+  "skeleton_ink_median": 0.009725,
+  "rice_vae": {
+    "roundtrip_ink_iou": 0.951,
+    "shift_2px_over_blank": 0.052,
+    "shift_32px_over_blank": 0.216,
+    "static_moment_exactly_zero": true
+  },
+  "branch_rms_over_video": {
+    "camera": 0.7374,
+    "skeleton": 0.6371
+  },
+  "intervention_rms_over_video": {
+    "synthetic_camera_15deg_0p5m": 0.0958,
+    "skeleton_right_40px": 0.1218
+  }
+}
