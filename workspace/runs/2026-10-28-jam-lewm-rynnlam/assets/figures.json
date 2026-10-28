@@ -1,0 +1,22 @@
+{
+ "jam:designspace": {
+  "caption": "JAM 的三选分解:骨干初始化、未来观测上的目标、推理时保留的模块。VLA 只用动作损失,WAM 再加生成损失,JAM 把未来观测换成冻结表示的预测损失并在训练后丢弃该分支。来源:论文 Figure 1。",
+  "file": "assets/jam-fig1-designspace.png"
+ },
+ "jam:toy-grid": {
+  "caption": "玩具网格:12 个配置 × 3 seeds,动作预算 12000 步,加长对照 18000 步。左:200 episode 成功率;右:冻结特征到未来真值状态的 ridge 探针 R²。辅助角色(fs_)下随机/像素/当前帧目标的成功率比基线高 1–2.5pp,常数目标持平;生成角色(latent_)半预算下随机与常数落后,补足动作步数后 oracle 0.868、随机 0.820。oracle 只抬绝对状态探针,不抬成功率。",
+  "file": "assets/toy_grid.png"
+ },
+ "jam:latent-curves": {
+  "caption": "生成角色下,预训练目标若是帧的光滑确定函数(随机 CNN 特征、原始像素、输入无关常数),损失在 2000–4000 步内塌到 1e-4(退化为恒等任务);真值未来状态则保持 0.05–0.11 的非平凡监督。log 纵轴。",
+  "file": "assets/latent_curves.png"
+ },
+ "lewm:gram-main": {
+  "caption": "LeWM 局部动作几何复测(官方权重、脚本专家锚点)。左:两个扰动尺度的迹归一化 Gram 差异 D_G;中:模型/环境敏感度增益,小尺度 0.43、大尺度 0.93;右:30 个规划对上 D_G 与 Plan-Real Spearman ρ 的散点,最高组 14 对里 9 对为负 ρ。",
+  "file": "assets/gram_main.png"
+ },
+ "rynnlam:decoupling": {
+  "caption": "RynnLAM 三分量对六类条件的相对变化(6 集 LIBERO、18 帧对)。运动 token zᵐ 被平移/旋转/缩放驱动的幅度与换一帧真实内容同量级甚至更高;动作潜变量 zᵃ 缩放最稳,平移 24px 时 Δ 达同集另一帧的三倍;相机潜变量 zᶜ 也漏内容。",
+  "file": "assets/decoupling_fig.png"
+ }
+}
