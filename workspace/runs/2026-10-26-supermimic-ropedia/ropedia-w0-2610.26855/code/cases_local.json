@@ -1,0 +1,10 @@
+[
+  {"name": "rice_full", "clip": "examples/agibot_rice_cooker", "camera": "on", "skeleton": "on", "cfg": 3.0, "seed": 0, "fps": 30},
+  {"name": "rice_synthcam", "clip": "variants/synthcam_RICE", "camera": "on", "skeleton": "on", "cfg": 3.0, "seed": 0, "fps": 30},
+  {"name": "rice_skelshift", "clip": "variants/skelshift_RICE", "camera": "on", "skeleton": "on", "cfg": 3.0, "seed": 0, "fps": 30},
+  {"name": "rice_skelshuffle", "clip": "variants/skelshuffle_RICE", "camera": "on", "skeleton": "on", "cfg": 3.0, "seed": 0, "fps": 30},
+  {"name": "cut_full", "clip": "examples/xp10m_cut_cardboard", "camera": "on", "skeleton": "on", "cfg": 5.0, "seed": 0},
+  {"name": "cut_nocam", "clip": "examples/xp10m_cut_cardboard", "camera": "off", "skeleton": "on", "cfg": 5.0, "seed": 0},
+  {"name": "rice_noskel", "clip": "examples/agibot_rice_cooker", "camera": "on", "skeleton": "off", "cfg": 3.0, "seed": 0, "fps": 30},
+  {"name": "rice_none", "clip": "examples/agibot_rice_cooker", "camera": "off", "skeleton": "off", "cfg": 3.0, "seed": 0, "fps": 30}
+]

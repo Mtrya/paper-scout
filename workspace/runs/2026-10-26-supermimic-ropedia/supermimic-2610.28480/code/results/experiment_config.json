@@ -1,0 +1,41 @@
+{
+  "implementation": "CuboiLeo/SuperMimic-Reproduced",
+  "upstream_commit": "d9be385b3eeb13a638fb33fb200d3bfd9be9839f",
+  "hardware": "single RTX 3060 12GB",
+  "seed": 0,
+  "training": {
+    "clips": 30,
+    "num_simulation_envs": 1024,
+    "imagination_batch_size": 1024,
+    "total_iterations": 32000,
+    "checkpoint_interval": 2000,
+    "anchor_observation": true,
+    "action_noise_std": 0.1,
+    "observation_noise": true,
+    "domain_randomization": true,
+    "world_model_fit_window": 8,
+    "imagination_horizon": 32,
+    "elapsed_hours_from_log": 5.20,
+    "elapsed_time_note": "training only; independent checkpoint evaluation is excluded"
+  },
+  "evaluation": {
+    "held_out_clips": 10,
+    "control_hz": 50,
+    "deterministic_policy": true,
+    "observation_noise": false,
+    "action_noise": false,
+    "domain_randomization": false,
+    "start": "first reference frame",
+    "aggregation": "equal weight per clip",
+    "return_denominator": "0.1 * (L - 1) for L reference states, including unearned rewards after early failure"
+  },
+  "world_model_probe": {
+    "paired_clips": 19,
+    "matched_motion_families": 9,
+    "unpaired_held_out_clip": "walk4_subject1",
+    "open_loop_windows": [1, 8],
+    "window_stride": 8,
+    "trajectory_source": "each clip's own deterministic policy in real simulation",
+    "policy_return_source": "the identical rollout used to measure world-model error"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "generation_checkpoint": {
+    "stage": "midtrain",
+    "source": "https://huggingface.co/ropedia-ai/Ropedia-W0/blob/main/w0-5b-midtrain.safetensors",
+    "bytes": 10003198872,
+    "sha256": "a47edd6a67a8e434eae7af47b905884b85c185413471cd48f1f18d27d4eed375",
+    "loaded_tensors": 827
+  },
+  "local_hand_detector": {
+    "source": "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task",
+    "sha256": "fbc2a30080c3c557093b5ddfc334698132eb341044ccee322ccf8bcf3607cde1",
+    "role": "auxiliary MediaPipe 0.10.32 HandLandmarker probe; not Ropedia model weights"
+  }
+}

@@ -30,8 +30,8 @@ user-invocable: false
 
 - 图示计划:产物类型、来源、目的、位置(模板见 `references/format.md`)
 - 材料路径:线程包、论文缓存、适用记忆条目(术语译法口径)——给原始文件路径,不给二手摘要
-- 必读:`references/format.md`、`references/anti-ai-zh.md`、`lark-doc` 的 DocxXML 参考
-- 硬约束:读者没读过这篇论文;材料回答不了的问题,回报障碍,不要编
+- 必读:`references/format.md`、`references/anti-ai-zh.md`、`lark-doc` 的 DocxXML 参考、用户级 `repo-hygiene` 第 5 节(技能缺失时执行下一条的受益者判据)
+- 硬约束:读者没读过这篇论文;材料回答不了的问题,回报障碍,不要编;逐句以真实读者的新判断或新行动为去留标准,限定句必须指出它阻止的具体误读
 
 ### 线程写作
 
@@ -39,7 +39,7 @@ user-invocable: false
 
 ### 审校闸门与装配
 
-四道人工闸 + 一道机器闸,定义与执行者见 `references/review-gates.md`。每道只有过/不过;不过则带整改简报原地整改,编辑闸只做一轮、整改后不安排复检,冷读者闸有一轮复核。全部通过后,主代理把线程片段装配为 `runs/<run-id>/report.docxxml`,跑机器门禁(verify_run prepublish),再进入交付。
+四道人工闸 + 一道机器闸,定义与执行者见 `references/review-gates.md`。每道只有过/不过;不过则带整改简报原地整改,编辑闸只做一轮、整改后不安排复检。完整性、编辑与首尾检查完成后,冷读者对终稿候选做一次独立测量;主代理回到证据做深度修订,再跑机器门禁(verify_run prepublish)并进入交付,不再召回冷读者复核。
 
 ## 结构
 
@@ -81,7 +81,7 @@ user-invocable: false
 <p>作者等(2026)· <a href="url">HF</a> · <a href="url">PDF</a></p>
 ```
 
-写成流畅的叙事,不要套固定模板。每个深度线程都应讲清:问题是什么、核心机制、调查发现了什么、哪些外部信号支撑、还有什么不确定。排版不是图文交替;载体(`<latex>`、`<pre>`、`<whiteboard>`、`<grid>`、`<callout>`、`<table>`、图片锚点)按叙事功能选择,细则见 `references/format.md`。
+写成流畅的叙事,不要套固定模板。每个深度线程都应讲清:问题是什么、核心机制、调查发现了什么、哪些外部信号支撑,以及这些证据改变了什么判断。排版不是图文交替;载体(`<latex>`、`<pre>`、`<whiteboard>`、`<grid>`、`<callout>`、`<table>`、图片锚点)按叙事功能选择,细则见 `references/format.md`。
 
 ### 跨主题观察
 
@@ -150,7 +150,8 @@ lark-cli im +messages-send --as bot --user-id <ou_xxx> \
 
 审校:
 
-- [ ] 四道人工闸全部通过,整改简报闭环;冷读者闸的卡点清单逐条有下落
+- [ ] 四道人工闸全部通过,整改简报闭环;编辑闸的逐句受益者测试与正面改写完成,冷读者反馈已驱动深度修订,未重复召回冷读者
+- [ ] 正文、表格与图注的叙述否定式语句比例 ≤ 10%
 
 交付:
 

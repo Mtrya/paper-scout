@@ -1,0 +1,4 @@
+[
+  {"name": "smoke_rice9", "clip": "examples/agibot_rice_cooker", "camera": "on", "skeleton": "on",
+   "cfg": 3.0, "seed": 0, "num_frames": 9, "steps": 8}
+]

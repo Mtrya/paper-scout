@@ -1,0 +1,6 @@
+[ckpt] cam (3072, 96, 1, 2, 2)  skel (3072, 48, 1, 2, 2)  vid (3072, 48, 1, 2, 2)
+[tokens] (1, 3072, 6, 15, 20)  rms cam=0.2824 skel=0.2440 vid(noise)=0.3830
+[ratio] cam/vid(noise) = 0.7374   skel/vid(noise) = 0.6371
+[token-norm] |P_cam z| / |P_vid z_noise| = 0.7374
+[gain] camera (own vs synthetic 15 deg / 0.5 m): |dP|/|P| = 0.1299   cos = 0.9923   |dP|/|P_vid(noise)| = 0.0958
+[gain] skeleton (+40 px): |dP|/|P| = 0.1913   cos = 0.9822   |dP|/|P_vid(noise)| = 0.1218

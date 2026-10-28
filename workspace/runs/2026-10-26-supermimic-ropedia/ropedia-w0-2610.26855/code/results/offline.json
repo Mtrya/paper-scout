@@ -1,0 +1,608 @@
+{
+  "agibot_peel_cucumber": {
+    "prompt_chars": 91,
+    "prompt": "Use the held peeler in the right arm to tidy the peeled cucumber skin attached to cucumber.",
+    "prompt_action_words": 2,
+    "camera": {
+      "frames": 81,
+      "trans_path_m": 0.0,
+      "max_rot_deg": 0.0,
+      "end_trans_m": 0.0,
+      "moment_abs_mean": 9.120900956113785e-07,
+      "moment_nonzero_frac": 0.9758949947487997,
+      "direction_abs_mean": 0.4934264685993218,
+      "direction_frame_std": 3.135993715748221e-06
+    },
+    "skeleton": {
+      "frames": 81,
+      "ink_frac": 0.00822,
+      "bbox_area_frac": 0.3923,
+      "bbox": [
+        [
+          0,
+          233,
+          639,
+          389
+        ],
+        [
+          0,
+          242,
+          639,
+          439
+        ]
+      ]
+    }
+  },
+  "agibot_rice_cooker": {
+    "prompt_chars": 38,
+    "prompt": "Press the left arm on the rice cooker.",
+    "prompt_action_words": 2,
+    "camera": {
+      "frames": 81,
+      "trans_path_m": 0.0,
+      "max_rot_deg": 0.0,
+      "end_trans_m": 0.0,
+      "moment_abs_mean": 3.335507922251503e-07,
+      "moment_nonzero_frac": 0.92440013074417,
+      "direction_abs_mean": 0.49346693989111207,
+      "direction_frame_std": 9.74173536303213e-07
+    },
+    "skeleton": {
+      "frames": 81,
+      "ink_frac": 0.00951,
+      "bbox_area_frac": 0.4514,
+      "bbox": [
+        [
+          0,
+          272,
+          639,
+          411
+        ],
+        [
+          0,
+          145,
+          639,
+          411
+        ]
+      ]
+    }
+  },
+  "egodex_tv_remote": {
+    "prompt_chars": 1041,
+    "prompt": "This egocentric video segment features a person interacting with a TV remote in front of a computer monitor. Throughout the entire clip, the person holds a grey",
+    "prompt_action_words": 4,
+    "camera": {
+      "frames": 81,
+      "trans_path_m": 0.05,
+      "max_rot_deg": 3.4,
+      "end_trans_m": 0.004,
+      "moment_abs_mean": 0.002154601798148366,
+      "moment_nonzero_frac": 0.9997920417524006,
+      "direction_abs_mean": 0.5040527812616102,
+      "direction_frame_std": 0.010137144525490456
+    },
+    "skeleton": {
+      "frames": 81,
+      "ink_frac": 0.00943,
+      "bbox_area_frac": 0.0783,
+      "bbox": [
+        [
+          288,
+          338,
+          504,
+          440
+        ],
+        [
+          286,
+          324,
+          505,
+          439
+        ]
+      ]
+    }
+  },
+  "gr1_grasp_plate": {
+    "prompt_chars": 396,
+    "prompt": "The robot's right hand reaches toward a white ceramic plate sitting in a wooden dish rack on a light-colored wooden table. The right hand approaches the plate w",
+    "prompt_action_words": 5,
+    "camera": {
+      "frames": 49,
+      "trans_path_m": 0.0,
+      "max_rot_deg": 0.0,
+      "end_trans_m": 0.0,
+      "moment_abs_mean": 0.0,
+      "moment_nonzero_frac": 0.0,
+      "direction_abs_mean": 0.4924749761002119,
+      "direction_frame_std": 0.0
+    },
+    "skeleton": {
+      "frames": 49,
+      "ink_frac": 0.01584,
+      "bbox_area_frac": 0.6726,
+      "bbox": [
+        [
+          83,
+          222,
+          591,
+          479
+        ],
+        [
+          83,
+          64,
+          639,
+          479
+        ]
+      ]
+    }
+  },
+  "gr1_place_cucumber": {
+    "prompt_chars": 397,
+    "prompt": "The robot's right hand is already holding a long green cucumber at the start of the clip while the left hand remains idle on the left side of the workspace. The",
+    "prompt_action_words": 4,
+    "camera": {
+      "frames": 49,
+      "trans_path_m": 0.0,
+      "max_rot_deg": 0.0,
+      "end_trans_m": 0.0,
+      "moment_abs_mean": 0.0,
+      "moment_nonzero_frac": 0.0,
+      "direction_abs_mean": 0.4924749761002119,
+      "direction_frame_std": 0.0
+    },
+    "skeleton": {
+      "frames": 49,
+      "ink_frac": 0.01572,
+      "bbox_area_frac": 0.4074,
+      "bbox": [
+        [
+          110,
+          248,
+          620,
+          479
+        ],
+        [
+          112,
+          264,
+          639,
+          479
+        ]
+      ]
+    }
+  },
+  "gr1_stack_blocks": {
+    "prompt_chars": 441,
+    "prompt": "The robot's right hand is seen holding a small yellow square block over a stack consisting of a red base and a blue square. It carefully places the yellow block",
+    "prompt_action_words": 6,
+    "camera": {
+      "frames": 49,
+      "trans_path_m": 0.0,
+      "max_rot_deg": 0.0,
+      "end_trans_m": 0.0,
+      "moment_abs_mean": 0.0,
+      "moment_nonzero_frac": 0.0,
+      "direction_abs_mean": 0.4924749761002119,
+      "direction_frame_std": 0.0
+    },
+    "skeleton": {
+      "frames": 49,
+      "ink_frac": 0.015,
+      "bbox_area_frac": 0.3428,
+      "bbox": [
+        [
+          65,
+          280,
+          639,
+          479
+        ],
+        [
+          65,
+          288,
+          639,
+          479
+        ]
+      ]
+    }
+  },
+  "omega_home_apple_basket": {
+    "prompt_chars": 435,
+    "prompt": "From an egocentric perspective, the robot stands at a white table where an orange woven basket is placed. The robot's right hand, wearing a black glove, holds a",
+    "prompt_action_words": 6,
+    "camera": {
+      "frames": 81,
+      "trans_path_m": 0.092,
+      "max_rot_deg": 14.3,
+      "end_trans_m": 0.012,
+      "moment_abs_mean": 0.002506871357205194,
+      "moment_nonzero_frac": 0.987653865526406,
+      "direction_abs_mean": 0.46984257417989767,
+      "direction_frame_std": 0.030861695893985887
+    },
+    "skeleton": {
+      "frames": 81,
+      "ink_frac": 0.00802,
+      "bbox_area_frac": 0.0645,
+      "bbox": [
+        [
+          524,
+          262,
+          639,
+          370
+        ],
+        [
+          508,
+          172,
+          633,
+          291
+        ]
+      ]
+    }
+  },
+  "omega_home_arrange_fruit": {
+    "prompt_chars": 352,
+    "prompt": "The robot stands before a white shelving unit containing a pink bowl, a green and red apple, a red fruit, and a yellow mango. Its left hand remains out of view ",
+    "prompt_action_words": 3,
+    "camera": {
+      "frames": 81,
+      "trans_path_m": 0.125,
+      "max_rot_deg": 3.4,
+      "end_trans_m": 0.051,
+      "moment_abs_mean": 0.009025438430333418,
+      "moment_nonzero_frac": 0.9876542272162209,
+      "direction_abs_mean": 0.4695523808453806,
+      "direction_frame_std": 0.009054821714588669
+    },
+    "skeleton": {
+      "frames": 81,
+      "ink_frac": 0.00684,
+      "bbox_area_frac": 0.076,
+      "bbox": [
+        [
+          506,
+          192,
+          589,
+          237
+        ],
+        [
+          488,
+          44,
+          639,
+          208
+        ]
+      ]
+    }
+  },
+  "omega_home_hang_clothes": {
+    "prompt_chars": 337,
+    "prompt": "The robot stands in a bedroom at the foot of a bed with a gray duvet. Its left hand, wearing a black glove with a white sensor, holds a yellow and black athleti",
+    "prompt_action_words": 3,
+    "camera": {
+      "frames": 81,
+      "trans_path_m": 0.137,
+      "max_rot_deg": 8.3,
+      "end_trans_m": 0.05,
+      "moment_abs_mean": 0.007033398295007843,
+      "moment_nonzero_frac": 0.9876541468407064,
+      "direction_abs_mean": 0.470930734945028,
+      "direction_frame_std": 0.018236317023759246
+    },
+    "skeleton": {
+      "frames": 81,
+      "ink_frac": 0.00566,
+      "bbox_area_frac": 0.0287,
+      "bbox": [
+        [
+          75,
+          375,
+          148,
+          436
+        ],
+        [
+          50,
+          355,
+          125,
+          477
+        ]
+      ]
+    }
+  },
+  "omega_home_hang_shirt": {
+    "prompt_chars": 382,
+    "prompt": "The robot is standing in a bedroom, positioned over a bed with a grey duvet and a light green checkered pillow. Its left hand, wearing a black glove with a whit",
+    "prompt_action_words": 4,
+    "camera": {
+      "frames": 81,
+      "trans_path_m": 0.097,
+      "max_rot_deg": 5.5,
+      "end_trans_m": 0.028,
+      "moment_abs_mean": 0.005162359612552148,
+      "moment_nonzero_frac": 0.9876540262774348,
+      "direction_abs_mean": 0.47028133733396565,
+      "direction_frame_std": 0.010018837351553265
+    },
+    "skeleton": {
+      "frames": 81,
+      "ink_frac": 0.00605,
+      "bbox_area_frac": 0.0302,
+      "bbox": [
+        [
+          156,
+          382,
+          227,
+          479
+        ],
+        [
+          153,
+          350,
+          253,
+          479
+        ]
+      ]
+    }
+  },
+  "omega_home_push_chair": {
+    "prompt_chars": 336,
+    "prompt": "From an egocentric perspective, the robot is in a room with a light-colored wooden floor and a white desk. Its left hand, which is black and white, is placed on",
+    "prompt_action_words": 4,
+    "camera": {
+      "frames": 81,
+      "trans_path_m": 0.09,
+      "max_rot_deg": 15.3,
+      "end_trans_m": 0.03,
+      "moment_abs_mean": 0.00531837897344149,
+      "moment_nonzero_frac": 0.987654053069273,
+      "direction_abs_mean": 0.4695054580248081,
+      "direction_frame_std": 0.022939357029544867
+    },
+    "skeleton": {
+      "frames": 81,
+      "ink_frac": 0.00994,
+      "bbox_area_frac": 0.0594,
+      "bbox": [
+        [
+          66,
+          236,
+          187,
+          444
+        ],
+        [
+          63,
+          234,
+          181,
+          435
+        ]
+      ]
+    }
+  },
+  "omega_home_sort_fruit": {
+    "prompt_chars": 311,
+    "prompt": "Standing at a white table, the robot holds a red nectarine in its right hand. A small wicker basket sits on the table, containing a yellow banana, next to a pie",
+    "prompt_action_words": 4,
+    "camera": {
+      "frames": 81,
+      "trans_path_m": 0.116,
+      "max_rot_deg": 12.0,
+      "end_trans_m": 0.044,
+      "moment_abs_mean": 0.014564920527319574,
+      "moment_nonzero_frac": 0.9876542807998971,
+      "direction_abs_mean": 0.4707521149519404,
+      "direction_frame_std": 0.030855914198919164
+    },
+    "skeleton": {
+      "frames": 81,
+      "ink_frac": 0.00838,
+      "bbox_area_frac": 0.0499,
+      "bbox": [
+        [
+          460,
+          129,
+          590,
+          219
+        ],
+        [
+          452,
+          15,
+          606,
+          123
+        ]
+      ]
+    }
+  },
+  "openaoe_keychain": {
+    "prompt_chars": 955,
+    "prompt": "The scene unfolds on a white, slightly wrinkled fabric surface, likely a tablecloth or bedsheet, where several small, transparent plastic bags are scattered. So",
+    "prompt_action_words": 7,
+    "camera": {
+      "frames": 81,
+      "trans_path_m": 0.313,
+      "max_rot_deg": 6.6,
+      "end_trans_m": 0.04,
+      "moment_abs_mean": 0.013923708594792281,
+      "moment_nonzero_frac": 0.9876540128815158,
+      "direction_abs_mean": 0.45655670705484563,
+      "direction_frame_std": 0.013013743136358212
+    },
+    "skeleton": {
+      "frames": 81,
+      "ink_frac": 0.01469,
+      "bbox_area_frac": 0.0755,
+      "bbox": [
+        [
+          289,
+          183,
+          478,
+          294
+        ],
+        [
+          294,
+          183,
+          480,
+          299
+        ]
+      ]
+    }
+  },
+  "xp10m_cut_cardboard": {
+    "prompt_chars": 872,
+    "prompt": "This egocentric video segment captures a methodical cardboard-cutting task performed on a workspace. Initially, the user pauses to assess a previously made diag",
+    "prompt_action_words": 5,
+    "camera": {
+      "frames": 81,
+      "trans_path_m": 0.238,
+      "max_rot_deg": 11.4,
+      "end_trans_m": 0.068,
+      "moment_abs_mean": 0.012471660085351338,
+      "moment_nonzero_frac": 0.9953893791795267,
+      "direction_abs_mean": 0.5196041360441882,
+      "direction_frame_std": 0.03122684276792254
+    },
+    "skeleton": {
+      "frames": 81,
+      "ink_frac": 0.01681,
+      "bbox_area_frac": 0.1961,
+      "bbox": [
+        [
+          210,
+          150,
+          597,
+          313
+        ],
+        [
+          149,
+          158,
+          639,
+          328
+        ]
+      ]
+    }
+  },
+  "xp10m_jigsaw_puzzle": {
+    "prompt_chars": 813,
+    "prompt": "This egocentric video segment captures a person diligently assembling a \"Starry Night\" jigsaw puzzle on an office workbench. Initially, the scene shows a quiet ",
+    "prompt_action_words": 4,
+    "camera": {
+      "frames": 81,
+      "trans_path_m": 0.478,
+      "max_rot_deg": 76.6,
+      "end_trans_m": 0.228,
+      "moment_abs_mean": 0.06045668247868714,
+      "moment_nonzero_frac": 0.9948990751457476,
+      "direction_abs_mean": 0.4952546372310503,
+      "direction_frame_std": 0.22469917769822315
+    },
+    "skeleton": {
+      "frames": 81,
+      "ink_frac": 0.00107,
+      "bbox_area_frac": 0.0166,
+      "bbox": [
+        [
+          214,
+          228,
+          277,
+          309
+        ]
+      ]
+    }
+  },
+  "xp_teleop_lift_jacket": {
+    "prompt_chars": 207,
+    "prompt": "Both hands pull back from the crumpled jacket and hover over it without gripping. Both hands close on the black fleece jacket together and lift the whole bundle",
+    "prompt_action_words": 6,
+    "camera": {
+      "frames": 81,
+      "trans_path_m": 0.084,
+      "max_rot_deg": 2.5,
+      "end_trans_m": 0.03,
+      "moment_abs_mean": 0.009853594015994543,
+      "moment_nonzero_frac": 0.9992484889403292,
+      "direction_abs_mean": 0.49026209371611057,
+      "direction_frame_std": 0.004799854320685148
+    },
+    "skeleton": {
+      "frames": 81,
+      "ink_frac": 0.01905,
+      "bbox_area_frac": 0.1926,
+      "bbox": [
+        [
+          98,
+          286,
+          441,
+          436
+        ],
+        [
+          128,
+          279,
+          405,
+          421
+        ]
+      ]
+    }
+  },
+  "xp_teleop_place_bottle": {
+    "prompt_chars": 339,
+    "prompt": "The left hand lowers the amber bottle onto the round table to the left of the plate and opens to release it standing upright too. Both hands come away with the ",
+    "prompt_action_words": 4,
+    "camera": {
+      "frames": 81,
+      "trans_path_m": 0.034,
+      "max_rot_deg": 0.2,
+      "end_trans_m": 0.001,
+      "moment_abs_mean": 0.0005815895986992436,
+      "moment_nonzero_frac": 0.9999537840792181,
+      "direction_abs_mean": 0.4902330598330678,
+      "direction_frame_std": 0.00043065344173379605
+    },
+    "skeleton": {
+      "frames": 81,
+      "ink_frac": 0.02012,
+      "bbox_area_frac": 0.4132,
+      "bbox": [
+        [
+          143,
+          40,
+          487,
+          367
+        ],
+        [
+          136,
+          36,
+          487,
+          365
+        ]
+      ]
+    }
+  },
+  "xp_teleop_playdoh_tub": {
+    "prompt_chars": 105,
+    "prompt": "The right hand lowers the yellow PlayDoh tub down over the mouth of the open cardboard box on the carpet.",
+    "prompt_action_words": 3,
+    "camera": {
+      "frames": 81,
+      "trans_path_m": 0.106,
+      "max_rot_deg": 1.2,
+      "end_trans_m": 0.014,
+      "moment_abs_mean": 0.0049009693230107655,
+      "moment_nonzero_frac": 0.9997103400420096,
+      "direction_abs_mean": 0.4902438035205274,
+      "direction_frame_std": 0.001866245734597647
+    },
+    "skeleton": {
+      "frames": 81,
+      "ink_frac": 0.01568,
+      "bbox_area_frac": 0.1994,
+      "bbox": [
+        [
+          97,
+          177,
+          410,
+          407
+        ],
+        [
+          88,
+          216,
+          399,
+          417
+        ]
+      ]
+    }
+  }
+}

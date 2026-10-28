@@ -13,6 +13,14 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-10-26 — 截至 2026-10-26 的近期论文池；用户点名 SuperMimic，本机双深线程
+- Doc: https://fudan-nlp.feishu.cn/docx/YEA7dYS5toULMqxBflHcYg67n3c
+- Run: runs/2026-10-26-supermimic-ropedia/
+- Deep threads: SuperMimic (2610.28480), Ropedia W0 (2610.26855)
+- Covered papers: 2610.28480, 2610.26855
+- Shortlisted papers: 2610.27628 (PAR), 2610.29997 (DONIC)
+- 背景: 本机真实训练、评价协议修正与同轨迹配对显示，SuperMimic 缩小配置中训练覆盖继续改善而留出整体回落，短窗世界模型误差不能独自解释策略失败；Ropedia 真实 5B midtrain 干预显示相机分支确实影响视点，文本与首帧能补偿任务语义，但精确几何、时序和本体外观仍会失联。前作与对照包括 BeyondMimic、SONIC、MorphMimic、Visual Action Prompts、OSCAR、DreamDojo。
+
 ## 2026-10-20 — 2026-10-19 报告重修(读者反馈驱动的可读性重修 + 六条规则落地)
 - Doc: https://fudan-nlp.feishu.cn/docx/Jxhkddm2CoQPlYx81bcc7Ty9nRg (修订版;原版 TqavdJunyo7nEOxbqkUcRaNVnzd 保持不动)
 - Run: runs/2026-10-19-whyfar-linearmem-natura-astra/(report.docxxml 已替换为修订稿,原稿在 git 历史)

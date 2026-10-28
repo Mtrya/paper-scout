@@ -1,0 +1,112 @@
+diff --git a/ropedia_w0/cli.py b/ropedia_w0/cli.py
+index f04a03a..6e06d98 100644
+--- a/ropedia_w0/cli.py
++++ b/ropedia_w0/cli.py
+@@ -56,7 +56,8 @@ def _attach_branch(pipe, attr: str, in_dim: int):
+                          stride=tuple(dit.patch_size), bias=False)
+         nn.init.zeros_(conv.weight)
+         ref = dit.patch_embedding.weight
+-        setattr(dit, attr, conv.to(dtype=ref.dtype, device=ref.device))
++        device = "cuda" if getattr(dit, "vram_management_enabled", False) else ref.device
++        setattr(dit, attr, conv.to(dtype=ref.dtype, device=device))
+         setattr(dit, attr.replace("patch_embed", "in_dim"), in_dim)
+         print(f"[cond] attached {attr} on `{name}` (in={in_dim}, out={dit.dim}, patch={tuple(dit.patch_size)})")
+
+@@ -289,7 +290,7 @@ def build_parser(model: str, description: str):
+ BASE_FILES = ["Wan2.2_VAE.pth", "models_t5_umt5-xxl-enc-bf16.pth", "google/umt5-xxl/tokenizer.json"]
+
+
+-def load_pipeline(model: str, base_model_dir: str):
++def load_pipeline(model: str, base_model_dir: str, layer_offload: bool = False, text_layer_offload: bool = False):
+     """Build the Wan2.2-TI2V-5B pipeline from a local download of Wan-AI/Wan2.2-TI2V-5B (nothing is downloaded here)."""
+     os.environ.setdefault("DIFFSYNTH_SKIP_DOWNLOAD", "true")
+     if model != "5b":
+@@ -301,14 +302,24 @@ def load_pipeline(model: str, base_model_dir: str):
+         sys.exit(f"Wan2.2-TI2V-5B base model not found at {base} (missing: {missing}).\n"
+                  "Download it with\n  hf download Wan-AI/Wan2.2-TI2V-5B --local-dir models/Wan2.2-TI2V-5B\n"
+                  "and pass the directory with --base_model_dir (default: models/Wan2.2-TI2V-5B).")
++    model_configs = [
++        ModelConfig(path=os.path.join(base, "models_t5_umt5-xxl-enc-bf16.pth")),
++        ModelConfig(path=dit_files),
++        ModelConfig(path=os.path.join(base, "Wan2.2_VAE.pth")),
++    ]
++    for index, config in enumerate(model_configs):
++        if layer_offload or (text_layer_offload and index == 0):
++            config.offload_device = "cpu"
++            config.offload_dtype = torch.bfloat16
++            config.onload_device = "cpu"
++            config.onload_dtype = torch.bfloat16
++            config.preparing_device = "cpu"
++            config.preparing_dtype = torch.bfloat16
++            config.computation_device = "cuda"
+     return WanVideoPipeline.from_pretrained(
+         torch_dtype=torch.bfloat16,
+         device="cuda",
+-        model_configs=[
+-            ModelConfig(path=os.path.join(base, "models_t5_umt5-xxl-enc-bf16.pth")),
+-            ModelConfig(path=dit_files),
+-            ModelConfig(path=os.path.join(base, "Wan2.2_VAE.pth")),
+-        ],
++        model_configs=model_configs,
+         tokenizer_config=ModelConfig(path=os.path.join(base, "google", "umt5-xxl")),
+         redirect_common_files=False,
+     )
+@@ -318,6 +329,10 @@ def load_pipeline(model: str, base_model_dir: str):
+ REQUIRED_KEY_PREFIXES = ("camera_patch_embed.", "skeleton_patch_embed.", "blocks.")
+
+
++def _unwrapped_parameter_key(key):
++    return ".".join(part for part in key.split(".") if part != "module")
++
++
+ def check_checkpoint_keys(model_keys, ckpt_keys, path: str, target: str = "dit"):
+     """Compare the keys of a checkpoint with the state dict of the model it is loaded into.
+
+@@ -325,7 +340,8 @@ def check_checkpoint_keys(model_keys, ckpt_keys, path: str, target: str = "dit")
+     --camera_in_dim / --skeleton_in_dim, or not a released checkpoint), or if it lacks the condition
+     branches or any transformer-block weight. Returns the list of other missing keys (normally empty).
+     """
+-    model_keys, ckpt_keys = set(model_keys), set(ckpt_keys)
++    model_keys = {_unwrapped_parameter_key(k) for k in model_keys}
++    ckpt_keys = set(ckpt_keys)
+     unexpected = sorted(ckpt_keys - model_keys)
+     missing = sorted(model_keys - ckpt_keys)
+     missing_required = [k for k in missing if k.startswith(REQUIRED_KEY_PREFIXES)]
+@@ -344,20 +360,32 @@ def check_checkpoint_keys(model_keys, ckpt_keys, path: str, target: str = "dit")
+
+
+ def load_checkpoints(pipe, model: str, args):
++    from types import SimpleNamespace
+     from safetensors import safe_open
+-    from safetensors.torch import load_file
+     pairs = [("dit", args.ckpt)]
+     for name, path in pairs:
+         dit = getattr(pipe, name)
+-        with safe_open(path, framework="pt") as f:   # header only: fail before reading any tensor
++        with safe_open(path, framework="pt") as f:
+             ckpt_keys = list(f.keys())
+         other_missing = check_checkpoint_keys(dit.state_dict().keys(), ckpt_keys, path, name)
+-        result = dit.load_state_dict(load_file(path), strict=False)
++        state_dict = dit.state_dict()
++        model_key_by_raw = {_unwrapped_parameter_key(k): k for k in state_dict}
++        loaded = 0
++        with torch.no_grad(), safe_open(path, framework="pt") as f:
++            for key in ckpt_keys:
++                if key not in model_key_by_raw:
++                    continue
++                target = state_dict[model_key_by_raw[key]]
++                if target.device.type == "meta":
++                    raise RuntimeError(f"Cannot load {key} into a meta tensor")
++                target.copy_(f.get_tensor(key))
++                loaded += 1
++        result = SimpleNamespace(missing_keys=[], unexpected_keys=[])
+         if other_missing:
+             print(f"[ckpt] warning: {len(other_missing)} model keys not in {os.path.basename(path)} "
+                   f"(kept from the base model), e.g. {other_missing[:3]}")
+-        print(f"[ckpt] {os.path.basename(path)} -> {name}: missing={len(result.missing_keys)} "
+-              f"unexpected={len(result.unexpected_keys)}")
++        print(f"[ckpt] {os.path.basename(path)} -> {name}: loaded={loaded}, "
++              f"missing={len(result.missing_keys)} unexpected={len(result.unexpected_keys)}")
+
+
+ def main(model: str, description: str = None):
