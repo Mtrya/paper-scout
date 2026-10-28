@@ -13,6 +13,14 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-10-28 — 2026-10-26 至 2026-10-28(未来表示的角色:辅助损失/预训练目标/条件输入)
+- Doc: https://fudan-nlp.feishu.cn/docx/IaIMdSwDjo85H6xGSutcA1NfnAR
+- Run: runs/2026-10-28-jam-lewm-rynnlam/
+- Deep threads: JAM (2610.37219), LeWM 局部动作几何 (2610.31716), RynnLAM 家族 (2610.34356, 2610.36791)
+- Covered papers: 2610.37219, 2610.31716, 2610.34356, 2610.36791
+- Shortlisted papers: 2610.37381 (PDRVLA), 2610.36068 (Rollback), 2610.37255 (Policy-Harness), 2610.19687 (FSPO), 2610.27364 (Predictive Closure), 2610.29915 (CausalAlign)
+- 背景: 同周"免生成未来监督"合流。玩具网格(12 配置×3 seeds)显示辅助 foresight 的增益是优化侧正则、与动力学信息脱钩(随机 0.885 vs 基线 0.860,常数 0.862 持平,oracle 只抬绝对状态探针);生成角色下目标质量是生死线(随机 0.618/常数 0.590 远低于 oracle 0.810 与基线 0.860),长预算后 oracle 0.868 > 基线、随机 0.820 仍低——崩塌大头是预算,角色差异保留。LeWM 复测显示局部动作响应近似状态无关固定图(跨状态一致性 0.727 vs 环境 0.516),D_G×plan-ρ 呈必要非充分(−0.43)。RynnLAM 探针量化相机解耦不均匀(z^m 污染≈内容变化,z^a 平移 24px 时 Δ 为内容 3 倍)。启智 notebook IDE 全故障,全部本机完成(官方 LeWM/RynnLAM 权重 + 本机模拟器与脚本专家)。
+
 ## 2026-10-26 — 截至 2026-10-26 的近期论文池；用户点名 SuperMimic，本机双深线程
 - Doc: https://fudan-nlp.feishu.cn/docx/YEA7dYS5toULMqxBflHcYg67n3c
 - Run: runs/2026-10-26-supermimic-ropedia/

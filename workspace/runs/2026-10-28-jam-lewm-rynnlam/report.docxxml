@@ -1,0 +1,401 @@
+<title>未来观测如何进入策略:三条路线、三组实验(2026-10-28)</title>
+<p>这一周的论文池里,"未来观测"正在以不生成的姿态进入策略训练:JAM 用冻结未来表示做辅助损失,RynnLAM 用 608 维潜动作描述符做预训练目标,RynnWorld-Latent(RynnVLA-Latent 团队同期的生成侧姊妹工作)让它做生成的条件输入;短名单里的 PDRVLA 则用物理动态 token 预测未来 RGB、深度与光流。我们的三组实验分别回答:JAM 的随机锚点悖论在玩具网格里怎么解释(辅助 foresight 的增益很小且在 seed 波动内,若为真,它来自输入依赖的辅助结构,与动力学信息的可解码性脱钩);LeWM 的局部动作几何在复测里长什么样(近似一张状态无关的固定图,好几何也不保证能规划);RynnLAM 的相机解耦在真实权重上有多强(解耦不均匀,运动 token 被视点污染的幅度与真实内容变化同量级)。合起来,未来表示的角色——辅助损失、预训练目标还是条件输入——决定了它的质量要求,也决定了它以什么方式起作用。贯穿三组实验的还有一条测量纪律:表示侧指标与决策侧指标分开报,谁也不能替谁背书。</p>
+
+<h1>未来观测如何进入策略:辅助损失、预训练目标与条件输入</h1>
+<p>同一周出现的三条路线都在回避"先生成视频再动作"的成本,但它们让未来表示承担的角色不同。JAM 让未来表示只做训练期的辅助损失,RynnLAM 让它做预训练目标本身,RynnWorld-Latent 让它做生成的条件输入。下文把这三类位置统一叫作辅助、生成、条件输入。角色之分是我们读这一组论文的钥匙。短名单里另有六篇本轮只记录、不深挖的工作,按主题相关度保留。</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray"><p>论文</p></th>
+      <th background-color="light-gray"><p>核心贡献</p></th>
+      <th background-color="light-gray"><p>为什么重要</p></th>
+      <th background-color="light-gray"><p>链接</p></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><p><b>PDRVLA: A Vision-Language-Action Model with Physical Dynamics Representations</b>(Wang、Cai、An 等,2026)</p></td>
+      <td><p>轻量物理动态模块从视觉-语言模型(VLM)中层特征抽物理 token,预测未来 RGB/深度/光流,推理时不跑视频世界模型。</p></td>
+      <td><p>"预测未来表示"路线的又一实例,且物理 token 保留到推理;LIBERO-Plus 89.9 高于同周的 RynnVLA-Latent-4B 与 JAM。</p></td>
+      <td><p><a href="https://huggingface.co/papers/2610.37381">HF</a> / <a href="https://arxiv.org/abs/2610.37381">PDF</a></p></td>
+    </tr>
+    <tr>
+      <td><p><b>Rollback: Experience Backtracking in World Models for Policy Improvement</b>(2026)</p></td>
+      <td><p>把世界模型当反事实引擎:回滚到关键决策点、分叉动作、对比结局,蒸馏成动作级监督。</p></td>
+      <td><p>世界模型从被动模拟器变成监督信号生产器,与真实执行构成自强化环。</p></td>
+      <td><p><a href="https://huggingface.co/papers/2610.36068">HF</a> / <a href="https://arxiv.org/abs/2610.36068">PDF</a></p></td>
+    </tr>
+    <tr>
+      <td><p><b>Your Policy Is Secretly a Harness: The Decision Geometry of Agent Interfaces</b>(2026)</p></td>
+      <td><p>KL 正则控制下,最优策略的 log-odds 恢复 harness(提示、工具与控制逻辑)对各动作的偏好,部署回报被 harness 封顶。</p></td>
+      <td><p>harness 与策略归因的形式化结果:换 harness 时策略学到的东西有多少还在。</p></td>
+      <td><p><a href="https://huggingface.co/papers/2610.37255">HF</a> / <a href="https://arxiv.org/abs/2610.37255">PDF</a></p></td>
+    </tr>
+    <tr>
+      <td><p><b>Function-Space Temporal Self-Distillation for Policy Optimization</b>(2026)</p></td>
+      <td><p>把稀疏的历史 next-token 分布存成固定时间目标,单策略完成特权适应与时间固化。</p></td>
+      <td><p>可验证奖励强化学习(RLVR)的稠密监督与时间固化新形态,接自蒸馏与经验固化线。</p></td>
+      <td><p><a href="https://huggingface.co/papers/2610.19687">HF</a> / <a href="https://arxiv.org/abs/2610.19687">PDF</a></p></td>
+    </tr>
+    <tr>
+      <td><p><b>Predictive Closure: A Set-Level Characterization of JEPA's Feature Selection</b>(2026)</p></td>
+      <td><p>联合嵌入预测架构(JEPA)特征选择的集合级刻画:预测误差也受特征间关系影响,不可预测特征能被相互可预测的特征带出。</p></td>
+      <td><p>给"JEPA 用预测误差选特征、可能丢掉与预测无关但决策关键的信息(例如红绿灯)"的担心一个修正框架。</p></td>
+      <td><p><a href="https://huggingface.co/papers/2610.27364">HF</a> / <a href="https://arxiv.org/abs/2610.27364">PDF</a></p></td>
+    </tr>
+    <tr>
+      <td><p><b>CausalAlign: Causal Alignment of Video Generation Models for Consistent Ego-Motion</b>(2026)</p></td>
+      <td><p>线性探针加因果干预诊断视频生成中相机自运动的表示、使用与保持,去噪过程中表示强度先升后降。</p></td>
+      <td><p>相机自运动控制的表示侧证据,视点与标定战线可读。</p></td>
+      <td><p><a href="https://huggingface.co/papers/2610.29915">HF</a> / <a href="https://arxiv.org/abs/2610.29915">PDF</a></p></td>
+    </tr>
+  </tbody>
+</table>
+<p>短名单里值得优先读的两篇:PDRVLA(同族路线的直接对照,数字最高)与 Predictive Closure(给 LeWM 这条 JEPA 线补理论地基)。LIBERO 是 40 个操作任务、每任务 50 次 rollout 的成功率基准(四套任务),LIBERO-Plus 是在其上叠加七类扰动的零样本鲁棒性版本;下表及后文数字均为成功率(%),并排比较时按本作在前、基线在后的顺序。</p>
+
+<h2>Vision-Language-Action or World-Action? Just Action Models</h2>
+<p>Yonghao Yu、Runyi Li、Lang Huang、Toshihiko Yamasaki(2026)· <a href="https://huggingface.co/papers/2610.37219">HF</a> · <a href="https://arxiv.org/abs/2610.37219">PDF</a></p>
+
+<p>世界-动作模型在动作损失之外,还对记录下来的未来观测加一项视频或图像生成损失;视觉-语言-动作模型只用动作损失。成功率差常被整体记到这一项账上,可这处差异还牵动另外两处:骨干从生成器还是从视觉-语言模型初始化,推理期保留哪些模块。</p>
+
+<p>Just Action Models(JAM)把这三处拆成独立旋钮。数据与部署接口不变,动作专家读当前帧;另有一支只在训练期存在的分支,把当前帧特征经小预测头拟合到冻结未来锚点(产生目标的冻结编码器)对记录未来的表示上,损失取余弦距离,目标一侧停梯度。这种"用冻结未来表示做辅助损失"的损失叫 foresight。</p>
+
+<latex>\mathcal{L}_{\mathrm{JAM}} = \mathcal{L}_{\mathrm{act}} + \lambda_F \mathcal{L}_F, \qquad \mathcal{L}_F = \frac{1}{|\mathcal{K}|} \sum_{k \in \mathcal{K}} \mathbb{E}_n \left[ 1 - \cos\left( \hat{\mathbf{g}}_{k,n},\ \mathrm{sg}[\mathbf{g}_{k,n}] \right) \right]</latex>
+
+<p>k 遍历监督的偏移,n 遍历空间 token;偏移以视频潜帧计,[1,2] 对应第 4–16 与 20–32 环境步。训练后锚分支与预测头一起丢弃,部署只剩骨干与动作专家,训练与推理都不生成图像;预处理固定后目标可离线缓存,在线只跑当前帧。</p>
+
+[[figure-anchor:jam:designspace]]
+
+<table>
+  <colgroup>
+    <col width="330"/>
+    <col width="90"/>
+    <col width="110"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray"><p>FastWAM 架构上的目标</p></th>
+      <th background-color="light-gray"><p>LIBERO</p></th>
+      <th background-color="light-gray"><p>LIBERO-Plus</p></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><p>无未来损失,只训动作</p></td>
+      <td><p>95.25</p></td>
+      <td><p>45.55</p></td>
+    </tr>
+    <tr>
+      <td><p>视频生成损失</p></td>
+      <td><p>97.00</p></td>
+      <td><p>55.31</p></td>
+    </tr>
+    <tr>
+      <td><p>foresight,偏移 [0](当前位置)</p></td>
+      <td><p>95.80</p></td>
+      <td><p>44.62</p></td>
+    </tr>
+    <tr>
+      <td><p>foresight,预训练 Wan 锚点,[1,2]</p></td>
+      <td><p>97.45</p></td>
+      <td><p>55.58</p></td>
+    </tr>
+    <tr>
+      <td><p>foresight,随机 Wan 锚点,[1,2]</p></td>
+      <td><p>97.65</p></td>
+      <td><p><b>58.63</b></p></td>
+    </tr>
+    <tr>
+      <td><p>foresight,冻结 Wan VAE 潜斑块直出(VAE-direct)</p></td>
+      <td><p>98.15</p></td>
+      <td><p><b>64.54</b></p></td>
+    </tr>
+  </tbody>
+</table>
+<p>FastWAM 是 Wan2.2-5B 视频生成骨干加动作专家的基线系统;Wan 是视频生成基础模型,VAE 是变分自编码器,潜斑块是 VAE 潜空间里的 patch token。偏移的影响与换目标同量级:只监督当前位置的 44.62 甚至低于不监督未来的 45.55,换到未来位置是 55.58(+10.96pp);同一目标下换 objective 只有 +0.27pp,而换到 VAE-direct 目标再得 +9.23pp。随机初始化的 Wan 锚点拿 58.63,反超预训练锚点。换骨干,视觉-语言模型 Qwen3.5-2B 从动作单训的 77.03 升到 81.14,DINOv2-L 从 68.26 到 70.39(均 LIBERO-Plus)。缓存目标把在线算力从每样本每次更新 15.52 TFLOPs 压到 4.19,少 73%;JAM (Wan) 与 JAM (Ovis-U1) 的 LIBERO-Plus 三次独立训练均值 64.61±0.37 与 79.92±0.43,1506 个扰动任务上各自对生成基线的配对 McNemar p 值为 <latex>1.9\times10^{-13}</latex> 与 <latex>9.7\times10^{-30}</latex>。</p>
+
+<p>随机锚点在两种骨干下都优于预训练锚点(97.65 对 97.45;84.40 对 71.15),但强成功率仍依赖骨干预训练(97.65 对 84.40)。锚点给的是稳定且随输入变化的特征,骨干的预训练得自己带(这是我们的读法)。论文没有报随机骨干加无未来损失的对照,归因链在这里缺一格。问题是随机锚点的目标里未来信息稀薄,成功率却抬高,抬的是什么?</p>
+
+<p>我们把它做成一张可分离的网格。任务换成 48×48 的 2D 视觉推块:白手把蓝块推进绿圈,2500 集连续脚本专家;策略 27 万参数,卷积神经网络(CNN)出 36 个 token、2 层 transformer 骨干加 2 层动作专家,流匹配,chunk 4 步执行 2 步;未来帧取 8 步之后。角色分两种:辅助(动作损失加 foresight,训练后丢头)与生成(两段式,stage-1 用 6000 步拟合未来全局表示,stage-2 用 6000 步换头训动作;这里的"生成"指把目标当预训练标签,不涉及解码)。目标四种:oracle 真值状态、随机冻结 CNN 特征、原始像素斑块、输入无关常数,另有"随机 CNN 读当前帧"作偏移对照。</p>
+
+<table>
+  <colgroup>
+    <col width="180"/>
+    <col width="70"/>
+    <col width="210"/>
+    <col width="100"/>
+    <col width="90"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray"><p>配置</p></th>
+      <th background-color="light-gray"><p>角色</p></th>
+      <th background-color="light-gray"><p>目标</p></th>
+      <th background-color="light-gray"><p>成功率</p></th>
+      <th background-color="light-gray"><p><latex>s_T</latex> 探针</p></th>
+      <th background-color="light-gray"><p>增量探针</p></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><p>action only</p></td>
+      <td><p>—</p></td>
+      <td><p>无</p></td>
+      <td><p>0.860</p></td>
+      <td><p>0.757</p></td>
+      <td><p>0.674</p></td>
+    </tr>
+    <tr>
+      <td><p>fs oracle</p></td>
+      <td><p>辅助</p></td>
+      <td><p>真值未来状态(1 个 token、10 维)</p></td>
+      <td><p>0.863</p></td>
+      <td><p>0.808</p></td>
+      <td><p>0.671</p></td>
+    </tr>
+    <tr>
+      <td><p>fs random</p></td>
+      <td><p>辅助</p></td>
+      <td><p>随机冻结 CNN 读未来帧(36×64)</p></td>
+      <td><p><b>0.885</b></p></td>
+      <td><p>0.750</p></td>
+      <td><p>0.674</p></td>
+    </tr>
+    <tr>
+      <td><p>fs pixels</p></td>
+      <td><p>辅助</p></td>
+      <td><p>未来帧原始像素斑块</p></td>
+      <td><p>0.875</p></td>
+      <td><p>0.741</p></td>
+      <td><p>0.668</p></td>
+    </tr>
+    <tr>
+      <td><p>fs current random</p></td>
+      <td><p>辅助</p></td>
+      <td><p>随机 CNN 读当前帧</p></td>
+      <td><p>0.873</p></td>
+      <td><p>0.743</p></td>
+      <td><p>0.670</p></td>
+    </tr>
+    <tr>
+      <td><p>fs const</p></td>
+      <td><p>辅助</p></td>
+      <td><p>输入无关常数</p></td>
+      <td><p>0.862</p></td>
+      <td><p>0.621</p></td>
+      <td><p>0.563</p></td>
+    </tr>
+    <tr>
+      <td><p>latent oracle</p></td>
+      <td><p>生成</p></td>
+      <td><p>真值未来状态(全局向量)</p></td>
+      <td><p>0.810</p></td>
+      <td><p>0.804</p></td>
+      <td><p>0.684</p></td>
+    </tr>
+    <tr>
+      <td><p>latent random</p></td>
+      <td><p>生成</p></td>
+      <td><p>随机 CNN 的池化特征</p></td>
+      <td><p>0.618</p></td>
+      <td><p>0.721</p></td>
+      <td><p>0.636</p></td>
+    </tr>
+    <tr>
+      <td><p>latent pixels</p></td>
+      <td><p>生成</p></td>
+      <td><p>像素斑块的池化特征</p></td>
+      <td><p>0.668</p></td>
+      <td><p>0.720</p></td>
+      <td><p>0.628</p></td>
+    </tr>
+    <tr>
+      <td><p>latent const</p></td>
+      <td><p>生成</p></td>
+      <td><p>输入无关常数</p></td>
+      <td><p>0.590</p></td>
+      <td><p>0.709</p></td>
+      <td><p>0.622</p></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>每配置 3 seeds、200 episode;探针是冻结特征对未来状态(s_T=未来 8 步真值状态,T 表示未来时刻)与增量(Δ=未来状态相对当前状态的增量)的 ridge R²。生成臂的增量探针只跑了 1–2 个 seed,列值以可用 seed 平均。</p>
+
+<p>辅助角色里,随机 0.885、像素 0.875、当前帧随机 0.873 都比基线 0.860 高 1–2.5pp;oracle 0.863 与常数 0.862 贴着基线,三 seed 标准差 2.5–3.9pp,这些差值都在一个 seed 标准差内。常数臂是关键对照:输入无关的目标把 <latex>s_T</latex> 探针从 0.757 压到 0.621、增量探针从 0.674 压到 0.563,成功率稳在 0.862。oracle 只把 <latex>s_T</latex> 抬到 0.808,增量探针 0.671 与基线持平,成功率 0.863 持平。辅助角色里探针的升降与行为脱钩;生成角色里两者同向(长预算 0.728/0.820 对 0.794/0.868)。oracle 另有容量差:只监督 1 个 token 的 10 维向量,随机锚点监督 36×64,跨角色比较只在同为全局向量的生成配置上成立。</p>
+
+[[figure-anchor:jam:toy-grid]]
+
+<p>生成角色把目标当作完整的预训练任务,差距立刻拉开:oracle 0.810,像素 0.668,随机 0.618,常数 0.590,基线 0.860。预训练曲线给出机制:随机、像素、常数三类目标的 stage-1 损失(flow matching 的 MSE)在 2000–4000 步之间塌到 1e-4 量级,oracle 停在 0.05–0.11。</p>
+
+[[figure-anchor:jam:latent-curves]]
+
+<p>成因我们量了。随机锚点下,未来帧目标与当前帧目标的余弦相似度在 0.999 以上,与另一条无关轨迹的帧也一样;目标平方范数的 99.9% 来自各 token 在数据集上的平均方向,当前帧特征足以拟合未来目标,预训练退化为恒等映射。像素目标只有 65% 的平方范数来自平均方向,辅助角色里两种目标成功率差 1pp:未来含量(目标范数中不被数据集平均方向解释的份额)差约三个数量级(按 99.9% 的保守口径约 350 倍),行为几乎同分。</p>
+
+<p>生成角色还有一层预算混淆:两段式配置的动作训练步数是辅助配置的一半,oracle 生成臂的 0.810 低于基线 0.860;补足动作步数的长预算 oracle 生成臂回到 0.868,与基线 0.860 基本持平,长预算随机生成臂回到 0.820。这里的"同预算"指动作训练步数相同(12000 步),生成臂另外多花 6000 步预训练。半预算的 19.2pp 里约四分之三是动作预算,角色差异保留下来:同预算下,辅助随机(0.885)优于生成随机(0.820),oracle 生成(0.868)优于随机生成(0.820),目标质量敏感性的方向与短预算一致,幅度缩到几个点。</p>
+
+<p>七条预登记预测的结果:</p>
+
+<table>
+  <colgroup>
+    <col width="90"/>
+    <col width="250"/>
+    <col width="110"/>
+    <col width="260"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray"><p>预测</p></th>
+      <th background-color="light-gray"><p>内容</p></th>
+      <th background-color="light-gray"><p>判定</p></th>
+      <th background-color="light-gray"><p>依据</p></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><p>P1</p></td>
+      <td><p>随机锚点在辅助角色下有效</p></td>
+      <td><p>方向成立</p></td>
+      <td><p>fs random 0.885 对 action 0.860,约 0.9 个均值差标准误</p></td>
+    </tr>
+    <tr>
+      <td><p>P2</p></td>
+      <td><p>输入无关目标无增益(≤ 基线 +1pp)</p></td>
+      <td><p>成立(均值)</p></td>
+      <td><p>fs const 0.862;两 seed 时均值曾高于基线</p></td>
+    </tr>
+    <tr>
+      <td><p>P3</p></td>
+      <td><p>未来目标优于当前帧目标</p></td>
+      <td><p>弱成立</p></td>
+      <td><p>0.885 对 0.873,差 1.2pp</p></td>
+    </tr>
+    <tr>
+      <td><p>P4</p></td>
+      <td><p>目标质量敏感性:辅助 &lt; 生成</p></td>
+      <td><p>方向成立</p></td>
+      <td><p>辅助角色 oracle−random 为 −2.2pp;生成角色短预算 +19.2pp、长预算 +4.8pp(约 2.6 SE)</p></td>
+    </tr>
+    <tr>
+      <td><p>P5</p></td>
+      <td><p>随机与 oracle 的探针高于基线,常数不高于</p></td>
+      <td><p>部分成立</p></td>
+      <td><p>只有 oracle 的 <latex>s_T</latex> 升到 0.808;非 const 辅助臂增量 0.668–0.674,常数 0.563,生成臂 0.62–0.69(部分 seed)</p></td>
+    </tr>
+    <tr>
+      <td><p>P6</p></td>
+      <td><p>像素目标(探索项,不押方向)</p></td>
+      <td><p>记录</p></td>
+      <td><p>0.875,介于随机与基线之间</p></td>
+    </tr>
+    <tr>
+      <td><p>P7</p></td>
+      <td><p>生成角色下常数目标低于 oracle,且不高于基线</p></td>
+      <td><p>成立</p></td>
+      <td><p>常数生成臂 0.590 对 oracle 生成臂 0.810、基线 0.860</p></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>总判定:P2、P7 成立,P1/P3/P4 方向成立,P5 部分成立,P6 仅记录;P2 的两 seed 曾高于基线(+1.25pp),第三个 seed 拉回 0.862,1.2pp 的摆动说明这个量级的差要三个 seed 才定性。</p>
+
+<p>把两种角色放回去读 JAM。辅助角色里,随机锚点把 foresight 变成一次蒸馏:当前帧特征对齐到一个冻结随机特征器,损失剩下的是把特征拉向一组由数据统计定出的方向,改的是特征几何,与预测未来是两件事。生成角色里,目标就是预训练标签:标签若只是帧的光滑函数,预训练塌成恒等;标签含真动力学,才有非平凡监督。JAM 对 VAE-direct 的解释同在这条轴上:Wan 的 VAE 潜斑块横跨 32 步动作窗、自带场景变化,Yak 锚点(Ovis-U1 的图像编辑骨干)只看 16 步后的单帧,前者的目标里动力学成分更多。RynnLAM 的目标质量投入属于生成角色,方向与 latent 配置一致,幅度约 5pp,不是决定论。可检验的推论:把未来时距拉长,随机锚点目标里平均方向的份额会下降,固定方向式的正则装不下,损失被迫变成真正的前瞻预测。轴的边界也要写清:辅助角色在小容量玩具里对目标质量不敏感,但 JAM 自己的 VAE-direct 在同为辅助角色时拉开 5.9pp(64.54 对 58.63),差别可能在目标容量与任务时距,这条边界我们不能替它抹平。</p>
+<hr/>
+<h2>RynnVLA-Latent: Scaling Robotic Manipulation Foundation Models with 3D-Grounded Latent Actions</h2>
+<p>Haoyu Zhao、Xingyue Zhao、Zhian Su 等(2026)· <a href="https://huggingface.co/papers/2610.34356">HF</a> · <a href="https://arxiv.org/abs/2610.34356">PDF</a></p>
+
+<p>扩大视觉-语言-动作模型的瓶颈落在监督信号上。带动作标签的示教昂贵,各本体的控制空间在维度与坐标系上彼此错位;人体视频和网络视频覆盖最广的交互形态,画面充足而动作标签缺席。RynnVLA-Latent 绕开动作标签,把相邻两帧之间发生了什么压成一个与本体无关的向量。</p>
+
+<p>承担这一步的是 RynnLAM(描述符的编码器,Latent Action Model):把帧对映射成 608 维描述符,按功能切成三段。</p>
+
+<table>
+  <colgroup>
+    <col width="150"/>
+    <col width="110"/>
+    <col width="200"/>
+    <col width="350"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray"><p>分量</p></th>
+      <th background-color="light-gray"><p>维数</p></th>
+      <th background-color="light-gray"><p>编码什么</p></th>
+      <th background-color="light-gray"><p>监督信号</p></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><p>运动 token <latex>z^{m}</latex></p></td>
+      <td><p>512(8×64)</p></td>
+      <td><p>目标帧的局部变化</p></td>
+      <td><p>预测未来特征残差 <latex>X_{t+\Delta} - X_{t}</latex>(X 为骨干视觉特征,Δ 为帧间隔)</p></td>
+    </tr>
+    <tr>
+      <td><p>动作潜变量 <latex>z^{a}</latex></p></td>
+      <td><p>64</p></td>
+      <td><p>整段转变的摘要</p></td>
+      <td><p>预测相机补偿后的动态 3D 流(光流加深度估计出的伪标签)</p></td>
+    </tr>
+    <tr>
+      <td><p>相机潜变量 <latex>z^{c}</latex></p></td>
+      <td><p>32</p></td>
+      <td><p>相机自运动</p></td>
+      <td><p>解码相对 6-DoF 位姿</p></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>分离由监督信号诱导。残差要穿过 8×64 的瓶颈才算得准,运动 token 于是携带真实的帧间变化;3D 流先减掉估计的相机运动,静态区域的动态流归零,监督指向物体自身的位移;动作潜变量上另接一个位姿预测头,用梯度反转(GRL)使它在这项预测上失败,位姿信息只能走相机通道。论文把解耦写成鼓励而非保证,且只作用于 <latex>z^{a}</latex>:描述符整体保留相机通道,相机不变的承诺就限定在这一层。</p>
+
+<p>冻结编码器随后站在两个位置。RynnVLA-Latent 拿它当离线标注器:25 个数据源(人体、真机、仿真视频集)批量打上伪标签,策略从观测和语言用 flow matching 预测未来 6 个一组的描述符块,后训练再把同一目标重定向到本体动作。<a href="https://arxiv.org/abs/2610.36791">RynnWorld-Latent</a> 拿它当条件输入:576 维的 [<latex>z^{m}</latex>; <latex>z^{a}</latex>] 作操作切片、32 维 <latex>z^{c}</latex> 作相机切片,分类器自由引导按切片分别丢弃;描述符按 4 帧提取,视频 VAE 的时间压缩也是 4 倍,每个描述符正好对应一个 latent 帧间步。</p>
+
+<p>规模决定了这套接口的可用边界:25 个源 30.1K 小时、3.057B 帧,按 4 帧步长切出 745.52M 个描述符(扣掉不足一个 chunk 的尾部)。4B 策略在 LIBERO 上 98.8%,LIBERO-Plus 零样本 84.7%,与 π0.5 的 84.4% 持平。总分掩盖了一次此消彼长:语言、光照、背景、噪声、布局五类扰动对 π0.5 领先,相机 72.9 对 78.4、机器人初始状态 64.0 对 73.6 落后,2B 在相机类上 76.4,还高于 4B——规模增大并未改善相机档,论文未给解释。</p>
+
+<p>相机这一类扰动值得单独测。我们用公开的 RynnLAM 权重(1.46GB、fp32、CPU),取 HF physical-intelligence/libero 数据 chunk-000 的前 6 个 episode、每集 3 个 (t, t+4) 帧对共 18 对,输入 224×224,逐分量测六类条件相对原帧对的变化 <latex>\Delta = \lVert z_{\mathrm{cond}} - z_{\mathrm{base}} \rVert / \lVert z_{\mathrm{base}} \rVert</latex>:原样、同集再晚 4 帧、同集远处的另一帧、合成平移 8–24px、旋转 5–10°、缩放 1.1–1.25×。</p>
+
+[[figure-anchor:rynnlam:decoupling]]
+
+<p>运动 token 对相机运动的响应与换一帧内容同量级:同集另一帧 0.39,平移 0.34、旋转 0.40、缩放 0.47(各条件均值),1.25× 缩放端点值 0.58。参照是同集再晚 4 帧的真实机器人运动,只有 0.09;一次 8px 平移就把它推到约 0.3。动作潜变量的解耦不均匀:缩放 0.05,约为同集另一帧(<latex>\Delta z^{a} = 0.085</latex>)的一半,是三个分量里最干净的;平移一路上涨,8px 0.17、16px 0.20、24px 0.26(+x 单方向),最后一个数是同集另一帧的三倍。相机潜变量同样随内容移动,同集另一帧 0.18、平移 0.25,内容也进了这个通道。</p>
+
+<p>表示基准 LARY 的相对动作探针(从冻结表示回归相对末端位姿)同向:单取运动 token 的 MSE 是 0.54,单取动作潜变量 0.93,单取相机潜变量 0.95,拼成 608 维降到 0.38(均为四个数据集的均值,越低越好),控制可预测性最强的分量恰好是相机最敏感的那一个。LIBERO-Plus 的相机扰动调的是视点,与动作潜变量最不稳的平移轴同向;若该档以平移为主,这能解释 4B 在相机档的退步(72.9 低于 2B 的 76.4)——这是推测。论文把限度留在定性表述,我们换成逐分量的数字。</p>
+
+<p>合成相机运动只做屏幕空间重采样,场景被当作平面,近处与远处按同一比例位移,遮挡原样保留。真实视点移动更复杂,这些数字只是视点类扰动与内容变化同量级的证据,不给方向性上下界;18 对帧对只看量级。对 RynnWorld-Latent,576 维操作切片里装着与真实运动同量级的视点响应,按切片引导时,一次视点漂移会被当作操作变化送进生成过程。</p>
+
+<p>同一周,京东与北大的 PDRVLA 走了另一条路:轻量物理动态模块直接预测未来 RGB、深度和光流特征,用冻结的视频世界模型做辅助监督,推理时不跑视频世界模型,报出 LIBERO 99.3%、LIBERO-Plus 89.9%,两项都高于 RynnVLA-Latent-4B。共享描述符的独有价值在跨本体:同一目标可来自人体、机器人、仿真,人体视频只有画面、没有机器人动作标签,却能经 RynnLAM 转成监督目标(这是论文的主张)。</p>
+<h1>动作接口的几何与规划</h1>
+<h2>Does LeWorldModel Preserve Local Action Geometry?</h2>
+<p>Vasil Vasilev、Siddharth Nayak(2026)· <a href="https://huggingface.co/papers/2610.31716">HF</a> · <a href="https://arxiv.org/abs/2610.31716">PDF</a></p>
+
+<p>LeWorldModel(LeWM)把世界模型建在表示空间,属联合嵌入预测架构(JEPA):三帧相隔 5 步的观测加一段五个原始环境步的动作块(一个模型步),直接预测下一时刻的嵌入,约 18M 参数。动作是 5 维,块长为一个模型步。规划器按末端嵌入到目标嵌入的平方距离给候选动作块排序,所以"动作改一点、嵌入挪多少"这张局部地图就是搜索的罗盘。地图偏了,排序把搜索推向错的方向。</p>
+
+<p>论文把它变成可测的量:五个动作同时加同一个 d 维方向 <latex>u</latex>(Reacher d=2、Cube d=5)的偏移,幅度按数据集动作维的 1–99 分位范围缩放;模型侧预测下一嵌入,环境侧复位到锚点状态、执行同一动作块、用同一个冻结编码器编码渲染帧。两边共用输出空间,得到映射 <latex>F(u)</latex>,坐标方向的中心差分给出雅可比 <latex>J</latex>:</p>
+
+<latex>G=J^{\top}J,\qquad \|Ju\|^2=u^{\top}Gu,\qquad D_G=\left\|\frac{G_{\mathrm{model}}}{\operatorname{tr}G_{\mathrm{model}}}-\frac{G_{\mathrm{env}}}{\operatorname{tr}G_{\mathrm{env}}}\right\|_F.</latex>
+
+<p><latex>G</latex> 是动作空间的响应椭球,方向为特征向量,幅度为特征值。两边各除以迹,<latex>D_G</latex> 只比形状与方向,整体增益(两边幅度之比)另算;完全一致时 <latex>D_G=0</latex>,完全错位时接近 <latex>\sqrt{2}\approx1.41</latex>,随机各向同性参照约 0.6。</p>
+
+<p>Reacher 与 OGBench Cube 上,主尺度下扰动取动作半宽的千分之一,最敏感方向夹角中位 36° 与 42°;动作空间里随机两个方向的期望夹角是 90°(随机时 |cos| 期望为 0),42° 对应 |cos| 0.74,比随机好但远未对齐。迹归一化后 <latex>D_G</latex> 中位 0.465 与 0.508,Cube 这一值低于同迹各向同性参照 0.609,Reacher 略高于 0.449(Reacher 的各向同性参照)。模型的响应幅度只有环境的五到八成。把模型 Gram 缩放到环境的迹,Cube 的留出方向误差(WAPE,加权绝对百分比误差)从 56% 掉到 32%,各向同性 38%,环境自身 28%:误差大头是增益。扰动放大十倍,Cube 上环境最敏感方向转 39°,模型只转 0.01°;Cube 的 <latex>D_G</latex> 从 0.508 降到 0.271,压低 47%。</p>
+
+<p>我们用官方检查点 quentinll/lewm-cube 在 cube-single 上按同一协议复测:两个尺度,100 个几何锚点加 30 个规划对;锚点来自自写脚本专家的 120 条轨迹,与论文从原数据集重生成的锚点分布不同,只比方向与结构。复测 <latex>D_G</latex> 本身已高于论文的 0.508,锚点分布不同是首要候选解释。千分之一尺度下增益 0.43:同一动作扰动,模型的嵌入响应只有环境的四成;放大十倍升到 0.93,追平。方向错配持续在 60.1° 与 59.2°,|cos| 约 0.5。差异出在 <latex>D_G</latex> 的尺度趋势:我们从 0.60 微升到 0.67,论文的 Cube 是十倍尺度压低 47%。放大扰动补的是绝对增益,相对方向照旧。</p>
+
+<p>第一个新测量看地图本身。把各锚点模型的最敏感方向两两取 |cos|,跨状态一致性 0.727;环境侧 0.516,五维随机方向的基准 0.375。模型 Gram 拟合自身响应的中位误差 0.0001,即万分之一,响应几乎落在自己的椭球上;环境侧同量 0.285。合起来:模型在局部的雅可比接近一张状态无关的固定图,增益偏小,方向固定。论文那 0.01° 的跨尺度不转由此有了机制解释,固定图本就无处可转;同一张图碰上随状态变化的几何,偏差写进每一处,60° 的错配因此在两个尺度上一样宽。稳定的是这张图:状态换了,预测嵌入照样换,局部响应却几乎不动。</p>
+
+<p>第二个测量把几何接到规划。沿用 DA-LeWM 的 Plan-Real 协议(给 LeWM 接逆动力学头与目标条件动作头的那篇):每个锚点采 64 条候选动作块,真实代价取方块位置、末端位置与朝向的加权距离(权重 1:0.5:0.1),潜空间代价取候选末端嵌入到目标嵌入的平方距离,排序后取 Spearman 相关 ρ,1 表示完全一致,0 表示无关。30 对上 ρ 双峰:14 对高于 0.2,13 对低于 −0.2,均值 0.012。同批锚点的 <latex>D_G</latex> 与 ρ 秩相关 −0.43,30 对的抽样标准误约 0.19,这是 2.3 个标准误。<latex>D_G</latex> 最低的 0.29 拿到 0.85 的 ρ;<latex>D_G</latex> 最高的 14 对里 9 对为负 ρ,最低的 9 对里 3 对为负 ρ(最高组 D_G≥0.753,最低组 D_G≤0.591)。</p>
+
+[[figure-anchor:lewm:gram-main]]
+
+<p>读法是必要非充分:几何好的锚点里仍有负 ρ,好几何是排序能力的前提;几何差的锚点多半连排序一起坏掉。30 对撑得起这个方向,撑不起"几何决定规划"。近五成负 ρ 与 DA-LeWM 的精英候选崩塌同型(推测)。</p>
+
+<p>这张地图方向偏 60°,小尺度下幅度打四折,状态差异在图里被抹平。改它最直接的杠杆是训练时匹配环境 Gram,但匹配 Gram 只约束局部度量,不约束 <latex>J</latex> 的旋转部分;<latex>J</latex> 整体取反在 <latex>G</latex> 上隐形,朝向排序仍要单独测。下一步最干净的对照,是给同一批锚点接逆动力学头(状态对推动作)与目标条件动作头(当前状态与目标状态推目标动作),看 <latex>D_G</latex> 下降能否换来 ρ 上升。</p>
+<h1>跨主题观察</h1>
+<p>三个线程读完,同一句话可以写得更准:未来含量值多少,取决于它站在哪个位置。站在辅助损失的位置,它是个便宜的正则项,随机冻结的特征也能带来收益,收益与"特征里读不读得出未来"无关;站在预训练目标的位置,它就是动作标签,标签的质量与输入依赖性是生死线,随机目标退化成恒等任务,标签语义被掏空;站在条件输入的位置,它里头的每一分量都会进入生成,相机污染也一起进去。JAM 与 RynnLAM 表面相反的两组结果,在这条角色划分下共存:一个指向辅助任务的优化价值,一个指向标签的语义价值。</p>
+<p>第二条横线是关于测量的。三个线程各自把表示侧指标与决策侧指标分开了:辅助角色里 ridge 探针读出的未来信息与成功率脱钩(生成角色里同向),LeWM 的 Gram 几何与规划排序只呈现必要非充分的关系,RynnLAM 的相机扰动幅度与 LIBERO-Plus 相机档胜负同向。这条测量纪律又添了一组实例:评估"未来监督""动作接口"这类工作时,表示侧的数字(预测误差、嵌入对齐、控制回归)与决策侧的数字(成功率、规划排序)必须分开报,谁也不能替谁背书。</p>
+<p>第三条是工具。常数目标、随机冻结锚点、当前帧目标,这三类对照的成本很低,却能一刀切开"未来信息注入"与"输入依赖的结构正则"两种解释。JAM 的随机锚点结果若只读到"未来表示的语义不重要"是不够的,我们的网格显示,辅助角色下最简约的解释是输入依赖的辅助结构,而不是未来本身;辅助侧 1–2.5pp 的差在 seed 波动内,这条只能算方向。给这一族工作做消融时,这三类对照值得成为标配。</p>
