@@ -1,0 +1,14 @@
+{
+  "serial_4x1s": 4.001,
+  "blocking_4x1s_reasoning0.25": 5.002,
+  "pipelined_4x1s_reasoning0.25": 4.003,
+  "blocking_4x1s_reasoning1.5": 10.004,
+  "pipelined_4x1s_reasoning1.5": 6.003,
+  "parallel_4x1s": 1.002,
+  "mixed_4exclusive_4parallel": 4.003,
+  "ideal_serial": 4.0,
+  "ideal_pipelined": 4.0,
+  "ideal_parallel": 1.0,
+  "ideal_mixed": 5.0,
+  "hidden_reasoning_s": 0.999
+}
