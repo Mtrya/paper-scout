@@ -18,5 +18,9 @@
   "probe-c3": {
     "file": "assets/probe-c3.png",
     "caption": "动作敏感度与干预边距;只有 DINOv2 同时有可观的敏感度与正向边距,其余模型的预测特征几乎不动。"
+  },
+  "rua-harness": {
+    "file": "assets/rua-harness.png",
+    "caption": "左:同一个 Qwen3.8-Flash-Next 换四个 harness,Score 从 1.90 到 31.39;GPT-6 Astra 从 RoboProbe 的 28.97 到同一 harness 的 51.90。右:合成调度测试的墙钟时间;0.25 秒推理时 1.00 秒被动作时间隐藏,1.5 秒推理时只隐藏 4.00 秒、2.00 秒暴露,并行视觉调用 1.00 秒完成。"
   }
 }
