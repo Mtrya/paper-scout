@@ -13,6 +13,15 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-11-03 — 2026-10-29 至 2026-11-03(WAM 动作头读什么 × 空间状态探针)
+- Doc: https://fudan-nlp.feishu.cn/docx/UMDPdhA0vovI4wxc3ZYcJFIQnud
+- Run: runs/2026-11-03-wam-readout/
+- Deep threads: WorldBridge × CausalWAM 动作头读出 (2610.40748, 2610.42096), Probing Spatial State 发布物重分析 (2610.40636)
+- Covered papers: 2610.40748, 2610.42096, 2610.40636
+- Shortlisted papers: 2610.35850 (OSWAM), 2610.42053 (REA), 2610.40614 (L3G-World), 2610.31670 (S²)
+- 背景: 合成世界 37 runs(共享编码器 + 视频头 + 稠密/top-k 动作头)把 WorldBridge 的监督分解与 CausalWAM 的稀疏路由放进同一张表。稠密头 OOD 2.1%,与零动作/随机动作的 1.19%/1.24% 同量级;k=1 在五个种子上三好两坏(42–49% vs 4%),好种子把查询分散到图像边缘、坏种子挤在中心;加 OOD 视频把好种子抬到 47–66%,坏种子仍 4.2–4.7%,模式比例不变;一条/五条演示让 k=1 的 ID 掉到 40–60%/32.3%。留出 cue probe 47.1%(机会 50%),选中 token 的目标位置读出 ID R² 0.96–0.99、OOD −0.09/0.22:编码器没保留标记,k=1 只是空间覆盖采样,不是因果选择。CausalWAM 的稀疏路由是残差分支(门控 + 稠密通路仍在),定理还要求雅可比行非退化与支撑大小已知;我们的 token k 不是潜变量支撑。Probing 重算:持久化—相机位姿 ρ=+0.80(n=9,p=0.010,LOO +0.71..+0.98);预测—可见场景六对 0.48–0.65(p=0.15–0.23),预测—持久化九模型为 −0.38/−0.20,论文 |ρ|<0.1 依赖被排除的 CogVideoX;动作可归因份额 DINOv2/VideoMAE/V-JEPA2 64–75%,生成式视频模型 24–38%;C3 120 行全部 CI>1/3 但 87% 边距为负、中位 |margin| 0.00064,只有 DINOv2 同时有正边距与 0.100 敏感度。启智不可用,全部本机 RTX 3060;OSWAM 12GB checkpoint 未跑。
+- 执行教训: 本机 12GB 显存跑不动 OSWAM 5B;`uv` 装 torch 2.15+cu132 约 8.5 分钟;`push_report.py` 需 venv PIL;图注在 `assets/figures.json`,锚点名必须与报告裸行一致;合成实验的种子数要写进表注(k=1 五种子、k=2/4/稠密两种子、五条演示单种子)。
+
 ## 2026-10-28 — 2026-10-26 至 2026-10-28(未来表示的角色:辅助损失/预训练目标/条件输入)
 - Doc: https://fudan-nlp.feishu.cn/docx/IaIMdSwDjo85H6xGSutcA1NfnAR
 - Run: runs/2026-10-28-jam-lewm-rynnlam/

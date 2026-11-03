@@ -1,0 +1,18 @@
+{
+  "n_id": 1024,
+  "stats_id": {
+    "sel_goal_frac": 0.091796875,
+    "sel_dist_frac": 0.091796875,
+    "sel_center_dist": 0.23570236563682556,
+    "sel_goal_mean_dist": 0.6505861282348633
+  },
+  "stats_ood": {
+    "sel_goal_frac": 0.111328125,
+    "sel_dist_frac": 0.078125,
+    "sel_center_dist": 0.23754379153251648,
+    "sel_goal_mean_dist": 0.6330649852752686
+  },
+  "cue_probe_acc": 0.462890625,
+  "goal_readout_r2_id": 0.9634442329406738,
+  "goal_readout_r2_ood": 0.22114741802215576
+}

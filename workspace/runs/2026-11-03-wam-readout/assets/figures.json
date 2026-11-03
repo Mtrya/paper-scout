@@ -1,0 +1,22 @@
+{
+  "synth-ood": {
+    "file": "assets/synth-ood.png",
+    "caption": "合成世界里的分布外成功率随每个动作查询读取的 token 数变化;每个点是单个训练种子。只有 k=1 出现双峰,其余设置都落在 1–2%。"
+  },
+  "synth-router": {
+    "file": "assets/synth-router.png",
+    "caption": "上排是好种子,下排是坏种子;k=1 时四个查询各自选中的 token 用编号圈出;白星是目标,灰叉是干扰物。好种子把查询分散到场景四周,坏种子挤在中心,两者都没有稳定地选中白色标记。"
+  },
+  "probe-pose-persist": {
+    "file": "assets/probe-pose-persist.png",
+    "caption": "九个表征的相机位姿读出与物体持久化误差;方向校正后 Spearman ρ=+0.80(n=9),留一法范围 +0.71 到 +0.98。"
+  },
+  "probe-action-share": {
+    "file": "assets/probe-action-share.png",
+    "caption": "直接预测的 Global R@1 拆成静态基线与动作可归因部分;DINOv2/VideoMAE/V-JEPA2 的动作份额在 64–75%,生成式视频模型在 24–38%。"
+  },
+  "probe-c3": {
+    "file": "assets/probe-c3.png",
+    "caption": "动作敏感度与干预边距;只有 DINOv2 同时有可观的敏感度与正向边距,其余模型的预测特征几乎不动。"
+  }
+}
