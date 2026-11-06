@@ -1,0 +1,292 @@
+{
+  "tag": "dit_l20",
+  "dataset": "calvin",
+  "seed": 42,
+  "best_val_mse": 1.1848565340042114,
+  "final_val_mse": 1.7792019844055176,
+  "log": [
+    {
+      "epoch": 1,
+      "val_mse": 1.1848565340042114,
+      "mse_position": 0.9968209266662598,
+      "mse_orientation": 1.4350087642669678,
+      "mse_gripper": 0.9985076785087585
+    },
+    {
+      "epoch": 2,
+      "val_mse": 1.223344326019287,
+      "mse_position": 1.3238986730575562,
+      "mse_orientation": 1.1186541318893433,
+      "mse_gripper": 1.235751986503601
+    },
+    {
+      "epoch": 3,
+      "val_mse": 1.7317230701446533,
+      "mse_position": 2.4855241775512695,
+      "mse_orientation": 1.07440185546875,
+      "mse_gripper": 1.442283034324646
+    },
+    {
+      "epoch": 4,
+      "val_mse": 2.1174514293670654,
+      "mse_position": 2.769613265991211,
+      "mse_orientation": 1.646976351737976,
+      "mse_gripper": 1.572389841079712
+    },
+    {
+      "epoch": 5,
+      "val_mse": 2.1219751834869385,
+      "mse_position": 2.5853447914123535,
+      "mse_orientation": 1.8536465167999268,
+      "mse_gripper": 1.5368527173995972
+    },
+    {
+      "epoch": 6,
+      "val_mse": 2.219540596008301,
+      "mse_position": 2.4901092052459717,
+      "mse_orientation": 2.1891160011291504,
+      "mse_gripper": 1.499108076095581
+    },
+    {
+      "epoch": 7,
+      "val_mse": 2.0581252574920654,
+      "mse_position": 1.8239918947219849,
+      "mse_orientation": 2.2499475479125977,
+      "mse_gripper": 2.185058832168579
+    },
+    {
+      "epoch": 8,
+      "val_mse": 2.0288479328155518,
+      "mse_position": 1.7094886302947998,
+      "mse_orientation": 2.297253131866455,
+      "mse_gripper": 2.1817097663879395
+    },
+    {
+      "epoch": 9,
+      "val_mse": 2.7782201766967773,
+      "mse_position": 2.3230526447296143,
+      "mse_orientation": 3.2858896255493164,
+      "mse_gripper": 2.620715379714966
+    },
+    {
+      "epoch": 10,
+      "val_mse": 2.6628525257110596,
+      "mse_position": 1.9096735715866089,
+      "mse_orientation": 3.480933427810669,
+      "mse_gripper": 2.4681460857391357
+    },
+    {
+      "epoch": 11,
+      "val_mse": 2.556446075439453,
+      "mse_position": 1.7247174978256226,
+      "mse_orientation": 3.309905767440796,
+      "mse_gripper": 2.791252374649048
+    },
+    {
+      "epoch": 12,
+      "val_mse": 2.7488954067230225,
+      "mse_position": 2.2784199714660645,
+      "mse_orientation": 3.44150447845459,
+      "mse_gripper": 2.082494020462036
+    },
+    {
+      "epoch": 13,
+      "val_mse": 3.1910862922668457,
+      "mse_position": 2.8529796600341797,
+      "mse_orientation": 4.008573055267334,
+      "mse_gripper": 1.7529441118240356
+    },
+    {
+      "epoch": 14,
+      "val_mse": 2.8725922107696533,
+      "mse_position": 2.3333740234375,
+      "mse_orientation": 3.6826117038726807,
+      "mse_gripper": 2.0601892471313477
+    },
+    {
+      "epoch": 15,
+      "val_mse": 2.7929046154022217,
+      "mse_position": 2.204265832901001,
+      "mse_orientation": 3.6478238105773926,
+      "mse_gripper": 1.9940617084503174
+    },
+    {
+      "epoch": 16,
+      "val_mse": 2.782803773880005,
+      "mse_position": 2.6503372192382812,
+      "mse_orientation": 3.3135809898376465,
+      "mse_gripper": 1.5878705978393555
+    },
+    {
+      "epoch": 17,
+      "val_mse": 2.7772302627563477,
+      "mse_position": 2.536648750305176,
+      "mse_orientation": 3.2898359298706055,
+      "mse_gripper": 1.9611549377441406
+    },
+    {
+      "epoch": 18,
+      "val_mse": 2.357769250869751,
+      "mse_position": 2.155304193496704,
+      "mse_orientation": 2.7823851108551025,
+      "mse_gripper": 1.6913187503814697
+    },
+    {
+      "epoch": 19,
+      "val_mse": 2.5408098697662354,
+      "mse_position": 2.413037061691284,
+      "mse_orientation": 2.8575565814971924,
+      "mse_gripper": 1.9738878011703491
+    },
+    {
+      "epoch": 20,
+      "val_mse": 2.3550260066986084,
+      "mse_position": 2.328097343444824,
+      "mse_orientation": 2.5901401042938232,
+      "mse_gripper": 1.7304691076278687
+    },
+    {
+      "epoch": 21,
+      "val_mse": 2.177455186843872,
+      "mse_position": 2.039367914199829,
+      "mse_orientation": 2.5172674655914307,
+      "mse_gripper": 1.5722787380218506
+    },
+    {
+      "epoch": 22,
+      "val_mse": 2.159820556640625,
+      "mse_position": 2.032376766204834,
+      "mse_orientation": 2.4971187114715576,
+      "mse_gripper": 1.530256986618042
+    },
+    {
+      "epoch": 23,
+      "val_mse": 2.083387851715088,
+      "mse_position": 2.05059552192688,
+      "mse_orientation": 2.2763469219207764,
+      "mse_gripper": 1.602886438369751
+    },
+    {
+      "epoch": 24,
+      "val_mse": 1.9671168327331543,
+      "mse_position": 1.7820039987564087,
+      "mse_orientation": 2.260434150695801,
+      "mse_gripper": 1.6425039768218994
+    },
+    {
+      "epoch": 25,
+      "val_mse": 1.9550176858901978,
+      "mse_position": 1.8819109201431274,
+      "mse_orientation": 2.1697263717651367,
+      "mse_gripper": 1.5302115678787231
+    },
+    {
+      "epoch": 26,
+      "val_mse": 1.926982045173645,
+      "mse_position": 1.8565974235534668,
+      "mse_orientation": 2.210559844970703,
+      "mse_gripper": 1.2874027490615845
+    },
+    {
+      "epoch": 27,
+      "val_mse": 1.9244396686553955,
+      "mse_position": 1.740647554397583,
+      "mse_orientation": 2.21979022026062,
+      "mse_gripper": 1.5897647142410278
+    },
+    {
+      "epoch": 28,
+      "val_mse": 1.811651349067688,
+      "mse_position": 1.837992787361145,
+      "mse_orientation": 1.8309835195541382,
+      "mse_gripper": 1.6746329069137573
+    },
+    {
+      "epoch": 29,
+      "val_mse": 2.0965664386749268,
+      "mse_position": 2.127072811126709,
+      "mse_orientation": 2.272467851638794,
+      "mse_gripper": 1.4773427248001099
+    },
+    {
+      "epoch": 30,
+      "val_mse": 1.83305025100708,
+      "mse_position": 1.71853506565094,
+      "mse_orientation": 2.0388972759246826,
+      "mse_gripper": 1.5590546131134033
+    },
+    {
+      "epoch": 31,
+      "val_mse": 1.9919310808181763,
+      "mse_position": 1.8321107625961304,
+      "mse_orientation": 2.2411041259765625,
+      "mse_gripper": 1.7238731384277344
+    },
+    {
+      "epoch": 32,
+      "val_mse": 1.8432390689849854,
+      "mse_position": 1.6458159685134888,
+      "mse_orientation": 2.091618299484253,
+      "mse_gripper": 1.6903709173202515
+    },
+    {
+      "epoch": 33,
+      "val_mse": 1.880196452140808,
+      "mse_position": 1.7148630619049072,
+      "mse_orientation": 2.0951788425445557,
+      "mse_gripper": 1.7312487363815308
+    },
+    {
+      "epoch": 34,
+      "val_mse": 1.5719479322433472,
+      "mse_position": 1.3703607320785522,
+      "mse_orientation": 1.7218507528305054,
+      "mse_gripper": 1.7270017862319946
+    },
+    {
+      "epoch": 35,
+      "val_mse": 1.8242647647857666,
+      "mse_position": 1.532165765762329,
+      "mse_orientation": 2.0451133251190186,
+      "mse_gripper": 2.0380160808563232
+    },
+    {
+      "epoch": 36,
+      "val_mse": 1.8724839687347412,
+      "mse_position": 1.6443872451782227,
+      "mse_orientation": 2.15971302986145,
+      "mse_gripper": 1.6950873136520386
+    },
+    {
+      "epoch": 37,
+      "val_mse": 1.795026421546936,
+      "mse_position": 1.481041669845581,
+      "mse_orientation": 1.8613570928573608,
+      "mse_gripper": 2.5379881858825684
+    },
+    {
+      "epoch": 38,
+      "val_mse": 1.6855448484420776,
+      "mse_position": 1.3364360332489014,
+      "mse_orientation": 1.9229696989059448,
+      "mse_gripper": 2.0205953121185303
+    },
+    {
+      "epoch": 39,
+      "val_mse": 1.8591406345367432,
+      "mse_position": 1.5568052530288696,
+      "mse_orientation": 2.242391586303711,
+      "mse_gripper": 1.616391658782959
+    },
+    {
+      "epoch": 40,
+      "val_mse": 1.7792019844055176,
+      "mse_position": 1.552146315574646,
+      "mse_orientation": 2.0669143199920654,
+      "mse_gripper": 1.597231149673462
+    }
+  ],
+  "n_train": 19000,
+  "n_val": 11969,
+  "in_dim": 2048
+}

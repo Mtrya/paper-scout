@@ -1,0 +1,292 @@
+{
+  "tag": "dit_l27_pool4",
+  "dataset": "calvin",
+  "seed": 0,
+  "best_val_mse": 1.1177005767822266,
+  "final_val_mse": 2.786271333694458,
+  "log": [
+    {
+      "epoch": 1,
+      "val_mse": 1.2014423608779907,
+      "mse_position": 1.1283271312713623,
+      "mse_orientation": 1.3287639617919922,
+      "mse_gripper": 1.0388230085372925
+    },
+    {
+      "epoch": 2,
+      "val_mse": 1.1177005767822266,
+      "mse_position": 1.2624690532684326,
+      "mse_orientation": 0.9977580904960632,
+      "mse_gripper": 1.0432218313217163
+    },
+    {
+      "epoch": 3,
+      "val_mse": 1.4159232378005981,
+      "mse_position": 1.7830157279968262,
+      "mse_orientation": 1.0171198844909668,
+      "mse_gripper": 1.5110559463500977
+    },
+    {
+      "epoch": 4,
+      "val_mse": 1.5299164056777954,
+      "mse_position": 1.9034761190414429,
+      "mse_orientation": 1.1982051134109497,
+      "mse_gripper": 1.404370665550232
+    },
+    {
+      "epoch": 5,
+      "val_mse": 1.2342785596847534,
+      "mse_position": 1.310302495956421,
+      "mse_orientation": 1.1262532472610474,
+      "mse_gripper": 1.330282211303711
+    },
+    {
+      "epoch": 6,
+      "val_mse": 1.2066744565963745,
+      "mse_position": 1.2336658239364624,
+      "mse_orientation": 1.1424437761306763,
+      "mse_gripper": 1.3183919191360474
+    },
+    {
+      "epoch": 7,
+      "val_mse": 1.3897552490234375,
+      "mse_position": 1.482577919960022,
+      "mse_orientation": 1.363006830215454,
+      "mse_gripper": 1.1915332078933716
+    },
+    {
+      "epoch": 8,
+      "val_mse": 1.1876487731933594,
+      "mse_position": 1.1419821977615356,
+      "mse_orientation": 1.2022120952606201,
+      "mse_gripper": 1.280958652496338
+    },
+    {
+      "epoch": 9,
+      "val_mse": 1.3179690837860107,
+      "mse_position": 1.3387614488601685,
+      "mse_orientation": 1.3491926193237305,
+      "mse_gripper": 1.1619210243225098
+    },
+    {
+      "epoch": 10,
+      "val_mse": 1.3375483751296997,
+      "mse_position": 1.3158514499664307,
+      "mse_orientation": 1.4347350597381592,
+      "mse_gripper": 1.1110798120498657
+    },
+    {
+      "epoch": 11,
+      "val_mse": 1.3999477624893188,
+      "mse_position": 1.4755359888076782,
+      "mse_orientation": 1.396561622619629,
+      "mse_gripper": 1.1833410263061523
+    },
+    {
+      "epoch": 12,
+      "val_mse": 1.5563201904296875,
+      "mse_position": 1.5473415851593018,
+      "mse_orientation": 1.679336667060852,
+      "mse_gripper": 1.2142070531845093
+    },
+    {
+      "epoch": 13,
+      "val_mse": 2.2955410480499268,
+      "mse_position": 2.101935625076294,
+      "mse_orientation": 2.686974287033081,
+      "mse_gripper": 1.702057123184204
+    },
+    {
+      "epoch": 14,
+      "val_mse": 2.295377016067505,
+      "mse_position": 2.140927791595459,
+      "mse_orientation": 2.6667349338531494,
+      "mse_gripper": 1.6446491479873657
+    },
+    {
+      "epoch": 15,
+      "val_mse": 2.698824882507324,
+      "mse_position": 2.365734338760376,
+      "mse_orientation": 3.169146776199341,
+      "mse_gripper": 2.287130832672119
+    },
+    {
+      "epoch": 16,
+      "val_mse": 3.0376529693603516,
+      "mse_position": 2.64937424659729,
+      "mse_orientation": 3.6654586791992188,
+      "mse_gripper": 2.319072723388672
+    },
+    {
+      "epoch": 17,
+      "val_mse": 2.789694309234619,
+      "mse_position": 2.317223310470581,
+      "mse_orientation": 3.299903631210327,
+      "mse_gripper": 2.676478147506714
+    },
+    {
+      "epoch": 18,
+      "val_mse": 2.9474310874938965,
+      "mse_position": 2.4571309089660645,
+      "mse_orientation": 3.5106611251831055,
+      "mse_gripper": 2.7286417484283447
+    },
+    {
+      "epoch": 19,
+      "val_mse": 3.1667933464050293,
+      "mse_position": 2.4572246074676514,
+      "mse_orientation": 3.967238664627075,
+      "mse_gripper": 2.8941662311553955
+    },
+    {
+      "epoch": 20,
+      "val_mse": 2.730832815170288,
+      "mse_position": 1.947122573852539,
+      "mse_orientation": 3.4868240356445312,
+      "mse_gripper": 2.813990831375122
+    },
+    {
+      "epoch": 21,
+      "val_mse": 2.89809513092041,
+      "mse_position": 2.3021628856658936,
+      "mse_orientation": 3.535351276397705,
+      "mse_gripper": 2.774122714996338
+    },
+    {
+      "epoch": 22,
+      "val_mse": 2.6386656761169434,
+      "mse_position": 1.9663255214691162,
+      "mse_orientation": 3.370471954345703,
+      "mse_gripper": 2.460268259048462
+    },
+    {
+      "epoch": 23,
+      "val_mse": 2.8786935806274414,
+      "mse_position": 2.022043466567993,
+      "mse_orientation": 3.782094955444336,
+      "mse_gripper": 2.73844051361084
+    },
+    {
+      "epoch": 24,
+      "val_mse": 2.9090139865875244,
+      "mse_position": 2.248558282852173,
+      "mse_orientation": 3.577498197555542,
+      "mse_gripper": 2.8849287033081055
+    },
+    {
+      "epoch": 25,
+      "val_mse": 2.5439727306365967,
+      "mse_position": 2.003432035446167,
+      "mse_orientation": 3.092695713043213,
+      "mse_gripper": 2.5194272994995117
+    },
+    {
+      "epoch": 26,
+      "val_mse": 3.0166187286376953,
+      "mse_position": 2.0074965953826904,
+      "mse_orientation": 4.008370876312256,
+      "mse_gripper": 3.0687286853790283
+    },
+    {
+      "epoch": 27,
+      "val_mse": 2.8252220153808594,
+      "mse_position": 1.7723045349121094,
+      "mse_orientation": 3.8219709396362305,
+      "mse_gripper": 2.993726968765259
+    },
+    {
+      "epoch": 28,
+      "val_mse": 3.086179256439209,
+      "mse_position": 2.0987534523010254,
+      "mse_orientation": 4.148837089538574,
+      "mse_gripper": 2.860482692718506
+    },
+    {
+      "epoch": 29,
+      "val_mse": 3.1425209045410156,
+      "mse_position": 2.0971484184265137,
+      "mse_orientation": 4.145418167114258,
+      "mse_gripper": 3.2699460983276367
+    },
+    {
+      "epoch": 30,
+      "val_mse": 2.9119694232940674,
+      "mse_position": 1.9900740385055542,
+      "mse_orientation": 3.777801275253296,
+      "mse_gripper": 3.080155611038208
+    },
+    {
+      "epoch": 31,
+      "val_mse": 3.265249252319336,
+      "mse_position": 2.0896949768066406,
+      "mse_orientation": 4.343841552734375,
+      "mse_gripper": 3.556133985519409
+    },
+    {
+      "epoch": 32,
+      "val_mse": 3.154768228530884,
+      "mse_position": 2.0291190147399902,
+      "mse_orientation": 4.106111526489258,
+      "mse_gripper": 3.6776866912841797
+    },
+    {
+      "epoch": 33,
+      "val_mse": 2.8226380348205566,
+      "mse_position": 1.8338814973831177,
+      "mse_orientation": 3.5750479698181152,
+      "mse_gripper": 3.53167724609375
+    },
+    {
+      "epoch": 34,
+      "val_mse": 3.0514018535614014,
+      "mse_position": 1.9378873109817505,
+      "mse_orientation": 4.022556304931641,
+      "mse_gripper": 3.4784834384918213
+    },
+    {
+      "epoch": 35,
+      "val_mse": 2.9203622341156006,
+      "mse_position": 1.9617539644241333,
+      "mse_orientation": 3.583961009979248,
+      "mse_gripper": 3.805392265319824
+    },
+    {
+      "epoch": 36,
+      "val_mse": 2.922564744949341,
+      "mse_position": 1.799320101737976,
+      "mse_orientation": 3.922093152999878,
+      "mse_gripper": 3.293715715408325
+    },
+    {
+      "epoch": 37,
+      "val_mse": 2.926562786102295,
+      "mse_position": 1.8280808925628662,
+      "mse_orientation": 3.8616628646850586,
+      "mse_gripper": 3.4167063236236572
+    },
+    {
+      "epoch": 38,
+      "val_mse": 2.973820686340332,
+      "mse_position": 2.080564260482788,
+      "mse_orientation": 3.59456729888916,
+      "mse_gripper": 3.791351795196533
+    },
+    {
+      "epoch": 39,
+      "val_mse": 3.2290449142456055,
+      "mse_position": 1.9947577714920044,
+      "mse_orientation": 4.261961936950684,
+      "mse_gripper": 3.8331539630889893
+    },
+    {
+      "epoch": 40,
+      "val_mse": 2.786271333694458,
+      "mse_position": 1.7815650701522827,
+      "mse_orientation": 3.5994834899902344,
+      "mse_gripper": 3.3607559204101562
+    }
+  ],
+  "n_train": 19000,
+  "n_val": 11969,
+  "in_dim": 2048
+}

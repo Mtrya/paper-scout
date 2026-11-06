@@ -13,6 +13,15 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-11-05 — 2026-11-03 至 2026-11-05(冻结先验归因探针 × 语料审计 × TNAS 复现)
+- Doc: https://fudan-nlp.feishu.cn/docx/UA4mdh5TBo6YNPxodQ7cYXTtnae
+- Run: runs/2026-11-05-dreamx-primesim-tnas/
+- Deep threads: DreamX × LARYBench 冻结先验归因探针 (2611.05377, 2604.11689), PrimeSim 语料审计与开源核查 (2611.04870), Say the Same Act Differently TNAS InstructVLA 侧复现 (2611.04166)
+- Covered papers: 2611.05377, 2604.11689, 2611.04870, 2611.04166
+- Shortlisted papers: 2611.06918 (NEO-VLA), 2611.04391 (H2RB), 2611.05163 (RoboTryOn), 2611.02497 (RoboColosseum), 2611.02782 (History Forcing), 2611.04449 (Near-Zero Token Embeddings), 2611.05306 (You don't need long context), 2611.05609 (On-Policy Distillation 泛化上限)
+- 背景: DreamX 线程跑了 15 臂冻结先验探针(Cosmos-Predict2.5-2B,LARYBench CALVIN 两帧回归,train 19,000 / val 11,969,均值地板 A0=0.987):VAE 潜空间 attentive probe 0.836–0.943 破地板、LARY 官方巨型 MLP(152M)仅到 0.818(位置 0.813→0.252 而朝向 0.718→1.257,容量做子维度再分配);DiT σ=1.0 特征层曲线非单调 l13=0.898 唯一破地板,l20 最差 1.185,巨型 MLP 在 DiT 上 epoch 1 即过拟合。DreamX 表 1 裁掉 LARY 原表全部冻结编码器基线(DINOv3 0.22 等)、混用两帧与恢复中间帧两协议、LARY 发布版只有端点帧使第三方无法复现其评测条件;其 0.15 与冻结先验之间约六倍差距归于 LoRA 训练与致密帧输入。PrimeSim 语料表帧率级属实(RT-1 3.17Hz/Bridge 5.05Hz 吻合原生控制频率),DROID 510h 含未成功轨迹,InternData-A1 4,000h 被从 sim 重划为 real,In-House 9,540h(31.7%)不可审计;WorldSimProbe 五基线 100% 照录原论文;仓库三占位文件假开源。TNAS 复现(启智 4090,200 例):ρ 均值 6.36%/中位 5.92%(论文 5.28%/4.90%),等范数 q=1 位移 tnas 0.161 = rand 16 倍、nll 7.6 倍,KL 2.34e-2 vs 论文 2.20e-2 几乎逐位;位移绝对值系统性高论文约 45%(层索引 0/1-indexed 歧义)。复现三坑:推理 ckpt 全冻结须手动解冻、autograd 目标勿用切片视图、flow 初始噪声必须配对(否则全方向假阳性 ~1.0)。
+- 执行教训: 两套守门进程曾并发重复跑同一探针链(setsid 旧守门未被 ps grep 发现);大特征实验前先写守门脚本并验证存活;编辑闸会把正确的 11,969 改成事实源里写错的 11,970——事实源本身先对齐磁盘真值;`push_report.py` 用 scout-exp venv(需 PIL)。
+
 ## 2026-11-03 — 2026-10-29 至 2026-11-03(WAM 动作头读什么 × 空间状态探针 × harness 归因)
 - Doc: https://fudan-nlp.feishu.cn/docx/UMDPdhA0vovI4wxc3ZYcJFIQnud
 - Run: runs/2026-11-03-wam-readout/

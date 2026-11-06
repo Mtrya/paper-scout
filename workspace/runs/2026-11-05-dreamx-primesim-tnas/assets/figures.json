@@ -1,0 +1,34 @@
+{
+  "dreamx:concept": {
+    "file": "assets/concept_figure_final.png",
+    "caption": "DreamX 的概念图:同一个冻结的视频扩散模型既是编码器也是解码器,中间的潜动作空间支撑动作回归、策略评估与世界模型三类下游用法。"
+  },
+  "dreamx:method": {
+    "file": "assets/dreamx_method_main_fin.png",
+    "caption": "DreamX 的方法:编码器与解码器共享冻结的 Cosmos-Predict2.5 主干,LoRA 适配与一组可学习的潜动作 query 是唯一被训练的部分;注意力掩码决定 query 能读到哪些帧的特征。"
+  },
+  "dreamx:perturb": {
+    "file": "assets/perturbation_figure.png",
+    "caption": "DreamX 自己的零化对照:上排原始生成,中排加噪,下排把潜动作 query 全部置零——机械臂仍然在动,只是不再执行任务;运动量保留 45.6%。"
+  },
+  "primesim:teaser": {
+    "file": "assets/primesim_teaser.png",
+    "caption": "PrimeSim 的能力总览:以 Wan2.2-TI2V-5B 为底座的跨本体机器人模拟器,支持动作条件生成、策略评估与世界模型内强化学习。"
+  },
+  "primesim:pipeline": {
+    "file": "assets/primesim_pipeline.png",
+    "caption": "PrimeSim 的训练管线:30,110 小时跨本体语料的中间训练加四阶段后训练,其中 9,540 小时私有数据占 31.7%。"
+  },
+  "tnas:demo": {
+    "file": "assets/tnas_demo.png",
+    "caption": "论文的核心演示:同一句理由(保持车距)逐字不变,干净输入下模型停车,沿 TNAS 方向扰动后车辆继续行驶。"
+  },
+  "tnas:probe": {
+    "file": "assets/tnas_probe.png",
+    "caption": "我们复现的等范数干预扫描(200 个 Bridge 样本):左,动作位移随干预幅度增长,tnas 方向全程领先随机方向约一个数量级;右,位移-文本 KL 权衡,tnas 占据高位移、低 KL 的角落,文本梯度方向(nll/margin)用二十倍的文本漂移换不到一半的动作位移。"
+  },
+  "dreamx:probe": {
+    "file": "assets/dreamx_probe_calvin.png",
+    "caption": "我们的探针结果与论文锚点:绿色为 DreamX 读出规模的 attentive 探针,深绿为 LARY 官方规模的拉直 MLP;虚线是均值地板。冻结 Cosmos 先验里能破地板的只有 VAE 潜空间与 DiT 第 13 层,与锚点(0.22–0.39)的差距主要来自特征而非读出器容量。"
+  }
+}
