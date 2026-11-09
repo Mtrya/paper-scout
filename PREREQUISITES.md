@@ -13,15 +13,17 @@ Paper Scout has no installer — but a run touches several external tools. This 
   - *If missing:* runs still happen, but nothing is versioned and `scout.sh` aborts (it requires a clean worktree on `main`).
 - **GitHub CLI (`gh`)** — PR creation, CI watching, and merge during finalization.
   - *If missing:* the run finishes locally; the agent reports the branch and commit instead of opening a PR.
-- **Python 3** (stdlib only) — runs `verify_run.py`, the machine-checkable run-packet gate.
-  - *If missing:* no local verification; the `verify-run` GitHub Action still gates PRs remotely.
+- **Python 3** (stdlib only) — runs `verify_run.py`, the machine-checkable run-packet gate, and the shared RSS/Atom parser.
+  - *If missing:* no local verification or feed parsing; the `verify-run` GitHub Action still gates PRs remotely.
 - **curl, unzip** — arXiv PDF download and MinerU output handling in the `paper-source` scripts.
   - *If missing:* the PDF reading path fails; the agent falls back to metadata-only scouting.
 
-## Paper sources and reading
+## Research sources and reading
 
 - **Hugging Face `hf` CLI** — the default recent-paper pool (trending/daily lists, metadata, keyword search).
   - *If missing:* no default pool. The agent is instructed to use whatever other paper sources the environment offers, but expect thinner scouting.
+- **Scientific Spaces RSS** — recent research essays from `spaces.ac.cn`; selected full text comes from the public `spaces-index` mirror or the original site.
+  - *If unreachable:* skip this source and continue with the other pools; no local mirror or crawler is required.
 - **MinerU, local install** — `uv tool install 'mineru[all]'`, plus model weights (`mineru-models-download -s modelscope -m pipeline` if the automatic download fails). Used for full-text reading with reliable figure/table extraction.
   - *If missing:* deep dives lose their main full-text source; the agent falls back to abstract-level reading or other converters, and investigations get shallower.
 
