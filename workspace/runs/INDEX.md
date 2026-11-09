@@ -13,6 +13,13 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-11-09 — 2026-11-06 至 2026-11-09；另含点名 RoboTTT 与科学空间前序文章
+- Doc: https://fudan-nlp.feishu.cn/docx/L0s0dYFRmohSBWxK2vNckRv6nyg
+- Run: runs/2026-11-09-robotttt-attention-compression/
+- Deep threads: Attention→TTT 写入谱与读出几何 (scientific-spaces:11823, scientific-spaces:11993, 2602.21204), RoboTTT 末层更新配对实验 (2607.15275)
+- Covered papers: scientific-spaces:11823, scientific-spaces:11993, 2602.21204, 2607.15275, 2611.08376
+- Shortlisted papers: 2611.06817, 2611.02660, 2611.09382, 2611.08376, 2611.08373
+
 ## 2026-11-05 — 2026-11-03 至 2026-11-05(冻结先验归因探针 × 语料审计 × TNAS 复现)
 - Doc: https://fudan-nlp.feishu.cn/docx/UA4mdh5TBo6YNPxodQ7cYXTtnae
 - Run: runs/2026-11-05-dreamx-primesim-tnas/

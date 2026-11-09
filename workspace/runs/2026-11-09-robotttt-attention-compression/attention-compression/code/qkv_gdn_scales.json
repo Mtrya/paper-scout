@@ -1,0 +1,3761 @@
+{
+  "purpose": "Test whether \u03ba at the 1/d_head scale removes the GDN recurrence's early spectral instability, and whether stable outputs improve over VaLA.",
+  "decision": "Distinguish a normalization failure from an intrinsically unhelpful delta correction; do not interpret inf/nan as task error.",
+  "config": {
+    "model_dir": "/inspire/qb-ilm/project/exploration-topic/ky26021/attention-1109/models/Qwen3-0.6B",
+    "text_file": "/inspire/qb-ilm/project/exploration-topic/ky26021/attention-1109/data/wikitext-2-raw-validation.txt",
+    "layers": [
+      0,
+      13,
+      27
+    ],
+    "sequences": 4,
+    "length": 512,
+    "device": "cuda",
+    "scales": [
+      0.0,
+      0.001953125,
+      0.00390625,
+      0.0078125,
+      0.015625,
+      0.03125,
+      0.0625,
+      0.125
+    ]
+  },
+  "metadata": {
+    "model_dir": "/inspire/qb-ilm/project/exploration-topic/ky26021/attention-1109/models/Qwen3-0.6B",
+    "text_sha256": "714a24a5de7459876f7cfdc64837e551dd7cde2a51f95b763ee083fff273e307",
+    "token_count_available": 262211,
+    "sequences": 4,
+    "length": 512,
+    "torch_dtype": "bfloat16",
+    "attention_probe_length": 512,
+    "attention_probe_max_abs_by_layer": {
+      "0": 0.0,
+      "13": 3.0994415283203125e-06,
+      "27": 0.0006103515625
+    }
+  },
+  "aggregate": {
+    "methods": {
+      "mean": {
+        "all": {
+          "count_vectors": 98304,
+          "nmse": 1.6904203228042585,
+          "cosine": 0.4668515049838044,
+          "output_target_rms": 1.0465853137140746,
+          "layer_count": 3
+        },
+        "1-16": {
+          "count_vectors": 3072,
+          "nmse": 2.009840913027164,
+          "cosine": 0.6030442368584393,
+          "output_target_rms": 1.450254188402145,
+          "layer_count": 3
+        },
+        "17-32": {
+          "count_vectors": 3072,
+          "nmse": 1.97729057373792,
+          "cosine": 0.5096843550579139,
+          "output_target_rms": 1.314691090840849,
+          "layer_count": 3
+        },
+        "33-64": {
+          "count_vectors": 6144,
+          "nmse": 2.060343466277337,
+          "cosine": 0.45864770248235454,
+          "output_target_rms": 1.2700728517242736,
+          "layer_count": 3
+        },
+        "65-128": {
+          "count_vectors": 12288,
+          "nmse": 1.8138314533303503,
+          "cosine": 0.4771121013907846,
+          "output_target_rms": 1.1274200008744175,
+          "layer_count": 3
+        },
+        "129-256": {
+          "count_vectors": 24576,
+          "nmse": 1.703180121455177,
+          "cosine": 0.45975488713259144,
+          "output_target_rms": 1.0386291985869283,
+          "layer_count": 3
+        },
+        "257-512": {
+          "count_vectors": 49152,
+          "nmse": 1.6015073893876075,
+          "cosine": 0.45767104124855057,
+          "output_target_rms": 0.9606615954864378,
+          "layer_count": 3
+        }
+      },
+      "vala": {
+        "all": {
+          "count_vectors": 98304,
+          "nmse": 2.3622118392204006,
+          "cosine": 0.5780035791563429,
+          "output_target_rms": 1.6793035169682409,
+          "layer_count": 3
+        },
+        "1-16": {
+          "count_vectors": 3072,
+          "nmse": 3.025445095825147,
+          "cosine": 0.7266406394679154,
+          "output_target_rms": 2.159702398049869,
+          "layer_count": 3
+        },
+        "17-32": {
+          "count_vectors": 3072,
+          "nmse": 2.3297700871578138,
+          "cosine": 0.691277498057164,
+          "output_target_rms": 1.857584538982219,
+          "layer_count": 3
+        },
+        "33-64": {
+          "count_vectors": 6144,
+          "nmse": 2.443518913958876,
+          "cosine": 0.6452898696883214,
+          "output_target_rms": 1.7961902886629222,
+          "layer_count": 3
+        },
+        "65-128": {
+          "count_vectors": 12288,
+          "nmse": 2.5326547542766664,
+          "cosine": 0.6196114051103007,
+          "output_target_rms": 1.7618034748788152,
+          "layer_count": 3
+        },
+        "129-256": {
+          "count_vectors": 24576,
+          "nmse": 2.4629363846265533,
+          "cosine": 0.5678413181270853,
+          "output_target_rms": 1.6849924009934598,
+          "layer_count": 3
+        },
+        "257-512": {
+          "count_vectors": 49152,
+          "nmse": 2.2554593593209837,
+          "cosine": 0.5479025306652103,
+          "output_target_rms": 1.6019387524703663,
+          "layer_count": 3
+        }
+      },
+      "0.0": {
+        "all": {
+          "count_vectors": 98304,
+          "nmse": 2.362211839220401,
+          "cosine": 0.5780035791563428,
+          "output_target_rms": 1.6793035169682415,
+          "layer_count": 3
+        },
+        "1-16": {
+          "count_vectors": 3072,
+          "nmse": 3.025445095825147,
+          "cosine": 0.7266406394679154,
+          "output_target_rms": 2.159702398049869,
+          "layer_count": 3
+        },
+        "17-32": {
+          "count_vectors": 3072,
+          "nmse": 2.3297700871578146,
+          "cosine": 0.691277498057164,
+          "output_target_rms": 1.8575845389822192,
+          "layer_count": 3
+        },
+        "33-64": {
+          "count_vectors": 6144,
+          "nmse": 2.443518913958876,
+          "cosine": 0.6452898696883214,
+          "output_target_rms": 1.7961902886629222,
+          "layer_count": 3
+        },
+        "65-128": {
+          "count_vectors": 12288,
+          "nmse": 2.5326547542766673,
+          "cosine": 0.6196114051103007,
+          "output_target_rms": 1.7618034748788156,
+          "layer_count": 3
+        },
+        "129-256": {
+          "count_vectors": 24576,
+          "nmse": 2.4629363846265537,
+          "cosine": 0.5678413181270853,
+          "output_target_rms": 1.68499240099346,
+          "layer_count": 3
+        },
+        "257-512": {
+          "count_vectors": 49152,
+          "nmse": 2.255459359320984,
+          "cosine": 0.5479025306652102,
+          "output_target_rms": 1.6019387524703668,
+          "layer_count": 3
+        }
+      },
+      "0.001953125": {
+        "all": {
+          "count_vectors": 98304,
+          "nmse": 122.71536221795674,
+          "cosine": 0.5577490715396051,
+          "output_target_rms": 7.591372690803137,
+          "layer_count": 3
+        },
+        "1-16": {
+          "count_vectors": 3072,
+          "nmse": 2016.5131297990754,
+          "cosine": 0.6428093764881063,
+          "output_target_rms": 27.422395014366746,
+          "layer_count": 3
+        },
+        "17-32": {
+          "count_vectors": 3072,
+          "nmse": 951.0014274857303,
+          "cosine": 0.6158003541857642,
+          "output_target_rms": 19.17670325288989,
+          "layer_count": 3
+        },
+        "33-64": {
+          "count_vectors": 6144,
+          "nmse": 131.0754095821525,
+          "cosine": 0.5940775982324876,
+          "output_target_rms": 7.9133250891596605,
+          "layer_count": 3
+        },
+        "65-128": {
+          "count_vectors": 12288,
+          "nmse": 31.60351869145713,
+          "cosine": 0.5857234172257338,
+          "output_target_rms": 4.470935656754105,
+          "layer_count": 3
+        },
+        "129-256": {
+          "count_vectors": 24576,
+          "nmse": 9.496603930702173,
+          "cosine": 0.5485452171532165,
+          "output_target_rms": 2.839161264436168,
+          "layer_count": 3
+        },
+        "257-512": {
+          "count_vectors": 49152,
+          "nmse": 4.063354347434069,
+          "cosine": 0.5418718722499906,
+          "output_target_rms": 2.0459212547862786,
+          "layer_count": 3
+        }
+      },
+      "0.00390625": {
+        "all": {
+          "count_vectors": 98304,
+          "nmse": 196963934.79287317,
+          "cosine": 0.4915331311126639,
+          "output_target_rms": 8103.9850676387,
+          "layer_count": 3
+        },
+        "1-16": {
+          "count_vectors": 3072,
+          "nmse": 1334960053.8762457,
+          "cosine": 0.5967872220236131,
+          "output_target_rms": 21096.204944522866,
+          "layer_count": 3
+        },
+        "17-32": {
+          "count_vectors": 3072,
+          "nmse": 3302328256.0598598,
+          "cosine": 0.5508006133051088,
+          "output_target_rms": 33179.31520104403,
+          "layer_count": 3
+        },
+        "33-64": {
+          "count_vectors": 6144,
+          "nmse": 297468497.51034266,
+          "cosine": 0.5293723832063048,
+          "output_target_rms": 9959.05508069915,
+          "layer_count": 3
+        },
+        "65-128": {
+          "count_vectors": 12288,
+          "nmse": 86481616.12776385,
+          "cosine": 0.5135226264470736,
+          "output_target_rms": 5370.417214247264,
+          "layer_count": 3
+        },
+        "129-256": {
+          "count_vectors": 24576,
+          "nmse": 16281024.213291617,
+          "cosine": 0.4768007886428125,
+          "output_target_rms": 2330.8405758870554,
+          "layer_count": 3
+        },
+        "257-512": {
+          "count_vectors": 49152,
+          "nmse": 5190637.291255126,
+          "cosine": 0.47838942368332,
+          "output_target_rms": 1316.5456452749352,
+          "layer_count": 3
+        }
+      },
+      "0.0078125": {
+        "all": {
+          "count_vectors": 98304,
+          "nmse": 2.2769209701909567e+23,
+          "cosine": 0.45065928694357166,
+          "output_target_rms": 275494765238.2789,
+          "layer_count": 3
+        },
+        "1-16": {
+          "count_vectors": 3072,
+          "nmse": 3.49671454502584e+17,
+          "cosine": 0.5663052575209065,
+          "output_target_rms": 341404675.5892193,
+          "layer_count": 3
+        },
+        "17-32": {
+          "count_vectors": 3072,
+          "nmse": 9.301064529566311e+22,
+          "cosine": 0.5179257150939431,
+          "output_target_rms": 176078245199.0002,
+          "layer_count": 3
+        },
+        "33-64": {
+          "count_vectors": 6144,
+          "nmse": 2.5684536365423023e+24,
+          "cosine": 0.49372566367837506,
+          "output_target_rms": 925284395298.6484,
+          "layer_count": 3
+        },
+        "65-128": {
+          "count_vectors": 12288,
+          "nmse": 2.358129841354724e+23,
+          "cosine": 0.476624290293177,
+          "output_target_rms": 280364634085.4767,
+          "layer_count": 3
+        },
+        "129-256": {
+          "count_vectors": 24576,
+          "nmse": 6.962734260544992e+22,
+          "cosine": 0.43616378284539836,
+          "output_target_rms": 152345378013.86945,
+          "layer_count": 3
+        },
+        "257-512": {
+          "count_vectors": 49152,
+          "nmse": 2.3146521533725492e+22,
+          "cosine": 0.43460046614292486,
+          "output_target_rms": 87837959778.84145,
+          "layer_count": 3
+        }
+      },
+      "0.015625": {
+        "all": {
+          "count_vectors": 98304,
+          "nmse": 5.444237678983579e+58,
+          "cosine": 0.4285973324384051,
+          "output_target_rms": 1.347125047274575e+29,
+          "layer_count": 3
+        },
+        "1-16": {
+          "count_vectors": 3072,
+          "nmse": 1.590419817618411e+26,
+          "cosine": 0.5285649748281868,
+          "output_target_rms": 7281070932262.325,
+          "layer_count": 3
+        },
+        "17-32": {
+          "count_vectors": 3072,
+          "nmse": 3.198755003996294e+45,
+          "cosine": 0.47538012143844255,
+          "output_target_rms": 3.2653509275402e+22,
+          "layer_count": 3
+        },
+        "33-64": {
+          "count_vectors": 6144,
+          "nmse": 1.3425960463942844e+58,
+          "cosine": 0.45567765091757134,
+          "output_target_rms": 6.68978337066875e+28,
+          "layer_count": 3
+        },
+        "65-128": {
+          "count_vectors": 12288,
+          "nmse": 2.4788958551569392e+59,
+          "cosine": 0.4448896440163019,
+          "output_target_rms": 2.8745410388193214e+29,
+          "layer_count": 3
+        },
+        "129-256": {
+          "count_vectors": 24576,
+          "nmse": 6.5012119824833e+58,
+          "cosine": 0.4117726810524232,
+          "output_target_rms": 1.4720973679847969e+29,
+          "layer_count": 3
+        },
+        "257-512": {
+          "count_vectors": 49152,
+          "nmse": 1.4381115836546475e+58,
+          "cosine": 0.42037963846516235,
+          "output_target_rms": 6.923658916244232e+28,
+          "layer_count": 3
+        }
+      },
+      "0.03125": {
+        "all": {
+          "count_vectors": 98304,
+          "nmse": 3.667523900773054e+127,
+          "cosine": 0.38850283644804234,
+          "output_target_rms": 3.496438140342756e+63,
+          "layer_count": 3
+        },
+        "1-16": {
+          "count_vectors": 3072,
+          "nmse": 2.3783235102700056e+34,
+          "cosine": 0.48820682090129147,
+          "output_target_rms": 8.90378853872516e+16,
+          "layer_count": 3
+        },
+        "17-32": {
+          "count_vectors": 3072,
+          "nmse": 1.4376297357732333e+63,
+          "cosine": 0.4520462546676272,
+          "output_target_rms": 2.189086366328225e+31,
+          "layer_count": 3
+        },
+        "33-64": {
+          "count_vectors": 6144,
+          "nmse": 4.2469991216056946e+104,
+          "cosine": 0.4241852779697632,
+          "output_target_rms": 1.1898177901967027e+52,
+          "layer_count": 3
+        },
+        "65-128": {
+          "count_vectors": 12288,
+          "nmse": 5.309909709334983e+126,
+          "cosine": 0.40714910643041463,
+          "output_target_rms": 1.3304021584136358e+63,
+          "layer_count": 3
+        },
+        "129-256": {
+          "count_vectors": 24576,
+          "nmse": 1.23968354148329e+128,
+          "cosine": 0.3728282049912524,
+          "output_target_rms": 6.428280074491906e+63,
+          "layer_count": 3
+        },
+        "257-512": {
+          "count_vectors": 49152,
+          "nmse": 1.1348018832115205e+127,
+          "cosine": 0.377015316823577,
+          "output_target_rms": 1.9449094950764167e+63,
+          "layer_count": 3
+        }
+      },
+      "0.0625": {
+        "all": {
+          "count_vectors": 98304,
+          "nmse": 4.144817903661374e+259,
+          "cosine": 0.37547787722773757,
+          "output_target_rms": 3.7169960558051777e+129,
+          "layer_count": 3
+        },
+        "1-16": {
+          "count_vectors": 3072,
+          "nmse": 3.2903149547913805e+42,
+          "cosine": 0.4166078227938818,
+          "output_target_rms": 1.047268662568076e+21,
+          "layer_count": 3
+        },
+        "17-32": {
+          "count_vectors": 3072,
+          "nmse": 7.307328023631856e+82,
+          "cosine": 0.4230837124177563,
+          "output_target_rms": 1.5606972825879096e+41,
+          "layer_count": 3
+        },
+        "33-64": {
+          "count_vectors": 6144,
+          "nmse": 4.511561864904167e+145,
+          "cosine": 0.4043381596054987,
+          "output_target_rms": 3.8779555889257625e+72,
+          "layer_count": 3
+        },
+        "65-128": {
+          "count_vectors": 12288,
+          "nmse": 9.982727273239985e+216,
+          "cosine": 0.3959246166843706,
+          "output_target_rms": 1.8241643998682414e+108,
+          "layer_count": 3
+        },
+        "129-256": {
+          "count_vectors": 24576,
+          "nmse": 9.243966793472336e+251,
+          "cosine": 0.3620840071081162,
+          "output_target_rms": 5.5509659199915634e+125,
+          "layer_count": 3
+        },
+        "257-512": {
+          "count_vectors": 49152,
+          "nmse": 8.34903747278964e+259,
+          "cosine": 0.3679096058289096,
+          "output_target_rms": 5.275426514444003e+129,
+          "layer_count": 3
+        }
+      },
+      "0.125": {
+        "all": {
+          "count_vectors": 98304,
+          "nmse": Infinity,
+          "cosine": 0.3144873560275446,
+          "output_target_rms": Infinity,
+          "layer_count": 3
+        },
+        "1-16": {
+          "count_vectors": 3072,
+          "nmse": 9.8697431140222e+50,
+          "cosine": 0.22681402915081614,
+          "output_target_rms": 1.813812110264107e+25,
+          "layer_count": 3
+        },
+        "17-32": {
+          "count_vectors": 3072,
+          "nmse": 6.862100332443298e+101,
+          "cosine": 0.20285947361876325,
+          "output_target_rms": 4.782642342347062e+50,
+          "layer_count": 3
+        },
+        "33-64": {
+          "count_vectors": 6144,
+          "nmse": 9.769120098771871e+182,
+          "cosine": 0.2511244874071353,
+          "output_target_rms": 1.804542425729384e+91,
+          "layer_count": 3
+        },
+        "65-128": {
+          "count_vectors": 12288,
+          "nmse": 5.135870596256139e+298,
+          "cosine": 0.3049250155889141,
+          "output_target_rms": 1.308417695317024e+149,
+          "layer_count": 3
+        },
+        "129-256": {
+          "count_vectors": 24576,
+          "nmse": Infinity,
+          "cosine": 0.3140639129358581,
+          "output_target_rms": Infinity,
+          "layer_count": 3
+        },
+        "257-512": {
+          "count_vectors": 49152,
+          "nmse": Infinity,
+          "cosine": 0.3374663468409409,
+          "output_target_rms": Infinity,
+          "layer_count": 3
+        }
+      }
+    },
+    "stats": {
+      "0.0": {
+        "1-16": {
+          "state_fro_mean": 147.71255934976998,
+          "state_fro_max": 807.5996948002268,
+          "centered_sq_mean": 1461.5609011677377,
+          "multiplier_mean": 0.788704437923188,
+          "multiplier_min": 0.0,
+          "multiplier_max": 0.9375,
+          "noncontractive_fraction": 0.0,
+          "layer_count": 3
+        },
+        "17-32": {
+          "state_fro_mean": 120.75254157524843,
+          "state_fro_max": 403.8359712517194,
+          "centered_sq_mean": 1747.678262579642,
+          "multiplier_mean": 0.9576396123620295,
+          "multiplier_min": 0.9411764705882353,
+          "multiplier_max": 0.96875,
+          "noncontractive_fraction": 0.0,
+          "layer_count": 3
+        },
+        "33-64": {
+          "state_fro_mean": 112.64647332801582,
+          "state_fro_max": 334.03885998808505,
+          "centered_sq_mean": 1757.869683179196,
+          "multiplier_mean": 0.9785813841165861,
+          "multiplier_min": 0.9696969696969697,
+          "multiplier_max": 0.984375,
+          "noncontractive_fraction": 0.0,
+          "layer_count": 3
+        },
+        "65-128": {
+          "state_fro_mean": 95.37746468875639,
+          "state_fro_max": 268.5822560018097,
+          "centered_sq_mean": 1811.7515958979482,
+          "multiplier_mean": 0.9892303720486968,
+          "multiplier_min": 0.9846153846153847,
+          "multiplier_max": 0.9921875,
+          "noncontractive_fraction": 0.0,
+          "layer_count": 3
+        },
+        "129-256": {
+          "state_fro_mean": 78.71966885017703,
+          "state_fro_max": 225.3042225071075,
+          "centered_sq_mean": 1971.1850084608986,
+          "multiplier_mean": 0.9946000166388429,
+          "multiplier_min": 0.9922480620155039,
+          "multiplier_max": 0.99609375,
+          "noncontractive_fraction": 0.0,
+          "layer_count": 3
+        },
+        "257-512": {
+          "state_fro_mean": 71.95798987332661,
+          "state_fro_max": 231.75021955653415,
+          "centered_sq_mean": 1883.9322992542118,
+          "multiplier_mean": 0.99729620479792,
+          "multiplier_min": 0.9961089494163424,
+          "multiplier_max": 0.998046875,
+          "noncontractive_fraction": 0.0,
+          "layer_count": 3
+        }
+      },
+      "0.001953125": {
+        "1-16": {
+          "state_fro_mean": 230.1465302614349,
+          "state_fro_max": 9940.888815602248,
+          "centered_sq_mean": 1461.5609011677377,
+          "multiplier_mean": 0.39073326938076897,
+          "multiplier_min": -14.66195541633554,
+          "multiplier_max": 0.9312258784703316,
+          "noncontractive_fraction": 0.061197916666666664,
+          "layer_count": 3
+        },
+        "17-32": {
+          "state_fro_mean": 153.19612265088247,
+          "state_fro_max": 2759.2153711284877,
+          "centered_sq_mean": 1747.678262579642,
+          "multiplier_mean": 0.8125654158446447,
+          "multiplier_min": -1.6502020399885664,
+          "multiplier_max": 0.9631107341506052,
+          "noncontractive_fraction": 0.007161458333333333,
+          "layer_count": 3
+        },
+        "33-64": {
+          "state_fro_mean": 121.93495442283017,
+          "state_fro_max": 991.6489840754904,
+          "centered_sq_mean": 1757.869683179196,
+          "multiplier_mean": 0.904971383279359,
+          "multiplier_min": -1.6539663498043335,
+          "multiplier_max": 0.9812222912436134,
+          "noncontractive_fraction": 0.0003255208333333333,
+          "layer_count": 3
+        },
+        "65-128": {
+          "state_fro_mean": 94.79798195489924,
+          "state_fro_max": 497.95978820913274,
+          "centered_sq_mean": 1811.7515958979482,
+          "multiplier_mean": 0.9508619602413063,
+          "multiplier_min": -0.3006489259986407,
+          "multiplier_max": 0.9907386627450244,
+          "noncontractive_fraction": 0.0,
+          "layer_count": 3
+        },
+        "129-256": {
+          "state_fro_mean": 73.8921540761265,
+          "state_fro_max": 247.01859698421305,
+          "centered_sq_mean": 1971.1850084608986,
+          "multiplier_mean": 0.9739946405417594,
+          "multiplier_min": 0.2906472293688729,
+          "multiplier_max": 0.9952233501939665,
+          "noncontractive_fraction": 0.0,
+          "layer_count": 3
+        },
+        "257-512": {
+          "state_fro_mean": 65.1435302586848,
+          "state_fro_max": 221.30226544408575,
+          "centered_sq_mean": 1883.9322992542118,
+          "multiplier_mean": 0.9873202276866451,
+          "multiplier_min": 0.5143104605847104,
+          "multiplier_max": 0.9976063668586485,
+          "noncontractive_fraction": 0.0,
+          "layer_count": 3
+        }
+      },
+      "0.00390625": {
+        "1-16": {
+          "state_fro_mean": 60886.49862907302,
+          "state_fro_max": 13121809.07918558,
+          "centered_sq_mean": 1461.5609011677377,
+          "multiplier_mean": -0.007237899161650112,
+          "multiplier_min": -29.990577499337746,
+          "multiplier_max": 0.9249517569406631,
+          "noncontractive_fraction": 0.11393229166666667,
+          "layer_count": 3
+        },
+        "17-32": {
+          "state_fro_mean": 99142.6619768245,
+          "state_fro_max": 6544259.039145894,
+          "centered_sq_mean": 1747.678262579642,
+          "multiplier_mean": 0.66749121932726,
+          "multiplier_min": -4.247772501029765,
+          "multiplier_max": 0.9574714683012104,
+          "noncontractive_fraction": 0.043619791666666664,
+          "layer_count": 3
+        },
+        "33-64": {
+          "state_fro_mean": 33464.64022225271,
+          "state_fro_max": 2043138.1023853314,
+          "centered_sq_mean": 1757.869683179196,
+          "multiplier_mean": 0.831361382442132,
+          "multiplier_min": -4.278520934902785,
+          "multiplier_max": 0.9783175983602426,
+          "noncontractive_fraction": 0.007161458333333333,
+          "layer_count": 3
+        },
+        "65-128": {
+          "state_fro_mean": 15946.319952281161,
+          "state_fro_max": 866707.250498566,
+          "centered_sq_mean": 1811.7515958979482,
+          "multiplier_mean": 0.912493548433916,
+          "multiplier_min": -1.5870121377115671,
+          "multiplier_max": 0.9892898254900488,
+          "noncontractive_fraction": 0.0006510416666666666,
+          "layer_count": 3
+        },
+        "129-256": {
+          "state_fro_mean": 7868.675388581275,
+          "state_fro_max": 423784.47611955623,
+          "centered_sq_mean": 1971.1850084608986,
+          "multiplier_mean": 0.953389264444676,
+          "multiplier_min": -0.4123361145106619,
+          "multiplier_max": 0.9943529503879328,
+          "noncontractive_fraction": 0.0,
+          "layer_count": 3
+        },
+        "257-512": {
+          "state_fro_mean": 3916.045386694436,
+          "state_fro_max": 210313.82617413512,
+          "centered_sq_mean": 1883.9322992542118,
+          "multiplier_mean": 0.9773442505753701,
+          "multiplier_min": 0.03238031966566146,
+          "multiplier_max": 0.9971890055743191,
+          "noncontractive_fraction": 0.0,
+          "layer_count": 3
+        }
+      },
+      "0.0078125": {
+        "1-16": {
+          "state_fro_mean": 293671122.5792592,
+          "state_fro_max": 205525650674.33728,
+          "centered_sq_mean": 1461.5609011677377,
+          "multiplier_mean": -0.8031802362464883,
+          "multiplier_min": -60.64782166534216,
+          "multiplier_max": 0.9124035138813261,
+          "noncontractive_fraction": 0.16080729166666666,
+          "layer_count": 3
+        },
+        "17-32": {
+          "state_fro_mean": 257413243534.87476,
+          "state_fro_max": 125855616943970.2,
+          "centered_sq_mean": 1747.678262579642,
+          "multiplier_mean": 0.3773428262924905,
+          "multiplier_min": -9.442913423112161,
+          "multiplier_max": 0.9468930884176225,
+          "noncontractive_fraction": 0.09049479166666667,
+          "layer_count": 3
+        },
+        "33-64": {
+          "state_fro_mean": 1239643370146.507,
+          "state_fro_max": 371877899898739.9,
+          "centered_sq_mean": 1757.869683179196,
+          "multiplier_mean": 0.6841413807676778,
+          "multiplier_min": -9.527630105099687,
+          "multiplier_max": 0.972508212593501,
+          "noncontractive_fraction": 0.0390625,
+          "layer_count": 3
+        },
+        "65-128": {
+          "state_fro_mean": 477307456553.0701,
+          "state_fro_max": 62603425178580.336,
+          "centered_sq_mean": 1811.7515958979482,
+          "multiplier_mean": 0.835756724819135,
+          "multiplier_min": -4.15973856113742,
+          "multiplier_max": 0.9863921509800976,
+          "noncontractive_fraction": 0.008138020833333334,
+          "layer_count": 3
+        },
+        "129-256": {
+          "state_fro_mean": 234996660277.8358,
+          "state_fro_max": 31120832215760.637,
+          "centered_sq_mean": 1971.1850084608986,
+          "multiplier_mean": 0.9121785122505089,
+          "multiplier_min": -1.8183028022697312,
+          "multiplier_max": 0.9926121507758656,
+          "noncontractive_fraction": 0.0015462239583333333,
+          "layer_count": 3
+        },
+        "257-512": {
+          "state_fro_mean": 115826625555.3539,
+          "state_fro_max": 15382539789612.951,
+          "centered_sq_mean": 1883.9322992542118,
+          "multiplier_mean": 0.9573922963528201,
+          "multiplier_min": -0.9314799621724366,
+          "multiplier_max": 0.9963582091684401,
+          "noncontractive_fraction": 0.0,
+          "layer_count": 3
+        }
+      },
+      "0.015625": {
+        "1-16": {
+          "state_fro_mean": 3991951504595.9004,
+          "state_fro_max": 2519158794444554.0,
+          "centered_sq_mean": 1461.5609011677377,
+          "multiplier_mean": -2.395064910416164,
+          "multiplier_min": -121.96230999735099,
+          "multiplier_max": 0.8873070277626522,
+          "noncontractive_fraction": 0.22981770833333334,
+          "layer_count": 3
+        },
+        "17-32": {
+          "state_fro_mean": 4.237643223386523e+22,
+          "state_fro_max": 3.0161973452260494e+25,
+          "centered_sq_mean": 1747.678262579642,
+          "multiplier_mean": -0.2029539597770488,
+          "multiplier_min": -19.833195267276952,
+          "multiplier_max": 0.9271195101685783,
+          "noncontractive_fraction": 0.13997395833333334,
+          "layer_count": 3
+        },
+        "33-64": {
+          "state_fro_mean": 2.861663429648533e+28,
+          "state_fro_max": 1.8798308252061763e+31,
+          "centered_sq_mean": 1757.869683179196,
+          "multiplier_mean": 0.3897013774187698,
+          "multiplier_min": -20.02584844549349,
+          "multiplier_max": 0.9608894410600177,
+          "noncontractive_fraction": 0.08951822916666667,
+          "layer_count": 3
+        },
+        "65-128": {
+          "state_fro_mean": 4.111665175031047e+29,
+          "state_fro_max": 1.7859366296976915e+32,
+          "centered_sq_mean": 1811.7515958979482,
+          "multiplier_mean": 0.6822830775895731,
+          "multiplier_min": -9.305191407989126,
+          "multiplier_max": 0.9805968019601952,
+          "noncontractive_fraction": 0.039876302083333336,
+          "layer_count": 3
+        },
+        "129-256": {
+          "state_fro_mean": 1.689098227821292e+29,
+          "state_fro_max": 2.2251273243602504e+31,
+          "centered_sq_mean": 1971.1850084608986,
+          "multiplier_mean": 0.8297570078621749,
+          "multiplier_min": -4.630236177787871,
+          "multiplier_max": 0.9891305515517312,
+          "noncontractive_fraction": 0.007893880208333334,
+          "layer_count": 3
+        },
+        "257-512": {
+          "state_fro_mean": 7.937937922431018e+28,
+          "state_fro_max": 1.044096052848205e+31,
+          "centered_sq_mean": 1883.9322992542118,
+          "multiplier_mean": 0.9174883879077199,
+          "multiplier_min": -2.8592005258486326,
+          "multiplier_max": 0.9946966163566822,
+          "noncontractive_fraction": 0.0012613932291666667,
+          "layer_count": 3
+        }
+      },
+      "0.03125": {
+        "1-16": {
+          "state_fro_mean": 5.107452085173161e+16,
+          "state_fro_max": 3.215664300107292e+19,
+          "centered_sq_mean": 1461.5609011677377,
+          "multiplier_mean": -5.578834258755517,
+          "multiplier_min": -244.59128666136863,
+          "multiplier_max": 0.8371140555253045,
+          "noncontractive_fraction": 0.3216145833333333,
+          "layer_count": 3
+        },
+        "17-32": {
+          "state_fro_mean": 2.678285063468011e+31,
+          "state_fro_max": 1.9314863622008362e+34,
+          "centered_sq_mean": 1747.678262579642,
+          "multiplier_mean": -1.363547531916127,
+          "multiplier_min": -40.61375895560654,
+          "multiplier_max": 0.8880790782172842,
+          "noncontractive_fraction": 0.20377604166666666,
+          "layer_count": 3
+        },
+        "33-64": {
+          "state_fro_mean": 3.26326069243842e+51,
+          "state_fro_max": 3.216051295905813e+54,
+          "centered_sq_mean": 1757.869683179196,
+          "multiplier_mean": -0.1991786292790465,
+          "multiplier_min": -41.022285126281105,
+          "multiplier_max": 0.9376518979930513,
+          "noncontractive_fraction": 0.1396484375,
+          "layer_count": 3
+        },
+        "65-128": {
+          "state_fro_mean": 1.4693356223785835e+63,
+          "state_fro_max": 7.137685509661743e+65,
+          "centered_sq_mean": 1811.7515958979482,
+          "multiplier_mean": 0.3753357831304494,
+          "multiplier_min": -19.596097101692536,
+          "multiplier_max": 0.9690061039203904,
+          "noncontractive_fraction": 0.09163411458333333,
+          "layer_count": 3
+        },
+        "129-256": {
+          "state_fro_mean": 8.00599368653248e+63,
+          "state_fro_max": 2.0677593850833834e+66,
+          "centered_sq_mean": 1971.1850084608986,
+          "multiplier_mean": 0.664913999085507,
+          "multiplier_min": -10.254102928824148,
+          "multiplier_max": 0.9822237295951002,
+          "noncontractive_fraction": 0.04345703125,
+          "layer_count": 3
+        },
+        "257-512": {
+          "state_fro_mean": 3.162530508948718e+63,
+          "state_fro_max": 4.67162689977829e+65,
+          "centered_sq_mean": 1883.9322992542118,
+          "multiplier_mean": 0.8376805710175198,
+          "multiplier_min": -6.714641653201024,
+          "multiplier_max": 0.9913734307331663,
+          "noncontractive_fraction": 0.008951822916666666,
+          "layer_count": 3
+        }
+      },
+      "0.0625": {
+        "1-16": {
+          "state_fro_mean": 1.135567517455877e+21,
+          "state_fro_max": 7.38893607552664e+23,
+          "centered_sq_mean": 1461.5609011677377,
+          "multiplier_mean": -11.94637295543422,
+          "multiplier_min": -489.84923998940394,
+          "multiplier_max": 0.736728111050609,
+          "noncontractive_fraction": 0.4544270833333333,
+          "layer_count": 3
+        },
+        "17-32": {
+          "state_fro_mean": 1.167661715034215e+41,
+          "state_fro_max": 9.941385064201201e+43,
+          "centered_sq_mean": 1747.678262579642,
+          "multiplier_mean": -3.6847346761942834,
+          "multiplier_min": -82.17488633226571,
+          "multiplier_max": 0.8106409150552579,
+          "noncontractive_fraction": 0.2630208333333333,
+          "layer_count": 3
+        },
+        "33-64": {
+          "state_fro_mean": 9.625400987314098e+71,
+          "state_fro_max": 1.361534200195392e+75,
+          "centered_sq_mean": 1757.869683179196,
+          "multiplier_mean": -1.3769386426746788,
+          "multiplier_min": -83.01515848785633,
+          "multiplier_max": 0.8911768118591185,
+          "noncontractive_fraction": 0.1982421875,
+          "layer_count": 3
+        },
+        "65-128": {
+          "state_fro_mean": 5.89732942085897e+107,
+          "state_fro_max": 1.3638860983604077e+111,
+          "centered_sq_mean": 1811.7515958979482,
+          "multiplier_mean": -0.23855880578779767,
+          "multiplier_min": -40.17790848909936,
+          "multiplier_max": 0.9458247078407809,
+          "noncontractive_fraction": 0.14729817708333334,
+          "layer_count": 3
+        },
+        "129-256": {
+          "state_fro_mean": 2.3779979266675906e+125,
+          "state_fro_max": 4.762955011067655e+128,
+          "centered_sq_mean": 1971.1850084608986,
+          "multiplier_mean": 0.335227981532171,
+          "multiplier_min": -21.501836430896702,
+          "multiplier_max": 0.9685458198459381,
+          "noncontractive_fraction": 0.10074869791666667,
+          "layer_count": 3
+        },
+        "257-512": {
+          "state_fro_mean": 6.373516562238886e+129,
+          "state_fro_max": 1.7570265982044177e+132,
+          "centered_sq_mean": 1883.9322992542118,
+          "multiplier_mean": 0.6780649372371195,
+          "multiplier_min": -14.425523907905808,
+          "multiplier_max": 0.9847270594861346,
+          "noncontractive_fraction": 0.039632161458333336,
+          "layer_count": 3
+        }
+      },
+      "0.125": {
+        "1-16": {
+          "state_fro_mean": 2.295901622463636e+25,
+          "state_fro_max": 1.8957783914381049e+28,
+          "centered_sq_mean": 1461.5609011677377,
+          "multiplier_mean": -24.68145034879163,
+          "multiplier_min": -980.3651466454745,
+          "multiplier_max": 0.5359562221012178,
+          "noncontractive_fraction": 0.6373697916666666,
+          "layer_count": 3
+        },
+        "17-32": {
+          "state_fro_mean": 2.4410688955430434e+50,
+          "state_fro_max": 2.5632711690272766e+53,
+          "centered_sq_mean": 1747.678262579642,
+          "multiplier_mean": -8.327108964750597,
+          "multiplier_min": -165.29714108558406,
+          "multiplier_max": 0.657561878151409,
+          "noncontractive_fraction": 0.3092447916666667,
+          "layer_count": 3
+        },
+        "33-64": {
+          "state_fro_mean": 4.027077212853602e+90,
+          "state_fro_max": 9.145493778643818e+93,
+          "centered_sq_mean": 1757.869683179196,
+          "multiplier_mean": -3.7324586694659447,
+          "multiplier_min": -167.00090521100677,
+          "multiplier_max": 0.7982266395912528,
+          "noncontractive_fraction": 0.2604166666666667,
+          "layer_count": 3
+        },
+        "65-128": {
+          "state_fro_mean": 2.3431736118178082e+148,
+          "state_fro_max": 5.875831887554684e+151,
+          "centered_sq_mean": 1811.7515958979482,
+          "multiplier_mean": -1.466347983624292,
+          "multiplier_min": -81.34153126391301,
+          "multiplier_max": 0.8994619156815616,
+          "noncontractive_fraction": 0.20589192708333334,
+          "layer_count": 3
+        },
+        "129-256": {
+          "state_fro_mean": Infinity,
+          "state_fro_max": Infinity,
+          "centered_sq_mean": 1971.1850084608986,
+          "multiplier_mean": -0.324144053574501,
+          "multiplier_min": -43.997303435041815,
+          "multiplier_max": 0.941190000347614,
+          "noncontractive_fraction": 0.15006510416666666,
+          "layer_count": 3
+        },
+        "257-512": {
+          "state_fro_mean": Infinity,
+          "state_fro_max": Infinity,
+          "centered_sq_mean": 1883.9322992542118,
+          "multiplier_mean": 0.35883366967631886,
+          "multiplier_min": -29.847288417315376,
+          "multiplier_max": 0.9714343169920713,
+          "noncontractive_fraction": 0.09212239583333333,
+          "layer_count": 3
+        }
+      }
+    }
+  },
+  "layers": [
+    {
+      "layer": 0,
+      "methods": {
+        "mean": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 0.8586604734747275,
+            "cosine": 0.48672638058817175,
+            "output_target_rms": 0.37828332139513854
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 0.6286284263046207,
+            "cosine": 0.6350066472692182,
+            "output_target_rms": 0.6040864617790934
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 0.840762123338326,
+            "cosine": 0.47766956234638763,
+            "output_target_rms": 0.42617587071170177
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 0.8620550548500726,
+            "cosine": 0.4561938141829142,
+            "output_target_rms": 0.38333716797234507
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 0.8498633818361787,
+            "cosine": 0.49463243214614006,
+            "output_target_rms": 0.3788614579942684
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 0.8627395040454824,
+            "cosine": 0.4920878792859837,
+            "output_target_rms": 0.36730675390204304
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 0.8765725138132247,
+            "cosine": 0.47718422362297697,
+            "output_target_rms": 0.3571252263669315
+          }
+        },
+        "vala": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 1.5283512142103028,
+            "cosine": 0.6258009428836204,
+            "output_target_rms": 1.2553942201163422
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 1.8432398687722764,
+            "cosine": 0.8559778347839231,
+            "output_target_rms": 1.9273572573806246
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 1.1565229735952254,
+            "cosine": 0.7653180785099489,
+            "output_target_rms": 1.3631877620791424
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 1.3846882994520642,
+            "cosine": 0.693657279650093,
+            "output_target_rms": 1.2939160595329646
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 1.4113876703485044,
+            "cosine": 0.6728217824576881,
+            "output_target_rms": 1.2432353658518362
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 1.5200224085495575,
+            "cosine": 0.6333419556211817,
+            "output_target_rms": 1.2286342682184244
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 1.5823179776541338,
+            "cosine": 0.5786873078050992,
+            "output_target_rms": 1.1943600784224897
+          }
+        },
+        "0.0": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 1.5283512142103033,
+            "cosine": 0.6258009428836203,
+            "output_target_rms": 1.2553942201163424
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 1.8432398687722769,
+            "cosine": 0.8559778347839231,
+            "output_target_rms": 1.9273572573806246
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 1.1565229735952254,
+            "cosine": 0.7653180785099489,
+            "output_target_rms": 1.3631877620791424
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 1.3846882994520642,
+            "cosine": 0.693657279650093,
+            "output_target_rms": 1.2939160595329646
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 1.4113876703485049,
+            "cosine": 0.6728217824576879,
+            "output_target_rms": 1.2432353658518365
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 1.5200224085495582,
+            "cosine": 0.6333419556211817,
+            "output_target_rms": 1.2286342682184244
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 1.5823179776541347,
+            "cosine": 0.5786873078050991,
+            "output_target_rms": 1.1943600784224904
+          }
+        },
+        "0.001953125": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 362.7263846544863,
+            "cosine": 0.5582446288642982,
+            "output_target_rms": 19.0433079830607
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 6042.493936956044,
+            "cosine": 0.5976644173451003,
+            "output_target_rms": 77.75696830234487
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 2847.3801173991146,
+            "cosine": 0.532567162698032,
+            "output_target_rms": 53.38039989838826
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 387.4444141378739,
+            "cosine": 0.5341876317829781,
+            "output_target_rms": 19.697276751643003
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 88.76645778644402,
+            "cosine": 0.5652724273513281,
+            "output_target_rms": 9.418123029505304
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 22.756478128959134,
+            "cosine": 0.569609576836738,
+            "output_target_rms": 4.738317200870978
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 7.135953110053201,
+            "cosine": 0.5529534347468272,
+            "output_target_rms": 2.581084620606935
+          }
+        },
+        "0.00390625": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 590891799.0767184,
+            "cosine": 0.35383268733472295,
+            "output_target_rms": 24308.27039650473
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 4004880154.7028103,
+            "cosine": 0.4561832918487151,
+            "output_target_rms": 63284.13219735189
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 9906984762.724535,
+            "cosine": 0.33254638321477703,
+            "output_target_rms": 99533.84700583832
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 892405486.8820229,
+            "cosine": 0.33533527648046163,
+            "output_target_rms": 29873.166869800545
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 259444842.4617767,
+            "cosine": 0.3438271655591061,
+            "output_target_rms": 16107.299471482325
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 48843067.026196234,
+            "cosine": 0.3492562144636477,
+            "output_target_rms": 6988.785664357778
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 15571906.930998264,
+            "cosine": 0.35586796179631963,
+            "output_target_rms": 3946.129329566376
+          }
+        },
+        "0.0078125": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 6.83076291057287e+23,
+            "cosine": 0.22224271782206811,
+            "output_target_rms": 826484295711.2306
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 1.049014363507752e+18,
+            "cosine": 0.36586448676679095,
+            "output_target_rms": 1024214022.3114942
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 2.7903193588698932e+23,
+            "cosine": 0.2264464137223331,
+            "output_target_rms": 528234735592.98584
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 7.705360909626908e+24,
+            "cosine": 0.22161622007727733,
+            "output_target_rms": 2775853185892.0195
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 7.074389524064173e+23,
+            "cosine": 0.22600791364096465,
+            "output_target_rms": 841093902252.5518
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 2.0888202781634974e+23,
+            "cosine": 0.21898445050718424,
+            "output_target_rms": 457036134037.94867
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 6.943956460117648e+22,
+            "cosine": 0.21376977319007306,
+            "output_target_rms": 263513879333.10126
+          }
+        },
+        "0.015625": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 1.6332713036950735e+59,
+            "cosine": 0.14527804505431974,
+            "output_target_rms": 4.041375141823725e+29
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 4.7712594528552324e+26,
+            "cosine": 0.26828253169196936,
+            "output_target_rms": 21843212796782.508
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 9.596265011988882e+45,
+            "cosine": 0.0894856065951268,
+            "output_target_rms": 9.796052782620601e+22
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 4.027788139182853e+58,
+            "cosine": 0.1012736647601618,
+            "output_target_rms": 2.006935011200625e+29
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 7.436687565470818e+59,
+            "cosine": 0.12345806502985701,
+            "output_target_rms": 8.623623116457964e+29
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 1.95036359474499e+59,
+            "cosine": 0.13483179698403214,
+            "output_target_rms": 4.416292103954391e+29
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 4.3143347509639426e+58,
+            "cosine": 0.15725595862119537,
+            "output_target_rms": 2.0770976748732695e+29
+          }
+        },
+        "0.03125": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 1.1002571702319162e+128,
+            "cosine": 0.01897292458255436,
+            "output_target_rms": 1.0489314421028269e+64
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 7.134970530810017e+34,
+            "cosine": 0.1921917734931235,
+            "output_target_rms": 2.671136561617548e+17
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 4.3128892073197e+63,
+            "cosine": 0.013370072845688377,
+            "output_target_rms": 6.567259098984675e+31
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 1.2740997364817084e+105,
+            "cosine": 0.008577827164808538,
+            "output_target_rms": 3.569453370590108e+52
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 1.592972912800495e+127,
+            "cosine": 0.008861800221935865,
+            "output_target_rms": 3.991206475240907e+63
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 3.71905062444987e+128,
+            "cosine": 0.00959581813609875,
+            "output_target_rms": 1.9284840223475718e+64
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 3.404405649634561e+127,
+            "cosine": 0.01701264624979857,
+            "output_target_rms": 5.83472848522925e+63
+          }
+        },
+        "0.0625": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 1.2434453710984122e+260,
+            "cosine": -0.0008894755516984636,
+            "output_target_rms": 1.1150988167415534e+130
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 9.870944864374141e+42,
+            "cosine": 0.16162136446733785,
+            "output_target_rms": 3.1418059877042283e+21
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 2.192198407089557e+83,
+            "cosine": 0.0013795693665087268,
+            "output_target_rms": 4.682091847763729e+41
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 1.35346855947125e+146,
+            "cosine": -0.003101071860265741,
+            "output_target_rms": 1.1633866766777288e+73
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 2.9948181819719955e+217,
+            "cosine": -0.0012917889531170739,
+            "output_target_rms": 5.472493199604724e+108
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 2.7731900380417007e+252,
+            "cosine": -0.015588740469289741,
+            "output_target_rms": 1.665289775997469e+126
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 2.5047112418368923e+260,
+            "cosine": -0.0034615580125549822,
+            "output_target_rms": 1.582627954333201e+130
+          }
+        },
+        "0.125": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": Infinity,
+            "cosine": 0.006312044217299954,
+            "output_target_rms": Infinity
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 2.96092293420666e+51,
+            "cosine": 0.15324784236505457,
+            "output_target_rms": 5.441436330792321e+25
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 2.0586300997329893e+102,
+            "cosine": -0.0037137652169219686,
+            "output_target_rms": 1.4347927027041186e+51
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 2.9307360296315614e+183,
+            "cosine": 0.003564670750837933,
+            "output_target_rms": 5.413627277188153e+91
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 1.5407611788768418e+299,
+            "cosine": 0.0018703837098368713,
+            "output_target_rms": 3.9252530859510725e+149
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": Infinity,
+            "cosine": 0.002075507739481911,
+            "output_target_rms": Infinity
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": Infinity,
+            "cosine": 0.0013272749717867045,
+            "output_target_rms": Infinity
+          }
+        }
+      },
+      "stats": {
+        "0.0": {
+          "1-16": {
+            "state_fro_mean": 37.4765268284509,
+            "state_fro_max": 122.9905621944501,
+            "centered_sq_mean": 4098.081881873124,
+            "multiplier_mean": 0.788704437923188,
+            "multiplier_min": 0.0,
+            "multiplier_max": 0.9375,
+            "noncontractive_fraction": 0.0
+          },
+          "17-32": {
+            "state_fro_mean": 33.75839279916336,
+            "state_fro_max": 70.88574230606605,
+            "centered_sq_mean": 4896.06616453411,
+            "multiplier_mean": 0.9576396123620297,
+            "multiplier_min": 0.9411764705882353,
+            "multiplier_max": 0.96875,
+            "noncontractive_fraction": 0.0
+          },
+          "33-64": {
+            "state_fro_mean": 30.21343040847202,
+            "state_fro_max": 72.28331544872819,
+            "centered_sq_mean": 4827.227096184246,
+            "multiplier_mean": 0.978581384116586,
+            "multiplier_min": 0.9696969696969697,
+            "multiplier_max": 0.984375,
+            "noncontractive_fraction": 0.0
+          },
+          "65-128": {
+            "state_fro_mean": 27.889332748513382,
+            "state_fro_max": 70.27355277140227,
+            "centered_sq_mean": 4964.355211220985,
+            "multiplier_mean": 0.9892303720486968,
+            "multiplier_min": 0.9846153846153847,
+            "multiplier_max": 0.9921875,
+            "noncontractive_fraction": 0.0
+          },
+          "129-256": {
+            "state_fro_mean": 26.50414207425935,
+            "state_fro_max": 64.36673115053448,
+            "centered_sq_mean": 5361.244870997373,
+            "multiplier_mean": 0.9946000166388429,
+            "multiplier_min": 0.9922480620155039,
+            "multiplier_max": 0.99609375,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 25.399080984451516,
+            "state_fro_max": 59.187005721333534,
+            "centered_sq_mean": 5067.248577022388,
+            "multiplier_mean": 0.9972962047979201,
+            "multiplier_min": 0.9961089494163424,
+            "multiplier_max": 0.998046875,
+            "noncontractive_fraction": 0.0
+          }
+        },
+        "0.001953125": {
+          "1-16": {
+            "state_fro_mean": 293.9387667794369,
+            "state_fro_max": 9940.888815602248,
+            "centered_sq_mean": 4098.081881873124,
+            "multiplier_mean": -0.3122869055910987,
+            "multiplier_min": -14.66195541633554,
+            "multiplier_max": 0.9041248066399369,
+            "noncontractive_fraction": 0.18359375
+          },
+          "17-32": {
+            "state_fro_mean": 139.78697856896395,
+            "state_fro_max": 2759.2153711284877,
+            "centered_sq_mean": 4896.06616453411,
+            "multiplier_mean": 0.5507123360811961,
+            "multiplier_min": -1.6502020399885664,
+            "multiplier_max": 0.9526774445849873,
+            "noncontractive_fraction": 0.021484375
+          },
+          "33-64": {
+            "state_fro_mean": 67.53572081782842,
+            "state_fro_max": 991.6489840754904,
+            "centered_sq_mean": 4827.227096184246,
+            "multiplier_mean": 0.7763579507733649,
+            "multiplier_min": -1.6539663498043335,
+            "multiplier_max": 0.9755081188174968,
+            "noncontractive_fraction": 0.0009765625
+          },
+          "65-128": {
+            "state_fro_mean": 34.59556811803766,
+            "state_fro_max": 497.95978820913274,
+            "centered_sq_mean": 4964.355211220985,
+            "multiplier_mean": 0.8840660547763122,
+            "multiplier_min": -0.3006489259986407,
+            "multiplier_max": 0.9881702944236056,
+            "noncontractive_fraction": 0.0
+          },
+          "129-256": {
+            "state_fro_mean": 18.868903575160008,
+            "state_fro_max": 247.01859698421305,
+            "centered_sq_mean": 5361.244870997373,
+            "multiplier_mean": 0.9385754215669052,
+            "multiplier_min": 0.2906472293688729,
+            "multiplier_max": 0.9947592742141811,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 11.111571139439,
+            "state_fro_max": 122.99567751885832,
+            "centered_sq_mean": 5067.248577022388,
+            "multiplier_mean": 0.970460905683008,
+            "multiplier_min": 0.5143104605847104,
+            "multiplier_max": 0.9972194194739493,
+            "noncontractive_fraction": 0.0
+          }
+        },
+        "0.00390625": {
+          "1-16": {
+            "state_fro_mean": 182269.9905386596,
+            "state_fro_max": 13121809.07918558,
+            "centered_sq_mean": 4098.081881873124,
+            "multiplier_mean": -1.4132782491053855,
+            "multiplier_min": -29.990577499337746,
+            "multiplier_max": 0.8848151485597197,
+            "noncontractive_fraction": 0.341796875
+          },
+          "17-32": {
+            "state_fro_mean": 297115.86571133276,
+            "state_fro_max": 6544259.039145894,
+            "centered_sq_mean": 4896.06616453411,
+            "multiplier_mean": 0.1437850598003627,
+            "multiplier_min": -4.247772501029765,
+            "multiplier_max": 0.9376129536861036,
+            "noncontractive_fraction": 0.130859375
+          },
+          "33-64": {
+            "state_fro_mean": 100104.22581646149,
+            "state_fro_max": 2043138.1023853314,
+            "centered_sq_mean": 4827.227096184246,
+            "multiplier_mean": 0.5741345174301438,
+            "multiplier_min": -4.278520934902785,
+            "multiplier_max": 0.9675891457547572,
+            "noncontractive_fraction": 0.021484375
+          },
+          "65-128": {
+            "state_fro_mean": 47596.848405742596,
+            "state_fro_max": 866707.250498566,
+            "centered_sq_mean": 4964.355211220985,
+            "multiplier_mean": 0.7789017375039273,
+            "multiplier_min": -1.5870121377115671,
+            "multiplier_max": 0.9844706701480243,
+            "noncontractive_fraction": 0.001953125
+          },
+          "129-256": {
+            "state_fro_mean": 23409.43059376413,
+            "state_fro_max": 423784.47611955623,
+            "centered_sq_mean": 5361.244870997373,
+            "multiplier_mean": 0.8825508264949675,
+            "multiplier_min": -0.4123361145106619,
+            "multiplier_max": 0.9934711175983226,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 11569.411046414345,
+            "state_fro_max": 210313.82617413512,
+            "centered_sq_mean": 5067.248577022388,
+            "multiplier_mean": 0.9436256065680961,
+            "multiplier_min": 0.03238031966566146,
+            "multiplier_max": 0.9964796552744294,
+            "noncontractive_fraction": 0.0
+          }
+        },
+        "0.0078125": {
+          "1-16": {
+            "state_fro_mean": 881012986.9764919,
+            "state_fro_max": 205525650674.33728,
+            "centered_sq_mean": 4098.081881873124,
+            "multiplier_mean": -3.615260936133959,
+            "multiplier_min": -60.64782166534216,
+            "multiplier_max": 0.8465533740425162,
+            "noncontractive_fraction": 0.4765625
+          },
+          "17-32": {
+            "state_fro_mean": 772239730305.5133,
+            "state_fro_max": 125855616943970.2,
+            "centered_sq_mean": 4896.06616453411,
+            "multiplier_mean": -0.670069492761304,
+            "multiplier_min": -9.442913423112161,
+            "multiplier_max": 0.9074839718883364,
+            "noncontractive_fraction": 0.271484375
+          },
+          "33-64": {
+            "state_fro_mean": 3718930110164.8345,
+            "state_fro_max": 371877899898739.9,
+            "centered_sq_mean": 4827.227096184246,
+            "multiplier_mean": 0.16968765074370146,
+            "multiplier_min": -9.527630105099687,
+            "multiplier_max": 0.9530354343666573,
+            "noncontractive_fraction": 0.1171875
+          },
+          "65-128": {
+            "state_fro_mean": 1431922369430.61,
+            "state_fro_max": 62603425178580.336,
+            "centered_sq_mean": 4964.355211220985,
+            "multiplier_mean": 0.5685731029591579,
+            "multiplier_min": -4.15973856113742,
+            "multiplier_max": 0.9771112360469141,
+            "noncontractive_fraction": 0.0244140625
+          },
+          "129-256": {
+            "state_fro_mean": 704989980647.7834,
+            "state_fro_max": 31120832215760.637,
+            "centered_sq_mean": 5361.244870997373,
+            "multiplier_mean": 0.770501636351092,
+            "multiplier_min": -1.8183028022697312,
+            "multiplier_max": 0.9908948043666057,
+            "noncontractive_fraction": 0.004638671875
+          },
+          "257-512": {
+            "state_fro_mean": 347479876497.14746,
+            "state_fro_max": 15382539789612.951,
+            "centered_sq_mean": 5067.248577022388,
+            "multiplier_mean": 0.8899550083382719,
+            "multiplier_min": -0.9314799621724366,
+            "multiplier_max": 0.9950001268753893,
+            "noncontractive_fraction": 0.0
+          }
+        },
+        "0.015625": {
+          "1-16": {
+            "state_fro_mean": 11975854513408.746,
+            "state_fro_max": 2519158794444554.0,
+            "centered_sq_mean": 4098.081881873124,
+            "multiplier_mean": -8.019226310191105,
+            "multiplier_min": -121.96230999735099,
+            "multiplier_max": 0.7700298250081093,
+            "noncontractive_fraction": 0.625
+          },
+          "17-32": {
+            "state_fro_mean": 1.2712929670159569e+23,
+            "state_fro_max": 3.0161973452260494e+25,
+            "centered_sq_mean": 4896.06616453411,
+            "multiplier_mean": -2.297778597884638,
+            "multiplier_min": -19.833195267276952,
+            "multiplier_max": 0.8472260082928018,
+            "noncontractive_fraction": 0.419921875
+          },
+          "33-64": {
+            "state_fro_mean": 8.584990288945599e+28,
+            "state_fro_max": 1.8798308252061763e+31,
+            "centered_sq_mean": 4827.227096184246,
+            "multiplier_mean": -0.639206082629183,
+            "multiplier_min": -20.02584844549349,
+            "multiplier_max": 0.9239280115904575,
+            "noncontractive_fraction": 0.2685546875
+          },
+          "65-128": {
+            "state_fro_mean": 1.2334995525093143e+30,
+            "state_fro_max": 1.7859366296976915e+32,
+            "centered_sq_mean": 4964.355211220985,
+            "multiplier_mean": 0.147915833869619,
+            "multiplier_min": -9.305191407989126,
+            "multiplier_max": 0.9657167249673914,
+            "noncontractive_fraction": 0.11962890625
+          },
+          "129-256": {
+            "state_fro_mean": 5.0672946834638755e+29,
+            "state_fro_max": 2.2251273243602504e+31,
+            "centered_sq_mean": 5361.244870997373,
+            "multiplier_mean": 0.5464032560633412,
+            "multiplier_min": -4.630236177787871,
+            "multiplier_max": 0.9857421779031718,
+            "noncontractive_fraction": 0.023681640625
+          },
+          "257-512": {
+            "state_fro_mean": 2.3813813767293055e+29,
+            "state_fro_max": 1.044096052848205e+31,
+            "centered_sq_mean": 5067.248577022388,
+            "multiplier_mean": 0.7826138118786237,
+            "multiplier_min": -2.8592005258486326,
+            "multiplier_max": 0.9920410700773092,
+            "noncontractive_fraction": 0.0037841796875
+          }
+        },
+        "0.03125": {
+          "1-16": {
+            "state_fro_mean": 1.5322356255519437e+17,
+            "state_fro_max": 3.215664300107292e+19,
+            "centered_sq_mean": 4098.081881873124,
+            "multiplier_mean": -16.8271570583054,
+            "multiplier_min": -244.59128666136863,
+            "multiplier_max": 0.6169827269392956,
+            "noncontractive_fraction": 0.78125
+          },
+          "17-32": {
+            "state_fro_mean": 8.0348551904040325e+31,
+            "state_fro_max": 1.9314863622008362e+34,
+            "centered_sq_mean": 4896.06616453411,
+            "multiplier_mean": -5.553196808131306,
+            "multiplier_min": -40.61375895560654,
+            "multiplier_max": 0.7267100811017326,
+            "noncontractive_fraction": 0.611328125
+          },
+          "33-64": {
+            "state_fro_mean": 9.78978207731526e+51,
+            "state_fro_max": 3.216051295905813e+54,
+            "centered_sq_mean": 4827.227096184246,
+            "multiplier_mean": -2.2569935493749522,
+            "multiplier_min": -41.022285126281105,
+            "multiplier_max": 0.8657131660380577,
+            "noncontractive_fraction": 0.4189453125
+          },
+          "65-128": {
+            "state_fro_mean": 4.408006867135751e+63,
+            "state_fro_max": 7.137685509661743e+65,
+            "centered_sq_mean": 4964.355211220985,
+            "multiplier_mean": -0.6933987043094588,
+            "multiplier_min": -19.596097101692536,
+            "multiplier_max": 0.942927702808346,
+            "noncontractive_fraction": 0.27490234375
+          },
+          "129-256": {
+            "state_fro_mean": 2.401798105959744e+64,
+            "state_fro_max": 2.0677593850833834e+66,
+            "centered_sq_mean": 5361.244870997373,
+            "multiplier_mean": 0.09820649548783955,
+            "multiplier_min": -10.254102928824148,
+            "multiplier_max": 0.9754369249763041,
+            "noncontractive_fraction": 0.13037109375
+          },
+          "257-512": {
+            "state_fro_mean": 9.487591526846154e+63,
+            "state_fro_max": 4.67162689977829e+65,
+            "centered_sq_mean": 5067.248577022388,
+            "multiplier_mean": 0.5679314189593272,
+            "multiplier_min": -6.714641653201024,
+            "multiplier_max": 0.9861229564811491,
+            "noncontractive_fraction": 0.02685546875
+          }
+        },
+        "0.0625": {
+          "1-16": {
+            "state_fro_mean": 3.406702552367631e+21,
+            "state_fro_max": 7.38893607552664e+23,
+            "centered_sq_mean": 4098.081881873124,
+            "multiplier_mean": -34.443018554533985,
+            "multiplier_min": -489.84923998940394,
+            "multiplier_max": 0.33353744793566875,
+            "noncontractive_fraction": 0.890625
+          },
+          "17-32": {
+            "state_fro_mean": 3.502985145102645e+41,
+            "state_fro_max": 9.941385064201201e+43,
+            "centered_sq_mean": 4896.06616453411,
+            "multiplier_mean": -12.06403322862464,
+            "multiplier_min": -82.17488633226571,
+            "multiplier_max": 0.48567822671959426,
+            "noncontractive_fraction": 0.7890625
+          },
+          "33-64": {
+            "state_fro_mean": 2.8876202961942296e+72,
+            "state_fro_max": 1.361534200195392e+75,
+            "centered_sq_mean": 4827.227096184246,
+            "multiplier_mean": -5.49256848286649,
+            "multiplier_min": -83.01515848785633,
+            "multiplier_max": 0.7492834749332582,
+            "noncontractive_fraction": 0.5947265625
+          },
+          "65-128": {
+            "state_fro_mean": 1.769198826257691e+108,
+            "state_fro_max": 1.3638860983604077e+111,
+            "centered_sq_mean": 4964.355211220985,
+            "multiplier_mean": -2.376027780667614,
+            "multiplier_min": -40.17790848909936,
+            "multiplier_max": 0.8973496584902552,
+            "noncontractive_fraction": 0.44189453125
+          },
+          "129-256": {
+            "state_fro_mean": 7.133993780002772e+125,
+            "state_fro_max": 4.762955011067655e+128,
+            "centered_sq_mean": 5361.244870997373,
+            "multiplier_mean": -0.7981870256631638,
+            "multiplier_min": -21.501836430896702,
+            "multiplier_max": 0.9548264191225686,
+            "noncontractive_fraction": 0.30224609375
+          },
+          "257-512": {
+            "state_fro_mean": 1.9120549686716656e+130,
+            "state_fro_max": 1.7570265982044177e+132,
+            "centered_sq_mean": 5067.248577022388,
+            "multiplier_mean": 0.13856663312073428,
+            "multiplier_min": -14.425523907905808,
+            "multiplier_max": 0.974286729288829,
+            "noncontractive_fraction": 0.118896484375
+          }
+        },
+        "0.125": {
+          "1-16": {
+            "state_fro_mean": 6.8877048673909086e+25,
+            "state_fro_max": 1.8957783914381049e+28,
+            "centered_sq_mean": 4098.081881873124,
+            "multiplier_mean": -69.67474154699116,
+            "multiplier_min": -980.3651466454745,
+            "multiplier_max": 0.1670748958713375,
+            "noncontractive_fraction": 0.93359375
+          },
+          "17-32": {
+            "state_fro_mean": 7.32320668662913e+50,
+            "state_fro_max": 2.5632711690272766e+53,
+            "centered_sq_mean": 4896.06616453411,
+            "multiplier_mean": -25.08570606961131,
+            "multiplier_min": -165.29714108558406,
+            "multiplier_max": 0.003614517955317642,
+            "noncontractive_fraction": 0.9140625
+          },
+          "33-64": {
+            "state_fro_mean": 1.2081231638560806e+91,
+            "state_fro_max": 9.145493778643818e+93,
+            "centered_sq_mean": 4827.227096184246,
+            "multiplier_mean": -11.963718349849568,
+            "multiplier_min": -167.00090521100677,
+            "multiplier_max": 0.5164240927236594,
+            "noncontractive_fraction": 0.7802734375
+          },
+          "65-128": {
+            "state_fro_mean": 7.029520835453425e+148,
+            "state_fro_max": 5.875831887554684e+151,
+            "centered_sq_mean": 4964.355211220985,
+            "multiplier_mean": -5.741285933383925,
+            "multiplier_min": -81.34153126391301,
+            "multiplier_max": 0.8061935698540735,
+            "noncontractive_fraction": 0.61767578125
+          },
+          "129-256": {
+            "state_fro_mean": Infinity,
+            "state_fro_max": Infinity,
+            "centered_sq_mean": 5361.244870997373,
+            "multiplier_mean": -2.5909740679651705,
+            "multiplier_min": -43.997303435041815,
+            "multiplier_max": 0.9136054074150977,
+            "noncontractive_fraction": 0.4501953125
+          },
+          "257-512": {
+            "state_fro_mean": Infinity,
+            "state_fro_max": Infinity,
+            "centered_sq_mean": 5067.248577022388,
+            "multiplier_mean": -0.7201629385564516,
+            "multiplier_min": -29.847288417315376,
+            "multiplier_max": 0.9506142749041885,
+            "noncontractive_fraction": 0.2763671875
+          }
+        }
+      },
+      "qualification_vala_max_abs": 4.884981308350689e-15,
+      "input_stats": {
+        "query_norm_mean": 2.1600135666028533,
+        "key_norm_mean": 203.9355583016998,
+        "centered_key_sq_mean": 5077.248727624903,
+        "value_norm_mean": 1.568507365402931
+      }
+    },
+    {
+      "layer": 13,
+      "methods": {
+        "mean": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 0.9573743614718255,
+            "cosine": 0.5317335990601608,
+            "output_target_rms": 0.8798074573922795
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 1.948044373335122,
+            "cosine": 0.6358024805689388,
+            "output_target_rms": 1.661803446773665
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 2.0682297816992983,
+            "cosine": 0.5414802984964033,
+            "output_target_rms": 1.5768295542389992
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 1.8148313838491918,
+            "cosine": 0.4914427057983195,
+            "output_target_rms": 1.4109737836238632
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 1.082045803418074,
+            "cosine": 0.5192366748318167,
+            "output_target_rms": 1.00829711328714
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 0.912472260832169,
+            "cosine": 0.5203676308315779,
+            "output_target_rms": 0.8578586540398023
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 0.7982876159805443,
+            "cosine": 0.5384637020802048,
+            "output_target_rms": 0.7080850325000775
+          }
+        },
+        "vala": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 1.916592236194497,
+            "cosine": 0.6487807843531013,
+            "output_target_rms": 1.6492609692950675
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 3.269603018071035,
+            "cosine": 0.7150624044824215,
+            "output_target_rms": 2.133814245557484
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 2.1951718489688523,
+            "cosine": 0.692034016197328,
+            "output_target_rms": 1.8847044545038145
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 2.178427987241037,
+            "cosine": 0.7024263567920646,
+            "output_target_rms": 1.8192550207418374
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 2.3099150820141467,
+            "cosine": 0.6728781171857354,
+            "output_target_rms": 1.7869204623226058
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 2.314753685662449,
+            "cosine": 0.6296129470921343,
+            "output_target_rms": 1.7485034086083373
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 1.5848971288350915,
+            "cosine": 0.6387887449722092,
+            "output_target_rms": 1.5269388857296486
+          }
+        },
+        "0.0": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 1.9165922361944976,
+            "cosine": 0.6487807843531012,
+            "output_target_rms": 1.6492609692950682
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 3.2696030180710336,
+            "cosine": 0.7150624044824215,
+            "output_target_rms": 2.133814245557484
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 2.195171848968853,
+            "cosine": 0.692034016197328,
+            "output_target_rms": 1.8847044545038147
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 2.178427987241037,
+            "cosine": 0.7024263567920647,
+            "output_target_rms": 1.8192550207418374
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 2.3099150820141476,
+            "cosine": 0.6728781171857354,
+            "output_target_rms": 1.7869204623226063
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 2.3147536856624504,
+            "cosine": 0.6296129470921341,
+            "output_target_rms": 1.748503408608338
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 1.5848971288350926,
+            "cosine": 0.6387887449722089,
+            "output_target_rms": 1.526938885729649
+          }
+        },
+        "0.001953125": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 1.8066145100666067,
+            "cosine": 0.6554145207353104,
+            "output_target_rms": 1.6061634140717378
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 3.1637145536055336,
+            "cosine": 0.7164689031778239,
+            "output_target_rms": 2.1075559111302895
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 2.0801062351462134,
+            "cosine": 0.6959806012771947,
+            "output_target_rms": 1.84736820940747
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 2.0667481232156537,
+            "cosine": 0.7079436181302234,
+            "output_target_rms": 1.7812912389894653
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 2.192194650843721,
+            "cosine": 0.6790224212117382,
+            "output_target_rms": 1.7470383893921042
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 2.1968252246895577,
+            "cosine": 0.6355872783952012,
+            "output_target_rms": 1.7068616249931148
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 1.4803277986426335,
+            "cosine": 0.6465087506753688,
+            "output_target_rms": 1.480467113945733
+          }
+        },
+        "0.00390625": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 1.712494319585711,
+            "cosine": 0.6611596574568568,
+            "output_target_rms": 1.5676162237629634
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 3.0691049746379675,
+            "cosine": 0.7168593561125873,
+            "output_target_rms": 2.083652000387001
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 1.9781952540135856,
+            "cosine": 0.6995513231261348,
+            "output_target_rms": 1.8133327372171808
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 1.9728630719448133,
+            "cosine": 0.7126742658976146,
+            "output_target_rms": 1.748026397360112
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 2.0915292062762485,
+            "cosine": 0.6841790888405879,
+            "output_target_rms": 1.7115464151875037
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 2.0927038530155153,
+            "cosine": 0.6408473302483242,
+            "output_target_rms": 1.6688303804780156
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 1.3923022470207946,
+            "cosine": 0.6532409268897826,
+            "output_target_rms": 1.4391647001425698
+          }
+        },
+        "0.0078125": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 1.5601431313470062,
+            "cosine": 0.6703974083155121,
+            "output_target_rms": 1.501357615588682
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 2.908195625283798,
+            "cosine": 0.7159713693654278,
+            "output_target_rms": 2.0418939346196154
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 1.8071896916952337,
+            "cosine": 0.7057180424025471,
+            "output_target_rms": 1.753857248122911
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 1.8247344304932236,
+            "cosine": 0.7199172012432896,
+            "output_target_rms": 1.6924420155386422
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 1.9277985940957612,
+            "cosine": 0.6919988856287917,
+            "output_target_rms": 1.6506352416347783
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 1.917084287583612,
+            "cosine": 0.6494979197174996,
+            "output_target_rms": 1.6016537591712128
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 1.2531725000085476,
+            "cosine": 0.6642008969741668,
+            "output_target_rms": 1.3688241907404142
+          }
+        },
+        "0.015625": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 1.3492169443094586,
+            "cosine": 0.6822463138387749,
+            "output_target_rms": 1.3994162342310634
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 2.672681154656007,
+            "cosine": 0.7115711782320251,
+            "output_target_rms": 1.9774252364713498
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 1.5630725155254537,
+            "cosine": 0.7148824425924453,
+            "output_target_rms": 1.6621929022924617
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 1.6280386052646234,
+            "cosine": 0.7276265931170767,
+            "output_target_rms": 1.610609712521459
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 1.6954483685984134,
+            "cosine": 0.7007906887052745,
+            "output_target_rms": 1.5558806792242568
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 1.6569183408547417,
+            "cosine": 0.6610844559917712,
+            "output_target_rms": 1.49371275617771
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 1.069074923169647,
+            "cosine": 0.6786460520641815,
+            "output_target_rms": 1.2624712998648802
+          }
+        },
+        "0.03125": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 1.1162763606315529,
+            "cosine": 0.6911442803876475,
+            "output_target_rms": 1.2654354670583843
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 2.443754456455457,
+            "cosine": 0.6961480884636648,
+            "output_target_rms": 1.9038502514097515
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 1.3101437553781738,
+            "cosine": 0.724415499466744,
+            "output_target_rms": 1.5503996665575588
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 1.4193848706868886,
+            "cosine": 0.7297459661681195,
+            "output_target_rms": 1.5072708836837607
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 1.4174429077809865,
+            "cosine": 0.7053944625630787,
+            "output_target_rms": 1.4252762227300257
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 1.3398415191789779,
+            "cosine": 0.6710210715126406,
+            "output_target_rms": 1.3433285618643913
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 0.8810776902003841,
+            "cosine": 0.6904259393615396,
+            "output_target_rms": 1.1265370007692752
+          }
+        },
+        "0.0625": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 0.9462720557123077,
+            "cosine": 0.6852367641548913,
+            "output_target_rms": 1.128733350160397
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 3.5773205038112477,
+            "cosine": 0.6104816136514797,
+            "output_target_rms": 2.121751313855829
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 1.2394455878095003,
+            "cosine": 0.7134648917119571,
+            "output_target_rms": 1.4678098014844583
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 1.2633493686068589,
+            "cosine": 0.7128770007386385,
+            "output_target_rms": 1.3977760381117195
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 1.1484667371603412,
+            "cosine": 0.6978719817568175,
+            "output_target_rms": 1.2700269801421993
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 1.0462073095781457,
+            "cosine": 0.6707659361731715,
+            "output_target_rms": 1.171428166452558
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 0.7456976307799401,
+            "cosine": 0.688766283106448,
+            "output_target_rms": 0.9851975039239625
+          }
+        },
+        "0.125": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 10.507545040256518,
+            "cosine": 0.5823720419907557,
+            "output_target_rms": 3.250018884637572
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 364.1613867312588,
+            "cosine": 0.2862167537054349,
+            "output_target_rms": 19.034155335197617
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 100.38590350008947,
+            "cosine": 0.34474082983374343,
+            "output_target_rms": 9.99321748153496
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 24.591753444506956,
+            "cosine": 0.45605896157439163,
+            "output_target_rms": 4.978127756962123
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 5.094591907951163,
+            "cosine": 0.5506060080340132,
+            "output_target_rms": 2.2988739823851767
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 1.9307425514109389,
+            "cosine": 0.5848930188090753,
+            "output_target_rms": 1.4372472758299806
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 0.8234953777926283,
+            "cosine": 0.6382038534004728,
+            "output_target_rms": 0.9367999860874644
+          }
+        }
+      },
+      "stats": {
+        "0.0": {
+          "1-16": {
+            "state_fro_mean": 56.928810253151134,
+            "state_fro_max": 262.0131686610871,
+            "centered_sq_mean": 139.2937826051525,
+            "multiplier_mean": 0.788704437923188,
+            "multiplier_min": 0.0,
+            "multiplier_max": 0.9375,
+            "noncontractive_fraction": 0.0
+          },
+          "17-32": {
+            "state_fro_mean": 86.06034809637578,
+            "state_fro_max": 250.0866904392434,
+            "centered_sq_mean": 192.09733380506606,
+            "multiplier_mean": 0.9576396123620297,
+            "multiplier_min": 0.9411764705882353,
+            "multiplier_max": 0.96875,
+            "noncontractive_fraction": 0.0
+          },
+          "33-64": {
+            "state_fro_mean": 85.97255000013844,
+            "state_fro_max": 205.31729934609297,
+            "centered_sq_mean": 222.96802043749267,
+            "multiplier_mean": 0.978581384116586,
+            "multiplier_min": 0.9696969696969697,
+            "multiplier_max": 0.984375,
+            "noncontractive_fraction": 0.0
+          },
+          "65-128": {
+            "state_fro_mean": 61.99698059028505,
+            "state_fro_max": 129.14504586097667,
+            "centered_sq_mean": 244.5702999821853,
+            "multiplier_mean": 0.9892303720486968,
+            "multiplier_min": 0.9846153846153847,
+            "multiplier_max": 0.9921875,
+            "noncontractive_fraction": 0.0
+          },
+          "129-256": {
+            "state_fro_mean": 45.88539156397584,
+            "state_fro_max": 91.92076064259588,
+            "centered_sq_mean": 272.61756691710707,
+            "multiplier_mean": 0.9946000166388429,
+            "multiplier_min": 0.9922480620155039,
+            "multiplier_max": 0.99609375,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 36.6248596426165,
+            "state_fro_max": 62.878492472684485,
+            "centered_sq_mean": 294.1035137303535,
+            "multiplier_mean": 0.9972962047979201,
+            "multiplier_min": 0.9961089494163424,
+            "multiplier_max": 0.998046875,
+            "noncontractive_fraction": 0.0
+          }
+        },
+        "0.001953125": {
+          "1-16": {
+            "state_fro_mean": 55.8236723246324,
+            "state_fro_max": 256.7481129761631,
+            "centered_sq_mean": 139.2937826051525,
+            "multiplier_mean": 0.7467445835522277,
+            "multiplier_min": 0.0,
+            "multiplier_max": 0.9250843931928956,
+            "noncontractive_fraction": 0.0
+          },
+          "17-32": {
+            "state_fro_mean": 84.09670468803549,
+            "state_fro_max": 242.15904838097418,
+            "centered_sq_mean": 192.09733380506606,
+            "multiplier_mean": 0.9419516961063576,
+            "multiplier_min": 0.9049408317456358,
+            "multiplier_max": 0.9617058699139428,
+            "noncontractive_fraction": 0.0
+          },
+          "33-64": {
+            "state_fro_mean": 83.51586091569916,
+            "state_fro_max": 198.23933591561482,
+            "centered_sq_mean": 222.96802043749267,
+            "multiplier_mean": 0.9693075898176691,
+            "multiplier_min": 0.9471060037306857,
+            "multiplier_max": 0.9807051973889549,
+            "noncontractive_fraction": 0.0
+          },
+          "65-128": {
+            "state_fro_mean": 60.05178360124958,
+            "state_fro_max": 126.90539184612335,
+            "centered_sq_mean": 244.5702999821853,
+            "multiplier_mean": 0.9840728569463468,
+            "multiplier_min": 0.9726655552083499,
+            "multiplier_max": 0.9899816877866903,
+            "noncontractive_fraction": 0.0
+          },
+          "129-256": {
+            "state_fro_mean": 44.34524695486968,
+            "state_fro_max": 89.89608699361044,
+            "centered_sq_mean": 272.61756691710707,
+            "multiplier_mean": 0.9917403360626229,
+            "multiplier_min": 0.9859310661930778,
+            "multiplier_max": 0.9950806415361149,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 35.30458102381001,
+            "state_fro_max": 59.26393829662421,
+            "centered_sq_mean": 294.1035137303535,
+            "multiplier_mean": 0.9957400394721339,
+            "multiplier_min": 0.9917986749172407,
+            "multiplier_max": 0.9975607938997434,
+            "noncontractive_fraction": 0.0
+          }
+        },
+        "0.00390625": {
+          "1-16": {
+            "state_fro_mean": 54.81236492193238,
+            "state_fro_max": 251.64363973888007,
+            "centered_sq_mean": 139.2937826051525,
+            "multiplier_mean": 0.7047847291812677,
+            "multiplier_min": 0.0,
+            "multiplier_max": 0.9126687863857912,
+            "noncontractive_fraction": 0.0
+          },
+          "17-32": {
+            "state_fro_mean": 82.24481953449535,
+            "state_fro_max": 234.63819709436476,
+            "centered_sq_mean": 192.09733380506606,
+            "multiplier_mean": 0.9262637798506859,
+            "multiplier_min": 0.8687051929030363,
+            "multiplier_max": 0.9556698043440146,
+            "noncontractive_fraction": 0.0
+          },
+          "33-64": {
+            "state_fro_mean": 81.20942236257108,
+            "state_fro_max": 191.57297200016566,
+            "centered_sq_mean": 222.96802043749267,
+            "multiplier_mean": 0.9600337955187523,
+            "multiplier_min": 0.9245150377644016,
+            "multiplier_max": 0.9770353947779098,
+            "noncontractive_fraction": 0.0
+          },
+          "65-128": {
+            "state_fro_mean": 58.2479451503363,
+            "state_fro_max": 124.71807444218256,
+            "centered_sq_mean": 244.5702999821853,
+            "multiplier_mean": 0.9789153418439969,
+            "multiplier_min": 0.9592199993055885,
+            "multiplier_max": 0.988227838383298,
+            "noncontractive_fraction": 0.0
+          },
+          "129-256": {
+            "state_fro_mean": 42.932412560958944,
+            "state_fro_max": 87.95671677882692,
+            "centered_sq_mean": 272.61756691710707,
+            "multiplier_mean": 0.988880655486403,
+            "multiplier_min": 0.9790637591680752,
+            "multiplier_max": 0.9940675330722296,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 34.10836360223876,
+            "state_fro_max": 56.120085532035354,
+            "centered_sq_mean": 294.1035137303535,
+            "multiplier_mean": 0.9941838741463477,
+            "multiplier_min": 0.9873077350439996,
+            "multiplier_max": 0.997093974387258,
+            "noncontractive_fraction": 0.0
+          }
+        },
+        "0.0078125": {
+          "1-16": {
+            "state_fro_mean": 53.04166860985437,
+            "state_fro_max": 241.88936462257973,
+            "centered_sq_mean": 139.2937826051525,
+            "multiplier_mean": 0.6208650204393473,
+            "multiplier_min": -0.4392143026489783,
+            "multiplier_max": 0.8908516879118886,
+            "noncontractive_fraction": 0.0
+          },
+          "17-32": {
+            "state_fro_mean": 78.83535318810075,
+            "state_fro_max": 220.71858134564027,
+            "centered_sq_mean": 192.09733380506606,
+            "multiplier_mean": 0.8948879473393422,
+            "multiplier_min": 0.7962339152178373,
+            "multiplier_max": 0.9435976732041581,
+            "noncontractive_fraction": 0.0
+          },
+          "33-64": {
+            "state_fro_mean": 76.98809963817354,
+            "state_fro_max": 179.3617060576958,
+            "centered_sq_mean": 222.96802043749267,
+            "multiplier_mean": 0.9414862069209186,
+            "multiplier_min": 0.8787733805176895,
+            "multiplier_max": 0.9702978408587281,
+            "noncontractive_fraction": 0.0
+          },
+          "65-128": {
+            "state_fro_mean": 54.99248205528285,
+            "state_fro_max": 120.49404062850232,
+            "centered_sq_mean": 244.5702999821853,
+            "multiplier_mean": 0.9686003116392968,
+            "multiplier_min": 0.932328887500066,
+            "multiplier_max": 0.9847201395765133,
+            "noncontractive_fraction": 0.0
+          },
+          "129-256": {
+            "state_fro_mean": 40.42089212647625,
+            "state_fro_max": 84.30993385471852,
+            "centered_sq_mean": 272.61756691710707,
+            "multiplier_mean": 0.9831612943339632,
+            "multiplier_min": 0.9653217629404669,
+            "multiplier_max": 0.9920413161444592,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 32.016767290612066,
+            "state_fro_max": 52.26552493471277,
+            "centered_sq_mean": 294.1035137303535,
+            "multiplier_mean": 0.9910715434947752,
+            "multiplier_min": 0.9781741889492093,
+            "multiplier_max": 0.9961603353622873,
+            "noncontractive_fraction": 0.0
+          }
+        },
+        "0.015625": {
+          "1-16": {
+            "state_fro_mean": 50.3605629987041,
+            "state_fro_max": 225.6603451243202,
+            "centered_sq_mean": 139.2937826051525,
+            "multiplier_mean": 0.45302560295550665,
+            "multiplier_min": -1.3784286052979566,
+            "multiplier_max": 0.8483700424904439,
+            "noncontractive_fraction": 0.01953125
+          },
+          "17-32": {
+            "state_fro_mean": 72.9747410842862,
+            "state_fro_max": 196.7717365675156,
+            "centered_sq_mean": 192.09733380506606,
+            "multiplier_mean": 0.8321362823166547,
+            "multiplier_min": 0.6512913598474392,
+            "multiplier_max": 0.9194534109244453,
+            "noncontractive_fraction": 0.0
+          },
+          "33-64": {
+            "state_fro_mean": 69.80119703514842,
+            "state_fro_max": 158.74844514698592,
+            "centered_sq_mean": 222.96802043749267,
+            "multiplier_mean": 0.9043910297252511,
+            "multiplier_min": 0.7838625505090632,
+            "multiplier_max": 0.956989124340407,
+            "noncontractive_fraction": 0.0
+          },
+          "65-128": {
+            "state_fro_mean": 49.55536295818942,
+            "state_fro_max": 112.60934308893344,
+            "centered_sq_mean": 244.5702999821853,
+            "multiplier_mean": 0.9479702512298969,
+            "multiplier_min": 0.8785466638890209,
+            "multiplier_max": 0.977704741962944,
+            "noncontractive_fraction": 0.0
+          },
+          "129-256": {
+            "state_fro_mean": 36.33672841049764,
+            "state_fro_max": 77.8128201611883,
+            "centered_sq_mean": 272.61756691710707,
+            "multiplier_mean": 0.9717225720290833,
+            "multiplier_min": 0.9378377704852504,
+            "multiplier_max": 0.9879888822889185,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 28.70572385410349,
+            "state_fro_max": 47.98737055812707,
+            "centered_sq_mean": 294.1035137303535,
+            "multiplier_mean": 0.9848468821916303,
+            "multiplier_min": 0.9599070967596285,
+            "multiplier_max": 0.9942930573123457,
+            "noncontractive_fraction": 0.0
+          }
+        },
+        "0.03125": {
+          "1-16": {
+            "state_fro_mean": 47.895566135645396,
+            "state_fro_max": 224.29094456082385,
+            "centered_sq_mean": 139.2937826051525,
+            "multiplier_mean": 0.11734676798782531,
+            "multiplier_min": -3.2568572105959133,
+            "multiplier_max": 0.7667900956773741,
+            "noncontractive_fraction": 0.064453125
+          },
+          "17-32": {
+            "state_fro_mean": 63.9815643601037,
+            "state_fro_max": 160.7549715884224,
+            "centered_sq_mean": 192.09733380506606,
+            "multiplier_mean": 0.7066329522712799,
+            "multiplier_min": 0.3614062491066432,
+            "multiplier_max": 0.8711648863650197,
+            "noncontractive_fraction": 0.0
+          },
+          "33-64": {
+            "state_fro_mean": 58.90497638902859,
+            "state_fro_max": 128.6842809578501,
+            "centered_sq_mean": 222.96802043749267,
+            "multiplier_mean": 0.8302006753339162,
+            "multiplier_min": 0.5940408904918105,
+            "multiplier_max": 0.9303716913037648,
+            "noncontractive_fraction": 0.0
+          },
+          "65-128": {
+            "state_fro_mean": 41.50458786541034,
+            "state_fro_max": 98.83903382085302,
+            "centered_sq_mean": 244.5702999821853,
+            "multiplier_mean": 0.9067101304110967,
+            "multiplier_min": 0.7709822166669308,
+            "multiplier_max": 0.9636739467358053,
+            "noncontractive_fraction": 0.0
+          },
+          "129-256": {
+            "state_fro_mean": 30.52385158420875,
+            "state_fro_max": 67.28454763441721,
+            "centered_sq_mean": 272.61756691710707,
+            "multiplier_mean": 0.9488451274193237,
+            "multiplier_min": 0.8828697855748174,
+            "multiplier_max": 0.979884014577837,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 24.15588585074506,
+            "state_fro_max": 41.401341059080956,
+            "centered_sq_mean": 294.1035137303535,
+            "multiplier_mean": 0.9723975595853405,
+            "multiplier_min": 0.9233729123804669,
+            "multiplier_max": 0.9905585012124627,
+            "noncontractive_fraction": 0.0
+          }
+        },
+        "0.0625": {
+          "1-16": {
+            "state_fro_mean": 58.76910509714881,
+            "state_fro_max": 223.4173110110819,
+            "centered_sq_mean": 139.2937826051525,
+            "multiplier_mean": -0.5540109019475372,
+            "multiplier_min": -7.0137144211918265,
+            "multiplier_max": 0.6050087627833196,
+            "noncontractive_fraction": 0.220703125
+          },
+          "17-32": {
+            "state_fro_mean": 54.32814629944335,
+            "state_fro_max": 124.70650215937776,
+            "centered_sq_mean": 192.09733380506606,
+            "multiplier_mean": 0.4556262921805303,
+            "multiplier_min": -0.21836397237494887,
+            "multiplier_max": 0.7821498542113687,
+            "noncontractive_fraction": 0.0
+          },
+          "33-64": {
+            "state_fro_mean": 45.677661523838594,
+            "state_fro_max": 103.19201149256067,
+            "centered_sq_mean": 222.96802043749267,
+            "multiplier_mean": 0.6818199665512463,
+            "multiplier_min": 0.21439757045730523,
+            "multiplier_max": 0.8771368252304804,
+            "noncontractive_fraction": 0.0
+          },
+          "65-128": {
+            "state_fro_mean": 31.739100192703823,
+            "state_fro_max": 77.77554809080644,
+            "centered_sq_mean": 244.5702999821853,
+            "multiplier_mean": 0.8241898887734967,
+            "multiplier_min": 0.5558533222227504,
+            "multiplier_max": 0.935612356281528,
+            "noncontractive_fraction": 0.0
+          },
+          "129-256": {
+            "state_fro_mean": 23.66324699103059,
+            "state_fro_max": 52.7890353287373,
+            "centered_sq_mean": 272.61756691710707,
+            "multiplier_mean": 0.9030902381998045,
+            "multiplier_min": 0.7729338157539514,
+            "multiplier_max": 0.9639841181626354,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 18.92348047721807,
+            "state_fro_max": 32.80596994565752,
+            "centered_sq_mean": 294.1035137303535,
+            "multiplier_mean": 0.9474989143727606,
+            "multiplier_min": 0.8503045436221439,
+            "multiplier_max": 0.9830893890126966,
+            "noncontractive_fraction": 0.0
+          }
+        },
+        "0.125": {
+          "1-16": {
+            "state_fro_mean": 409.71307414396074,
+            "state_fro_max": 3137.2453626251004,
+            "centered_sq_mean": 139.2937826051525,
+            "multiplier_mean": -1.8967262418182624,
+            "multiplier_min": -14.527428842383653,
+            "multiplier_max": 0.2814460969952105,
+            "noncontractive_fraction": 0.5
+          },
+          "17-32": {
+            "state_fro_mean": 265.03674355394503,
+            "state_fro_max": 2573.3736157711064,
+            "centered_sq_mean": 192.09733380506606,
+            "multiplier_mean": -0.04638702800096903,
+            "multiplier_min": -1.3779044153381328,
+            "multiplier_max": 0.6042997084227375,
+            "noncontractive_fraction": 0.0078125
+          },
+          "33-64": {
+            "state_fro_mean": 122.2760797730714,
+            "state_fro_max": 1086.8271844877822,
+            "centered_sq_mean": 222.96802043749267,
+            "multiplier_mean": 0.3850585489859067,
+            "multiplier_min": -0.5448890696117052,
+            "multiplier_max": 0.7706670930839117,
+            "noncontractive_fraction": 0.0
+          },
+          "65-128": {
+            "state_fro_mean": 60.20533242436096,
+            "state_fro_max": 507.30621960143316,
+            "centered_sq_mean": 244.5702999821853,
+            "multiplier_mean": 0.6591494054982967,
+            "multiplier_min": 0.12559553333438966,
+            "multiplier_max": 0.8794891753729733,
+            "noncontractive_fraction": 0.0
+          },
+          "129-256": {
+            "state_fro_mean": 32.22748800362133,
+            "state_fro_max": 233.16541132448123,
+            "centered_sq_mean": 272.61756691710707,
+            "multiplier_mean": 0.811580459760766,
+            "multiplier_min": 0.5530618761122195,
+            "multiplier_max": 0.9323350485523451,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 19.491662934215842,
+            "state_fro_max": 104.3599930027765,
+            "centered_sq_mean": 294.1035137303535,
+            "multiplier_mean": 0.897701623947601,
+            "multiplier_min": 0.7041678061054977,
+            "multiplier_max": 0.9681511646131643,
+            "noncontractive_fraction": 0.0
+          }
+        }
+      },
+      "qualification_vala_max_abs": 1.7763568394002505e-14,
+      "input_stats": {
+        "query_norm_mean": 1.6623573883850642,
+        "key_norm_mean": 21.463617717696295,
+        "centered_key_sq_mean": 270.06890975738924,
+        "value_norm_mean": 11.566201755281721
+      }
+    },
+    {
+      "layer": 27,
+      "methods": {
+        "mean": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 3.2552261334662225,
+            "cosine": 0.3820945353030807,
+            "output_target_rms": 1.8816651623548055
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 3.4528499394417502,
+            "cosine": 0.5383235827371609,
+            "output_target_rms": 2.0848726566536766
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 3.022879816176135,
+            "cosine": 0.5099032043309508,
+            "output_target_rms": 1.941067847571846
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 3.504143960132747,
+            "cosine": 0.42830658746583,
+            "output_target_rms": 2.0159076035766126
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 3.5095851747367983,
+            "cosine": 0.41746719719439696,
+            "output_target_rms": 1.995101431341844
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 3.334328599487879,
+            "cosine": 0.3668091512802128,
+            "output_target_rms": 1.8907221878189395
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 3.129662038369054,
+            "cosine": 0.35736519804247,
+            "output_target_rms": 1.8167745275923042
+          }
+        },
+        "vala": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 3.641692067256402,
+            "cosine": 0.4594290102323071,
+            "output_target_rms": 2.1332553614933136
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 3.9634924006321293,
+            "cosine": 0.6088816791374014,
+            "output_target_rms": 2.417935691211498
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 3.637615438909364,
+            "cosine": 0.6164803994642152,
+            "output_target_rms": 2.3248614003637003
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 3.7674404551835274,
+            "cosine": 0.5397859726228065,
+            "output_target_rms": 2.2753997857139647
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 3.8766615104673487,
+            "cosine": 0.5131343156874786,
+            "output_target_rms": 2.255254596462004
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 3.554033059667653,
+            "cosine": 0.44056905166793997,
+            "output_target_rms": 2.0778395261536176
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 3.599162971473726,
+            "cosine": 0.42623153921832263,
+            "output_target_rms": 2.08451729325896
+          }
+        },
+        "0.0": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 3.641692067256402,
+            "cosine": 0.45942901023230703,
+            "output_target_rms": 2.1332553614933136
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 3.9634924006321297,
+            "cosine": 0.6088816791374014,
+            "output_target_rms": 2.417935691211498
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 3.6376154389093647,
+            "cosine": 0.6164803994642152,
+            "output_target_rms": 2.3248614003637003
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 3.767440455183527,
+            "cosine": 0.5397859726228065,
+            "output_target_rms": 2.2753997857139647
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 3.8766615104673487,
+            "cosine": 0.5131343156874786,
+            "output_target_rms": 2.255254596462004
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 3.554033059667653,
+            "cosine": 0.44056905166793997,
+            "output_target_rms": 2.0778395261536176
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 3.599162971473726,
+            "cosine": 0.4262315392183226,
+            "output_target_rms": 2.0845172932589606
+          }
+        },
+        "0.001953125": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 3.613087489317283,
+            "cosine": 0.4595880650192068,
+            "output_target_rms": 2.124646675276973
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 3.8817378875761483,
+            "cosine": 0.6142948089413948,
+            "output_target_rms": 2.402660829625085
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 3.544058822930091,
+            "cosine": 0.6188532985820658,
+            "output_target_rms": 2.302341650873937
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 3.7150664853680246,
+            "cosine": 0.5401015447842612,
+            "output_target_rms": 2.2614072768465157
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 3.8519036370836486,
+            "cosine": 0.5128754031141354,
+            "output_target_rms": 2.2476455513649083
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 3.5365084384578256,
+            "cosine": 0.44043879622771004,
+            "output_target_rms": 2.072304967444411
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 3.5737821336063744,
+            "cosine": 0.4261534313277758,
+            "output_target_rms": 2.0762120298061673
+          }
+        },
+        "0.00390625": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 3.5894067571326045,
+            "cosine": 0.459607048546412,
+            "output_target_rms": 2.11719018760585
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 3.8568224233114847,
+            "cosine": 0.617319018109537,
+            "output_target_rms": 2.398984216313194
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 3.476847605382506,
+            "cosine": 0.6203041335744146,
+            "output_target_rms": 2.285264556559863
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 3.676142030974224,
+            "cosine": 0.540107607240838,
+            "output_target_rms": 2.2503458995459504
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 3.829985676320018,
+            "cosine": 0.5125616249415268,
+            "output_target_rms": 2.2406248442785484
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 3.520974765685076,
+            "cosine": 0.4402988212164656,
+            "output_target_rms": 2.0672329229093847
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 3.5504648656354254,
+            "cosine": 0.42605938236385776,
+            "output_target_rms": 2.0684415582871747
+          }
+        },
+        "0.0078125": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 3.551810239664512,
+            "cosine": 0.4593377346931347,
+            "output_target_rms": 2.1046224893577317
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 3.9180371239248615,
+            "cosine": 0.617079916430501,
+            "output_target_rms": 2.4142697201981194
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 3.3891789648965855,
+            "cosine": 0.6216126891569491,
+            "output_target_rms": 2.2609304145985933
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 3.6219833871884157,
+            "cosine": 0.5396435697145583,
+            "output_target_rms": 2.23350040491485
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 3.7911683251829613,
+            "cosine": 0.5118660716097745,
+            "output_target_rms": 2.2276626192134468
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 3.4938472598357877,
+            "cosine": 0.4400089783115113,
+            "output_target_rms": 2.05802664960214
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 3.5088908707021043,
+            "cosine": 0.4258307282645347,
+            "output_target_rms": 2.054256975911639
+          }
+        },
+        "0.015625": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 3.4991673242849797,
+            "cosine": 0.45826763842212065,
+            "output_target_rms": 2.085189005887999
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 4.286955148143549,
+            "cosine": 0.6058412145605658,
+            "output_target_rms": 2.4930996480927545
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 3.296968350730579,
+            "cosine": 0.6217723151277557,
+            "output_target_rms": 2.2302599601760376
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 3.556045195507641,
+            "cosine": 0.5381326948754755,
+            "output_target_rms": 2.2097162664231464
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 3.7245299623920403,
+            "cosine": 0.5104201783137741,
+            "output_target_rms": 2.2043862242583776
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 3.449131737070556,
+            "cosine": 0.43940179018146636,
+            "output_target_rms": 2.0420227896517784
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 3.441002270629748,
+            "cosine": 0.4252369047101101,
+            "output_target_rms": 2.030175293243671
+          }
+        },
+        "0.03125": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 3.4591205322441154,
+            "cosine": 0.4553913043739251,
+            "output_target_rms": 2.0637411853138627
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 6.169541105023509,
+            "cosine": 0.576280600747086,
+            "output_target_rms": 2.84814676771571
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 3.240365476102524,
+            "cosine": 0.6183531916904493,
+            "output_target_rms": 2.199422642902851
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 3.4910108089109295,
+            "cosine": 0.5342320405763614,
+            "output_target_rms": 2.1795451815454
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 3.6255352218863783,
+            "cosine": 0.5071910565062292,
+            "output_target_rms": 2.167284930846918
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 3.384205302460858,
+            "cosine": 0.43786772532501805,
+            "output_target_rms": 2.0168543293730465
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 3.3454569505978,
+            "cosine": 0.42360736485939277,
+            "output_target_rms": 1.9940550492371172
+          }
+        },
+        "0.0625": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 4.537710978461657,
+            "cosine": 0.4420863430800197,
+            "output_target_rms": 2.2939316213540173
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 48.85972744800302,
+            "cosine": 0.4777204902628279,
+            "output_target_rms": 7.121529337558971
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 5.658534009921738,
+            "cosine": 0.554406676174803,
+            "output_target_rms": 2.670465248687153
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 4.317433035634504,
+            "cosine": 0.5032385499381233,
+            "output_target_rms": 2.3383725105120803
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 3.770890511853477,
+            "cosine": 0.4911936572494114,
+            "output_target_rms": 2.178155575252872
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 3.38541233962533,
+            "cosine": 0.43107482562046706,
+            "output_target_rms": 2.0025075447277687
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 3.261586649078291,
+            "cosine": 0.41842409239283573,
+            "output_target_rms": 1.9549692156861755
+          }
+        },
+        "0.125": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 1055.2129904341443,
+            "cosine": 0.35477798187457804,
+            "output_target_rms": 32.493106739505194
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 35764.03465125851,
+            "cosine": 0.24097749138195887,
+            "output_target_rms": 189.1150798323276
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 2754.33025191628,
+            "cosine": 0.26755135623946835,
+            "output_target_rms": 52.49995747581273
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 1290.1869285654,
+            "cosine": 0.2937498298961762,
+            "output_target_rms": 35.933865112766796
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 360.72755134779436,
+            "cosine": 0.3622986550228924,
+            "output_target_rms": 19.01521622286103
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 68.1066317480484,
+            "cosine": 0.3552232122590171,
+            "output_target_rms": 8.28036733181316
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 14.934164458307368,
+            "cosine": 0.3728679121505632,
+            "output_target_rms": 3.9222475584245657
+          }
+        }
+      },
+      "stats": {
+        "0.0": {
+          "1-16": {
+            "state_fro_mean": 348.73234096770784,
+            "state_fro_max": 807.5996948002268,
+            "centered_sq_mean": 147.30703902493676,
+            "multiplier_mean": 0.788704437923188,
+            "multiplier_min": 0.0,
+            "multiplier_max": 0.9375,
+            "noncontractive_fraction": 0.0
+          },
+          "17-32": {
+            "state_fro_mean": 242.43888383020618,
+            "state_fro_max": 403.8359712517194,
+            "centered_sq_mean": 154.8712893997498,
+            "multiplier_mean": 0.9576396123620297,
+            "multiplier_min": 0.9411764705882353,
+            "multiplier_max": 0.96875,
+            "noncontractive_fraction": 0.0
+          },
+          "33-64": {
+            "state_fro_mean": 221.75343957543697,
+            "state_fro_max": 334.03885998808505,
+            "centered_sq_mean": 223.41393291584984,
+            "multiplier_mean": 0.978581384116586,
+            "multiplier_min": 0.9696969696969697,
+            "multiplier_max": 0.984375,
+            "noncontractive_fraction": 0.0
+          },
+          "65-128": {
+            "state_fro_mean": 196.2460807274707,
+            "state_fro_max": 268.5822560018097,
+            "centered_sq_mean": 226.32927649067352,
+            "multiplier_mean": 0.9892303720486968,
+            "multiplier_min": 0.9846153846153847,
+            "multiplier_max": 0.9921875,
+            "noncontractive_fraction": 0.0
+          },
+          "129-256": {
+            "state_fro_mean": 163.7694729122959,
+            "state_fro_max": 225.3042225071075,
+            "centered_sq_mean": 279.6925874682152,
+            "multiplier_mean": 0.9946000166388429,
+            "multiplier_min": 0.9922480620155039,
+            "multiplier_max": 0.99609375,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 153.8500289929118,
+            "state_fro_max": 231.75021955653415,
+            "centered_sq_mean": 290.4448070098937,
+            "multiplier_mean": 0.9972962047979201,
+            "multiplier_min": 0.9961089494163424,
+            "multiplier_max": 0.998046875,
+            "noncontractive_fraction": 0.0
+          }
+        },
+        "0.001953125": {
+          "1-16": {
+            "state_fro_mean": 340.67715168023534,
+            "state_fro_max": 794.9863440655726,
+            "centered_sq_mean": 147.30703902493676,
+            "multiplier_mean": 0.7377421301811777,
+            "multiplier_min": 0.0,
+            "multiplier_max": 0.9312258784703316,
+            "noncontractive_fraction": 0.0
+          },
+          "17-32": {
+            "state_fro_mean": 235.70468469564798,
+            "state_fro_max": 382.4514679929886,
+            "centered_sq_mean": 154.8712893997498,
+            "multiplier_mean": 0.9450322153463805,
+            "multiplier_min": 0.9123082197566761,
+            "multiplier_max": 0.9631107341506052,
+            "noncontractive_fraction": 0.0
+          },
+          "33-64": {
+            "state_fro_mean": 214.75328153496295,
+            "state_fro_max": 315.316768488105,
+            "centered_sq_mean": 223.41393291584984,
+            "multiplier_mean": 0.9692486092470429,
+            "multiplier_min": 0.9354820696324414,
+            "multiplier_max": 0.9812222912436134,
+            "noncontractive_fraction": 0.0
+          },
+          "65-128": {
+            "state_fro_mean": 189.74659414541048,
+            "state_fro_max": 258.7062623950869,
+            "centered_sq_mean": 226.32927649067352,
+            "multiplier_mean": 0.9844469690012602,
+            "multiplier_min": 0.968760661511362,
+            "multiplier_max": 0.9907386627450244,
+            "noncontractive_fraction": 0.0
+          },
+          "129-256": {
+            "state_fro_mean": 158.46231169834982,
+            "state_fro_max": 217.2427511564434,
+            "centered_sq_mean": 279.6925874682152,
+            "multiplier_mean": 0.9916681639957501,
+            "multiplier_min": 0.9814576389384894,
+            "multiplier_max": 0.9952233501939665,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 149.0144386128054,
+            "state_fro_max": 221.30226544408575,
+            "centered_sq_mean": 290.4448070098937,
+            "multiplier_mean": 0.9957597379047933,
+            "multiplier_min": 0.9906146544520702,
+            "multiplier_max": 0.9976063668586485,
+            "noncontractive_fraction": 0.0
+          }
+        },
+        "0.00390625": {
+          "1-16": {
+            "state_fro_mean": 334.6929836375454,
+            "state_fro_max": 785.8053562190396,
+            "centered_sq_mean": 147.30703902493676,
+            "multiplier_mean": 0.6867798224391675,
+            "multiplier_min": -0.3584129885683449,
+            "multiplier_max": 0.9249517569406631,
+            "noncontractive_fraction": 0.0
+          },
+          "17-32": {
+            "state_fro_mean": 229.8753996062049,
+            "state_fro_max": 365.04512121539125,
+            "centered_sq_mean": 154.8712893997498,
+            "multiplier_mean": 0.9324248183307313,
+            "multiplier_min": 0.8722354871323998,
+            "multiplier_max": 0.9574714683012104,
+            "noncontractive_fraction": 0.0
+          },
+          "33-64": {
+            "state_fro_mean": 208.4854279340757,
+            "state_fro_max": 301.4269149363902,
+            "centered_sq_mean": 223.41393291584984,
+            "multiplier_mean": 0.9599158343774998,
+            "multiplier_min": 0.9012671695679131,
+            "multiplier_max": 0.9783175983602426,
+            "noncontractive_fraction": 0.0
+          },
+          "65-128": {
+            "state_fro_mean": 183.8635059505524,
+            "state_fro_max": 249.84991252244325,
+            "centered_sq_mean": 226.32927649067352,
+            "multiplier_mean": 0.9796635659538235,
+            "multiplier_min": 0.9522272053756652,
+            "multiplier_max": 0.9892898254900488,
+            "noncontractive_fraction": 0.0
+          },
+          "129-256": {
+            "state_fro_mean": 153.66315941873552,
+            "state_fro_max": 210.03274891832945,
+            "centered_sq_mean": 279.6925874682152,
+            "multiplier_mean": 0.9887363113526573,
+            "multiplier_min": 0.9697645929454719,
+            "multiplier_max": 0.9943529503879328,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 144.61675006672348,
+            "state_fro_max": 211.92619995753384,
+            "centered_sq_mean": 290.4448070098937,
+            "multiplier_mean": 0.9942232710116666,
+            "multiplier_min": 0.9849467810230995,
+            "multiplier_max": 0.9971890055743191,
+            "noncontractive_fraction": 0.0
+          }
+        },
+        "0.0078125": {
+          "1-16": {
+            "state_fro_mean": 327.71961719113904,
+            "state_fro_max": 776.0713422508063,
+            "centered_sq_mean": 147.30703902493676,
+            "multiplier_mean": 0.5848552069551469,
+            "multiplier_min": -1.2168259771366898,
+            "multiplier_max": 0.9124035138813261,
+            "noncontractive_fraction": 0.005859375
+          },
+          "17-32": {
+            "state_fro_mean": 220.2756019257335,
+            "state_fro_max": 338.97797057504795,
+            "centered_sq_mean": 154.8712893997498,
+            "multiplier_mean": 0.9072100242994332,
+            "multiplier_min": 0.7920900218838474,
+            "multiplier_max": 0.9468930884176225,
+            "noncontractive_fraction": 0.0
+          },
+          "33-64": {
+            "state_fro_mean": 197.69892432906568,
+            "state_fro_max": 281.5681747511264,
+            "centered_sq_mean": 223.41393291584984,
+            "multiplier_mean": 0.9412502846384136,
+            "multiplier_min": 0.8328373694388566,
+            "multiplier_max": 0.972508212593501,
+            "noncontractive_fraction": 0.0
+          },
+          "65-128": {
+            "state_fro_mean": 173.6077779597224,
+            "state_fro_max": 234.56447974747013,
+            "centered_sq_mean": 226.32927649067352,
+            "multiplier_mean": 0.9700967598589503,
+            "multiplier_min": 0.9191602931042716,
+            "multiplier_max": 0.9863921509800976,
+            "noncontractive_fraction": 0.0
+          },
+          "129-256": {
+            "state_fro_mean": 145.3029887851924,
+            "state_fro_max": 197.60662851419528,
+            "centered_sq_mean": 279.6925874682152,
+            "multiplier_mean": 0.9828726060664716,
+            "multiplier_min": 0.946378500959437,
+            "multiplier_max": 0.9926121507758656,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 136.897447893584,
+            "state_fro_max": 195.77212924469077,
+            "centered_sq_mean": 290.4448070098937,
+            "multiplier_mean": 0.9911503372254131,
+            "multiplier_min": 0.973611034165158,
+            "multiplier_max": 0.9963582091684401,
+            "noncontractive_fraction": 0.0
+          }
+        },
+        "0.015625": {
+          "1-16": {
+            "state_fro_mean": 328.5949949870735,
+            "state_fro_max": 1022.0742484029994,
+            "centered_sq_mean": 147.30703902493676,
+            "multiplier_mean": 0.38100597598710595,
+            "multiplier_min": -2.93365195427338,
+            "multiplier_max": 0.8873070277626522,
+            "noncontractive_fraction": 0.044921875
+          },
+          "17-32": {
+            "state_fro_mean": 206.9745666885085,
+            "state_fro_max": 313.27544666277595,
+            "centered_sq_mean": 154.8712893997498,
+            "multiplier_mean": 0.8567804362368368,
+            "multiplier_min": 0.6317990913867423,
+            "multiplier_max": 0.9271195101685783,
+            "noncontractive_fraction": 0.0
+          },
+          "33-64": {
+            "state_fro_mean": 181.24186678748492,
+            "state_fro_max": 250.40381371505669,
+            "centered_sq_mean": 223.41393291584984,
+            "multiplier_mean": 0.9039191851602413,
+            "multiplier_min": 0.6959777691807435,
+            "multiplier_max": 0.9608894410600177,
+            "noncontractive_fraction": 0.0
+          },
+          "65-128": {
+            "state_fro_mean": 157.57780316594096,
+            "state_fro_max": 211.092352218973,
+            "centered_sq_mean": 226.32927649067352,
+            "multiplier_mean": 0.9509631476692036,
+            "multiplier_min": 0.8530264685614845,
+            "multiplier_max": 0.9805968019601952,
+            "noncontractive_fraction": 0.0
+          },
+          "129-256": {
+            "state_fro_mean": 132.19635587758833,
+            "state_fro_max": 178.43070829718664,
+            "centered_sq_mean": 279.6925874682152,
+            "multiplier_mean": 0.9711451954941003,
+            "multiplier_min": 0.899606316987367,
+            "multiplier_max": 0.9891305515517312,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 124.6321369070233,
+            "state_fro_max": 171.10878438691498,
+            "centered_sq_mean": 290.4448070098937,
+            "multiplier_mean": 0.985004469652906,
+            "multiplier_min": 0.9509395404492752,
+            "multiplier_max": 0.9946966163566822,
+            "noncontractive_fraction": 0.0
+          }
+        },
+        "0.03125": {
+          "1-16": {
+            "state_fro_mean": 385.08513455782423,
+            "state_fro_max": 1772.1831928553777,
+            "centered_sq_mean": 147.30703902493676,
+            "multiplier_mean": -0.026692485948976163,
+            "multiplier_min": -6.36730390854676,
+            "multiplier_max": 0.8371140555253045,
+            "noncontractive_fraction": 0.119140625
+          },
+          "17-32": {
+            "state_fro_mean": 200.88248445798467,
+            "state_fro_max": 373.6581254233203,
+            "centered_sq_mean": 154.8712893997498,
+            "multiplier_mean": 0.7559212601116442,
+            "multiplier_min": 0.31121723039253213,
+            "multiplier_max": 0.8880790782172842,
+            "noncontractive_fraction": 0.0
+          },
+          "33-64": {
+            "state_fro_mean": 162.74456798103796,
+            "state_fro_max": 241.8310068661173,
+            "centered_sq_mean": 223.41393291584984,
+            "multiplier_mean": 0.8292569862038965,
+            "multiplier_min": 0.4222585686645173,
+            "multiplier_max": 0.9376518979930513,
+            "noncontractive_fraction": 0.0
+          },
+          "65-128": {
+            "state_fro_mean": 137.02518649821377,
+            "state_fro_max": 184.24860851774855,
+            "centered_sq_mean": 226.32927649067352,
+            "multiplier_mean": 0.9126959232897105,
+            "multiplier_min": 0.72075881947591,
+            "multiplier_max": 0.9690061039203904,
+            "noncontractive_fraction": 0.0
+          },
+          "129-256": {
+            "state_fro_mean": 114.72982960956563,
+            "state_fro_max": 154.44780682766867,
+            "centered_sq_mean": 279.6925874682152,
+            "multiplier_mean": 0.9476903743493575,
+            "multiplier_min": 0.8060619490432273,
+            "multiplier_max": 0.9822237295951002,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 107.80286962794904,
+            "state_fro_max": 140.01402079896837,
+            "centered_sq_mean": 290.4448070098937,
+            "multiplier_mean": 0.9727127345078919,
+            "multiplier_min": 0.9055965530175095,
+            "multiplier_max": 0.9913734307331663,
+            "noncontractive_fraction": 0.0
+          }
+        },
+        "0.0625": {
+          "1-16": {
+            "state_fro_mean": 938.2892465581681,
+            "state_fro_max": 7738.711351436409,
+            "centered_sq_mean": 147.30703902493676,
+            "multiplier_mean": -0.8420894098211402,
+            "multiplier_min": -13.23460781709352,
+            "multiplier_max": 0.736728111050609,
+            "noncontractive_fraction": 0.251953125
+          },
+          "17-32": {
+            "state_fro_mean": 370.71019590693294,
+            "state_fro_max": 1962.8452017842922,
+            "centered_sq_mean": 154.8712893997498,
+            "multiplier_mean": 0.5542029078612589,
+            "multiplier_min": -0.32994649159588807,
+            "multiplier_max": 0.8106409150552579,
+            "noncontractive_fraction": 0.0
+          },
+          "33-64": {
+            "state_fro_mean": 214.81944158206616,
+            "state_fro_max": 945.520196337605,
+            "centered_sq_mean": 223.41393291584984,
+            "multiplier_mean": 0.6799325882912071,
+            "multiplier_min": -0.12517983236793517,
+            "multiplier_max": 0.8911768118591185,
+            "noncontractive_fraction": 0.0
+          },
+          "65-128": {
+            "state_fro_mean": 141.16779091908808,
+            "state_fro_max": 470.486644183737,
+            "centered_sq_mean": 226.32927649067352,
+            "multiplier_mean": 0.8361614745307244,
+            "multiplier_min": 0.4562235213047614,
+            "multiplier_max": 0.9458247078407809,
+            "noncontractive_fraction": 0.0
+          },
+          "129-256": {
+            "state_fro_mean": 103.91547255552669,
+            "state_fro_max": 245.18356919678743,
+            "centered_sq_mean": 279.6925874682152,
+            "multiplier_mean": 0.9007807320598722,
+            "multiplier_min": 0.6189732131549476,
+            "multiplier_max": 0.9685458198459381,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 90.82169697858784,
+            "state_fro_max": 144.37169611705775,
+            "centered_sq_mean": 290.4448070098937,
+            "multiplier_mean": 0.9481292642178637,
+            "multiplier_min": 0.8149105781539782,
+            "multiplier_max": 0.9847270594861346,
+            "noncontractive_fraction": 0.0
+          }
+        },
+        "0.125": {
+          "1-16": {
+            "state_fro_mean": 11360.488643470897,
+            "state_fro_max": 177519.2719474247,
+            "centered_sq_mean": 147.30703902493676,
+            "multiplier_mean": -2.4728832575654685,
+            "multiplier_min": -26.96921563418704,
+            "multiplier_max": 0.5359562221012178,
+            "noncontractive_fraction": 0.478515625
+          },
+          "17-32": {
+            "state_fro_mean": 7807.942758988611,
+            "state_fro_max": 125152.82048431327,
+            "centered_sq_mean": 154.8712893997498,
+            "multiplier_mean": 0.1507662033604882,
+            "multiplier_min": -1.6122739355727287,
+            "multiplier_max": 0.657561878151409,
+            "noncontractive_fraction": 0.005859375
+          },
+          "33-64": {
+            "state_fro_mean": 3700.0436617354653,
+            "state_fro_max": 61226.395039521994,
+            "centered_sq_mean": 223.41393291584984,
+            "multiplier_mean": 0.38128379246582833,
+            "multiplier_min": -1.22005663443284,
+            "multiplier_max": 0.7982266395912528,
+            "noncontractive_fraction": 0.0009765625
+          },
+          "65-128": {
+            "state_fro_mean": 1720.0051788206706,
+            "state_fro_max": 28323.424621241684,
+            "centered_sq_mean": 226.32927649067352,
+            "multiplier_mean": 0.6830925770127518,
+            "multiplier_min": -0.07284707503753607,
+            "multiplier_max": 0.8994619156815616,
+            "noncontractive_fraction": 0.0
+          },
+          "129-256": {
+            "state_fro_mean": 786.5995679704581,
+            "state_fro_max": 13190.95934762782,
+            "centered_sq_mean": 279.6925874682152,
+            "multiplier_mean": 0.8069614474809016,
+            "multiplier_min": 0.24479574137838833,
+            "multiplier_max": 0.941190000347614,
+            "noncontractive_fraction": 0.0
+          },
+          "257-512": {
+            "state_fro_mean": 375.53187564611545,
+            "state_fro_max": 5774.999354210726,
+            "centered_sq_mean": 290.4448070098937,
+            "multiplier_mean": 0.8989623236378073,
+            "multiplier_min": 0.6335386284269153,
+            "multiplier_max": 0.9714343169920713,
+            "noncontractive_fraction": 0.0
+          }
+        }
+      },
+      "qualification_vala_max_abs": 4.973799150320701e-14,
+      "input_stats": {
+        "query_norm_mean": 2.355123799269295,
+        "key_norm_mean": 30.87334481736754,
+        "centered_key_sq_mean": 266.84315350384685,
+        "value_norm_mean": 84.83039717989419
+      }
+    }
+  ],
+  "elapsed_s": 11.123273134231567
+}

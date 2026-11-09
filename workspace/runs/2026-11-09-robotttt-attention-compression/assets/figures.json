@@ -1,0 +1,18 @@
+{
+  "attention-compression:gdn-stability": {
+    "file": "assets/attention-gdn-stability.png",
+    "caption": "真实 Qwen3-0.6B 的第 0、13、27 层，每层汇总后对三层等权平均。左：构造段原始中心化键递推在不同 κ 下的 NMSE 随位置变化，三角标记数值溢出。中：谱钳制在构造段与确认段的各位置桶均降低 VaLA 的 NMSE。右：两组文本的余弦相似度呈另一排序，收缩稳定性与读出方向需要分别设计。"
+  },
+  "attention-compression:ttt-readout": {
+    "file": "assets/attention-ttt-readout.png",
+    "caption": "左：正则比例为 0.001 时，绿、红、黄实线分别为精确注意力读出 Wr、直接 Wq 与最优共线校准 W(λq)；绿色虚线改用上一时刻状态 W(t−1) 读出，灰色虚线为历史值均值。中：构造段三层平均的注意力加权键与查询余弦仅约 0.2，最优共线投影的相对残差范数仍约为原读出向量的 96%。右：构造段第 0、13、27 层均呈现这一读出差距。"
+  },
+  "robotttt-last-layer:architecture": {
+    "file": "assets/robotttt-architecture.png",
+    "caption": "RoboTTT 的序列训练与推理。单步注意力处理状态、动作和可学习寄存器，TTT 层跨时间更新快权重；推理时状态沿轨迹逐步展开，尺寸保持固定。图源：RoboTTT 原论文。"
+  },
+  "robotttt-last-layer:paired-results": {
+    "file": "assets/robotttt-paired-results.png",
+    "caption": "红色为全参数更新，绿色为仅更新输出矩阵。A：两个版本的外层序列动作 MSE 随更新次数变化。B：64 条留出轨迹的非饱和动作 R²，观察前 256 步的冷启动差异。C：同一指标在 384–1024 步的长程排序。D：前 16 条留出轨迹第 0 层更新前的内环重构 MSE。E：每层实际更新参数的相对漂移。F：末层各输出通道的径向特征值，0 < rⱼ < 1 表示该方向收缩。"
+  }
+}
