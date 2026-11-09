@@ -1,6 +1,6 @@
 # Paper Scout
 
-A living collection of paper-conditioned research reports. Paper Scout is an agent-native workflow that scouts recent papers (default source: Hugging Face), filters hard, investigates the most promising or interesting ones deeply, and delivers a fresh Feishu report for each run. The record accumulates here as runs happen.
+A living collection of paper-conditioned research reports. Paper Scout is an agent-native workflow that scouts recent papers (default source: Hugging Face) and selected research essays (Scientific Spaces), filters hard, investigates the most promising or interesting ones deeply, and delivers a fresh Feishu report for each run. The record accumulates here as runs happen.
 
 There is no code to build and nothing to install. The repository *is* the instance. What it ships is **prompts** — instruction files and skills that are easy to read and tune.
 

@@ -13,7 +13,7 @@ user-invocable: false
 ├── memories/
 │   ├── MEMORY.md                         # 近稳定的研究方向入口
 │   └── <date>-memory.md                  # typed 跨巡航记忆
-├── papers/<area>/<slug>-<id>.md          # 下载的论文 Markdown
+├── papers/<area>/<slug>-<id>.md          # 下载的论文或研究文章 Markdown
 ├── code/                                 # 忽略的实验台,用于外部信号工作
 ├── drafts/                               # 忽略的 DocxXML、媒体与暂存产物
 └── runs/
@@ -22,19 +22,19 @@ user-invocable: false
         ├── report.docxxml                # 已交付报告的源文件
         ├── checklist.md                  # 人工完成闸门
         ├── assets/                       # 面向报告的资产与小型结果产物
-        └── <thread-id>/                  # 论文或跨论文研究线程
+        └── <thread-id>/                  # 论文、文章或跨作品研究线程
             ├── README.md                 # 保留证据时必需
             ├── code/                     # 可选保留的探针、脚本、复现
             └── patches/                  # 可选保留的针对外部代码的补丁
 ```
 
-一个线程是一个持久的调查单元。它可以是一篇论文、一次跨论文比较、一个方法问题、一条代码路径,或一个由论文池激发的可建造想法。当没有任何有意义的外部信号可以保留时,线程目录也可以只含 `BLOCKER.md`。
+一个线程是一个持久的调查单元。它可以是一篇论文或研究文章、一次跨作品比较、一个方法问题、一条代码路径,或一个由候选池激发的可建造想法。当没有任何有意义的外部信号可以保留时,线程目录也可以只含 `BLOCKER.md`。
 
 ## 命名
 
 运行 id 以日期开头、尽量可读,例如 `2026-06-07-cosmos3-grail-qwenvla`。论文集没有现成名字时,不要硬造花哨的 slug。
 
-论文缓存文件以标题 slug 开头、论文 id 结尾:
+文本缓存文件以标题 slug 开头、论文或文章 id 结尾:
 
 - `papers/vla/robosemanticbench-2606.02277.md`
 - `papers/world-models/cosmos3-2606.02800.md`
@@ -48,7 +48,7 @@ user-invocable: false
 
 - `memories/MEMORY.md`:被追踪的近稳定研究方向入口,不作为逐轮索引。
 - `memories/<date>-memory.md`:被追踪的跨巡航记忆;条目 schema 与检索规则遵循 `memory-manage`。
-- `papers/`:被追踪的持久论文文本缓存。
+- `papers/`:被追踪的持久论文与研究文章文本缓存。
 - `code/`:忽略的实验台。在这里克隆仓库、创建虚拟环境、跑实验、给上游代码打补丁、写临时探针。不要把有用工作的唯一副本留在这里。
 - `drafts/`:忽略的暂存区。随意覆盖。绝不把持久内容放在这里。
 - `runs/<run-id>/report.docxxml`:被追踪的已交付报告源文件。
@@ -172,7 +172,7 @@ python3 .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mo
 
 持久去重日志。只追加,新的在前。
 
-**侦查之前先读。**不要重复已覆盖的论文或研究线程,除非被明确推翻。短名单中的论文如仍相关,可以再次出现。
+**侦查之前先读。**不要重复已覆盖的论文、研究文章或研究线程,除非被明确推翻。短名单中的论文或文章如仍相关,可以再次出现。
 
 **确认交付后追加。**记录:
 
@@ -181,10 +181,10 @@ python3 .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mo
 - 飞书文档 URL
 - 运行包路径
 - 深度线程
-- 已覆盖论文
-- 短名单论文
+- 已覆盖论文与文章
+- 短名单论文与文章
 
-条目保持简洁。不要改写历史。
+科学空间文章以 `scientific-spaces:<archive-id>` 作为覆盖 id,并在深度线程或背景中保留原站 URL;若文章与论文共同构成一个线程,两者都记录。条目保持简洁,不要改写历史。
 
 ## 预检
 

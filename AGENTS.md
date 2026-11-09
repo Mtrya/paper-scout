@@ -67,9 +67,9 @@ Each file has a distinct job. Do not let them bleed into each other.
 
 **`workspace/.agents/skills/memory-manage/SKILL.md`** — cross-run memory retrieval, typed execution/hypothesis schemas, promotion rules, provenance, and update policy.
 
-**`workspace/.agents/skills/paper-source/SKILL.md`** — recent-paper pool discovery. Default source is Hugging Face Papers, with commands documented inline; additional sources are added here as the workflow grows.
+**`workspace/.agents/skills/paper-source/SKILL.md`** — recent research-candidate discovery and full-text acquisition. Hugging Face Papers is the default paper source; Scientific Spaces RSS supplies research essays. Commands and fallbacks are documented inline.
 
-**`workspace/.agents/skills/paper-deep-dive/SKILL.md`** — deep investigation of a single paper: reading, code inspection, resource-proportional research actions, related-work comparison, and structured analysis notes.
+**`workspace/.agents/skills/paper-deep-dive/SKILL.md`** — deep investigation of a selected paper or research article: reading, code inspection, resource-proportional research actions, related-work comparison, and structured analysis notes.
 
 **`workspace/.agents/skills/report-compose/SKILL.md`** — DocxXML research report composition as a gated pipeline: per-thread writer briefs (fresh-context writer/reviewer subagents recommended), four human review gates plus a machine gate, Feishu doc creation, media insertion, user notification, and run-packet report preservation. Formatting rules, gate definitions, the anti-AI-tone negative list, and the manual delivery flow live in `references/`; `scripts/push_report.py` automates chunked push, anchor-based image placement, and verification. Uses `lark-doc` and `lark-im` for command details.
 
@@ -106,7 +106,7 @@ workspace/
 ├── memories/
 │   ├── MEMORY.md         # near-stable research orientation
 │   └── <date>-memory.md  # typed cross-run memory from a scouting run
-├── papers/            # tracked downloaded paper markdown cache, organized by area
+├── papers/            # tracked paper and research-article markdown cache, organized by area
 ├── code/              # ignored lab bench for external-signal work
 ├── drafts/            # ignored working DocxXML and scratch artifacts
 └── runs/
