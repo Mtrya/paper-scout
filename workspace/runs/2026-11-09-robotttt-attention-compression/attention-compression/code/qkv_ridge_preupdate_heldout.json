@@ -1,0 +1,808 @@
+{
+  "purpose": "Check whether the query-readout loss survives when W_{t-1}, rather than W_t fitted on the current pair, is used.",
+  "decision": "Do not use early post-update interpolation as evidence of K-to-V generalization.",
+  "config": {
+    "model_dir": "/inspire/qb-ilm/project/exploration-topic/ky26021/attention-1109/models/Qwen3-0.6B",
+    "text_file": "/inspire/qb-ilm/project/exploration-topic/ky26021/attention-1109/data/wikitext-2-raw-validation.txt",
+    "layers": [
+      0,
+      13,
+      27
+    ],
+    "sequences": 4,
+    "length": 512,
+    "rho": 0.001,
+    "device": "cuda"
+  },
+  "metadata": {
+    "model_dir": "/inspire/qb-ilm/project/exploration-topic/ky26021/attention-1109/models/Qwen3-0.6B",
+    "text_sha256": "714a24a5de7459876f7cfdc64837e551dd7cde2a51f95b763ee083fff273e307",
+    "token_count_available": 262211,
+    "token_offset": 131072,
+    "sequences": 4,
+    "length": 512,
+    "torch_dtype": "bfloat16",
+    "attention_probe_length": 512,
+    "attention_probe_max_abs_by_layer": {
+      "0": 0.0,
+      "13": 9.5367431640625e-06,
+      "27": 0.0
+    }
+  },
+  "aggregate": {
+    "pre_attention": {
+      "all": {
+        "count_vectors": 98304,
+        "nmse": 0.5904311468241731,
+        "cosine": 0.750093133700143,
+        "output_target_rms": 1.0363116763323095,
+        "layer_count": 3
+      },
+      "1-16": {
+        "count_vectors": 3072,
+        "nmse": 0.8480658867341875,
+        "cosine": 0.7363644468096974,
+        "output_target_rms": 1.0556181378720622,
+        "layer_count": 3
+      },
+      "17-32": {
+        "count_vectors": 3072,
+        "nmse": 0.7209620053780318,
+        "cosine": 0.8017400375234134,
+        "output_target_rms": 1.0497824105434823,
+        "layer_count": 3
+      },
+      "33-64": {
+        "count_vectors": 6144,
+        "nmse": 0.5999548264038957,
+        "cosine": 0.839130263411984,
+        "output_target_rms": 1.0550881995566492,
+        "layer_count": 3
+      },
+      "65-128": {
+        "count_vectors": 12288,
+        "nmse": 0.5113308350702925,
+        "cosine": 0.8568551915130662,
+        "output_target_rms": 1.0419117425443474,
+        "layer_count": 3
+      },
+      "129-256": {
+        "count_vectors": 24576,
+        "nmse": 0.45040561293395465,
+        "cosine": 0.7958632042798716,
+        "output_target_rms": 0.9902683868223957,
+        "layer_count": 3
+      },
+      "257-512": {
+        "count_vectors": 49152,
+        "nmse": 0.6592686941280589,
+        "cosine": 0.6870180541847661,
+        "output_target_rms": 1.049042386355417,
+        "layer_count": 3
+      }
+    },
+    "post_attention": {
+      "all": {
+        "count_vectors": 98304,
+        "nmse": 0.2762134642643967,
+        "cosine": 0.8399408940523668,
+        "output_target_rms": 1.0052527305313808,
+        "layer_count": 3
+      },
+      "1-16": {
+        "count_vectors": 3072,
+        "nmse": 0.00011566442310292952,
+        "cosine": 0.9999435694812203,
+        "output_target_rms": 0.9975139812840146,
+        "layer_count": 3
+      },
+      "17-32": {
+        "count_vectors": 3072,
+        "nmse": 0.0009555969031290861,
+        "cosine": 0.9995594269925,
+        "output_target_rms": 0.990899266016406,
+        "layer_count": 3
+      },
+      "33-64": {
+        "count_vectors": 6144,
+        "nmse": 0.003960732394805138,
+        "cosine": 0.9980655503779786,
+        "output_target_rms": 0.9819285201983599,
+        "layer_count": 3
+      },
+      "65-128": {
+        "count_vectors": 12288,
+        "nmse": 0.019275392588693704,
+        "cosine": 0.9872288442631766,
+        "output_target_rms": 0.9630653743677864,
+        "layer_count": 3
+      },
+      "129-256": {
+        "count_vectors": 24576,
+        "nmse": 0.11277628308933386,
+        "cosine": 0.888190947124862,
+        "output_target_rms": 0.945626454105954,
+        "layer_count": 3
+      },
+      "257-512": {
+        "count_vectors": 49152,
+        "nmse": 0.4751608670276474,
+        "cosine": 0.7392519723996537,
+        "output_target_rms": 1.0373133517214372,
+        "layer_count": 3
+      }
+    },
+    "pre_query": {
+      "all": {
+        "count_vectors": 98304,
+        "nmse": 1.8378864537480546,
+        "cosine": 0.1764591258629641,
+        "output_target_rms": 0.7813128043100511,
+        "layer_count": 3
+      },
+      "1-16": {
+        "count_vectors": 3072,
+        "nmse": 1.0279901646114504,
+        "cosine": 0.2793032307574894,
+        "output_target_rms": 0.20567716392550653,
+        "layer_count": 3
+      },
+      "17-32": {
+        "count_vectors": 3072,
+        "nmse": 1.017661517042549,
+        "cosine": 0.22655329270209332,
+        "output_target_rms": 0.252592342545048,
+        "layer_count": 3
+      },
+      "33-64": {
+        "count_vectors": 6144,
+        "nmse": 1.0687842954883415,
+        "cosine": 0.21434197810690567,
+        "output_target_rms": 0.3401513754208442,
+        "layer_count": 3
+      },
+      "65-128": {
+        "count_vectors": 12288,
+        "nmse": 1.334684289994607,
+        "cosine": 0.17333506116605527,
+        "output_target_rms": 0.5745320334641586,
+        "layer_count": 3
+      },
+      "129-256": {
+        "count_vectors": 24576,
+        "nmse": 1.8326051388454927,
+        "cosine": 0.1589832040813439,
+        "output_target_rms": 0.8006137592651035,
+        "layer_count": 3
+      },
+      "257-512": {
+        "count_vectors": 49152,
+        "nmse": 2.1319711923339124,
+        "cosine": 0.17168410441415538,
+        "output_target_rms": 0.8637074919939668,
+        "layer_count": 3
+      }
+    },
+    "post_query": {
+      "all": {
+        "count_vectors": 98304,
+        "nmse": 1.8207933763556232,
+        "cosine": 0.20524313945913264,
+        "output_target_rms": 0.7822622886054648,
+        "layer_count": 3
+      },
+      "1-16": {
+        "count_vectors": 3072,
+        "nmse": 1.00615044587487,
+        "cosine": 0.41292129930160953,
+        "output_target_rms": 0.2315226515776515,
+        "layer_count": 3
+      },
+      "17-32": {
+        "count_vectors": 3072,
+        "nmse": 0.9875503893768643,
+        "cosine": 0.325714453268036,
+        "output_target_rms": 0.26812177763446593,
+        "layer_count": 3
+      },
+      "33-64": {
+        "count_vectors": 6144,
+        "nmse": 1.040168800990644,
+        "cosine": 0.2759204206275021,
+        "output_target_rms": 0.34338665129651114,
+        "layer_count": 3
+      },
+      "65-128": {
+        "count_vectors": 12288,
+        "nmse": 1.318186436767533,
+        "cosine": 0.21051014911349897,
+        "output_target_rms": 0.579161788220122,
+        "layer_count": 3
+      },
+      "129-256": {
+        "count_vectors": 24576,
+        "nmse": 1.816047174568739,
+        "cosine": 0.18194424311174165,
+        "output_target_rms": 0.8010387236855617,
+        "layer_count": 3
+      },
+      "257-512": {
+        "count_vectors": 49152,
+        "nmse": 2.1172665705561413,
+        "cosine": 0.1862318329699791,
+        "output_target_rms": 0.8634541289364911,
+        "layer_count": 3
+      }
+    }
+  },
+  "layers": [
+    {
+      "layer": 0,
+      "methods": {
+        "pre_attention": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 0.6453109130920754,
+            "cosine": 0.7714125758716527,
+            "output_target_rms": 0.8411374579425487
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 1.1570959743775417,
+            "cosine": 0.582327601862016,
+            "output_target_rms": 0.991253885454254
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 1.0601040775400377,
+            "cosine": 0.651407624548749,
+            "output_target_rms": 0.9492072085338908
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 0.8134326338113019,
+            "cosine": 0.7403706505406382,
+            "output_target_rms": 0.9377027578648736
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 0.689174135108153,
+            "cosine": 0.7726860776294906,
+            "output_target_rms": 0.904160723513865
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 0.6248546899080003,
+            "cosine": 0.7835751328415832,
+            "output_target_rms": 0.8487773328810517
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 0.5590848547971222,
+            "cosine": 0.7882112829468886,
+            "output_target_rms": 0.7870051218088367
+          }
+        },
+        "post_attention": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 0.1790513368396388,
+            "cosine": 0.9356182871856273,
+            "output_target_rms": 0.832837308893443
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 0.00034305718296233627,
+            "cosine": 0.9998350563712403,
+            "output_target_rms": 0.9928250372756439
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 0.0028363457708046047,
+            "cosine": 0.9987385359043792,
+            "output_target_rms": 0.973590859697324
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 0.011578755293200576,
+            "cosine": 0.9947668345792191,
+            "output_target_rms": 0.9486067230092907
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 0.04811049169817091,
+            "cosine": 0.9829248697226408,
+            "output_target_rms": 0.9000970082700965
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 0.14638664683225758,
+            "cosine": 0.9499040637681311,
+            "output_target_rms": 0.8296356594061678
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 0.2736425505421576,
+            "cosine": 0.9012966212169002,
+            "output_target_rms": 0.7767961478841279
+          }
+        },
+        "pre_query": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 0.9723092344865476,
+            "cosine": 0.299090004896274,
+            "output_target_rms": 0.14397738802777377
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 0.9876722830613276,
+            "cosine": 0.2532945471921957,
+            "output_target_rms": 0.05685536844583835
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 0.9809373747425929,
+            "cosine": 0.27930447077009796,
+            "output_target_rms": 0.09617719314151289
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 0.9708313579477013,
+            "cosine": 0.2985573096670263,
+            "output_target_rms": 0.11940973100111424
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 0.9703257260015493,
+            "cosine": 0.2904149967982167,
+            "output_target_rms": 0.13759313488711564
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 0.971821458706719,
+            "cosine": 0.2900532780290183,
+            "output_target_rms": 0.15120196741622807
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 0.9715506721135287,
+            "cosine": 0.30994251924746313,
+            "output_target_rms": 0.15148166573087118
+          }
+        },
+        "post_query": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 0.9509600608317139,
+            "cosine": 0.3624129654598974,
+            "output_target_rms": 0.1439094976481753
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 0.9562117188738347,
+            "cosine": 0.4837974622186042,
+            "output_target_rms": 0.06340338042701153
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 0.9352383501634829,
+            "cosine": 0.46134474249737367,
+            "output_target_rms": 0.09857100283023947
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 0.9311108779582535,
+            "cosine": 0.4151033229826223,
+            "output_target_rms": 0.11996106359026798
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 0.939325815538762,
+            "cosine": 0.37375406746285805,
+            "output_target_rms": 0.13740641358957936
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 0.9493330806006753,
+            "cosine": 0.34833092650826325,
+            "output_target_rms": 0.15078776347844652
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 0.9578208655137276,
+            "cosine": 0.3462626476323722,
+            "output_target_rms": 0.15125608889189598
+          }
+        }
+      },
+      "exact_self_attention_mean": {
+        "1-16": 0.540417318958848,
+        "17-32": 0.46480880194153373,
+        "33-64": 0.42338638864107403,
+        "65-128": 0.4042362619516052,
+        "129-256": 0.39520977912204447,
+        "257-512": 0.3843325605768988
+      }
+    },
+    {
+      "layer": 13,
+      "methods": {
+        "pre_attention": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 0.2720576704756054,
+            "cosine": 0.8868950172705476,
+            "output_target_rms": 1.0878504653403993
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 0.8190765473669034,
+            "cosine": 0.8423813685715056,
+            "output_target_rms": 1.270168174402148
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 0.5869047199562657,
+            "cosine": 0.8891206097743721,
+            "output_target_rms": 1.2097852675127863
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 0.4888299710932653,
+            "cosine": 0.9006574316045624,
+            "output_target_rms": 1.1879406702319466
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 0.28945696582379254,
+            "cosine": 0.9355150378609551,
+            "output_target_rms": 1.1207279672444705
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 0.13218542918711107,
+            "cosine": 0.9266614734489151,
+            "output_target_rms": 1.0309074830843064
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 0.28834852330918465,
+            "cosine": 0.8557794857542111,
+            "output_target_rms": 1.087852668136285
+          }
+        },
+        "post_attention": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 0.15893858807282274,
+            "cosine": 0.9202764793613936,
+            "output_target_rms": 1.0481386747750507
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 3.1211626259267795e-06,
+            "cosine": 0.9999966745729036,
+            "output_target_rms": 1.0000253123489076
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 2.1395682310697323e-05,
+            "cosine": 0.9999597678779231,
+            "output_target_rms": 0.9999411692200452
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 0.00012404134452408263,
+            "cosine": 0.9998222934387304,
+            "output_target_rms": 0.9997346334559131
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 0.0029175731434800526,
+            "cosine": 0.9974719147027439,
+            "output_target_rms": 0.9991211737689023
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 0.052328901763404774,
+            "cosine": 0.9533892680294024,
+            "output_target_rms": 1.0046773111456957
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 0.2597265826952722,
+            "cosine": 0.864515281699382,
+            "output_target_rms": 1.0826361899672285
+          }
+        },
+        "pre_query": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 1.3424645045596786,
+            "cosine": 0.14036979166163177,
+            "output_target_rms": 0.6643003833911253
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 1.12790805828243,
+            "cosine": 0.28100746716016606,
+            "output_target_rms": 0.39473987083072387
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 1.0779491070689466,
+            "cosine": 0.20951610923823602,
+            "output_target_rms": 0.3778109267503046
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 1.1676162958565106,
+            "cosine": 0.18270354110260995,
+            "output_target_rms": 0.4899170610457984
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 1.5254610569859017,
+            "cosine": 0.11943949213436605,
+            "output_target_rms": 0.7865417818899343
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 1.4669907716549637,
+            "cosine": 0.10589428027110112,
+            "output_target_rms": 0.755546643502398
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 1.2795298859978428,
+            "cosine": 0.1444369039913951,
+            "output_target_rms": 0.6183321851628145
+          }
+        },
+        "post_query": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 1.344991010987872,
+            "cosine": 0.1412204502311516,
+            "output_target_rms": 0.6661403927532397
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 1.1600098045538845,
+            "cosine": 0.295457637309006,
+            "output_target_rms": 0.4342165138059641
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 1.0924762247703228,
+            "cosine": 0.2178500480407346,
+            "output_target_rms": 0.4033863731230418
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 1.1742110095846436,
+            "cosine": 0.18639315050628985,
+            "output_target_rms": 0.4993012661456287
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 1.5401161352131052,
+            "cosine": 0.1203973431017841,
+            "output_target_rms": 0.79754665737842
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 1.4659246343773307,
+            "cosine": 0.10587171186497893,
+            "output_target_rms": 0.754420171825688
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 1.2797175508438459,
+            "cosine": 0.14402483460672266,
+            "output_target_rms": 0.6177944672953432
+          }
+        }
+      },
+      "exact_self_attention_mean": {
+        "1-16": 0.16184410623626677,
+        "17-32": 0.11061656777665586,
+        "33-64": 0.10374904623098727,
+        "65-128": 0.08546035759416121,
+        "129-256": 0.08815345701116983,
+        "257-512": 0.07872315829796411
+      }
+    },
+    {
+      "layer": 27,
+      "methods": {
+        "pre_attention": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 0.8539248569048385,
+            "cosine": 0.5919718079582286,
+            "output_target_rms": 1.1799471057139808
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 0.5680251384581172,
+            "cosine": 0.7843843699955707,
+            "output_target_rms": 0.9054323537597845
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 0.515877218637792,
+            "cosine": 0.8646918782471191,
+            "output_target_rms": 0.99035475558377
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 0.49760187430712005,
+            "cosine": 0.8763627080907517,
+            "output_target_rms": 1.0396211705731273
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 0.5553614042789322,
+            "cosine": 0.8623644590487531,
+            "output_target_rms": 1.1008465368747062
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 0.5941767197067525,
+            "cosine": 0.6773530065491167,
+            "output_target_rms": 1.091120344501829
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 1.13037270427787,
+            "cosine": 0.41706339385319846,
+            "output_target_rms": 1.2722693691211293
+          }
+        },
+        "post_attention": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 0.49065046788072847,
+            "cosine": 0.6639279156100797,
+            "output_target_rms": 1.1347822079256487
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 8.149237205255204e-07,
+            "cosine": 0.999998977499517,
+            "output_target_rms": 0.9996915942274924
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 9.049256271956095e-06,
+            "cosine": 0.9999799771951977,
+            "output_target_rms": 0.9991657691318487
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 0.00017940054669075435,
+            "cosine": 0.9996075231159862,
+            "output_target_rms": 0.9974442041298758
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 0.006798112924430149,
+            "cosine": 0.9812897483641451,
+            "output_target_rms": 0.9899779410643603
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 0.13961330067233926,
+            "cosine": 0.7612795095770526,
+            "output_target_rms": 1.0025663917659986
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 0.8921134678455125,
+            "cosine": 0.4519440142826788,
+            "output_target_rms": 1.252507717312955
+          }
+        },
+        "pre_query": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 3.1988856221979383,
+            "cosine": 0.08991758103098657,
+            "output_target_rms": 1.5356606415112544
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 0.9683901524905938,
+            "cosine": 0.30360767792010646,
+            "output_target_rms": 0.16543625249995744
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 0.994098069316107,
+            "cosine": 0.19083929809794595,
+            "output_target_rms": 0.2837889077433265
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 1.0679052326608125,
+            "cosine": 0.16176508355108066,
+            "output_target_rms": 0.41112733421562
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 1.5082660869963695,
+            "cosine": 0.1101506945655831,
+            "output_target_rms": 0.799461183615426
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 3.0590031861747953,
+            "cosine": 0.08100205394391222,
+            "output_target_rms": 1.4950926668766842
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 4.144833018890366,
+            "cosine": 0.0606728900036079,
+            "output_target_rms": 1.8213086250882147
+          }
+        },
+        "post_query": {
+          "all": {
+            "count_vectors": 32768,
+            "nmse": 3.1664290572472837,
+            "cosine": 0.11209600268634895,
+            "output_target_rms": 1.5367369754149796
+          },
+          "1-16": {
+            "count_vectors": 1024,
+            "nmse": 0.9022298141968911,
+            "cosine": 0.4595087983772184,
+            "output_target_rms": 0.19694806049997884
+          },
+          "17-32": {
+            "count_vectors": 1024,
+            "nmse": 0.9349365931967875,
+            "cosine": 0.2979485692659998,
+            "output_target_rms": 0.3024079569501166
+          },
+          "33-64": {
+            "count_vectors": 2048,
+            "nmse": 1.0151845154290349,
+            "cosine": 0.2262647883935941,
+            "output_target_rms": 0.41089762415363684
+          },
+          "65-128": {
+            "count_vectors": 4096,
+            "nmse": 1.475117359550732,
+            "cosine": 0.13737903677585475,
+            "output_target_rms": 0.8025322936923664
+          },
+          "129-256": {
+            "count_vectors": 8192,
+            "nmse": 3.0328838087282106,
+            "cosine": 0.0916300909619828,
+            "output_target_rms": 1.4979082357525504
+          },
+          "257-512": {
+            "count_vectors": 16384,
+            "nmse": 4.11426129531085,
+            "cosine": 0.0684080166708424,
+            "output_target_rms": 1.8213118306222342
+          }
+        }
+      },
+      "exact_self_attention_mean": {
+        "1-16": 0.17346197993771958,
+        "17-32": 0.11031929430110432,
+        "33-64": 0.11750013970801951,
+        "65-128": 0.11397834577997962,
+        "129-256": 0.10992603388450106,
+        "257-512": 0.10527238476766526
+      }
+    }
+  ],
+  "elapsed_s": 12.231122016906738
+}

@@ -1,0 +1,172 @@
+<title>Paper Scout 研究报告 - 2026-11-09</title>
+<p>本轮从 RoboTTT 与两篇科学空间文章出发，研究定长状态怎样写入历史、又怎样被读出。语言模型实验以精确 Softmax 注意力为参照，发现原有的状态写入会在真实激活尺度下放大扰动；按当前键向量的范数限制写入增益后，递推恢复收缩，并在构造与确认两组文本上降低基础线性近似的输出误差。另一组测量显示，用查询向量替代精确注意力的读出输入，是测试时训练压缩的主要误差来源。机器人合成控制实验在相同数据和初始化下比较两种更新方式：只更新小型网络的输出矩阵，早期适应较弱，长程精度较高，且受测轨迹上的局部更新没有放大扰动。两组实验共同指向一个设计原则：长上下文能力来自非线性特征、在线写入增益与读出接口的配合，而非单纯增加测试时可训练参数。</p>
+<h1>定长状态的写入与读出</h1>
+<p>语言模型的注意力压缩与机器人策略的长上下文，都在回答同一个问题：怎样用尺寸固定的状态保存历史，并在当前位置取出有用信息。两条深度线程分别从真实语言模型的中间量与相同初始化下的合成控制训练出发，考察状态转移的收缩性、读出几何以及序列内真正需要的自由度。</p>
+<h2>从 Softmax 到 TTT：压缩误差的来源</h2>
+<p>苏剑林（2026）· <a href="https://spaces.ac.cn/archives/11823">将Softmax Attention线性化为Gated DeltaNet</a> · <a href="https://spaces.ac.cn/archives/11993">平均之路：从Attention到TTT</a></p>
+<p>这两篇文章讨论同一个基本问题：能否把随历史增长的键值缓存，换成尺寸固定的循环状态。前一文从注意力的精确递归出发，逐次引入近似，得到门控 Delta 网络（Gated DeltaNet，GDN）的形式；后一文先学习从键（key）到值（value）的条件均值，再把读出输入换成查询（query），得到测试时训练（Test-Time Training，TTT）的形式。两条推导把压缩误差分到两个可以分别测量的环节：历史怎样写入状态，状态又怎样被当前位置读出。我们用真实语言模型的中间量考察这两个环节；写入收缩与读出方向是两个可以分别设计的自由度。</p>
+<h3>从精确递归到固定状态</h3>
+<p>记第 <latex>i</latex> 个位置的键、值向量为 <latex>k_i,v_i</latex>，固定查询向量为 <latex>q</latex>。因果 Softmax Attention 的输出是 <latex>o_t(q)=\sum_{i=1}^{t}a_{t,i}(q)v_i</latex>，其中 <latex>a_{t,i}(q)=\exp(q^\top k_i)/\sum_{j=1}^{t}\exp(q^\top k_j)</latex>。固定 <latex>q</latex> 后，它有一条精确递归：</p>
+<latex>o_t(q)=o_{t-1}(q)+a_{t,t}(q)(v_t-o_{t-1}(q)).</latex>
+<p>新观测 <latex>v_t</latex> 与旧预测 <latex>o_{t-1}</latex> 之差决定状态的修正，这已经具有 Delta Rule 的外形。实际序列的每个位置都有自己的 <latex>q_t</latex>；若逐查询重演历史，计算量仍是平方级。线性化的关键，是把历史压缩成与具体查询无关的状态，最后再让 <latex>q_t</latex> 参与读出。</p>
+<p>《将Softmax Attention线性化为Gated DeltaNet》先定义包含当前项的均值 <latex>\bar{k}_t=t^{-1}\sum_{i=1}^t k_i</latex>、<latex>\bar{v}_t=t^{-1}\sum_{i=1}^t v_i</latex>，并令 <latex>\bar{v}_0=0</latex>。Softmax 对角元的一阶展开为 <latex>a_{t,t}(q)\approx[1+q^\top(k_t-\bar{k}_t)]/t</latex>，仿射读出则设为 <latex>o_t(q)\approx A_tq+\bar{v}_t</latex>。若用向量 <latex>c</latex> 替代历史读出中的 <latex>q</latex>，精确递归中的替换误差是 <latex>a_{t,t}(q)(o_{t-1}(q)-o_{t-1}(c))</latex>。文章的极大极小原则先在 <latex>a_{t,t}</latex> 较大的方向令这项误差为零；一阶近似下最大方向为 <latex>u_t/\|u_t\|</latex>，再假定查询与键的模长相等，取 <latex>c=u_t</latex>。这里 <latex>u_t=k_t-\bar{k}_t</latex> 称为中心化键（centered key）。</p>
+<p>为了单独检查这个替代的尺度，下文以 <latex>\kappa u_t</latex> 替代 <latex>A_{t-1}q</latex> 中的 <latex>q</latex>，外部写入的 <latex>u_t^\top</latex> 不乘 <latex>\kappa</latex>。完整递推与读出为</p>
+<latex>A_t=\left(1-\frac{1}{t}\right)A_{t-1}+\frac{1}{t}\left(v_t-\bar{v}_{t-1}-A_{t-1}(\kappa u_t)\right)u_t^\top,\qquad \hat{o}_t=A_tq_t+\bar{v}_t.</latex>
+<p>状态 <latex>A_0</latex> 从零初始化，原文取 <latex>\kappa=1</latex>。展开后，齐次项含有 <latex>-(\kappa/t)A_{t-1}u_tu_t^\top</latex>，这正是 GDN 的门控衰减与秩一写入。</p>
+<p>令 <latex>\kappa=0</latex>，齐次状态映射只保留均值衰减，得到</p>
+<latex>A_t=\left(1-\frac{1}{t}\right)A_{t-1}+\frac{1}{t}(v_t-\bar{v}_{t-1})u_t^\top.</latex>
+<p>这就是 Vanilla Linear Attention（VaLA）的递归形式；它与直接用一阶 Softmax 权重加权值的表达式等价，已通过独立实现的逐位置校验：</p>
+<latex>\hat{o}_t\approx\bar{v}_t+\left(\frac{1}{t}\sum_{i=1}^{t}v_ik_i^\top-\bar{v}_t\bar{k}_t^\top\right)q_t.</latex>
+<p>《平均之路：从Attention到TTT》从另一端出发。它用参数模型 <latex>\mu_W(k)</latex> 学习给定键时值的条件均值，历史样本通过在线梯度下降写入 <latex>W</latex>。下文把 <latex>a_{t,i}(q)</latex> 简写为 <latex>a_i</latex>。注意力输出先近似为 <latex>\sum_i a_i\mu_W(k_i)</latex>；一般模型的平均场是近似，在线性模型 <latex>\mu_W(k)=Wk</latex> 下则是恒等式：</p>
+<latex>\sum_i a_iWk_i=Wr,\qquad r=\sum_i a_ik_i.</latex>
+<p>这里 <latex>r</latex> 是精确的注意力加权读出输入。下一步以 <latex>\lambda q</latex> 代替 <latex>r</latex>，其中 <latex>\lambda</latex> 表示读出尺度；原文把这个常数吸收进 <latex>W</latex>，因而写成 <latex>Wq</latex>。于是，GDN 路线突出写入递推的稳定性，TTT 路线则把读出方向的问题暴露得格外清楚。后文另用逐位置最优投影系数诊断方向，会明确区分这一尺度与吸收进 <latex>W</latex> 的常数。</p>
+<callout emoji="📖" background-color="light-blue"><p><b>推荐通读原文：</b>这两篇短文值得合读并逐式推导。前一篇从精确递归得到 GDN 形态，后一篇以平均操作贯通 Attention 与 TTT；推导简洁，并把定长状态的写入与读出直接联系起来。</p></callout>
+<h3>真实查询与键激活下的写入稳定性</h3>
+<p>实验取 Qwen3-0.6B 官方权重与 WikiText-2 原始文本验证集。分词器对完整验证文本编码，不添加特殊 token，得到 262,211 个 token。构造段取连续区间 <latex>[0,2048)</latex>，确认段取 <latex>[131072,133120)</latex>；两组互不重叠，各自重排为四段、每段 512 token。四段分别运行递推，每段都重置状态。每组、每层均为 <latex>4\times16\times512=32768</latex> 个向量，三层共 98,304 个。</p>
+<p>在第 0、13、27 层捕获全部 16 个注意力头的 Q/K/V，分别表示查询、键、值激活；小写 <latex>q/k/v</latex> 与前述推导中的向量一一对应。Q 已完成模型自身的 QK 归一化、旋转位置编码（RoPE），并乘模型原有的 <latex>1/\sqrt{128}</latex> 缩放；K 做同样的归一化与位置编码。分组查询注意力（GQA）的键值头展开到 16 个查询头。头维数 <latex>d=128</latex>，所以下文 <latex>1/d=1/128</latex>。模型前向使用 bf16，递推与误差分析使用 float64。</p>
+<p>记 <latex>o</latex> 为精确 Softmax 输出，<latex>\hat{o}</latex> 为相应近似输出。归一化均方误差（normalized mean squared error，NMSE）为 <latex>\mathrm{NMSE}=\sum\|\hat{o}-o\|^2/\sum\|o\|^2</latex>：每层先在四段、全部头和位置上分别累加误差能量与目标能量，得到一个 NMSE，再对三层作算术平均。全零预测 <latex>\hat{o}=0</latex> 时 NMSE 为 1，越低越好。余弦相似度则先逐向量计算，在每层全部向量上取均值，再对三层作算术平均。位置桶按每段内部位置划分为 1–16、17–32、33–64、65–128、129–256、257–512。</p>
+<p>将完整递推的齐次状态映射作用在 <latex>u_t</latex> 方向，乘子有闭式：</p>
+<latex>m_t=1-\frac{1+\kappa\|u_t\|^2}{t}.</latex>
+<p>其余正交方向的乘子都是 <latex>1-1/t</latex>。收缩要求乘子绝对值不超过 1；较大的 <latex>\|u_t\|</latex> 会使 <latex>m_t&lt;-1</latex>，早期的小扰动因而被后续递推不断放大。</p>
+<p>以下尺度统计均指构造段。第 0、13、27 层的键平均范数分别为 203.94、21.46、30.87；中心化键的均方范数分别为 5077.25、270.07、266.84，后者直接进入 <latex>m_t</latex>。原文 <latex>\kappa=1</latex> 时，三层平均 NMSE 在前 16 步已达 <latex>3.47\times10^{76}</latex>，65–128 步出现无穷大，全位置结果随之成为非数值。固定的 <latex>\kappa=1/128</latex> 也不能保证收缩：在三层、全部头、四段各自前 16 个位置的集合中，16.08% 的乘子越过收缩边界，最小值为 −60.65；三层全位置 NMSE 为 <latex>2.28\times10^{23}</latex>。即使 <latex>\kappa=1/512</latex>，NMSE 仍为 122.7，而 <latex>\kappa=0</latex> 的 VaLA 为 2.362。</p>
+<p>既然失稳来自一个可计算的乘子，就可以把修复直接写进递推。对 <latex>t&gt;1</latex>，本实验定义因果谱钳制（causal spectral clamp）：</p>
+<latex>\kappa_t=\min\left(1,\frac{t-1}{\|u_t\|^2}\right).</latex>
+<p>若 <latex>u_t=0</latex>，取 <latex>\kappa_t=1</latex>。这一增益只使用当前与历史已经得到的量，使 <latex>0\leq m_t\leq1</latex>；安全位置恢复原文的 <latex>\kappa=1</latex>，危险位置降低当前秩一更新的增益。谱范数是矩阵对向量扰动的最大放大倍数，即最大奇异值。其余方向仍以 <latex>1-1/t</latex> 收缩，所以线性状态转移的谱范数至多为一。输出精度还受外部写入项与读出方向支配，谱条件在这里承担在线步长选择的职责。</p>
+[[figure-anchor:attention-compression:gdn-stability]]
+<p>钳制在两组文本上都消除了非收缩步骤，并在每个位置桶降低 VaLA 的 NMSE。历史值均值预测就是包含当前项的 <latex>\hat{o}_t=\bar{v}_t</latex>。全位置结果给出了更完整的图景：</p>
+<table>
+<colgroup><col width="150"/><col width="150"/><col width="140"/><col width="140"/><col width="140"/></colgroup>
+<thead><tr><th background-color="light-gray"><p>文本段</p></th><th background-color="light-gray"><p>指标</p></th><th background-color="light-gray"><p>历史值均值预测</p></th><th background-color="light-gray"><p>VaLA</p></th><th background-color="light-gray"><p>谱钳制</p></th></tr></thead>
+<tbody>
+<tr><td><p>构造段</p></td><td><p>NMSE</p></td><td><p>1.690</p></td><td><p>2.362</p></td><td><p><b>1.624</b></p></td></tr>
+<tr><td><p>构造段</p></td><td><p>余弦相似度</p></td><td><p>0.467</p></td><td><p><b>0.578</b></p></td><td><p>0.519</p></td></tr>
+<tr><td><p>确认段</p></td><td><p>NMSE</p></td><td><p><b>1.810</b></p></td><td><p>2.490</p></td><td><p>1.858</p></td></tr>
+<tr><td><p>确认段</p></td><td><p>余弦相似度</p></td><td><p>0.497</p></td><td><p><b>0.603</b></p></td><td><p>0.551</p></td></tr>
+</tbody>
+</table>
+<p><b>粗体标出每行三种预测中的较优结果；NMSE 越低越好，余弦相似度越高越好。</b>确认段上，历史值均值的 NMSE 比谱钳制约低 0.05，这一反转划清了钳制的精度边界；VaLA 则在两组文本上保持最高的方向相似度。谱钳制以因果增益控制获得稳定性，并逐桶改善 VaLA 的 NMSE，读出方向则留给另一套机制处理。</p>
+<h3>读出方向与写入时序</h3>
+<p>第二条路线可以用同样的真实中间量分解。为隔离单步随机梯度下降的超参数影响，实验用在线岭回归（online ridge regression）拟合 <latex>W_t</latex>，即在线求解带 <latex>L_2</latex> 正则的最小二乘。累积 <latex>G_t=\sum_{i\leq t}v_ik_i^\top</latex> 与 <latex>H_t=\sum_{i\leq t}k_ik_i^\top</latex>，再求 <latex>W_t=G_t(H_t+\rho_tI)^{-1}</latex>，其中 <latex>I</latex> 是单位矩阵。正则量 <latex>\rho_t=\rho\cdot\operatorname{tr}(H_t)/d_k</latex>，<latex>d_k=128</latex> 是键维数。主结果取 <latex>\rho=0.001</latex>，<latex>10^{-4}</latex> 至 <latex>10^{-1}</latex> 的网格用来辨认正则化与几何误差的分工。</p>
+<p>先检查 <latex>r_t=\sum_i a_{t,i}k_i</latex> 与 <latex>q_t</latex> 的方向。构造段两者的余弦从 1–16 步的 0.201 变到 257–512 步的 0.225，确认段从 0.198 变到 0.223。为单独诊断共线程度，给每个位置独立选择最小二乘意义下的最优标量 <latex>\lambda=r^\top q/(q^\top q)</latex>，相对投影残差 <latex>\|r-\lambda q\|/\|r\|</latex> 在构造段仍从 0.969 缓慢降到 0.958，确认段为 0.970 到 0.960；区间同上，余弦与残差都先逐向量计算再作层内与层间平均。最佳共线近似留下的残差范数仍约为原读出向量的 96%。</p>
+<p>这一几何差距直接传到输出。保留精确注意力读出 <latex>Wr</latex> 时，构造段与确认段的 NMSE 分别为 0.329、0.276；换成 <latex>Wq</latex> 后变为 1.899、1.821。若先以最优 <latex>\lambda</latex> 校准查询，再计算 <latex>W(\lambda q)</latex>，误差反而升至 4.545、4.486。标量只拟合输入方向的投影，垂直分量依然缺失，而学习到的 <latex>W</latex> 对各方向具有不同增益。读出方向与读出尺度因而是两个同时存在的变量。</p>
+<p>正则网格进一步显示这种分工。构造段在 <latex>\rho=0.1</latex> 时，<latex>Wq</latex> 的输出/目标均方根幅度比只有 0.136，NMSE 为 0.964，接近全零预测的 1。幅度比按 <latex>\sqrt{\sum\|\hat{o}\|^2}/\sqrt{\sum\|o\|^2}</latex> 逐层计算，再对三层平均；强正则在这里主要收缩输出，前述方向残差仍保持原状。</p>
+[[figure-anchor:attention-compression:ttt-readout]]
+<p>还需区分“历史泛化”与“当前样本自拟合”。上述 <latex>W_t</latex> 已纳入当前的 <latex>(k_t,v_t)</latex>，所以早期近乎完美的写入可能主要来自插值。把读出改为使用上一时刻的 <latex>W_{t-1}</latex>，便得到更新前（pre-update）对照。下表均为 NMSE：</p>
+<table>
+<colgroup><col width="180"/><col width="160"/><col width="160"/><col width="160"/><col width="160"/></colgroup>
+<thead><tr><th background-color="light-gray"><p>文本段</p></th><th background-color="light-gray"><p>更新前 Wr</p></th><th background-color="light-gray"><p>更新后 Wr</p></th><th background-color="light-gray"><p>更新前 Wq</p></th><th background-color="light-gray"><p>更新后 Wq</p></th></tr></thead>
+<tbody>
+<tr><td><p>构造段</p></td><td><p>0.639</p></td><td><p><b>0.329</b></p></td><td><p>1.916</p></td><td><p><b>1.899</b></p></td></tr>
+<tr><td><p>确认段</p></td><td><p>0.590</p></td><td><p><b>0.276</b></p></td><td><p>1.838</p></td><td><p><b>1.821</b></p></td></tr>
+</tbody>
+</table>
+<p><b>粗体标出同一读出方式下更新前后的较优结果。</b>构造段四段各自前 16 个位置上，更新后 <latex>Wr</latex> 的 NMSE 仅为 <latex>1.22\times10^{-4}</latex>，更新前为 0.581，说明当前样本自拟合确实贡献了早期的“完美写入”。更新前的 <latex>Wq</latex> 在同一范围已有 0.979 的误差，查询读出的困难贯穿两种时序。第 0 层、257–512 步，构造段四段的全部 16 头及位置上，当前位置自注意力权重 <latex>a_{t,t}</latex> 的均值为 0.378，即约 37.8% 的注意力在当前样本；确认段同口径为 0.384。这解释了更新后读出为何能直接受益。</p>
+<p>这组测量为周期性保留精确注意力的混合架构提供了具体依据：少量精确注意力可以补回定长状态最难保存的检索方向。压缩既有 Softmax Attention 与训练一个新的 TTT 模型仍是两类问题；经任务目标训练的 TTT 可以联合塑造查询、键、值与状态算子，读出几何也会随之改变。</p>
+<h3>联合训练中的读出与状态</h3>
+<p><a href="https://arxiv.org/abs/2611.08376">Muir: Linear Attention with Sensitivity-Allocated Gating and Matched-Filter Readout</a> 提供了与这一分解相吻合的证据。它在单位范数键下保持秩一擦除的收缩性，并用低秩擦除门（low-rank erase gate）抑制偏离当前键方向的擦除分量。按原论文的行向量记号，状态矩阵 <latex>S</latex> 的每一行对应一个键状态通道，匹配滤波读出（matched-filter readout）写成 <latex>(\gamma\odot q)S</latex>，其中 <latex>\odot</latex> 是逐通道乘法。在单位范数键、行间不相关等假设下，若 <latex>\bar{a}_{\ell,j}</latex> 是目标信号经过时延 <latex>\ell</latex> 后在第 <latex>j</latex> 行的平均保留系数，<latex>m_j^*</latex> 是该行的稳态干扰能量，最优增益方向为 <latex>\gamma_j\propto\bar{a}_{\ell,j}/m_j^*</latex>。静态版本对全部位置共用一套增益。</p>
+<p>同一论文对 13.4 亿参数模型施加相同的 65,536 token 纯文本继续训练协议后，在 100 万 token 的 RULER S-NIAH-1 口令检索中，静态读出 Muir 达到 99.4% 准确率，GDN-2 基线为 10.6%；每个长度有 160 个样本，口令均匀分布在十个深度区间。GDN-2 以逐通道衰减及相互独立的擦除、写入门更新状态，因此这一同协议对照呈现的是整套模型设计的差距。同一表中无读出增益的 Muir 为 32.5%，则更直接地显示匹配滤波的贡献。</p>
+<p>匹配滤波校准状态各行对读出的相对贡献，查询的基本方向仍由 <latex>q</latex> 给出。它处理行能量失衡，本实验的 <latex>r/q</latex> 失配处理读出输入的方向，两者属于读出的不同自由度，也共同说明读出可以独立于写入进行设计。</p>
+<p><a href="https://arxiv.org/abs/2602.21204">Test-Time Training with KV Binding Is Secretly Linear Attention</a>（TTTLA）则从端到端任务提供了边界证据。它的 Replace Q with K 消融把已训练 TTT 的读出查询换成键。Book-3 语言建模困惑度、RealEstate10K 新视图合成的峰值信噪比（PSNR）与 ImageNet-1K 图像分类准确率分别为 16.18、25.95 dB、79.18%；未替换查询的同一已训练模型为 16.43、25.94 dB、79.34%。首项越低越好，后两项越高越好。三项结果彼此接近，说明在这组训练好的模型中，Q 与 K 更接近可互换的特征表示，读出行为已经超出对冻结 Softmax 检索的模仿。</p>
+<p>TTTLA 的<a href="https://github.com/JunchenLiu77/LaCT">公开实现</a>还给出一条可迁移原则：序列内只更新快权重多层感知机（fast MLP）的输出矩阵，隐藏特征在序列内保持静态。序列内更新称为内环，跨样本优化慢参数称为外层训练。输出矩阵就是随序列演化的循环状态；“末层”专指这个小型网络的输出层，与整个 Transformer 的层号无关。按列向量记号，若 <latex>x</latex> 是快网络输入，隐藏特征与读出可写为</p>
+<latex>\phi(x)=\operatorname{SiLU}(W_0x)\odot(W_2x),\qquad f(x)=W_1\phi(x).</latex>
+<p><latex>\operatorname{SiLU}(z)=z\operatorname{sigmoid}(z)</latex> 是逐元素门控激活，<latex>\odot</latex> 是逐元素乘法。序列内固定 <latex>W_0,W_2</latex>，只让 <latex>W_1</latex> 累积更新；外层训练仍共同学习三者。静态特征使块内更新可以写成前缀和；公开实现按块先用旧状态读出、再更新，与上述逐步更新后读出形成清楚对照。下一节的 RoboTTT 配对实验将在这个实现边界内考察机器人策略需要多少序列内自由度。</p>
+<hr/>
+<h2>RoboTTT：机器人策略需要多少测试时自由度</h2>
+<p>Jiang 等（2026）· <a href="https://huggingface.co/papers/2607.15275">HF</a> · <a href="https://arxiv.org/abs/2607.15275">arXiv</a> · <a href="https://research.nvidia.com/labs/gear/robottt/">项目与视频</a></p>
+<p>RoboTTT: Context Scaling for Robot Policies 将测试时训练（TTT）引入视觉—语言—动作策略。其基本思想是让一个小型网络的参数承担历史状态：这些参数在训练与推理中都接受自监督梯度更新，称为快权重（fast weights）；其余仅在训练阶段更新的参数称为慢参数（slow parameters）。标准注意力要保留逐位置的历史表示，单步计算随历史增长；RoboTTT 将历史压入定长的快权重，使上下文延伸至 8K（约八千）时间步，而状态尺寸与单步计算量均与历史长度无关。</p>
+<h3>动作头里的快权重</h3>
+<p>模型以 GR00T N1.7 为底座，在其扩散 Transformer（Diffusion Transformer，DiT）动作头的 16 个层中各加入一个 TTT 层。DiT 每次预测一段连续动作，称为动作块（action chunk）。寄存器 token 是不对应观测内容的可学习辅助序列位置。单步注意力处理 16 个寄存器、机器人状态与带噪动作 token，并交叉读取同一时刻的视觉—语言 token；所有这些注意力输出按时间拼接后进入 TTT 层。视觉—语言 token 只参与单步计算，其跨时间信息由 16 个寄存器携带。TTT 输出经逐通道门控后加到注意力输出上：</p>
+<latex>O=\tanh(\alpha)\odot O_{\mathrm{TTT}}+O_{\mathrm{attn}},\qquad \alpha\in\mathbb{R}^d.</latex>
+<p><latex>\alpha</latex> 是每个通道独立的可学习系数，初值为 0.001，<latex>\odot</latex> 表示逐通道乘法。门控初值接近零，使新增分支在训练初期只小幅改变预训练策略。</p>
+[[figure-anchor:robotttt-last-layer:architecture]]
+<p>每个 TTT 层含有一个由快权重参数化的小型多层感知机，记为 fast MLP <latex>f_W</latex>。当前位置的表示经三组可学习投影得到 <latex>q_t,k_t,v_t</latex>：<latex>k_t</latex> 是写入网络的输入，<latex>v_t</latex> 是回归目标，<latex>q_t</latex> 是读出时的输入。每一步的自监督更新称为内环。若输出维数为 <latex>d</latex>，内环重构损失取各输出维的均方误差，<latex>\eta</latex> 为内环学习率，则每一步先更新、后读出（update-then-read）：</p>
+<latex>\mathcal{L}_t(W)=\frac{1}{d}\|f_W(k_t)-v_t\|^2,\qquad W_t=W_{t-1}-\eta\nabla_W\mathcal{L}_t(W_{t-1}),</latex>
+<latex>o_t=f_{W_t}(q_t).</latex>
+<p>用于训练整个策略的任务损失称为外层动作损失。投影矩阵、网络其他权重以及 fast MLP 的初始值 <latex>W_0</latex> 都是慢参数，由外层动作损失训练；<latex>W_t</latex> 则是随每条轨迹演化的快权重。当前 <latex>k_t</latex> 与 <latex>v_t</latex> 经重构误差写入参数，更新后的网络再变换 <latex>q_t</latex>，供动作预测使用。部署时，每条轨迹都从学习到的 <latex>W_0</latex> 出发，逐步传播这一状态。</p>
+<p>长序列训练依靠三项配合。sequence action forcing 为每个动作块独立采样噪声水平，使同一条轨迹兼有难易不同的去噪目标。截断时间反向传播（truncated backpropagation through time，TBPTT）将轨迹切成小段，快权重的数值跨段传递，梯度只在段内回溯；显存因而由分段长度决定，与整段历史无关。纯上下文损失掩码将指定时刻的外层动作损失置零，内环更新照常进行。人类演示视频由此只写入上下文，机器人失败动作也保留在历史中，监督则取自人类修正动作。这一区分支撑论文的一次性模仿与在线改进：单段人类视频提供新任务配置，失败与修正的连续历史提供恢复依据。</p>
+<p>论文的主评测包含数据集聚合（DAgger）训练，在同一双臂平台上设置 Pup Go Car、Circuit 与 Gear Bot 三项长程装配任务。前两项各评测 20 次，Gear Bot 评测 10 次，各方法次数相同。rubric 完成度按任务阶段的完成比例计分，再对三项任务平均：RoboTTT 为 79%，单步上下文的 GR00T N1.7 为 42%，Gated DeltaNet（GDN）基线为 56%。在跨越约五分钟、十个阶段的 Gear Bot 中，RoboTTT 完成 2 次完整装配，其他方法在这组各 10 次评测中没有完整成功。</p>
+<p>另一组上下文扩展评测同样报告三项任务的平均完成度：预训练上下文从 1K 增至 8K 时，完成度由 43.9% 增至 71.5%。论文明确说明这组评测早于主结果中的 DAgger 训练，因而 71.5% 与 79% 属于不同训练阶段。GDN 将 TTT 层换为由门控 delta 规则更新的矩阵状态，用以分离定长状态与梯度更新规则的影响；TTT Linear 消融则将 fast MLP 换成线性层，用以检验非线性快速模型的贡献。在该平台与任务上，较长上下文与更高完成度相伴出现。接下来的问题更为细致：序列内的自由度应当分布于整个 fast MLP，还是集中于它的读出层？</p>
+<h3>把非线性留在特征，把更新留给读出</h3>
+<p>沿 <a href="https://arxiv.org/abs/2602.21204">TTTLA</a> 的末层构造，本实验把 RoboTTT 的两层 fast MLP 按行向量重新编号；高斯误差线性单元（Gaussian Error Linear Unit，GELU）表示逐元素的平滑非线性激活。</p>
+<latex>\phi(x)=\operatorname{GELU}(xW_1+b_1),\qquad f_W(x)=\phi(x)W_2+b_2.</latex>
+<p>其中 <latex>\phi(x)\in\mathbb{R}^h</latex> 是隐藏特征，<latex>W_2\in\mathbb{R}^{h\times d}</latex> 的每一列对应一个输出通道，<latex>b_2</latex> 是输出偏置。全参数 TTT 在序列内更新 <latex>W_1,b_1,W_2,b_2</latex>；末层版本只更新 <latex>W_2</latex>，而 <latex>W_1,b_1,b_2</latex> 在序列内保持固定，仍由外层动作损失训练。非线性仍由特征映射 <latex>\phi</latex> 提供，序列内状态则由 <latex>W_2</latex> 单独承载。这一构造考察的是：非线性特征是否也必须在线改写？</p>
+<p>取当前键 <latex>k_t</latex>，记 <latex>\phi=\phi(k_t)</latex>，输出矩阵第 <latex>j</latex> 列为 <latex>w_j</latex>，更新后的该列为 <latex>w_j^+</latex>。更新前第 <latex>j</latex> 个输出通道的重构误差为 <latex>e_j=\phi w_j+b_{2,j}-v_{t,j}</latex>。由于 <latex>\phi</latex> 在当前内环步骤中固定，均方重构损失对这一列的梯度及其更新为</p>
+<latex>\nabla_{w_j}\mathcal{L}_t=\frac{2}{d}\phi^\top e_j,\qquad w_j^+=w_j-\eta_j\nabla_{w_j}\mathcal{L}_t=w_j-\frac{2\eta_j}{d}\phi^\top e_j.</latex>
+<p><latex>\eta_j</latex> 是第 <latex>j</latex> 个输出通道的可学习内环学习率。各列更新都沿同一个 <latex>\phi^\top</latex> 方向，误差提供各输出通道的幅度；合在一起，便构成静态特征上的秩一 delta 更新。将误差表达式代回，更新映射对更新前 <latex>w_j</latex> 的雅可比矩阵为</p>
+<latex>J_j=\frac{\partial w_j^+}{\partial w_j}=I-\frac{2\eta_j}{d}\phi^\top\phi.</latex>
+<p>各 <latex>J_j</latex> 按输出通道排成块对角矩阵，即得完整雅可比 <latex>J</latex>。在隐藏宽度大于 1 的情形，<latex>J_j</latex> 沿 <latex>\phi^\top</latex> 的径向特征值记为 <latex>r_j</latex>，正交方向的特征值为 1，因而完整谱范数为</p>
+<latex>r_j=1-\frac{2\eta_j}{d}\|\phi\|^2,\qquad \|J\|_2=\max\left(1,\max_j|r_j|\right).</latex>
+<p>谱范数以 1 为局部收缩与放大的分界：不超过 1 时，该步映射保持或缩短扰动；大于 1 时，至少一个扰动方向被放大。它描述当前状态与当前样本的一步局部映射，长轨迹行为则由逐层、逐步映射的连乘共同决定。控制 <latex>\eta_j\|\phi\|^2</latex> 就直接控制径向增益，这与上一节的谱钳制遵循同一原则。实际更新函数由自动微分得到的完整雅可比亦与上述闭式一致。</p>
+<h3>相同任务与初始化下的两种内环参数集</h3>
+<p>实验沿用二维点质量的重复到达任务。达到限幅的动作称为饱和，容易预测；主要指标因而只统计专家动作最大绝对分量小于 0.95 的位置，并略去最初八步热身。专家动作限幅为 <latex>[-1,1]</latex>，0.95 在限幅前留出筛选边界。以预测动作 <latex>\hat{a}</latex> 对专家动作 <latex>a</latex> 的决定系数 <latex>R^2=1-\sum(\hat{a}-a)^2/\sum a^2</latex> 衡量精度：1 表示完美预测，0 表示与全零预测误差相同，负值表示误差超过这一参照。</p>
+<p>每条轨迹（episode）的隐藏目标 <latex>g</latex> 与控制器增益 <latex>k</latex> 固定，分别按二维均匀分布与对数均匀分布采样；对数均匀指 <latex>\log k</latex> 在对应区间内均匀。初始及每 48 步重置的位置 <latex>x</latex> 独立采样，目标与增益保持不变：</p>
+<latex>g\sim U(-0.8,0.8)^2,\qquad k\sim\log U(0.5,2.5),\qquad x\sim U(-0.8,0.8)^2.</latex>
+<p>专家以带饱和的非线性比例控制驱动点质量。动作逐分量限幅，位置观测的两个分量分别加入独立高斯噪声，状态转移为</p>
+<latex>a_t=\operatorname{clip}\left(k(g-x_t)(1+0.5\|g-x_t\|),-1,1\right),</latex>
+<latex>o_t=x_t+\mathcal{N}(0,0.15^2I),\qquad x_{t+1}=x_t+0.15a_t.</latex>
+<p>策略输入是当前观测和上一步动作，输出当前专家动作。每次重置只改变点位置，后续阶段因而可以利用先前观测与动作辨识隐藏任务参数。这个合成任务将长上下文的作用集中于在线辨识，与论文的真机装配证据分属两个尺度。</p>
+<p>两个模型都堆叠两个 TTT 层，每个 TTT 层含前述两层 fast MLP，宽度为 64；参数数目、逐参数初始化、训练数据与留出数据完全一致。全参数版本在序列内更新 <latex>W_1,b_1,W_2,b_2</latex>，末层版本只更新 <latex>W_2</latex>。训练长度为 512，每批 32 条轨迹，TBPTT 分段为 64，外层 AdamW 学习率为 <latex>3\times10^{-4}</latex>，共 2,500 次更新。</p>
+<p>两种完整实现的外层梯度路径也不同。末层版本在每个分段重新绑定序列内静态的 <latex>W_1,b_1,b_2</latex>，使这些慢参数从所有分段接收外层梯度；全参数版本的快权重在段界截断梯度。因此，下述训练曲线与成本是两种完整实现的配对比较，差别同时包括内环参数集与外层梯度路径。</p>
+<p>非饱和动作 <latex>R^2</latex> 的主评测使用相同的 64 条留出轨迹，分别取前 512 步与前 1,024 步；较短评测是同一批轨迹的前缀。内环重构损失与漂移诊断使用这 64 条轨迹的前 16 条，重构损失在每次更新前记录。每层实际更新张量的相对漂移按拼接范数计算：<latex>\sqrt{\sum_j\|W_{t,j}-W_{0,j}\|_F^2/\sum_j\|W_{0,j}\|_F^2}</latex>；Frobenius 范数 <latex>\|\cdot\|_F</latex> 是矩阵全部元素平方和的平方根。谱诊断另行生成随机种子 999、批量 16 的同分布轨迹，只适用于末层版本，计算各输出通道的 <latex>J_j</latex> 与完整谱范数。</p>
+<p>成本测量包括相同更新次数下的训练耗时，以及逐时间步顺序推理的延迟。后者采用相同随机初始化的两个模型，将宽度设为 256、轨迹长度设为 2,048，在单条轨迹、单 CPU 线程下重复三次，对同一位置取三次中的最小值，再按时间窗求平均。这一口径比较两个顺序 PyTorch 内环的相对成本；相应官方并行计算内核的吞吐须按其自身实现测量。</p>
+<h3>末层更新换取长程稳定，代价出现在序列开端</h3>
+<p>配对实验给出了清楚的时序分工。全参数适应在序列开端更有利；随着历史累积，只更新输出矩阵的版本赶上并超过它，且在训练长度之外保持优势。下表全部为同一批 64 条留出轨迹上的非饱和动作 <latex>R^2</latex>。两个综合行把全部轨迹及保留位置的平方误差、目标能量分别求和后各计算一次 <latex>R^2</latex>，而非逐轨迹平均。</p>
+[[figure-anchor:robotttt-last-layer:paired-results]]
+<table>
+<colgroup><col width="260"/><col width="210"/><col width="210"/></colgroup>
+<thead><tr><th background-color="light-gray"><p>评测范围</p></th><th background-color="light-gray"><p>全参数更新</p></th><th background-color="light-gray"><p>仅更新输出矩阵</p></th></tr></thead>
+<tbody>
+<tr><td><p>第 8–16 步</p></td><td><p><b>0.864</b></p></td><td><p>0.508</p></td></tr>
+<tr><td><p>第 16–32 步</p></td><td><p><b>0.066</b></p></td><td><p>−2.830</p></td></tr>
+<tr><td><p>第 32–64 步</p></td><td><p><b>0.896</b></p></td><td><p>0.886</p></td></tr>
+<tr><td><p>第 384–512 步</p></td><td><p>0.891</p></td><td><p><b>0.906</b></p></td></tr>
+<tr><td><p>第 896–1024 步</p></td><td><p>0.726</p></td><td><p><b>0.860</b></p></td></tr>
+<tr><td><p>前 512 步综合</p></td><td><p>0.884</p></td><td><p><b>0.891</b></p></td></tr>
+<tr><td><p>前 1,024 步综合</p></td><td><p>0.841</p></td><td><p><b>0.882</b></p></td></tr>
+</tbody>
+</table>
+<p><b>粗体标出每行两种实现中的较高 R²。</b>末层版本的冷启动代价十分具体。第 16–32 步的 <latex>R^2</latex> 为 −2.830，意味着该时间桶的误差能量达到全零预测的 3.83 倍；全参数版本在同一桶为 0.066，接近零预测参照。第 0 层的内环重构均方误差（MSE）在第 8 步为 3.384，是全参数版本 0.355 的约 9.5 倍；第 64 步仍为 0.687 对 0.110。静态特征在轨迹内保持不变，输出矩阵需要积累一定样本后才能补足任务差异，这与观察到的早期弱项一致。到第 32–64 步，两者已基本持平。</p>
+<p>长轨迹上，两层重构误差呈现不同趋势。末层版本在第 384–512 步以 0.906 对 0.891 略优，在第 896–1024 步扩大到 0.860 对 0.726；其第 0 层内环 MSE 在第 1,024 步降至 0.027，全参数版本同期为 0.114；第 1 层同期则为 0.008171 对 0.002950，趋势相反。图中的周期性尖峰对应每 48 步一次的点质量重新放置。末层版本在第 0 层的重构于训练窗之后仍继续改善，全参数版本在该层没有保持同样趋势；第 1 层的相反结果说明，动作 <latex>R^2</latex> 的长程优势并不要求各层重构误差同时下降。</p>
+<p>两臂都在外层训练中收敛。外层序列动作 MSE 包含全部动作位置（含饱和），在批量、序列和动作维上求均值，各 TBPTT 分段等权平均；每 20 次更新记录一次，最后十次对应第 2,320–2,500 次更新。它与上述内环重构 MSE 是不同的量。末层版本最后十次的平均序列动作 MSE 为 0.00540，全参数版本为 0.00475；末层版本略高，和冷启动较弱以及外层梯度路径的差别相一致。训练耗时约为末层版本 3,402 秒、全参数版本 5,339 秒，前者减少 36.3%。这组数字来自同一 CPU 环境、相同 2,500 次更新，直接反映本次顺序实现的训练成本。</p>
+<p>更有教益的是，参数漂移并未随长程精度一起改善。第 0 层可更新状态在第 1,024 步的相对漂移，全参数版本为 0.773，末层版本的输出矩阵达到 2.923；第 1 层则为 0.742 与 0.660。末层第 0 层在漂移更大的情况下保持更高的动作 <latex>R^2</latex>，说明参数范数的增长本身不能充当长程稳定性的判据。</p>
+<p>局部谱提供了更合适的观测量。谱诊断按 1–64、65–128、129–256、257–512、513–640、641–768、769–896、897–1024 分桶，第 0、1 层跨全部受测轨迹、位置和输出通道的最小径向特征值分别为 0.816 与 0.878。所有径向值均为正且不超过 1，因此完整更新雅可比谱范数均为 1，没有出现放大通道。序列内静态参数的变化也逐张量严格为零。于是，末层方案在当前状态邻域具有可检查的收缩性，其输出矩阵可以大幅偏离初值，而任务映射仍保持稳定。状态幅度、局部更新增益与函数精度是三个不同的量。</p>
+<p>顺序推理的成本也随可更新参数集缩小。宽度 256、单 CPU 线程时，第 1,536–2,048 步窗口的逐步延迟为全参数 1.166 毫秒（ms）、末层 0.969 ms，约减少 17%；两臂各时间窗都基本平坦，体现定长状态的固定单步成本。这里的延迟属于本实验的顺序 PyTorch 内环。</p>
+<p>这些结果提出一个尚未测试的猜想：能否在序列开端暂时允许隐藏特征适应，随后冻结特征并只更新读出矩阵。当前两臂始终采用各自的更新方式，没有测试中途切换；切换时刻与收益需要第三种方案、多随机种子实验以及后续真实机器人流共同检验。另一条后续假设是提高慢特征初始化的通用性，从源头减小冷启动缺口。它们都把“全参数或线性状态”的二选一，改写为特征、状态与读出如何随时间分工的问题。对这一合成任务而言，静态非线性特征加输出矩阵已经足以支撑长程记忆。</p>
+<h1>近期论文短名单</h1>
+<p>以下五篇论文提供人类经验规模化、显式记忆、权重编辑、线性状态读出与空间预训练五条线索。</p>
+<table>
+<colgroup><col width="200"/><col width="240"/><col width="250"/><col width="90"/></colgroup>
+<thead><tr><th background-color="light-gray"><p>论文</p></th><th background-color="light-gray"><p>核心贡献</p></th><th background-color="light-gray"><p>为什么重要</p></th><th background-color="light-gray"><p>链接</p></th></tr></thead>
+<tbody>
+<tr>
+<td><p><b>Open-HumanWAM: An Open Recipe for Scaling Human and Robot Experience for Embodied Foundation Models</b>（Ma 等，2026）</p></td>
+<td><p>构建五万小时第一视角人类视频语料，以 HumanWAM-Vanilla 研究纯人类视频预训练，再以 HumanWAM-Goal 混合人类与机器人经验。论文报告数据小时数与下游成功率之间的对数线性关系。</p></td>
+<td><p>HumanWAM-Goal 在 RoboTwin 2.0 Clean2Random（干净条件训练、随机条件评测）上的平均任务成功率达到 84.60%，纯人类预训练的 Vanilla 为 68.88%。项目已公开模型与数据集，可用于检验人类视频的规模收益怎样迁移到动作。</p></td>
+<td><p><a href="https://huggingface.co/papers/2611.06817">HF</a> / <a href="https://arxiv.org/abs/2611.06817">arXiv</a> / <a href="https://dagroup-pku.github.io/open-humanwam/">项目</a></p></td>
+</tr>
+<tr>
+<td><p><b>HeLM: Hierarchical Explicit Language Memory for Non-Markovian Manipulation</b>（Kim 等，2026）</p></td>
+<td><p>把事件检测与记忆更新分解，以分层自然语言保存任务历史，处理当前动作依赖早期事件、甚至依赖上一任务结局的操作任务。</p></td>
+<td><p>在五项依赖同一回合早期事件的任务中，HeLM 的平均子任务成功率为 85.7%，最强基线 Keyframe-HLP 为 72.9%；子任务成功率统计已完成必要子步骤的比例。显式文本提供可检查的记忆载体，公开代码使“语言记忆与定长神经状态如何分工”成为可执行的问题。</p></td>
+<td><p><a href="https://huggingface.co/papers/2611.02660">HF</a> / <a href="https://arxiv.org/abs/2611.02660">arXiv</a> / <a href="https://github.com/kimspacehuni/HeLM">代码</a></p></td>
+</tr>
+<tr>
+<td><p><b>Exploring Weight-Space Programming: Capabilities, Generalization, and Limitations</b>（Hu 等，2026）</p></td>
+<td><p>让智能体直接检查并修改网络参数，以 16 条编辑轨迹、七项基准和两个模型尺度研究局部权重编辑及其跨任务迁移。</p></td>
+<td><p>在 Qwen3.5-0.8B 上，单次修改 1,023 个参数使 MATH-500 留出准确率较未编辑模型提高 29.45 个百分点，跨任务收益则随任务变化。它为“经验能否低成本固化进慢权重”提供了与梯度训练不同的实验入口；项目仓库目前公开的是论文 PDF，实现代码尚未随附。</p></td>
+<td><p><a href="https://huggingface.co/papers/2611.09382">HF</a> / <a href="https://arxiv.org/abs/2611.09382">arXiv</a> / <a href="https://github.com/WSP-Scope/WSP-Scope-Project">项目</a></p></td>
+</tr>
+<tr>
+<td><p><b>Muir: Linear Attention with Sensitivity-Allocated Gating and Matched-Filter Readout</b>（Tabak 与 Schaefer，2026）</p></td>
+<td><p>以单位范数键维持擦除收缩，用低秩门分配写入与擦除容量，再以匹配滤波读出平衡不同衰减速率的状态行。</p></td>
+<td><p>它与本轮实验共享“写入收缩与读出校准应分别设计”的原则。论文附录含 JAX token mixer 与前后向参考实现，可作为后续联合检验状态行能量校准和读出方向失配的直接起点。</p></td>
+<td><p><a href="https://huggingface.co/papers/2611.08376">HF</a> / <a href="https://arxiv.org/abs/2611.08376">arXiv</a> / <a href="https://arxiv.org/html/2611.08376#A10">实现</a></p></td>
+</tr>
+<tr>
+<td><p><b>SLA: Scaling Spatial-Language-Action Model via Continual Pre-training</b>（Li 等，2026）</p></td>
+<td><p>在持续预训练与下游后训练中，对齐视觉—语言—动作（VLA）模型的中间视觉特征和冻结三维感知模型的空间表征；辅助空间模块仅参与训练。</p></td>
+<td><p>它把空间对齐从任务适配阶段前移到基础训练阶段，为研究空间监督能否形成可迁移的通用表征提供了对照。</p></td>
+<td><p><a href="https://huggingface.co/papers/2611.08373">HF</a> / <a href="https://arxiv.org/abs/2611.08373">arXiv</a> / <a href="https://embodiedsla.github.io/">项目</a></p></td>
+</tr>
+</tbody>
+</table>
