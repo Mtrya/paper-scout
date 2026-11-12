@@ -1,0 +1,5 @@
+{
+  "prompt_tokens": 74,
+  "prompt_tokens_after_state_dropout": 24,
+  "removed_tokens": 50
+}

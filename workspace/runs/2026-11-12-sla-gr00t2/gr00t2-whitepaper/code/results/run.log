@@ -1,0 +1,320 @@
+{
+  "seed": 20261112,
+  "group_size": 8,
+  "pseudo_count": 2,
+  "ema": 0.25,
+  "chains_per_probability": 128,
+  "visits_per_chain": 160,
+  "warmup_visits_excluded": 20,
+  "rloo_uniform_nonzero_max": 0.0,
+  "memory_uniform_nonzero_min": 0.9977088242995549,
+  "memory_uniform_nonzero_max": 1.0,
+  "trajectory": [
+    {
+      "trajectory": "improvement",
+      "visit": -4,
+      "uniform_return": 0.0,
+      "history_before": 0.1,
+      "history_after": 0.07500000000000001,
+      "rloo_advantage": 0.0,
+      "memory_advantage": -0.022222222222222223
+    },
+    {
+      "trajectory": "improvement",
+      "visit": -3,
+      "uniform_return": 0.0,
+      "history_before": 0.07500000000000001,
+      "history_after": 0.05625000000000001,
+      "rloo_advantage": 0.0,
+      "memory_advantage": -0.01666666666666667
+    },
+    {
+      "trajectory": "improvement",
+      "visit": -2,
+      "uniform_return": 0.0,
+      "history_before": 0.05625000000000001,
+      "history_after": 0.0421875,
+      "rloo_advantage": 0.0,
+      "memory_advantage": -0.012500000000000002
+    },
+    {
+      "trajectory": "improvement",
+      "visit": -1,
+      "uniform_return": 0.0,
+      "history_before": 0.0421875,
+      "history_after": 0.031640625000000006,
+      "rloo_advantage": 0.0,
+      "memory_advantage": -0.009375000000000001
+    },
+    {
+      "trajectory": "improvement",
+      "visit": 0,
+      "uniform_return": 1.0,
+      "history_before": 0.031640625000000006,
+      "history_after": 0.27373046875,
+      "rloo_advantage": 0.0,
+      "memory_advantage": 0.21519097222222217
+    },
+    {
+      "trajectory": "improvement",
+      "visit": 1,
+      "uniform_return": 1.0,
+      "history_before": 0.27373046875,
+      "history_after": 0.4552978515625,
+      "rloo_advantage": 0.0,
+      "memory_advantage": 0.16139322916666665
+    },
+    {
+      "trajectory": "improvement",
+      "visit": 2,
+      "uniform_return": 1.0,
+      "history_before": 0.4552978515625,
+      "history_after": 0.591473388671875,
+      "rloo_advantage": 0.0,
+      "memory_advantage": 0.12104492187500004
+    },
+    {
+      "trajectory": "improvement",
+      "visit": 3,
+      "uniform_return": 1.0,
+      "history_before": 0.591473388671875,
+      "history_after": 0.6936050415039063,
+      "rloo_advantage": 0.0,
+      "memory_advantage": 0.09078369140625009
+    },
+    {
+      "trajectory": "improvement",
+      "visit": 4,
+      "uniform_return": 1.0,
+      "history_before": 0.6936050415039063,
+      "history_after": 0.7702037811279298,
+      "rloo_advantage": 0.0,
+      "memory_advantage": 0.06808776855468757
+    },
+    {
+      "trajectory": "improvement",
+      "visit": 5,
+      "uniform_return": 1.0,
+      "history_before": 0.7702037811279298,
+      "history_after": 0.8276528358459473,
+      "rloo_advantage": 0.0,
+      "memory_advantage": 0.051065826416015536
+    },
+    {
+      "trajectory": "improvement",
+      "visit": 6,
+      "uniform_return": 1.0,
+      "history_before": 0.8276528358459473,
+      "history_after": 0.8707396268844605,
+      "rloo_advantage": 0.0,
+      "memory_advantage": 0.03829936981201165
+    },
+    {
+      "trajectory": "improvement",
+      "visit": 7,
+      "uniform_return": 1.0,
+      "history_before": 0.8707396268844605,
+      "history_after": 0.9030547201633454,
+      "rloo_advantage": 0.0,
+      "memory_advantage": 0.028724527359008878
+    },
+    {
+      "trajectory": "improvement",
+      "visit": 8,
+      "uniform_return": 1.0,
+      "history_before": 0.9030547201633454,
+      "history_after": 0.9272910401225091,
+      "rloo_advantage": 0.0,
+      "memory_advantage": 0.02154339551925666
+    },
+    {
+      "trajectory": "improvement",
+      "visit": 9,
+      "uniform_return": 1.0,
+      "history_before": 0.9272910401225091,
+      "history_after": 0.9454682800918818,
+      "rloo_advantage": 0.0,
+      "memory_advantage": 0.016157546639442355
+    },
+    {
+      "trajectory": "improvement",
+      "visit": 10,
+      "uniform_return": 1.0,
+      "history_before": 0.9454682800918818,
+      "history_after": 0.9591012100689114,
+      "rloo_advantage": 0.0,
+      "memory_advantage": 0.012118159979581766
+    },
+    {
+      "trajectory": "improvement",
+      "visit": 11,
+      "uniform_return": 1.0,
+      "history_before": 0.9591012100689114,
+      "history_after": 0.9693259075516836,
+      "rloo_advantage": 0.0,
+      "memory_advantage": 0.009088619984686463
+    },
+    {
+      "trajectory": "improvement",
+      "visit": 12,
+      "uniform_return": 1.0,
+      "history_before": 0.9693259075516836,
+      "history_after": 0.9769944306637627,
+      "rloo_advantage": 0.0,
+      "memory_advantage": 0.006816464988514848
+    },
+    {
+      "trajectory": "degradation",
+      "visit": -4,
+      "uniform_return": 1.0,
+      "history_before": 0.9,
+      "history_after": 0.925,
+      "rloo_advantage": 0.0,
+      "memory_advantage": 0.022222222222222143
+    },
+    {
+      "trajectory": "degradation",
+      "visit": -3,
+      "uniform_return": 1.0,
+      "history_before": 0.925,
+      "history_after": 0.9437500000000001,
+      "rloo_advantage": 0.0,
+      "memory_advantage": 0.01666666666666672
+    },
+    {
+      "trajectory": "degradation",
+      "visit": -2,
+      "uniform_return": 1.0,
+      "history_before": 0.9437500000000001,
+      "history_after": 0.9578125000000001,
+      "rloo_advantage": 0.0,
+      "memory_advantage": 0.012500000000000067
+    },
+    {
+      "trajectory": "degradation",
+      "visit": -1,
+      "uniform_return": 1.0,
+      "history_before": 0.9578125000000001,
+      "history_after": 0.968359375,
+      "rloo_advantage": 0.0,
+      "memory_advantage": 0.009374999999999911
+    },
+    {
+      "trajectory": "degradation",
+      "visit": 0,
+      "uniform_return": 0.0,
+      "history_before": 0.968359375,
+      "history_after": 0.72626953125,
+      "rloo_advantage": 0.0,
+      "memory_advantage": -0.21519097222222222
+    },
+    {
+      "trajectory": "degradation",
+      "visit": 1,
+      "uniform_return": 0.0,
+      "history_before": 0.72626953125,
+      "history_after": 0.5447021484375001,
+      "rloo_advantage": 0.0,
+      "memory_advantage": -0.16139322916666668
+    },
+    {
+      "trajectory": "degradation",
+      "visit": 2,
+      "uniform_return": 0.0,
+      "history_before": 0.5447021484375001,
+      "history_after": 0.40852661132812507,
+      "rloo_advantage": 0.0,
+      "memory_advantage": -0.12104492187500002
+    },
+    {
+      "trajectory": "degradation",
+      "visit": 3,
+      "uniform_return": 0.0,
+      "history_before": 0.40852661132812507,
+      "history_after": 0.30639495849609377,
+      "rloo_advantage": 0.0,
+      "memory_advantage": -0.09078369140625002
+    },
+    {
+      "trajectory": "degradation",
+      "visit": 4,
+      "uniform_return": 0.0,
+      "history_before": 0.30639495849609377,
+      "history_after": 0.22979621887207033,
+      "rloo_advantage": 0.0,
+      "memory_advantage": -0.06808776855468751
+    },
+    {
+      "trajectory": "degradation",
+      "visit": 5,
+      "uniform_return": 0.0,
+      "history_before": 0.22979621887207033,
+      "history_after": 0.17234716415405274,
+      "rloo_advantage": 0.0,
+      "memory_advantage": -0.051065826416015626
+    },
+    {
+      "trajectory": "degradation",
+      "visit": 6,
+      "uniform_return": 0.0,
+      "history_before": 0.17234716415405274,
+      "history_after": 0.12926037311553956,
+      "rloo_advantage": 0.0,
+      "memory_advantage": -0.03829936981201172
+    },
+    {
+      "trajectory": "degradation",
+      "visit": 7,
+      "uniform_return": 0.0,
+      "history_before": 0.12926037311553956,
+      "history_after": 0.09694527983665467,
+      "rloo_advantage": 0.0,
+      "memory_advantage": -0.02872452735900879
+    },
+    {
+      "trajectory": "degradation",
+      "visit": 8,
+      "uniform_return": 0.0,
+      "history_before": 0.09694527983665467,
+      "history_after": 0.072708959877491,
+      "rloo_advantage": 0.0,
+      "memory_advantage": -0.021543395519256592
+    },
+    {
+      "trajectory": "degradation",
+      "visit": 9,
+      "uniform_return": 0.0,
+      "history_before": 0.072708959877491,
+      "history_after": 0.054531719908118254,
+      "rloo_advantage": 0.0,
+      "memory_advantage": -0.016157546639442445
+    },
+    {
+      "trajectory": "degradation",
+      "visit": 10,
+      "uniform_return": 0.0,
+      "history_before": 0.054531719908118254,
+      "history_after": 0.04089878993108869,
+      "rloo_advantage": 0.0,
+      "memory_advantage": -0.012118159979581834
+    },
+    {
+      "trajectory": "degradation",
+      "visit": 11,
+      "uniform_return": 0.0,
+      "history_before": 0.04089878993108869,
+      "history_after": 0.030674092448316516,
+      "rloo_advantage": 0.0,
+      "memory_advantage": -0.009088619984686375
+    },
+    {
+      "trajectory": "degradation",
+      "visit": 12,
+      "uniform_return": 0.0,
+      "history_before": 0.030674092448316516,
+      "history_after": 0.02300556933623739,
+      "rloo_advantage": 0.0,
+      "memory_advantage": -0.006816464988514782
+    }
+  ]
+}

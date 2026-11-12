@@ -1,0 +1,115 @@
+{
+  "task": "The person picks up flower stems and wraps a rubber band around them to secure them together.",
+  "frames": 836,
+  "fps": 30,
+  "duration_seconds": 27.835145950317383,
+  "timestamp_max_step_seconds": 0.03368568420410156,
+  "timestamp_min_step_seconds": 0.03288745880126953,
+  "camera_position_finite": true,
+  "camera_rotation_finite": true,
+  "hand_mask_values": [
+    0,
+    1,
+    2
+  ],
+  "left_confidence_quantiles": [
+    0.0,
+    0.8019607961177826,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "right_confidence_quantiles": [
+    0.0,
+    0.7715686410665512,
+    0.9647058844566345,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "left_zero_position_frames": 10,
+  "right_zero_position_frames": 1,
+  "video_meta": {
+    "main": {
+      "size": "(1280, 720)"
+    },
+    "right": {
+      "size": "(1280, 720)"
+    },
+    "left_wrist": {
+      "size": "(640, 480)"
+    },
+    "right_wrist": {
+      "size": "(640, 480)"
+    }
+  },
+  "subtask_runs": [
+    {
+      "subtask_index": 1,
+      "start": 0,
+      "end": 140,
+      "subtask": "Pick up a cluster of flowers with the left hand from the table.",
+      "timestamp_start": 0.0,
+      "timestamp_end": 4.666867256164551
+    },
+    {
+      "subtask_index": 2,
+      "start": 141,
+      "end": 259,
+      "subtask": "Gather the flower stems with both hands.",
+      "timestamp_start": 4.700117111206055,
+      "timestamp_end": 8.633915901184082
+    },
+    {
+      "subtask_index": 3,
+      "start": 260,
+      "end": 350,
+      "subtask": "Hold a cluster of flowers with the left hand, and pick up a rubber band with the right hand from the storage box.",
+      "timestamp_start": 8.667191505432129,
+      "timestamp_end": 11.667461395263672
+    },
+    {
+      "subtask_index": 4,
+      "start": 351,
+      "end": 599,
+      "subtask": "Hold a cluster of flowers with the left hand, and wrap the rubber band around the flower stems with the right hand.",
+      "timestamp_start": 11.700845718383789,
+      "timestamp_end": 19.967750549316406
+    },
+    {
+      "subtask_index": 5,
+      "start": 600,
+      "end": 761,
+      "subtask": "Hold a cluster of flowers with the left hand, and secure the rubber band on the flower stems with the right hand.",
+      "timestamp_start": 20.00133514404297,
+      "timestamp_end": 25.368106842041016
+    },
+    {
+      "subtask_index": 6,
+      "start": 762,
+      "end": 834,
+      "subtask": "Place the flower bouquet bound with a rubber band on the table with the left hand.",
+      "timestamp_start": 25.401615142822266,
+      "timestamp_end": 27.801738739013672
+    }
+  ],
+  "selected_frames": [
+    70,
+    200,
+    475,
+    798
+  ],
+  "camera_intrinsics_first_view": [
+    522.7321166992188,
+    522.7321166992188,
+    640.3081665039062,
+    350.5869140625,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ]
+}
