@@ -1,0 +1,42 @@
+{
+  "sla:method": {
+    "file": "assets/sla-method.png",
+    "caption": "SLA 将策略视觉词元与冻结 OmniVGGT 的同视角、同位置几何特征对齐。三维教师、投影与门控只在训练期出现，部署时保留 π0.5 的原有推理结构。"
+  },
+  "sla:scaling": {
+    "file": "assets/sla-scaling.png",
+    "caption": "RoboTwin Clean2Random 成功率随持续预训练数据比例的变化。四条曲线分别对应两阶段都对齐、仅持续预训练对齐、仅后训练对齐与两阶段都不对齐；空间监督的两阶段组合从 5% 数据时的 49.2% 增至全量数据时的 72.3%。"
+  },
+  "sla:counterfactual-real": {
+    "file": "assets/sla-counterfactual-real.png",
+    "caption": "SLA_base 在官方真实机器人蔬菜交接样本 64 帧上的输入反事实。上图为归一化模型动作的相对 RMSE，分母是各帧原始动作 RMS；下左为 50 步动作块内的响应，下右为 14 个动作通道的分解，每臂 7 维动作的最后一维（第 7、14 位）为夹爪。各条件共用流匹配噪声，误差棒为对 64 帧有放回重抽样得到的 95% 区间。全部 64 帧的状态置换均实际改变提示词元，图像置换均替换输入图像。"
+  },
+  "sla:counterfactual-libero": {
+    "file": "assets/sla-counterfactual-libero.png",
+    "caption": "同一 LIBERO 演示的 64 帧上，SLA_base 与任务后训练权重的输入敏感性。左图比较五种扰动下的相对动作 RMSE，右图为同帧配对的后训练减基础权重差值；两组权重共用归一化统计量、输入管线与流匹配噪声，误差棒为按帧 bootstrap 95% 区间。后训练降低了状态扰动响应并增强了图像扰动响应，这一差值对应完整任务后训练配方。"
+  },
+  "gr00t2:xadapt-pipeline": {
+    "file": "assets/gr00t2-xadapt-pipeline.png",
+    "caption": "X-Adapt 将任务演示与目标身体的通用 play 数据共同用于后训练。视频监督场景变化，重定向轨迹与机器人动作监督目标身体的控制，部署时联合生成未来观测和动作。"
+  },
+  "gr00t2:embodiment-imagination": {
+    "file": "assets/gr00t2-embodiment-imagination.png",
+    "caption": "从目标机器人工作台的初始帧出发，加入目标身体 play 数据后，模型生成的未来由人类手臂与手持夹爪转为 YAM 机械臂。任务过程得以保留，执行身体改由目标机器人承担。"
+  },
+  "gr00t2:camera-alignment": {
+    "file": "assets/gr00t2-camera-alignment.png",
+    "caption": "手持设备的鱼眼腕部视图经虚拟针孔相机重投影后与 YAM 视场对齐。112 对同场景渲染用于拟合焦距与朝向，留出样本中的场景位置偏差由 74–94 像素降至 8–11 像素。"
+  },
+  "gr00t2:human1m-sample": {
+    "file": "assets/human1m-aligned-episode.png",
+    "caption": "Human-1M 花卉整理样本的四个代表帧与多模态时间轴。上方将双手各 21 个三维关节点投回主相机；左下为相机坐标系中的腕部轨迹，数字对应六段子任务；右下为双手跟踪置信度与连续子任务区间。"
+  },
+  "gr00t2:human-scaling": {
+    "file": "assets/gr00t2-human-video-scaling.png",
+    "caption": "人类视频预训练规模与 72 项 Dexter 任务表现的关系。视频从 0 增至 870、8100 和 84400 小时，真机成功率由 18% 增至 41%，未来视频生成成功率由 30% 增至 51%；0% 档没有共享的人类视频预训练阶段，其余各档按相同 epoch 数训练，步数随数据量增加。"
+  },
+  "gr00t2:grpo-memory": {
+    "file": "assets/grpo-context-memory.png",
+    "caption": "历史基线的独立数值实验，每组八次尝试，历史伪计数为 2，指数移动平均系数为 0.25。左图是全同组（全成功或全失败）恢复非零优势的比例；中图是各组平均绝对优势的均方根；右图是成功率突变后历史优势随后续访问的衰减。"
+  }
+}

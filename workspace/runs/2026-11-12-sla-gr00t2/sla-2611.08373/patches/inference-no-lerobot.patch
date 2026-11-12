@@ -1,0 +1,10 @@
+--- a/src/openpi/training/checkpoints.py
++++ b/src/openpi/training/checkpoints.py
+@@ -13,7 +13,6 @@
+ 
+ from openpi.shared import array_typing as at
+ import openpi.shared.normalize as _normalize
+-import openpi.training.data_loader as _data_loader
+ import openpi.training.distributed as _distributed
+ import openpi.training.utils as training_utils
+ 

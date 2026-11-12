@@ -13,6 +13,14 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-11-12 — 2026-11-10 至 2026-11-12；另含点名 SLA 与 GR00T 2 技术报告
+- Doc: https://fudan-nlp.feishu.cn/docx/NFRKd4RciokJWKxr36ecKV10nib
+- Run: runs/2026-11-12-sla-gr00t2/
+- Deep threads: SLA 真实权重反事实与动作时程 (2611.08373), GR00T 2 联合生成 × Human-1M 真实数据 × GRPO 历史基线 (gr00t2-whitepaper)
+- Covered papers: 2611.08373, gr00t2-whitepaper
+- Shortlisted papers: 2611.12870, 2611.12885, 2611.14488, 2611.12324, 2611.11166, 2611.09501, scientific-spaces:12003
+- 科学空间线索: 《让炼丹更科学一些（十一）：无调度学习率新思路》 https://spaces.ac.cn/archives/12003
+
 ## 2026-11-09 — 2026-11-06 至 2026-11-09；另含点名 RoboTTT 与科学空间前序文章
 - Doc: https://fudan-nlp.feishu.cn/docx/L0s0dYFRmohSBWxK2vNckRv6nyg
 - Run: runs/2026-11-09-robotttt-attention-compression/

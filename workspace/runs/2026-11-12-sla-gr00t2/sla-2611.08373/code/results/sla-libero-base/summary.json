@@ -1,0 +1,129 @@
+{
+  "mode": "libero",
+  "checkpoint": "/inspire/qb-ilm/project/exploration-topic/ky26021/scout-20261112/checkpoints/SLA_base",
+  "config": "train_libero_plus",
+  "episode": 0,
+  "samples": 64,
+  "frames": [
+    3,
+    9,
+    10,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    21,
+    24,
+    27,
+    32,
+    49,
+    50,
+    52,
+    53,
+    55,
+    58,
+    65,
+    67,
+    68,
+    69,
+    71,
+    72,
+    75,
+    76,
+    83,
+    87,
+    100,
+    101,
+    103,
+    107,
+    109,
+    113,
+    114,
+    115,
+    120,
+    123,
+    132,
+    135,
+    139,
+    147,
+    149,
+    152,
+    159,
+    160,
+    168,
+    169,
+    170,
+    171,
+    175,
+    180,
+    182,
+    183,
+    184,
+    185,
+    186,
+    188,
+    196,
+    201,
+    204,
+    205,
+    206
+  ],
+  "seed": 20261112,
+  "action_horizon": 10,
+  "action_channels_compared": 7,
+  "metric_space": "normalized model actions before unnormalization and absolute-action reconstruction",
+  "conditions": {
+    "state_zero": {
+      "relative_rmse_mean": 0.3627657266912864,
+      "relative_rmse_median": 0.09721891007601738,
+      "relative_rmse_bootstrap95": [
+        0.22466987719964587,
+        0.5179519877591581
+      ],
+      "rmse_mean": 0.1369935602415353,
+      "cosine_mean": 0.7689712227193699
+    },
+    "state_shuffle": {
+      "relative_rmse_mean": 0.2266369138547013,
+      "relative_rmse_median": 0.06781339799593147,
+      "relative_rmse_bootstrap95": [
+        0.12281235566780306,
+        0.35557845749721595
+      ],
+      "rmse_mean": 0.08548712620540755,
+      "cosine_mean": 0.860856529496575
+    },
+    "state_dropout": {
+      "relative_rmse_mean": 0.1339425399619953,
+      "relative_rmse_median": 0.06982751297575346,
+      "relative_rmse_bootstrap95": [
+        0.07529648127800898,
+        0.2159455161013827
+      ],
+      "rmse_mean": 0.05052167037501931,
+      "cosine_mean": 0.9496203738626315
+    },
+    "image_zero": {
+      "relative_rmse_mean": 0.42013848909345664,
+      "relative_rmse_median": 0.22011186932300825,
+      "relative_rmse_bootstrap95": [
+        0.29767400590693716,
+        0.5656010959357556
+      ],
+      "rmse_mean": 0.15865293587557971,
+      "cosine_mean": 0.7490034122933449
+    },
+    "image_shuffle": {
+      "relative_rmse_mean": 1.220178619359569,
+      "relative_rmse_median": 1.9529372287115423,
+      "relative_rmse_bootstrap95": [
+        1.0242527582442755,
+        1.433678583470727
+      ],
+      "rmse_mean": 0.46215671650134027,
+      "cosine_mean": -0.11766161106151148
+    }
+  }
+}
