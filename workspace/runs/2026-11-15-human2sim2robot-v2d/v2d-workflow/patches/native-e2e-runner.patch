@@ -1,0 +1,32 @@
+diff --git a/tools/e2e/stages.py b/tools/e2e/stages.py
+index 100628a..ef80ca1 100644
+--- a/tools/e2e/stages.py
++++ b/tools/e2e/stages.py
+@@ -4,6 +4,7 @@ from __future__ import annotations
+ 
+ import json
+ import math
++import os
+ import sys
+ from collections.abc import Iterable, Mapping, Sequence
+ from pathlib import Path
+@@ -14,7 +15,7 @@ from .runner import Command, Stage
+ 
+ RECONSTRUCTION_ROOT = REPO_ROOT / "reconstruction"
+ ROBOTIC_ROOT = REPO_ROOT / "robotic_grounding"
+-WORKFLOW_RUNNER = ROBOTIC_ROOT / "workflow" / "run.sh"
++WORKFLOW_RUNNER = ROBOTIC_ROOT / "workflow" / "native_run.py"
+ CANONICAL_TOOLS = ROBOTIC_ROOT / "groot_finetune" / "tools"
+ CANONICAL_EVAL = ROBOTIC_ROOT / "groot_finetune" / "closed_loop" / "run_eval.sh"
+ REPOSITORY_HUMAN_MOTION_DATA = (
+@@ -1045,9 +1046,7 @@ def finetune_stages(
+     )
+     statistics = _command(
+         (
+-            "uv",
+-            "run",
+-            "python",
++            os.environ.get("V2D_ISAAC_PYTHON", sys.executable),
+             "gr00t/data/stats.py",
+             "--dataset-path",
+             dataset_host,

@@ -1,0 +1,45 @@
+{
+  "purpose": "An explicit order-of-magnitude thought experiment, not a forecast of V2D production cost.",
+  "assumptions": {
+    "raw_video_hours": 1000000,
+    "seconds_per_clip": 10,
+    "accepted_clips_per_2000_raw_clips": 83,
+    "acceptance_rate_source": "Do as I Do, 100DOH qualitative quality screen; not a universal acceptance rate",
+    "expert_GPU_hours_per_accepted_task": 2,
+    "expert_cost_source": "CHORD single-task L40S training time; a different implementation and task distribution",
+    "GPU_hours_per_year": 8760
+  },
+  "derived": {
+    "raw_ten_second_clips": 360000000,
+    "accepted_clips": 14940000,
+    "expert_GPU_hours": 29880000,
+    "expert_GPU_years": 3410.958904109589,
+    "years_on_1000_continuously_utilized_GPUs": 3.4109589041095894
+  },
+  "expert_amortization_scenarios": {
+    "definition": "accepted_clips_per_shared_expert is a hypothetical reuse factor, not a measured generalization result",
+    "cases": [
+      {"accepted_clips_per_shared_expert": 1, "expert_GPU_hours": 29880000, "days_on_1000_continuously_utilized_GPUs": 1245.0},
+      {"accepted_clips_per_shared_expert": 10, "expert_GPU_hours": 2988000, "days_on_1000_continuously_utilized_GPUs": 124.5},
+      {"accepted_clips_per_shared_expert": 100, "expert_GPU_hours": 298800, "days_on_1000_continuously_utilized_GPUs": 12.45},
+      {"accepted_clips_per_shared_expert": 1000, "expert_GPU_hours": 29880, "days_on_1000_continuously_utilized_GPUs": 1.245}
+    ],
+    "reuse_needed_for_one_year_on_1000_GPUs": 3.4109589041095894,
+    "unchanged_costs": "Every raw clip still needs qualification, reconstruction, retargeting, rollout rendering, and quality control; this scenario analysis reduces only the expert-training term."
+  },
+  "measured_reconstruction_scenario": {
+    "source_video_seconds": 13,
+    "frames": 390,
+    "hardware": "one RTX 4090 48GB",
+    "core_wall_seconds_through_hand_object_alignment": 1272.199,
+    "diagnostic_preview_wall_seconds_excluded": 1611.733,
+    "optional_refinement_wall_seconds_excluded": 519.677,
+    "timing_rule": "First successful production run per module; downloads, setup, failed attempts, cache hits and host-side final alignment are excluded",
+    "seconds_per_ten_second_clip": 978.6146153846154,
+    "accepted_clips": 14940000,
+    "accepted_reconstruction_GPU_hours": 4061250.6538461535,
+    "days_on_1000_continuously_utilized_GPUs": 169.21877724358973,
+    "scope": "A same-configuration extrapolation through hand-object alignment for already accepted clips. Later reconstruction stages, raw-video screening, retargeting, rollout and quality control are outside this term."
+  },
+  "interpretation": "Per-clip expert optimization cannot be the only scaling mechanism. Expert cost falls linearly with reuse: roughly four accepted clips per expert already brings this isolated term below one year on 1000 GPUs. The research question is therefore whether reference-conditioned experts and automatic verifiers can share across clips while preserving physical success. Measured reconstruction through hand-object alignment already gives a separate 169.2-day term on 1000 RTX 4090 GPUs for the same hypothetical accepted clips; asset caching, temporal reuse and early screening must be optimized alongside expert sharing."
+}

@@ -1,0 +1,135 @@
+{
+  "source_video_seconds": 13.0,
+  "successful_modules": [
+    {
+      "module": "v2d.anycalib.lib.video_to_calibration",
+      "image": "v2d_anycalib",
+      "wall_seconds": 40.491,
+      "role": "reconstruction"
+    },
+    {
+      "module": "v2d.moge.lib.video_to_depth",
+      "image": "v2d_moge",
+      "wall_seconds": 159.544,
+      "role": "reconstruction"
+    },
+    {
+      "module": "v2d.droid_slam.lib.video_to_slam",
+      "image": "v2d_droid_slam",
+      "wall_seconds": 43.644,
+      "role": "reconstruction"
+    },
+    {
+      "module": "v2d.wilor.lib.video_to_hands",
+      "image": "v2d_wilor",
+      "wall_seconds": 108.708,
+      "role": "reconstruction"
+    },
+    {
+      "module": "v2d.grounding_dino.lib.image_to_object_bboxes",
+      "image": "v2d_grounding_dino",
+      "wall_seconds": 73.345,
+      "role": "reconstruction"
+    },
+    {
+      "module": "v2d.wilor.lib.render_prompt_masks",
+      "image": "v2d_wilor",
+      "wall_seconds": 6.94,
+      "role": "reconstruction"
+    },
+    {
+      "module": "v2d.sam2.lib.video_to_masks",
+      "image": "v2d_sam2",
+      "wall_seconds": 55.859,
+      "role": "reconstruction"
+    },
+    {
+      "module": "v2d.sam3d.lib.image_to_mesh",
+      "image": "v2d_sam3d",
+      "wall_seconds": 164.517,
+      "role": "reconstruction"
+    },
+    {
+      "module": "v2d.foundation_pose.lib.run_estimate_mesh_scale",
+      "image": "v2d_foundation_pose",
+      "wall_seconds": 170.891,
+      "role": "reconstruction"
+    },
+    {
+      "module": "v2d.foundation_pose.lib.run_video_to_poses",
+      "image": "v2d_foundation_pose",
+      "wall_seconds": 210.016,
+      "role": "reconstruction"
+    },
+    {
+      "module": "v2d.foundation_pose.lib.run_ekf_smoothing",
+      "image": "v2d_foundation_pose",
+      "wall_seconds": 20.355,
+      "role": "reconstruction"
+    },
+    {
+      "module": "v2d.hamer.lib.masks_to_hands",
+      "image": "v2d_hamer",
+      "wall_seconds": 80.774,
+      "role": "reconstruction"
+    },
+    {
+      "module": "v2d.hamer.lib.align_hands",
+      "image": "v2d_hamer",
+      "wall_seconds": 137.115,
+      "role": "reconstruction"
+    },
+    {
+      "module": "v2d.wilor.lib.tracks_interpolate",
+      "image": "v2d_wilor",
+      "wall_seconds": 1.6,
+      "role": "post_alignment"
+    },
+    {
+      "module": "v2d.gsplat_refinement.lib.refine_simple",
+      "image": "v2d_gsplat_refinement",
+      "wall_seconds": 519.677,
+      "role": "optional_refinement"
+    },
+    {
+      "module": "v2d.geocalib.lib.video_to_calibration",
+      "image": "v2d_geocalib",
+      "wall_seconds": 13.646,
+      "role": "reconstruction_packaging"
+    }
+  ],
+  "observed_single_gpu_wall_seconds": 1272.199,
+  "core_wall_seconds_through_hand_object_alignment": 1272.199,
+  "observed_wall_per_source_second": 97.861462,
+  "production_role_wall_seconds": {
+    "reconstruction": 1272.199,
+    "post_alignment": 1.6,
+    "optional_refinement": 519.677,
+    "reconstruction_packaging": 13.646
+  },
+  "all_successful_production_wall_seconds": 1807.122,
+  "diagnostic_previews": [
+    {
+      "module": "v2d.hamer.lib.render_hands_video",
+      "image": "v2d_hamer",
+      "wall_seconds": 244.298
+    },
+    {
+      "module": "v2d.hamer.lib.render_hands_aligned_video",
+      "image": "v2d_hamer",
+      "wall_seconds": 466.448
+    },
+    {
+      "module": "v2d.hamer.lib.render_hands_aligned_video",
+      "image": "v2d_hamer",
+      "wall_seconds": 481.702
+    },
+    {
+      "module": "v2d.hamer.lib.render_hands_aligned_video",
+      "image": "v2d_hamer",
+      "wall_seconds": 419.285
+    }
+  ],
+  "diagnostic_preview_wall_seconds": 1611.733,
+  "scope": "First successful timing for each production module in the log. Downloads, environment setup, failed attempts and cache hits are excluded. The core total ends at hand-object alignment. Interpolation, optional refinement and final bundle packaging are separate production roles. Every successful diagnostic visualization invocation is summed separately and excluded from production costs."
+}

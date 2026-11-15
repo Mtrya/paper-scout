@@ -13,6 +13,14 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-11-15 — Human2Sim2Robot 主线及 2025–2026 年相关论文；公开 V2D 工作流实跑
+- Doc: https://fudan-nlp.feishu.cn/docx/ValndncVdomI8nxySKuciLh1npg
+- Run: runs/2026-11-15-human2sim2robot-v2d/
+- Deep threads: V2D 原片自动重建→重定向→物理专家→LeRobot 全链实测（NVIDIA-Isaac/video_to_data@1e862a8984bf28474c324c1b49db99b2da7ece80）, 物体轨迹与接触力旋量的动作接地 (2504.12609, 2607.00033, 2505.07096), 单目视频的手物与接触几何 (2606.19333, 2610.18822), 条件专家与任务簇复用的规模化分析 (2511.09484)
+- Covered papers: 2504.12609, 2607.00033, 2505.07096, 2505.24853, 2511.09484, 2606.19333, 2610.18822
+- Shortlisted papers: 2611.02968 (ReContact), 2608.07045 (C2Dex), 2609.19119 (Track, Articulate, Act)
+- 核心结果: 原片自动链与人工修正参考链分别完成 12/12 与 10/10 物理任务验收，各导出 10 条、5190 时间步、30 视频的 LeRobot 数据；IK 零内部收敛不妨碍状态反馈专家完成任务，同任务同本体专家复用获得两条直接证据。未微调 GR00T，未测闭环视觉策略。
+
 ## 2026-11-12 — 2026-11-10 至 2026-11-12；另含点名 SLA 与 GR00T 2 技术报告
 - Doc: https://fudan-nlp.feishu.cn/docx/NFRKd4RciokJWKxr36ecKV10nib
 - Run: runs/2026-11-12-sla-gr00t2/

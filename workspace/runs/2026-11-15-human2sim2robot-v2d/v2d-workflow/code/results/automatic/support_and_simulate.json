@@ -1,0 +1,36 @@
+{
+  "source_sequence": "tissue_box_simple",
+  "retargeted_motion": {
+    "source_solver_frames": 390,
+    "source_fps": 30.0,
+    "output_frames": 649,
+    "output_fps": 50.0,
+    "duration_seconds": 12.98,
+    "robot_joint_dimensions": 58,
+    "evidence": "retarget_report.json and motion_metrics.json"
+  },
+  "support_surface": {
+    "frames_read": 649,
+    "object_mesh_vertices": 6043,
+    "still_frames": 413,
+    "still_segments": 7,
+    "merged_support_disks": 1,
+    "disks_above_ground": 1,
+    "status": "written",
+    "artifact_name": "tissue_box_simple_vega_sharpa_support.usda"
+  },
+  "simulation_smoke": {
+    "task": "VegaSharpa-WholeBody-Manip-v0",
+    "num_envs": 1,
+    "max_steps": 2,
+    "observation_dimensions": 445,
+    "action_dimensions": 58,
+    "status": "done",
+    "scope": "Environment construction and two simulation steps, before expert rollout"
+  },
+  "runtime_compatibility": {
+    "initial_error": "ModuleNotFoundError: No module named 'pxr'",
+    "resolution": "The native Isaac wrapper adds the installed omni.usd.libs Python root and its bin directory to PYTHONPATH and LD_LIBRARY_PATH.",
+    "implementation": "../../setup_native_isaac.sh"
+  }
+}

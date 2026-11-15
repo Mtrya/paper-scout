@@ -1,0 +1,66 @@
+{
+  "v2d-workflow:overview": {
+    "file": "assets/v2d-official-overview.png",
+    "caption": "Video to Data 将视频切分与检索、手物重建、机器人重定向、物理专家、数据采集和 GR00T 微调组织为可组合模块。根 E2E 从选定短片与任务配置开始，依次产生几何参考、机器人动作和图像—动作数据。"
+  },
+  "action-grounding:anchor-reward": {
+    "file": "assets/human2sim2robot-anchor-reward.png",
+    "caption": "Human2Sim2Robot 用物体局部坐标中的三个非共线锚点表示位姿轨迹，位置与旋转由此进入同一个跟踪奖励。完整物体轨迹定义任务，预操作手姿提供探索初始化。"
+  },
+  "action-grounding:contact-wrench": {
+    "file": "assets/chord-contact-wrench.png",
+    "caption": "CHORD 在物体跟踪与手部模仿之外加入接触 wrench 引导。每个接触位置、法向与摩擦锥共同决定可施加于物体的力和力矩方向，支持函数再比较人手与机器人不同接触集合的机械作用。"
+  },
+  "video-reconstruction:object-tracking": {
+    "file": "assets/do-as-i-do-tracking.png",
+    "caption": "Do as I Do 在参考帧固定物体形状，随后各帧用上一帧位姿引导生成候选，并以聚类和投影掩码选择结果。手部近公制尺度进一步确定物体沿相机射线的相对深度。"
+  },
+  "video-reconstruction:contact-pipeline": {
+    "file": "assets/egomatrix-contact-pipeline.png",
+    "caption": "EgoMatrix 从手部尺度锚、手物相对深度和接触证据出发，经多起点位姿精炼与局部接触精炼得到物理参考；成功仿真展开随后同时驱动机器人与物体的联合渲染。"
+  },
+  "video-reconstruction:contact-comparison": {
+    "file": "assets/egomatrix-contact-comparison.png",
+    "caption": "多起点位姿精炼先纠正手物的大错位，局部接触精炼再闭合残余缝隙并减少穿透。EgoMatrix 的对照显示，绝对手姿精度与接触可执行性应当分别评价。"
+  },
+  "v2d-workflow:tissue-source": {
+    "file": "assets/tissue-source-preview.gif",
+    "caption": "原始第一视角纸巾视频：13 秒、390 帧、30 Hz。双手抬起纸巾盒、保持并放回，这是原始视频自动重建链的输入。"
+  },
+  "v2d-workflow:airplane-source": {
+    "file": "assets/airplane-source-preview.gif",
+    "caption": "第二段公开人类视频：26 秒、780 帧、1280×800、30 Hz。双手持续翻转玩具飞机，用来检验姿态重定向所需的目标姿态与角误差验收接口。"
+  },
+  "v2d-workflow:tissue-masks": {
+    "file": "assets/tissue-mask-sheet.jpg",
+    "caption": "单目视频中操作区域的时序分割结果，按约 3 秒间隔抽取。蓝色右手、绿色左手与纸巾盒在全部 390 帧中均保持非空，接触、抬升与放回阶段的轮廓连续可见，为后续三维反投影提供区域约束。"
+  },
+  "v2d-workflow:tissue-aligned": {
+    "file": "assets/tissue-refined-preview.gif",
+    "caption": "原片自动链经手物对齐、轨迹插值与可选高斯精炼后的最终四视图。左上为原相机叠加，其余为世界系俯视、侧视与正视；黄色与蓝色双手、绿色纸巾盒网格呈现接近、抬升与松开。390 帧的几何束完整生成，局部接触与穿透由重定向和物理仿真继续验收。"
+  },
+  "v2d-workflow:tissue-aligned-sheet": {
+    "file": "assets/tissue-aligned-sheet.jpg",
+    "caption": "尚未插值与精炼的手物粗对齐，展示六个时刻的原相机叠加与三个正交世界视图。单目投影难以揭示沿视线方向的距离误差，多视角则使手物间隙、疑似重叠和桌面参照的缺失进入可复核的范围。"
+  },
+  "v2d-workflow:tissue-retarget": {
+    "file": "assets/tissue-retarget-preview.gif",
+    "caption": "原片自动重建经逆运动学重定向得到的 Vega 双臂与灵巧手参考轨迹。390 帧全部生成，手腕与指尖平均位置误差分别为 1.53 cm 和 1.14 cm；所有帧均达到 100 次优化上限，逐帧收敛计数为 0，因此这段运动学预览继续接受物理仿真验收。"
+  },
+  "v2d-workflow:reference-replay": {
+    "file": "assets/reference-replay-preview.gif",
+    "caption": "公开人工修正参考链在 Isaac Sim 中的实际三路录制，依次为第一视角、左腕与右腕，视觉随机化开启。画面呈现抬盒、保持与放回；腕部近距离遮挡使接触验收主要依赖状态轨迹。"
+  },
+  "v2d-workflow:reconstruction-cost": {
+    "file": "assets/reconstruction-cost.png",
+    "caption": "单张 RTX 4090 从 13 秒原片到手物对齐的首次成功模块墙钟时间，合计 1272.2 秒。蓝色为参考帧资产，橙色为序列处理，绿色为手部处理；诊断预览、下载、安装、失败重试和缓存命中不计。"
+  },
+  "v2d-workflow:reference-lift": {
+    "file": "assets/reference-lift-trajectory.png",
+    "caption": "公开参考专家的十条真实仿真轨迹，细线为单次展开，粗线为中位数。物体最大抬升 14.46–15.87 cm，越过 10 cm 阈值并保持 9.15–10.10 秒，随后回到桌面；各次初始状态噪声为零，因此曲线的一致性反映受控执行，而不是状态分布的多样化。采样频率 20 Hz。"
+  },
+  "v2d-workflow:automatic-replay": {
+    "file": "assets/automatic-replay-preview.gif",
+    "caption": "原片自动重建与重定向后，公开物理专家在 Isaac Sim 中的实际三路录制，依次为第一视角、左腕与右腕，视觉随机化开启。机器人完成接近、抬升、保持与放回；腕部近景遮挡明显，接触与放置由仿真物体状态验收。"
+  }
+}

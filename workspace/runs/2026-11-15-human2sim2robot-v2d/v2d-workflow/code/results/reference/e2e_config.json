@@ -1,0 +1,364 @@
+{
+  "contracts": {
+    "embodiment": {
+      "action_fields": [
+        {
+          "end": 7,
+          "key": "right_arm",
+          "source_term": "action_target",
+          "start": 0,
+          "transform": null
+        },
+        {
+          "end": 29,
+          "key": "right_finger",
+          "source_term": "action_target",
+          "start": 7,
+          "transform": null
+        },
+        {
+          "end": 36,
+          "key": "left_arm",
+          "source_term": "action_target",
+          "start": 29,
+          "transform": null
+        },
+        {
+          "end": 58,
+          "key": "left_finger",
+          "source_term": "action_target",
+          "start": 36,
+          "transform": null
+        }
+      ],
+      "action_horizon": 16,
+      "cameras": [
+        {
+          "key": "front",
+          "observation_term": "image",
+          "sensor_name": "camera"
+        },
+        {
+          "key": "right_wrist_view",
+          "observation_term": "image_right_wrist",
+          "sensor_name": "camera_right_wrist"
+        },
+        {
+          "key": "left_wrist_view",
+          "observation_term": "image_left_wrist",
+          "sensor_name": "camera_left_wrist"
+        }
+      ],
+      "contract_id": "vega_sharpa_joint",
+      "evaluation_terminations": [
+        "timeout",
+        "robot_state_diverged"
+      ],
+      "fps": 20,
+      "inference_task": "VegaSharpa-WholeBody-Gr00t-Joint-Inference-v0",
+      "joint_names": [
+        "R_arm_j1",
+        "R_arm_j2",
+        "R_arm_j3",
+        "R_arm_j4",
+        "R_arm_j5",
+        "R_arm_j6",
+        "R_arm_j7",
+        "right_thumb_CMC_FE",
+        "right_thumb_CMC_AA",
+        "right_thumb_MCP_FE",
+        "right_thumb_MCP_AA",
+        "right_thumb_IP",
+        "right_index_MCP_FE",
+        "right_index_MCP_AA",
+        "right_index_PIP",
+        "right_index_DIP",
+        "right_middle_MCP_FE",
+        "right_middle_MCP_AA",
+        "right_middle_PIP",
+        "right_middle_DIP",
+        "right_ring_MCP_FE",
+        "right_ring_MCP_AA",
+        "right_ring_PIP",
+        "right_ring_DIP",
+        "right_pinky_CMC",
+        "right_pinky_MCP_FE",
+        "right_pinky_MCP_AA",
+        "right_pinky_PIP",
+        "right_pinky_DIP",
+        "L_arm_j1",
+        "L_arm_j2",
+        "L_arm_j3",
+        "L_arm_j4",
+        "L_arm_j5",
+        "L_arm_j6",
+        "L_arm_j7",
+        "left_thumb_CMC_FE",
+        "left_thumb_CMC_AA",
+        "left_thumb_MCP_FE",
+        "left_thumb_MCP_AA",
+        "left_thumb_IP",
+        "left_index_MCP_FE",
+        "left_index_MCP_AA",
+        "left_index_PIP",
+        "left_index_DIP",
+        "left_middle_MCP_FE",
+        "left_middle_MCP_AA",
+        "left_middle_PIP",
+        "left_middle_DIP",
+        "left_ring_MCP_FE",
+        "left_ring_MCP_AA",
+        "left_ring_PIP",
+        "left_ring_DIP",
+        "left_pinky_CMC",
+        "left_pinky_MCP_FE",
+        "left_pinky_MCP_AA",
+        "left_pinky_PIP",
+        "left_pinky_DIP"
+      ],
+      "modality_config": "groot_finetune/vega_sharpa_joint_config.py",
+      "record_task": "VegaSharpa-WholeBody-Gr00t-Record-v0",
+      "reset_joint_groups": {
+        "arm": [
+          "R_arm_j1",
+          "R_arm_j2",
+          "R_arm_j3",
+          "R_arm_j4",
+          "R_arm_j5",
+          "R_arm_j6",
+          "R_arm_j7",
+          "L_arm_j1",
+          "L_arm_j2",
+          "L_arm_j3",
+          "L_arm_j4",
+          "L_arm_j5",
+          "L_arm_j6",
+          "L_arm_j7"
+        ],
+        "finger": [
+          "right_thumb_CMC_FE",
+          "right_thumb_CMC_AA",
+          "right_thumb_MCP_FE",
+          "right_thumb_MCP_AA",
+          "right_thumb_IP",
+          "right_index_MCP_FE",
+          "right_index_MCP_AA",
+          "right_index_PIP",
+          "right_index_DIP",
+          "right_middle_MCP_FE",
+          "right_middle_MCP_AA",
+          "right_middle_PIP",
+          "right_middle_DIP",
+          "right_ring_MCP_FE",
+          "right_ring_MCP_AA",
+          "right_ring_PIP",
+          "right_ring_DIP",
+          "right_pinky_CMC",
+          "right_pinky_MCP_FE",
+          "right_pinky_MCP_AA",
+          "right_pinky_PIP",
+          "right_pinky_DIP",
+          "left_thumb_CMC_FE",
+          "left_thumb_CMC_AA",
+          "left_thumb_MCP_FE",
+          "left_thumb_MCP_AA",
+          "left_thumb_IP",
+          "left_index_MCP_FE",
+          "left_index_MCP_AA",
+          "left_index_PIP",
+          "left_index_DIP",
+          "left_middle_MCP_FE",
+          "left_middle_MCP_AA",
+          "left_middle_PIP",
+          "left_middle_DIP",
+          "left_ring_MCP_FE",
+          "left_ring_MCP_AA",
+          "left_ring_PIP",
+          "left_ring_DIP",
+          "left_pinky_CMC",
+          "left_pinky_MCP_FE",
+          "left_pinky_MCP_AA",
+          "left_pinky_PIP",
+          "left_pinky_DIP"
+        ]
+      },
+      "robot_name": "vega_sharpa",
+      "schema_version": 1,
+      "source_action_terms": [
+        "joint_pos"
+      ],
+      "source_task": "VegaSharpa-WholeBody-Manip-v0",
+      "source_terminations": [
+        "timeout"
+      ],
+      "state_fields": [
+        {
+          "end": 7,
+          "key": "right_arm",
+          "source_term": "arm_joint_pos",
+          "start": 0,
+          "transform": null
+        },
+        {
+          "end": 14,
+          "key": "left_arm",
+          "source_term": "arm_joint_pos",
+          "start": 7,
+          "transform": null
+        },
+        {
+          "end": 22,
+          "key": "right_finger",
+          "source_term": "finger_joint_pos",
+          "start": 0,
+          "transform": null
+        },
+        {
+          "end": 44,
+          "key": "left_finger",
+          "source_term": "finger_joint_pos",
+          "start": 22,
+          "transform": null
+        }
+      ]
+    },
+    "task": {
+      "evaluator": {
+        "final_min_lift_m": -0.01,
+        "hold_threshold_m": 0.05,
+        "id": "lift_hold",
+        "lift_threshold_m": 0.1,
+        "max_descent_step_m": 0.01,
+        "max_terminal_range_m": 0.01,
+        "max_terminal_step_m": 0.005,
+        "min_hold_steps": 20,
+        "placement_threshold_m": 0.03,
+        "placement_window_steps": 20
+      },
+      "instruction": "lift the box and hold it",
+      "object_prompt": "a tissue box",
+      "schema_version": 1,
+      "target_object": {
+        "name": null,
+        "selector": "primary"
+      },
+      "task_id": "tissue_box_lift_hold"
+    }
+  },
+  "created_at": "2026-11-15T09:01:44.782952+00:00",
+  "inputs": {
+    "isaac_groot_dir": "${V2D_WORKROOT}/Isaac-GR00T",
+    "mano_dir": "${V2D_WORKROOT}/mano",
+    "rl_checkpoint": "${V2D_WORKROOT}/video_to_data/robotic_grounding/source/robotic_grounding/robotic_grounding/assets/policies/e2e_example/tissue_box/vega_sharpa_policy.onnx"
+  },
+  "paths": {
+    "container": {
+      "bundle": "/workspace/e2e/reconstruction/result_slam_gravity_aligned",
+      "closed_loop": "/workspace/e2e/closed_loop",
+      "dataset": "/workspace/e2e/gr00t_dataset",
+      "embodiment_contract": "/workspace/e2e/contracts/embodiment.json",
+      "human_motion_data": "/workspace/e2e/human_motion_data",
+      "loaded": "/workspace/e2e/intermediate/ego_recon/loaded",
+      "mano_dir": "/workspace/mano",
+      "processed": "/workspace/e2e/human_motion_data/ego_recon/processed",
+      "recording": "/workspace/e2e/recording",
+      "repo_root": "/workspace/video_to_data",
+      "rl_checkpoint": "/workspace/checkpoints/vega_sharpa_policy.onnx",
+      "run_root": "/workspace/e2e",
+      "selected": "/workspace/e2e/selected",
+      "source": "/workspace/e2e/source",
+      "task_profile": "/workspace/e2e/contracts/task_profile.json"
+    },
+    "host": {
+      "bundle": "${V2D_WORKROOT}/runs/tissue_reference/reconstruction/result_slam_gravity_aligned",
+      "closed_loop": "${V2D_WORKROOT}/runs/tissue_reference/closed_loop",
+      "dataset": "${V2D_WORKROOT}/runs/tissue_reference/gr00t_dataset",
+      "ego_raw": "${V2D_WORKROOT}/runs/tissue_reference/ego_recon_raw",
+      "embodiment_contract": "${V2D_WORKROOT}/runs/tissue_reference/contracts/embodiment.json",
+      "finetune": "${V2D_WORKROOT}/runs/tissue_reference/finetune",
+      "human_motion_data": "${V2D_WORKROOT}/runs/tissue_reference/human_motion_data",
+      "loaded": "${V2D_WORKROOT}/runs/tissue_reference/intermediate/ego_recon/loaded",
+      "open_loop": "${V2D_WORKROOT}/runs/tissue_reference/open_loop",
+      "processed": "${V2D_WORKROOT}/runs/tissue_reference/human_motion_data/ego_recon/processed",
+      "reconstruction": "${V2D_WORKROOT}/runs/tissue_reference/reconstruction",
+      "recording": "${V2D_WORKROOT}/runs/tissue_reference/recording",
+      "selected": "${V2D_WORKROOT}/runs/tissue_reference/selected",
+      "source": "${V2D_WORKROOT}/runs/tissue_reference/source",
+      "task_profile": "${V2D_WORKROOT}/runs/tissue_reference/contracts/task_profile.json"
+    }
+  },
+  "repo_root": "${V2D_WORKROOT}/video_to_data",
+  "run_root": "${V2D_WORKROOT}/runs/tissue_reference",
+  "runtime": {
+    "container_name": "robotic-grounding-latest-gpu0",
+    "gpu": 0,
+    "image_version": "latest"
+  },
+  "schema_version": 1,
+  "stage_parameters": {
+    "collect": {
+      "collection_max_steps": 600,
+      "collection_safety_factor": 1.125,
+      "frames_per_episode": 519,
+      "measured_success_rate": 1.0,
+      "measured_success_rate_source": "pilot",
+      "pilot_attempts": 32,
+      "pilot_completed_attempts": 32,
+      "pilot_successful_attempts": 32,
+      "render_envs": 1,
+      "reset_arm_noise_rad": 0.0,
+      "reset_finger_noise_rad": 0.0,
+      "reset_object_xy_noise_m": 0.0,
+      "reset_object_yaw_noise_rad": 0.0,
+      "rl_checkpoint": "${V2D_WORKROOT}/video_to_data/robotic_grounding/source/robotic_grounding/robotic_grounding/assets/policies/e2e_example/tissue_box/vega_sharpa_policy.onnx",
+      "sequence_id": "tissue_box_simple",
+      "target_successes": 10
+    },
+    "finetune": {
+      "action_horizon": 16,
+      "base_model": "nvidia/GR00T-N1.7-3B",
+      "epochs": 1.0,
+      "global_batch_size": 32
+    },
+    "setup": {
+      "accept_nvidia_model_eula": true,
+      "gpu": 0,
+      "image_version": "native",
+      "isaac_groot_dir": "${V2D_WORKROOT}/Isaac-GR00T",
+      "mano_dir": "${V2D_WORKROOT}/mano",
+      "skip_reconstruction": false
+    },
+    "simulate": {
+      "embodiment": "vega"
+    }
+  },
+  "updated_at": "2026-11-15T12:56:45.849530+00:00",
+  "workflow": {
+    "action_dim": 58,
+    "action_horizon": 16,
+    "base_model": "nvidia/GR00T-N1.7-3B",
+    "camera_count": 3,
+    "collection_max_steps": 600,
+    "collection_safety_factor": 1.125,
+    "embodiment_contract": "vega_sharpa_joint",
+    "embodiment_contract_sha256": "91a414a748b86b88262b792d35057ca3a6fa9df739267dd18263f3133216b07e",
+    "epochs": 1.0,
+    "fps": 20,
+    "frames_per_episode": 519,
+    "global_batch_size": 32,
+    "instruction": "lift the box and hold it",
+    "measured_success_rate": 1.0,
+    "object_prompt": "a tissue box",
+    "pilot_attempts": 32,
+    "render_envs": 1,
+    "reset_arm_noise_rad": 0.0,
+    "reset_finger_noise_rad": 0.0,
+    "reset_object_xy_noise_m": 0.0,
+    "reset_object_yaw_noise_rad": 0.0,
+    "sequence_id": "tissue_box_simple",
+    "state_dim": 58,
+    "target_successes": 10,
+    "task_profile": "tissue_box_lift_hold",
+    "task_profile_sha256": "165a5037bf5c6c85c7378e310bfb535b0c97f45b547c738b50e0c39a1fc9b7fb"
+  }
+}

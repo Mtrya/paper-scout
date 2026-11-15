@@ -1,0 +1,14 @@
+diff --git a/reconstruction/modules/v2d_sam2/docker/run_video_to_masks.py b/reconstruction/modules/v2d_sam2/docker/run_video_to_masks.py
+index 878ad92..f01aadd 100644
+--- a/reconstruction/modules/v2d_sam2/docker/run_video_to_masks.py
++++ b/reconstruction/modules/v2d_sam2/docker/run_video_to_masks.py
+@@ -13,6 +13,9 @@ def _rewrite_prompts_for_container(
+     prompts_path: str,
+ ) -> tuple[str, list[str], str | None]:
+     """Rewrite host mask prompt paths to container-visible paths."""
++    if os.environ.get("V2D_NATIVE") == "1":
++        return prompts_path, [], None
++
+     with open(prompts_path) as f:
+         data = json.load(f)
+     prompts = data.get("prompts") or []
