@@ -1,0 +1,106 @@
+{
+  "label": "automatic",
+  "path": "/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_box/human_motion_data/ego_recon/processed/sequence_id=tissue_box_simple/robot_name=vega_sharpa/data.parquet",
+  "metadata": {
+    "schema_version": "motion_v1",
+    "motion_kind": "single_robot",
+    "source_dataset": "ego_recon",
+    "fps": 50.0,
+    "coord_frame": "robot_base_z_up",
+    "object_name": "tissue_box_simple",
+    "source_kind": ""
+  },
+  "frames": 649,
+  "duration_seconds": 12.98,
+  "robot_joint_shape": [
+    649,
+    58
+  ],
+  "joint_step_l2_rad": {
+    "min": 0.01320400457573559,
+    "median": 0.05427962478650607,
+    "p95": 0.24791024526801284,
+    "max": 0.5943291037466691
+  },
+  "contact": {
+    "shape": [
+      649,
+      2
+    ],
+    "active_frame_fraction_per_side": [
+      0.5608628659476117,
+      0.5608628659476117
+    ],
+    "any_contact_frame_fraction": 0.5608628659476117,
+    "contact_bout_count": 1,
+    "longest_contact_bout_seconds": 7.28
+  },
+  "object_body_position": {
+    "shape": [
+      649,
+      3
+    ],
+    "start": [
+      0.007154496386647224,
+      0.07374827563762665,
+      0.8490585088729858
+    ],
+    "end": [
+      0.000862330081872642,
+      0.1059526577591896,
+      0.8534955978393555
+    ],
+    "axis_range": [
+      0.03089226968586445,
+      0.051094651222229004,
+      0.22563034296035767
+    ],
+    "max_rise_from_start_m": 0.22559845447540283,
+    "step_distance_m": {
+      "min": 1.7953513586453526e-05,
+      "median": 0.0005870612054880166,
+      "p95": 0.0020681075986722784,
+      "max": 0.00228922285487843
+    },
+    "step_speed_m_per_s": {
+      "min": 0.0008976756793226764,
+      "median": 0.029353060274400836,
+      "p95": 0.10340537993361393,
+      "max": 0.1144611427439215
+    }
+  },
+  "object_root_position": {
+    "shape": [
+      649,
+      3
+    ],
+    "start": [
+      0.007154496386647224,
+      0.07374827563762665,
+      0.8490585088729858
+    ],
+    "end": [
+      0.000862330081872642,
+      0.1059526577591896,
+      0.8534955978393555
+    ],
+    "axis_range": [
+      0.03089226968586445,
+      0.051094651222229004,
+      0.22563034296035767
+    ],
+    "max_rise_from_start_m": 0.22559845447540283,
+    "step_distance_m": {
+      "min": 1.7953513586453526e-05,
+      "median": 0.0005870612054880166,
+      "p95": 0.0020681075986722784,
+      "max": 0.00228922285487843
+    },
+    "step_speed_m_per_s": {
+      "min": 0.0008976756793226764,
+      "median": 0.029353060274400836,
+      "p95": 0.10340537993361393,
+      "max": 0.1144611427439215
+    }
+  }
+}

@@ -1,0 +1,612 @@
+{
+  "run_root": "/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_box",
+  "task_profile": "/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_box/contracts/task_profile.json",
+  "task_id": "tissue_box_lift_hold",
+  "evaluator": {
+    "id": "lift_hold",
+    "lift_threshold_m": 0.1,
+    "hold_threshold_m": 0.05,
+    "min_hold_steps": 20,
+    "final_min_lift_m": -0.01,
+    "placement_threshold_m": 0.03,
+    "placement_window_steps": 20,
+    "max_descent_step_m": 0.01,
+    "max_terminal_step_m": 0.005,
+    "max_terminal_range_m": 0.01
+  },
+  "interpretation": "Offline task metrics of source expert rollouts, not closed-loop VLA evaluation. Object heights are pre-action samples from the exported trajectories.",
+  "sources": [
+    {
+      "name": "rollouts",
+      "root": "/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_box/source",
+      "episode_count": 12,
+      "timeout_eligible_count": 12,
+      "lift_hold_success_count": 12,
+      "offline_task_success_count": 12,
+      "episodes": [
+        {
+          "episode": "episode_000000.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.21467339992523193,
+            "max_hold_steps": 194,
+            "final_lift_m": -0.0040051937103271484,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000001.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.2147153615951538,
+            "max_hold_steps": 196,
+            "final_lift_m": -0.00400930643081665,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000002.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.20848798751831055,
+            "max_hold_steps": 180,
+            "final_lift_m": -0.004002749919891357,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000003.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.20759797096252441,
+            "max_hold_steps": 174,
+            "final_lift_m": -0.004008769989013672,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000004.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.17590820789337158,
+            "max_hold_steps": 151,
+            "final_lift_m": -0.004100978374481201,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000005.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.20899450778961182,
+            "max_hold_steps": 173,
+            "final_lift_m": -0.0039958953857421875,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000006.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.21401441097259521,
+            "max_hold_steps": 197,
+            "final_lift_m": -0.0040000081062316895,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000007.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.2113429307937622,
+            "max_hold_steps": 176,
+            "final_lift_m": -0.004008948802947998,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000008.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.18867206573486328,
+            "max_hold_steps": 172,
+            "final_lift_m": -0.004025757312774658,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000009.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.18207252025604248,
+            "max_hold_steps": 156,
+            "final_lift_m": -0.003916800022125244,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000010.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.1989448070526123,
+            "max_hold_steps": 169,
+            "final_lift_m": -0.0040125250816345215,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000011.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.20687341690063477,
+            "max_hold_steps": 176,
+            "final_lift_m": -0.00401616096496582,
+            "sample_count": 518
+          }
+        }
+      ]
+    },
+    {
+      "name": "pilot",
+      "root": "/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_box/source/pilot",
+      "episode_count": 32,
+      "timeout_eligible_count": 32,
+      "lift_hold_success_count": 32,
+      "offline_task_success_count": 31,
+      "episodes": [
+        {
+          "episode": "episode_000000.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.19384515285491943,
+            "max_hold_steps": 154,
+            "final_lift_m": -0.004032611846923828,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000001.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.2078007459640503,
+            "max_hold_steps": 177,
+            "final_lift_m": -0.0040070414543151855,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000002.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.17082881927490234,
+            "max_hold_steps": 152,
+            "final_lift_m": -0.004160106182098389,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000003.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.2136479616165161,
+            "max_hold_steps": 195,
+            "final_lift_m": -0.004013776779174805,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000004.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.18018043041229248,
+            "max_hold_steps": 153,
+            "final_lift_m": -0.0039223432540893555,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000005.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.21499264240264893,
+            "max_hold_steps": 180,
+            "final_lift_m": -0.0040097832679748535,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000006.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.2090895175933838,
+            "max_hold_steps": 172,
+            "final_lift_m": -0.004006326198577881,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000007.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.20130765438079834,
+            "max_hold_steps": 173,
+            "final_lift_m": -0.004005134105682373,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000008.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.2185581922531128,
+            "max_hold_steps": 185,
+            "final_lift_m": -0.004055142402648926,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000009.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.2038576602935791,
+            "max_hold_steps": 174,
+            "final_lift_m": -0.004006803035736084,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000010.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.20212042331695557,
+            "max_hold_steps": 172,
+            "final_lift_m": -0.004000306129455566,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000011.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.18178975582122803,
+            "max_hold_steps": 164,
+            "final_lift_m": -0.004011929035186768,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000012.npz",
+          "timeout_eligible": true,
+          "offline_task_success": false,
+          "metrics": {
+            "success": false,
+            "lift_hold_success": true,
+            "max_lift_m": 0.17979204654693604,
+            "max_hold_steps": 166,
+            "final_lift_m": -0.0041277408599853516,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000013.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.2162325382232666,
+            "max_hold_steps": 189,
+            "final_lift_m": -0.003999650478363037,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000014.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.208534836769104,
+            "max_hold_steps": 178,
+            "final_lift_m": -0.0039931535720825195,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000015.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.21670854091644287,
+            "max_hold_steps": 184,
+            "final_lift_m": -0.004009068012237549,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000016.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.17780792713165283,
+            "max_hold_steps": 158,
+            "final_lift_m": -0.004112601280212402,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000017.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.21752631664276123,
+            "max_hold_steps": 193,
+            "final_lift_m": -0.004007935523986816,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000018.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.21512770652770996,
+            "max_hold_steps": 176,
+            "final_lift_m": -0.004007399082183838,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000019.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.2182469367980957,
+            "max_hold_steps": 196,
+            "final_lift_m": -0.004008650779724121,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000020.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.21659326553344727,
+            "max_hold_steps": 197,
+            "final_lift_m": -0.004004359245300293,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000021.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.2045198678970337,
+            "max_hold_steps": 174,
+            "final_lift_m": -0.003998994827270508,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000022.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.20466363430023193,
+            "max_hold_steps": 173,
+            "final_lift_m": -0.004006087779998779,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000023.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.21158623695373535,
+            "max_hold_steps": 196,
+            "final_lift_m": -0.0040076375007629395,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000024.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.20945203304290771,
+            "max_hold_steps": 173,
+            "final_lift_m": -0.0040084123611450195,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000025.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.18112003803253174,
+            "max_hold_steps": 164,
+            "final_lift_m": -0.0039920806884765625,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000026.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.21149098873138428,
+            "max_hold_steps": 198,
+            "final_lift_m": -0.004012346267700195,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000027.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.21819424629211426,
+            "max_hold_steps": 192,
+            "final_lift_m": -0.004010021686553955,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000028.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.22082912921905518,
+            "max_hold_steps": 176,
+            "final_lift_m": -0.004065215587615967,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000029.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.2092912197113037,
+            "max_hold_steps": 177,
+            "final_lift_m": -0.004003405570983887,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000030.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.18774878978729248,
+            "max_hold_steps": 151,
+            "final_lift_m": -0.0040048956871032715,
+            "sample_count": 518
+          }
+        },
+        {
+          "episode": "episode_000031.npz",
+          "timeout_eligible": true,
+          "offline_task_success": true,
+          "metrics": {
+            "success": true,
+            "lift_hold_success": true,
+            "max_lift_m": 0.1988062858581543,
+            "max_hold_steps": 172,
+            "final_lift_m": -0.003996670246124268,
+            "sample_count": 518
+          }
+        }
+      ]
+    }
+  ]
+}

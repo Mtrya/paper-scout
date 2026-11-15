@@ -1,0 +1,25 @@
+{
+  "checks": [
+    "selected manifest format matches the run contract",
+    "selected manifest schema_version matches the run contract",
+    "selected manifest embodiment_contract matches the run contract",
+    "selected manifest embodiment_contract_sha256 matches the run contract",
+    "selected manifest fps matches the run contract",
+    "selected manifest joint_names matches the run contract",
+    "selected manifest selected_episode_count matches the run contract",
+    "selected manifest declares a contract-allowed timeout termination",
+    "selected export has 10 episodes",
+    "all selected episodes are timeout-eligible and exactly 519 frames",
+    "HDF5 schema_version matches the run contract",
+    "HDF5 embodiment_contract matches the run contract",
+    "HDF5 embodiment_contract_sha256 matches the run contract",
+    "HDF5 task_profile matches the run contract",
+    "HDF5 task_profile_sha256 matches the run contract",
+    "HDF5 has 10 demos",
+    "HDF5 state, action, and camera terms satisfy the contract for exactly 519 frames"
+  ],
+  "errors": [],
+  "ok": true,
+  "root": "/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_box",
+  "warnings": []
+}

@@ -1,0 +1,345 @@
+{
+  "frames": 390,
+  "array_schema": {
+    "camera_to_world_transform": {
+      "shape": [
+        390,
+        4,
+        4
+      ],
+      "dtype": "float32"
+    },
+    "camera_is_valid": {
+      "shape": [
+        390
+      ],
+      "dtype": "bool"
+    },
+    "camera_intrinsics": {
+      "shape": [
+        4
+      ],
+      "dtype": "float32"
+    },
+    "object_to_camera_transform": {
+      "shape": [
+        390,
+        4,
+        4
+      ],
+      "dtype": "float32"
+    },
+    "object_to_world_transform": {
+      "shape": [
+        390,
+        4,
+        4
+      ],
+      "dtype": "float32"
+    },
+    "object_scale": {
+      "shape": [],
+      "dtype": "float32"
+    },
+    "object_is_valid": {
+      "shape": [
+        390
+      ],
+      "dtype": "bool"
+    },
+    "hand_left_betas": {
+      "shape": [
+        10
+      ],
+      "dtype": "float32"
+    },
+    "hand_left_wrist_orient_in_camera": {
+      "shape": [
+        390,
+        3
+      ],
+      "dtype": "float32"
+    },
+    "hand_left_wrist_trans_in_camera": {
+      "shape": [
+        390,
+        3
+      ],
+      "dtype": "float32"
+    },
+    "hand_left_wrist_to_camera_transform": {
+      "shape": [
+        390,
+        4,
+        4
+      ],
+      "dtype": "float32"
+    },
+    "hand_left_wrist_to_world_transform": {
+      "shape": [
+        390,
+        4,
+        4
+      ],
+      "dtype": "float32"
+    },
+    "hand_left_finger_pose": {
+      "shape": [
+        390,
+        15,
+        3
+      ],
+      "dtype": "float32"
+    },
+    "hand_left_scale": {
+      "shape": [
+        390
+      ],
+      "dtype": "float32"
+    },
+    "hand_left_is_valid": {
+      "shape": [
+        390
+      ],
+      "dtype": "bool"
+    },
+    "hand_right_betas": {
+      "shape": [
+        10
+      ],
+      "dtype": "float32"
+    },
+    "hand_right_wrist_orient_in_camera": {
+      "shape": [
+        390,
+        3
+      ],
+      "dtype": "float32"
+    },
+    "hand_right_wrist_trans_in_camera": {
+      "shape": [
+        390,
+        3
+      ],
+      "dtype": "float32"
+    },
+    "hand_right_wrist_to_camera_transform": {
+      "shape": [
+        390,
+        4,
+        4
+      ],
+      "dtype": "float32"
+    },
+    "hand_right_wrist_to_world_transform": {
+      "shape": [
+        390,
+        4,
+        4
+      ],
+      "dtype": "float32"
+    },
+    "hand_right_finger_pose": {
+      "shape": [
+        390,
+        15,
+        3
+      ],
+      "dtype": "float32"
+    },
+    "hand_right_scale": {
+      "shape": [
+        390
+      ],
+      "dtype": "float32"
+    },
+    "hand_right_is_valid": {
+      "shape": [
+        390
+      ],
+      "dtype": "bool"
+    },
+    "gravity_alignment_transform": {
+      "shape": [
+        4,
+        4
+      ],
+      "dtype": "float32"
+    },
+    "gravity_in_world_before_alignment": {
+      "shape": [
+        3
+      ],
+      "dtype": "float32"
+    },
+    "gravity_target_world": {
+      "shape": [
+        3
+      ],
+      "dtype": "float32"
+    },
+    "gravity_alignment_applied": {
+      "shape": [],
+      "dtype": "bool"
+    }
+  },
+  "mesh": {
+    "vertices": 6043,
+    "faces": 11204,
+    "mesh": "mesh.obj",
+    "materials": [
+      "material.mtl"
+    ],
+    "textures": [
+      "material_0.png"
+    ],
+    "vertex_scale_applied": [
+      0.9240579009056091,
+      0.9240579009056091,
+      0.9240579009056091
+    ]
+  },
+  "object_mesh_vertex_scale_applied": [
+    0.9240579009056091,
+    0.9240579009056091,
+    0.9240579009056091
+  ],
+  "camera": {
+    "valid_frames": 390,
+    "valid_fraction": 1.0,
+    "finite_fraction": 1.0,
+    "translation_range_m": [
+      0.0022487969836220145,
+      0.004030586685985327,
+      0.004957846365869045
+    ],
+    "translation_step_m": {
+      "count": 389,
+      "min": 6.001435619344257e-05,
+      "median": 0.0007292132632072385,
+      "p95": 0.0014608701205273613,
+      "max": 0.00365811890857958
+    },
+    "rotation_step_degrees": {
+      "count": 389,
+      "min": 0.0,
+      "median": 0.04716539549766657,
+      "p95": 0.1070308969640885,
+      "max": 0.15490752712595401
+    },
+    "start_position_m": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "end_position_m": [
+      -0.00029081193497404456,
+      0.0032753481063991785,
+      -0.002149083884432912
+    ]
+  },
+  "object_in_camera": {
+    "valid_frames": 390,
+    "valid_fraction": 1.0,
+    "finite_fraction": 1.0,
+    "translation_range_m": [
+      0.026917994022369385,
+      0.19242433831095695,
+      0.15458810329437256
+    ],
+    "translation_step_m": {
+      "count": 389,
+      "min": 9.417058823546598e-05,
+      "median": 0.00154995935963198,
+      "p95": 0.00397105564130447,
+      "max": 0.005695653935239231
+    },
+    "rotation_step_degrees": {
+      "count": 389,
+      "min": 0.009379942434318847,
+      "median": 0.1044875236571871,
+      "p95": 0.23055286196715777,
+      "max": 0.40684593387403684
+    },
+    "start_position_m": [
+      -0.04342021048069,
+      0.02695554681122303,
+      0.6530323028564453
+    ],
+    "end_position_m": [
+      -0.03600386902689934,
+      0.044548455625772476,
+      0.6215306520462036
+    ]
+  },
+  "object_in_world": {
+    "valid_frames": 390,
+    "valid_fraction": 1.0,
+    "finite_fraction": 1.0,
+    "translation_range_m": [
+      0.030938359908759594,
+      0.051094651222229004,
+      0.22564087808132172
+    ],
+    "translation_step_m": {
+      "count": 389,
+      "min": 2.991811068006281e-05,
+      "median": 0.0009980491710993552,
+      "p95": 0.003429935046082323,
+      "max": 0.0038153524804501265
+    },
+    "rotation_step_degrees": {
+      "count": 389,
+      "min": 0.0,
+      "median": 0.09279748230317733,
+      "p95": 0.21494256163087677,
+      "max": 0.4050009763929455
+    },
+    "start_position_m": [
+      -0.04400043934583664,
+      0.4864135980606079,
+      -0.4364961087703705
+    ],
+    "end_position_m": [
+      -0.03767737001180649,
+      0.4542374610900879,
+      -0.4320521652698517
+    ]
+  },
+  "hand_left": {
+    "valid_fraction": 1.0,
+    "scale": {
+      "count": 390,
+      "min": 1.4436932802200317,
+      "median": 1.4436932802200317,
+      "p95": 1.4436932802200317,
+      "max": 1.4436932802200317
+    },
+    "wrist_to_object_origin_distance_m": {
+      "count": 390,
+      "min": 0.1590619683265686,
+      "median": 0.16593042761087418,
+      "p95": 0.2468663640320301,
+      "max": 0.2514529228210449
+    },
+    "distance_interpretation": "Origin distance is a diagnostic, not a surface-contact measurement."
+  },
+  "hand_right": {
+    "valid_fraction": 1.0,
+    "scale": {
+      "count": 390,
+      "min": 1.4400752782821655,
+      "median": 1.4400752782821655,
+      "p95": 1.4400752782821655,
+      "max": 1.4400752782821655
+    },
+    "wrist_to_object_origin_distance_m": {
+      "count": 390,
+      "min": 0.15043401718139648,
+      "median": 0.1611381322145462,
+      "p95": 0.2692895412445068,
+      "max": 0.2766137719154358
+    },
+    "distance_interpretation": "Origin distance is a diagnostic, not a surface-contact measurement."
+  }
+}

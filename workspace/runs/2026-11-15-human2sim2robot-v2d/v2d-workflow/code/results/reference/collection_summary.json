@@ -1,0 +1,36 @@
+{
+  "reference": "manually_checked_public_tissue_box_motion",
+  "policy_sha256": "bf3259ec2b86dd696e6b89e6275d85985ad30dafeaf53351971b16cdb8dad8b2",
+  "fps": 20.0,
+  "frames_per_episode": 519,
+  "selection": {
+    "pilot_episodes": 32,
+    "formal_episodes": 12,
+    "selected_episodes": 10,
+    "selection_rule": "timeout eligibility followed by exact successful-episode selection",
+    "offline_evaluator": "lift_hold with 0.10 m lift, 0.05 m hold, 20-step minimum hold, and terminal placement checks"
+  },
+  "selected_metrics": {
+    "timeout_eligible": 10,
+    "offline_task_success": 10,
+    "max_lift_range_m": [0.14460241794586182, 0.1586904525756836],
+    "max_lift_median_m": 0.15199589729309082,
+    "hold_range_seconds": [9.15, 10.1],
+    "final_lift_range_m": [0.00673222541809082, 0.006738722324371338]
+  },
+  "pilot_metrics": {
+    "timeout_eligible": 32,
+    "offline_task_success": 32,
+    "max_lift_range_m": [0.14825856685638428, 0.1570112705230713],
+    "hold_range_seconds": [9.3, 10.45]
+  },
+  "probe_reset_contract": {
+    "arm_noise_rad": 0.0,
+    "finger_noise_rad": 0.0,
+    "object_xy_noise_m": 0.0,
+    "object_yaw_noise_rad": 0.0,
+    "initial_state_cross_episode_std_mean_rad": 0.0,
+    "object_position_cross_episode_std_mean_m": 0.0017478961923592517
+  },
+  "interpretation": "The zero-noise public-reference rollouts verify physical execution and the downstream stack. They are not a domain-randomized training-set diversity result and not a closed-loop visual-policy evaluation."
+}

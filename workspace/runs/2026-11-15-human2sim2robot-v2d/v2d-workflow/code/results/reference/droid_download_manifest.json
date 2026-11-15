@@ -1,0 +1,7 @@
+{
+  "source": "https://raw.githubusercontent.com/youmi-zym/GO-SLAM/main/pretrained/droid.pth",
+  "source_kind": "third-party mirror of the DROID-SLAM checkpoint",
+  "path": "droid.pth",
+  "bytes": 16061701,
+  "sha256": "46476ef64cde45a97504910d6f3de2eef7b398ec1c6e4e668815c29076024526"
+}

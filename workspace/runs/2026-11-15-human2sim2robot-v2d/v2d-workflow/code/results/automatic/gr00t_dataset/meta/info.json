@@ -1,0 +1,149 @@
+{
+  "codebase_version": "v2.1",
+  "robot_type": "vega_sharpa_joint",
+  "schema_version": 1,
+  "embodiment_contract": "vega_sharpa_joint",
+  "embodiment_contract_sha256": "91a414a748b86b88262b792d35057ca3a6fa9df739267dd18263f3133216b07e",
+  "task_profile": "tissue_box_lift_hold",
+  "task_profile_sha256": "165a5037bf5c6c85c7378e310bfb535b0c97f45b547c738b50e0c39a1fc9b7fb",
+  "total_episodes": 10,
+  "total_frames": 5190,
+  "total_tasks": 1,
+  "total_videos": 30,
+  "total_chunks": 1,
+  "chunks_size": 1000,
+  "fps": 20,
+  "splits": {
+    "train": "0:10"
+  },
+  "data_path": "data/chunk-{episode_chunk:03d}/episode_{episode_index:06d}.parquet",
+  "video_path": "videos/chunk-{episode_chunk:03d}/{video_key}/episode_{episode_index:06d}.mp4",
+  "features": {
+    "observation.state": {
+      "dtype": "float32",
+      "shape": [
+        58
+      ],
+      "names": [
+        "right_arm",
+        "left_arm",
+        "right_finger",
+        "left_finger"
+      ]
+    },
+    "action": {
+      "dtype": "float32",
+      "shape": [
+        58
+      ],
+      "names": [
+        "right_arm",
+        "right_finger",
+        "left_arm",
+        "left_finger"
+      ]
+    },
+    "timestamp": {
+      "dtype": "float32",
+      "shape": [
+        1
+      ]
+    },
+    "episode_index": {
+      "dtype": "int64",
+      "shape": [
+        1
+      ]
+    },
+    "index": {
+      "dtype": "int64",
+      "shape": [
+        1
+      ]
+    },
+    "task_index": {
+      "dtype": "int64",
+      "shape": [
+        1
+      ]
+    },
+    "next.done": {
+      "dtype": "bool",
+      "shape": [
+        1
+      ]
+    },
+    "next.reward": {
+      "dtype": "float32",
+      "shape": [
+        1
+      ]
+    },
+    "observation.images.front": {
+      "dtype": "video",
+      "shape": [
+        240,
+        320,
+        3
+      ],
+      "names": [
+        "height",
+        "width",
+        "channels"
+      ],
+      "info": {
+        "video.fps": 20.0,
+        "video.height": 240,
+        "video.width": 320,
+        "video.channels": 3,
+        "video.codec": "mp4v",
+        "video.pix_fmt": "rgb24",
+        "has_audio": false
+      }
+    },
+    "observation.images.right_wrist_view": {
+      "dtype": "video",
+      "shape": [
+        240,
+        320,
+        3
+      ],
+      "names": [
+        "height",
+        "width",
+        "channels"
+      ],
+      "info": {
+        "video.fps": 20.0,
+        "video.height": 240,
+        "video.width": 320,
+        "video.channels": 3,
+        "video.codec": "mp4v",
+        "video.pix_fmt": "rgb24",
+        "has_audio": false
+      }
+    },
+    "observation.images.left_wrist_view": {
+      "dtype": "video",
+      "shape": [
+        240,
+        320,
+        3
+      ],
+      "names": [
+        "height",
+        "width",
+        "channels"
+      ],
+      "info": {
+        "video.fps": 20.0,
+        "video.height": 240,
+        "video.width": 320,
+        "video.channels": 3,
+        "video.codec": "mp4v",
+        "video.pix_fmt": "rgb24",
+        "has_audio": false
+      }
+    }
+  }
+}
