@@ -1,0 +1,106 @@
+{
+  "label": "manually_checked_public_reference",
+  "path": "/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/video_to_data/robotic_grounding/source/robotic_grounding/robotic_grounding/assets/human_motion_data/ego_recon/processed/sequence_id=tissue_box_simple/robot_name=vega_sharpa/data.parquet",
+  "metadata": {
+    "schema_version": "motion_v1",
+    "motion_kind": "single_robot",
+    "source_dataset": "ego_recon",
+    "fps": 50.0,
+    "coord_frame": "robot_base_z_up",
+    "object_name": "tissue_box_simple",
+    "source_kind": ""
+  },
+  "frames": 649,
+  "duration_seconds": 12.98,
+  "robot_joint_shape": [
+    649,
+    58
+  ],
+  "joint_step_l2_rad": {
+    "min": 0.008799546322170565,
+    "median": 0.042331559706283384,
+    "p95": 0.16218556489229194,
+    "max": 0.804716313629579
+  },
+  "contact": {
+    "shape": [
+      649,
+      2
+    ],
+    "active_frame_fraction_per_side": [
+      0.5315870570107858,
+      0.5315870570107858
+    ],
+    "any_contact_frame_fraction": 0.5315870570107858,
+    "contact_bout_count": 1,
+    "longest_contact_bout_seconds": 6.9
+  },
+  "object_body_position": {
+    "shape": [
+      649,
+      3
+    ],
+    "start": [
+      0.002974090166389942,
+      0.10805635899305344,
+      0.8728997707366943
+    ],
+    "end": [
+      -0.0014922746922820807,
+      0.13726665079593658,
+      0.8844981789588928
+    ],
+    "axis_range": [
+      0.017947662621736526,
+      0.05546151101589203,
+      0.17213094234466553
+    ],
+    "max_rise_from_start_m": 0.17213094234466553,
+    "step_distance_m": {
+      "min": 1.8901693158875246e-05,
+      "median": 0.00045634259709467805,
+      "p95": 0.0015665087159957359,
+      "max": 0.0018160331502726525
+    },
+    "step_speed_m_per_s": {
+      "min": 0.0009450846579437623,
+      "median": 0.0228171298547339,
+      "p95": 0.07832543579978679,
+      "max": 0.09080165751363263
+    }
+  },
+  "object_root_position": {
+    "shape": [
+      649,
+      3
+    ],
+    "start": [
+      0.002974090166389942,
+      0.10805635899305344,
+      0.8728997707366943
+    ],
+    "end": [
+      -0.0014922746922820807,
+      0.13726665079593658,
+      0.8844981789588928
+    ],
+    "axis_range": [
+      0.017947662621736526,
+      0.05546151101589203,
+      0.17213094234466553
+    ],
+    "max_rise_from_start_m": 0.17213094234466553,
+    "step_distance_m": {
+      "min": 1.8901693158875246e-05,
+      "median": 0.00045634259709467805,
+      "p95": 0.0015665087159957359,
+      "max": 0.0018160331502726525
+    },
+    "step_speed_m_per_s": {
+      "min": 0.0009450846579437623,
+      "median": 0.0228171298547339,
+      "p95": 0.07832543579978679,
+      "max": 0.09080165751363263
+    }
+  }
+}

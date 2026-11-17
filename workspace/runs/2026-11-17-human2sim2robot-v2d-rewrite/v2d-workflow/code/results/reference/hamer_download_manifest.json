@@ -1,0 +1,23 @@
+{
+  "repository": "Edson125/mesh_hamer",
+  "revision": "c300c1688435c00e8c76b27d314af96f6a0e624d",
+  "endpoint": "https://hf-mirror.com",
+  "source_kind": "third-party mirror of the HaMeR checkpoint layout",
+  "files": [
+    {
+      "path": "_DATA/hamer_ckpts/checkpoints/hamer.ckpt",
+      "bytes": 2689536166,
+      "sha256": "e5cc06f294d88a92dee24e603480aab04de532b49f0e08200804ee7d90e16f53"
+    },
+    {
+      "path": "_DATA/hamer_ckpts/dataset_config.yaml",
+      "bytes": 1369,
+      "sha256": "392d10aece296152769328f14bb1c0137d6ea2f50f7e69f716ee00e9ad6ac343"
+    },
+    {
+      "path": "_DATA/hamer_ckpts/model_config.yaml",
+      "bytes": 2072,
+      "sha256": "0e5eeb82752e47dfd01db8e13ccc4c5eba9bf83f53da8285523b8d3e87247aa3"
+    }
+  ]
+}

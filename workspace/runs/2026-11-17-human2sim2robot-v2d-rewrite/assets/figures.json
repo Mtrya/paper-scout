@@ -1,0 +1,46 @@
+{
+  "action-grounding:anchor-reward": {
+    "file": "assets/human2sim2robot-anchor-reward.png",
+    "caption": "Human2Sim2Robot 在物体局部坐标中取三个非共线锚点。同一刚体变换同时决定它们的位置，因此物体平移与旋转都能转化为可度量的锚点距离；绿色为参考轨迹，黑色为实际轨迹。"
+  },
+  "action-grounding:contact-wrench": {
+    "file": "assets/chord-contact-wrench.png",
+    "caption": "CHORD 将人手演示中的接触转化为机器人接触的机械约束。接触位置、法向与摩擦锥共同决定可施加的力和力矩，支持函数再比较两种手形在不同方向上的作用能力。"
+  },
+  "video-reconstruction:object-tracking": {
+    "file": "assets/do-as-i-do-tracking.png",
+    "caption": "Do as I Do 以参考帧形状和前一帧位姿引导生成过程，每帧形成一组位姿候选，再通过聚类与投影掩码选出结果。手部近公制尺度随后用于手物深度对齐。"
+  },
+  "video-reconstruction:contact-pipeline": {
+    "file": "assets/egomatrix-contact-pipeline.png",
+    "caption": "EgoMatrix 从手部尺度、相对深度与接触证据出发，经多起点位姿精炼和局部接触精炼形成手物参考；重定向与物理学习产生成功展开，再由同一展开联合渲染机器人、物体和动作记录。"
+  },
+  "video-reconstruction:contact-comparison": {
+    "file": "assets/egomatrix-contact-comparison.png",
+    "caption": "EgoMatrix 的初始化、多起点位姿精炼与局部接触精炼对照。放大区域呈现手物互穿、触点偏移与残余缝隙的变化；观看重点是手物相对几何及其接触关系。"
+  },
+  "v2d-workflow:overview": {
+    "file": "assets/v2d-official-overview.png",
+    "caption": "Video to Data 的官方模块组织：人类演示视频经摄入与重建形成手物轨迹和仿真环境，机器人接地与数据增广产生物理一致数据集，随后接入基础模型训练与真机部署。"
+  },
+  "v2d-workflow:tissue-source": {
+    "file": "assets/tissue-source-preview.gif",
+    "caption": "原始第一视角纸巾视频，13 秒、390 帧、30 Hz。双手完成接近、抬升、保持与放回，这段未经人工修正的视频是自动生产链的输入。"
+  },
+  "v2d-workflow:tissue-aligned": {
+    "file": "assets/tissue-refined-preview.gif",
+    "caption": "原片自动重建经手物对齐、轨迹插值与高斯精炼后的四视图。左上为原相机叠加，其余为世界系俯视、侧视与正视；黄色与蓝色双手、绿色纸巾盒网格共同呈现操作过程。"
+  },
+  "v2d-workflow:tissue-retarget": {
+    "file": "assets/tissue-retarget-preview.gif",
+    "caption": "自动重建结果经逆运动学映射为 Vega 双臂与 Sharpa 灵巧手的关节参考。画面展示几何与运动学阶段的目标轨迹，接触动力学由后续物理专家处理。"
+  },
+  "v2d-workflow:automatic-replay": {
+    "file": "assets/automatic-replay-preview.gif",
+    "caption": "自动参考驱动公开物理专家后的三路仿真录制，依次为第一视角、左腕与右腕。物体外观、背景与光照按配置随机化，图像、机器人状态和实际动作来自同一次展开。"
+  },
+  "v2d-workflow:reconstruction-cost": {
+    "file": "assets/reconstruction-cost.png",
+    "caption": "单张 RTX 4090 从 13 秒原片到手物对齐的模块墙钟时间，合计 1272.2 秒。蓝色为参考帧资产，橙色为序列处理，绿色为手部处理；计时采用各模块首次成功生产口径，诊断预览与环境准备另列。"
+  }
+}

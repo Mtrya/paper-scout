@@ -1,0 +1,11 @@
+--- a/sam3d_objects/model/backbone/tdfy_dit/renderers/gaussian_render.py
++++ b/sam3d_objects/model/backbone/tdfy_dit/renderers/gaussian_render.py
+@@ -189,7 +189,7 @@
+             Ks=Ks,
+             width=int(viewpoint_camera.image_width),
+             height=int(viewpoint_camera.image_height),
+-            backgrounds=bg_color,
++            backgrounds=bg_color.unsqueeze(0) if bg_color.ndim == 1 else bg_color,
+         )
+         rendered_image = render_colors.squeeze(0).permute(
+             2, 0, 1

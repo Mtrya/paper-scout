@@ -1,0 +1,305 @@
+{
+  "file": "/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_reference/recording/data.h5",
+  "bytes": 1414558935,
+  "data_attrs": {
+    "embodiment_contract": "vega_sharpa_joint",
+    "embodiment_contract_sha256": "91a414a748b86b88262b792d35057ca3a6fa9df739267dd18263f3133216b07e",
+    "fps": 20,
+    "manifest": "{\"embodiment_contract\": \"vega_sharpa_joint\", \"embodiment_contract_sha256\": \"91a414a748b86b88262b792d35057ca3a6fa9df739267dd18263f3133216b07e\", \"expected_frames\": 519, \"format\": \"joint_rollout_selection\", \"fps\": 20.0, \"input_directories\": [\"/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_reference/source\"], \"input_episode_count\": 12, \"joint_names\": [\"R_arm_j1\", \"R_arm_j2\", \"R_arm_j3\", \"R_arm_j4\", \"R_arm_j5\", \"R_arm_j6\", \"R_arm_j7\", \"right_thumb_CMC_FE\", \"right_thumb_CMC_AA\", \"right_thumb_MCP_FE\", \"right_thumb_MCP_AA\", \"right_thumb_IP\", \"right_index_MCP_FE\", \"right_index_MCP_AA\", \"right_index_PIP\", \"right_index_DIP\", \"right_middle_MCP_FE\", \"right_middle_MCP_AA\", \"right_middle_PIP\", \"right_middle_DIP\", \"right_ring_MCP_FE\", \"right_ring_MCP_AA\", \"right_ring_PIP\", \"right_ring_DIP\", \"right_pinky_CMC\", \"right_pinky_MCP_FE\", \"right_pinky_MCP_AA\", \"right_pinky_PIP\", \"right_pinky_DIP\", \"L_arm_j1\", \"L_arm_j2\", \"L_arm_j3\", \"L_arm_j4\", \"L_arm_j5\", \"L_arm_j6\", \"L_arm_j7\", \"left_thumb_CMC_FE\", \"left_thumb_CMC_AA\", \"left_thumb_MCP_FE\", \"left_thumb_MCP_AA\", \"left_thumb_IP\", \"left_index_MCP_FE\", \"left_index_MCP_AA\", \"left_index_PIP\", \"left_index_DIP\", \"left_middle_MCP_FE\", \"left_middle_MCP_AA\", \"left_middle_PIP\", \"left_middle_DIP\", \"left_ring_MCP_FE\", \"left_ring_MCP_AA\", \"left_ring_PIP\", \"left_ring_DIP\", \"left_pinky_CMC\", \"left_pinky_MCP_FE\", \"left_pinky_MCP_AA\", \"left_pinky_PIP\", \"left_pinky_DIP\"], \"object_names\": [\"tissue_box_simple\"], \"schema_version\": 1, \"selected\": [{\"destination\": \"episode_000000.npz\", \"frames\": 519, \"source\": \"/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_reference/source/episode_000000.npz\", \"source_success\": true, \"time_series_keys\": [\"joint_pos\", \"action_target\", \"object_pose\"]}, {\"destination\": \"episode_000001.npz\", \"frames\": 519, \"source\": \"/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_reference/source/episode_000001.npz\", \"source_success\": true, \"time_series_keys\": [\"joint_pos\", \"action_target\", \"object_pose\"]}, {\"destination\": \"episode_000002.npz\", \"frames\": 519, \"source\": \"/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_reference/source/episode_000002.npz\", \"source_success\": true, \"time_series_keys\": [\"joint_pos\", \"action_target\", \"object_pose\"]}, {\"destination\": \"episode_000003.npz\", \"frames\": 519, \"source\": \"/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_reference/source/episode_000003.npz\", \"source_success\": true, \"time_series_keys\": [\"joint_pos\", \"action_target\", \"object_pose\"]}, {\"destination\": \"episode_000004.npz\", \"frames\": 519, \"source\": \"/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_reference/source/episode_000004.npz\", \"source_success\": true, \"time_series_keys\": [\"joint_pos\", \"action_target\", \"object_pose\"]}, {\"destination\": \"episode_000005.npz\", \"frames\": 519, \"source\": \"/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_reference/source/episode_000005.npz\", \"source_success\": true, \"time_series_keys\": [\"joint_pos\", \"action_target\", \"object_pose\"]}, {\"destination\": \"episode_000006.npz\", \"frames\": 519, \"source\": \"/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_reference/source/episode_000006.npz\", \"source_success\": true, \"time_series_keys\": [\"joint_pos\", \"action_target\", \"object_pose\"]}, {\"destination\": \"episode_000007.npz\", \"frames\": 519, \"source\": \"/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_reference/source/episode_000007.npz\", \"source_success\": true, \"time_series_keys\": [\"joint_pos\", \"action_target\", \"object_pose\"]}, {\"destination\": \"episode_000008.npz\", \"frames\": 519, \"source\": \"/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_reference/source/episode_000008.npz\", \"source_success\": true, \"time_series_keys\": [\"joint_pos\", \"action_target\", \"object_pose\"]}, {\"destination\": \"episode_000009.npz\", \"frames\": 519, \"source\": \"/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_reference/source/episode_000009.npz\", \"source_success\": true, \"time_series_keys\": [\"joint_pos\", \"action_target\", \"object_pose\"]}], \"selected_episode_count\": 10, \"selection_order\": \"input argument order, then lexical episode filename\", \"source_manifests\": [{\"manifest\": {\"action_target_source\": \"joint_pos.last_applied_actions\", \"checkpoint\": \"vega_sharpa_policy.onnx\", \"checkpoint_format\": \"onnx\", \"checkpoint_sha256\": \"bf3259ec2b86dd696e6b89e6275d85985ad30dafeaf53351971b16cdb8dad8b2\", \"command_debug_vis\": false, \"embodiment_contract\": \"vega_sharpa_joint\", \"embodiment_contract_sha256\": \"91a414a748b86b88262b792d35057ca3a6fa9df739267dd18263f3133216b07e\", \"env_spacing\": 6.0, \"episode_count\": 12, \"episode_lengths\": [519, 519, 519, 519, 519, 519, 519, 519, 519, 519, 519, 519], \"format\": \"joint_rollout\", \"fps\": 20.0, \"initial_condition_noise\": {\"arm_rad\": 0.0, \"distribution\": \"independent_uniform_symmetric\", \"finger_rad\": 0.0, \"object_xy_m\": 0.0, \"object_yaw_rad\": 0.0, \"policy_action_noise_added\": false, \"reference_trajectory_perturbed\": false, \"seed\": 42}, \"joint_names\": [\"R_arm_j1\", \"R_arm_j2\", \"R_arm_j3\", \"R_arm_j4\", \"R_arm_j5\", \"R_arm_j6\", \"R_arm_j7\", \"right_thumb_CMC_FE\", \"right_thumb_CMC_AA\", \"right_thumb_MCP_FE\", \"right_thumb_MCP_AA\", \"right_thumb_IP\", \"right_index_MCP_FE\", \"right_index_MCP_AA\", \"right_index_PIP\", \"right_index_DIP\", \"right_middle_MCP_FE\", \"right_middle_MCP_AA\", \"right_middle_PIP\", \"right_middle_DIP\", \"right_ring_MCP_FE\", \"right_ring_MCP_AA\", \"right_ring_PIP\", \"right_ring_DIP\", \"right_pinky_CMC\", \"right_pinky_MCP_FE\", \"right_pinky_MCP_AA\", \"right_pinky_PIP\", \"right_pinky_DIP\", \"L_arm_j1\", \"L_arm_j2\", \"L_arm_j3\", \"L_arm_j4\", \"L_arm_j5\", \"L_arm_j6\", \"L_arm_j7\", \"left_thumb_CMC_FE\", \"left_thumb_CMC_AA\", \"left_thumb_MCP_FE\", \"left_thumb_MCP_AA\", \"left_thumb_IP\", \"left_index_MCP_FE\", \"left_index_MCP_AA\", \"left_index_PIP\", \"left_index_DIP\", \"left_middle_MCP_FE\", \"left_middle_MCP_AA\", \"left_middle_PIP\", \"left_middle_DIP\", \"left_ring_MCP_FE\", \"left_ring_MCP_AA\", \"left_ring_PIP\", \"left_ring_DIP\", \"left_pinky_CMC\", \"left_pinky_MCP_FE\", \"left_pinky_MCP_AA\", \"left_pinky_PIP\", \"left_pinky_DIP\"], \"motion_file\": \"ego_recon/processed/sequence_id=tissue_box_simple/robot_name=vega_sharpa\", \"num_envs\": 12, \"object_names\": [\"tissue_box_simple\"], \"policy_runtime\": \"onnxruntime:CUDAExecutionProvider\", \"reset_finger_openness\": 0.0, \"reset_freeze_steps\": 0, \"schema_version\": 1, \"seed\": 42, \"source_success_criterion\": \"timeout.time_out=True\", \"source_successful_episode_count\": 12, \"source_task\": \"VegaSharpa-WholeBody-Manip-v0\", \"source_unsuccessful_episode_count\": 0, \"successful_trajectory_diversity\": {\"action_cross_episode_std_mean_rad\": 0.011293859122479145, \"episode_count\": 12, \"horizon\": 519, \"initial_action_cross_episode_std_mean_rad\": 6.125880605609254e-08, \"initial_object_position_cross_episode_std_mean_m\": 1.087415044997528e-07, \"initial_state_cross_episode_std_mean_rad\": 0.0, \"object_position_cross_episode_std_mean_m\": 0.0017478961923592517, \"state_cross_episode_std_mean_rad\": 0.009335536195672633, \"terminal_action_cross_episode_std_mean_rad\": 0.0018606091246014084}, \"termination_reasons\": {\"timeout\": 12}, \"timeout_termination\": \"timeout\", \"wandb_run\": \"\"}, \"path\": \"/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_reference/source/manifest.json\"}], \"source_successful_episode_count\": 12, \"source_unsuccessful_episode_count\": 0, \"timeout_termination\": \"timeout\"}",
+    "motion_file": "ego_recon/processed/sequence_id=tissue_box_simple/robot_name=vega_sharpa",
+    "num_demos": 10,
+    "schema_version": 1,
+    "selected_episode_count": 10,
+    "selection_policy": "source_success",
+    "source": "external_rollout_replay",
+    "source_episode_count": 10,
+    "source_successful_episode_count": 10,
+    "source_unsuccessful_episode_count": 0,
+    "task_profile": "tissue_box_lift_hold",
+    "task_profile_sha256": "165a5037bf5c6c85c7378e310bfb535b0c97f45b547c738b50e0c39a1fc9b7fb",
+    "total": 5190
+  },
+  "demo_count": 10,
+  "demo_names": [
+    "demo_0",
+    "demo_1",
+    "demo_2",
+    "demo_3",
+    "demo_4",
+    "demo_5",
+    "demo_6",
+    "demo_7",
+    "demo_8",
+    "demo_9"
+  ],
+  "first_demo_datasets": {
+    "actions": {
+      "shape": [
+        519,
+        58
+      ],
+      "dtype": "float32"
+    },
+    "obs/arm_joint_pos": {
+      "shape": [
+        519,
+        14
+      ],
+      "dtype": "float32"
+    },
+    "obs/finger_joint_pos": {
+      "shape": [
+        519,
+        44
+      ],
+      "dtype": "float32"
+    },
+    "obs/image": {
+      "shape": [
+        519,
+        240,
+        320,
+        3
+      ],
+      "dtype": "uint8"
+    },
+    "obs/image_left_wrist": {
+      "shape": [
+        519,
+        240,
+        320,
+        3
+      ],
+      "dtype": "uint8"
+    },
+    "obs/image_right_wrist": {
+      "shape": [
+        519,
+        240,
+        320,
+        3
+      ],
+      "dtype": "uint8"
+    },
+    "obs/object_orientation_e": {
+      "shape": [
+        519,
+        4
+      ],
+      "dtype": "float32"
+    },
+    "obs/object_position_e": {
+      "shape": [
+        519,
+        3
+      ],
+      "dtype": "float32"
+    },
+    "obs/wrist_orientation_e": {
+      "shape": [
+        519,
+        8
+      ],
+      "dtype": "float32"
+    },
+    "obs/wrist_position_e": {
+      "shape": [
+        519,
+        6
+      ],
+      "dtype": "float32"
+    }
+  },
+  "demos": {
+    "demo_0": {
+      "attrs": {
+        "num_samples": 519,
+        "source_episode": "episode_000000.npz",
+        "source_success": true
+      },
+      "dataset_first_dims": {
+        "actions": 519,
+        "obs/arm_joint_pos": 519,
+        "obs/finger_joint_pos": 519,
+        "obs/image": 519,
+        "obs/image_left_wrist": 519,
+        "obs/image_right_wrist": 519,
+        "obs/object_orientation_e": 519,
+        "obs/object_position_e": 519,
+        "obs/wrist_orientation_e": 519,
+        "obs/wrist_position_e": 519
+      }
+    },
+    "demo_1": {
+      "attrs": {
+        "num_samples": 519,
+        "source_episode": "episode_000001.npz",
+        "source_success": true
+      },
+      "dataset_first_dims": {
+        "actions": 519,
+        "obs/arm_joint_pos": 519,
+        "obs/finger_joint_pos": 519,
+        "obs/image": 519,
+        "obs/image_left_wrist": 519,
+        "obs/image_right_wrist": 519,
+        "obs/object_orientation_e": 519,
+        "obs/object_position_e": 519,
+        "obs/wrist_orientation_e": 519,
+        "obs/wrist_position_e": 519
+      }
+    },
+    "demo_2": {
+      "attrs": {
+        "num_samples": 519,
+        "source_episode": "episode_000002.npz",
+        "source_success": true
+      },
+      "dataset_first_dims": {
+        "actions": 519,
+        "obs/arm_joint_pos": 519,
+        "obs/finger_joint_pos": 519,
+        "obs/image": 519,
+        "obs/image_left_wrist": 519,
+        "obs/image_right_wrist": 519,
+        "obs/object_orientation_e": 519,
+        "obs/object_position_e": 519,
+        "obs/wrist_orientation_e": 519,
+        "obs/wrist_position_e": 519
+      }
+    },
+    "demo_3": {
+      "attrs": {
+        "num_samples": 519,
+        "source_episode": "episode_000003.npz",
+        "source_success": true
+      },
+      "dataset_first_dims": {
+        "actions": 519,
+        "obs/arm_joint_pos": 519,
+        "obs/finger_joint_pos": 519,
+        "obs/image": 519,
+        "obs/image_left_wrist": 519,
+        "obs/image_right_wrist": 519,
+        "obs/object_orientation_e": 519,
+        "obs/object_position_e": 519,
+        "obs/wrist_orientation_e": 519,
+        "obs/wrist_position_e": 519
+      }
+    },
+    "demo_4": {
+      "attrs": {
+        "num_samples": 519,
+        "source_episode": "episode_000004.npz",
+        "source_success": true
+      },
+      "dataset_first_dims": {
+        "actions": 519,
+        "obs/arm_joint_pos": 519,
+        "obs/finger_joint_pos": 519,
+        "obs/image": 519,
+        "obs/image_left_wrist": 519,
+        "obs/image_right_wrist": 519,
+        "obs/object_orientation_e": 519,
+        "obs/object_position_e": 519,
+        "obs/wrist_orientation_e": 519,
+        "obs/wrist_position_e": 519
+      }
+    },
+    "demo_5": {
+      "attrs": {
+        "num_samples": 519,
+        "source_episode": "episode_000005.npz",
+        "source_success": true
+      },
+      "dataset_first_dims": {
+        "actions": 519,
+        "obs/arm_joint_pos": 519,
+        "obs/finger_joint_pos": 519,
+        "obs/image": 519,
+        "obs/image_left_wrist": 519,
+        "obs/image_right_wrist": 519,
+        "obs/object_orientation_e": 519,
+        "obs/object_position_e": 519,
+        "obs/wrist_orientation_e": 519,
+        "obs/wrist_position_e": 519
+      }
+    },
+    "demo_6": {
+      "attrs": {
+        "num_samples": 519,
+        "source_episode": "episode_000006.npz",
+        "source_success": true
+      },
+      "dataset_first_dims": {
+        "actions": 519,
+        "obs/arm_joint_pos": 519,
+        "obs/finger_joint_pos": 519,
+        "obs/image": 519,
+        "obs/image_left_wrist": 519,
+        "obs/image_right_wrist": 519,
+        "obs/object_orientation_e": 519,
+        "obs/object_position_e": 519,
+        "obs/wrist_orientation_e": 519,
+        "obs/wrist_position_e": 519
+      }
+    },
+    "demo_7": {
+      "attrs": {
+        "num_samples": 519,
+        "source_episode": "episode_000007.npz",
+        "source_success": true
+      },
+      "dataset_first_dims": {
+        "actions": 519,
+        "obs/arm_joint_pos": 519,
+        "obs/finger_joint_pos": 519,
+        "obs/image": 519,
+        "obs/image_left_wrist": 519,
+        "obs/image_right_wrist": 519,
+        "obs/object_orientation_e": 519,
+        "obs/object_position_e": 519,
+        "obs/wrist_orientation_e": 519,
+        "obs/wrist_position_e": 519
+      }
+    },
+    "demo_8": {
+      "attrs": {
+        "num_samples": 519,
+        "source_episode": "episode_000008.npz",
+        "source_success": true
+      },
+      "dataset_first_dims": {
+        "actions": 519,
+        "obs/arm_joint_pos": 519,
+        "obs/finger_joint_pos": 519,
+        "obs/image": 519,
+        "obs/image_left_wrist": 519,
+        "obs/image_right_wrist": 519,
+        "obs/object_orientation_e": 519,
+        "obs/object_position_e": 519,
+        "obs/wrist_orientation_e": 519,
+        "obs/wrist_position_e": 519
+      }
+    },
+    "demo_9": {
+      "attrs": {
+        "num_samples": 519,
+        "source_episode": "episode_000009.npz",
+        "source_success": true
+      },
+      "dataset_first_dims": {
+        "actions": 519,
+        "obs/arm_joint_pos": 519,
+        "obs/finger_joint_pos": 519,
+        "obs/image": 519,
+        "obs/image_left_wrist": 519,
+        "obs/image_right_wrist": 519,
+        "obs/object_orientation_e": 519,
+        "obs/object_position_e": 519,
+        "obs/wrist_orientation_e": 519,
+        "obs/wrist_position_e": 519
+      }
+    }
+  }
+}

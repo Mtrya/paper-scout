@@ -1,0 +1,13 @@
+{
+  "direction_samples": 512,
+  "contacts": 2,
+  "primitive_wrenches": 8,
+  "support_permutation_max_abs_delta": 0.0,
+  "moment_arm_change_max_abs_support_delta": 0.08582272991696427,
+  "radius_normalization_max_abs_support_delta": 0.5281631818050986,
+  "support_range": [
+    -0.7079614327687133,
+    0.9631672424349902
+  ],
+  "interpretation": "The support representation is invariant to contact ordering while retaining sensitivity to moment arms and their radius normalization."
+}

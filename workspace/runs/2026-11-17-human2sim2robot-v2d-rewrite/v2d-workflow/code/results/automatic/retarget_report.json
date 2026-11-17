@@ -1,0 +1,116 @@
+{
+  "T_reduced_to_fixed": [
+    [
+      -3.450508643049368e-06,
+      -0.9393727128410414,
+      -0.3428978074554513,
+      0.6858657807295698
+    ],
+    [
+      0.9999999999932536,
+      -3.6732051036381095e-06,
+      3.9783981876400747e-22,
+      1.469282041455244e-06
+    ],
+    [
+      -1.2595339763716814e-06,
+      -0.3428978074531379,
+      0.9393727128473789,
+      -0.2931531189431831
+    ],
+    [
+      0.0,
+      0.0,
+      0.0,
+      1.0
+    ]
+  ],
+  "active_orientation_error_rad": {
+    "max": 0.3896379455449411,
+    "mean": 0.15070865290649163,
+    "p95": 0.29387367364494804,
+    "worst_frame": 320
+  },
+  "bundle_dir": "/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_box/reconstruction/result_slam_gravity_aligned",
+  "converged_frames": 0,
+  "converged_pct": 0.0,
+  "frame_start": 0,
+  "frames": 390,
+  "gravity_alignment_applied": true,
+  "hand_scale_mean": {
+    "left": 1.4436932802200317,
+    "right": 1.4400752782821655
+  },
+  "iterations": {
+    "max": 100,
+    "mean": 100.0,
+    "p95": 100.0
+  },
+  "mano_to_robot_scale": 1.2,
+  "object_embedded_scale": 1.0000000157532614,
+  "object_scale": 1.0,
+  "object_vertex_scale": 1.0000000157532614,
+  "parquet_partition_dir": "/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_box/human_motion_data/ego_recon/processed/sequence_id=tissue_box_simple/robot_name=vega_sharpa",
+  "parquet_world": "reduced (gravity-aligned placement world of vega_sharpa_reduced.urdf, root at origin; matches the ROBOT_REGISTRY 'vega_sharpa' replay spawn)",
+  "placement": {
+    "T_place": [
+      [
+        -1.0,
+        -1.2246467991473532e-16,
+        0.0,
+        -0.03684594262577368
+      ],
+      [
+        1.2246467991473532e-16,
+        -1.0,
+        0.0,
+        0.5601618704111337
+      ],
+      [
+        0.0,
+        0.0,
+        1.0,
+        1.2855546367780255
+      ],
+      [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    ],
+    "extra_offset": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "yaw_deg": 180.0
+  },
+  "position_error_m": {
+    "fingertips": {
+      "max": 0.03637898864328103,
+      "mean": 0.011443459875169466,
+      "p95": 0.026891159903369037,
+      "worst_frame": 92
+    },
+    "mps": {
+      "max": 0.07479577858040419,
+      "mean": 0.04997897135317933,
+      "p95": 0.06802771750293596,
+      "worst_frame": 247
+    },
+    "wrists": {
+      "max": 0.032788215020332925,
+      "mean": 0.015305751936797986,
+      "p95": 0.026804824836354872,
+      "worst_frame": 389
+    }
+  },
+  "scene_scale": 1.0,
+  "sequence_id": "tissue_box_simple",
+  "sidecar_path": "/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_box/vega_retarget_qa/tissue_box_simple_vega_sharpa_ik.npz",
+  "source_fps": 30.0,
+  "target_fps": 50.0,
+  "video_path": "/inspire/qb-ilm/project/exploration-topic/ky26021/v2d-h2s-1115/runs/tissue_box/vega_retarget_qa/tissue_box_simple_vega_sharpa.mp4",
+  "warnings": []
+}

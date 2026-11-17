@@ -1,0 +1,29 @@
+--- a/reconstruction/modules/v2d_foundation_pose/lib/trt_engine.py
++++ b/reconstruction/modules/v2d_foundation_pose/lib/trt_engine.py
+@@ -18,7 +18,7 @@ MODEL_LICENSE = "NVIDIA Open Model License"
+ MODEL_SUBDIR = Path("nvidia_tensorrt") / MODEL_VERSION
+ TRTEXEC_PATH = os.environ.get("TRTEXEC_PATH", "/usr/src/tensorrt/bin/trtexec")
+ ENGINE_CACHE_ENV = "FOUNDATIONPOSE_ENGINE_CACHE_DIR"
+-MIN_TENSORRT_VERSION = (10, 3)
++MIN_TENSORRT_VERSION = (10, 0)
+
+
+ @dataclass(frozen=True)
+@@ -79,7 +79,7 @@ def _tensorrt_version() -> str:
+     except ImportError as exc:
+         raise RuntimeError(
+             "TensorRT is required for backend='nvidia_tensorrt'. "
+-            "Use the FoundationPose container or install TensorRT 10.3+."
++            "Use the FoundationPose container or install TensorRT 10.0+."
+         ) from exc
+     version = trt.__version__
+     numeric = []
+@@ -88,7 +88,7 @@ def _tensorrt_version() -> str:
+         numeric.append(int(digits or 0))
+     if tuple(numeric) < MIN_TENSORRT_VERSION:
+         raise RuntimeError(
+-            "backend='nvidia_tensorrt' requires TensorRT 10.3 or newer; "
++            "backend='nvidia_tensorrt' requires TensorRT 10.0 or newer; "
+             f"found {version}"
+         )
+     return version

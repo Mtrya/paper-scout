@@ -1,0 +1,232 @@
+{
+  "stages": [
+    {
+      "name": "collect.audit",
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "completed",
+          "exit_code": 0,
+          "duration_seconds": 0.90173
+        }
+      ]
+    },
+    {
+      "name": "collect.pilot",
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "failed",
+          "exit_code": null,
+          "duration_seconds": 20.25479
+        },
+        {
+          "number": 2,
+          "status": "failed",
+          "exit_code": 1,
+          "duration_seconds": 46.570672
+        },
+        {
+          "number": 3,
+          "status": "interrupted",
+          "exit_code": null,
+          "duration_seconds": 3049.814373
+        },
+        {
+          "number": 4,
+          "status": "interrupted",
+          "exit_code": null,
+          "duration_seconds": 738.914721
+        },
+        {
+          "number": 5,
+          "status": "completed",
+          "exit_code": 0,
+          "duration_seconds": 99.11923
+        }
+      ]
+    },
+    {
+      "name": "collect.plan",
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "completed",
+          "exit_code": 0,
+          "duration_seconds": 0.499122
+        }
+      ]
+    },
+    {
+      "name": "collect.replay",
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "failed",
+          "exit_code": 1,
+          "duration_seconds": 51.609794
+        },
+        {
+          "number": 2,
+          "status": "failed",
+          "exit_code": 1,
+          "duration_seconds": 49.551816
+        },
+        {
+          "number": 3,
+          "status": "failed",
+          "exit_code": null,
+          "duration_seconds": 93.397862
+        },
+        {
+          "number": 4,
+          "status": "failed",
+          "exit_code": null,
+          "duration_seconds": 225.747942
+        },
+        {
+          "number": 5,
+          "status": "completed",
+          "exit_code": 0,
+          "duration_seconds": 587.148914
+        }
+      ]
+    },
+    {
+      "name": "collect.rollouts",
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "completed",
+          "exit_code": 0,
+          "duration_seconds": 91.002815
+        }
+      ]
+    },
+    {
+      "name": "collect.select",
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "completed",
+          "exit_code": 0,
+          "duration_seconds": 0.909973
+        }
+      ]
+    },
+    {
+      "name": "finetune.audit-dataset",
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "failed",
+          "exit_code": 1,
+          "duration_seconds": 0.912731
+        },
+        {
+          "number": 2,
+          "status": "completed",
+          "exit_code": 0,
+          "duration_seconds": 4.788925
+        }
+      ]
+    },
+    {
+      "name": "finetune.convert",
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "completed",
+          "exit_code": 0,
+          "duration_seconds": 63.484049
+        },
+        {
+          "number": 2,
+          "status": "completed",
+          "exit_code": 0,
+          "duration_seconds": 62.851698
+        },
+        {
+          "number": 3,
+          "status": "completed",
+          "exit_code": 0,
+          "duration_seconds": 62.560552
+        }
+      ]
+    },
+    {
+      "name": "finetune.statistics",
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "failed",
+          "exit_code": null,
+          "duration_seconds": 0.008832
+        },
+        {
+          "number": 2,
+          "status": "failed",
+          "exit_code": -15,
+          "duration_seconds": 1077.053304
+        },
+        {
+          "number": 3,
+          "status": "failed",
+          "exit_code": 1,
+          "duration_seconds": 0.36126
+        },
+        {
+          "number": 4,
+          "status": "completed",
+          "exit_code": 0,
+          "duration_seconds": 1.648483
+        }
+      ]
+    },
+    {
+      "name": "setup.native-python",
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "completed",
+          "exit_code": 0,
+          "duration_seconds": 0.003171
+        }
+      ]
+    },
+    {
+      "name": "simulate.vega",
+      "status": "completed",
+      "attempts": [
+        {
+          "number": 1,
+          "status": "failed",
+          "exit_code": 127,
+          "duration_seconds": 0.014784
+        },
+        {
+          "number": 2,
+          "status": "completed",
+          "exit_code": 0,
+          "duration_seconds": 14.971513
+        },
+        {
+          "number": 3,
+          "status": "completed",
+          "exit_code": 0,
+          "duration_seconds": 80.341923
+        }
+      ]
+    }
+  ]
+}

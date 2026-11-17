@@ -1,0 +1,58 @@
+{
+  "model_role": "V2D任务语义与验收器设计探针",
+  "inputs": [
+    {
+      "clip": "tissue",
+      "object_prompt": "tissue box",
+      "instruction": "Grasp the tissue box from the table, lift it at least 10 cm above the table, hold it stably for the required duration, and place it back stably on the table.",
+      "task_class": "lift_hold",
+      "lift_hold_applicable": true,
+      "lift_hold_reason": "仅依据任务语义，该段核心动作是抓取纸巾盒、抬离桌面、短暂保持并放回，结构与lift_hold的抬升-保持-稳定放置语义匹配；但阈值仍需由后续连续位姿流验证，语言命名不等于验收器已实现。",
+      "required_physical_events": [
+        "手/夹爪与纸巾盒形成稳定抓取接触，无明显滑移",
+        "纸巾盒质心或参考点相对初始桌面的抬升峰值至少达到10 cm",
+        "连续至少20个控制样本中，盒子高度高于初始高度5 cm以上",
+        "保持阶段位姿漂移和滑移在允许范围内",
+        "最终放回桌面后接触稳定、速度与姿态稳定，无跌落或倾倒"
+      ],
+      "unknown_properties": [
+        "纸巾盒质量与惯性张量",
+        "盒体与手/夹爪及桌面的摩擦系数",
+        "盒体刚度、是否可压缩或局部变形",
+        "内部纸巾余量及其质量分布",
+        "精确尺寸与最佳抓取点",
+        "允许抓取压力上限",
+        "桌面摩擦与放置稳定性阈值",
+        "图片无法直接给出精确抬升高度真值"
+      ],
+      "confidence": 0.94
+    },
+    {
+      "clip": "airplane",
+      "object_prompt": "toy airplane",
+      "instruction": "Grasp the toy airplane, lift it from the table, and rotate/reorient it through the target orientations while maintaining a stable hold and avoiding collisions with the propeller and wheels.",
+      "task_class": "reorient",
+      "lift_hold_applicable": false,
+      "lift_hold_reason": "仅依据任务语义，该段核心是双手拿起玩具飞机并翻转、旋转到不同姿态进行重定向/展示，成功判据是目标姿态或旋转变化，而不是仅抬升高度、保持和最终稳定放置；且末帧仍处于手持姿态，lift_hold的最终稳定放置条件不匹配。抬升只是重定向过程的中间动作。",
+      "required_physical_events": [
+        "稳定抓取玩具飞机并可靠抬离桌面",
+        "飞机参考坐标系相对初始姿态发生指定的旋转/重定向变化",
+        "目标姿态达成并在要求时长内保持稳定",
+        "螺旋桨、轮子、机翼等关键部件无碰撞、无明显形变或损坏",
+        "若任务要求放置，则最终稳定放置；若要求展示保持，则稳定保持目标姿态"
+      ],
+      "unknown_properties": [
+        "玩具飞机质量与惯性张量",
+        "螺旋桨和轮子是否为可动关节及其阻尼/自由度",
+        "材料刚度、脆性和可承受抓取力",
+        "手/夹爪与机体表面的摩擦系数",
+        "精确尺寸与最佳抓取点",
+        "目标姿态、旋转角度及容差定义",
+        "关键部件碰撞容限",
+        "是否要求最终放回桌面及放置稳定性判据"
+      ],
+      "confidence": 0.91
+    }
+  ],
+  "overall_conclusion": "两段中仅tissue在任务语义上匹配lift_hold；airplane属于重定向/姿态展示，不应直接套用lift_hold。两图稀疏且无时间戳或真值，图片本身无法确定质量、摩擦、刚度、关节、精确高度/角度等物理属性，也不能据此逐帧审核或宣称验收器已实现；实际判定需依赖后续仿真连续位姿流和相应物理成功事件。"
+}
