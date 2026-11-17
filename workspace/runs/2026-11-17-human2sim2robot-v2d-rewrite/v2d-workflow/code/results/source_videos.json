@@ -1,0 +1,34 @@
+{
+  "repository": "https://github.com/NVIDIA-Isaac/video_to_data",
+  "revision": "1e862a8984bf28474c324c1b49db99b2da7ece80",
+  "inputs": [
+    {
+      "sequence_id": "tissue_box",
+      "repository_path": "reconstruction/assets/tissue_box.mp4",
+      "sha256": "5616a861a332a2d0025db1282f00ed5d2b3fc28b9ed43ec9cb83846cc05debdf",
+      "duration_seconds": 13,
+      "frames": 390,
+      "width": 1280,
+      "height": 720,
+      "fps": 30,
+      "role": "Full-chain reconstruction, retargeting, expert collection, and LeRobot export probe."
+    },
+    {
+      "sequence_id": "airplane",
+      "repository_path": "reconstruction/assets/airplane.mp4",
+      "sha256": "25e202b3659a0913231b3f6e969f8c9713f150404e25319311d4521665e90311",
+      "duration_seconds": 26,
+      "frames": 780,
+      "width": 1280,
+      "height": 800,
+      "fps": 30,
+      "license": "CC-BY-4.0",
+      "datacard": "reference/airplane-datacard.md",
+      "role": "Second real human video for reconstruction and task-interface analysis; its full-chain status must be filled from actual run artifacts."
+    }
+  ],
+  "preview_files": [
+    "../../assets/tissue-source-preview.gif",
+    "../../assets/airplane-source-preview.gif"
+  ]
+}

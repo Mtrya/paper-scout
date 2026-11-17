@@ -1,0 +1,33 @@
+{
+  "model": "deepseek-flash",
+  "created": 1794678821,
+  "finish_reason": "stop",
+  "usage": {
+    "prompt_tokens": 1749,
+    "completion_tokens": 3370,
+    "total_tokens": 5119,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 2561
+    },
+    "prompt_cache_hit_tokens": 0,
+    "prompt_cache_miss_tokens": 1749
+  },
+  "inputs": [
+    {
+      "label": "tissue",
+      "filename": "tissue-contact.jpg",
+      "bytes": 99083,
+      "sha256": "712934ca51a444a9851b0b88655fa6021d7eb67e0273cb688ef36906edd5feb9"
+    },
+    {
+      "label": "airplane",
+      "filename": "airplane-contact.jpg",
+      "bytes": 48928,
+      "sha256": "e76b82f416561c20ff1d414c0098e0b88d1155624b98229924915bb04687207b"
+    }
+  ],
+  "content": "{\"model_role\":\"V2D视觉输入审核员\",\"inputs\":[{\"clip\":\"tissue\",\"decision\":\"human_review_required\",\"object_prompt\":\"purple tissue box\",\"reference_time_seconds\":8,\"observations\":[\"仅基于稀疏采样观察：约每2秒一帧，共8个可用画面（3x3排列，右下空白）。\",\"目标为桌面上的紫色长方形纸巾盒，带绿色叶片图案和顶部抽纸口；背景为木桌、白色显示器和洞洞板。\",\"可见交互：双手从两侧接近、夹持盒体两侧并轻微抬起/调整位置；盒体保持刚性，未明显看到抽纸被拉出。\",\"0秒附近盒体更少遮挡，适合仅做目标 grounding；8秒附近双手夹持关系更清楚，适合参考接触画面。\"],\"risks\":[\"目标存在歧义：目标可能是纸巾盒整体，也可能是盒内纸巾或抽纸口，GroundingDINO prompt 可能误检。\",\"二维图像无法确定手指下方真实接触点、接触面积、夹持力，也无法确认是否只是视觉上贴近。\",\"无时间戳和真值标签，参考时刻只能按采样顺序估计。\",\"无标尺/标定信息，盒体实际尺寸、质量、摩擦、刚度、是否变形不可确定。\",\"手部遮挡和运动模糊会影响目标边界与参考帧稳定性。\",\"画面清晰不代表三维重建正确。\"],\"confidence\":0.55,\"rationale\":\"VLM可提出合理的 purple tissue box prompt，并能给出大致的接触参考帧候选；但目标定义（盒体/纸巾）和最佳参考帧需要人工确认，且三维接触与物理属性不能由这些稀疏二维图确定。\"},{\"clip\":\"airplane\",\"decision\":\"human_review_required\",\"object_prompt\":\"red and blue toy airplane\",\"reference_time_seconds\":20,\"observations\":[\"仅基于稀疏采样观察：约每4秒一帧，共6个可用画面。\",\"目标为红蓝配色的玩具飞机，带螺旋桨和轮子；背景为白色桌面/台面。\",\"可见交互：双手抓持、翻转并重新定向玩具飞机，飞机从接近平放到竖直/侧向展示；手指覆盖部分机翼和机身。\",\"最后约20秒画面中飞机整体、机翼、机身和轮子较清楚，适合作为整体目标参考；但双手仍遮挡部分接触区域。\"],\"risks\":[\"目标可能被细化为螺旋桨、轮子或机翼，单一 prompt 可能无法覆盖所有预期部件。\",\"二维投影下无法确定手指与机翼/机身的真实三维接触点、夹持稳定性和是否发生滑移。\",\"无法确定玩具飞机的实际尺寸、质量、关节/螺旋桨是否可动、材料刚度与摩擦。\",\"旋转和遮挡导致外观变化，参考帧选择可能影响跟踪与重建稳定性。\",\"无时间戳和真值，参考时刻为按采样顺序估计。\",\"图像清晰不能证明三维位姿或接触重建正确。\"],\"confidence\":0.5,\"rationale\":\"VLM能给出 red and blue toy airplane 这类可用 prompt，并建议较清楚的参考帧候选；但目标粒度、最佳参考帧和真实三维抓持关系需人工确认，物理属性不可从稀疏二维图可靠推断。\"}],\"overall_conclusion\":\"VLM可作为初筛：为 tissue 提出 purple tissue box、为 airplane 提出 red and blue toy airplane 的 GroundingDINO prompt，并给出粗略参考时刻候选。但不能替代人工选择目标和参考帧：目标定义存在歧义，稀疏采样缺少时间戳与真值，手部遮挡使三维接触点、夹持力、尺度、质量、摩擦、刚度、变形及可动性均无法由这些二维清晰图像确定。二维清晰不等同于三维重建正确，最终应人工复核。\"}"
+}

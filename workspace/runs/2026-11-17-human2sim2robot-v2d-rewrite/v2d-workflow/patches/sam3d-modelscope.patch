@@ -1,0 +1,28 @@
+diff --git a/reconstruction/modules/v2d_sam3d/lib/download_weights.py b/reconstruction/modules/v2d_sam3d/lib/download_weights.py
+index 0194888..1608b31 100644
+--- a/reconstruction/modules/v2d_sam3d/lib/download_weights.py
++++ b/reconstruction/modules/v2d_sam3d/lib/download_weights.py
+@@ -49,13 +49,16 @@ def download_weights(output_dir: str):
+     os.makedirs(hf_home_dir, exist_ok=True)
+     os.makedirs(torch_ckpt_dir, exist_ok=True)
+
+-    _ensure_hf_token()
+-
+-    print(f"Downloading SAM 3D checkpoints to {hf_download_dir}...")
+-    subprocess.run([
+-        "hf", "download", "facebook/sam-3d-objects",
+-        "--local-dir", hf_download_dir,
+-    ], check=True)
++    complete_marker = os.path.join(hf_download_dir, ".modelscope-complete")
++    if os.path.isfile(complete_marker):
++        print(f"Using pre-staged SAM 3D checkpoints from {hf_download_dir}...")
++    else:
++        _ensure_hf_token()
++        print(f"Downloading SAM 3D checkpoints to {hf_download_dir}...")
++        subprocess.run([
++            "hf", "download", "facebook/sam-3d-objects",
++            "--local-dir", hf_download_dir,
++        ], check=True)
+
+     print(f"Downloading MoGE v1 checkpoint (required for SAM3D)...")
+     env = os.environ.copy()

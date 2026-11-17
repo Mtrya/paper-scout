@@ -1,0 +1,30 @@
+{
+  "source": {
+    "paper": "SPIDER: Scalable Physics-Informed Dexterous Retargeting",
+    "arxiv": "https://arxiv.org/abs/2511.09484",
+    "evidence": "Appendix A.4, Tables 6-7; source inputs are existing 3D hand-object demonstrations, not raw RGB video."
+  },
+  "observed": {
+    "source_demonstrations": 3827,
+    "robot_hands": 4,
+    "planned_tasks": 15308,
+    "task_records": 15302,
+    "completed_rollouts": 15041,
+    "retained_trajectories": 6520,
+    "retained_frames_at_100_hz": 1291575,
+    "median_task_wall_seconds_including_preprocessing": 220,
+    "gpu": "NVIDIA L40S",
+    "retention": {
+      "minimum_final_reference_rise_m": 0.15,
+      "minimum_final_simulated_rise_m": 0.10,
+      "maximum_final_object_position_error_m": 0.10
+    }
+  },
+  "derived": {
+    "retained_percent_of_planned_tasks": 42.592109,
+    "retained_trajectory_hours": 3.587708333,
+    "rough_gpu_hours_from_median_times_task_records": 935.122222,
+    "rough_gpu_hours_per_retained_trajectory_hour": 260.646110
+  },
+  "interpretation": "The GPU-hour values multiply the reported median by the number of task records and are only an order-of-magnitude estimate. Full per-task times and concurrency were not published. The 42.6% yield describes physics-based retargeting after 3D input is available, not an end-to-end RGB-video acceptance rate."
+}

@@ -1,0 +1,32 @@
+{
+  "measurement": {
+    "source": "tissue_reference collect.replay successful attempt in run_manifest.json",
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "episodes": 10,
+    "frames_per_episode": 519,
+    "fps": 20,
+    "cameras_per_episode": 3,
+    "image_shape": [240, 320, 3],
+    "visual_randomization": true,
+    "initial_state_noise": false,
+    "data_seconds": 259.5,
+    "replay_wall_seconds": 587.148914,
+    "wall_seconds_per_data_second": 2.262616238921002,
+    "hdf5_bytes": 1414558935,
+    "lerobot_bytes": 38117933,
+    "lerobot_video_bytes": 33881851,
+    "lerobot_parquet_bytes": 4207409,
+    "lerobot_metadata_bytes": 28673,
+    "hdf5_GB_per_data_hour": 19.62393898265896,
+    "lerobot_GB_per_data_hour": 0.5288036947976879
+  },
+  "scaling_illustration": {
+    "accepted_data_hours": 41500,
+    "basis": "The 14.94 million accepted ten-second clips from scale_envelope.json",
+    "render_GPU_hours": 93898.57391522158,
+    "render_days_on_1000_continuously_utilized_GPUs": 3.9124405798008994,
+    "hdf5_TB": 814.3934677803468,
+    "lerobot_TB": 21.94535333410404
+  },
+  "scope": "The replay measurement uses finalized successful source rollouts and includes camera rendering and HDF5 recording. It excludes reconstruction, source-expert optimization, failed-attempt rendering, LeRobot conversion, vision-policy training, and setup. The projection holds resolution, frame rate, camera count, scene complexity, and GPU model fixed; it is an order-of-magnitude illustration rather than a production forecast."
+}

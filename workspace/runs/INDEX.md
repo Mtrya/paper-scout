@@ -13,6 +13,14 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-11-17 — 2026-11-15 Human2Sim2Robot 报告重写；同一覆盖范围，不新增实验
+- Doc: https://fudan-nlp.feishu.cn/docx/PDv5dIfrfoO0mIx8cZZcE7PCn4T
+- Run: runs/2026-11-17-human2sim2robot-v2d-rewrite/
+- Deep threads: 同 2026-11-15；重组为物体轨迹与接触作用、单目手物重建、V2D 完整工作流与实跑、规模化成本与复用
+- Covered papers: 不新增（继承 2026-11-15）
+- Shortlisted papers: 不新增（继承 2026-11-15）
+- 背景: 按新版写作引导补足背景、直接前作与作品机制，以任务表示和完整数据生产链组织叙事，再呈现实跑与规模化分析。独立顺序冷读、编辑整改、11 份媒体远端核验及机器门禁完成。旧文档 https://fudan-nlp.feishu.cn/docx/ValndncVdomI8nxySKuciLh1npg 与旧运行包保持原样。
+
 ## 2026-11-15 — Human2Sim2Robot 主线及 2025–2026 年相关论文；公开 V2D 工作流实跑
 - Doc: https://fudan-nlp.feishu.cn/docx/ValndncVdomI8nxySKuciLh1npg
 - Run: runs/2026-11-15-human2sim2robot-v2d/

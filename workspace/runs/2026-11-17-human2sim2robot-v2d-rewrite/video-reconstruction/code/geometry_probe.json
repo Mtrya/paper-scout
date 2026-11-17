@@ -1,0 +1,25 @@
+{
+  "shape": {
+    "denoised": 5.5,
+    "reference_path": 11.0,
+    "alpha": 0.9,
+    "guided": 10.45,
+    "alpha_one_exactly_preserves_reference": true
+  },
+  "pose": {
+    "previous": 4.0,
+    "denoised": 4.25,
+    "alpha": 0.8,
+    "guided": 2.45,
+    "moves_toward_previous_pose": true
+  },
+  "metric_anchor": {
+    "scale": 0.25,
+    "object_target": [
+      0.15000000000000002,
+      0.025,
+      0.55
+    ],
+    "formula": "c_hand_H + (z_hand_H/z_hand_M) * (c_obj_M - c_hand_M)"
+  }
+}
