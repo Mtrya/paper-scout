@@ -1,0 +1,104 @@
+{
+ "com_sort|force": {
+  "n": 20,
+  "grasped": 1.0,
+  "grasped_and_lifted": 1.0,
+  "mean_object_rise": 0.09660400000000005,
+  "mean_descend_contact": 0.0030000000000000005,
+  "mean_descend_peak_force": 20.443400000000004,
+  "com_err": {
+   "mean": 0.09086589025711896,
+   "sd": 0.4086146835800555,
+   "rms": 0.40850247449383487,
+   "mean_sigma": 0.32649999999999996,
+   "within1": 0.5,
+   "decision_acc": 0.8,
+   "mean_tilt": 10.325,
+   "dir_err_median": 11.420247208289894
+  }
+ },
+ "com_sort|guard": {
+  "n": 20,
+  "grasped": 1.0,
+  "grasped_and_lifted": 1.0,
+  "mean_object_rise": 0.08681450000000002,
+  "mean_descend_contact": 0.0,
+  "mean_descend_peak_force": 1.9088,
+  "com_err": {
+   "mean": 0.0758907247839224,
+   "sd": 0.5162866213093187,
+   "rms": 0.5089043954261657,
+   "mean_sigma": 0.40599999999999997,
+   "within1": 0.6,
+   "decision_acc": 0.9,
+   "mean_tilt": 9.17,
+   "dir_err_median": 9.951845819964433
+  }
+ },
+ "com_sort|pose": {
+  "n": 20,
+  "grasped": 1.0,
+  "grasped_and_lifted": 1.0,
+  "mean_object_rise": 0.08680000000000002,
+  "mean_descend_contact": 0.0,
+  "mean_descend_peak_force": 1.85575,
+  "com_err": {
+   "mean": 0.18368313837190905,
+   "sd": 0.3978723437454351,
+   "rms": 0.4290999617149427,
+   "mean_sigma": 0.4164999999999999,
+   "within1": 0.75,
+   "decision_acc": 0.95,
+   "mean_tilt": 9.185,
+   "dir_err_median": 13.858521315717255
+  }
+ },
+ "weight_sort|force": {
+  "n": 20,
+  "grasped": 1.0,
+  "grasped_and_lifted": 1.0,
+  "mean_object_rise": 0.1022675,
+  "mean_descend_contact": 0.007675000000000001,
+  "mean_descend_peak_force": 13.642900000000001,
+  "mass_err": {
+   "mean": 0.008150000000000006,
+   "sd": 0.019572469924548835,
+   "rms": 0.020744878886125136,
+   "mean_sigma": 0.03230000000000001,
+   "within1": 0.8,
+   "decision_acc": 1.0
+  }
+ },
+ "weight_sort|guard": {
+  "n": 20,
+  "grasped": 1.0,
+  "grasped_and_lifted": 1.0,
+  "mean_object_rise": 0.09572299999999997,
+  "mean_descend_contact": 0.0,
+  "mean_descend_peak_force": 1.9177500000000003,
+  "mass_err": {
+   "mean": 0.012650000000000012,
+   "sd": 0.022884780049079286,
+   "rms": 0.02564273776335126,
+   "mean_sigma": 0.034100000000000005,
+   "within1": 0.75,
+   "decision_acc": 1.0
+  }
+ },
+ "weight_sort|pose": {
+  "n": 20,
+  "grasped": 1.0,
+  "grasped_and_lifted": 1.0,
+  "mean_object_rise": 0.09573299999999997,
+  "mean_descend_contact": 0.0,
+  "mean_descend_peak_force": 1.87485,
+  "mass_err": {
+   "mean": 0.007300000000000006,
+   "sd": 0.01991851822854935,
+   "rms": 0.020741263220932327,
+   "mean_sigma": 0.03470000000000001,
+   "within1": 0.95,
+   "decision_acc": 1.0
+  }
+ }
+}

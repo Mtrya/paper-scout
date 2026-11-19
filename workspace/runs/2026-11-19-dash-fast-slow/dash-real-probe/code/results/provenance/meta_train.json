@@ -1,0 +1,18 @@
+{
+ "model": "models/Qwen3-VL-2B-Instruct",
+ "n_layers": 28,
+ "layers": [
+  7,
+  14,
+  21,
+  28
+ ],
+ "layer_fracs": [
+  0.25,
+  0.5,
+  0.75,
+  1.0
+ ],
+ "prompt_template": "user: <image><image><instruction>",
+ "split": "train"
+}

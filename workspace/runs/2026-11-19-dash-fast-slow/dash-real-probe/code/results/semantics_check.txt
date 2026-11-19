@@ -1,0 +1,5 @@
+delta=0: img@t=True img@t-d=True vis@t-d=True vis@t=True state@t=True
+delta=2: img@t=True img@t-d=False vis@t-d=True vis@t=False state@t=True
+delta=8: img@t=True img@t-d=False vis@t-d=True vis@t=False state@t=True
+delta=8 stalefresh control: img@t-d=True
+SEMANTICS PASS
