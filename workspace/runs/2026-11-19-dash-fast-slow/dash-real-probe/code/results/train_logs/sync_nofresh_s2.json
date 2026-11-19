@@ -1,0 +1,90 @@
+{
+ "arm": "sync_nofresh",
+ "seed": 2,
+ "cfg": {
+  "fresh": false,
+  "dmax": 0,
+  "leak": false
+ },
+ "epochs": 10,
+ "batch": 128,
+ "lr": 0.0003,
+ "wd": 0.01,
+ "n_params": 17123853,
+ "n_fresh_params": 0,
+ "n_anchors": 42546,
+ "steps_per_epoch": 333,
+ "steps": [
+  {
+   "epoch": 0,
+   "train_loss": 0.5920961859884921,
+   "elapsed": 16.3,
+   "val_flow_loss_d0": 0.39929893612861633,
+   "val_flow_loss_d8": 0.4359481632709503
+  },
+  {
+   "epoch": 1,
+   "train_loss": 0.29933266757844806,
+   "elapsed": 32.6,
+   "val_flow_loss_d0": 0.2992355525493622,
+   "val_flow_loss_d8": 0.35740652680397034
+  },
+  {
+   "epoch": 2,
+   "train_loss": 0.23727637574121402,
+   "elapsed": 49.0,
+   "val_flow_loss_d0": 0.2698894143104553,
+   "val_flow_loss_d8": 0.33242860436439514
+  },
+  {
+   "epoch": 3,
+   "train_loss": 0.20179713260125112,
+   "elapsed": 64.4,
+   "val_flow_loss_d0": 0.2531069815158844,
+   "val_flow_loss_d8": 0.33070865273475647
+  },
+  {
+   "epoch": 4,
+   "train_loss": 0.1777785650199956,
+   "elapsed": 79.9,
+   "val_flow_loss_d0": 0.2501014173030853,
+   "val_flow_loss_d8": 0.31525883078575134
+  },
+  {
+   "epoch": 5,
+   "train_loss": 0.1581346004664361,
+   "elapsed": 93.6,
+   "val_flow_loss_d0": 0.250518262386322,
+   "val_flow_loss_d8": 0.3111784756183624
+  },
+  {
+   "epoch": 6,
+   "train_loss": 0.14062757367217862,
+   "elapsed": 105.2,
+   "val_flow_loss_d0": 0.218333438038826,
+   "val_flow_loss_d8": 0.32997947931289673
+  },
+  {
+   "epoch": 7,
+   "train_loss": 0.12501538620965258,
+   "elapsed": 117.9,
+   "val_flow_loss_d0": 0.2354689985513687,
+   "val_flow_loss_d8": 0.3183855712413788
+  },
+  {
+   "epoch": 8,
+   "train_loss": 0.11589934267439284,
+   "elapsed": 130.9,
+   "val_flow_loss_d0": 0.22073832154273987,
+   "val_flow_loss_d8": 0.3270266056060791
+  },
+  {
+   "epoch": 9,
+   "train_loss": 0.1101086702164229,
+   "elapsed": 143.7,
+   "val_flow_loss_d0": 0.22856397926807404,
+   "val_flow_loss_d8": 0.3153768479824066
+  }
+ ],
+ "wall_s": 143.7
+}

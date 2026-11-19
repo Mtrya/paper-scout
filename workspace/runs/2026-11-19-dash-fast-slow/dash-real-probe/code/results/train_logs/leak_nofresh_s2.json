@@ -1,0 +1,90 @@
+{
+ "arm": "leak_nofresh",
+ "seed": 2,
+ "cfg": {
+  "fresh": false,
+  "dmax": 0,
+  "leak": true
+ },
+ "epochs": 10,
+ "batch": 128,
+ "lr": 0.0003,
+ "wd": 0.01,
+ "n_params": 17131533,
+ "n_fresh_params": 0,
+ "n_anchors": 42546,
+ "steps_per_epoch": 333,
+ "steps": [
+  {
+   "epoch": 0,
+   "train_loss": 0.6013476408279694,
+   "elapsed": 12.0,
+   "val_flow_loss_d0": 0.4214167296886444,
+   "val_flow_loss_d8": 0.4597094655036926
+  },
+  {
+   "epoch": 1,
+   "train_loss": 0.29833026838911186,
+   "elapsed": 23.5,
+   "val_flow_loss_d0": 0.30575501918792725,
+   "val_flow_loss_d8": 0.3691219389438629
+  },
+  {
+   "epoch": 2,
+   "train_loss": 0.23374543873755424,
+   "elapsed": 35.1,
+   "val_flow_loss_d0": 0.29227152466773987,
+   "val_flow_loss_d8": 0.34166431427001953
+  },
+  {
+   "epoch": 3,
+   "train_loss": 0.20079585739800163,
+   "elapsed": 46.7,
+   "val_flow_loss_d0": 0.24541610479354858,
+   "val_flow_loss_d8": 0.32798269391059875
+  },
+  {
+   "epoch": 4,
+   "train_loss": 0.17808397040442303,
+   "elapsed": 58.1,
+   "val_flow_loss_d0": 0.24511387944221497,
+   "val_flow_loss_d8": 0.3110181987285614
+  },
+  {
+   "epoch": 5,
+   "train_loss": 0.15739617371433848,
+   "elapsed": 70.3,
+   "val_flow_loss_d0": 0.2576962113380432,
+   "val_flow_loss_d8": 0.3180891275405884
+  },
+  {
+   "epoch": 6,
+   "train_loss": 0.1396296335546462,
+   "elapsed": 82.6,
+   "val_flow_loss_d0": 0.2139512151479721,
+   "val_flow_loss_d8": 0.32180970907211304
+  },
+  {
+   "epoch": 7,
+   "train_loss": 0.1242342832478675,
+   "elapsed": 94.8,
+   "val_flow_loss_d0": 0.22301927208900452,
+   "val_flow_loss_d8": 0.3032234311103821
+  },
+  {
+   "epoch": 8,
+   "train_loss": 0.1154034222076247,
+   "elapsed": 107.1,
+   "val_flow_loss_d0": 0.21686898171901703,
+   "val_flow_loss_d8": 0.3055274486541748
+  },
+  {
+   "epoch": 9,
+   "train_loss": 0.10966831441219146,
+   "elapsed": 118.6,
+   "val_flow_loss_d0": 0.22004902362823486,
+   "val_flow_loss_d8": 0.3107070326805115
+  }
+ ],
+ "wall_s": 118.6
+}

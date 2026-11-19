@@ -13,6 +13,14 @@ Entry format:
 - Shortlisted papers: <id>, <id>, ...
 ```
 
+## 2026-11-19 — 2026-11-13 至 2026-11-19；DASH 与快慢系统紧耦合
+- Doc: https://fudan-nlp.feishu.cn/docx/XZTNdhJqioNrc9xJBVWcQWINnpe
+- Run: runs/2026-11-19-dash-fast-slow/
+- Deep threads: DASH × ScaleVLA 慢语义进入快动作 (2611.11854, 2611.21607), ForceHarness 物理证据回到慢决策 (2611.21099)
+- Covered papers: 2611.11854, 2611.21607, 2611.21099, 2610.19604, 2512.20188, 2601.14945, 2506.07339, 2512.05964, 2512.01031
+- Shortlisted papers: 2611.17831, 2611.20404, 2611.17767, scientific-spaces:12010
+- 核心结果: 同一冻结 Qwen3-VL-2B 特征与仿真演示上的受控对照显示，慢语义陈旧 0.4 秒时，当前视觉与错位训练部分互相替代且各保留残余收益；ForceHarness 复现实验将质量的可靠不确定度与质心的偏乐观区间分开，指出上行协议应区分随机波动与残余偏置上界。综合得到紧耦合的三项约定：信息何时有效、误差由谁建模、停止权属于哪一侧。
+
 ## 2026-11-17 — 2026-11-15 Human2Sim2Robot 报告重写；同一覆盖范围，不新增实验
 - Doc: https://fudan-nlp.feishu.cn/docx/PDv5dIfrfoO0mIx8cZZcE7PCn4T
 - Run: runs/2026-11-17-human2sim2robot-v2d-rewrite/

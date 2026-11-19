@@ -1,0 +1,17 @@
+arm,cond_delta,pos_mm,rot_mrad,grip_raw
+desync4_fresh,main_d0,1.784,5.43,0.1990
+desync4_fresh,main_d8,1.751,5.55,0.1891
+desync4_nofresh,main_d0,1.974,5.11,0.2662
+desync4_nofresh,main_d8,2.215,5.77,0.3370
+desync8_fresh,main_d0,1.793,5.40,0.1936
+desync8_fresh,main_d8,1.735,5.45,0.1815
+desync8_nofresh,main_d0,2.069,5.25,0.2979
+desync8_nofresh,main_d8,2.087,5.47,0.3320
+leak_fresh,main_d0,1.774,5.32,0.1867
+leak_fresh,main_d8,1.769,5.63,0.1794
+leak_nofresh,main_d0,1.936,5.06,0.2648
+leak_nofresh,main_d8,2.374,6.37,0.3534
+sync_fresh,main_d0,1.796,5.54,0.1978
+sync_fresh,main_d8,1.789,5.79,0.1903
+sync_nofresh,main_d0,1.952,4.97,0.2552
+sync_nofresh,main_d8,2.371,6.20,0.3505

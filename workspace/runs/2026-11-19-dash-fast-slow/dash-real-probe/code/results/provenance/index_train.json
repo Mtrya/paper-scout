@@ -1,0 +1,471 @@
+{
+ "split": "train",
+ "n_frames": 43570,
+ "n_vis": 32,
+ "n_layers": 4,
+ "dim": 2048,
+ "state_dim": 11,
+ "scene_dim": 15,
+ "scene_keys": {
+  "weight_sort": [
+   "cube",
+   "heavy_zone",
+   "light_zone"
+  ],
+  "com_sort": [
+   "balanced_zone",
+   "bar",
+   "offset_zone"
+  ]
+ },
+ "episodes": [
+  {
+   "task": "weight_sort",
+   "seed": 20000,
+   "start": 0,
+   "length": 678,
+   "file": "episode_20000.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20017,
+   "start": 678,
+   "length": 708,
+   "file": "episode_20017.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20025,
+   "start": 1386,
+   "length": 690,
+   "file": "episode_20025.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20036,
+   "start": 2076,
+   "length": 706,
+   "file": "episode_20036.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20039,
+   "start": 2782,
+   "length": 682,
+   "file": "episode_20039.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20068,
+   "start": 3464,
+   "length": 699,
+   "file": "episode_20068.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20070,
+   "start": 4163,
+   "length": 656,
+   "file": "episode_20070.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20071,
+   "start": 4819,
+   "length": 681,
+   "file": "episode_20071.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20074,
+   "start": 5500,
+   "length": 673,
+   "file": "episode_20074.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20075,
+   "start": 6173,
+   "length": 708,
+   "file": "episode_20075.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20084,
+   "start": 6881,
+   "length": 671,
+   "file": "episode_20084.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20087,
+   "start": 7552,
+   "length": 687,
+   "file": "episode_20087.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20092,
+   "start": 8239,
+   "length": 667,
+   "file": "episode_20092.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20093,
+   "start": 8906,
+   "length": 703,
+   "file": "episode_20093.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20098,
+   "start": 9609,
+   "length": 669,
+   "file": "episode_20098.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20105,
+   "start": 10278,
+   "length": 702,
+   "file": "episode_20105.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20112,
+   "start": 10980,
+   "length": 712,
+   "file": "episode_20112.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20117,
+   "start": 11692,
+   "length": 693,
+   "file": "episode_20117.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20118,
+   "start": 12385,
+   "length": 667,
+   "file": "episode_20118.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20122,
+   "start": 13052,
+   "length": 672,
+   "file": "episode_20122.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20131,
+   "start": 13724,
+   "length": 697,
+   "file": "episode_20131.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20132,
+   "start": 14421,
+   "length": 689,
+   "file": "episode_20132.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20141,
+   "start": 15110,
+   "length": 693,
+   "file": "episode_20141.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20151,
+   "start": 15803,
+   "length": 692,
+   "file": "episode_20151.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20158,
+   "start": 16495,
+   "length": 685,
+   "file": "episode_20158.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20159,
+   "start": 17180,
+   "length": 673,
+   "file": "episode_20159.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20186,
+   "start": 17853,
+   "length": 680,
+   "file": "episode_20186.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20188,
+   "start": 18533,
+   "length": 696,
+   "file": "episode_20188.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20196,
+   "start": 19229,
+   "length": 681,
+   "file": "episode_20196.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20198,
+   "start": 19910,
+   "length": 706,
+   "file": "episode_20198.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20200,
+   "start": 20616,
+   "length": 695,
+   "file": "episode_20200.npz"
+  },
+  {
+   "task": "weight_sort",
+   "seed": 20208,
+   "start": 21311,
+   "length": 682,
+   "file": "episode_20208.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20007,
+   "start": 21993,
+   "length": 668,
+   "file": "episode_20007.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20011,
+   "start": 22661,
+   "length": 682,
+   "file": "episode_20011.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20018,
+   "start": 23343,
+   "length": 678,
+   "file": "episode_20018.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20023,
+   "start": 24021,
+   "length": 691,
+   "file": "episode_20023.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20029,
+   "start": 24712,
+   "length": 699,
+   "file": "episode_20029.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20042,
+   "start": 25411,
+   "length": 670,
+   "file": "episode_20042.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20050,
+   "start": 26081,
+   "length": 673,
+   "file": "episode_20050.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20055,
+   "start": 26754,
+   "length": 693,
+   "file": "episode_20055.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20062,
+   "start": 27447,
+   "length": 672,
+   "file": "episode_20062.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20068,
+   "start": 28119,
+   "length": 673,
+   "file": "episode_20068.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20084,
+   "start": 28792,
+   "length": 655,
+   "file": "episode_20084.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20086,
+   "start": 29447,
+   "length": 652,
+   "file": "episode_20086.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20090,
+   "start": 30099,
+   "length": 645,
+   "file": "episode_20090.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20094,
+   "start": 30744,
+   "length": 672,
+   "file": "episode_20094.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20097,
+   "start": 31416,
+   "length": 691,
+   "file": "episode_20097.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20119,
+   "start": 32107,
+   "length": 690,
+   "file": "episode_20119.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20135,
+   "start": 32797,
+   "length": 672,
+   "file": "episode_20135.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20138,
+   "start": 33469,
+   "length": 674,
+   "file": "episode_20138.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20143,
+   "start": 34143,
+   "length": 668,
+   "file": "episode_20143.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20144,
+   "start": 34811,
+   "length": 632,
+   "file": "episode_20144.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20151,
+   "start": 35443,
+   "length": 691,
+   "file": "episode_20151.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20153,
+   "start": 36134,
+   "length": 684,
+   "file": "episode_20153.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20155,
+   "start": 36818,
+   "length": 695,
+   "file": "episode_20155.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20157,
+   "start": 37513,
+   "length": 691,
+   "file": "episode_20157.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20161,
+   "start": 38204,
+   "length": 709,
+   "file": "episode_20161.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20185,
+   "start": 38913,
+   "length": 672,
+   "file": "episode_20185.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20189,
+   "start": 39585,
+   "length": 666,
+   "file": "episode_20189.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20190,
+   "start": 40251,
+   "length": 679,
+   "file": "episode_20190.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20194,
+   "start": 40930,
+   "length": 646,
+   "file": "episode_20194.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20198,
+   "start": 41576,
+   "length": 678,
+   "file": "episode_20198.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20204,
+   "start": 42254,
+   "length": 638,
+   "file": "episode_20204.npz"
+  },
+  {
+   "task": "com_sort",
+   "seed": 20207,
+   "start": 42892,
+   "length": 678,
+   "file": "episode_20207.npz"
+  }
+ ]
+}

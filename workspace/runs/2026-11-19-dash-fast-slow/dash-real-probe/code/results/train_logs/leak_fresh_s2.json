@@ -1,0 +1,128 @@
+{
+ "arm": "leak_fresh",
+ "seed": 2,
+ "cfg": {
+  "fresh": true,
+  "dmax": 0,
+  "leak": true
+ },
+ "epochs": 15,
+ "batch": 64,
+ "lr": 0.0003,
+ "wd": 0.01,
+ "n_params": 28833869,
+ "n_fresh_params": 11439168,
+ "n_train_frames": 43570,
+ "n_anchors": 42546,
+ "steps_per_epoch": 665,
+ "steps": [
+  {
+   "epoch": 0,
+   "train_loss": 0.41907822395625866,
+   "elapsed": 32.3,
+   "val_flow_loss_d0": 0.31852272152900696,
+   "val_flow_loss_d8": 0.351288378238678
+  },
+  {
+   "epoch": 1,
+   "train_loss": 0.2238782661413788,
+   "elapsed": 63.0,
+   "val_flow_loss_d0": 0.3850690424442291,
+   "val_flow_loss_d8": 0.3864421248435974
+  },
+  {
+   "epoch": 2,
+   "train_loss": 0.1862493685537711,
+   "elapsed": 94.0,
+   "val_flow_loss_d0": 0.25048574805259705,
+   "val_flow_loss_d8": 0.267448753118515
+  },
+  {
+   "epoch": 3,
+   "train_loss": 0.16010578902144182,
+   "elapsed": 127.7,
+   "val_flow_loss_d0": 0.277189165353775,
+   "val_flow_loss_d8": 0.2749030590057373
+  },
+  {
+   "epoch": 4,
+   "train_loss": 0.14710256281427872,
+   "elapsed": 162.5,
+   "val_flow_loss_d0": 0.35302311182022095,
+   "val_flow_loss_d8": 0.31583720445632935
+  },
+  {
+   "epoch": 5,
+   "train_loss": 0.13040199163824992,
+   "elapsed": 197.3,
+   "val_flow_loss_d0": 0.2874976396560669,
+   "val_flow_loss_d8": 0.26579514145851135
+  },
+  {
+   "epoch": 6,
+   "train_loss": 0.11617722001514937,
+   "elapsed": 232.1,
+   "val_flow_loss_d0": 0.25477296113967896,
+   "val_flow_loss_d8": 0.27895888686180115
+  },
+  {
+   "epoch": 7,
+   "train_loss": 0.10071260394682562,
+   "elapsed": 266.7,
+   "val_flow_loss_d0": 0.267454594373703,
+   "val_flow_loss_d8": 0.28251251578330994
+  },
+  {
+   "epoch": 8,
+   "train_loss": 0.08811344405762235,
+   "elapsed": 301.3,
+   "val_flow_loss_d0": 0.27847880125045776,
+   "val_flow_loss_d8": 0.3388739824295044
+  },
+  {
+   "epoch": 9,
+   "train_loss": 0.07562211515535985,
+   "elapsed": 336.2,
+   "val_flow_loss_d0": 0.29147109389305115,
+   "val_flow_loss_d8": 0.35528823733329773
+  },
+  {
+   "epoch": 10,
+   "train_loss": 0.06553491962639461,
+   "elapsed": 370.9,
+   "val_flow_loss_d0": 0.31758955121040344,
+   "val_flow_loss_d8": 0.3565879762172699
+  },
+  {
+   "epoch": 11,
+   "train_loss": 0.055787267737594765,
+   "elapsed": 406.2,
+   "val_flow_loss_d0": 0.4244345426559448,
+   "val_flow_loss_d8": 0.3780781924724579
+  },
+  {
+   "epoch": 12,
+   "train_loss": 0.04844151176932387,
+   "elapsed": 441.3,
+   "val_flow_loss_d0": 0.37174761295318604,
+   "val_flow_loss_d8": 0.4327734708786011
+  },
+  {
+   "epoch": 13,
+   "train_loss": 0.04292745243870002,
+   "elapsed": 476.3,
+   "val_flow_loss_d0": 0.4444369971752167,
+   "val_flow_loss_d8": 0.46348440647125244
+  },
+  {
+   "epoch": 14,
+   "train_loss": 0.04107708594992869,
+   "elapsed": 510.8,
+   "val_flow_loss_d0": 0.4143124520778656,
+   "val_flow_loss_d8": 0.40130069851875305
+  }
+ ],
+ "torch": "2.7.0a0+ecf3bae40a.nv25.02",
+ "gpu": "NVIDIA GeForce RTX 4090",
+ "wall_s": 511.0
+}

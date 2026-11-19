@@ -1,0 +1,90 @@
+{
+ "arm": "leak_nofresh",
+ "seed": 1,
+ "cfg": {
+  "fresh": false,
+  "dmax": 0,
+  "leak": true
+ },
+ "epochs": 10,
+ "batch": 128,
+ "lr": 0.0003,
+ "wd": 0.01,
+ "n_params": 17131533,
+ "n_fresh_params": 0,
+ "n_anchors": 42546,
+ "steps_per_epoch": 333,
+ "steps": [
+  {
+   "epoch": 0,
+   "train_loss": 0.5827898939808568,
+   "elapsed": 12.1,
+   "val_flow_loss_d0": 0.4323345720767975,
+   "val_flow_loss_d8": 0.4612427353858948
+  },
+  {
+   "epoch": 1,
+   "train_loss": 0.2966808667770019,
+   "elapsed": 24.1,
+   "val_flow_loss_d0": 0.3306446075439453,
+   "val_flow_loss_d8": 0.359094500541687
+  },
+  {
+   "epoch": 2,
+   "train_loss": 0.24053957543752572,
+   "elapsed": 35.6,
+   "val_flow_loss_d0": 0.2798132300376892,
+   "val_flow_loss_d8": 0.3469195067882538
+  },
+  {
+   "epoch": 3,
+   "train_loss": 0.19999475893494603,
+   "elapsed": 47.3,
+   "val_flow_loss_d0": 0.26616641879081726,
+   "val_flow_loss_d8": 0.34095945954322815
+  },
+  {
+   "epoch": 4,
+   "train_loss": 0.17468162894517453,
+   "elapsed": 59.2,
+   "val_flow_loss_d0": 0.2447134554386139,
+   "val_flow_loss_d8": 0.32496094703674316
+  },
+  {
+   "epoch": 5,
+   "train_loss": 0.156341384212534,
+   "elapsed": 71.1,
+   "val_flow_loss_d0": 0.23089388012886047,
+   "val_flow_loss_d8": 0.3389432430267334
+  },
+  {
+   "epoch": 6,
+   "train_loss": 0.1375011680004475,
+   "elapsed": 82.6,
+   "val_flow_loss_d0": 0.24000632762908936,
+   "val_flow_loss_d8": 0.31070300936698914
+  },
+  {
+   "epoch": 7,
+   "train_loss": 0.1251554391808338,
+   "elapsed": 94.0,
+   "val_flow_loss_d0": 0.2105620950460434,
+   "val_flow_loss_d8": 0.3229428231716156
+  },
+  {
+   "epoch": 8,
+   "train_loss": 0.11582550446729402,
+   "elapsed": 105.8,
+   "val_flow_loss_d0": 0.2173037827014923,
+   "val_flow_loss_d8": 0.30127769708633423
+  },
+  {
+   "epoch": 9,
+   "train_loss": 0.11072170474865774,
+   "elapsed": 117.3,
+   "val_flow_loss_d0": 0.2139778435230255,
+   "val_flow_loss_d8": 0.3436688184738159
+  }
+ ],
+ "wall_s": 117.3
+}
