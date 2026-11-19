@@ -1,0 +1,441 @@
+<title>Paper Scout 研究报告 - 2026-11-20</title>
+
+<h1>开篇综述</h1>
+
+<p>上一轮巡航（2026-11-19）在机器人侧得到一个结论：把慢模型移出控制关键路径，只是把两个时钟分开；要让快慢两层真正咬合，还得约定三件事——信息何时有效、误差由谁建模、停止权属于哪一侧。本轮沿着这条线继续走，发现这个接口契约正在三个层面同时成形，而且三篇工作都放出了可验证的公开产物：<b>REA</b>（运行时层）把"何时打扰大脑"写成了带黄金法则的工程规则；<b>AnyS1</b>（模型层）用一个 4B 指针模型接管所有智能体工作流里的枚举决策，配校准置信度门控；<b>Does Scaling Toward AGI Depend on What System-1 Lets System-2 Execute?</b>（理论层）把前两者统一成 predict–gate–execute–update 的"条件交互"循环，并给出执行算力节省趋近 1/<latex>\rho_u</latex> 的经济学上界。</p>
+
+<p>我们没有停留在转述。对 REA，在其官方运行时代码上构建抽屉玩具探针（每格 400 seeds），复现并扩展了它的核心声称：异常门对静默失败完全失明（与单快策略同分 49.8%），判官门满分；判官噪声扫描给出一个干净的不对称律——"说没完成"几乎免费（只加步数），"说完成"才线性没收成功率。对 AnyS1，审计了官方 Any-DP 数据集（训练侧 25,986 条样本、1,072 个技能，与论文数据表完全吻合），并在启智 GPU 上用官方发布的真实权重复核 <latex>\tau_{\mathrm{cold}}</latex>=0.918 的门控表现（τ=0.918 时接管 24.8% 的决策、与金标准一致率 95.3%，见 AnyS1 线程）。对理论篇，用独立实现的蒙特卡洛复推了三组形式结果：IIE 增益公式在四组参数下全部逐点吻合，筛选增益精确等于 ρ+r，遗憾界在 2ε 跨过效用间隔处出现真实相变。</p>
+
+<callout emoji="✅" background-color="light-green">
+  <p><b>亮点：</b>三篇工作互不知情，却把 System-1 从认知科学的比喻落成了可测量的工程组件——一张查表路由、一个校准指针头、一个效用预测器；而且都收敛到同一个设计判断：<b>错误代价是不对称的</b>。"快系统哪种错误最致命"（判官谎报完成、门控过度委派、预测器假阴性）决定了整个接口的形状。</p>
+</callout>
+
+<p>本轮结构：先读 REA（运行时层），再读 AnyS1（模型层），最后用条件交互理论收拢。三个深度线程之外，短名单上有六篇值得留意的论文，见下表。</p>
+
+<h1>快慢系统耦合：从运行时到 scaling 律</h1>
+
+<p>本轮短名单（轻量留意，未深挖）：</p>
+
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray">论文</th>
+      <th background-color="light-gray">核心贡献</th>
+      <th background-color="light-gray">为什么重要</th>
+      <th background-color="light-gray">链接</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Jeveration: System One Models Now Generate</b>（2026）</td>
+      <td>证明商用快速决策模型 Jev（TypeSafe AI）这类 System-1 模型能做单前向图像生成，78ms 出 512px 图。</td>
+      <td>"快系统"范式正从决策外溢到生成；快模型的能力边界直接决定快慢耦合中快侧能承接多少决策。</td>
+      <td><a href="https://arxiv.org/abs/2611.24738">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>The Hitchhiker's Guide to System 1 Models</b>（2026）</td>
+      <td>System-1 决策模型五族综述，附校准与级联理论。</td>
+      <td>想系统入门快决策模型，这是目前最好的地图。</td>
+      <td><a href="https://arxiv.org/abs/2610.33775">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>BLIP-Live</b>（2026）</td>
+      <td>流式视频智能体的"何时开口"时序权衡。</td>
+      <td>与快慢耦合的时机问题同构：反应太快噪声大，太慢错过窗口。</td>
+      <td><a href="https://arxiv.org/abs/2611.21553">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>EmbodiedRSI</b>（2026）</td>
+      <td>快慢双系统用于机器人自进化（假设图 + VoI 实验选择）。</td>
+      <td>把"System-2 选实验"搬进机器人自我改进循环。</td>
+      <td><a href="https://arxiv.org/abs/2610.10498">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>SALMONN-duo</b>（2026）</td>
+      <td>全双工语音智能体的自适应双系统协调。</td>
+      <td>语音是快慢耦合最苛刻的实时场景，值得对照。</td>
+      <td><a href="https://arxiv.org/abs/2609.34247">arXiv</a></td>
+    </tr>
+    <tr>
+      <td><b>HINT-WAM</b>（2026）</td>
+      <td>世界-动作模型的 hindsight 训练。</td>
+      <td>与快慢系统间的回传信号设计直接相关。</td>
+      <td><a href="https://arxiv.org/abs/2611.24789">arXiv</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>REA：具身运行时的边界触发与判官门契约</h2>
+
+<p>上一轮对人形机器人异步快慢系统 DASH 的分析已经指出，仅仅把慢模型移出控制关键路径、拆开快慢时钟，还不足以支撑紧耦合的具身系统；信息何时有效、误差由谁建模、停止权属于哪一侧——这三项约定正是 REA 要在运行时层落实的问题。论文 <em>REA: A Routed Embodied Agent Runtime for Asynchronous Brain-Cerebellum Control</em>（下称 <b>REA</b>）把这套约定落到了具身智能体的运行时层。在机器人控制语境下，人们习惯将大模型比作慢速审议的“大脑”，将视觉-语言-动作模型（VLA）或底层程序控制器比作快速反应的“小脑”。REA 的核心判断是：快慢耦合的关键在于“层间何时说话”，以及运行时能否把通信时机写进确定性的接口契约。</p>
+
+<h3>两种传统耦合拓扑的失效</h3>
+
+<p>把大脑接进控制环通常有两种朴素做法，但两者在实测中都出现了结构性失效。</p>
+
+<p>第一种拓扑是“智能体调用快策略”：大脑作为主循环，每一步都先推理再下发指令给快策略执行。这种串行结构把大脑的推理延迟直接焊进了物理控制环，机器人在每次模型调用期间只能原地空转。在 LIBERO-Pro 基准的 3,000 集测试中，即便路由器每集仅向阻塞式在线顾问（blocking advisor）咨询 1.71 次，等待大脑返回的时间也达到每集 2.62 秒，占去总控制时间（13.33 秒）的 20%，并将首动作延迟拉长至 1.5 秒。若进一步让大模型直接充当控制器、每步看图输出 2 至 4 厘米末端位移（Show-Harness + GPT-6 零样本基线），3,000 集测试中仅完成 78 集（成功率 2.6%），其余 2,806 集均在耗尽 900 秒预算后强制终止，平均每集消耗 34.4 次模型调用。</p>
+
+<p>第二种拓扑是“快策略报错才调智能体”：快策略以原生频率独立闭环运行，仅当代码抛出异常或达到步数截断上限时才唤醒大脑。这种结构会遭遇双向失灵：一方面，环境中的持续性故障在每次重试时都会反复抛错，导致大脑被同一错误频繁打断；另一方面，具身任务中绝大多数失败属于<b>静默失败</b>（silent failure），即底层程序正常执行完毕、零异常返回，但物体未抓取成功或炉灶旋钮未拧开。在 LIBERO-Pro 种子 1 至 10 的 590 集 ASPIRE Fix 策略测试中，共发生了 166 例失败，而仅依赖异常触发的门控只发起了 6 次升级（平均每集 0.01 次），其余 160 例静默失败全部漏接。</p>
+
+[[figure-anchor:rea:coupling]]
+
+<p>图 1：三种大脑-小脑耦合拓扑的时序对比（引自论文拓扑示意图）。(a) 智能体驱动快策略，控制环每步等待大脑；(b) 快策略仅在报错时唤醒大脑，反复被持续异常打断且完全漏接静默失败；(c) REA 在中间插入路由器，同步模式下仅在策略返回边界咨询判官，异步模式下大脑思考与策略执行并行并在下一边界生效。</p>
+
+<h3>REA 的三级契约与运行回路</h3>
+
+<p>针对上述两种失灵，REA 将具身系统划分为三层，并确立了一条铁律：<b>任何运行中的策略均免于等待大脑</b>。在此契约下，<b>System 0</b>（小脑）指任意能从当前物理状态启动、以原生频率闭环运行并在段边界或任务结束时返回控制权的快策略，包括冻结的 Python 操作程序（调用 SAM 3 分割、ContactGraspNet 抓取规划与 PyRoki 逆运动学）、VLA 动作块或全身控制器，每次执行返回消耗步数、耗时、异常标记与截断标记。<b>System 2</b>（大脑）在离线阶段负责生成候选策略库，在线阶段则彻底退出控制环与派发路径，仅在策略返回边界充当视觉判官。<b>System 1</b>（具身路由器，embodied router）独占全部控制流决策，自身不输出物理动作，依靠以下四个机制完成闭环：</p>
+
+<p>第一是<b>路由记忆</b>（route memory，离线查表派发）。在正式测试前，路由器在开发集回合上预先跑完每个候选策略 <latex>p \in \mathcal{P}_t</latex>，记录各任务上的实测成功率 <latex>\hat{r}_{t,p}</latex> 与平均步数 <latex>\hat{c}_{t,p}</latex>，按成功率降序排列并以步数更少打破平局。测试时派发首轮策略只需一次本地查表，在线模型调用为零。</p>
+
+<p>第二是<b>边界触发判官门</b>（boundary-triggered judge gate）。每当 System 0 策略执行返回，路由器截取初始帧 <latex>f_0</latex> 与当前帧 <latex>f_k</latex>，连同任务指令 <latex>\ell_t</latex> 一并交由 System 2 视觉判官，询问当前是否已经完成。若判官输出 <latex>\text{done}</latex>，路由器立即停机并保护已完成的工作成果，避免盲目重跑破坏现场；若输出 <latex>\text{not\_done}</latex>，则触发恢复流程。判官仅依赖视觉帧与指令，与模拟器真值状态完全隔离。</p>
+
+<p>第三是<b>共享预算升级梯</b>（escalation ladder）。当判官门或异常门触发恢复时，路由器从当前物理状态出发，沿路由记忆排定的候选梯子 <latex>L_t = [\text{first}(t), \text{other}(t), \text{first}(t)]</latex> 依次派发：先换次选策略，最后一档再回到首选策略——此时起始状态与剩余预算都已改变，等同一次有界重试。单集内的所有策略执行与判官调用共享同一套步数上限 <latex>H</latex> 与墙钟预算 <latex>W</latex>，第 <latex>k</latex> 次调用仅获得剩余预算 <latex>(H - u, W - w)</latex>，确保恢复过程严格有界，总开销绝不超过单策略预算。</p>
+
+<p>第四是<b>密封计分</b>（sealed score）。环境的真实成功谓词 <latex>\text{Score}()</latex> 仅在整集彻底停机后读取一次，专用于最终评估记录，任何在线策略、路由器与判官均不可读取。</p>
+
+[[figure-anchor:rea:mechanism]]
+
+<p>图 2：REA 在 LIBERO-Pro “打开炉灶（Turn on the stove）”任务上的运行走查（引自论文）。单跑 Fix 策略在 1,140 步后无异常返回但炉灶未亮（静默失败）；REA 的视觉判官对比初始帧与当前帧后判定任务未完成，路由器在共享预算内从当前状态升级至梯子下一档 Evo 策略；Evo 执行 1,260 步后点亮炉灶，判官确认 done 并停机，最后由密封计分记录成功。下图为其运行时回路：策略库 → System 1 路由 → System 0 执行 → System 2 判官 → 一次性计分。</p>
+
+<h3>LIBERO-Pro 上的效率与门控证据</h3>
+
+<p>在包含 60 个任务、每任务 50 个随机种子（共 3,000 集）的 LIBERO-Pro 分布外扰动测试集上，仅启用路由记忆与异常门的 <b>REA-M</b> 取得了 <b>95.9%</b> 的整体成功率，超过策略池中表现最强的单一生成管线 Agents SDK + GPT-6（94.7%）。在相同任务与种子配对下，配对精确 McNemar 检验显示 REA-M 独解（仅该方法成功的配对任务）86 集，Agents SDK 独解 51 集（<latex>p = 0.004</latex>，配对 95% 置信区间 <latex>[+0.4, +1.9]\%</latex>，表明在 95% 置信度下真实胜率提升落在这一正区间内）。在 37 个底层程序文件完全对齐的任务上，REA-M 以 95.3% 胜过 Agents SDK 的 93.7%（54:25，<latex>p = 0.001</latex>），距离事后挑选每任务最优策略的理论上限（hindsight oracle，全量 96.9% / 对齐 96.3%）仅差 1.0 个百分点。</p>
+
+<p>更重要的是成本与数据效率的剪刀差。REA-M 每成功一集平均只需 1,003 步、控制耗时 9.96 秒，较 Agents SDK + GPT-6（1,343 步、12.04 秒）步数减少 <b>25%</b>，控制时间缩短 <b>17%</b>（任务聚类自助法 95% 置信区间 <latex>[-23, -11]\%</latex>），原因是 60 个任务中有 46 个由路由记忆匹配到了更短更稳的替代程序。从开发集开销看，路由记忆仅需在每个候选程序上重放 10 个开发种子（全池 179 个程序共 1,790 回合，<b>0 模型 token</b>），而 Codex + GPT-6 与 Agents SDK + GPT-6 在生成策略库时分别耗费了 1,328 与 1,249 个开发回合以及 <b>89.0M</b> 与 <b>28.8M</b> 输入 token。</p>
+
+<p>判官门与异常门的差异在静默失败密集的场景下尤为显著。在专为压力测试恢复机制抽取的匹配困难子集（6 个任务 × 12 种子 = 72 集，每任务含 8 集已知 Fix 失败）上，带判官门的 <b>REA-V</b> 解决了 48/72（66.7%），相对使用异常门的 REA-M（37/72，51.4%）净胜 <b>+15.3%</b>（配对胜负比 12:1，<latex>p = 0.003</latex>，经 Holm 多重检验校正后 <latex>p = 0.014</latex>）。在未经筛选的 LIBERO-Pro 种子 1 至 10（590 集 ASPIRE Fix 策略库）上，REA-M 依靠路由记忆已将成功率从单策略 66.3% 提至 71.9%（+5.6%，<latex>p &lt; 10^{-4}</latex>），判官门 REA-V 在此基础上再推高 <b>+3.1%</b> 至 74.9%（37:19，<latex>p = 0.022</latex>）；这一额外收益的代价是每成功一集的墙钟时间增至 2.1 倍（120.7 秒对比 57.9 秒），源于每集平均增加 1.10 次升级重跑与 2.10 次判官调用。</p>
+
+<p>在线大脑的临时介入反而可能帮倒忙。前文提到的阻塞式顾问每集仅被咨询 1.71 次，却令控制时间涨至 13.33 秒，且其在 1,236 集中推翻了路由记忆的默认选择；在这 1,236 集上，路由记忆原选策略可独立解决 1,168 集，顾问改派的策略仅解决 1,124 集，导致整体成功率从 95.9% 滑落至 94.1%（配对 90:37，<latex>p &lt; 10^{-5}</latex>）。</p>
+
+<h3>判官噪声的不对称性</h3>
+
+<p>深究判官门的混淆矩阵会发现一个反直觉的现象：测试集上，视觉判官终局判决的整体准确率其实有限——在匹配困难子集上仅为 0.72（略高于永远回答 <latex>\text{done}</latex> 的多数类基线 0.67），在 LIBERO-Pro 590 集上仅为 0.67（甚至低于永远回答 <latex>\text{done}</latex> 的 0.75）。一个整体准确率低于常数的判官，为何能在系统层面稳定赚取正收益？</p>
+
+<p>答案在于两类误判的代价存在剧烈的不对称性，而物理重跑本身具备单向容错特性。一方面，判官对 <latex>\text{done}</latex> 判决的精确率（precision）极高：在匹配困难子集上为 <b>0.83</b>（35 例真阳性对 7 例假阳性），在 LIBERO-Pro 590 集上达到 <b>0.905</b>（276 例真阳性对 29 例假阳性）。判官一旦喊停，任务几乎确实已经完成，极少提前放走失败回合（两数据集上分别仅漏放 1/72 与 12/590）。另一方面，判官误报 <latex>\text{not\_done}</latex>（即漏报已成功回合，假阴性分别为 13/72 与 166/590）虽会触发多余的升级重跑，但重跑一个已经完成的物理任务极少毁坏现有成果。以 REA-M 作为首轮结果代理的归因统计显示，升级重跑将 <b>19% 至 24%</b> 的首轮失败转化为成功，而仅毁坏了 <b>5% 至 9%</b> 的首轮成功。只要判官严格收紧宣布完成的判定门槛，即便它因此频繁误报未完成，系统在共享预算内依然稳定受益。</p>
+
+<h3>抽屉玩具上的契约扫描</h3>
+
+<p>为独立验证上述契约逻辑并定量扫描判官噪声的影响，我们在本机直接调用 REA 开源仓库中的 runRoutedEpisode 与 route-memory 模块，构建了一个随机抽屉玩具环境：快策略执行 3 步，以 <latex>p_{\text{jam}} = 0.5</latex> 的概率遭遇卡阻并在抽屉半开状态下无异常返回（静默失败）；慢策略固定执行 8 步且必然拉开抽屉。该玩具环境仅包含抽象状态转移，用于机制复现与契约扫描，每格参数配置运行 400 个随机种子。</p>
+
+[[figure-anchor:rea:probe-gates]]
+
+<p>图 3：本机抽屉玩具复现（400 seeds/格，基于 REA 开源运行时源码）。(a) 四种基础门控与无噪声判官门的成功率及平均步数对比；(b) 假 done 率 α 线性没收系统成功率，实测曲线贴合理论线 1 − 0.5α（卡阻概率 0.5）；(c) 假 not-done 率 β 仅增加平均步数，成功率恒定保持 1.0。</p>
+
+<p>四门控对比（图 3a）精确复现了论文中的机制分化：单快策略（<latex>\text{never-fast}</latex>）与异常门（<latex>\text{exception}</latex>）的成功率完全一致，均为 <b>0.4975</b>（平均 3 步），说明异常门在面对静默失败时形同虚设；同策略盲目重试（<latex>\text{always-same}</latex>）耗费 6 步却依然停留在 <b>0.4975</b>，印证了持久性故障下原地重试无效；全梯盲目升级（<latex>\text{always}</latex>）虽然拿满 <b>1.0</b> 成功率，却固定消耗 14 步；唯有判官门在无噪声时以 <b>7.02 步/集</b>拿下 <b>1.0</b> 成功率，步数效率达到盲升级的两倍。这一分化与论文匹配困难子集上的对照方向一致：那里盲重试 24/72 对单策略 21/72（<latex>p = 0.66</latex>），同样说明原地重试无用。</p>
+
+<p>二维噪声扫描（图 3b、3c）则把判官的不对称性刻画成一条清晰的边界。令假 <latex>\text{done}</latex> 率为 <latex>\alpha = P(\text{done} \mid \text{not\_done})</latex>、假 <latex>\text{not\_done}</latex> 率为 <latex>\beta = P(\text{not\_done} \mid \text{done})</latex>：当 <latex>\alpha = 0</latex> 时，即便 <latex>\beta</latex> 从 0 恶化到 0.2 与 0.5，平均步数仅从 7.02 增至 8.27 与 10.31 步，系统成功率始终保持 <b>1.0</b>；相反，当 <latex>\alpha</latex> 从 0 升至 0.1、0.2 与 0.3 时，成功率沿理论斜线 <latex>\text{success} = 1 - p_{\text{jam}}\alpha</latex> 线性跌落至 <b>0.9575</b>、<b>0.8925</b> 与 <b>0.8300</b>。这一扫描结果直接回答了上一轮遗留的“停止权归属”问题：停止权完全可以交给一个整体精度有限的判官，前提是它把“宣布完成”的阈值收紧，把误报未完成的成本留在步数预算内消化。</p>
+
+<h3>适用边界与向在线打分的过渡</h3>
+
+<p>REA 的实验版图也标出了几条清晰的适用边界。首先，路由记忆的零在线成本优势成立的前提是候选策略已在开发集上测过：在 LIBERO-Pro 上改用在线文本智能体派发（REA-A），虽然成功率同为 95.9%，但每集耗时增加 1.39 秒（其中 0.73 秒用于等待派发决策，其余源于 46% 的回合改派了更长的程序）。其次，跨平台迁移时存在样本量与评估窗口约束：在 BEHAVIOR-1K 的 50 集测试中，REA 解决 27 集，与在线 Agents SDK（25 集）的差距尚在随机波动范围内（配对 7:5，<latex>p = 0.77</latex>）；在 RoboTwin 2.0 上，100 集 VLA 与代码混合策略池的对比（86% 对比单 VLA 最强基线 MEDex 的 80%）与早期的 200 集文本代理基线的样本量与评估窗口均不同，比较应在各自窗口内进行。最后，前文对判官“挽救失败率（19%–24%）”与“毁坏成功率（5%–9%）”的归因统计是以 REA-M 首轮结果作为代理估算的，其中混入了少量重放方差（replay variance，同一策略重复执行时因环境复位与仿真非确定性导致的结果波动）。</p>
+
+<p>从契约演进的视角看，REA 的 System 1 本质上是一套离线制备好的静态查表路由，仅在策略返回的粗粒度边界唤醒判官；下一线程要讨论的 AnyS1 则走出了另一条路径，将 System 1 推进为在每个可枚举决策点上实时打分的校准模型。</p>
+
+<h2>AnyS1：一个 4B 指针模型接管工作流的枚举决策</h2>
+
+<p>前文分析的 REA 在具身控制循环的边界上设置判官门，将路由经验固化于离线准备的记忆表。把同一快慢耦合问题移入通用大语言模型（LLM）智能体工作流时，开销结构呈现出另一副面孔：智能体在每一步都调用大模型（System-2）推演并生成动作，而大量中间步骤本质上只是从几个已知候选中挑出一项。现有的快慢耦合智能体虽然会把这类轻量选择交给小模型（System-1），却依赖工程师为每条固定工作流手工编写触发挂钩，一旦面对新任务或新工具集，所有判断便只得退回 System-2。论文 <em>Thinking Fast, Anywhere: One System-1 for the Decision Points of Any Agent Workflow</em>（下文简称 AnyS1）提出了一条跨工作流的解法：人类编写的程序性技能文档（SKILL.md）天然写明了"何处出现分支、有哪些候选选项"，只要按步骤复杂度将工作流编译为三类节点，就能用单个 4B 参数量的通用指针模型接管所有智能体的可枚举决策，并通过逐决策的置信度门控决定何时升级给 System-2。</p>
+
+<h3>按节点复杂度分流与 Any-DP 执行状态库</h3>
+
+<p>AnyS1 将技能文档驱动的多步执行轨迹按决策复杂度拆分为三类节点。第一类是确定性节点（D node，deterministic node），其动作完全由结构化状态决定（例如固定参数的工具调用），编译后直接以代码执行，消耗零个词元。第二类是生成式节点（G node，generative node），需要开放式文本或代码生成，留在 System-2 处理。第三类是可枚举节点（E node，enumerable node），需要读取当前非结构化状态 <latex>s</latex>，并从技能文档预先给定或可由当前状态列举的有限候选集中选出一项。每个 E 节点被形式化为一个决策点模板（decision point template）三元组 <latex>(q, O, d)</latex>，由判断问题 <latex>q</latex>、带有一句话操作定义 <latex>d(o)</latex> 的候选集 <latex>O = \{o_1, \ldots, o_n\}</latex> 以及兜底项 none of the above 构成；在轨迹第 <latex>t</latex> 步触发时，它与实时观测 <latex>s</latex> 共同组成运行时实例 <latex>x = (s, q, O, d)</latex>。</p>
+
+<p>设单集全由 System-2 执行的成本为 <latex>C^{\text{S2}}</latex>，引入双系统分流后的单集总成本 <latex>C</latex> 可拆解为 G 节点成本、残余 E 节点成本与 System-1 开销之和：</p>
+
+<latex>\frac{C}{C^{\text{S2}}} = \underbrace{\frac{C_G}{C^{\text{S2}}}}_{\approx 1 - s_E} + \underbrace{\frac{C_E}{C^{\text{S2}}}}_{\le s_E} + \underbrace{\frac{C_{\text{S1}}}{C^{\text{S2}}}}_{\kappa}</latex>
+
+<p>其中 <latex>s_E</latex> 表示 E 节点在全 System-2 成本中所占的比例，<latex>\kappa</latex> 为 System-1 推理本身的相对开销。当执行轨迹长度保持稳定时，双系统分流所能压缩的成本上限即受限于 <latex>s_E - \kappa</latex>。AnyS1 的目标是在不损害任务成功率的前提下，用单一通用模型尽可能承接 <latex>C_E</latex>。</p>
+
+[[figure-anchor:anys1:overview]]
+
+<p>图 4：AnyS1 的离线挖掘与在线分流架构（对应论文系统架构图）。左半部分为离线流程：从公开技能文档中经三轮抽取挖掘决策点模板，在 OpenHands 隔离容器中执行合成任务以捕获真实终端状态，再由双教师正反序共识过滤监督标签，训练单个 4B 指针模型；右半部分为在线运行时：D 节点由代码直接执行，G 节点交由 System-2，E 节点则由 System-1 单次前向打分并依据置信度门控决定直接采纳或升级给 System-2。</p>
+
+<p>为了得到跨领域泛化的训练样本，作者从公开技能库 SkillMD-138K 出发构建了 Any-DP 数据集。筛选过程遵循四条硬性准入标准：要求具备宽松开源 SPDX 许可及清晰的多步程序结构；经 MinHash 近重复过滤并将单仓库贡献上限设为 3 个技能；在仓库级别做训练与评测集隔离，并剔除任何提及下游评测基准的技能；通过离线 Linux 容器验证可端到端运行。最终保留的 1,072 个公开技能横跨 16 个功能类别。</p>
+
+<p>在数据构造上，LLM 分析器对每个技能文档独立阅读三遍，抽取带逐字原文引用且经精确字符串匹配核验的候选决策点，只保留三轮中至少出现两次（支持度 <latex>\sigma(p) \ge 2</latex>）的 E 节点。由此矿出的 17,865 个类型化决策点显示，D、E、G 三类节点占比分别为 21.3%、64.5% 与 14.2%，且 100% 的技能都包含至少一个 E 节点，证明有限候选决策在智能体工作流中普遍存在。随后的状态采集环节拒绝了让 LLM 直接编造文本摘要的做法，而是为每个技能合成带有输入文件、参考解、隐藏验证器以及两个跨类干扰技能的多阶段任务，由 OpenHands 智能体在断网容器中真实执行 2,846 个通过验证的任务，截取每处决策发生前的原始观测与工具输出，构成状态 <latex>s</latex>。针对每个状态，两位独立教师模型按正序与反序排列候选选项分别打分，仅保留选项顺序反转后仍达成一致的样本（双教师共识率 89.2%），最终形成 25,986 条高质量共识标注。统计表明，其中 64.6% 的 E 节点需要结合上下文做语义推理，仅 17.8% 属于字面信息查找，这解释了静态正则或启发式规则难以替代学习型 System-1 的原因。</p>
+
+<h3>选项交互指针架构与平滑校准门控</h3>
+
+<p>AnyS1 以 Qwen3.5-4B-Base 为 System-1 骨干，在注意力层、MLP 层及线性注意力序列模型 Gated DeltaNet 的投影上挂载秩为 16、缩放因子 <latex>\alpha = 32</latex> 的 LoRA 适配器。模型将运行时实例 <latex>x</latex> 序列化为带结构分隔符的单个输入序列，把状态 <latex>s</latex>、问题 <latex>q</latex>、逐个附带定义的选项以及结尾的决策查询符 <latex>\langle\text{dec}\rangle</latex> 拼接后一次前向传播，提取维度为 <latex>d_p = 256</latex> 的指针特征。在传统的指针头（pointer head，将查询向量与各候选向量分别匹配并经 softmax 归一化输出选项分布的判别层）之上，AnyS1 叠加了一个排列等变的选项交互头（option-interaction head）：它由单层无位置编码的 4 头双向自注意力与两倍宽度 MLP 组成，使各个候选选项向量与决策查询向量在最终打分前充分交互语义语境，同时对残差投影采用零初始化，使模型在训练伊始严格等价于标准指针头。</p>
+
+<p>要在运行时安全地将决策权交给 4B 模型，输出概率 <latex>p_f(o \mid x)</latex> 必须准确刻画模型在未见工作流上的真实把握，而标准的硬标签交叉熵容易诱导模型在陌生状态上输出过度自信的极端 logits。为此，AnyS1 在训练目标中直接引入标签平滑（label smoothing）：</p>
+
+<latex>\mathcal{L} = \sum_{(x, y) \in \mathcal{D}} \operatorname{CE}\bigl(p_f(\cdot \mid x),\ (1 - \epsilon)\,e_y + \epsilon\,u_O\bigr)</latex>
+
+<p>其中 <latex>e_y</latex> 为真实标签的独热向量，<latex>u_O</latex> 为候选集 <latex>O</latex> 上的均匀分布，平滑系数取 <latex>\epsilon = 0.1</latex>。留出一部分均匀概率质量抑制了模型把最大置信度推向饱和的冲动，从而在未知领域保住具有区分度的校准余量。</p>
+
+<p>在线执行时，置信度门控（confidence gate）按如下规则决定是否采纳 System-1 的最高分选项：</p>
+
+<latex>g(x) = \mathbb{I}\bigl[c(x) \ge \tau\bigr], \qquad c(x) = \max_{o \in O} p_f(o \mid x)</latex>
+
+<p>阈值 <latex>\tau</latex> 定义为在验证决策中使采纳子集与 System-2 一致率达到至少 95% 的最小临界值。针对新工作流与已上线工作流两种部署条件，AnyS1 提供两套定标制度：冷启动阈值 <latex>\tau_{\text{cold}}</latex> 在 153 条来自独立开发技能的容器样本上拟合出单一全局值 0.918，以零样本方式直接迁移至任意未知基准；温校准阈值 <latex>\tau_{\text{warm}}</latex> 则在目标工作流上运行 50 条无人工标注的开发轨迹，由 System-2 实际执行并记录 System-1 的并行打分，从而在不引入人工标注的前提下把 <latex>\tau</latex> 贴合到特定领域的分布上。</p>
+
+<h3>跨基准实证与消融：门控、状态与成本上限</h3>
+
+<p>作者在三个与 Any-DP 零技能重叠的未见基准上进行了端到端在线评测：受严格数据库与规则约束的多轮客服对话基准 SOPBench（268 个测试任务）、部分可观的文本具身搜索基准 ALFWorld（134 局测试）以及涵盖 118 万商品的网页购物基准 WebShop（500 条测试指令）。System-2 端分别采用 DeepSeek-V4.1-Flash 与跨家族的 GPT-6 Sol，以直接阅读原始技能文本的未编译 System-2 智能体为成本与耗时基准（表 1）。</p>
+
+<table>
+  <colgroup>
+    <col width="170"/>
+    <col width="95"/>
+    <col width="95"/>
+    <col width="95"/>
+    <col width="95"/>
+    <col width="95"/>
+    <col width="105"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray"><p>System-2 与配置</p></th>
+      <th background-color="light-gray"><p>SOPBench 通过率 / 省费</p></th>
+      <th background-color="light-gray"><p>ALFWorld 成功率 / 省费</p></th>
+      <th background-color="light-gray"><p>WebShop 得分 / 省费</p></th>
+      <th background-color="light-gray"><p>平均指标差（对比 All-S2）</p></th>
+      <th background-color="light-gray"><p>平均省费（对比未编译）</p></th>
+      <th background-color="light-gray"><p>关键路径模型耗时降幅</p></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><p><b>DeepSeek-V4.1-Flash</b></p></td>
+      <td><p></p></td>
+      <td><p></p></td>
+      <td><p></p></td>
+      <td><p></p></td>
+      <td><p></p></td>
+      <td><p></p></td>
+    </tr>
+    <tr>
+      <td><p>未编译技能智能体（基线）</p></td>
+      <td><p>55.2% / —</p></td>
+      <td><p>82.8% / —</p></td>
+      <td><p>54.9 / —</p></td>
+      <td><p>-17.8 pt</p></td>
+      <td><p>—</p></td>
+      <td><p>—（51.4–163 s）</p></td>
+    </tr>
+    <tr>
+      <td><p>编译工作流（All-S2）</p></td>
+      <td><p>83.2% / 86%</p></td>
+      <td><p>96.3% / 81%</p></td>
+      <td><p>66.9 / 76%</p></td>
+      <td><p>0.0 pt</p></td>
+      <td><p>81%</p></td>
+      <td><p>51–87%</p></td>
+    </tr>
+    <tr>
+      <td><p>商业 Jev 作 System-1</p></td>
+      <td><p>84.0% / 87%</p></td>
+      <td><p>96.3% / 84%</p></td>
+      <td><p>67.1 / 83%</p></td>
+      <td><p>+0.3 pt</p></td>
+      <td><p>84%</p></td>
+      <td><p>54–88%</p></td>
+    </tr>
+    <tr>
+      <td><p><b>AnyS1（warm 校准）</b></p></td>
+      <td><p>84.3% / 91%</p></td>
+      <td><p>95.5% / 88%</p></td>
+      <td><p>68.1 / 86%</p></td>
+      <td><p>+0.5 pt</p></td>
+      <td><p>89%</p></td>
+      <td><p>70–92%</p></td>
+    </tr>
+    <tr>
+      <td><p>AnyS1（cold 零样本）</p></td>
+      <td><p>83.2% / 87%</p></td>
+      <td><p>95.5% / 85%</p></td>
+      <td><p>67.9 / 89%</p></td>
+      <td><p>+0.1 pt</p></td>
+      <td><p>87%</p></td>
+      <td><p>59–91%</p></td>
+    </tr>
+    <tr>
+      <td><p><b>GPT-6 Sol</b></p></td>
+      <td><p></p></td>
+      <td><p></p></td>
+      <td><p></p></td>
+      <td><p></p></td>
+      <td><p></p></td>
+      <td><p></p></td>
+    </tr>
+    <tr>
+      <td><p>未编译技能智能体（基线）</p></td>
+      <td><p>61.2% / —</p></td>
+      <td><p>88.8% / —</p></td>
+      <td><p>48.5 / —</p></td>
+      <td><p>-16.8 pt</p></td>
+      <td><p>—</p></td>
+      <td><p>—（207.6–413.5 s）</p></td>
+    </tr>
+    <tr>
+      <td><p>编译工作流（All-S2）</p></td>
+      <td><p>82.1% / 86%</p></td>
+      <td><p>96.3% / 56%</p></td>
+      <td><p>70.6 / 72%</p></td>
+      <td><p>0.0 pt</p></td>
+      <td><p>71%</p></td>
+      <td><p>40–74%</p></td>
+    </tr>
+    <tr>
+      <td><p><b>AnyS1（warm 校准）</b></p></td>
+      <td><p>82.5% / 91%</p></td>
+      <td><p>95.5% / 75%</p></td>
+      <td><p>70.4 / 80%</p></td>
+      <td><p>-0.2 pt</p></td>
+      <td><p>82%</p></td>
+      <td><p>63–84%</p></td>
+    </tr>
+    <tr>
+      <td><p>AnyS1（cold 零样本）</p></td>
+      <td><p>82.5% / 88%</p></td>
+      <td><p>94.0% / 69%</p></td>
+      <td><p>70.1 / 86%</p></td>
+      <td><p>-0.8 pt</p></td>
+      <td><p>81%</p></td>
+      <td><p>48–90%</p></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>表 1：三个未见基准上的端到端在线评测（数据来自论文评测表）。省费比例与耗时降幅均以同骨干下未编译的技能智能体为基准；平均指标差为三个基准主指标相对全 System-2 编译版（All-S2）的宏平均差值。</p>
+
+<p>数据拆解出两层正交的效率来源。仅将自然语言技能编译为 D/E/G 显式程序（All-S2）就已经剥离了机械的工具编排并遏制了对话历史膨胀，使任务表现相对未编译基线跃升近 18 个百分点，成本在 Flash 下下降 76–86%（平均 81%）。在此之上接入 <latex>\text{AnyS1}_{\text{warm}}</latex>，单集成本降幅进一步扩至 75–91%（Flash 下平均 89%，Sol 下平均 82%），关键路径模型调用时间在两个模型家族下削减 63–92%，且任务表现与 All-S2 持平（Flash 下平均 +0.5 个百分点）。WebShop 得分甚至从 All-S2 的 66.9 升至 68.1，原因是单次前向打分抑制了大模型面对简单属性二选一时的冗长自我纠结。同时，自托管 4B 模型免去了远程 API 往返：论文在单卡 H100 上实测单次决策中位延迟 21.8–31.7 ms，相比 System-2 单次 E 节点调用的 1.51–1.78 s 快 56–81 倍，并按 L4 自托管吞吐折算每千次决策仅耗费 0.0045 美元，从而使平均成本降幅超越商业 System-1 模型 Jev（89% 对比 84%）。在完全不跑目标工作流轨迹的冷启动设定下，<latex>\text{AnyS1}_{\text{cold}}</latex> 仍在 Flash 下节省 87% 成本，距 All-S2 仅差 0.1 个百分点；切换至 GPT-6 Sol 后，同一套 4B 权重无需重训依然维持等价收益。</p>
+
+<p>两组关键消融定位了系统成败的力学机制。第一组消融检验门控的必要性：将阈值撤除至全量委派（All-S1）时，短视野的 SOPBench 依然维持 84.3% 的通过率，但需要多步长程探索的 ALFWorld 成功率从 96.3% 骤跌至 40.3%，WebShop 得分也降至 66.3。门控之所以保住长程任务，靠的是置信度排序拦截了开放探索中的早期不确定误判，避免小错级联成彻底的搜索失败；对照实验表明，与 <latex>\text{AnyS1}_{\text{warm}}</latex> 保持相同委派比例的随机分流，在 ALFWorld 上每百次 E 节点决策会产生 16.0 次分歧，而置信度门控仅产生 3.8 次（分歧率相差 4 倍以上）。第二组消融检验训练状态与损失函数：在完全相同的 4B 架构上，用 84,481 条 LLM 编造的文本摘要（样本量为 Any-DP 的 3.3 倍）替代容器真实执行状态，模型在独立容器开发集上的准确率下降了 18.8 个百分点（65.0% 对比 83.8%）；而将标签平滑替换为硬标签交叉熵后，虽然原始准确率几乎持平（82.3% 对比 82.4%），未见域上的 logits 饱和却把校准阈值推高至 0.998，导致跨基准平均门控一致率从 97.7% 滑落至 92.4%。</p>
+
+<p>进一步剖析节省上限与阈值敏感度，可以看到方法本身的物理边界。在未编译基线成本中，E 节点占比 <latex>s_E</latex> 在 ALFWorld 与 WebShop 上为 17–22%，在 SOPBench 上仅为 4%——E 节点只占这么少的成本，意味着即使全量委派，节省上限也由 <latex>s_E</latex> 直接划定；SOPBench 上 98% 的委派率说明 E 节点几乎被全部接管，节省已贴近这条上限。关于定标样本量，目标工作流仅需 20 条无标注开发轨迹就能将 <latex>\tau_{\text{warm}}</latex> 拟合到全量拟合 1 个百分点以内，而若缩减至 5 条轨迹，WebShop 的委派比例会在 19–75% 之间剧烈摆动。这也解释了单一全局阈值 <latex>\tau_{\text{cold}} = 0.918</latex> 的域间张力：它在 SOPBench 上显得保守（仅接管 40% 决策，换取 100% 一致率），在 WebShop 上却偏激进（接管 55% 决策，一致率降至 80.0%）。</p>
+
+<h3>独立复核：官方数据集审计与启智 GPU 权重实测</h3>
+
+<p>为核实论文公开产物的可复现性与校准声称，我们下载了官方 Hugging Face 仓库（anys1/Any-DP）的训练集与测试集做全量字段审计。经核对，训练集包含 25,986 条样本、覆盖 1,072 个技能，与论文数据表完全吻合；独立测试集包含 2,537 条样本、覆盖 84 个技能；数据集中 none of the above 标签占比为 6.92%，与论文报告的 6.7% 基本一致；单条记录的 12 个字段涵盖判断问题、候选选项及其操作定义、执行状态、标签与来源技能等，与论文定义的模板 <latex>(q, O, d)</latex> 严密对应。</p>
+
+<p>随后，我们在启智平台 L40S GPU 上加载官方发布的 AnyS1-4B 适配器与 Qwen3.5-4B-Base 基座。实查 head.pt 权重元数据，确认为 LoRA 秩 16、指针维度 256、配备选项交互头及标签平滑系数 0.1。接着从官方独立测试集（held-out test）随机抽取 600 条样本复核 <latex>\tau</latex> 扫描操作曲线。实测全量样本的裸 top-1 准确率为 78.3%；因为测试集全部由未见技能组成，这一难度高于论文开发集 83.8% 的同分布评估。按论文决策类型拆解，字面查找类（literal，n=141）准确率为 83.0%，上下文语义推理类（inferential，n=420）与规划类（planning，n=39）的准确率则均保持在 76.9%。启用论文预设的冷启动阈值 <latex>\tau_{\text{cold}} = 0.918</latex> 时，System-1 接管了 24.8% 的决策（149/600），这批被放行的决策与金标准的一致率达到 95.3%，恰恰落在论文设定的 ≥95% 一致率设计目标上。在 <latex>\tau</latex> 从 0.85 升至 0.918 的区间内，接管覆盖率从 77.7% 收敛至 24.8%，而一致率则从 87.8% 跃升至 95.3%，实证了标签平滑在未见技能上塑造的高置信度校准带。</p>
+
+[[figure-anchor:anys1:tau]]
+
+<p>图 5：在启智平台 L40S GPU 上使用官方 AnyS1-4B 权重与独立测试集抽样（n=600）复核的置信度阈值扫描曲线。横轴为 System-1 接管决策的覆盖率，纵轴为与金标准一致率；全量裸 top-1 准确率为 78.3%，在论文冷启动阈值 τ=0.918 处接管 24.8% 决策并达到 95.3% 一致率。</p>
+
+<p>至此，REA 的离线边界判官与 AnyS1 的在线指针门控共同展示了快慢分层在工程上的两种具体形态。把目光收束到下一节的条件交互理论，AnyS1 中决定成本节省上限的 E 节点成本占比 <latex>s_E</latex>，可视为理论框架里效用相关交互密度 <latex>\rho_u</latex> 的一个可测代理，而它实测取得的 75–91% 单集成本降幅，也与理论推导给出的 <latex>1/\rho_u</latex> 效率区间相容。</p>
+
+<h2>条件交互：门控省钱的经济学与失效边界</h2>
+
+<p>前两个线程分别在具身运行时与智能体工作流上给出了快慢门控的工程实例。清华大学团队的 perspective 类综述文章 <em>Does Scaling Toward AGI Depend on What System-1 Lets System-2 Execute?</em>（下文简称 <em>Does Scaling Toward AGI</em>）将这类设计统一为“条件交互”（conditional interaction）理论，给出门控节省算力的核算公式、选择遗憾的误差边界，以及系统何时失效的结构性原因。需要预先划清论断层级：该文区分了“给定假设下已证明的性质”“已有应用证据的节省”与“尚待验证的缩放猜想”三类结论，下文按此口径逐层展开。</p>
+
+<h3>交互边际收益衰减与 predict–gate–execute–update 循环</h3>
+
+<p>在 <em>Does Scaling Toward AGI</em> 的技术演进路线中，人工智能的规模扩张正从扩大模型容量（Era 1，2012–2020）与扩大数据算力（Era 2，2020–2025），转向快慢系统协同设计（Era 3，2026+）。其经济动因来自一条简单的经验事实：在幂律损失 <latex>\mathcal{L}(C) \propto C^{-\alpha}</latex>（<latex>\alpha \gt 0</latex>）下，增加单位累计计算量 <latex>C</latex> 带来的边际性能增益 <latex>\eta_{\mathrm{unc}}(t) = -d\mathcal{L}/dC \propto \alpha C^{-\alpha - 1}</latex> 随算力增长迅速趋近于零。问题出在交互的成本与价值错配：无论是语言模型生成一条思维链、强化学习采样一组 rollout，还是机器人执行一次物理试验，系统必须在观测结果前预付全部执行成本，而候选交互之间的信息价值高度不均。例如，在可验证奖励强化学习（RLVR）的 GRPO 算法中，同一提示词下若 <latex>G</latex> 条采样全部答对或全部答错，组内相对优势 <latex>A_g^{\mathrm{GRPO}}</latex> 恒为零，整组算力在梯度更新上毫无收益；在物理仿真域随机化中，无差别采样会把昂贵的仿真步数耗散在模型早已掌握的任务配置上。</p>
+
+<p>条件交互用四步闭环解决这一错配：Represent（表征候选）→ Predict（预测效用）→ Gate（门控放行）→ Learn（以真实结果重校预测器）——这四步正是 predict–gate–execute–update 循环的展开：Gate 放行后进入执行，Learn 对应 update。设 <latex>\mathcal{I}</latex> 为候选交互空间，<latex>\mathcal{H}_{0:t}</latex> 为截至第 <latex>t</latex> 步的历史交互与结果记录。轻量级且具备语义感知能力的 System-1 以远低于执行的成本（<latex>c_{\mathrm{pred}} \ll c_{\mathrm{exec}}</latex>）为每个候选输出预测效用 <latex>\hat{u}(i \mid \mathcal{H}_{0:t})</latex>，随后条件交互策略 <latex>\pi_{\mathrm{CI}}</latex> 按阈值 <latex>\kappa_t</latex> 与逆温度参数 <latex>\beta \gt 0</latex> 决定执行分布：</p>
+
+<p><latex>\pi_{\mathrm{CI}}(i_t \mid \mathcal{H}_{0:t}) = \frac{1}{Z_t} \exp\bigl(\beta \hat{u}(i_t \mid \mathcal{H}_{0:t})\bigr) \cdot \mathbf{1}[\hat{u}(i_t \mid \mathcal{H}_{0:t}) \ge \kappa_t], \quad Z_t = \sum_{i \in \mathcal{I}} \exp\bigl(\beta \hat{u}(i \mid \mathcal{H}_{0:t})\bigr)\mathbf{1}[\hat{u}(i \mid \mathcal{H}_{0:t}) \ge \kappa_t]</latex></p>
+
+<p>其中 <latex>Z_t</latex> 为可行集上的归一化因子；当所有候选均低于阈值（<latex>Z_t = 0</latex>）时，策略触发显式弃权动作 <latex>\varnothing</latex> 并跳过执行。当候选执行成本不等时，策略将原始效用替换为净价值 <latex>\tilde{u}(i) = \hat{u}(i) - \lambda C(i)</latex>，其中 <latex>\lambda \ge 0</latex> 为预算拉格朗日乘子，<latex>C(i)</latex> 为执行成本。</p>
+
+<p>这一闭环将协同设计与静态级联（static cascade）区分开来。以商用快速模型 Jev 为代表的静态级联在离线训练完成后部署于推理层，仅作单向路由，其参数在推理期保持固定。在协同设计中，System-2 随训练或任务推进不断演化（参数记为 <latex>\theta</latex>），同一交互的边际效用随之改变；System-2 产生的奖励、梯度与验证判决持续回流，在更快的时钟上更新 System-1 的参数 <latex>\phi</latex>，由此形成双时钟演进循环：预测器为执行侧提供候选，执行结果又持续更新预测器。图 6 描绘了这套架构期望达到的总体目标，在论文论断层级中属于待实证检验的设计假设。</p>
+
+[[figure-anchor:sys12:pareto]]
+
+<p>图 6：成本、推理时延与任务成功率三维前沿示意图（引自 <em>Does Scaling Toward AGI</em> 原文架构示意图）。灰色曲面代表无条件扩展 System-2 的性能边界，绿色曲面代表论文假设的快慢协同设计前沿：在相同任务成功率下同步压低成本与时延（红色箭头），或在相同预算下换取更高成功率（蓝色箭头）。</p>
+
+<h3>效率经济学与选择遗憾：三个已证明的形式结果</h3>
+
+<p>在明确假设下，论文证明了门控机制的效率上限与误差容忍度。为了量化单位成本的效用产出，定义交互信息效率（Interaction Information Efficiency，简称 IIE）与效用相关交互密度 <latex>\rho_u</latex>：</p>
+
+<p><latex>\mathrm{IIE}_T = \frac{\sum_{t=0}^{T-1} \mathbb{I}(i_t)\mathbf{1}[i_t\text{ executed}]}{\sum_{t=0}^{T-1}\bigl(c_{\mathrm{pred}}(i_t) + C(i_t)\mathbf{1}[i_t\text{ executed}]\bigr)}, \qquad \rho_u(\theta_t) = \Pr_{i \sim \mathcal{D}}\bigl[u(i; \theta_t) \ge u_{\min}\bigr]</latex></p>
+
+<p>其中 <latex>\mathbb{I}(i_t) = u(i_t; \theta_t)</latex> 是声明的真实效用（例如期望贝叶斯惊奇或 GRPO 非零优势概率），<latex>u_{\min} \gt 0</latex> 为预设的效用下限。<latex>\rho_u</latex> 度量候选池中效用达标的“有效交互”比例，其余 <latex>1 - \rho_u</latex> 称为无效（dead）交互，其平均成本与有效交互的平均成本分别记为 <latex>\bar{C}_{\mathrm{dead}}</latex> 与 <latex>\bar{C}_{\mathrm{rel}}</latex>，全池平均成本为 <latex>\bar{C} = \rho_u \bar{C}_{\mathrm{rel}} + (1 - \rho_u)\bar{C}_{\mathrm{dead}}</latex>。</p>
+
+<p><b>一、IIE 增益与误差折损（对应论文命题 7）。</b>假设无效交互的效用为零。在完美筛选（假阳性率 <latex>\mathrm{fp}=0</latex>、假阴性率 <latex>\mathrm{fn}=0</latex>）、免费预测（<latex>c_{\mathrm{pred}}=0</latex>）且两类交互成本相等（<latex>\bar{C}_{\mathrm{dead}}=\bar{C}_{\mathrm{rel}}</latex>）的理想情形下，条件交互相对无条件执行的 IIE 倍率收敛于 <latex>1/\rho_u</latex>。当预测器存在误判且预测本身付费时，精确增益修正为：</p>
+
+<p><latex>\frac{\mathrm{IIE}^{\mathrm{CI}}}{\mathrm{IIE}^{\mathrm{unc}}} = \frac{\bar{\mathbb{I}}_{\mathrm{rel}}/\bar{C}_{\mathrm{rel}}}{\bar{\mathbb{I}}/\bar{C}} \cdot \left(1 + \frac{\mathrm{fp}(1 - \rho_u)\bar{C}_{\mathrm{dead}} + c_{\mathrm{pred}}}{(1 - \mathrm{fn})\rho_u \bar{C}_{\mathrm{rel}}}\right)^{-1}</latex></p>
+
+<p>其中 <latex>\mathrm{fp}</latex> 是无效候选被误放行的比例，<latex>\mathrm{fn}</latex> 是有效候选被误拦截的比例。分母表明：假阳性直接浪费 <latex>\bar{C}_{\mathrm{dead}}</latex> 的执行预算，预测成本对每个候选都要扣除；假阴性虽节省了单次执行费用，却把预测与误放行成本分摊到更少（<latex>1-\mathrm{fn}</latex> 倍）的有效样本上，同时直接将单位候选总产出 <latex>Y_T</latex> 压低 <latex>(1-\mathrm{fn})</latex> 倍，使学习过程面临信号匮乏的风险。</p>
+
+<p><b>二、相对“先执行再过滤”的筛选增益（对应论文命题 14）。</b>若反应式基线必须执行全部 <latex>n</latex> 个候选才能识别出其中的有效子集（总成本 <latex>C_{\mathrm{react}} = n c_{\mathrm{exec}}</latex>），而完美预测筛选以成本 <latex>c_{\mathrm{screen}} = c_{\mathrm{embed}} + c_{\mathrm{score}}</latex> 逐一打分后仅执行达标者，则两者的总成本比为：</p>
+
+<p><latex>\frac{C_{\mathrm{CI}}}{C_{\mathrm{react}}} = \rho_u + r, \qquad r = \frac{c_{\mathrm{screen}}}{c_{\mathrm{exec}}}</latex></p>
+
+<p>当单次编码与预测的相对开销 <latex>r \to 0</latex> 时，计算加速比逼近 <latex>1/\rho_u</latex>。需要留意的是，若每轮都用大型冻结编码器重新编码长提示词，<latex>c_{\mathrm{embed}}</latex> 会抬高 <latex>r</latex> 并直接压缩上述加速空间。</p>
+
+<p><b>三、选择遗憾的零门槛相变（对应论文定理 18）。</b>在固定每轮执行预算为 top-<latex>B</latex> 候选的场景中，设预测器在全池与全周期 <latex>T</latex> 轮上的一致误差上界为 <latex>\varepsilon_\phi = \sup_{0 \le t \lt T}\sup_{i \in \mathcal{I}_t}|\hat{u}_t(i) - u_t(i)|</latex>，oracle 最优第 <latex>B</latex> 名与第 <latex>B+1</latex> 名候选的真实效用间隔下界为 <latex>\mathrm{gap}_{\min} \gt 0</latex>，则累计选择遗憾满足：</p>
+
+<p><latex>\mathcal{R}_T(\pi_{\mathrm{CI}}, \pi^*) \le 2 T B \varepsilon_\phi \cdot \mathbf{1}\bigl[2\varepsilon_\phi \ge \mathrm{gap}_{\min}\bigr]</latex></p>
+
+<p>该定理揭示了一个锐利的相变边界：只要预测误差小于效用间隔的一半（<latex>2\varepsilon_\phi \lt \mathrm{gap}_{\min}</latex>），任何跨界错排都无法发生，门控选集与 oracle 逐位一致，遗憾严格为零；越过该阈值后，遗憾上界随误差与预算呈线性增长。</p>
+
+<h3>独立数值复推：三个形式结果的检验</h3>
+
+<p>由于 <em>Does Scaling Toward AGI</em> 属于综述与理论展望，随文并无公开实验代码，我们依据论文公式独立编写了蒙特卡洛模拟脚本（verify.py，随本线程证据包保存），在合成参数上检验上述三项结果。</p>
+
+<p>针对 IIE 增益公式，我们在四组参数配置下各抽取 400,000 个候选样本（有效效用服从均值 1.0 的指数分布，单次成本在均值上下 50% 均匀波动），实测值与公式值见表 2。</p>
+<table>
+  <colgroup>
+    <col width="260"/>
+    <col width="150"/>
+    <col width="150"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray"><p>参数配置</p></th>
+      <th background-color="light-gray"><p>实测 IIE 增益</p></th>
+      <th background-color="light-gray"><p>理论公式值</p></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><p>理想门控（<latex>\rho_u=0.20</latex>，<latex>\mathrm{fp}=\mathrm{fn}=c_{\mathrm{pred}}=0</latex>）</p></td>
+      <td><p>4.996</p></td>
+      <td><p>5.000</p></td>
+    </tr>
+    <tr>
+      <td><p>轻度误差与预测开销（<latex>\rho_u=0.20</latex>，<latex>\mathrm{fp}=\mathrm{fn}=0.05</latex>，<latex>c_{\mathrm{pred}}=0.01</latex>）</p></td>
+      <td><p>3.963</p></td>
+      <td><p>3.958</p></td>
+    </tr>
+    <tr>
+      <td><p>稀疏且无效候选更贵（<latex>\rho_u=0.10</latex>，<latex>\mathrm{fp}=\mathrm{fn}=0.10</latex>，<latex>c_{\mathrm{pred}}=0.02</latex>，<latex>\bar{C}_{\mathrm{dead}}=2\bar{C}_{\mathrm{rel}}</latex>）</p></td>
+      <td><p>5.885</p></td>
+      <td><p>5.897</p></td>
+    </tr>
+    <tr>
+      <td><p>高稀疏与高假阴性（<latex>\rho_u=0.05</latex>，<latex>\mathrm{fp}=0.02</latex>，<latex>\mathrm{fn}=0.30</latex>，<latex>c_{\mathrm{pred}}=0.005</latex>）</p></td>
+      <td><p>11.807</p></td>
+      <td><p>11.864</p></td>
+    </tr>
+  </tbody>
+</table>
+<p>四组绝对误差均在 0.06 以内。</p>针对筛选增益命题，在四组 <latex>(\rho_u, r)</latex> 组合（0.20/0.01、0.20/0.10、0.05/0.02、0.50/0.05）下各模拟 100,000 个样本，实测成本比分别为 0.21、0.30、0.07 与 0.55，与 <latex>\rho_u + r</latex> 逐点吻合。</p>
+
+<p>针对选择遗憾相变定理，我们构造了候选池规模 <latex>n=200</latex>、每轮选 top-5、边界间隔 <latex>\mathrm{gap}_{\min}=0.20</latex> 的离散选择任务，并在 200 次独立试验、每次 200 轮（共 40,000 轮）上扫描均匀噪声幅度 <latex>\varepsilon</latex>。当 <latex>\varepsilon = 0.05</latex> 与 <latex>0.09</latex>（满足 <latex>2\varepsilon \lt 0.20</latex>）时，40,000 轮保持零违例与零遗憾；当 <latex>\varepsilon = 0.11</latex>（刚跨过 0.10 临界点）时，oracle 违例率（所选集合与 oracle 最优集合不一致的比例）跳升至 0.9%，累计遗憾为 74.5（理论上界 44,000）；当 <latex>\varepsilon = 0.20</latex> 时，违例率升至 85.4%，累计遗憾为 12,862（理论上界 80,000）。这说明该选择遗憾界在平均情形下相当宽松，而 <latex>2\varepsilon = \mathrm{gap}_{\min}</latex> 处的零遗憾相变真实存在。</p>
+
+[[figure-anchor:sys12:verify]]
+
+<p>图 7：对 <em>Does Scaling Toward AGI</em> 理论结果的独立数值复推（验证脚本 verify.py）。左面板：四组参数下蒙特卡洛实测 IIE 增益与理论公式对照，最大偏差 0.057；中面板：四组 (ρᵤ, r) 下实测筛选成本比与筛选增益命题逐点重合；右面板：选择遗憾相变定理的 top-5 检验，2ε &lt; gapₘᵢₙ 时 40,000 轮零违例，跨过阈值后违例率由 0.9% 跳升至 85.4%，实际遗憾远低于最坏上界。</p>
+
+<h3>失效边界、选择性标签与尚未被测量的缩放假设</h3>
+
+<p>上述经济学收益依赖三个适用前提：单次执行昂贵、候选效用高度不均、执行前可用低成本特征预测价值。论文明确指出四类需要放松硬门控的情形：预测器处于分布外或校准失准时；候选交互具备多步期权或探索价值时；特征编码成本逼近执行成本、使 <latex>r</latex> 吞噬加速空间时；以及假阴性会引发安全关键或不可逆事故时。在这些情形下，门控需要将排序分数替换为带不确定度加成的探索准则（如 <latex>\hat{u} + c\sigma_\phi</latex>，其中 <latex>\sigma_\phi</latex> 为预测器对自身误差的估计不确定度），或直接全量执行。</p>
+
+<p>全套理论最深的结构性隐患在于<b>选择性标签（selective labels）</b>。一旦 System-1 决定放行哪些交互，它就同时决定了自身的训练分布 <latex>p_{\mathrm{train}}(i) \propto p_{\mathrm{cand}}(i)e(i)</latex>，其中 <latex>e(i)</latex> 为执行概率。被门控拦截的候选（<latex>\hat{u} \lt \kappa_t</latex>）永远得不到执行，其真实效用无从观测，预测器在该盲区上的低估误差也就永无纠正之日。提高逆温度 <latex>\beta</latex> 的随机化只能覆盖已放行集合，阈值以下的区域仍保持零概率。论文给出的解决机制是引入保正性（positivity）的探索流：以独立固定的比例 <latex>a</latex> 对被拦截候选实施审计采样（audit sampling），使全池任意候选的执行倾向度满足 <latex>e(i) \ge e_{\min} \gt 0</latex>，并在更新预测器时采用 <latex>1/e(i)</latex> 逆倾向加权或双重稳健估计量消除选择偏差。</p>
+
+<p>在更宏观的缩放定律层面，缩放等价性分析已证明：若有效交互密度 <latex>\rho_u</latex> 恒定且门控完美，条件训练的损失曲线相当于无条件训练在算力轴上的水平左移，即 <latex>\mathcal{L}_{\mathrm{CI}}(C) = \mathcal{L}_{\mathrm{base}}(C/\rho_u)</latex>，两者的本质差异在于有效吸收算力 <latex>C_{\mathrm{info}}(C) = \int_0^C \rho_u^{\mathrm{exec}}(c)\,dc</latex>（<latex>\rho_u^{\mathrm{exec}}(c)</latex> 为算力 <latex>c</latex> 处实际执行分布下的瞬时有效交互密度）。进一步地，论文提出了<b>缩放衰减假说（纯假设）</b>：在初始阶段之后，随着系统能力提升，已掌握的候选不断退出有效集，池中 <latex>\rho_u(\theta_t)</latex> 随训练单调衰减，从而部分解释了经验缩放律中的幂律指数。目前，支持这一方向的应用证据主要来自 RLVR 预测性提示采样等具体任务上观测到的数倍 rollout 节省（即收益来自把算力轴整体平移、剔除无效交互，而尚未改变能力增长的内在斜率）；至于 <latex>\rho_u(\theta_t)</latex> 本身随能力演化的完整衰减轨迹，论文坦承至今从未在无门控审计池上被独立测量过，并称其为检验整套理论“最干净的单点测试”。</p>
+
+<h3>与前两线程的统一对照</h3>
+
+<p>回到本轮巡航的前两个系统，<em>Does Scaling Toward AGI</em> 的框架恰好把它们的工程数字放进同一个坐标系里。在线程 2 的 AnyS1 中，编译后的工作流被拆分为确定性（D）、可枚举（E）与生成（G）三类节点，其中可被 System-1 单次前向打分接管的可枚举（E）节点占未编译智能体总成本的 17%–22%——在 E 节点定义即“值得 System-1 处理的有效决策”的意义上，这一成本占比正是真实智能体工作流中 <latex>\rho_u</latex> 的可测代理；由此推算，理想效率上限 <latex>1/\rho_u</latex> 约为 4.5 至 5.9 倍（对应剩余成本 17%–22%），而 AnyS1 实测取得的 75%–91% 成本节省（剩余成本 9%–25%），连同静态阈值与轻微误判的折损，与 IIE 增益、筛选增益两个公式刻画的区间相容。</p>
+
+<p>在线程 1 的 REA 中，具身运行时通过判官门与共享预算升级梯（escalation ladder）管控快慢切换。从条件交互理论的视角看，REA 的升级梯恰好为解决选择性标签问题提供了天然的架构落点：只要在判官判定常规通过的轨迹中按固定小比例 <latex>a</latex> 强制触发慢系统审计复核，就能以可控开销为快系统路由记忆与判官校准提供保正性的无偏监督信号。由此收拢，前两线程的接口契约与本线程的经济学共同指向一个可执行的结论：<latex>\rho_u</latex> 是可测量、可干预的系统效率坐标，快慢耦合的设计重心在于用低成本预测与有界审计把算力精确投向有效交互。</p>
+
+<h1>跨主题观察</h1>
+
+<p>把三个线程放回上一轮的三约定，对应关系整齐得接近一张接口规格表。<b>信息何时有效</b>：REA 用边界触发（策略返回时才问判官），AnyS1 用置信度门控（每次决策都打分、过阈值才采纳），理论篇用预测时效刻画（预测误差 <latex>\varepsilon_\phi</latex> 决定门控何时失效）。<b>误差由谁建模</b>：REA 发现判官的 done 精度（0.905）远比整体精度（0.67）要紧，AnyS1 用标签平滑防止置信度在陌生状态上虚高，理论篇直接给出误差 ε 与效用间隔 gap 的相变条件。<b>停止权属于哪一侧</b>：REA 把 done 判决交给低整体精度但高 done 精度的判官、用共享预算升级梯兜底，AnyS1 把升级决定交给校准阈值 τ，理论篇证明只要 2ε&lt;gap，门控选择与全知 oracle 逐位一致。</p>
+
+<p>三个可建造的问题由此打开。其一，REA 的路由记忆只存"平均成功率"，AnyS1 的门控自带校准不确定度——把后者接到前者上，可以得到一个<b>带不确定度的具身路由器</b>：派发不只看历史成功率，还看"这个状态我有多确定"。其二，理论篇指出门控会 censor 自己的训练数据（被压制的候选永不被执行、错误永不被纠正），解法是固定比例 audit 采样；REA 的升级梯恰好是审计采样的天然位置——每次升级都是一次被强迫的"执行并观测"。其三，理论篇的假设 25（效用相关交互密度 <latex>\rho_u</latex> 随系统能力提升而衰减）能解释 scaling 指数的变化，但论文自己承认它从未被测量；Any-DP 这类开放数据集与 REA 这类运行时日志，是测量 <latex>\rho_u</latex> 衰减曲线现实的地方。它们构成本轮阅读之后最值得优先动手的一组小型实验。</p>
+
+<p>值得一读的判断：本轮没有一篇达到"值得逐字通读"的三轴标准（well-written、insightful、正中兴趣），但 REA 的运行时设计章节与理论篇的第 3–4 节值得精读；若只读一篇，读 REA——它是三者中唯一把契约落到可运行代码且我们完整复现过的。</p>
