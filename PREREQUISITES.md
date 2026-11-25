@@ -36,8 +36,10 @@ Paper Scout has no installer — but a run touches several external tools. This 
 
 ## Remote compute (optional)
 
-- **Inspire `inspire` CLI + configured account** — routes GPU-heavy research actions (reproductions, ablations, probes) to the Inspire platform when a `full`-stream investigation outgrows the local machine. Project context lives in `workspace/INSPIRE.md` (gitignored — create your own as you start using the platform); command details come from the harness-level `inspire` skill installed by InspireSkill.
-  - *If missing:* everything still works; GPU-needing investigations simply stay local, and the agent records a precise blocker when no local action is feasible. `lite` runs never depend on it. If you don't have an Inspire account, delete the `remote-compute` skill and the corresponding bullet in `workspace/AGENTS.md`.
+- **Google Colab CLI (`colab`, `google-colab-cli`)** — provisions short-lived single-GPU runtimes (T4/L4/A100/H100) headlessly and runs a local script on them. Used for probes, small reproductions, 4B-class inference, and plotting when the local machine has no GPU; sessions are ephemeral, so the disk cannot be blown up. Usage is metered in monthly compute units (`colab usage`).
+  - *If missing or unauthenticated:* record a precise blocker instead of pretending a manual browser session happened. Nothing else degrades; the run reports the gap.
+- **Inspire `inspire` CLI + configured account** — routes multi-GPU, long-running, or workspace-resident work to the Inspire platform when Colab's single accelerator or session lifetime does not fit. Project context lives in `workspace/INSPIRE.md` (gitignored — create your own as you start using the platform); command details come from the harness-level `inspire` skill installed by InspireSkill.
+  - *If missing:* everything still works; GPU-needing investigations fall back to Colab or stay local, and the agent records a blocker when no backend is available. `lite` runs never depend on it. If you don't have an Inspire account, delete the corresponding bullet in `workspace/AGENTS.md` and keep the 本机 → Colab order.
 
 ## CI
 
