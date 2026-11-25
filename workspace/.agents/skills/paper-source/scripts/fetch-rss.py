@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import gzip
 import json
 import re
 import urllib.request
@@ -125,7 +126,12 @@ def main():
         args.feed_url, headers={"User-Agent": "paper-scout/rss"}
     )
     with urllib.request.urlopen(request, timeout=30) as response:
-        root = ET.fromstring(response.read())
+        body = response.read()
+    # Some feeds return gzip-compressed bytes under an XML content type without
+    # a Content-Encoding header urllib would act on; detect the magic instead.
+    if body[:2] == b"\x1f\x8b":
+        body = gzip.decompress(body)
+    root = ET.fromstring(body)
 
     if root.tag == "rss":
         raw_entries = rss_entries(root)

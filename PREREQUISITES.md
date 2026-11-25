@@ -24,6 +24,8 @@ Paper Scout has no installer — but a run touches several external tools. This 
   - *If missing:* no default pool. The agent is instructed to use whatever other paper sources the environment offers, but expect thinner scouting.
 - **Scientific Spaces RSS** — recent research essays from `spaces.ac.cn`; selected full text comes from the public `spaces-index` mirror or the original site.
   - *If unreachable:* skip this source and continue with the other pools; no local mirror or crawler is required.
+- **Research-blog RSS feeds** — thirteen registered researcher, lab, and company blogs, fetched through the same zero-dependency parser and merged into the paper pool.
+  - *If a feed is unreachable:* skip that feed, keep the rest, and note the gap; feeds come and go and none is load-bearing.
 - **MinerU, local install** — `uv tool install 'mineru[all]'`, plus model weights (`mineru-models-download -s modelscope -m pipeline` if the automatic download fails). Used for full-text reading with reliable figure/table extraction.
   - *If missing:* deep dives lose their main full-text source; the agent falls back to abstract-level reading or other converters, and investigations get shallower.
 

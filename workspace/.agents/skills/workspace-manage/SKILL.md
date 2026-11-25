@@ -194,7 +194,7 @@ python3 .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mo
 - 已覆盖论文与文章
 - 短名单论文与文章
 
-科学空间文章以 `scientific-spaces:<archive-id>` 作为覆盖 id,并在深度线程或背景中保留原站 URL;若文章与论文共同构成一个线程,两者都记录。条目保持简洁,不要改写历史。
+科学空间文章以 `scientific-spaces:<archive-id>` 作为覆盖 id,博客文章以规范 URL 作为覆盖 id,并在深度线程或背景中保留原站 URL;若文章与论文共同构成一个线程,两者都记录。条目保持简洁,不要改写历史。
 
 ## 预检
 

@@ -69,7 +69,7 @@ Each file has a distinct job. Do not let them bleed into each other.
 
 **`workspace/.agents/skills/memory-manage/SKILL.md`** — cross-run memory retrieval, typed execution/hypothesis schemas, promotion rules, provenance, and update policy.
 
-**`workspace/.agents/skills/paper-source/SKILL.md`** — recent research-candidate discovery and full-text acquisition. Hugging Face Papers is the default paper source; Scientific Spaces RSS supplies research essays. Commands and fallbacks are documented inline.
+**`workspace/.agents/skills/paper-source/SKILL.md`** — recent research-candidate discovery and full-text acquisition. Hugging Face Papers is the default paper source; Scientific Spaces RSS supplies research essays; thirteen registered research-blog feeds join the same candidate pool. Commands and fallbacks are documented inline.
 
 **`workspace/.agents/skills/paper-deep-dive/SKILL.md`** — deep investigation of a selected paper or research article: reading, code inspection, resource-proportional research actions chosen by run stream (`full` favors real experiments, `lite` favors source tracing and derivation), related-work comparison, and structured analysis notes.
 

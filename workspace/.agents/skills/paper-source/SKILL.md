@@ -77,6 +77,64 @@ curl -fL "https://raw.githubusercontent.com/caojiaolong/spaces-index/main/data/a
 
 镜像的 `data/posts_classified.json` 可按需下载到 `drafts/`,用于关键词、引用论文与系列上下文检索;不要每轮克隆全站正文或重跑镜像抓取器。镜像尚未收录、正文校验失败或公式可疑时回科学空间原页。报告引用仍链接原站,不把镜像全文复制进报告或运行包。
 
+## 发现源 C:研究博客订阅
+
+以下博客只保留能稳定解析的 RSS/Atom 源。全部走同一个 `fetch-rss.py`,批量拉取后与论文池合并进同一份候选列表:
+
+| source id | feed | canonical host |
+|---|---|---|
+| sander_ai | https://sander.ai/feed.xml | sander.ai |
+| lilianweng | https://lilianweng.github.io/index.xml | lilianweng.github.io |
+| bair | https://bair.berkeley.edu/blog/feed.xml | bair.berkeley.edu |
+| raschka | https://sebastianraschka.com/rss_feed.xml | sebastianraschka.com |
+| interconnects | https://www.interconnects.ai/feed | interconnects.ai |
+| mjbots | https://blog.mjbots.com/index.xml | blog.mjbots.com |
+| scaron | https://scaron.info/feeds/all.atom.xml | scaron.info |
+| argmin | https://www.argmin.net/feed | argmin.net |
+| caseyhandmer | https://blog.caseyhandmer.com/feed.xml | blog.caseyhandmer.com |
+| jasonwei | https://www.jasonwei.net/blog?format=rss | jasonwei.net |
+| epoch_ai | https://epoch.ai/atom.xml | epoch.ai |
+| thegradient | https://thegradient.pub/rss/ | thegradient.pub |
+| deepmind | https://deepmind.google/blog/rss.xml | deepmind.google |
+
+批量获取,按上次巡航日期留少量重叠:
+
+```bash
+while IFS='|' read -r source feed host; do
+  python3 .agents/skills/paper-source/scripts/fetch-rss.py \
+    --source "$source" --feed-url "$feed" --canonical-host "$host" \
+    --since YYYY-MM-DD --limit 10 \
+    || echo "skip $source" >&2
+done <<'LIST' > drafts/blog-rss.json
+sander_ai|https://sander.ai/feed.xml|sander.ai
+lilianweng|https://lilianweng.github.io/index.xml|lilianweng.github.io
+bair|https://bair.berkeley.edu/blog/feed.xml|bair.berkeley.edu
+raschka|https://sebastianraschka.com/rss_feed.xml|sebastianraschka.com
+interconnects|https://www.interconnects.ai/feed|interconnects.ai
+mjbots|https://blog.mjbots.com/index.xml|blog.mjbots.com
+scaron|https://scaron.info/feeds/all.atom.xml|scaron.info
+argmin|https://www.argmin.net/feed|argmin.net
+caseyhandmer|https://blog.caseyhandmer.com/feed.xml|blog.caseyhandmer.com
+jasonwei|https://www.jasonwei.net/blog?format=rss|jasonwei.net
+epoch_ai|https://epoch.ai/atom.xml|epoch.ai
+thegradient|https://thegradient.pub/rss/|thegradient.pub
+deepmind|https://deepmind.google/blog/rss.xml|deepmind.google
+LIST
+```
+
+单源失败就跳过该源继续,不要因为一条订阅挂了停掉整轮侦查;全部失败时退回 HF 与科学空间两路并说明缺口。博客条目的覆盖 id 用经 `--canonical-host` 归一的 URL,记法与科学空间的 `scientific-spaces:<archive-id>` 并列。
+
+博客全文直接从原页读,不需要 MinerU;公式密集或需反复引用的文章存到 `papers/<area>/<slug>-<host>.md`,其余留在暂存区。摘要被截断时以原页为准。
+
+### 权重
+
+博客与论文进同一个候选池,共用同一套质量与兴趣筛选,不设每轮入选配额,也不因"是博客"加分或减分。区别只在交付形态:
+
+- 一篇写得极好的深度文章(原创推导、机制剖析、经得起追问的经验总结),按报告契约的三轴标准处理:在报告里给简短导读,并明确推荐用户去读原文——导读只说明它好在哪、正文该带着什么问题读,不替代原文。
+- 其他博客文章与普通论文一样参与筛选,进入短名单或深度线程,不额外拔高。
+
+公司新闻、产品发布、榜单解读与社区转述不改变研究判断,不作为候选。
+
 ## 其他发现源
 
 HF 是默认论文池,但不是唯一的网。主动检查当前环境里可用的其他论文来源与数据工具(搜索插件、arXiv 接口、订阅源等),在 HF 覆盖不足时用起来——尤其是按领域和日期做补充扫荡。
