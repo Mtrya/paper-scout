@@ -20,6 +20,7 @@ PSEUDO_LATEX_RE = re.compile(
 RUN_RESERVED = {"assets", "report.docxxml", "report_group.docxxml", "checklist.md", "README.md"}
 THREAD_BLOCKER_SHAPE = {"BLOCKER.md"}
 THREAD_EVIDENCE_SHAPES = (
+    {"README.md"},
     {"README.md", "code"},
     {"README.md", "patches"},
     {"README.md", "code", "patches"},
@@ -30,29 +31,14 @@ MAX_FILE_BYTES = 2 * 1024 * 1024
 MAX_RUN_BYTES = 20 * 1024 * 1024
 BANNED_EXTENSIONS = {".npz", ".pt", ".pth", ".ckpt", ".safetensors"}
 
-# Style lint (report-compose references/anti-ai-zh.md): level-1 items and
-# excessive discourse-negation density FAIL; cumulative signals (banned words,
-# dash/bold density) are warnings that must be acknowledged before publishing.
+# Style lint (report-compose references/anti-ai-zh.md): mechanical hard-stops only
+# (markdown leakage, model voice, boilerplate headings). Prose pacing,
+# transitions, and judgment are left to the writer and cold-reader gate.
 MARKDOWN_LEAK_RE = re.compile(r"\*\*|`|\#\#")
 MODEL_VOICE_RE = re.compile(r"希望对你有帮助|如有需要请告诉我|截至我的知识|根据已有信息")
 BOILERPLATE_HEADING_RE = re.compile(
     r"<h[1-6][^>]*>\s*(是什么|为什么|怎么样)\s*[:：]?\s*</h[1-6]>"
 )
-BANNED_WORD_RE = re.compile(
-    r"助力|赋能|彰显|凸显|焕发|抓手|深度剖析|综上所述|不难发现|值得注意的是"
-    r"|奠定了坚实基础|标志着|见证了"
-)
-DASH_RE = re.compile(r"——")
-BOLD_RE = re.compile(r"<b>")
-DASH_DENSITY_LIMIT = 5.0   # per 1000 chars of prose
-BOLD_DENSITY_LIMIT = 12.0  # per 1000 chars of prose
-NEGATION_RE = re.compile(
-    r"不能|无法|未必|不代表|不保证|不构成|不直接|并不|并非|并不是|不是|而非|而不是|"
-    r"不支撑|不替代|不等于|不应|不再|没有|并未|尚未|未能|未证明|不必然|"
-    r"不充分|不独立|不单独|不会|不足|不适用|不蕴含|不属于|不进入|不回答"
-)
-NEGATION_DENSITY_LIMIT = 0.10
-PROSE_UNIT_SPLIT_RE = re.compile(r"(?<=[。！？；])")
 
 # Cold-reader backstops (report-compose references/review-gates.md gate 4,
 # mechanical subset): paper-internal coordinates (Eq. N, §N, 附录X, snake_case
@@ -94,6 +80,13 @@ def has_non_empty_file(path: Path) -> bool:
     return False
 
 
+def is_nonblank_text_file(path: Path) -> bool:
+    try:
+        return bool(path.read_text(encoding="utf-8", errors="replace").strip())
+    except OSError:
+        return False
+
+
 def visible_entries(path: Path) -> list[Path]:
     if not path.exists():
         return []
@@ -104,18 +97,23 @@ def verify_thread(path: Path, errors: list[str]) -> None:
     names = {entry.name for entry in visible_entries(path)}
 
     if names == THREAD_BLOCKER_SHAPE:
-        if not (path / "BLOCKER.md").is_file():
+        blocker = path / "BLOCKER.md"
+        if not blocker.is_file():
             errors.append(f"{path}: BLOCKER.md must be a file")
+        elif not is_nonblank_text_file(blocker):
+            errors.append(f"{blocker}: must be nonblank — an empty file is not a blocker account")
         return
 
     if names not in THREAD_EVIDENCE_SHAPES:
-        expected = "BLOCKER.md, or README.md with code/ and/or patches/"
+        expected = "BLOCKER.md, or README.md (optionally with code/ and/or patches/)"
         errors.append(f"{path}: invalid thread shape; expected {expected}")
         return
 
     readme = path / "README.md"
     if not readme.is_file():
         errors.append(f"{path}: README.md must be a file")
+    elif not is_nonblank_text_file(readme):
+        errors.append(f"{readme}: must be nonblank — it is the thread's explanation of record")
 
     for evidence_dir in ("code", "patches"):
         evidence_path = path / evidence_dir
@@ -133,43 +131,6 @@ def prose_lines(path: Path) -> list[str]:
     text = re.sub(r"<code>.*?</code>", "", text, flags=re.DOTALL)
     text = re.sub(r'href="[^"]*"', "", text)
     return text.splitlines()
-
-
-def split_prose_units(text: str) -> list[str]:
-    return [unit.strip() for unit in PROSE_UNIT_SPLIT_RE.split(text) if unit.strip()]
-
-
-def report_prose_units(report: Path) -> list[str]:
-    text = "\n".join(prose_lines(report))
-    units: list[str] = []
-    for match in re.finditer(r"<p(?:\s[^>]*)?>(.*?)</p>", text, flags=re.DOTALL):
-        plain = re.sub(r"<[^>]+>", "", match.group(1))
-        units.extend(split_prose_units(plain))
-    for match in re.finditer(r"<t[dh]\b[^>]*>(.*?)</t[dh]>", text, flags=re.DOTALL):
-        cell = match.group(1)
-        if "<p" in cell:
-            continue
-        plain = re.sub(r"<[^>]+>", "", cell)
-        units.extend(split_prose_units(plain))
-    return units
-
-
-def verify_negation_density(report: Path, captions: list[str], errors: list[str]) -> None:
-    units = report_prose_units(report)
-    for caption in captions:
-        units.extend(split_prose_units(caption))
-    if not units:
-        return
-    negative = [unit for unit in units if NEGATION_RE.search(unit)]
-    density = len(negative) / len(units)
-    if density > NEGATION_DENSITY_LIMIT:
-        shown = "; ".join(unit[:60] for unit in negative[:5])
-        errors.append(
-            f"{report}: discourse-negation ratio {density:.1%} "
-            f"({len(negative)}/{len(units)}, limit {NEGATION_DENSITY_LIMIT:.0%}) "
-            f"across report prose, tables, and figure captions; "
-            f"rewrite scope and comparisons positively; first hits: {shown}"
-        )
 
 
 def verify_report_prose(report: Path, errors: list[str]) -> None:
@@ -191,26 +152,17 @@ def verify_report_style(report: Path, errors: list[str], warnings: list[str]) ->
     markdown_hits: list[str] = []
     voice_hits: list[str] = []
     boilerplate_hits: list[str] = []
-    banned_hits: list[str] = []
     coord_hits: list[str] = []
     allcaps: dict[str, int] = {}
-    dash_count = 0
-    bold_count = 0
-    char_count = 0
     for lineno, line in enumerate(prose_lines(report), 1):
         if line.strip().startswith("[[figure-anchor:"):
             continue
-        char_count += len(line.strip())
-        dash_count += len(DASH_RE.findall(line))
-        bold_count += len(BOLD_RE.findall(line))
         if MARKDOWN_LEAK_RE.search(line):
             markdown_hits.append(str(lineno))
         if MODEL_VOICE_RE.search(line):
             voice_hits.append(str(lineno))
         if BOILERPLATE_HEADING_RE.search(line):
             boilerplate_hits.append(str(lineno))
-        for match in BANNED_WORD_RE.finditer(line):
-            banned_hits.append(f"{lineno}:{match.group(0)}")
         for match in INTERNAL_COORD_RE.finditer(line):
             coord_hits.append(f"{lineno}:{match.group(0)}")
         for token in ALLCAPS_RE.findall(line):
@@ -224,7 +176,7 @@ def verify_report_style(report: Path, errors: list[str], warnings: list[str]) ->
     ):
         if hits:
             shown = ", ".join(hits[:8]) + (" ..." if len(hits) > 8 else "")
-            errors.append(f"{report}: {label} on line(s) {shown}; see anti-ai-zh.md level 1")
+            errors.append(f"{report}: {label} on line(s) {shown}; see anti-ai-zh.md")
 
     if coord_hits:
         shown = ", ".join(coord_hits[:10]) + (" ..." if len(coord_hits) > 10 else "")
@@ -232,9 +184,6 @@ def verify_report_style(report: Path, errors: list[str], warnings: list[str]) ->
             f"{report}: paper-internal coordinate(s) in prose (line:token): {shown}; "
             "restate the content in prose (block-level code belongs in <pre><code>)"
         )
-    if banned_hits:
-        shown = ", ".join(banned_hits[:10]) + (" ..." if len(banned_hits) > 10 else "")
-        warnings.append(f"{report}: {len(banned_hits)} banned-word hit(s) (line:word): {shown}")
     if allcaps:
         shown = ", ".join(
             f"{token}×{count}"
@@ -244,24 +193,11 @@ def verify_report_style(report: Path, errors: list[str], warnings: list[str]) ->
             f"{report}: {sum(allcaps.values())} non-universal all-caps occurrence(s): {shown}; "
             "confirm each is a proper name or earns its full name at first use"
         )
-    if char_count:
-        dash_density = dash_count * 1000 / char_count
-        if dash_density > DASH_DENSITY_LIMIT:
-            warnings.append(
-                f"{report}: em-dash density {dash_density:.1f}/1000 chars "
-                f"({dash_count} total, limit {DASH_DENSITY_LIMIT:g})"
-            )
-        bold_density = bold_count * 1000 / char_count
-        if bold_density > BOLD_DENSITY_LIMIT:
-            warnings.append(
-                f"{report}: bold density {bold_density:.1f}/1000 chars "
-                f"({bold_count} total, limit {BOLD_DENSITY_LIMIT:g})"
-            )
 
 
 def verify_figure_captions(
     figures_json: Path, errors: list[str], warnings: list[str]
-) -> list[str]:
+) -> None:
     try:
         data = json.loads(figures_json.read_text(encoding="utf-8"))
     except (json.JSONDecodeError, UnicodeDecodeError):
@@ -300,7 +236,6 @@ def verify_figure_captions(
             f"{figures_json}: caption all-caps/label token(s) to confirm: "
             f"{', '.join(sorted(caption_tokens))}"
         )
-    return captions
 
 
 def verify_run(run_path: Path, mode: str) -> tuple[list[str], list[str], int, int]:
@@ -345,15 +280,12 @@ def verify_run(run_path: Path, mode: str) -> tuple[list[str], list[str], int, in
     if not checklist.is_file():
         errors.append(f"{checklist}: required checklist file is missing")
 
-    captions: list[str] = []
     if not assets.is_dir():
         errors.append(f"{assets}: required assets directory is missing")
     else:
         figures_manifest = assets / "figures.json"
         if figures_manifest.is_file():
-            captions = verify_figure_captions(figures_manifest, errors, warnings)
-    if report.is_file():
-        verify_negation_density(report, captions, errors)
+            verify_figure_captions(figures_manifest, errors, warnings)
 
     thread_count = 0
     for entry in visible_entries(run_path):

@@ -23,7 +23,7 @@ user-invocable: true
 
 ## 通用 RSS/Atom 获取
 
-`scripts/fetch-rss.py` 是所有订阅源共用的零依赖拉取器,支持 RSS 2.0 与 Atom,向标准输出写候选 JSON。`--feed-url` 与 `--source` 必填;`--kind` 默认为 `blog_post`,`--since YYYY-MM-DD` 与 `--limit` 控制时间窗和条数。同一站点有多个官方域名时,用 `--canonical-host` 统一文章 URL 与 id。新网站只需提供这些参数及其筛选、精读规则,不必新增解析器。
+`scripts/fetch-rss.py` 是所有订阅源共用的零依赖拉取器,支持 RSS 2.0 与 Atom。默认向标准输出写候选 JSON 数组;给 `--output <path>` 时改为把条目合并进该路径的 JSON 数组(按 id 去重,后写的覆盖先写的),批量拉多个源时用它,产物才是一份合法 JSON。`--feed-url` 与 `--source` 必填;`--kind` 默认为 `blog_post`,`--since YYYY-MM-DD` 与 `--limit` 控制时间窗和条数。同一站点有多个官方域名时,用 `--canonical-host` 统一文章 URL 与 id。新网站只需提供这些参数及其筛选、精读规则,不必新增解析器。
 
 ## 发现源 A:Hugging Face Papers
 
@@ -76,6 +76,66 @@ curl -fL "https://raw.githubusercontent.com/caojiaolong/spaces-index/main/data/a
 ```
 
 镜像的 `data/posts_classified.json` 可按需下载到 `drafts/`,用于关键词、引用论文与系列上下文检索;不要每轮克隆全站正文或重跑镜像抓取器。镜像尚未收录、正文校验失败或公式可疑时回科学空间原页。报告引用仍链接原站,不把镜像全文复制进报告或运行包。
+
+## 发现源 C:研究博客订阅
+
+以下博客只保留能稳定解析的 RSS/Atom 源。全部走同一个 `fetch-rss.py`,批量拉取后与论文池合并进同一份候选列表:
+
+| source id | feed | canonical host |
+|---|---|---|
+| sander_ai | https://sander.ai/feed.xml | sander.ai |
+| lilianweng | https://lilianweng.github.io/index.xml | lilianweng.github.io |
+| bair | https://bair.berkeley.edu/blog/feed.xml | bair.berkeley.edu |
+| raschka | https://sebastianraschka.com/rss_feed.xml | sebastianraschka.com |
+| interconnects | https://www.interconnects.ai/feed | interconnects.ai |
+| mjbots | https://blog.mjbots.com/index.xml | blog.mjbots.com |
+| scaron | https://scaron.info/feeds/all.atom.xml | scaron.info |
+| argmin | https://www.argmin.net/feed | argmin.net |
+| caseyhandmer | https://blog.caseyhandmer.com/feed.xml | blog.caseyhandmer.com |
+| jasonwei | https://www.jasonwei.net/blog?format=rss | jasonwei.net |
+| epoch_ai | https://epoch.ai/atom.xml | epoch.ai |
+| thegradient | https://thegradient.pub/rss/ | thegradient.pub |
+| deepmind | https://deepmind.google/blog/rss.xml | deepmind.google |
+
+批量获取,按上次巡航日期留少量重叠。每次批量先清掉旧候选文件——`--output` 是合并语义,重跑不重置会残留窗口外与已失败源的条目:
+
+```bash
+rm -f drafts/blog-rss.json
+while IFS='|' read -r source feed host; do
+  python3 .agents/skills/paper-source/scripts/fetch-rss.py \
+    --source "$source" --feed-url "$feed" --canonical-host "$host" \
+    --since YYYY-MM-DD --limit 10 \
+    --output drafts/blog-rss.json \
+    || echo "skip $source" >&2
+done <<'LIST'
+sander_ai|https://sander.ai/feed.xml|sander.ai
+lilianweng|https://lilianweng.github.io/index.xml|lilianweng.github.io
+bair|https://bair.berkeley.edu/blog/feed.xml|bair.berkeley.edu
+raschka|https://sebastianraschka.com/rss_feed.xml|sebastianraschka.com
+interconnects|https://www.interconnects.ai/feed|interconnects.ai
+mjbots|https://blog.mjbots.com/index.xml|blog.mjbots.com
+scaron|https://scaron.info/feeds/all.atom.xml|scaron.info
+argmin|https://www.argmin.net/feed|argmin.net
+caseyhandmer|https://blog.caseyhandmer.com/feed.xml|blog.caseyhandmer.com
+jasonwei|https://www.jasonwei.net/blog?format=rss|jasonwei.net
+epoch_ai|https://epoch.ai/atom.xml|epoch.ai
+thegradient|https://thegradient.pub/rss/|thegradient.pub
+deepmind|https://deepmind.google/blog/rss.xml|deepmind.google
+LIST
+```
+
+单源失败就跳过该源继续,不要因为一条订阅挂了停掉整轮侦查;全部失败时退回 HF 与科学空间两路并说明缺口。博客条目的覆盖 id 用经 `--canonical-host` 归一的 URL,记法与科学空间的 `scientific-spaces:<archive-id>` 并列。
+
+博客全文直接从原页读,不需要 MinerU;公式密集或需反复引用的文章存到 `papers/<area>/<slug>-<host>.md`,其余留在暂存区。摘要被截断时以原页为准。
+
+### 权重
+
+博客与论文进同一个候选池,共用同一套质量与兴趣筛选,不设每轮入选配额,也不因"是博客"加分或减分。区别只在交付形态:
+
+- 一篇写得极好的深度文章(原创推导、机制剖析、经得起追问的经验总结),纳入“推荐读原文”机制处理:在报告里给简短导读,说明好在哪里、正文该带着什么问题读,并附上原文链接,绝不作低质量压缩。
+- 其他博客文章与普通论文一样参与筛选,进入短名单或深度线程,不额外拔高。
+
+公司新闻、产品发布、榜单解读与社区转述不改变研究判断,不作为候选。
 
 ## 其他发现源
 

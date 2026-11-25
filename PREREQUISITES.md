@@ -24,6 +24,8 @@ Paper Scout has no installer — but a run touches several external tools. This 
   - *If missing:* no default pool. The agent is instructed to use whatever other paper sources the environment offers, but expect thinner scouting.
 - **Scientific Spaces RSS** — recent research essays from `spaces.ac.cn`; selected full text comes from the public `spaces-index` mirror or the original site.
   - *If unreachable:* skip this source and continue with the other pools; no local mirror or crawler is required.
+- **Research-blog RSS feeds** — thirteen registered researcher, lab, and company blogs, fetched through the same zero-dependency parser and merged into the paper pool.
+  - *If a feed is unreachable:* skip that feed, keep the rest, and note the gap; feeds come and go and none is load-bearing.
 - **MinerU, local install** — `uv tool install 'mineru[all]'`, plus model weights (`mineru-models-download -s modelscope -m pipeline` if the automatic download fails). Used for full-text reading with reliable figure/table extraction.
   - *If missing:* deep dives lose their main full-text source; the agent falls back to abstract-level reading or other converters, and investigations get shallower.
 
@@ -34,8 +36,10 @@ Paper Scout has no installer — but a run touches several external tools. This 
 
 ## Remote compute (optional)
 
-- **Inspire `inspire` CLI + configured account** — routes GPU-heavy research actions (reproductions, ablations, probes) to the Inspire platform when the local machine lacks compute. Project context lives in `workspace/INSPIRE.md` (gitignored — create your own as you start using the platform); command details come from the harness-level `inspire` skill installed by InspireSkill.
-  - *If missing:* everything still works; GPU-needing investigations simply stay local, and the agent records a precise blocker when no local action is feasible. If you don't have an Inspire account, delete the `remote-compute` skill and the corresponding bullet in `workspace/AGENTS.md`.
+- **Google Colab CLI (`colab`, `google-colab-cli`)** — provisions short-lived single-GPU runtimes (T4/L4/A100/H100) headlessly and runs a local script on them. Used for probes, small reproductions, 4B-class inference, and plotting when the local machine has no GPU; sessions are ephemeral, so the disk cannot be blown up. Usage is metered in monthly compute units (`colab usage`).
+  - *If missing or unauthenticated:* record a precise blocker instead of pretending a manual browser session happened. Nothing else degrades; the run reports the gap.
+- **Inspire `inspire` CLI + configured account** — routes multi-GPU, long-running, or workspace-resident work to the Inspire platform when Colab's single accelerator or session lifetime does not fit. Project context lives in `workspace/INSPIRE.md` (gitignored — create your own as you start using the platform); command details come from the harness-level `inspire` skill installed by InspireSkill.
+  - *If missing:* everything still works; GPU-needing investigations fall back to Colab or stay local, and the agent records a blocker when no backend is available. `lite` runs never depend on it. If you don't have an Inspire account, delete the corresponding bullet in `workspace/AGENTS.md` and keep the 本机 → Colab order.
 
 ## CI
 

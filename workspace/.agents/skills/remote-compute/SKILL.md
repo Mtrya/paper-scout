@@ -1,18 +1,54 @@
 ---
 name: remote-compute
-description: "当深度调查需要超出本机的算力(GPU 探针、复现、消融、批量推理)时,把该研究动作路由到启智(Inspire)平台执行,并把证据带回线程包。"
+description: "当深度调查需要超出本机的算力(GPU 探针、复现、消融、批量推理)时,按 本机 → Colab → 启智(Inspire) 的顺序选择执行后端,并把证据带回线程包。"
 user-invocable: false
 ---
 
 # remote-compute
 
-本技能回答一个问题:当一个值得做的研究动作超出本机算力时,怎么办。答案是路由到启智平台,而不是放弃或降级成纯阅读。
+本技能回答一个问题:当一个值得做的研究动作超出本机算力时,后端怎么选。答案是按代价从低到高依次尝试,而不是一律推给最重的平台,也不是放弃或降级成纯阅读。
 
 ## 何时使用
 
-只在研究动作需要 GPU、大内存或长时间运行时使用:复现关键实验、跑消融、对模型做探针、批量推理、评价基准子集。MinerU 解析、小规模 CPU 探针和代码阅读留在本机。
+在研究动作需要 GPU、大内存或长时间运行时使用:复现关键实验、跑消融、对模型做探针、批量推理、评价基准子集。MinerU 解析、小规模 CPU 探针和代码阅读留在本机。若当轮任务仅要求轻量聚焦核验,不要向启智平台提交重型 GPU 训练或长时间作业;轻量 GPU 验证或绘图优先使用 Colab 或本机检查。
 
-## 如何使用
+## 后端顺序
+
+1. **本机**。计算密集但不需要大量下载的动作留在本机:小模型推理、轻量复现、绘图、CPU 探针。本机存储有限,先把数据需求算清楚,不要为了跑一个探针把几十 GB 权重落到本地盘。
+2. **Colab**。需要单卡 GPU、但下载量与运行时长都可控的动作走 Colab。它是临时的、用完即弃的机器,不必担心磁盘被撑爆,适合探针、小规模复现、4B 级模型推理与绘图。月度计算单元有限(约 200 CU,大致相当于 100 小时 T4 或十几到几十小时 A100/H100),开销敏感的作业优先。
+3. **启智(Inspire)**。多卡、长任务、需要持久 Workspace、镜像或数据集驻留的动作才上启智。本机与启智都要留意磁盘压力,小模型的大规模作业不要丢给启智——它比 Colab 更重,清理成本也更高。
+
+上一档不可用、配额耗尽或确实不适合任务形态时再下沉一档,不要跳过 Colab 直接上启智。
+
+## Colab
+
+环境里有 `colab` CLI(`google-colab-cli`)时,headless 用法:
+
+```bash
+timeout 30 colab usage </dev/null                  # 余额与速率;授权缺失会等 stdin,关掉并限时,失败=Colab 不可用,下沉下一档
+colab run --gpu T4 --timeout 0 train.py --steps 200  # 一次性:建机、执行、流式回传 stdout、删机
+```
+
+`colab run` 的脚本参数按 `sys.argv[1:]` 原样转发。`--timeout` 计的是"多久没有输出",默认 30 秒;安静的训练步骤要么定期打印进度,要么显式设 `--timeout 0`。`colab run` 只回传 stdout,VM 释放后其上的文件即丢失:要保留的结果要么在脚本里打印(关键数字、小表),要么走会话模式先 `colab download` 取回文件再 `colab stop`。
+
+需要多次交互时用会话。会话名带运行/线程标识保证唯一——撞名会覆盖会话存储里的既有条目,`colab stop` 只会停到新会话,被打断的旧会话漏跑吃配额:
+
+```bash
+colab sessions                                    # 新建前查现状,有同名旧会话先处理
+colab new -s <run-id>-<thread> --gpu A100
+colab install -s <run-id>-<thread> numpy pandas
+colab exec -s <run-id>-<thread> -f probe.py --output-image drafts/probe.png
+colab download -s <run-id>-<thread> /content/results.json drafts/results.json
+colab stop -s <run-id>-<thread>                   # 只 stop 本轮创建的会话
+```
+
+约定:
+
+- 会话会被回收。任务要能被打断后重跑,不要把唯一副本留在远端;结果先用 `colab download` 取回,再 `colab stop`。
+- GPU 型号写进线程包(例如 T4、A100、H100),重跑的结论不能跨型号外推。
+- 认证配置与会话状态在 `~/.colab-cli-oauth-config.json`、`~/.config/colab-cli/` 下,属于本机环境;不要把 token 或配置副本写进工作区、运行包或任何被追踪的文件。
+
+## 启智(Inspire)
 
 1. 先读 `INSPIRE.md`(工作区根目录),获取本项目的启智上下文:默认 Workspace、资源组、路径约定、进行中的工作负载。
 2. 加载 harness 级的 `inspire` 技能获取平台操作模型和命令细节;如果当前 harness 没有该技能,以 `inspire --help` / `inspire <group> --help` 为准。
@@ -30,9 +66,12 @@ user-invocable: false
 远程执行不改变 `paper-deep-dive` 的证据契约:
 
 - 探针、脚本、复现的持久副本晋升到 `runs/<run-id>/<thread-id>/code/`,面向报告的结果产物晋升到 `runs/<run-id>/assets/`。
-- 不要让持久结果只存在于远端共享盘或任务日志里;把关键数字、曲线和产物取回本地线程包。
-- `README.md` 里写清远程环境(Workspace、镜像、配额)和重跑方式。
+- 不要让持久结果只存在于远端共享盘、Colab 会话或任务日志里;把关键数字、曲线和产物取回本地线程包。
+- `README.md` 里写清后端与型号(本机 / Colab / 启智)、镜像或机型、配额,以及重跑方式。
 
 ## 兜底
 
-如果 `inspire` CLI 不在 PATH 上或账号未配置,不要停滞:说明精确的障碍,退回本机可行的最强动作;若本机也无有意义的动作,按 `paper-deep-dive` 保留 `BLOCKER.md`。
+本机没有 GPU、Colab 与启智又都不可用时,如实记录 blocker:写明缺的是本机算力、Colab 授权还是启智配额,以及要解开它需要什么条件。落放形态跟线程走:已有 README 证据(源码追踪、推导、核验)的线程,把 blocker 写成 README 的一节;只有无线索可保留的线程才单立 `BLOCKER.md`——校验器只接受这两种线程形态。
+
+- `colab` CLI 不在 PATH 上、未登录或授权失败:视为 Colab 不可用、下沉下一档;三档都不可用时记 blocker,不要把手工在浏览器里跑的过程伪装成自动执行,也不要假设自己能操作网页。
+- 一档是否可用,按该动作实际所需的资源判定,不是一律要 GPU:MuJoCo/robosuite 仿真级实验本机 CPU 就能诚实地跑,GPU 实验才需要 GPU 后端。当启动指令明确要求真实实验时,判定标准是"存在能诚实跑该实验的后端";三档都满足不了时如实记 blocker 并在报告中说明,不要用玩具实验冒充"真实权重、真实数据"的实验。

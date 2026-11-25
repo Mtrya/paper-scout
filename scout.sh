@@ -1,22 +1,82 @@
 #!/usr/bin/env bash
 # Launch a Paper Scout reading-agent run.
 #
-# Usage: ./scout.sh <agent>
-#   agent  – codex | kimi | qoder (add your own below)
+# Usage: ./scout.sh <agent> [--stream full|lite]
+#   agent    – codex | kimi | qoder (add your own below)
+#   --stream – full (default) | lite
 #
 # Optional:
 #   PAPER_SCOUT_NOTIFY_USER_ID  Feishu/Lark open_id to notify when launch aborts.
 #
-# Runs the reading agent from workspace/ with the date-stamped prompt.txt as its
-# trigger. Add new backends in the case statement below.
+# Runs the reading agent from workspace/ with the date-stamped prompt.txt
+# (or prompt-lite.txt for --stream lite) as its trigger. Add new backends in
+# the case statement below.
 set -euo pipefail
 
-agent="${1:-}"
-if [[ -z "$agent" ]]; then
-    echo "Usage: $0 <agent>" >&2
+usage() {
+    echo "Usage: $0 <agent> [--stream full|lite]" >&2
     echo "Supported agents: codex, kimi, qoder" >&2
+    echo "Supported streams: full (default), lite" >&2
+}
+
+agent=""
+stream="full"
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --stream)
+            if [[ $# -lt 2 ]]; then
+                echo "Missing value for --stream" >&2
+                usage
+                exit 1
+            fi
+            stream="$2"
+            shift 2
+            ;;
+        --stream=*)
+            stream="${1#--stream=}"
+            shift
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        -*)
+            echo "Unknown option: $1" >&2
+            usage
+            exit 1
+            ;;
+        *)
+            if [[ -z "$agent" ]]; then
+                agent="$1"
+                shift
+            else
+                echo "Unexpected argument: $1" >&2
+                usage
+                exit 1
+            fi
+            ;;
+    esac
+done
+
+if [[ -z "$agent" ]]; then
+    usage
     exit 1
 fi
+
+case "$stream" in
+    full)
+        prompt_file="prompt.txt"
+        ;;
+    lite)
+        prompt_file="prompt-lite.txt"
+        ;;
+    *)
+        echo "Unknown stream: $stream" >&2
+        usage
+        exit 1
+        ;;
+esac
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
@@ -78,15 +138,19 @@ fi
 cd "$repo_root/workspace"
 
 today="$(date +%F)"
-prompt="$(printf '今天是 %s。\n\n' "$today"; cat "$repo_root/prompt.txt")"
+prompt="$(printf '今天是 %s。\n\n' "$today"; cat "$repo_root/$prompt_file")"
 
 case "$agent" in
     codex)
         # Non-interactive / unattended: workspace-write sandbox, no approval prompts,
-        # network enabled (needed for web search, HF, Lark, etc.).
+        # network enabled (needed for web search, HF, Lark, etc.). --add-dir grants
+        # the Colab CLI's session-state dir write access additively, so any
+        # writable_roots configured in ~/.codex/config.toml keep working and the
+        # local→Colab→Inspire compute ladder stays reachable from this launcher.
         exec codex exec \
             --sandbox workspace-write \
             --ask-for-approval never \
+            --add-dir "$HOME/.config/colab-cli" \
             -c 'sandbox_workspace_write.network_access=true' \
             "$prompt"
         ;;
