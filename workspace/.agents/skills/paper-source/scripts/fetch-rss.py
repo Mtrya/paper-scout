@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 import argparse
+import gzip
 import json
 import re
+import sys
 import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import date, datetime
 from email.utils import parsedate_to_datetime
 from html.parser import HTMLParser
+from pathlib import Path
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
 ATOM_NS = "http://www.w3.org/2005/Atom"
@@ -113,6 +116,11 @@ def parse_args():
         "--canonical-host",
         help="replace article URL hosts for stable IDs across official mirrors",
     )
+    parser.add_argument(
+        "--output",
+        help="merge emitted entries into the JSON array at this path (created if "
+        "absent); entries are deduplicated by id, later runs win",
+    )
     args = parser.parse_args()
     if args.limit < 1:
         parser.error("--limit must be positive")
@@ -125,7 +133,12 @@ def main():
         args.feed_url, headers={"User-Agent": "paper-scout/rss"}
     )
     with urllib.request.urlopen(request, timeout=30) as response:
-        root = ET.fromstring(response.read())
+        body = response.read()
+    # Some feeds return gzip-compressed bytes under an XML content type without
+    # a Content-Encoding header urllib would act on; detect the magic instead.
+    if body[:2] == b"\x1f\x8b":
+        body = gzip.decompress(body)
+    root = ET.fromstring(body)
 
     if root.tag == "rss":
         raw_entries = rss_entries(root)
@@ -166,7 +179,31 @@ def main():
         if len(entries) >= args.limit:
             break
 
-    print(json.dumps(entries, ensure_ascii=False, indent=2))
+    if args.output:
+        out_path = Path(args.output)
+        if out_path.exists():
+            try:
+                existing = json.loads(out_path.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+                raise SystemExit(f"--output: {out_path} is not valid JSON: {exc}")
+            if not isinstance(existing, list):
+                raise SystemExit(f"--output: {out_path} must hold a JSON array")
+        else:
+            existing = []
+        merged = {item["id"]: item for item in existing if isinstance(item, dict)}
+        for entry in entries:
+            merged[entry["id"]] = entry
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(
+            json.dumps(list(merged.values()), ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        )
+        print(
+            f"{args.source}: {len(entries)} emitted, {len(merged)} in {out_path}",
+            file=sys.stderr,
+        )
+    else:
+        print(json.dumps(entries, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":

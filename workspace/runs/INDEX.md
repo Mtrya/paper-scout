@@ -8,10 +8,12 @@ Entry format:
 ## YYYY-MM-DD — <period covered>
 - Doc: <url>
 - Run: runs/<run-id>/
-- Deep threads: <thread name> (<paper ids if any>), <thread name>
+- Deep threads: <thread name> (实验, <paper ids if any>), <thread name> (实验, <id1>; 核验, <id2>)
 - Covered papers: <id>, <id>, ...
 - Shortlisted papers: <id>, <id>, ...
 ```
+
+证据级记号挂在论文 id 上:`实验`(含真实权重/数据的实验或实测探针)或 `核验`(精读、源码追踪、推导、轻量核验)。线程覆盖多篇且深度不同时逐篇标注,深度一致时合并;不围绕单篇论文的线程,记号标在线程名上。历史条目(2026-11-19 之前)无此记号,覆盖深度从条目正文判断。
 
 ## 2026-11-20 — 2026-11-13 至 2026-11-20；快慢系统耦合的三层契约（续 11-19，不限于近期工作）
 - Doc: https://fudan-nlp.feishu.cn/docx/G1XndyNqcoDxZ1x8mvscV85pnBf
@@ -24,7 +26,7 @@ Entry format:
 ## 2026-11-19 — 2026-11-13 至 2026-11-19；DASH 与快慢系统紧耦合
 - Doc: https://fudan-nlp.feishu.cn/docx/XZTNdhJqioNrc9xJBVWcQWINnpe
 - Run: runs/2026-11-19-dash-fast-slow/
-- Deep threads: DASH × ScaleVLA 慢语义进入快动作 (2611.11854, 2611.21607), ForceHarness 物理证据回到慢决策 (2611.21099)
+- Deep threads: DASH × ScaleVLA 慢语义进入快动作 (实验, 2611.11854; 核验, 2611.21607), ForceHarness 物理证据回到慢决策 (实验, 2611.21099)
 - Covered papers: 2611.11854, 2611.21607, 2611.21099, 2610.19604, 2512.20188, 2601.14945, 2506.07339, 2512.05964, 2512.01031
 - Shortlisted papers: 2611.17831, 2611.20404, 2611.17767, scientific-spaces:12010
 - 核心结果: 同一冻结 Qwen3-VL-2B 特征与仿真演示上的受控对照显示，慢语义陈旧 0.4 秒时，当前视觉与错位训练部分互相替代且各保留残余收益；ForceHarness 复现实验将质量的可靠不确定度与质心的偏乐观区间分开，指出上行协议应区分随机波动与残余偏置上界。综合得到紧耦合的三项约定：信息何时有效、误差由谁建模、停止权属于哪一侧。
