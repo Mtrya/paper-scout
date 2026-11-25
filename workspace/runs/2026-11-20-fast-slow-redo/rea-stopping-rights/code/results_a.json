@@ -1,0 +1,182 @@
+[
+ {
+  "gate": "never-fast",
+  "alpha": 0,
+  "beta": 0,
+  "success": 0.4975,
+  "stepsPerEp": 3,
+  "judgeCallsPerEp": 0,
+  "escalationsPerEp": 0
+ },
+ {
+  "gate": "never-slow",
+  "alpha": 0,
+  "beta": 0,
+  "success": 1,
+  "stepsPerEp": 8,
+  "judgeCallsPerEp": 0,
+  "escalationsPerEp": 0
+ },
+ {
+  "gate": "exception",
+  "alpha": 0,
+  "beta": 0,
+  "success": 0.4975,
+  "stepsPerEp": 3,
+  "judgeCallsPerEp": 0,
+  "escalationsPerEp": 0
+ },
+ {
+  "gate": "always",
+  "alpha": 0,
+  "beta": 0,
+  "success": 1,
+  "stepsPerEp": 14,
+  "judgeCallsPerEp": 0,
+  "escalationsPerEp": 2
+ },
+ {
+  "gate": "always-same",
+  "alpha": 0,
+  "beta": 0,
+  "success": 0.4975,
+  "stepsPerEp": 6,
+  "judgeCallsPerEp": 0,
+  "escalationsPerEp": 1
+ },
+ {
+  "gate": "judge",
+  "alpha": 0,
+  "beta": 0,
+  "success": 1,
+  "stepsPerEp": 7.02,
+  "judgeCallsPerEp": 1.502,
+  "escalationsPerEp": 0.502
+ },
+ {
+  "gate": "judge",
+  "alpha": 0,
+  "beta": 0.2,
+  "success": 1,
+  "stepsPerEp": 8.27,
+  "judgeCallsPerEp": 1.607,
+  "escalationsPerEp": 0.743
+ },
+ {
+  "gate": "judge",
+  "alpha": 0,
+  "beta": 0.5,
+  "success": 1,
+  "stepsPerEp": 10.31,
+  "judgeCallsPerEp": 1.762,
+  "escalationsPerEp": 1.165
+ },
+ {
+  "gate": "judge",
+  "alpha": 0.05,
+  "beta": 0,
+  "success": 0.98,
+  "stepsPerEp": 6.86,
+  "judgeCallsPerEp": 1.482,
+  "escalationsPerEp": 0.482
+ },
+ {
+  "gate": "judge",
+  "alpha": 0.05,
+  "beta": 0.2,
+  "success": 0.98,
+  "stepsPerEp": 8.1,
+  "judgeCallsPerEp": 1.587,
+  "escalationsPerEp": 0.72
+ },
+ {
+  "gate": "judge",
+  "alpha": 0.05,
+  "beta": 0.5,
+  "success": 0.98,
+  "stepsPerEp": 10.11,
+  "judgeCallsPerEp": 1.742,
+  "escalationsPerEp": 1.133
+ },
+ {
+  "gate": "judge",
+  "alpha": 0.1,
+  "beta": 0,
+  "success": 0.9575,
+  "stepsPerEp": 6.68,
+  "judgeCallsPerEp": 1.46,
+  "escalationsPerEp": 0.46
+ },
+ {
+  "gate": "judge",
+  "alpha": 0.1,
+  "beta": 0.2,
+  "success": 0.9575,
+  "stepsPerEp": 7.91,
+  "judgeCallsPerEp": 1.565,
+  "escalationsPerEp": 0.695
+ },
+ {
+  "gate": "judge",
+  "alpha": 0.1,
+  "beta": 0.5,
+  "success": 0.9575,
+  "stepsPerEp": 9.89,
+  "judgeCallsPerEp": 1.72,
+  "escalationsPerEp": 1.097
+ },
+ {
+  "gate": "judge",
+  "alpha": 0.2,
+  "beta": 0,
+  "success": 0.8925,
+  "stepsPerEp": 6.16,
+  "judgeCallsPerEp": 1.395,
+  "escalationsPerEp": 0.395
+ },
+ {
+  "gate": "judge",
+  "alpha": 0.2,
+  "beta": 0.2,
+  "success": 0.8925,
+  "stepsPerEp": 7.34,
+  "judgeCallsPerEp": 1.5,
+  "escalationsPerEp": 0.615
+ },
+ {
+  "gate": "judge",
+  "alpha": 0.2,
+  "beta": 0.5,
+  "success": 0.8925,
+  "stepsPerEp": 9.28,
+  "judgeCallsPerEp": 1.655,
+  "escalationsPerEp": 1
+ },
+ {
+  "gate": "judge",
+  "alpha": 0.3,
+  "beta": 0,
+  "success": 0.83,
+  "stepsPerEp": 5.66,
+  "judgeCallsPerEp": 1.333,
+  "escalationsPerEp": 0.333
+ },
+ {
+  "gate": "judge",
+  "alpha": 0.3,
+  "beta": 0.2,
+  "success": 0.83,
+  "stepsPerEp": 6.79,
+  "judgeCallsPerEp": 1.438,
+  "escalationsPerEp": 0.535
+ },
+ {
+  "gate": "judge",
+  "alpha": 0.3,
+  "beta": 0.5,
+  "success": 0.83,
+  "stepsPerEp": 8.67,
+  "judgeCallsPerEp": 1.593,
+  "escalationsPerEp": 0.902
+ }
+]

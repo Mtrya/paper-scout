@@ -1,0 +1,36 @@
+{
+  "libero_590": {
+    "s": 0.719,
+    "f": 0.281,
+    "e_f": 0.8735,
+    "e_s": 0.5115,
+    "r": 0.1931,
+    "h": 0.0876,
+    "model_gain_pp": 1.52,
+    "model_gain_episodes": 9.0,
+    "observed_net_episodes": 9,
+    "observed_net_with_replay": 18,
+    "observed_net_pp": 1.53,
+    "observed_net_with_replay_pp": 3.05,
+    "break_even_s": 0.7902,
+    "optimal_roc_slope": 0.862
+  },
+  "matched_72": {
+    "s": 0.5139,
+    "f": 0.4861,
+    "e_f": 0.8286,
+    "e_s": 0.5676,
+    "r": 0.2414,
+    "h": 0.0476,
+    "model_gain_pp": 8.33,
+    "model_gain_episodes": 6.0,
+    "observed_net_episodes": 6,
+    "observed_net_with_replay": 11,
+    "observed_net_pp": 8.33,
+    "observed_net_with_replay_pp": 15.28,
+    "break_even_s": 0.881,
+    "optimal_roc_slope": 4.795
+  },
+  "exception_gate_recall_ceiling": 0.0361,
+  "note": "rates from REA Table 14 (proxy attribution, replay variance excluded from r/h; paper calls the attribution a consistent explanation, not a tested mechanism)"
+}
