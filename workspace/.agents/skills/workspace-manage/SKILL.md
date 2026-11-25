@@ -120,7 +120,7 @@ python3 .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mo
 - `report.docxxml` 含有至少两个不同的 `[[figure-anchor:...]]` 锚点。
 - 至少存在一个线程目录。
 - 每个非保留的运行级目录都是合法线程。
-- 线程要么是 `BLOCKER.md`,要么是 `README.md`(可单存阅读/追踪/推导证据,或搭配 `code/`、`patches/` 或两者兼有)。
+- 线程要么是 `BLOCKER.md`,要么是 `README.md`(可单存阅读/追踪/推导证据,或搭配 `code/`、`patches/` 或两者兼有);README.md 与 BLOCKER.md 都必须非空——零字节或纯空白的说明文件不构成证据。
 - 存在的 `code/` 或 `patches/` 目录内至少有一个非空文件。
 - `report.docxxml` 与 `report_group.docxxml` 的正文不含伪 LaTeX(`<latex>`、`<pre>`、`<code>`、链接与锚点之外的 `\命令`、`^`、单字符下标——含希腊字母下标——即 FAIL);`assets/figures.json` 的图注同理(图注不渲染 `<latex>`,允许 Unicode 下标)。
 - style lint(硬伤底线):模型口吻、Markdown 泄漏、三段式版面标签("是什么/为什么/怎么样")、以及论文内部坐标(式号、附录号、`snake_case` 标识符)进正文 FAIL;图注同理(式号/附录号 FAIL,`snake_case` 与非通用全大写缩写 WARNING)。不再对否定比例、段落字数、禁用词、破折号或加粗密度做机械 lint。
@@ -166,7 +166,7 @@ python3 .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mo
 
 ## 发布契约
 - [ ] 报告已发布。
-- [ ] 用户通知已确认。
+- [ ] 用户通知已送达,或无 `lark-cli` 时已走仅本地兜底。
 - [ ] `runs/INDEX.md` 已更新。
 - [ ] 工作区校验器 final 模式通过。
 ```
@@ -204,7 +204,7 @@ python3 .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mo
 
 ## 收尾与 PR
 
-在飞书文档已创建、媒体已插入、用户私信已确认、`runs/INDEX.md` 已更新之后:
+在飞书文档已创建、媒体已插入、用户私信已送达(或已走仅本地兜底)、`runs/INDEX.md` 已更新之后:
 
 1. 按产物策略把所有持久材料移入被追踪的位置。
 2. 清理被忽略的暂存,使 `code/` 和 `drafts/` 只剩各自的 README 标记。

@@ -143,11 +143,14 @@ prompt="$(printf '今天是 %s。\n\n' "$today"; cat "$repo_root/$prompt_file")"
 case "$agent" in
     codex)
         # Non-interactive / unattended: workspace-write sandbox, no approval prompts,
-        # network enabled (needed for web search, HF, Lark, etc.).
+        # network enabled (needed for web search, HF, Lark, etc.). The extra writable
+        # root covers the Colab CLI's session-state dir so the local→Colab→Inspire
+        # compute ladder stays reachable from this launcher.
         exec codex exec \
             --sandbox workspace-write \
             --ask-for-approval never \
             -c 'sandbox_workspace_write.network_access=true' \
+            -c "sandbox_workspace_write.writable_roots=[\"$HOME/.config/colab-cli\"]" \
             "$prompt"
         ;;
     kimi)

@@ -80,6 +80,13 @@ def has_non_empty_file(path: Path) -> bool:
     return False
 
 
+def is_nonblank_text_file(path: Path) -> bool:
+    try:
+        return bool(path.read_text(encoding="utf-8", errors="replace").strip())
+    except OSError:
+        return False
+
+
 def visible_entries(path: Path) -> list[Path]:
     if not path.exists():
         return []
@@ -90,8 +97,11 @@ def verify_thread(path: Path, errors: list[str]) -> None:
     names = {entry.name for entry in visible_entries(path)}
 
     if names == THREAD_BLOCKER_SHAPE:
-        if not (path / "BLOCKER.md").is_file():
+        blocker = path / "BLOCKER.md"
+        if not blocker.is_file():
             errors.append(f"{path}: BLOCKER.md must be a file")
+        elif not is_nonblank_text_file(blocker):
+            errors.append(f"{blocker}: must be nonblank — an empty file is not a blocker account")
         return
 
     if names not in THREAD_EVIDENCE_SHAPES:
@@ -102,6 +112,8 @@ def verify_thread(path: Path, errors: list[str]) -> None:
     readme = path / "README.md"
     if not readme.is_file():
         errors.append(f"{path}: README.md must be a file")
+    elif not is_nonblank_text_file(readme):
+        errors.append(f"{readme}: must be nonblank — it is the thread's explanation of record")
 
     for evidence_dir in ("code", "patches"):
         evidence_path = path / evidence_dir

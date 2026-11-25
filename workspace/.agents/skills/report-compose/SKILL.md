@@ -22,7 +22,7 @@ user-invocable: false
 
 语言质地以**费曼物理学讲义**式的物理直觉与对话感为范:句子完整、术语确切、节奏从容,像在黑板前把机制从头算穿;可读性来自清晰的逻辑引导,而不是口语化措辞或时髦词。
 
-报告以中文撰写。
+报告以中文撰写；指称论文一律用英文原题：首现给全题，之后用原题的自然短形式，不译成中文、不自造缩写。
 
 ## 写作流水线
 
@@ -141,7 +141,7 @@ lark-cli im +messages-send --as bot --user-id <ou_xxx> \
   --text "https://<tenant>.feishu.cn/docx/<doc_id>"
 ```
 
-只有当这条私信发出并确认后,一次巡航才算完成。如果收件人解析或发送失败,停下并报告。私信确认之后:
+只有当这条私信送达后,一次巡航才算完成。如果收件人解析或发送失败,停下并报告。私信送达之后:
 
 1. 确保已交付的 DocxXML 源文件保存在 `runs/<run-id>/report.docxxml`。
 2. 保存文档 `url`,交给 `workspace-manage` 记入 `runs/INDEX.md`。
@@ -174,4 +174,4 @@ lark-cli im +messages-send --as bot --user-id <ou_xxx> \
 发布前的核心检查点：
 - **两关审校**：第一关主线与事实（理顺动机、核对证据不编造）及第二关独立冷读者（只看正文、按顺序首读、能复述核心判断）已全部通过。
 - **机器硬伤门禁**：`python3 .agents/skills/workspace-manage/scripts/verify_run.py runs/<run-id> --mode prepublish` 零错误。
-- **飞书闭环**：文档创建、本地图片锚点解析与插入、用户私信通知确认，飞书 URL 记入 `runs/INDEX.md`。
+- **飞书闭环**：文档创建、本地图片锚点解析与插入、用户私信通知送达，飞书 URL 记入 `runs/INDEX.md`。

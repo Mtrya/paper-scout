@@ -26,10 +26,10 @@ user-invocable: false
 
 ```bash
 colab usage                                        # 先看计算单元余额与速率
-colab run --gpu T4 --timeout 0 train.py --steps 200  # 一次性:建机、执行、取回产物、删机
+colab run --gpu T4 --timeout 0 train.py --steps 200  # 一次性:建机、执行、流式回传 stdout、删机
 ```
 
-`colab run` 的脚本参数按 `sys.argv[1:]` 原样转发。`--timeout` 计的是"多久没有输出",默认 30 秒;安静的训练步骤要么定期打印进度,要么显式设 `--timeout 0`。
+`colab run` 的脚本参数按 `sys.argv[1:]` 原样转发。`--timeout` 计的是"多久没有输出",默认 30 秒;安静的训练步骤要么定期打印进度,要么显式设 `--timeout 0`。`colab run` 只回传 stdout,VM 释放后其上的文件即丢失:要保留的结果要么在脚本里打印(关键数字、小表),要么走会话模式先 `colab download` 取回文件再 `colab stop`。
 
 需要多次交互时用会话:
 

@@ -23,7 +23,7 @@ user-invocable: true
 
 ## 通用 RSS/Atom 获取
 
-`scripts/fetch-rss.py` 是所有订阅源共用的零依赖拉取器,支持 RSS 2.0 与 Atom,向标准输出写候选 JSON。`--feed-url` 与 `--source` 必填;`--kind` 默认为 `blog_post`,`--since YYYY-MM-DD` 与 `--limit` 控制时间窗和条数。同一站点有多个官方域名时,用 `--canonical-host` 统一文章 URL 与 id。新网站只需提供这些参数及其筛选、精读规则,不必新增解析器。
+`scripts/fetch-rss.py` 是所有订阅源共用的零依赖拉取器,支持 RSS 2.0 与 Atom。默认向标准输出写候选 JSON 数组;给 `--output <path>` 时改为把条目合并进该路径的 JSON 数组(按 id 去重,后写的覆盖先写的),批量拉多个源时用它,产物才是一份合法 JSON。`--feed-url` 与 `--source` 必填;`--kind` 默认为 `blog_post`,`--since YYYY-MM-DD` 与 `--limit` 控制时间窗和条数。同一站点有多个官方域名时,用 `--canonical-host` 统一文章 URL 与 id。新网站只需提供这些参数及其筛选、精读规则,不必新增解析器。
 
 ## 发现源 A:Hugging Face Papers
 
@@ -104,8 +104,9 @@ while IFS='|' read -r source feed host; do
   python3 .agents/skills/paper-source/scripts/fetch-rss.py \
     --source "$source" --feed-url "$feed" --canonical-host "$host" \
     --since YYYY-MM-DD --limit 10 \
+    --output drafts/blog-rss.json \
     || echo "skip $source" >&2
-done <<'LIST' > drafts/blog-rss.json
+done <<'LIST'
 sander_ai|https://sander.ai/feed.xml|sander.ai
 lilianweng|https://lilianweng.github.io/index.xml|lilianweng.github.io
 bair|https://bair.berkeley.edu/blog/feed.xml|bair.berkeley.edu
