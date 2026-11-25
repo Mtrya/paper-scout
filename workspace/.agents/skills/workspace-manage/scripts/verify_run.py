@@ -20,6 +20,7 @@ PSEUDO_LATEX_RE = re.compile(
 RUN_RESERVED = {"assets", "report.docxxml", "report_group.docxxml", "checklist.md", "README.md"}
 THREAD_BLOCKER_SHAPE = {"BLOCKER.md"}
 THREAD_EVIDENCE_SHAPES = (
+    {"README.md"},
     {"README.md", "code"},
     {"README.md", "patches"},
     {"README.md", "code", "patches"},
@@ -46,6 +47,13 @@ DASH_RE = re.compile(r"——")
 BOLD_RE = re.compile(r"<b>")
 DASH_DENSITY_LIMIT = 5.0   # per 1000 chars of prose
 BOLD_DENSITY_LIMIT = 12.0  # per 1000 chars of prose
+MAX_PARAGRAPH_CHARS = 280  # per <p> block (prose pacing warning)
+AVG_PARAGRAPH_CHARS_LIMIT = 220
+# Pacing warning (report-compose references/anti-ai-zh.md): a paragraph that
+# carries several judgments leaves the reader without a landing point. The
+# 2026-11-19 and 2026-11-20 reports averaged 312-316 chars per <p> under the
+# old "preliminaries first, dense prose" guidance; the limits here are
+# deliberately loose so genuine single-argument paragraphs stay quiet.
 NEGATION_RE = re.compile(
     r"不能|无法|未必|不代表|不保证|不构成|不直接|并不|并非|并不是|不是|而非|而不是|"
     r"不支撑|不替代|不等于|不应|不再|没有|并未|尚未|未能|未证明|不必然|"
@@ -109,7 +117,7 @@ def verify_thread(path: Path, errors: list[str]) -> None:
         return
 
     if names not in THREAD_EVIDENCE_SHAPES:
-        expected = "BLOCKER.md, or README.md with code/ and/or patches/"
+        expected = "BLOCKER.md, or README.md (optionally with code/ and/or patches/)"
         errors.append(f"{path}: invalid thread shape; expected {expected}")
         return
 
@@ -256,6 +264,26 @@ def verify_report_style(report: Path, errors: list[str], warnings: list[str]) ->
             warnings.append(
                 f"{report}: bold density {bold_density:.1f}/1000 chars "
                 f"({bold_count} total, limit {BOLD_DENSITY_LIMIT:g})"
+            )
+
+    raw_text = "\n".join(prose_lines(report))
+    para_lengths: list[tuple[int, int]] = []
+    for p_idx, match in enumerate(re.finditer(r"<p(?:\s[^>]*)?>(.*?)</p>", raw_text, flags=re.DOTALL), 1):
+        plain = re.sub(r"<[^>]+>", "", match.group(1)).strip()
+        if plain:
+            para_lengths.append((p_idx, len(plain)))
+    if para_lengths:
+        avg_len = sum(length for _, length in para_lengths) / len(para_lengths)
+        long_paras = [f"p{idx}({length})" for idx, length in para_lengths if length > MAX_PARAGRAPH_CHARS]
+        if avg_len > AVG_PARAGRAPH_CHARS_LIMIT:
+            warnings.append(
+                f"{report}: average paragraph length {avg_len:.0f} chars exceeds "
+                f"{AVG_PARAGRAPH_CHARS_LIMIT} (break dense blocks into single-judgment paragraphs)"
+            )
+        if long_paras:
+            shown = ", ".join(long_paras[:8]) + (" ..." if len(long_paras) > 8 else "")
+            warnings.append(
+                f"{report}: {len(long_paras)} paragraph(s) exceed {MAX_PARAGRAPH_CHARS} chars: {shown}"
             )
 
 

@@ -6,6 +6,7 @@ Entry format:
 
 ```
 ## YYYY-MM-DD — <period covered>
+- Stream: full | lite
 - Doc: <url>
 - Run: runs/<run-id>/
 - Deep threads: <thread name> (<paper ids if any>), <thread name>

@@ -34,8 +34,8 @@ Paper Scout has no installer — but a run touches several external tools. This 
 
 ## Remote compute (optional)
 
-- **Inspire `inspire` CLI + configured account** — routes GPU-heavy research actions (reproductions, ablations, probes) to the Inspire platform when the local machine lacks compute. Project context lives in `workspace/INSPIRE.md` (gitignored — create your own as you start using the platform); command details come from the harness-level `inspire` skill installed by InspireSkill.
-  - *If missing:* everything still works; GPU-needing investigations simply stay local, and the agent records a precise blocker when no local action is feasible. If you don't have an Inspire account, delete the `remote-compute` skill and the corresponding bullet in `workspace/AGENTS.md`.
+- **Inspire `inspire` CLI + configured account** — routes GPU-heavy research actions (reproductions, ablations, probes) to the Inspire platform when a `full`-stream investigation outgrows the local machine. Project context lives in `workspace/INSPIRE.md` (gitignored — create your own as you start using the platform); command details come from the harness-level `inspire` skill installed by InspireSkill.
+  - *If missing:* everything still works; GPU-needing investigations simply stay local, and the agent records a precise blocker when no local action is feasible. `lite` runs never depend on it. If you don't have an Inspire account, delete the `remote-compute` skill and the corresponding bullet in `workspace/AGENTS.md`.
 
 ## CI
 
