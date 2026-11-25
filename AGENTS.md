@@ -127,9 +127,9 @@ Delivered report sources are archived inside their run packets as `report.docxxm
 
 Behavioral invariants:
 
-- `runs/INDEX.md` is the single source of truth for what has been covered. Each entry carries `Stream: full` or `Stream: lite` (legacy entries default to `full`), so dedup rules can differ per stream while the file stays readable by both the reading agent and the user. If you change how logging works, the reading agent must still be able to determine what was previously covered from this file.
-- A `lite` run skips any previously covered paper; a `full` run skips `full` coverage but may upgrade a paper covered only by `lite`.
-- `memories/MEMORY.md` is near-stable orientation, not a per-run retrieval map. Dated memory files hold typed `execution` and `hypothesis` entries with keywords and provenance.
+- `runs/INDEX.md` is the single source of truth for what has been covered. Deep threads carry a per-thread evidence grade (`实验` = real experiments or measured probes, `核验` = close reading, source tracing, derivation, light checks), so dedup keys on per-paper coverage depth rather than a run-level label. Legacy entries predate the grade marker; their depth is read from the entry body. If you change how logging works, the reading agent must still be able to determine what was previously covered from this file.
+- A focused run skips any previously covered paper; a deep-experiment run skips papers with prior experiment-grade threads but may upgrade papers covered only by verification-grade threads or shortlist mentions.
+- `memories/MEMORY.md` is near-stable orientation, not a per-run retrieval map. Dated memory files hold typed `execution` and `hypothesis` entries with keywords and provenance. Retrieval doctrine lives in the memory skill: a hit is a prior with provenance that enters the thread's whiteboard brief, conflicting hits resolve by evidence discriminative power (never averaging), and refuting a prior is a run-time action recorded at write time via `updates`/`supersedes`.
 - The reading-agent contract is stable. Regenerating the prompts should not require changing `workspace/AGENTS.md`, and vice versa.
 - The prompts stay thin — run-scoped parameters only. `prompt.txt` names the `full` stream, `prompt-lite.txt` the `lite` stream; both streams share one writing quality bar and the same review gates.
 - One run produces one Feishu doc. Delivery is append-new, not update-existing.
