@@ -25,20 +25,21 @@ user-invocable: false
 环境里有 `colab` CLI(`google-colab-cli`)时,headless 用法:
 
 ```bash
-colab usage                                        # 先看计算单元余额与速率
+timeout 30 colab usage </dev/null                  # 余额与速率;授权缺失会等 stdin,关掉并限时,失败=Colab 不可用,下沉下一档
 colab run --gpu T4 --timeout 0 train.py --steps 200  # 一次性:建机、执行、流式回传 stdout、删机
 ```
 
 `colab run` 的脚本参数按 `sys.argv[1:]` 原样转发。`--timeout` 计的是"多久没有输出",默认 30 秒;安静的训练步骤要么定期打印进度,要么显式设 `--timeout 0`。`colab run` 只回传 stdout,VM 释放后其上的文件即丢失:要保留的结果要么在脚本里打印(关键数字、小表),要么走会话模式先 `colab download` 取回文件再 `colab stop`。
 
-需要多次交互时用会话:
+需要多次交互时用会话。会话名带运行/线程标识保证唯一——撞名会覆盖会话存储里的既有条目,`colab stop` 只会停到新会话,被打断的旧会话漏跑吃配额:
 
 ```bash
-colab new -s probe --gpu A100
-colab install -s probe numpy pandas
-colab exec -s probe -f probe.py --output-image drafts/probe.png
-colab download -s probe /content/results.json drafts/results.json
-colab stop -s probe
+colab sessions                                    # 新建前查现状,有同名旧会话先处理
+colab new -s <run-id>-<thread> --gpu A100
+colab install -s <run-id>-<thread> numpy pandas
+colab exec -s <run-id>-<thread> -f probe.py --output-image drafts/probe.png
+colab download -s <run-id>-<thread> /content/results.json drafts/results.json
+colab stop -s <run-id>-<thread>                   # 只 stop 本轮创建的会话
 ```
 
 约定:
@@ -70,7 +71,7 @@ colab stop -s probe
 
 ## 兜底
 
-本机没有 GPU、Colab 与启智又都不可用时,记 `BLOCKER.md`:写明缺的是本机 GPU、Colab 授权还是启智配额,以及要解开它需要什么条件。
+本机没有 GPU、Colab 与启智又都不可用时,如实记录 blocker:写明缺的是本机算力、Colab 授权还是启智配额,以及要解开它需要什么条件。落放形态跟线程走:已有 README 证据(源码追踪、推导、核验)的线程,把 blocker 写成 README 的一节;只有无线索可保留的线程才单立 `BLOCKER.md`——校验器只接受这两种线程形态。
 
-- `colab` CLI 不在 PATH 上、未登录或授权失败:记为 blocker,不要把手工在浏览器里跑的过程伪装成自动执行,也不要假设自己能操作网页。
-- 当启动指令明确要求真实实验时,执行环境需要提供 GPU(本机、Colab、启智任一)。三者都不可用时如实记 blocker 并在报告中说明,不要用玩具实验冒充"真实权重、真实数据"的实验。
+- `colab` CLI 不在 PATH 上、未登录或授权失败:视为 Colab 不可用、下沉下一档;三档都不可用时记 blocker,不要把手工在浏览器里跑的过程伪装成自动执行,也不要假设自己能操作网页。
+- 一档是否可用,按该动作实际所需的资源判定,不是一律要 GPU:MuJoCo/robosuite 仿真级实验本机 CPU 就能诚实地跑,GPU 实验才需要 GPU 后端。当启动指令明确要求真实实验时,判定标准是"存在能诚实跑该实验的后端";三档都满足不了时如实记 blocker 并在报告中说明,不要用玩具实验冒充"真实权重、真实数据"的实验。

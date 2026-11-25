@@ -97,9 +97,10 @@ curl -fL "https://raw.githubusercontent.com/caojiaolong/spaces-index/main/data/a
 | thegradient | https://thegradient.pub/rss/ | thegradient.pub |
 | deepmind | https://deepmind.google/blog/rss.xml | deepmind.google |
 
-批量获取,按上次巡航日期留少量重叠:
+批量获取,按上次巡航日期留少量重叠。每次批量先清掉旧候选文件——`--output` 是合并语义,重跑不重置会残留窗口外与已失败源的条目:
 
 ```bash
+rm -f drafts/blog-rss.json
 while IFS='|' read -r source feed host; do
   python3 .agents/skills/paper-source/scripts/fetch-rss.py \
     --source "$source" --feed-url "$feed" --canonical-host "$host" \
