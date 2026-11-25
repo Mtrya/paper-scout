@@ -1,0 +1,380 @@
+{
+ "sweep": [
+  {
+   "brainMs": 100,
+   "maxAdviceAgeSteps": 0,
+   "success": 0,
+   "steps": 24,
+   "wallMs": 7302,
+   "overlapMs": 879,
+   "adviceApplied": 0,
+   "corrections": 0,
+   "staleEvents": 24
+  },
+  {
+   "brainMs": 100,
+   "maxAdviceAgeSteps": 1,
+   "success": 1,
+   "steps": 13,
+   "wallMs": 3951,
+   "overlapMs": 480,
+   "adviceApplied": 2,
+   "corrections": 1,
+   "staleEvents": 11
+  },
+  {
+   "brainMs": 100,
+   "maxAdviceAgeSteps": 3,
+   "success": 1,
+   "steps": 13,
+   "wallMs": 3953,
+   "overlapMs": 478,
+   "adviceApplied": 2,
+   "corrections": 1,
+   "staleEvents": 11
+  },
+  {
+   "brainMs": 100,
+   "maxAdviceAgeSteps": 6,
+   "success": 1,
+   "steps": 13,
+   "wallMs": 3952,
+   "overlapMs": 478,
+   "adviceApplied": 2,
+   "corrections": 1,
+   "staleEvents": 11
+  },
+  {
+   "brainMs": 100,
+   "maxAdviceAgeSteps": 12,
+   "success": 1,
+   "steps": 13,
+   "wallMs": 3950,
+   "overlapMs": 478,
+   "adviceApplied": 2,
+   "corrections": 1,
+   "staleEvents": 11
+  },
+  {
+   "brainMs": 100,
+   "maxAdviceAgeSteps": 24,
+   "success": 1,
+   "steps": 13,
+   "wallMs": 3953,
+   "overlapMs": 479,
+   "adviceApplied": 2,
+   "corrections": 1,
+   "staleEvents": 11
+  },
+  {
+   "brainMs": 500,
+   "maxAdviceAgeSteps": 0,
+   "success": 0,
+   "steps": 24,
+   "wallMs": 7294,
+   "overlapMs": 5769,
+   "adviceApplied": 0,
+   "corrections": 0,
+   "staleEvents": 14
+  },
+  {
+   "brainMs": 500,
+   "maxAdviceAgeSteps": 1,
+   "success": 0,
+   "steps": 24,
+   "wallMs": 7297,
+   "overlapMs": 5770,
+   "adviceApplied": 0,
+   "corrections": 0,
+   "staleEvents": 14
+  },
+  {
+   "brainMs": 500,
+   "maxAdviceAgeSteps": 3,
+   "success": 1,
+   "steps": 13,
+   "wallMs": 3952,
+   "overlapMs": 3125,
+   "adviceApplied": 1,
+   "corrections": 1,
+   "staleEvents": 6
+  },
+  {
+   "brainMs": 500,
+   "maxAdviceAgeSteps": 6,
+   "success": 1,
+   "steps": 13,
+   "wallMs": 3951,
+   "overlapMs": 3124,
+   "adviceApplied": 1,
+   "corrections": 1,
+   "staleEvents": 6
+  },
+  {
+   "brainMs": 500,
+   "maxAdviceAgeSteps": 12,
+   "success": 1,
+   "steps": 13,
+   "wallMs": 3952,
+   "overlapMs": 3124,
+   "adviceApplied": 1,
+   "corrections": 1,
+   "staleEvents": 6
+  },
+  {
+   "brainMs": 500,
+   "maxAdviceAgeSteps": 24,
+   "success": 1,
+   "steps": 13,
+   "wallMs": 3953,
+   "overlapMs": 3125,
+   "adviceApplied": 1,
+   "corrections": 1,
+   "staleEvents": 6
+  },
+  {
+   "brainMs": 1350,
+   "maxAdviceAgeSteps": 0,
+   "success": 0,
+   "steps": 24,
+   "wallMs": 7297,
+   "overlapMs": 5770,
+   "adviceApplied": 0,
+   "corrections": 0,
+   "staleEvents": 5
+  },
+  {
+   "brainMs": 1350,
+   "maxAdviceAgeSteps": 1,
+   "success": 0,
+   "steps": 24,
+   "wallMs": 7298,
+   "overlapMs": 5771,
+   "adviceApplied": 0,
+   "corrections": 0,
+   "staleEvents": 5
+  },
+  {
+   "brainMs": 1350,
+   "maxAdviceAgeSteps": 3,
+   "success": 0,
+   "steps": 24,
+   "wallMs": 7298,
+   "overlapMs": 5771,
+   "adviceApplied": 0,
+   "corrections": 0,
+   "staleEvents": 5
+  },
+  {
+   "brainMs": 1350,
+   "maxAdviceAgeSteps": 6,
+   "success": 1,
+   "steps": 14,
+   "wallMs": 4257,
+   "overlapMs": 3366,
+   "adviceApplied": 1,
+   "corrections": 1,
+   "staleEvents": 3
+  },
+  {
+   "brainMs": 1350,
+   "maxAdviceAgeSteps": 12,
+   "success": 1,
+   "steps": 14,
+   "wallMs": 4255,
+   "overlapMs": 3365,
+   "adviceApplied": 1,
+   "corrections": 1,
+   "staleEvents": 2
+  },
+  {
+   "brainMs": 1350,
+   "maxAdviceAgeSteps": 24,
+   "success": 1,
+   "steps": 14,
+   "wallMs": 4256,
+   "overlapMs": 3366,
+   "adviceApplied": 1,
+   "corrections": 1,
+   "staleEvents": 2
+  },
+  {
+   "brainMs": 3000,
+   "maxAdviceAgeSteps": 0,
+   "success": 0,
+   "steps": 24,
+   "wallMs": 7297,
+   "overlapMs": 5770,
+   "adviceApplied": 0,
+   "corrections": 0,
+   "staleEvents": 2
+  },
+  {
+   "brainMs": 3000,
+   "maxAdviceAgeSteps": 1,
+   "success": 0,
+   "steps": 24,
+   "wallMs": 7297,
+   "overlapMs": 5771,
+   "adviceApplied": 0,
+   "corrections": 0,
+   "staleEvents": 2
+  },
+  {
+   "brainMs": 3000,
+   "maxAdviceAgeSteps": 3,
+   "success": 0,
+   "steps": 24,
+   "wallMs": 7296,
+   "overlapMs": 5770,
+   "adviceApplied": 0,
+   "corrections": 0,
+   "staleEvents": 2
+  },
+  {
+   "brainMs": 3000,
+   "maxAdviceAgeSteps": 6,
+   "success": 0,
+   "steps": 24,
+   "wallMs": 7300,
+   "overlapMs": 5771,
+   "adviceApplied": 0,
+   "corrections": 0,
+   "staleEvents": 2
+  },
+  {
+   "brainMs": 3000,
+   "maxAdviceAgeSteps": 12,
+   "success": 1,
+   "steps": 19,
+   "wallMs": 5782,
+   "overlapMs": 4570,
+   "adviceApplied": 1,
+   "corrections": 1,
+   "staleEvents": 1
+  },
+  {
+   "brainMs": 3000,
+   "maxAdviceAgeSteps": 24,
+   "success": 1,
+   "steps": 19,
+   "wallMs": 5782,
+   "overlapMs": 4569,
+   "adviceApplied": 1,
+   "corrections": 1,
+   "staleEvents": 0
+  },
+  {
+   "brainMs": 6000,
+   "maxAdviceAgeSteps": 0,
+   "success": 0,
+   "steps": 24,
+   "wallMs": 7305,
+   "overlapMs": 5773,
+   "adviceApplied": 0,
+   "corrections": 0,
+   "staleEvents": 1
+  },
+  {
+   "brainMs": 6000,
+   "maxAdviceAgeSteps": 1,
+   "success": 0,
+   "steps": 24,
+   "wallMs": 7306,
+   "overlapMs": 5773,
+   "adviceApplied": 0,
+   "corrections": 0,
+   "staleEvents": 1
+  },
+  {
+   "brainMs": 6000,
+   "maxAdviceAgeSteps": 3,
+   "success": 0,
+   "steps": 24,
+   "wallMs": 7306,
+   "overlapMs": 5773,
+   "adviceApplied": 0,
+   "corrections": 0,
+   "staleEvents": 1
+  },
+  {
+   "brainMs": 6000,
+   "maxAdviceAgeSteps": 6,
+   "success": 0,
+   "steps": 24,
+   "wallMs": 7302,
+   "overlapMs": 5772,
+   "adviceApplied": 0,
+   "corrections": 0,
+   "staleEvents": 1
+  },
+  {
+   "brainMs": 6000,
+   "maxAdviceAgeSteps": 12,
+   "success": 0,
+   "steps": 24,
+   "wallMs": 7302,
+   "overlapMs": 5772,
+   "adviceApplied": 0,
+   "corrections": 0,
+   "staleEvents": 1
+  },
+  {
+   "brainMs": 6000,
+   "maxAdviceAgeSteps": 24,
+   "success": 0,
+   "steps": 24,
+   "wallMs": 7302,
+   "overlapMs": 5772,
+   "adviceApplied": 1,
+   "corrections": 1,
+   "staleEvents": 0
+  }
+ ],
+ "modes": [
+  {
+   "mode": "sync",
+   "brainMs": 1350,
+   "success": true,
+   "steps": 13,
+   "wallMs": 8006,
+   "overlapMs": 0,
+   "blockedThinkingMs": 4055,
+   "adviceApplied": 1,
+   "system2Calls": 3
+  },
+  {
+   "mode": "sync",
+   "brainMs": 3000,
+   "success": true,
+   "steps": 13,
+   "wallMs": 12961,
+   "overlapMs": 0,
+   "blockedThinkingMs": 9008,
+   "adviceApplied": 1,
+   "system2Calls": 3
+  },
+  {
+   "mode": "async",
+   "brainMs": 1350,
+   "success": true,
+   "steps": 14,
+   "wallMs": 4259,
+   "overlapMs": 3025,
+   "blockedThinkingMs": 0,
+   "adviceApplied": 1,
+   "system2Calls": 3
+  },
+  {
+   "mode": "async",
+   "brainMs": 3000,
+   "success": true,
+   "steps": 19,
+   "wallMs": 5779,
+   "overlapMs": 4568,
+   "blockedThinkingMs": 0,
+   "adviceApplied": 1,
+   "system2Calls": 2
+  }
+ ]
+}

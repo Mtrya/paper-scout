@@ -1,0 +1,87 @@
+{
+  "eps": 0.1,
+  "n": 600,
+  "formula": "ceiling(K) = 1 - eps + eps/K",
+  "k_distribution": {
+    "2": 2,
+    "3": 187,
+    "4": 136,
+    "5": 129,
+    "6": 64,
+    "7": 33,
+    "8": 13,
+    "9": 5,
+    "10": 12,
+    "11": 2,
+    "12": 7,
+    "14": 4,
+    "16": 3,
+    "18": 2,
+    "20": 1
+  },
+  "median_K": 3,
+  "modal_ceiling": 0.9333,
+  "max_p_max": 0.9625,
+  "rows_ge_095": 2,
+  "rows_ge_097": 0,
+  "ceiling_violations": 30,
+  "max_overshoot": 0.0125,
+  "tau_cold": 0.918,
+  "tau_cold_coverage": 0.2483,
+  "tau_cold_agreement": 0.953,
+  "tau_cold_n_accepted": 149,
+  "top1_accuracy": 0.7833,
+  "curve": [
+    {
+      "tau": 0.5,
+      "coverage": 0.9783,
+      "agreement": 0.7922
+    },
+    {
+      "tau": 0.6,
+      "coverage": 0.9417,
+      "agreement": 0.8088
+    },
+    {
+      "tau": 0.7,
+      "coverage": 0.9033,
+      "agreement": 0.8266
+    },
+    {
+      "tau": 0.8,
+      "coverage": 0.8317,
+      "agreement": 0.8437
+    },
+    {
+      "tau": 0.85,
+      "coverage": 0.7767,
+      "agreement": 0.8777
+    },
+    {
+      "tau": 0.9,
+      "coverage": 0.5517,
+      "agreement": 0.9335
+    },
+    {
+      "tau": 0.918,
+      "coverage": 0.2483,
+      "agreement": 0.953
+    },
+    {
+      "tau": 0.95,
+      "coverage": 0.0033,
+      "agreement": 1.0
+    },
+    {
+      "tau": 0.97,
+      "coverage": 0.0,
+      "agreement": null
+    },
+    {
+      "tau": 0.99,
+      "coverage": 0.0,
+      "agreement": null
+    }
+  ],
+  "note": "ceiling is the loss optimum, not a hard constraint: the 1-epoch LoRA model overshoots it on a minority of samples; the explanatory content is where the confidence mass concentrates"
+}
