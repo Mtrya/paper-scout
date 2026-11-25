@@ -1,0 +1,23 @@
+== 跨 token 端口余弦距离（动态端口应显著>0） ==
+layer 0: read q^m=0.508 write k^m(attn)=0.519 write k^m(ffn)=0.561
+layer 2: read q^m=0.491 write k^m(attn)=0.555 write k^m(ffn)=0.594
+layer 5: read q^m=0.562 write k^m(attn)=0.545 write k^m(ffn)=0.622
+
+== 动态线路能量有效秩（token 中心化；上界 min(d_k=8,w)） ==
+layer 0: mean=2.98 max=3.76 rel-var=0.885
+layer 1: mean=3.80 max=4.60 rel-var=0.882
+layer 2: mean=4.28 max=5.21 rel-var=0.877
+layer 3: mean=4.26 max=5.71 rel-var=0.868
+layer 4: mean=4.79 max=5.61 rel-var=0.891
+layer 5: mean=5.05 max=6.39 rel-var=0.866
+
+== 静态端口消融（q^m,k^m 冻结为 token 均值） ==
+layer 2: static mean=0.00 rel-var=1.20e-07（变化量低于浮点噪声 → 结构上无动态线路）
+layer 5: static mean=0.00 rel-var=1.20e-07（变化量低于浮点噪声 → 结构上无动态线路）
+plot saved: drafts/loom_probe_rank.png
+
+== 节点门控(rank-1) vs Loom(rank<=d_k) 的线路可实现性 ==
+rank-1 最优逼近相对残差 = 0.7071
+rank-2 最优逼近相对残差 = 0.0000
+rank-4 最优逼近相对残差 = 0.0000
+loom 槽构造(d_k=2, one-hot): <q1,k1>=1, <q3,k3>=1, 交叉项=0 → 精确实现互不干扰

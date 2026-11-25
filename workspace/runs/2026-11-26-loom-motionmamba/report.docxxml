@@ -1,0 +1,199 @@
+<title>Paper Scout 研究报告 - 2026-11-26</title>
+<p>本期聚焦巡航覆盖 2026 年 11 月 20 日至 25 日的 Hugging Face Papers 池（187 篇）与十三路研究博客，把深挖火力集中在同一个原语的两个正交新轴上：<b>Rewirable Circuits in Transformers with Loom Attention</b> 把线性注意力"外积写入、按槽读出"的原语从时间轴搬到深度轴，让 Transformer 的头间线路第一次能够逐 token 重连；<b>Motion Mamba 2.0</b> 把同族的线性递推放进人形运动生成的快慢耦合，给慢通道的压缩历史装上了注意力可读的内容槽接口。两条线程都完成了论文精读、官方代码审计与本地机制探针：Loom 的重连容量与秩上界、PCM 的门控语义、可复位递推的逐位一致性，均在机制层面得到独立核验。</p>
+<callout emoji="✅" background-color="light-green">
+  <p><b>亮点:</b>Rewirable Circuits in Transformers with Loom Attention 是本轮最清晰的机制种子。它没有发明又一种时间轴注意力变体，而是指出同一套外积写读原语换到深度轴之后，恰好解开了 Transformer"垂直布线在训练后焊死"这个老限制；同样的验证损失，基线要多花约 3 倍训练计算，而 Loom 自己只多花 2% 至 3.7%。</p>
+</callout>
+<h1>线性注意力的两条新轴线</h1>
+<p>线性注意力通常被当作"省 KV 缓存"的效率工具，本周两篇最受关注的论文却都在把它当<b>结构原语</b>用：一处用来在深度方向重连注意力头，一处用来在人形机器人内部携带几十秒的运动历史。下表是本轮其余值得留意的线索；两篇深挖论文随后依次展开。</p>
+<table>
+  <colgroup>
+    <col width="200"/>
+    <col width="230"/>
+    <col width="230"/>
+    <col width="90"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray"><p>论文</p></th>
+      <th background-color="light-gray"><p>核心贡献</p></th>
+      <th background-color="light-gray"><p>为什么重要</p></th>
+      <th background-color="light-gray"><p>链接</p></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><p>Pre-Training Without Learning Rate Decay（Sebastian Raschka，博客）</p></td>
+      <td>整理各实验室预训练配方：Kolibri-1 与 DatologyAI 已弃用学习率衰减，改为恒定学习率加检查点平均。</td>
+      <td>与上轮科学空间"无调度学习率"线索互相印证：免调度配方正从想法变成工业实践。</td>
+      <td><a href="https://sebastianraschka.com/blog/2026/llm-pretraining-without-learning-rate-decay.html">原文</a></td>
+    </tr>
+    <tr>
+      <td><p>WorldLeague: Benchmarking Physical Agency</p></td>
+      <td>60 个仿真机器人任务，用统一的进度度量比较 VLM、VLA 与世界-动作模型。</td>
+      <td>把"物理能动性"拆成探索、塑形、应变等可分维度，适合当具身侧的体检表。</td>
+      <td><a href="https://huggingface.co/papers/2611.30989">HF</a> / <a href="https://arxiv.org/abs/2611.30989">PDF</a></td>
+    </tr>
+    <tr>
+      <td><p>Non-penetrating World Models</p></td>
+      <td>发现冻结视频世界模型的隐状态已能预测"动作会不会穿透障碍"，训练一个小读出头即可拦截危险动作，违规率 74% 降至 16%。</td>
+      <td>又一次证明世界模型内部已携带物理判据，缺的是读出层——表征里"在"不等于能被"用"。</td>
+      <td><a href="https://huggingface.co/papers/2611.27963">HF</a> / <a href="https://arxiv.org/abs/2611.27963">PDF</a></td>
+    </tr>
+    <tr>
+      <td><p>Fast-JEPA: Advancing the Success-Latency Frontier for Latent World Models</p></td>
+      <td>免递归 rollout 的潜世界模型规划： goal 引导搜索加直接预测完整候选结果，比 INTACT 快 2.41 倍。</td>
+      <td>把延迟当一等公民的规划基线，附带带截止时间与受控响应延迟的 DynaGoal 评测。</td>
+      <td><a href="https://huggingface.co/papers/2611.25927">HF</a> / <a href="https://arxiv.org/abs/2611.25927">PDF</a></td>
+    </tr>
+    <tr>
+      <td><p>ACAP: Asynchronous Coding Agents for Efficient Robot Control</p></td>
+      <td>把一台机器人拆成多个常驻编码智能体分头控制不同部件，超智能体负责依赖协调。</td>
+      <td>72 次真实 rollout 省时 28.2%——异步化是快慢耦合在执行层的另一张面孔。</td>
+      <td><a href="https://huggingface.co/papers/2611.31205">HF</a> / <a href="https://arxiv.org/abs/2611.31205">PDF</a></td>
+    </tr>
+    <tr>
+      <td><p>Teaching Vision-Language-Action Models to Stop Safely</p></td>
+      <td>SAFI（State-Aware Fallback Imitation）两阶段回退模仿：给禁止任务的中途执行强加"手臂静止+夹爪一致目标"的替代响应，与保留任务联合训练。</p></td>
+      <td>直接接续上轮"停止权属于谁"的判据工作：停止不仅要说停，还要停在物理上安全的姿态。</td>
+      <td><a href="https://huggingface.co/papers/2611.26239">HF</a> / <a href="https://arxiv.org/abs/2611.26239">PDF</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>Rewirable Circuits in Transformers with Loom Attention</h2>
+<p>Da Xiao, Qingye Meng, Shengping Li, Xingyuan Yuan 等(2026)· <a href="https://huggingface.co/papers/2611.30634">HF</a> · <a href="https://arxiv.org/abs/2611.30634">PDF</a> · <a href="https://github.com/Caiyun-AI/LoomFormer">Code</a></p>
+<p>标准 Transformer 的信息流动在两个方向上极不对称。水平方向（token 之间）的路由是输入相关的，每个注意力头可以依据当前上下文决定关注哪些更早的 token；但在垂直方向（层与层、头与头之间），前一层的头把输出写进残差流，后一层的头再从残差流里读出，两者的连接由输出投影与输入投影的乘积在训练后焊死。</p>
+<p>为了把垂直通信的瓶颈看清楚，可以把每个注意力头的输出看作写者（writer），把后续头的查询、键、值输入看作读者（reader）。两者的有效连接强度可以写成静态投影乘积与逐 token 标量的乘积，这组标量构成的矩阵就是<b>布线矩阵（wiring matrix）</b> <latex>C</latex>。问题在于，在主流的前置层归一化（pre-LN）架构下，网络在单个 token 上只能实施<b>节点门控（node-gated）</b>：某个头若把大量注意力分给几乎不携带语义的汇聚 token（attention sink，被当作"输出近零"寄存位的特殊 token），输出就会趋近于零，相当于把自己在布线矩阵里的整行和整列一起关掉。这种整头开关使 <latex>C</latex> 的秩至多为 1。如果两个同时活跃的读者想各自只读不同的写者而不互相串扰，秩 1 约束立刻就会失效。想要靠堆叠更多头来硬撑任意布线，每个读者都必须储备一个只看得到目标写者、却避开其他读者所选写者的备用头；组合下界决定，在实际模型尺寸下每个读者需要 <latex>\Theta(w)</latex> 个头（<latex>w</latex> 为更早写者总数），这在工程上行不通。</p>
+<p>最直接的解法是让每个读者像对 token 做注意力一样，对同位置全部更早头的输出直接做 softmax 注意力，但这会让端口参数与乘加计算量随总头数平方级膨胀。Loom Attention 选择把线性注意力的外积写读原语从序列时间轴<b>换轴</b>到网络深度轴：每个 token 额外维护一块 <latex>d_k \times d</latex> 的矩阵记忆 <latex>M</latex>，逐层累积写入结果，形成与原有向量残差流并行的<b>矩阵流（matrix stream）</b>。两者分工明确，向量流负责产生控制信号（去哪读、往哪写、看哪些 token），矩阵流专门承载被搬运的内容，而头与流之间交互的向量接口就称为<b>端口（port）</b>。</p>
+[[figure-anchor:loom-attention:architecture]]
+<p>在具体实现上，读端口模块 MRead 与写端口模块 MWrite 分别完成从向量流到矩阵流的寻址与写入：</p>
+<latex>q^m = \operatorname{Norm}(x^r W_2) \odot \sigma(x W_g) + \bar{q} \odot \sigma(x W_{\bar{g}}), \qquad u = q^m M</latex>
+<latex>k^m = \operatorname{Norm}(x^w W_2') \odot \sigma(x W_g'), \qquad \Delta M = k^m \otimes o</latex>
+<p>其中 <latex>x</latex> 是当前子层归一化后的向量流输入，<latex>x^r</latex> 与 <latex>x^w</latex> 是同层读写模块共享的低秩瓶颈特征，用来压低端口生成开销；<latex>W_2, W_2'</latex> 将低秩特征映射为 <latex>d_k</latex> 维的槽位方向，经均方根归一化 <latex>\operatorname{Norm}</latex> 后，再由标量门控 <latex>\sigma(x W_g)</latex> 与 <latex>\sigma(x W_g')</latex> 控制读写幅度（<latex>\sigma</latex> 为 sigmoid 函数，<latex>\odot</latex> 为缩放乘）。读端口还叠加了由 <latex>\sigma(x W_{\bar{g}})</latex> 控制的静态基准查询 <latex>\bar{q}</latex>，再与 <latex>M</latex> 相乘得到读出向量 <latex>u</latex>；写端口则把写者输出 <latex>o</latex> 与写键 <latex>k^m</latex> 做外积 <latex>\otimes</latex> 累加进矩阵流。在注意力子层内，水平注意力的点积打分拆成两项之和：向量流经旋转位置编码（RoPE）提供的 token 路由项，加上从 <latex>M</latex> 读出的槽位路由项；当前 token 自身的内容则不再走水平自注意力，改为通过旁路直接并入头输出。此外，后续前馈网络带一个伴生写入分支，它是嵌入之后向量流内容进入矩阵流的唯一常规通道。</p>
+<p>这一换轴设计有两条干净的结构性质。第一，当读写端口在所有 token 上保持固定时，LoomFormer 严格等价于在拼接残差流 <latex>(x, \operatorname{vec}(M))</latex> 上运行的标准节点门控 Transformer；第二，当端口由向量流逐 token 即时生成时，每个读者只需一个头就能实现至多 <latex>d_k</latex> 个写者的任意布线，多于 <latex>d_k</latex> 个活跃写者时则会像所有线性注意力一样因共享槽位而产生干扰。在训练级实证上，论文报告 LoomFormer 在 Pile 数据集 432M、778M 与 1.4B 三档规模上均取得最低验证损失，损失水平等效于让标准 Transformer++（RoPE、SwiGLU、RMSNorm 的现代化基线）多训 3.19 至 3.25 倍的计算量；在 300B token 预训练设定下，论文报告 2.8B 参数的 LoomPythia 在十项基准的零样本平均分上追平 Pythia-12B（59.9），五样本平均分反超至 61.6，FLAN 指令微调集困惑度降到 6.94，而额外浮点运算仅增加 1.95% 至 3.70%，训练吞吐保持在 89% 至 92%。</p>
+<p>为了确认这些机制特性不是纸面推导的幻觉，我们在本地复刻了 6 层、槽数 <latex>d_k=8</latex> 的玩具栈进行<b>玩具尺度机制核验</b>（不涉及端到端收益复现），并审计了官方 JAX 与 PyTorch 仓库代码。探针实测给出了四条一致的信号：动态读写端口的跨 token 余弦距离落在 0.49 至 0.62 之间（与论文报告 2.8B 模型的 0.33 至 0.75 同量级），表明逐 token 重连在机制上真实发生；动态布线——逐 token 去除均值后的布线矩阵——的能量有效秩随网络深度从 2.98 稳步升至 5.05，上界由槽数 <latex>d_k=8</latex> 给出（实测最大 6.39，尚未触及）；把读写端口冻结为 token 均值后，动态变化量跌至 <latex>1.2 \times 10^{-7}</latex> 的浮点噪声底，证明重连能力来自端口生成而非矩阵记忆本身；针对"两位写者各连一位读者、互不串扰"这一最小布线模式，秩 1 节点门控的最优逼近残差恒为 <latex>1/\sqrt{2}</latex>，而 2 槽构造能够以零残差精确实现。此外，源码审计发现论文公式、JAX 训练代码与 PyTorch 移植在写门乘在键向量还是内容向量上写法不同，但因写门是每头标量，乘在外积任意一侧在数学上完全恒等，三方实现没有实质分歧。</p>
+[[figure-anchor:loom-attention:probe-rank]]
+<table>
+  <colgroup>
+    <col width="160"/>
+    <col width="140"/>
+    <col width="140"/>
+    <col width="220"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray"><p>残差流机制</p></th>
+      <th background-color="light-gray"><p>动态布线秩上限</p></th>
+      <th background-color="light-gray"><p>布线粒度</p></th>
+      <th background-color="light-gray"><p>状态记忆规格</p></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><p>标准 Transformer</p></td>
+      <td><p>1</p></td>
+      <td><p>整头开关</p></td>
+      <td><p>仅向量流 D</p></td>
+    </tr>
+    <tr>
+      <td><p>HC / mHC</p></td>
+      <td><p>1</p></td>
+      <td><p>层</p></td>
+      <td><p>多层流 4D</p></td>
+    </tr>
+    <tr>
+      <td><p>MUDDFormer</p></td>
+      <td><p>3</p></td>
+      <td><p>层 × 查询/键/值</p></td>
+      <td><p>逐层缓存 lD</p></td>
+    </tr>
+    <tr>
+      <td><p>LoomFormer</p></td>
+      <td><p>min(dₖ, 3n) = 2n</p></td>
+      <td><p>头 × 查询/键/值</p></td>
+      <td><p>矩阵流 2D（加向量流 D）</p></td>
+    </tr>
+  </tbody>
+</table>
+<p>把 LoomFormer 放回残差流演进谱系里看：多股残差流加权混合的 Hyper-Connections 及其流形约束版 mHC、按查询/键/值三个输入角色分别做深度注意力的 MUDDFormer，都按"层"或"层×输入角色"分配布线权重，动态布线秩始终被锁在 1 或 3；Loom 把粒度细化到单头与查询/键/值端口，动态秩天花板推到 <latex>2n</latex>（<latex>n</latex> 为单层头数，默认槽数即取 <latex>2n</latex>，论文消融显示这一取值恰在损失-槽数曲线的拐点上），而矩阵流本身只占 <latex>2D</latex> 大小。不过有一条边界必须点破：论文报告的消融实验显示，将动态读写端口全部静态化之后，模型依然保留了 56.0% 的损失改善。这意味着<b>静态双流骨干与动态逐 token 重连各自贡献了约一半收益</b>，Loom 的实证优势并不全由重连单独撑起。同时，目前所有训练收益均来自论文自报且我们未做独立复训；超过 <latex>d_k</latex> 个写者并发竞争槽位时的干扰行为，以及把这种深度轴外积记忆与时间轴线性注意力结合后的表现，仍有待后续实验检验。</p>
+<hr/>
+<h2>Motion Mamba 2.0: Autoregressive Diffusion Mamba for Long-Horizon Humanoid Control</h2>
+<p>Yue Huang, Tianshan Zhang, Zeyu Zhang 等(2026)· <a href="https://huggingface.co/papers/2611.29897">HF</a> · <a href="https://arxiv.org/abs/2611.29897">PDF</a> · <a href="https://github.com/AIGeeksGroup/MotionMamba2.0">Code</a></p>
+
+<p>当人形机器人在连续行走中接到临时改向或半途指定落脚点的指令时，运动生成模型必须同时满足两个互相掣肘的要求。一方面，历史必须足够久，几十秒前下达的远端目标和运动惯性不能随着滑动窗口被踢出视野；另一方面，反应必须足够快，自回归扩散模型要在每个窗口内迭代去噪，如果上下文缓存无限拉长，每一步的延迟都会线性膨胀并破坏实时交互。上一节讨论的线性注意力已经展示了固定尺寸状态如何通过外积写入和按槽读取维持常数复杂度，但在 Motion Mamba 2.0 面对的混合架构里，问题向前推进了一步：网络内部同时存在局部注意力缓存与 Mamba 递推状态这两支历史，前者保留了精细的近期特征却会在驱逐后失忆，后者能把压缩过的远期历史一直带下去，却不是注意力层可直接检索的键与值。两条历史在同一个网络里并存，并不自动意味着压缩递推态能被局部注意力读懂。这篇论文是 ECCV 2024 会议版 Motion Mamba 的期刊扩展——时序骨架从原版的分层 Mamba 换成可复位的 Mamba-3 加 PCM 接口；运动表示则承自 ARDY 的"显式根轨迹 + 潜变量身体"两段式编码，而后文消融里的最强对手也正是 ARDY（39.52 秒时程上末端误差 14.84 厘米对本文 13.64 厘米）。</p>
+
+<p>为了打通这两支历史，论文提出了持久内容记忆（Persistent Content Memory，简称 PCM）作为慢通道与快通道之间的学习式翻译接口。模型采用"根部（root，躯干的全局位姿轨迹）+ 全身（body，关节级潜变量）"两段式自回归扩散，每次输出 52 帧（即 2.08 秒，25 Hz）的运动窗口，每层混合器由局部注意力（保留最近 <latex>W=4</latex> 个窗口和 4 个静态 sink 词元）、可复位 Mamba-3 递推分支与 PCM 共同构成。当一个运动窗口被接受并提交后，投影器 <latex>\Pi</latex> 会把该层最新的 Mamba 递推矩阵 <latex>\mathbf{H}_t</latex> 池化并映射为归一化状态摘要，再计算它与上一窗口摘要的差值，以此同时捕获累计语境与刚刚发生的动态变化：</p>
+
+<latex>\overline{\mathbf{s}}_t = \Pi(\mathbf{H}_t), \quad \mathbf{d}_t = \overline{\mathbf{s}}_t - \overline{\mathbf{s}}_{t-1}</latex>
+
+<p>随后，当前生效的文本指令嵌入会通过特征级线性调制（FiLM，即用文本特征经一层线性映射产生缩放系数与偏移）作用于归一化后的状态变化，把“动作状态往哪里变”与“用户现在想让它干什么”绑在一起，再与状态摘要和文本嵌入拼接后投影为候选槽内容 <latex>\mathbf{Z}</latex>：</p>
+
+<latex>\widetilde{\mathbf{d}}_t = (1 + \tanh \boldsymbol{\gamma}) \odot \operatorname{LN}(\mathbf{d}_t) + \boldsymbol{\beta}</latex>
+
+<p>每层 PCM 仅维护 2 个固定尺寸的内容槽 <latex>\mathbf{P}_t</latex>。写入速率由一个受上限 <latex>\eta = 0.25</latex> 约束的门控矢量控制，门控同时观察联合特征 <latex>\mathbf{j}</latex>（即前面拼接出的摘要、调制后差分与文本嵌入）与上一时刻的槽内容，确保单步更新不会剧烈覆盖此前积累的上下文：</p>
+
+<latex>\mathbf{w} = \eta \cdot \sigma\bigl(f_w([\mathbf{j}; \operatorname{vec}(\mathbf{P}_{t-1})])\bigr), \quad \mathbf{P}_t = (1 - \mathbf{w}) \odot \mathbf{P}_{t-1} + \mathbf{w} \odot \mathbf{Z}</latex>
+
+<p>在下一个窗口生成时，局部注意力把这两个内容槽投影为额外的键与值，直接插在静态 sink 之后参与计算，而整个读出增量通过可学习标量 <latex>\rho</latex> 以残差形式叠回输出，即乘上系数 <latex>\tanh(\rho)</latex>。由于 <latex>\rho</latex> 采用零初始化，模型在训练起点精确退化为没有 PCM 的基线混合器，避免了随机初始化槽向量在早期干扰注意力的归一化分布。</p>
+
+[[figure-anchor:motion-mamba2:overview]]
+
+<p>除了状态翻译接口，流式生成还必须解决一个容易被忽略的时序污染问题：扩散采样需要连续走 10 步去噪，如果把每一步的含噪候选都写进 Mamba 递推态或 PCM，物理时间就会与采样迭代次数混为一谈。Motion Mamba 2.0 为此引入了仅在采纳后提交（accepted-only）的语义契约。在整个去噪采样过程中，网络只读取一份不可变的历史快照，中间产生的临时状态提议绝不落盘；只有当干净窗口最终生成并被接受，系统才在零扩散时间下执行一次规范前向，把局部缓存追加、Mamba 递推态替换和 PCM 槽更新作为原子事务一并提交，任何环节失败则整体回滚至上一状态。</p>
+
+<p>在推理部署上，论文报告在 RTX 4090 上将完整 52 帧窗口的中位延迟从 1685.35 ms 压低到 276.14 ms——生成 2.08 秒的运动只花约 0.133 倍墙钟时间——中位配对加速比 6.138 倍（两端中位数直接相除约 6.10，统计口径略有差异），并在测试的 4 组 100 窗口长序列上与未优化路径逐位一致。拆解其加速组件表可以看到，移除无用诊断同步与未消费状态提议的执行流简化带来了 1.525 倍提速，将三路无分类器引导分支合并捕捉的 CUDA Graph 回放在此之上把累计加速推到 5.943 倍，而自定义的 Mamba 预处理融合核在此基础上只额外贡献了 1.029 倍。换言之，这份接近实时的响应主要赢在减少主机端 kernel 发射开销的执行流工程，而非单纯的算子融合。需要注明的是，6.138 倍提速与逐位一致的结论均来自论文自报，我们未在本地 GPU 上复测端到端延迟。</p>
+
+<p>论文在重定向到 G1 骨架后的人形运动基准 HiPHI 上测算了长达 39.52 秒的终端控制精度，指标是根轨迹与末端目标的厘米级平均误差（Root CE / End CE）；消融结果把各个部件的真实贡献划得十分清楚：</p>
+
+<table>
+  <colgroup>
+    <col width="220"/>
+    <col width="140"/>
+    <col width="140"/>
+    <col width="260"/>
+  </colgroup>
+  <thead>
+    <tr>
+      <th background-color="light-gray"><p>模型变体（39.52 s 协议）</p></th>
+      <th background-color="light-gray"><p>Root CE (cm)</p></th>
+      <th background-color="light-gray"><p>End CE (cm)</p></th>
+      <th background-color="light-gray"><p>结构含义</p></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><p>Minimal</p></td>
+      <td><p>60.00</p></td>
+      <td><p>64.86</p></td>
+      <td><p>仅局部注意力，无慢通道递推</p></td>
+    </tr>
+    <tr>
+      <td><p>Native</p></td>
+      <td><p>9.36</p></td>
+      <td><p>15.54</p></td>
+      <td><p>加入可复位 Mamba-3 递推，无 PCM</p></td>
+    </tr>
+    <tr>
+      <td><p>Native + PCM (w/o text)</p></td>
+      <td><p>8.62</p></td>
+      <td><p>14.62</p></td>
+      <td><p>开启内容槽写入，剥离文本条件</p></td>
+    </tr>
+    <tr>
+      <td><p>Motion Mamba 2.0（全量）</p></td>
+      <td><p>7.55</p></td>
+      <td><p>13.64</p></td>
+      <td><p>完整递推 + 文本调制 PCM 接口</p></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>从表中可以直接读出两个分层结论。真正把长时程根节点误差从 60.00 cm 拽回个位数的决定性因素是 Mamba-3 递推慢通道，PCM 则是建立在这个地基上的二次精修，把误差进一步压低约 1 到 2 cm。有意思的是，在同一消融的 52 帧单窗一列里，单独加入 Mamba 反而让 Root CE 从 3.86 cm 略微上升到 4.49 cm，而完整 PCM 又把它拉回 2.78 cm，说明翻译层也帮短窗注意力消化了递推分支带来的额外扰动。在 Unitree G1 实体机器人上，论文报告四类任务共 100 次试验取得 94 次成功、0 次摔倒，键盘与鼠标交互的物理响应中位延迟分别为 351 ms 和 360 ms。</p>
+
+[[figure-anchor:motion-mamba2:realworld]]
+
+<p>为了确认这些机制在代码层面没有偷工减料，我们在 CPU 上对官方仓库的类进行了机制核验。首先直接导入官方的持久内容记忆类测试五项性质：随机输入下写入门最大值 0.1278 严格低于上限 0.25，每槽的单步更新幅度都不超过上限乘以候选内容与旧槽值的距离，读出系数零初始化时对主干输出贡献精确为零，20 步连续写入后的槽范数为 2.913、全程写入门最大值 0.1273 仍低于上限。但核验也暴露出一个值得留意的细节：面对相同的状态转移而更换文本指令时，候选槽内容向量的范数差高达 26.185，而写入门控的差值仅有 0.005，说明在初始化阶段，文本条件主要通过改变“写进去什么内容”发挥作用，对“以多快速率写入”的调制极弱。其次，我们按论文公式用纯 PyTorch 复写了 Mamba-3 的梯形与旋转相位递推，在 32 加 32 步分块续扫时，只有完整携带递推矩阵、累积相位、上一步输入与上一步值这四元组，输出才与 64 步全程扫描逐位一致；一旦像朴素续跑那样只保留递推矩阵而清零其余三项，输出最大偏差立刻跳升到 0.762，这解释了为什么官方推理缓存必须显式存下全部四个状态分量。</p>
+
+<p>把工程包装剥开来看，Motion Mamba 2.0 的价值在于给出了一套边界清晰的双通道耦合样本：慢通道递推负责把几十秒的压缩轨迹带过时间墙，PCM 负责把压缩摘要翻译成快通道可读的几个固定槽位，而原子提交契约守住了物理时间与采样迭代的边界。但它的局限也同样清楚。即便接入了全套机制，控制误差依然随时间明显退化（2.08 秒时 Root CE 为 2.78 cm，到 39.52 秒时仍涨到 7.55 cm），每层区区 2 个内容槽也决定了它只能提供粗粒度的语境提示，不能指望从中精确召回几十秒前被驱逐的某一个动作细节。</p>
+<h1>跨主题观察</h1>
+<p>两个线程表面上一头在改语言模型架构、一头在做机器人运动生成，剥开后却是同一个问题：<b>固定尺寸的状态，如何携带足够多的结构或历史</b>。Loom 的回答是把状态挂到深度轴——每个 token 一块矩阵记忆，写者用外积落槽、读者按槽取用，布线自由度从秩 1 解放到了槽数上限；Motion Mamba 2.0 的回答是让状态挂到时间轴，再学一个翻译层（PCM）把递推摘要变成快通道可读的槽。两边的读写端口都做了"方向与幅度分离"：Loom 用归一化加标量门，PCM 用写入上限加残差读出系数——这不是巧合，线性注意力的老经验（写入门决定保留什么、读出几何决定能用什么）在两个轴上同样成立。</p>
+<p>对快慢耦合这条延续战线而言，本轮补上了又一块拼图：上月我们钉住了"停止权属于谁"，本周的 Motion Mamba 2.0 展示了"历史归属慢通道、可读性归快通道"时中间必须架一座显式的学习接口，而且接口的归纳偏置（往槽里写内容，而不是让状态直接改查询）是消融可以裁定的设计点。最值得跟进一步的三个问题：深度轴外积记忆与时间轴线性注意力同用的模型会表现如何（Loom 作者自己留下的方向）；PCM 的文本条件对写入速率的调制在训练后是否会从初始化时的近零变强；以及 Loom 的槽数在写者超载时的干扰曲线——这三问都不需要大算力，适合下一轮继续。</p>

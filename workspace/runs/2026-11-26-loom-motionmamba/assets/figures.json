@@ -1,0 +1,18 @@
+{
+  "loom-attention:architecture": {
+    "file": "assets/loom-architecture.png",
+    "caption": "图 1：LoomFormer 的双流架构（引自 Loom Attention 论文）。左：整体模型，向量残差流与矩阵残差流并行更新；中：一个块内的 LoomMHA 注意力子层与前馈网络写入分支，两者都向矩阵流写入；右：MRead 与 MWrite 端口——读端口用归一化加门控的查询从矩阵流取内容，写端口把头输出与写键做外积写入槽位。"
+  },
+  "loom-attention:probe-rank": {
+    "file": "assets/loom_probe_rank.png",
+    "caption": "图 2：玩具栈上的逐 token 线路重连核验（本轮自绘，未训练随机初始化，6 层、槽数 dₖ=8）。横轴为层号，纵轴为 token 中心化后动态布线矩阵的能量有效秩：动态端口（蓝线）随深度从 2.98 升至 5.05，被槽数上界 8 钉住；静态端口（红叉）的动态变化量只有浮点噪声量级，结构上无法重连。"
+  },
+  "motion-mamba2:overview": {
+    "file": "assets/mm2-overview.png",
+    "caption": "图 3：Motion Mamba 2.0 总览（引自原论文）。文本、空间控制与已接受的运动历史共同条件化两段式扩散去噪器：根部网络先预测全局轨迹，身体网络再预测关节运动；两段序列混合器都是局部注意力与 Mamba-3 递推的混合，PCM 把递推摘要变成注意力可读的内容槽；干净窗口被接受后历史状态才统一提交。"
+  },
+  "motion-mamba2:realworld": {
+    "file": "assets/mm2-realworld.png",
+    "caption": "图 4：Unitree G1 真机四类任务（引自原论文）。(a) 多段文本指令的动作编排；(b) 表情化动作；(c) 键盘控制行走；(d) 鼠标控制行走。每组给出实机帧、Viser 参考轨迹与完整指令序列；100 次试验 94 次全任务成功、0 摔倒。"
+  }
+}

@@ -1,0 +1,11 @@
+== A. PersistentContentMemory（官方类，CPU） ==
+A1 写入门 η 上限: max gate = 0.1278 ≤ η=0.25 -> True
+A2 更新有界: ||P_t-P_{t-1}|| ≤ η·||proposal-prev|| 逐槽成立 -> True
+A3 零初始化读出: tanh(ρ_init) = 0.00e+00 → Y 与 Native 输出差 = 0.00e+00
+A4 同一状态转移、不同文本: proposal 差 = 26.185, gate 差 = 0.005（均应显著>0）
+A5 20 步会话写入: 全程 max gate = 0.1273 ≤ η -> True; 槽范数 = 2.913
+
+== B. Mamba-3 Eq.6 可复位递推（纯 torch 复推） ==
+B1 携带 (H, phi, u_prev, B_prev) 分块续扫 32+32 vs 全程 64：
+    max|Δy| = 0.00e+00   max|ΔH| = 0.00e+00   max|Δphi| = 0.00e+00
+B2 只携带 H 的朴素续扫（phi/u/B 清零）：max|Δy| = 0.762（显著失配 → 这三个额外状态量是精确续扫所必需）
